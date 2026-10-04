@@ -14,7 +14,7 @@ All three sources are pinned as independent Git submodules under `references/`. 
 
 ## LOADOUT starting shape
 
-The LOADOUT product root intentionally has no `apps/`, `packages/`, or deployable application code while the website redesign and implementation architecture are being planned. Pixl remains the PRIMARY ENGINEERING BASE for later source-guided implementation, but its app tree is available only through the pinned `references/pixl/` submodule. The earlier landing prototype and restored Pixl landing surface are not part of this branch. Do not recreate either page until the separate redesign is ready.
+The LOADOUT product root intentionally has no `apps/`, `packages/`, or deployable application code while the website redesign and implementation architecture are being planned. Pixl remains the PRIMARY ENGINEERING BASE for later source-guided implementation, but its app tree is available only through the pinned `references/pixl/` submodule. The audit records Bun/Turborepo/Next as likely engineering tools, but no workspace code is included until the redesign direction is confirmed. The earlier landing prototype and restored Pixl landing surface are not part of this branch. Do not recreate either page until the separate redesign is ready.
 
 ## Data, identity, and permission boundaries
 

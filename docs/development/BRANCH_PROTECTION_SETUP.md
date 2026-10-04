@@ -16,7 +16,7 @@ For `main`, also disable force pushes and branch deletion. Enable branch-current
 
 ## Actual status
 
-No GitHub changes were made during this reorganization. The last successful repository inspection reported only the initializer on remote `main`, with no remote `development` or `testing` branches and no active branch protections/rulesets. The configured network proxy blocked a refresh during this task, so verify the live remote before publishing. The clean logical history is prepared on local `chore/reference-layout` from initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d`.
+No GitHub changes were made during this reorganization. The last successful repository inspection reported only the initializer on remote `main`, with no remote `development` or `testing` branches and no active branch protections/rulesets. The configured network proxy blocked a refresh during this task, so verify the live remote before publishing. The clean logical history from initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d` is locally present on `chore/reference-layout` and has been promoted through `development`, `testing`, and `main`. The previous local lane history is preserved by `backup/local-lanes-before-clean-layout`; nothing has been pushed.
 
 After the first approved publication:
 

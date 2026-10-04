@@ -6,7 +6,7 @@
 
 ## Pixl
 
-Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is the PRIMARY ENGINEERING BASE. Its upstream root license is MIT; the full original notice remains in `references/pixl/LICENSE`. The top-level LOADOUT `LICENSE` remains the MIT notice created for this repository and names Jerry. If Pixl code is later copied into LOADOUT-owned files, retain the required Pixl notice with that redistribution. Pixl and Hack Club do not endorse LOADOUT by virtue of this reference.
+Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is the PRIMARY ENGINEERING BASE. Its upstream root license is MIT; the full original notice remains in `references/pixl/LICENSE`. The top-level LOADOUT `LICENSE` retains both the original Jerry and Pixl copyright notices from the local bootstrap. The full Pixl notice also remains in `references/pixl/LICENSE`; the submodule keeps its own upstream license boundary. No Pixl application files are currently copied into the LOADOUT product tree. Pixl and Hack Club do not endorse LOADOUT by virtue of this reference.
 
 ## YSWS Template
 

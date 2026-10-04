@@ -4,3 +4,6 @@
 [submodule "references/ysws-template"]
 	path = references/ysws-template
 	url = https://github.com/EDRipper/ysws-template.git
+[submodule "references/stardance"]
+	path = references/stardance
+	url = https://github.com/hackclub/stardance.git

@@ -62,4 +62,3 @@ export function LoadoutIcon({ name, className, ...props }: LoadoutIconProps) {
     </svg>
   );
 }
-

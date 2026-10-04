@@ -10,7 +10,7 @@ Repository: `jeremy341/loadout`, personal account. The desired repository visibi
 
 Create active rulesets or branch protection rules targeting exactly `development`, `testing`, and `main`. Require a pull request before merging, require zero human approvals, and do not configure bypass actors. Do not require CODEOWNER, owner, Jeremy, team, or last-push approval. Apply PR requirements to administrators as well. A required PR rule blocks direct updates to the named lane; write collaborators can still push short-lived branches.
 
-Use GitHub Actions as the expected check source. The current required-check candidate is **Repository integrity**. It validates whitespace and the three reference URLs and pinned commit IDs; it does not build application code because the LOADOUT product tree is empty during redesign. Add build, test, or staging checks only when LOADOUT-owned application code exists and those checks have reported a successful run on the target lane.
+Use GitHub Actions as the expected check source. Current check candidates are **Repository integrity**, **Landing quality**, and **Landing browser**. Integrity validates whitespace and source pins; quality runs lint, typecheck, unit tests, and a production build; browser covers navigation, responsive behavior, normal/reduced motion, and accessibility. Select the exact GitHub-reported check names only after successful runs on each lane. The workflow definitions are local; this does not establish that lane protections are active.
 
 For `main`, also disable force pushes and branch deletion. Enable branch-current/up-to-date checks only if they do not create an impractical promotion deadlock. Never configure a human approval count above zero.
 

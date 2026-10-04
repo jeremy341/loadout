@@ -1,0 +1,9 @@
+[submodule "references/pixl"]
+	path = references/pixl
+	url = https://github.com/hackclub/pixl.git
+[submodule "references/ysws-template"]
+	path = references/ysws-template
+	url = https://github.com/EDRipper/ysws-template.git
+[submodule "references/stardance"]
+	path = references/stardance
+	url = https://github.com/hackclub/stardance.git

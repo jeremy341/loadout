@@ -16,7 +16,7 @@ For `main`, also disable force pushes and branch deletion. Enable branch-current
 
 ## Actual status
 
-No GitHub changes were made during this reorganization. The last successful repository inspection reported only the initializer on remote `main`, with no remote `development` or `testing` branches and no active branch protections/rulesets. The configured network proxy blocked a refresh during this task, so verify the live remote before publishing. The clean logical history from initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d` is locally present on `chore/reference-layout` and has been promoted through `development`, `testing`, and `main`. The previous local lane history is preserved by `backup/local-lanes-before-clean-layout`; nothing has been pushed.
+The local remote-tracking refs now contain the earlier reference-bootstrap lane history (`origin/development`, `origin/testing`, and `origin/main`). That cached state supersedes the old initializer-only note, but does not prove current live rules/protections. The current homepage commits are local and are being integrated into `development` at the user's request. Verify the live remote and required checks before publication or promotion. The earlier backup tag remains preserved.
 
 After the first approved publication:
 

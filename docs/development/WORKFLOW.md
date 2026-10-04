@@ -20,7 +20,7 @@ The LOADOUT product tree intentionally contains no app or package source while t
 
 ## Current setup status
 
-The local `chore/reference-layout` branch has been rebuilt from the GitHub initializer into separate source-reference, audit-documentation, workflow, and CI commits; this history is ready for review. This reorganization is local and has not been pushed. The remote's latest state could not be refreshed during this cleanup because the configured network proxy refused the GitHub connection; the last locally recorded `origin/main` is initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d`. Do not claim that branch rules are active or that this branch has been published.
+The clean source-reference, audit-documentation, workflow, and CI commits on `chore/reference-layout` have been promoted through local `development`, `testing`, and `main` merge commits. The previous unpushed lane history is preserved locally as `backup/local-lanes-before-clean-layout`. Nothing has been pushed. The remote's latest state could not be refreshed because the configured network proxy refused the GitHub connection; the last locally recorded `origin/main` is initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d`. Do not claim that branch rules are active or that this history has been published.
 
 ## Pull request checklist
 

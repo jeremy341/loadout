@@ -58,3 +58,49 @@ jobs:
           ysws-template|https://github.com/EDRipper/ysws-template.git|1ac191fa5eee1e57983b29ab7101f700c166e207
           stardance|https://github.com/hackclub/stardance.git|3a0fe8148b07c1edfe005e94dfc9d1faa4b64c14
           REFERENCES
+
+  landing-quality:
+    name: Landing quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.14
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Lint
+        run: bun run lint
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Unit tests
+        run: bun run test
+      - name: Production build
+        run: bun run build
+
+  landing-browser:
+    name: Landing browser
+    needs: landing-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.14
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Install Chromium
+        run: bunx playwright install --with-deps chromium
+        working-directory: apps/landing
+      - name: Browser and accessibility checks
+        run: bun run test:e2e

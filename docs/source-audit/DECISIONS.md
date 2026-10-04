@@ -2,7 +2,7 @@
 
 Paths in source rows are relative to their upstream repository root; local roots are `references/pixl/`, `references/ysws-template/`, and `references/stardance/`.
 
-Each row records a source-derived idea considered for LOADOUT. The corresponding exact commit and license basis are in SOURCE_BASES.md. The source repositories are linked as pinned submodules; none of their code has been copied into the LOADOUT product tree.
+Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in SOURCE_BASES.md. All three repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template and Stardance code are not copied. `PUBLIC_SITE_PORT.md` records final source/target paths.
 
 The source name in each row maps to these exact versions and permission bases:
 
@@ -14,9 +14,9 @@ The source name in each row maps to these exact versions and permission bases:
 |---|---|---|---|
 | Pixl | package.json; turbo.json; apps/landing/package.json | ADAPT | Keep Bun/Turborepo and Next landing as the engineering starting point; audit unrelated apps separately. |
 | Pixl | apps/landing/app/[lang]/page.tsx; apps/landing/app/_components/Hero.tsx; Menu.tsx; FAQ.tsx | ADAPT | Rebuild the public page with LOADOUT information architecture and visual system. |
-| Pixl | apps/landing/app/[lang]/layout.tsx; apps/landing/app/_generated/config.ts; apps/landing/app/robots.ts; apps/landing/app/sitemap.ts | REIMPLEMENT | The original Pixl files are restored locally as a temporary baseline. Replace metadata, locale configuration, robots, and sitemap with LOADOUT-owned values before publishing the redesigned site. |
-| Pixl | apps/landing/next.config.ts; apps/landing/vercel.json; apps/landing/proxy.ts | IGNORE | Restored locally from the pinned source snapshot at the user’s request. Remove Pixl game, cluster, web-shell, and play.pixl.rsvp routing before any LOADOUT deployment. |
-| Pixl | apps/landing/app/api/rsvp/route.ts | IGNORE | Restored locally from the pinned source snapshot; it is not a LOADOUT join flow and must be removed or replaced before deployment. |
+| Pixl | apps/landing/app/[lang]/layout.tsx; apps/landing/app/_generated/config.ts; apps/landing/app/robots.ts; apps/landing/app/sitemap.ts | REIMPLEMENT | English LOADOUT root layout/config/metadata replace source locales and configuration. Local/preview is noindex with an empty sitemap; an owned HTTPS origin and explicit indexing permission are required for production indexing. |
+| Pixl | apps/landing/next.config.ts; apps/landing/vercel.json; apps/landing/proxy.ts | IGNORE | The Next config has no Pixl rewrites. Stage A's temporary locale proxy was removed for the English Stage B root page. Pixl Vercel, game, cluster, web-shell, and play.pixl.rsvp routing remain excluded. |
+| Pixl | apps/landing/app/api/rsvp/route.ts | IGNORE | No Pixl RSVP route is included; this is not a LOADOUT join flow. |
 | Pixl | LICENSE | ADAPT | Preserve the full MIT license and Pixl copyright; state the source revision and transparent bootstrap attribution. |
 | Pixl | .github/workflows/codeql.yml; .github/codeql/codeql-config.yml | ADAPT | Retain pinned CodeQL actions and relevant false-positive suppression; rename config and run on all permanent lanes. |
 | Pixl | apps/server/src/routes/auth.ts; apps/server/src/auth/session.ts | REFERENCE ONLY | Reassess token/session security before a future LOADOUT auth slice. |

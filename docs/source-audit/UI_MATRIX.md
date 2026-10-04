@@ -23,6 +23,6 @@ The LOADOUT visual owner is PLAN/03; the public homepage follows PLAN/06. Pixl s
 
 ## Homepage redesign handoff
 
-The initial LOADOUT prototype was removed at the user’s direction before publication. apps/landing is back on the Pixl reference UI while a full redesign is pending. Use PLAN/03 and PLAN/06 when building the replacement; do not treat the restored Pixl routes or identity as LOADOUT product design.
+The initial prototype was removed before publication. Stage A then restored a narrow Pixl landing baseline for local comparison. After the user's model change and explicit UI authorization, Stage B replaced it with the supplied LOADOUT paper-grid/pixel-cloud composition. Its four dark track cards are Tools, Systems, Compute, and Hardware; Research Mode is a separate strip. Section containers and motion are adapted from Pixl, while public copy, SVGs, metadata, and page identity are LOADOUT-owned.
 
-The removed prototype used the planned graphite/orange/steel palette, grid-paper background, pixel headings, index labels, flat borders, and native details/summary controls. It was local and unpublished. The new LOADOUT design should follow PLAN/03 and PLAN/06; no prototype markup or styling remains in the restored landing app.
+The removed prototype used the planned graphite/orange/steel palette, grid-paper background, pixel headings, index labels, flat borders, and native details/summary controls. It was local and unpublished. The new LOADOUT design should follow PLAN/03 and PLAN/06; that prototype markup and styling are not in the current Pixl Stage A baseline.

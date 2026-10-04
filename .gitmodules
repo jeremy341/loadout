@@ -1,0 +1,3 @@
+[submodule "references/pixl"]
+	path = references/pixl
+	url = https://github.com/hackclub/pixl.git

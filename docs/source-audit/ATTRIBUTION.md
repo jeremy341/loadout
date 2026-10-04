@@ -2,11 +2,11 @@
 
 ## Reference handling
 
-`references/` contains three pinned Git submodules. The LOADOUT Git history stores the upstream URLs and commit pointers, not copies of the reference repositories' source files. Use `git clone --recurse-submodules` to populate them in a fresh checkout.
+`references/` contains three pinned Git submodules. A limited Pixl landing subset was copied for Stage A local comparison and then redesigned in Stage B. The final homepage retains adapted Next.js, Lenis, navigation, and reveal patterns; copied Pixl media and source-specific pages were removed. No YSWS Template or Stardance files are copied. Use `git clone --recurse-submodules` to populate references in a fresh checkout.
 
 ## Pixl
 
-Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is the PRIMARY ENGINEERING BASE. Its upstream root license is MIT; the full original notice remains in `references/pixl/LICENSE`. The top-level LOADOUT `LICENSE` retains both the original Jerry and Pixl copyright notices from the local bootstrap. The full Pixl notice also remains in `references/pixl/LICENSE`; the submodule keeps its own upstream license boundary. No Pixl application files are currently copied into the LOADOUT product tree. Pixl and Hack Club do not endorse LOADOUT by virtue of this reference.
+Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is the PRIMARY ENGINEERING BASE. Its upstream root license is MIT; the full original notice remains in `references/pixl/LICENSE`. The top-level LOADOUT `LICENSE` retains both the Jerry and Pixl copyright notices. Exact source/target mappings and final reuse decisions are in `PUBLIC_SITE_PORT.md`; owned SVGs and licensed fonts are recorded in `PUBLIC_SITE_ASSETS.md`. Pixl and Hack Club do not endorse LOADOUT by virtue of this reuse.
 
 ## YSWS Template
 

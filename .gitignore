@@ -1,0 +1,19 @@
+# Local tools and dependencies
+.claude/
+node_modules/
+
+# Build output
+coverage/
+dist/
+out/
+*.tsbuildinfo
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/

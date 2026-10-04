@@ -1,0 +1,60 @@
+name: Repository integrity
+
+on:
+  push:
+    branches: [development, testing, main]
+  pull_request:
+    branches: [development, testing, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repo-integrity-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-integrity:
+    name: Repository integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check whitespace and pinned references
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+
+          base_sha="$BASE_SHA"
+          if [[ -z "$base_sha" || "$base_sha" =~ ^0+$ ]] || ! git cat-file -e "${base_sha}^{commit}" 2>/dev/null; then
+            base_sha="$(git rev-parse HEAD^ 2>/dev/null || true)"
+          fi
+
+          if [[ -n "$base_sha" ]]; then
+            git diff --check "${base_sha}...HEAD"
+          else
+            git diff-tree --check --root -r HEAD
+          fi
+
+          while IFS='|' read -r name url expected_sha; do
+            actual_url="$(git config -f .gitmodules --get "submodule.references/${name}.url")"
+            test "$actual_url" = "$url"
+
+            entry="$(git ls-tree HEAD -- "references/${name}")"
+            expected_entry="$(printf '160000 commit %s\treferences/%s' "$expected_sha" "$name")"
+            if [[ "$entry" != "$expected_entry" ]]; then
+              printf 'Unexpected submodule pin for %s: %s\n' "$name" "$entry"
+              exit 1
+            fi
+          done <<'REFERENCES'
+          pixl|https://github.com/hackclub/pixl.git|8141b992e92e05583246fd914c63a101100f6fe4
+          ysws-template|https://github.com/EDRipper/ysws-template.git|1ac191fa5eee1e57983b29ab7101f700c166e207
+          stardance|https://github.com/hackclub/stardance.git|3a0fe8148b07c1edfe005e94dfc9d1faa4b64c14
+          REFERENCES

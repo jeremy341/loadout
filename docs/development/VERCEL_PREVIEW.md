@@ -4,7 +4,7 @@ The owner requested that the first co-developer demo be deployed to **Production
 
 ## Connect the repository
 
-1. Vercel project `jerry-team1/landing` has been created for the repository.
+1. Vercel project `jerry-team1/loadout` has been created for the repository.
 2. Set the project Root Directory to `apps/landing`. Keep the Bun workspace lockfile at the repository root available for package-manager detection; do not replace the root install command with a nested npm install.
 3. The app root is `apps/landing`; Vercel identifies it as Next.js. Its Git repository connection and `productionBranch` are currently unset, so Git pushes do not auto-deploy yet.
 4. No environment variables are needed to render the current homepage. Leave indexing configuration unset for a demo; preview metadata remains noindex.
@@ -27,10 +27,11 @@ Record the deployment URL and commit in `docs/development/WORKFLOW.md` after ver
 
 ## First production demo — 2026-10-05
 
-- Public URL: https://landing-mu-taupe.vercel.app/
-- Project: `jerry-team1/landing`; root directory: `apps/landing`.
+- Public URL: https://loadout-jerry-team1.vercel.app/
+- Project: `jerry-team1/loadout`; root directory: `apps/landing`.
 - Deployment: `dpl_9pZDHxdLzqrvZF9iMQFxChxQa9UH`, target `production`, status `READY`.
 - Deployed source: pushed `development` commit `2ea9161cdb7125063e6d2c707ea41e0b06e001aa`.
 - Vercel built Next.js 16.3.5 with Bun 1.3.14. The build compiled, typechecked, generated the static routes, and completed successfully.
-- Anonymous GET returned HTTP 200. The response contains the LOADOUT title, selected headline, and RSVP URL.
+- The project was renamed from `landing` to `loadout`. The exact `loadout.vercel.app` alias is already in use; Vercel assigned the available team-scoped URL above.
+- Vercel Authentication is disabled for this project. An anonymous GET to the public URL returns HTTP 200 with the LOADOUT title, selected headline, and RSVP URL.
 - This was a one-time production demo explicitly requested from `development`. The Vercel project's Git repository connection and Production Branch remain unset; Git pushes do not trigger deployments yet. The normal development/testing/main release lanes still apply to later changes.

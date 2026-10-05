@@ -810,3 +810,7 @@ The public homepage is ready for the first release when:
 - the page works at desktop and mobile widths
 - accessibility and reduced-motion basics pass
 - build/lint/typecheck/tests for the landing app pass
+
+## 22. Community Eras — future, compact homepage treatment
+
+The approved Era mechanic may be explained in one compact community-progression section; it must not displace the homepage's core projects → skills → progression → rewards story. Example sequence labels are illustrative until configured. Do not publish an active Era, progress meter, threshold, reset countdown, objective, or +10% bonus as current without real approved program configuration. A project receives the bonus only after reviewer approval. The current production homepage does not implement Era progress; plan this as a separate future UI change using `docs/development/UI_SKILLS.md` and Plan 11.

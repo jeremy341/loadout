@@ -4,7 +4,7 @@
 
 ## Current state
 
-`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The homepage is ready for a first Vercel preview; indexing remains disabled unless explicitly configured. Work follows the `development` → `testing` → `main` lanes described in [the development workflow](docs/development/WORKFLOW.md).
+`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The first demo is being deployed to Vercel Production on its generated domain; indexing remains disabled. Work follows the `development` → `testing` → `main` lanes described in [the development workflow](docs/development/WORKFLOW.md).
 
 ## Source references
 

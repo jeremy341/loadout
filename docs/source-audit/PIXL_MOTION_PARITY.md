@@ -63,3 +63,10 @@ The selected headline is BUILD YOUR OWN / TECHNICAL STACK. The desktop frame is 
 The confirmed RSVP default appears in nav, hero, and closing CTA, with safe explicit disable/override handling. Digital/Physical Loadout, global Bolts/non-spendable Track XP, conceptual project-fit examples, planned tracking/journals, AI disclosure, team/multi-track review, reproducible research and requisition constraints are explained. Unknown owner-provided policy/contact/dates/catalogue inputs remain deferred.
 
 Build, lint, TypeScript, four unit tests and 24 production-browser cases pass. Desktop/mobile axe checks report no serious or critical issues. The intentional paper grid is the Impeccable detector's only advisory. REFERENCE ONLY/IGNORE effects remain excluded as recorded above; this is source-informed motion, not a claim of copying every Pixl effect. All three source checkouts remain clean at their documented pins. See PUBLIC_SITE_PORT.md for evidence and local capture paths.
+
+
+## Plan 12 motion amendment — 2026-10-05
+
+The baseline evidence above belongs to the earlier revision. The current local refinement preserves hero/Lenis/nav/FAQ behavior and adds individually revealed vertical process nodes, with a 180ms, 1px hover offset and crisp 4px→5px shadow. Decorative connectors are static. This ADAPT comes from pinned Pixl Flow.tsx's Node/Down/Fork topology; no source-specific progress meter or media was added.
+
+LOADOUT-owned clouds now render up to 560px desktop/260px mobile, using ±112px/±48px viewport-relative X parallax and smooth 48s ±12px inner drift. There is still no vertical parallax and no added cloud count. Reduced motion disables the layers. New rendered evidence is pending the reopened local preview; prior automated test results do not validate this new diff. Automated tests and CI were not touched.

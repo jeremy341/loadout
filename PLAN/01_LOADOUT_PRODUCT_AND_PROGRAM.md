@@ -170,11 +170,13 @@ LEVEL UP      REWARD SHOP       CUSTOM ORDERS      SEASON / COMMUNITY
                   BUILD HARDER STUFF
 ```
 
-Three persistent things grow at the same time:
+Three lifetime records grow with approved work:
 
 1. **Digital Loadout** — the technical artifacts the builder has shipped.
 2. **Track XP / Levels** — persistent proof of technical depth across the four tracks.
 3. **Bolts** — spendable currency from approved work.
+
+Community Eras add a separate, non-spendable Era Points progress counter. Era Points do not replace or mix with those three records, do not change the four tracks, and do not change the four quality dimensions. Era behavior and the separate 10% qualifying-project Bolt bonus are defined in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
 A user should immediately understand:
 
@@ -285,6 +287,8 @@ Hardware   LV.3 / 15
 ```
 
 **Track levels cap at 15.** They persist across seasons. Seasonal leaderboards may reset, but track progression never does.
+
+Eras are a different progression layer from Seasons. They advance the shared technical-era theme from approved community work; they never create a fifth Track or reset lifetime Track XP. See Plan 11 for the approved cadence and boundaries.
 
 Projects may span several tracks. The builder proposes a primary track and any secondary tracks, but the **reviewer makes the final XP allocation based on the work actually shipped**.
 

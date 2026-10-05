@@ -1,5 +1,7 @@
 # LOADOUT Public Site Pixl Port and Redesign Implementation Plan
 
+> **Workflow update (2026-10-05):** this plan records the completed initial homepage work. New work follows the short-lived branch → PR to `main` workflow in Plan 07. The earlier development/testing branch sequence and checklist targets below are historical execution context, not the current contributor process.
+
 > **For agentic workers:** Use superpowers:executing-plans to implement this plan task by task. Keep the work sequential because the ported baseline is the reference point for the redesign.
 
 **Goal:** Port the pinned Pixl public landing site into LOADOUT as a locally verifiable baseline, then reshape that same Next.js app into the approved LOADOUT public homepage.

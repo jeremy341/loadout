@@ -6,9 +6,11 @@ Repository: `jeremy341/loadout`, personal account. The desired repository visibi
 
 `fazin-ahamed` was invited with write permission. The collaborator must accept that invitation before their access is active. Do not guess or invite any other username.
 
-## Desired rules for all permanent lanes
+## Desired rules
 
-Create active rulesets or branch protection rules targeting exactly `development`, `testing`, and `main`. Require a pull request before merging, require zero human approvals, and do not configure bypass actors. Do not require CODEOWNER, owner, Jeremy, team, or last-push approval. Apply PR requirements to administrators as well. A required PR rule blocks direct updates to the named lane; write collaborators can still push short-lived branches.
+The routine PR destination is `main`. Protect `main` with a required PR and its required CI checks. Require zero human approvals and configure no bypass actors. Do not require CODEOWNER, owner, Jeremy, team, or latest-pusher approval. Apply the PR rule to administrators. Direct pushes to permanent branches should be blocked once rules are configured; temporary work branches remain writable by both trusted maintainers.
+
+`development` and `testing` are retained staging/history branches, not the normal targets for feature work. Keep them protected from direct pushes while they remain active, but do not add them as promotion gates to every task.
 
 Use GitHub Actions as the expected check source. Current check candidates are **Repository integrity**, **Landing quality**, and **Landing browser**. Integrity validates whitespace and source pins; quality runs lint, typecheck, unit tests, and a production build; browser covers navigation, responsive behavior, normal/reduced motion, and accessibility. Select the exact GitHub-reported check names only after successful runs on each lane. The workflow definitions are local; this does not establish that lane protections are active.
 
@@ -16,14 +18,14 @@ For `main`, also disable force pushes and branch deletion. Enable branch-current
 
 ## Actual status
 
-The local remote-tracking refs now contain the earlier reference-bootstrap lane history (`origin/development`, `origin/testing`, and `origin/main`). That cached state supersedes the old initializer-only note, but does not prove current live rules/protections. The current homepage commits are local and are being integrated into `development` at the user's request. Verify the live remote and required checks before publication or promotion. The earlier backup tag remains preserved.
+The live refs show a current baseline on `development` and an older `main`. A temporary baseline-sync PR branch is being prepared from the full development history into `main`; this is needed so a default-branch clone contains plans, images, and source submodules. Branch protections and rulesets remain unverified. Do not claim they are active before checking GitHub settings. The earlier backup tag remains preserved.
 
-After the first approved publication:
+After the baseline-sync PR:
 
-1. Publish the logically grouped commits and create `development` and `testing` at the approved baseline.
-2. Run CI for each lane and record the exact check names GitHub reports.
-3. Create rules for `development`, `testing`, and `main` using only checks reported for each target.
-4. Verify that a write collaborator can open and merge a check-green PR without a required approval and that direct lane updates are rejected.
+1. Ensure `main` contains the full initial baseline and plan changes.
+2. Record the exact GitHub check names from the passing main PR.
+3. Protect `main` with PR plus checks and zero required approvals; retain PR protection on staging lanes still in use.
+4. Verify that a write collaborator can merge a check-green main PR without a required approval and that direct pushes to permanent branches are rejected.
 5. Record the ruleset IDs, checks, empty bypass list, and verification result here.
 
 ## Personal-account limitations

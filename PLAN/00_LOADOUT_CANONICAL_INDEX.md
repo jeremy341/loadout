@@ -2,7 +2,7 @@
 
 **Status:** Current source-of-truth index after splitting the old master plan.
 
-This file is intentionally short. The detailed plans live in the five focused documents next to it.
+This file is intentionally short. The detailed plans live in the focused documents next to it.
 
 ## Canonical product decisions
 
@@ -22,6 +22,7 @@ This file is intentionally short. The detailed plans live in the five focused do
 - Hard track locks are reserved for a small set of genuine **Mastery** equipment.
 - Core principle: **Depth gives leverage. Breadth gives flexibility. Mastery gives access.**
 - Core identity: **Build your own technical stack.**
+- Community Eras are a shared technical progression. They remain distinct from seasons, tracks, Bolts, and Track XP; Plan 11 owns the approved Era rules.
 
 ## Plan map
 
@@ -49,6 +50,7 @@ How progression and money-like mechanics work:
 - Requisitions
 - Custom Orders
 - economy balancing and guardrails
+- Eras, Era Points, the qualifying-project Bolt bonus, and economy stacking
 
 ### `03_LOADOUT_UI_DESIGN_SYSTEM.md`
 The current visual/product-interface direction:
@@ -59,6 +61,7 @@ The current visual/product-interface direction:
 - web-recreatable components
 - page-level UI requirements
 - anti-"AI UI" rules
+- future Era progress, advancement-ready, and objective states
 
 ### `04_LOADOUT_PIXL_MIGRATION_PLAN.md`
 Engineering-only plan:
@@ -80,6 +83,7 @@ Running the actual YSWS:
 - pilot / Season 00
 - metrics
 - LOADOUT IRL / Germany build weekend concept
+- Era schedule, thresholds, reviewer criteria, and objective readiness
 
 ### `06_LOADOUT_PUBLIC_HOMEPAGE.md`
 Public marketing/entry experience:
@@ -97,7 +101,7 @@ Source and development workflow:
 - feature/UI/architecture audit
 - independent fresh-history `jeremy341/loadout` repo
 - licensing/attribution tracking
-- `development` → `testing` → `main`
+- temporary work branches and PRs into `main`; retained staging lane context
 - contributor/PR workflow
 - CI + CodeScene
 - later transfer readiness for `hackclub/loadout`
@@ -115,10 +119,11 @@ Supporting external-context brief:
 
 ### Public-site execution and refinement records
 
-- `09_LOADOUT_PUBLIC_SITE_PIXL_PORT_AND_REDESIGN.md` records the public landing port/redesign and the later fullscreen-hero/lightning/cloud amendment.
-- `10_LOADOUT_HOMEPAGE_RSVP_MOTION_AND_CONTENT_REFINEMENT.md` is the current planning proposal for RSVP integration, source-grounded motion, horizontal clouds, muted grey palette, content completeness, and the user-selected **Build your own technical stack.** headline. Proposed visual values become active only during its approved implementation.
+- `09_LOADOUT_PUBLIC_SITE_PIXL_PORT_AND_REDESIGN.md` records the completed public landing port/redesign and source-informed motion audit.
+- `10_LOADOUT_HOMEPAGE_RSVP_MOTION_AND_CONTENT_REFINEMENT.md` records the completed RSVP, motion, horizontal-cloud, muted-palette, content, and desktop-width refinement.
+- `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md` records the user-approved Eras design. It is a product plan, not an implementation authorization.
 
-### Agent execution order
+### Historical bootstrap sequence (completed)
 
 ```text
 1. PROMPT_00_GATHER_HACKCLUB_YSWS_CONTEXT.md
@@ -134,6 +139,8 @@ Supporting external-context brief:
    → sets up workflow
    → implements the first public homepage
 ```
+
+This records how the initial repository was created. Do not rerun the bootstrap prompts for routine work.
 
 ## File cleanup policy
 

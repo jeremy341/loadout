@@ -2,6 +2,8 @@
 .claude/
 node_modules/
 .superpowers/
+.vercel/
+**/.vercel/
 
 # Next.js and test output
 .next/

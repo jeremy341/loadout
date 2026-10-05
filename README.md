@@ -4,7 +4,7 @@
 
 ## Current state
 
-`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. It currently runs as a local preview with indexing disabled. Work follows the `development` → `testing` → `main` lanes described in [the development workflow](docs/development/WORKFLOW.md).
+`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The homepage is ready for a first Vercel preview; indexing remains disabled unless explicitly configured. Work follows the `development` → `testing` → `main` lanes described in [the development workflow](docs/development/WORKFLOW.md).
 
 ## Source references
 
@@ -22,4 +22,4 @@ See [the public-site port audit](docs/source-audit/PUBLIC_SITE_PORT.md) for base
 
 ## Development setup
 
-Read [the workflow](docs/development/WORKFLOW.md), [branch protection setup](docs/development/BRANCH_PROTECTION_SETUP.md), and [CodeScene setup](docs/development/CODESCENE_SETUP.md). Run `bun install --frozen-lockfile`, then `bun run dev` for the local preview. Use `bun run lint`, `bun run typecheck`, `bun run test`, `bun run build`, and `bun run test:e2e` to verify changes. CI definitions cover repository integrity, landing quality, and browser/accessibility checks; GitHub runs and required-check settings still need verification after publication.
+Start with [AGENTS.md](AGENTS.md) and the [human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md). See also [branch protection setup](docs/development/BRANCH_PROTECTION_SETUP.md) and [CodeScene setup](docs/development/CODESCENE_SETUP.md). Plans, bootstrap inputs, and their status are indexed in [`PLAN/README.md`](PLAN/README.md); design screenshots are indexed in [`docs/design/references/README.md`](docs/design/references/README.md). Run `bun install --frozen-lockfile`, then `bun run dev` for the local preview. Use `bun run lint`, `bun run typecheck`, `bun run test`, `bun run build`, and `bun run test:e2e` to verify changes. CI definitions cover repository integrity, landing quality, and browser/accessibility checks; GitHub runs and required-check settings still need verification after publication.

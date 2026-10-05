@@ -1,0 +1,12 @@
+# The deployment uses only the landing app and the root Bun workspace files.
+references/
+PLAN/
+docs/
+.github/
+.impeccable/
+.superpowers/
+.ulpi/
+AGENTS.md
+LOADOUT_DESIGN_SYSTEM.md
+PRODUCT.md
+README.md

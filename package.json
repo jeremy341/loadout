@@ -1,0 +1,16 @@
+{
+  "name": "loadout",
+  "private": true,
+  "packageManager": "bun@1.3.14",
+  "workspaces": [
+    "apps/landing"
+  ],
+  "scripts": {
+    "dev": "bun run --filter @loadout/landing dev",
+    "build": "bun run --filter @loadout/landing build",
+    "lint": "bun run --filter @loadout/landing lint",
+    "typecheck": "bun run --filter @loadout/landing typecheck",
+    "test": "bun run --filter @loadout/landing test",
+    "test:e2e": "bun run --filter @loadout/landing test:e2e"
+  }
+}

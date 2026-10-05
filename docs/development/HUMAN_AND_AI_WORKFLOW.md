@@ -34,7 +34,7 @@ When using a source repository, keep its recorded commit pin, license status, ex
 
 ## 5. Preview and publish
 
-For a Vercel Git integration, `apps/landing` is the application root in the Bun workspace. `main` is the production branch; pushes to `development` should create a shareable preview when the Vercel project is connected and configured. Verify the actual Vercel build, deployment URL, branch, and commit before sharing a demo. A successful local build does not establish a deployment.
+For the Vercel project settings and first-demo checklist, see [`VERCEL_PREVIEW.md`](VERCEL_PREVIEW.md). `apps/landing` is the application root in the Bun workspace. `main` is the production branch; pushes to `development` should create a preview when the Vercel project is connected and configured. Verify the actual Vercel build, deployment URL, branch, and commit before sharing a demo. A successful local build does not establish a deployment.
 
 Do not promote a preview to production or change domains as part of demo preparation. Publish only to the branch and environment the owner requested. Never expose environment values in logs or reports.
 

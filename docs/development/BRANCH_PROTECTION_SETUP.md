@@ -8,21 +8,21 @@ Repository: `jeremy341/loadout`, personal account. The desired repository visibi
 
 ## Desired rules
 
-The routine PR destination is `main`. Protect `main` with a required PR and its required CI checks. Require zero human approvals and configure no bypass actors. Do not require CODEOWNER, owner, Jeremy, team, or latest-pusher approval. Apply the PR rule to administrators. Direct pushes to permanent branches should be blocked once rules are configured; temporary work branches remain writable by both trusted maintainers.
+The routine PR destination is `main`. Protect each permanent lane (`development`, `testing`, `main`) with a required PR and the stable CI checks configured for that lane. Require zero human approvals and configure no bypass actors. Do not require CODEOWNER, owner, Jeremy, team, or latest-pusher approval. Apply PR requirements to administrators. This blocks direct pushes to those permanent branches once verified while leaving temporary branches writable by both trusted maintainers.
 
 `development` and `testing` are retained staging/history branches, not the normal targets for feature work. Keep them protected from direct pushes while they remain active, but do not add them as promotion gates to every task.
 
-Use GitHub Actions as the expected check source. Current check candidates are **Repository integrity**, **Landing quality**, and **Landing browser**. Integrity validates whitespace and source pins; quality runs lint, typecheck, unit tests, and a production build; browser covers navigation, responsive behavior, normal/reduced motion, and accessibility. Select the exact GitHub-reported check names only after successful runs on each lane. The workflow definitions are local; this does not establish that lane protections are active.
+Use GitHub Actions as the expected check source. The current stable checks are **Repository integrity**, **Landing quality**, and **Landing browser**. Integrity validates whitespace and source pins; quality runs lint, typecheck, unit tests, and a production build; browser covers navigation, responsive behavior, normal/reduced motion, and accessibility. They are configured for PRs into all three permanent branches. Do not infer that a rule is active just because the workflow defines the checks.
 
 For `main`, also disable force pushes and branch deletion. Enable branch-current/up-to-date checks only if they do not create an impractical promotion deadlock. Never configure a human approval count above zero.
 
 ## Actual status
 
-The live refs show a current baseline on `development` and an older `main`. A temporary baseline-sync PR branch is being prepared from the full development history into `main`; this is needed so a default-branch clone contains plans, images, and source submodules. Branch protections and rulesets remain unverified. Do not claim they are active before checking GitHub settings. The earlier backup tag remains preserved.
+PR #1 merged the complete development baseline into `main` at `f55b883b09d2f2e583ffc76fa452128afd5da1e2`, so the default clone now includes plans, images, and source submodules. Branch protections/rulesets are not yet applied; do not claim they are active until GitHub confirms them. The earlier backup tag remains preserved.
 
 After the baseline-sync PR:
 
-1. Ensure `main` contains the full initial baseline and plan changes.
+1. Confirm `main` contains the full initial baseline and plan changes. (Verified after PR #1.)
 2. Record the exact GitHub check names from the passing main PR.
 3. Protect `main` with PR plus checks and zero required approvals; retain PR protection on staging lanes still in use.
 4. Verify that a write collaborator can merge a check-green main PR without a required approval and that direct pushes to permanent branches are rejected.

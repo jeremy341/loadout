@@ -20,16 +20,16 @@ Read [the human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md) befo
 
 ## Local development
 
-For a complete checkout, clone the populated `development` ref while the baseline-sync PR to `main` is pending:
+For a complete checkout, clone the default `main` branch and initialize all pinned source submodules:
 
 ```powershell
-git clone --branch development --recurse-submodules https://github.com/jeremy341/loadout.git
+git clone --recurse-submodules https://github.com/jeremy341/loadout.git
 cd loadout
 git submodule update --init --recursive
 git submodule status
 ```
 
-This downloads Pixl, YSWS Template, and Stardance at their pinned SHAs. The 26 tracked design images are ordinary repository files and arrive with the clone. After the baseline PR merges, normal clones may use the default `main` branch.
+This downloads Pixl, YSWS Template, and Stardance at their pinned SHAs. The 26 tracked design images are ordinary repository files and arrive with the clone.
 
 Use Bun 1.3.14 and Node.js supported by the checked-in lockfile. From the repository root:
 

@@ -414,7 +414,7 @@ The pinned source submodule remains at its audited commit, so source files are a
 
 ### Complete collaborator checkout
 
-Until the baseline-sync PR merges, run `git clone --branch development --recurse-submodules https://github.com/jeremy341/loadout.git`, then `cd loadout`, `git submodule update --init --recursive`, and `git submodule status`. After the PR merges, omit `--branch development` to clone default `main`. Git downloads all tracked design images from `docs/design/references/`; submodule initialization downloads Pixl, YSWS Template, and Stardance at the recorded SHAs. Do not manually recopy them or use a partial/filtered clone for onboarding.
+Run `git clone --recurse-submodules https://github.com/jeremy341/loadout.git`, then `cd loadout`, `git submodule update --init --recursive`, and `git submodule status`. The default `main` contains the complete repository. Git downloads all tracked design images from `docs/design/references/`; submodule initialization downloads Pixl, YSWS Template, and Stardance at the recorded SHAs. Do not manually recopy them or use a partial/filtered clone for onboarding.
 
 ---
 
@@ -460,7 +460,7 @@ Intended roles:
 | `development` | retained integration/staging history; use only under an explicit plan | preview/manual |
 | `testing` | retained staging/release-candidate history; use only under an explicit plan | staging/manual |
 
-The initial bootstrap has not yet been synchronized to GitHub's default `main`. The temporary `docs/eras-community-workflow` branch contains the full `development` baseline merged onto `main` plus the updated plans/workflow. Until its PR merges, clone `development` for the complete workspace, then create a short-lived task branch and target its PR to `main`.
+The initial bootstrap baseline was synchronized to GitHub's default `main` by PR #1. `main` now contains the complete application, plans, docs, images, and source submodule pins. New contributors clone `main` and create short-lived task branches from it.
 
 Historical branch relationships from bootstrap:
 
@@ -470,13 +470,13 @@ main
 └── development
 ```
 
-The current remote histories are not identical: `development` contains the populated bootstrap, while `main` needs the catch-up PR above. Refresh refs before assuming either branch contains the other's commits.
+The initial remote lane histories were not identical; PR #1 reconciled the populated `development` baseline into `main`. Refresh remote refs before working and do not assume retained staging branches have the same state as `main`.
 
 ---
 
 # 12. Short-Lived Branches
 
-After the baseline-sync PR is merged, all new work branches from the latest `main`. While that sync is pending, start from the current fully populated `development` history and target the catch-up PR to `main`.
+All new work branches from the latest `main`.
 
 Prefixes:
 
@@ -629,7 +629,7 @@ basic security/static checks
 CodeScene diff review when available
 ```
 
-UI PRs also run browser/accessibility checks. For current repository scope, main PRs require the stable GitHub checks that have actually succeeded: `Repository integrity`, `Landing quality`, and `Landing browser`. Do not invent required-check names. Add backend/database checks when those systems exist. If a future release explicitly uses `development` or `testing`, document that release's base, target, and check set in its plan; it does not replace the default PR flow.
+UI PRs also run browser/accessibility checks. For current repository scope, PRs into all permanent branches run the stable GitHub checks: `Repository integrity`, `Landing quality`, and `Landing browser`. The standard day-to-day PR base remains `main`. Do not invent required-check names. Add backend/database checks when those systems exist. If a future release uses `development` or `testing`, document that explicit staging plan; it does not replace the default PR flow.
 
 Human review is recommended, but it must not be a required GitHub approval. Either trusted maintainer may merge after all required checks pass.
 
@@ -643,7 +643,7 @@ Configure protection/rulesets when account capabilities permit. The standard PR 
 
 Recommended starting policy:
 
-The goal is a **PR and CI gate with zero required human approvals**. Require a pull request and passing required checks on `main`; apply the rule to administrators and do not configure bypass actors. If `development` or `testing` remain active, block direct pushes there too. Both trusted maintainers can create and push temporary branches and merge check-green PRs independently.
+The goal is a **PR and CI gate with zero required human approvals**. Require a pull request and the appropriate passing CI checks on `development`, `testing`, and `main`; apply the rules to administrators and configure no bypass actors. Both trusted maintainers can create and push temporary branches and merge check-green PRs independently.
 
 ## Retained `development` lane
 

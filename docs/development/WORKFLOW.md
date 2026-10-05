@@ -9,7 +9,7 @@ Repository: public personal-account repository `jeremy341/loadout`. The intended
 
 All work uses a short-lived branch: branch from the latest `main`, make a focused change, and open a PR into `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Do not commit task work directly to `main`, `development`, or `testing`.
 
-**Initial baseline sync:** the complete LOADOUT code/plans/assets currently live on `development`; `main` has two independent older commits. The short-lived `docs/eras-community-workflow` branch contains the baseline merge and this plan update, and its PR should synchronize `main`. Until it merges, use `development` as the clone source, then branch temporary task work and target the catch-up PR/main as documented in the human/AI workflow. After the catch-up PR merges, clone default `main` and branch all work from `main`.
+**Initial baseline sync complete:** PR #1 merged the full populated `development` baseline and contributor updates into `main` at merge commit `f55b883b09d2f2e583ffc76fa452128afd5da1e2`. The default `main` branch now contains the application, plans, tracked design images, and pinned source submodules. Clone `main` and branch every task from it.
 
 Both trusted maintainers can create/push short-lived branches, open/review PRs, and merge a check-green PR to `main`. Jeremy owns the personal-account repository. `fazin-ahamed` was invited with write permission; GitHub showed the invitation awaiting acceptance when last checked on 2026-10-04.
 
@@ -27,9 +27,9 @@ Vercel project `jerry-team1/loadout` uses root directory `apps/landing`. Its pub
 
 ## Pull request checklist
 
-1. During the baseline sync, clone the populated `development` ref; after it merges, clone default `main`.
+1. Clone default `main` with `--recurse-submodules` and verify the pins.
 2. Post a kickoff in `#loadout-development` before substantive work.
-3. Create a short-lived branch and keep the change scoped. After the baseline sync, branch from `main`.
+3. Create a short-lived branch from `main` and keep the change scoped.
 4. Run lint, typecheck, unit tests, production build, and Playwright checks. CI runs these in `Landing quality` and `Landing browser`, alongside `Repository integrity`.
 5. Open a PR to `main` and wait for every required check.
 6. Request optional review when useful; no one person's approval is mandatory. Either trusted maintainer may merge after checks pass.

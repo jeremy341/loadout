@@ -1,0 +1,3 @@
+# Markdown hard line breaks and upstream license bytes are intentional.
+*.md whitespace=-blank-at-eol
+apps/landing/public/fonts/*-OFL.txt -text whitespace=-blank-at-eol

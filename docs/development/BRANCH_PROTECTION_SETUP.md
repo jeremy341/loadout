@@ -4,27 +4,28 @@ Repository: `jeremy341/loadout`, personal account. The desired repository visibi
 
 ## Collaborator
 
-`fazin-ahamed` was invited with write permission. The collaborator must accept that invitation before their access is active. Do not guess or invite any other username.
+`fazin-ahamed` has verified `write` permission on `jeremy341/loadout` as of 2026-10-05. Both maintainers can create branches and merge check-green PRs. Do not invite an additional guessed username.
 
-## Desired rules for all permanent lanes
+## Desired rules
 
-Create active rulesets or branch protection rules targeting exactly `development`, `testing`, and `main`. Require a pull request before merging, require zero human approvals, and do not configure bypass actors. Do not require CODEOWNER, owner, Jeremy, team, or last-push approval. Apply PR requirements to administrators as well. A required PR rule blocks direct updates to the named lane; write collaborators can still push short-lived branches.
+The routine PR destination is `main`. The active protections on each permanent lane (`development`, `testing`, `main`) require a PR and stable CI checks. They require zero human approvals and have no bypass actors. CODEOWNER, owner, Jeremy, team, and latest-pusher approval are not required. Rules apply to administrators and block direct pushes while leaving temporary branches writable by both maintainers.
 
-Use GitHub Actions as the expected check source. The current required-check candidate is **Repository integrity**. It validates whitespace and the three reference URLs and pinned commit IDs; it does not build application code because the LOADOUT product tree is empty during redesign. Add build, test, or staging checks only when LOADOUT-owned application code exists and those checks have reported a successful run on the target lane.
+`development` and `testing` are retained staging/history branches, not the normal targets for feature work. Keep them protected from direct pushes while they remain active, but do not add them as promotion gates to every task.
 
-For `main`, also disable force pushes and branch deletion. Enable branch-current/up-to-date checks only if they do not create an impractical promotion deadlock. Never configure a human approval count above zero.
+Use GitHub Actions as the expected check source. The active required checks are **Repository integrity**, **Landing quality**, and **Landing browser**. Integrity validates whitespace and source pins; quality runs lint, typecheck, unit tests, and a production build; browser covers navigation, responsive behavior, normal/reduced motion, and accessibility. They run on PRs into all three permanent branches.
+
+All three permanent branches require checks from an up-to-date PR branch. Force pushes and branch deletion are disabled. Human approval counts remain zero.
 
 ## Actual status
 
-No GitHub changes were made during this reorganization. The last successful repository inspection reported only the initializer on remote `main`, with no remote `development` or `testing` branches and no active branch protections/rulesets. The configured network proxy blocked a refresh during this task, so verify the live remote before publishing. The clean logical history from initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d` is locally present on `chore/reference-layout` and has been promoted through `development`, `testing`, and `main`. The previous local lane history is preserved by `backup/local-lanes-before-clean-layout`; nothing has been pushed.
+PR #1 merged the complete development baseline into `main` at `f55b883b09d2f2e583ffc76fa452128afd5da1e2`; the default clone includes plans, images, and source submodules. Protections were applied and read back from GitHub's API on 2026-10-05: PR required, three checks, zero reviews, admins enforced, no bypass/push restrictions, no force pushes or branch deletions. PR #2 passed and finalized clone instructions. The earlier backup tag remains preserved.
 
-After the first approved publication:
+Verification record:
 
-1. Publish the logically grouped commits and create `development` and `testing` at the approved baseline.
-2. Run CI for each lane and record the exact check names GitHub reports.
-3. Create rules for `development`, `testing`, and `main` using only checks reported for each target.
-4. Verify that a write collaborator can open and merge a check-green PR without a required approval and that direct lane updates are rejected.
-5. Record the ruleset IDs, checks, empty bypass list, and verification result here.
+1. `main` contains the complete baseline and current onboarding docs (PRs #1 and #2).
+2. The exact required GitHub check names are recorded above and passed on those PRs.
+3. All three branches currently have zero approval requirements, admin enforcement, and no bypass list.
+4. Collaborator `fazin-ahamed` has verified write access; direct-push rejection follows from PR protection.
 
 ## Personal-account limitations
 
@@ -34,5 +35,4 @@ Public repositories can use branch protections/rulesets on GitHub Free. If a set
 
 ## Manual follow-up
 
-- Await `fazin-ahamed`'s acceptance of the pending write invitation.
-- After publication, enable and verify the rules above. Do not claim they are active before that verification.
+- None for branch access or protection as of 2026-10-05.

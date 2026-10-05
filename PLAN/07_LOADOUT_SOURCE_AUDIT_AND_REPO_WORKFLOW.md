@@ -2,7 +2,7 @@
 
 ## Later workspace decision (2026-10-04)
 
-This later user decision supersedes earlier instructions in this plan to keep references outside the repository or avoid submodules. The three references now live as pinned Git submodules at `loadout/references/pixl/`, `loadout/references/ysws-template/`, and `loadout/references/stardance/`, each at the exact SHA recorded in `loadout/docs/source-audit/SOURCE_BASES.md`. Use `git clone --recurse-submodules` for a full local checkout. The parent LOADOUT history stores URLs and gitlinks, not copies of upstream source files. This matters because the YSWS Template and Stardance have no identified reuse license.
+This later user decision supersedes earlier instructions in this plan to keep references outside the repository or avoid submodules. The three references now live as pinned Git submodules at `loadout/references/pixl/`, `loadout/references/ysws-template/`, and `loadout/references/stardance/`, each at the exact SHA recorded in `loadout/docs/source-audit/SOURCE_BASES.md`. Run `git submodule update --init` for the complete accessible source checkout. Do not recurse into Stardance's nested `secrets` submodule: its remote returned “Repository not found” on 2026-10-05. The parent LOADOUT history stores URLs and gitlinks, not copies of upstream source files. This matters because the YSWS Template and Stardance have no identified reuse license.
 
 The LOADOUT product root is intentionally free of app/package code while the website redesign is planned. The previously implemented homepage was removed; do not restore it or the Pixl landing surface. Wait for a separate redesign instruction before adding a homepage or broad feature migration. The Stardance specialist audit and LOADOUT's canonical four quality dimensions remain unchanged.
 
@@ -414,7 +414,7 @@ The pinned source submodule remains at its audited commit, so source files are a
 
 ### Complete collaborator checkout
 
-Run `git clone --recurse-submodules https://github.com/jeremy341/loadout.git`, then `cd loadout`, `git submodule update --init --recursive`, and `git submodule status`. The default `main` contains the complete repository. Git downloads all tracked design images from `docs/design/references/`; submodule initialization downloads Pixl, YSWS Template, and Stardance at the recorded SHAs. Do not manually recopy them or use a partial/filtered clone for onboarding.
+Run `git clone https://github.com/jeremy341/loadout.git`, then `cd loadout`, `git submodule update --init`, and `git submodule status`. The default `main` contains the complete repository. Git downloads all tracked design images from `docs/design/references/`; top-level submodule initialization downloads Pixl, YSWS Template, and Stardance at the recorded SHAs. Do not manually recopy them or use a partial/filtered clone for onboarding. Avoid `--recursive` because Stardance's nested `secrets` remote is unavailable.
 
 ---
 

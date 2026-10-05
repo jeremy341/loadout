@@ -1,7 +1,7 @@
 # Public Landing Port Audit
 
 **Source:** Pixl landing app at SHA 8141b992e92e05583246fd914c63a101100f6fe4  
-**Status:** Stage A verified; Stage B LOADOUT homepage implemented locally after the user's model change.  
+**Status:** Stage A verified; Stage B and the RSVP/motion/content refinement implemented and verified locally.  
 **Scope:** Public landing app only. No participant app, admin dashboard, server, RSVP endpoint, or deployment proxy was copied.
 
 ## Stage A source mapping
@@ -69,19 +69,22 @@ The final reference is `codex-clipboard-6ecd3256-5ec8-4580-a85b-8105eafacdd8.png
 
 ## Stage B motion and visual review
 
-- Lenis anchor scrolling; scroll-direction nav; one hero entrance sequence; once-only section reveals; card hover feedback; FAQ transitions; enlarged clouds with per-cloud scroll parallax (bounded to ±90px vertically and ±24px horizontally), plus inner-layer drift at 36 seconds in eight steps.
+- Lenis anchor scrolling; scroll-direction nav; one hero entrance sequence; once-only section reveals with item stagger; card hover feedback; FAQ transitions; enlarged clouds with horizontal-only scroll parallax (bounded to ±72px desktop and ±36px mobile), plus horizontal inner-layer drift at 36 seconds in eight steps. Animated Y remains zero.
 - Reduced motion disables Lenis, drift, entrances, and movement; content and controls remain available. Mobile navigation exposes a landmark and moves focus to the selected section heading.
 - Desktop and mobile captures are stored under `.impeccable/review/final/`; screenshot comparison preserves the framed hero, paper grid, cloud edges, outlined containers, dark track cards, progression, rewards, FAQ, and skyline/footer rhythm.
 - The Impeccable detector reports one advisory for the grid background. The user explicitly required the paper grid, so it is retained.
 - CI definitions now include `Landing quality` and `Landing browser`; GitHub execution and protection selection remain unverified until publication.
 
-## Final local verification — 2026-10-04
+## Final local verification — 2026-10-05
 
 - Production build, TypeScript check, and ESLint pass; lint has zero warnings/errors.
-- Three configuration unit tests pass.
-- All 15 Playwright cases pass against the local preview: canonical content/anchors, optional-link and preview metadata behavior, fullscreen desktop/mobile hero, 320/390/768/1440 reflow, keyboard FAQ, mobile navigation landmark/focus and 44px targets, nav scroll direction, reduced motion, cloud parallax, consistent scenery hydration, normal smooth scrolling/card hover, and desktop/mobile accessibility.
+- Four configuration unit tests pass, covering the confirmed RSVP default, explicit disabled/unsafe overrides, and opt-in indexing.
+- All 24 Playwright cases pass against the production preview using two workers: canonical content/anchors, RSVP and preview metadata, fullscreen desktop/mobile hero, 320/390/768/1440 reflow, keyboard FAQ, mobile navigation landmark/focus and 44px targets, nav scroll direction, reduced motion, horizontal cloud parallax, consistent scenery hydration, keyboard/touch/anchor/history scrolling, JS-disabled content and FAQ, short landscape, card hover, and desktop/mobile accessibility.
+- The desktop headline occupies exactly two lines without clipping at 1280×800, 1440×900, 1659×948 and 1920×1080 after fonts load. The desktop hero frame is widened to 900px above 1100px, with each explicit headline span kept on one line. Side labels are hidden at 1101–1300px to protect the widened title. Mobile wrapping remains responsive.
 - Automated accessibility review finds no serious or critical issues; this is bounded evidence, not a claim of full WCAG certification.
 - All three references remain clean at their documented commits. Source-only domains and service coupling are absent from the application and generated page output.
-- The local preview runs at port 3000. The homepage baseline is now being versioned in focused local commits and integrated into local `development`; hosted CI, remote promotion, protections, and CodeScene activation remain separate verification/setup steps.
+- The local production preview runs at port 3000. The homepage baseline and refinement are recorded in focused local commits for integration into local `development`; hosted CI, remote promotion, protections, and CodeScene activation remain separate verification/setup steps.
 
 Hero refinement verification: the exact 1659×948 reference viewport and mobile first screen were reviewed. The yellow lightning currency SVG is distinct from the brand mark. Cloud display springs initialize at zero on both server and client; preference-dependent activation happens after hydration, avoiding the reduced-motion attribute mismatch found during development.
+
+The final capture set is `.impeccable/review/final/desktop.png`, `desktop-viewport.png`, `mobile.png`, `mobile-viewport.png`, and `hero-reference.png`. These local review artifacts are ignored by Git. The detector's sole grid-background advisory is retained as an intentional user-requested design choice. Privacy/contact/rules URLs, dates, eligibility, and the live catalogue remain owner-provided setup inputs.

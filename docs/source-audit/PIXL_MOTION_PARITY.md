@@ -1,6 +1,6 @@
 # Pixl / LOADOUT landing motion and content audit
 
-Recorded 2026-10-04. This is planning evidence; application files are unchanged by this audit.
+Recorded 2026-10-04 before implementation. The inventory below preserves that planning evidence; the execution record at the end describes the verified 2026-10-05 result.
 
 Pixl pin: `8141b992e92e05583246fd914c63a101100f6fe4`, MIT, clean local checkout at `references/pixl/`. Source paths below are relative to that checkout. LOADOUT paths are relative to its repository root.
 
@@ -53,3 +53,13 @@ Conclusion: the essential scroll experience is present. Fullscreen behavior is a
 | Program dates/status, live reward inventory, Login | Unconfirmed | Remain absent; RSVP availability doesn't establish them. |
 
 This pass is public marketing only. Account, tracker, review, reward shop, economy, and fulfillment systems remain outside it.
+
+## Implemented result — 2026-10-05
+
+All ADAPT/REIMPLEMENT items in this scope are now present: source-derived hero entrance timing, accessible continue cue, 120px/4px/300ms scroll-direction nav, item-level 0.1s stagger, 0.35s FAQ panel and 0.25s chevron, bounded tactile buttons, and retained Lenis cleanup/focus/reduced-motion handling. The fullscreen hero remains in ordinary document flow; it is not pinned or scroll-zoomed.
+
+The selected headline is BUILD YOUR OWN / TECHNICAL STACK. The desktop frame is 900px wide above 1100px, with two explicit no-wrap title lines; four desktop sizes from 1280 to 1920px pass geometry assertions. Muted grey paper, subdued yellow accents, larger horizontal-only clouds (±72px desktop/±36px mobile), and reduced-motion/no-JS fallbacks implement the user's refinements.
+
+The confirmed RSVP default appears in nav, hero, and closing CTA, with safe explicit disable/override handling. Digital/Physical Loadout, global Bolts/non-spendable Track XP, conceptual project-fit examples, planned tracking/journals, AI disclosure, team/multi-track review, reproducible research and requisition constraints are explained. Unknown owner-provided policy/contact/dates/catalogue inputs remain deferred.
+
+Build, lint, TypeScript, four unit tests and 24 production-browser cases pass. Desktop/mobile axe checks report no serious or critical issues. The intentional paper grid is the Impeccable detector's only advisory. REFERENCE ONLY/IGNORE effects remain excluded as recorded above; this is source-informed motion, not a claim of copying every Pixl effect. All three source checkouts remain clean at their documented pins. See PUBLIC_SITE_PORT.md for evidence and local capture paths.

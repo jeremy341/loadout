@@ -4,7 +4,7 @@
 
 ## Current state
 
-`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The first demo is being deployed to Vercel Production on its generated domain; indexing remains disabled. Work follows the `development` → `testing` → `main` lanes described in [the development workflow](docs/development/WORKFLOW.md).
+`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The first production demo is live at [landing-mu-taupe.vercel.app](https://landing-mu-taupe.vercel.app/); indexing remains disabled. Work follows the `development` → `testing` → `main` lanes described in [the development workflow](docs/development/WORKFLOW.md).
 
 ## Source references
 

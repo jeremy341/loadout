@@ -25,6 +25,6 @@ To populate the reference folders in a fresh clone, use `git clone --recurse-sub
 
 ## Scope boundaries
 
-Pixl remains the primary engineering reference, but its application tree is not copied into the LOADOUT product root. No runtime, application architecture, or deployment target is currently shipped by LOADOUT. YSWS Template and Stardance are source-reading references only until an authorized reuse basis exists.
+Pixl remains the primary engineering reference. A temporary landing subset was ported for Stage A verification, then replaced with the LOADOUT public homepage in the same Next.js app. Final source reuse is limited to the landing composition and adapted scrolling/navigation/motion patterns recorded in `PUBLIC_SITE_PORT.md`. The temporary Pixl media and source-only pages were removed. YSWS Template and Stardance remain source-reading references until a reuse basis exists.
 
 The Stardance review audit does not adopt Rails or Stardance's rubric, aggregation, percentile, or payout formula. LOADOUT's canonical quality dimensions remain Originality, Technical Depth, Execution, and Documentation; the resulting LOADOUT quality assessment informs its Bolts multiplier according to `PLAN/02`.

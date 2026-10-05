@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const clouds = [
   [3, "left", 1], [2, "right", 2], [10, "right", 3], [12, "left", 2], [19, "left", 3], [23, "right", 1],
@@ -13,25 +13,28 @@ function ScrollCloud({ top, side, variant, index }: { top: number; side: "left" 
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const targetY = useTransform(scrollYProgress, [0, 1], [-90, 90]);
-  const targetX = useTransform(scrollYProgress, [0, 1], side === "left" ? [-24, 24] : [24, -24]);
+  const [range, setRange] = useState(72);
+  useEffect(() => {
+    const smallScreen = window.matchMedia("(max-width: 700px)");
+    const sync = () => setRange(smallScreen.matches ? 36 : 72);
+    const frame = requestAnimationFrame(sync);
+    smallScreen.addEventListener("change", sync);
+    return () => { cancelAnimationFrame(frame); smallScreen.removeEventListener("change", sync); };
+  }, []);
+  const targetX = useTransform(scrollYProgress, [0, 1], side === "left" ? [-range, range] : [range, -range]);
   const x = useSpring(0, { stiffness: 90, damping: 26, mass: 0.4 });
-  const y = useSpring(0, { stiffness: 90, damping: 26, mass: 0.4 });
 
   useEffect(() => {
     if (reduceMotion) {
       x.jump(0);
-      y.jump(0);
       return;
     }
     x.set(targetX.get());
-    y.set(targetY.get());
     const stopX = targetX.on("change", (value) => x.set(value));
-    const stopY = targetY.on("change", (value) => y.set(value));
-    return () => { stopX(); stopY(); };
-  }, [reduceMotion, targetX, targetY, x, y]);
+    return stopX;
+  }, [reduceMotion, targetX, x, range]);
 
-  return <motion.div ref={ref} className={`pixel-cloud cloud-${side}`} style={{ top: `${top}%`, x, y }}>
+  return <motion.div ref={ref} className={`pixel-cloud cloud-${side}`} style={{ top: `${top}%`, x }}>
     <svg className="cloud-art" style={{ animationDelay: `${-index * 3}s` }} viewBox="0 0 200 70"><image href={`/loadout/cloud-${variant}.svg`} width="200" height="70" /></svg>
   </motion.div>;
 }

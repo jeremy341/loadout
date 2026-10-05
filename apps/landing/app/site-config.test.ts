@@ -2,12 +2,18 @@ import { describe, expect, test } from "bun:test";
 import { createSiteConfig } from "./site-config";
 
 describe("public site configuration", () => {
-  test("missing program destinations stay absent and previews stay unindexed", () => {
+  test("the confirmed RSVP is the default while previews stay unindexed", () => {
     const config = createSiteConfig();
-    expect(config.joinUrl).toBeUndefined();
+    expect(config.joinUrl).toBe("https://rsvp.soon.it/loadout");
     expect(config.loginUrl).toBeUndefined();
     expect(config.origin).toBeUndefined();
     expect(config.allowIndexing).toBe(false);
+  });
+
+  test("an explicit empty or unsafe override disables RSVP", () => {
+    for (const joinUrl of ["", "http://example.com", "javascript:alert(1)", "https://user:password@example.com"]) {
+      expect(createSiteConfig({ joinUrl }).joinUrl).toBeUndefined();
+    }
   });
 
   test("only HTTPS destinations without credentials are accepted", () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, type Transition } from "framer-motion";
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import {
   faqItems,
   fieldCategories,
@@ -9,12 +9,15 @@ import {
   processSteps,
   progressionMilestones,
   projectFitItems,
+  requisitionMilestones,
   rewards,
+  researchCopy,
   shopCategories,
   tracks,
 } from "../site-content";
 import { LoadoutIcon } from "./icons/LoadoutIcon";
 import Reveal from "./Reveal";
+import { DigitalPhysicalLoadout } from "./DigitalPhysicalLoadout";
 
 function SectionHeading({ eyebrow, title, children, headingId }: { eyebrow: string; title: string; children: ReactNode; headingId?: string }) {
   return (
@@ -28,18 +31,18 @@ function SectionHeading({ eyebrow, title, children, headingId }: { eyebrow: stri
 
 export default function HomepageSections() {
   const reduceMotion = useReducedMotion();
-  const transition: Transition = reduceMotion ? { duration: 0 } : { duration: 0.24, ease: [0.16, 1, 0.3, 1] };
+  const transition: Transition = reduceMotion ? { duration: 0 } : { duration: 0.35, ease: [0.22, 1, 0.36, 1] };
 
   return (
     <>
-      <Reveal>
+      <Reveal stagger>
         <section className="site-section about-section" id="about" aria-labelledby="about-title">
           <SectionHeading eyebrow="About" title="What is LOADOUT?" headingId="about-title">
             A technical builder program in the making. Choose a track, build something real, and grow your skills and your loadout.
           </SectionHeading>
           <div className="overview-grid">
-            {overviewItems.map((item) => (
-              <article className="overview-card" key={item.index}>
+            {overviewItems.map((item, index) => (
+              <article className="overview-card reveal-item" style={{ "--reveal-index": index } as CSSProperties} key={item.index}>
                 <span className="card-icon" aria-hidden="true"><LoadoutIcon name={item.icon} /></span>
                 <span className="card-index">{item.index}</span>
                 <h3>{item.title}</h3>
@@ -51,14 +54,16 @@ export default function HomepageSections() {
         </section>
       </Reveal>
 
-      <Reveal>
+      <DigitalPhysicalLoadout />
+
+      <Reveal stagger>
         <section className="site-section process-section" id="process" aria-labelledby="process-title">
           <SectionHeading eyebrow="Process" title="How it works" headingId="process-title">
             From a capability gap to a working project. Here’s the planned LOADOUT loop.
           </SectionHeading>
           <ol className="process-grid">
             {processSteps.map((step, index) => (
-              <li className="process-card" key={step.title}>
+              <li className="process-card reveal-item" style={{ "--reveal-index": index } as CSSProperties} key={step.title}>
                 <span className="step-number">{String(index + 1).padStart(2, "0")}</span>
                 <span className="step-icon" aria-hidden="true"><LoadoutIcon name={step.icon} /></span>
                 <h3>{step.title}</h3>
@@ -84,17 +89,18 @@ export default function HomepageSections() {
               </article>
             ))}
           </div>
+          <p className="capability-note"><strong>Capability examples:</strong> renderer or netcode work; inference runtimes or GPU backends; local-first sync. These are project types, not claimed participant submissions.</p>
         </section>
       </Reveal>
 
-      <Reveal>
+      <Reveal stagger>
         <section className="site-section tracks-section" id="tracks" aria-labelledby="tracks-title">
           <SectionHeading eyebrow="Tracks" title="Build across four tracks" headingId="tracks-title">
             Choose a technical field to focus your work. Each track records its own progress.
           </SectionHeading>
           <div className="track-grid">
             {tracks.map((track, index) => (
-              <article className="track-card" key={track.name}>
+              <article className="track-card reveal-item" style={{ "--reveal-index": index } as CSSProperties} key={track.name}>
                 <div className="track-top"><span className="track-id">0{index + 1}</span><span className="track-icon" aria-hidden="true"><LoadoutIcon name={track.icon} /></span></div>
                 <h3>{track.name}</h3>
                 <p className="track-topics">{track.topics}</p>
@@ -104,7 +110,7 @@ export default function HomepageSections() {
           </div>
           <div className="research-strip" id="research">
             <span className="research-icon" aria-hidden="true"><LoadoutIcon name="flask" /></span>
-            <span><strong>Research Mode</strong><small>Investigate a technical question and share what you learn. Research Mode is a modifier, not a separate track.</small></span>
+            <span><strong>{researchCopy.title}</strong><small>{researchCopy.description}</small></span>
             <a className="track-arrow" href="#faq" aria-label="Learn about Research Mode"><LoadoutIcon name="arrow" /></a>
           </div>
         </section>
@@ -149,6 +155,13 @@ export default function HomepageSections() {
             <span className="order-icon" aria-hidden="true"><LoadoutIcon name="box" /></span>
             <div><h3>Need something specific?</h3><p>Build a strong project history. Custom Orders can support technical gear outside the catalogue; one-use Requisitions give specialists another way to upgrade.</p></div>
             <a className="button" href="#faq">Explore the details <LoadoutIcon name="arrow" /></a>
+          </div>
+          <div className="requisition-details">
+            <p><strong>Requisition milestones</strong></p>
+            <ul className="requisition-milestones" aria-label="Requisition milestone levels">
+              {requisitionMilestones.map((level) => <li key={level}>{level}</li>)}
+            </ul>
+            <p>Requisitions are one-use and never expire. Only one can apply to an order, and it cannot bypass Mastery level requirements. Custom Orders depend on project fit, budget, region, and fulfillment.</p>
           </div>
         </section>
       </Reveal>
@@ -199,6 +212,12 @@ export default function HomepageSections() {
               );
             })}
           </div>
+          <noscript>
+            <div className="faq-noscript">
+              <p>FAQ answers are also available here when scripts are disabled.</p>
+              <dl>{faqItems.map((item) => <div key={item.question}><dt>{item.question}</dt><dd>{item.answer}</dd></div>)}</dl>
+            </div>
+          </noscript>
         </section>
       </Reveal>
     </>

@@ -20,7 +20,7 @@ Human review is recommended when both maintainers are available. It is optional 
 
 ## Current setup status
 
-The current homepage, assets, audits, design, tests and CI are being recorded as focused local commits and integrated into local `development` at the user's request. Refinement work continues on the existing short-lived `chore/reference-layout` branch. Remote protections and CodeScene activation remain unverified. CI defines `Repository integrity`, `Landing quality`, and `Landing browser`; these must report successfully on GitHub before they become lane requirements. Commit/merge actions here do not publish changes or promote testing/main.
+The homepage baseline, assets, audits, design, tests and CI were recorded in focused local commits and integrated into local `development` at the user's request. The approved RSVP/motion/content and desktop-width refinement follows from `chore/reference-layout` into local `development`. This local integration is explicitly user-authorized; the normal published workflow remains PR-based. Remote protections and CodeScene activation remain unverified. CI defines `Repository integrity`, `Landing quality`, and `Landing browser`; these must report successfully on GitHub before they become lane requirements. Local evidence on 2026-10-05: build, lint, TypeScript, four unit tests and 24 browser cases pass. Commit/merge actions here do not publish changes or promote testing/main.
 
 ## Pull request checklist
 

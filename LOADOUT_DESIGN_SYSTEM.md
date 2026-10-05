@@ -42,21 +42,21 @@ The current mockup is primarily:
 
 | Token | Hex | Use |
 |---|---:|---|
-| `canvas` | `#F1EFEA` | Main page background |
-| `surface` | `#F7F5F0` | Cards, nav, FAQ rows |
-| `surface-muted` | `#E5E3DE` | Secondary panels / subtle fills |
+| `canvas` | `#E8E9E6` | Main page background |
+| `surface` | `#F0F1ED` | Cards, nav, FAQ rows |
+| `surface-muted` | `#DDE0DC` | Secondary panels / subtle fills |
 | `grid-line` | `#D8D6D1` | Engineering grid |
-| `ink` | `#17181A` | Main text / outlines |
-| `graphite` | `#202225` | Dark cards |
-| `graphite-2` | `#2B2D30` | Dark-card hover/secondary |
+| `ink` | `#1D2021` | Main text / outlines |
+| `graphite` | `#292C2D` | Dark cards |
+| `graphite-2` | `#34383A` | Dark-card hover/secondary |
 | `steel` | `#A5A5A5` | Secondary text / dividers |
-| `steel-dark` | `#606161` | Muted copy |
-| `bolt-yellow` | `#FBC834` | Primary accent |
-| `bolt-yellow-dark` | `#D8AC29` | Pressed/hover border tone |
-| `bolt-yellow-soft` | `#FBCF50` | Highlight / lighter yellow |
+| `steel-dark` | `#575E60` | Muted copy |
+| `bolt-yellow` | `#D9B64C` | Primary accent |
+| `bolt-yellow-dark` | `#B3913B` | Pressed/hover border tone |
+| `bolt-yellow-soft` | `#E1C56D` | Highlight / lighter yellow |
 | `white` | `#FFFFFF` | Text on dark / product backgrounds |
-| `danger` | `#C94A42` | Errors only |
-| `success` | `#5D9E63` | Success states only |
+| `danger` | `#A96F6C` | Errors only |
+| `success` | `#718C79` | Success states only |
 
 ## Primary rule
 
@@ -77,25 +77,25 @@ Color should approximately follow:
 
 ```css
 :root {
-  --loadout-canvas: #F1EFEA;
-  --loadout-surface: #F7F5F0;
-  --loadout-surface-muted: #E5E3DE;
+  --loadout-canvas: #E8E9E6;
+  --loadout-surface: #F0F1ED;
+  --loadout-surface-muted: #DDE0DC;
 
-  --loadout-ink: #17181A;
-  --loadout-graphite: #202225;
-  --loadout-graphite-2: #2B2D30;
+  --loadout-ink: #1D2021;
+  --loadout-graphite: #292C2D;
+  --loadout-graphite-2: #34383A;
 
   --loadout-steel: #A5A5A5;
-  --loadout-steel-dark: #606161;
+  --loadout-steel-dark: #575E60;
   --loadout-grid: #D8D6D1;
 
-  --loadout-yellow: #FBC834;
-  --loadout-yellow-dark: #D8AC29;
-  --loadout-yellow-soft: #FBCF50;
+  --loadout-yellow: #D9B64C;
+  --loadout-yellow-dark: #B3913B;
+  --loadout-yellow-soft: #E1C56D;
 
   --loadout-white: #FFFFFF;
-  --loadout-danger: #C94A42;
-  --loadout-success: #5D9E63;
+  --loadout-danger: #A96F6C;
+  --loadout-success: #718C79;
 }
 ```
 
@@ -107,7 +107,7 @@ Color should approximately follow:
 
 ```css
 body {
-  background-color: #F1EFEA;
+  background-color: #E8E9E6;
 }
 ```
 
@@ -117,7 +117,7 @@ Use two subtle 1 px grid layers.
 
 ```css
 body {
-  background-color: #F1EFEA;
+  background-color: #E8E9E6;
   background-image:
     linear-gradient(to right, rgba(23, 24, 26, 0.045) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(23, 24, 26, 0.045) 1px, transparent 1px);
@@ -185,7 +185,7 @@ Hero heading:
   line-height: 0.82;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  color: #17181A;
+  color: #1D2021;
 }
 ```
 
@@ -228,20 +228,20 @@ The website should use simple technical outlines.
 ## Standard border
 
 ```css
-border: 1.5px solid #17181A;
+border: 1.5px solid #1D2021;
 ```
 
 ## Strong container
 
 ```css
-border: 2px solid #17181A;
+border: 2px solid #1D2021;
 ```
 
 ## Dark card
 
 ```css
-background: #202225;
-border: 1.5px solid #17181A;
+background: #292C2D;
+border: 1.5px solid #1D2021;
 ```
 
 ## Radius
@@ -263,21 +263,21 @@ Do not use 16–32 px SaaS-style rounded cards.
 Use **hard offset shadows**, not soft blur.
 
 ```css
---shadow-hard: 4px 4px 0 #17181A;
---shadow-small: 2px 2px 0 #17181A;
+--shadow-hard: 4px 4px 0 #1D2021;
+--shadow-small: 2px 2px 0 #1D2021;
 ```
 
 Buttons:
 
 ```css
-box-shadow: 3px 3px 0 #17181A;
+box-shadow: 3px 3px 0 #1D2021;
 ```
 
 Hover:
 
 ```css
 transform: translate(1px, 1px);
-box-shadow: 2px 2px 0 #17181A;
+box-shadow: 2px 2px 0 #1D2021;
 ```
 
 Pressed:
@@ -353,8 +353,8 @@ Specs:
 
 ```css
 height: 64px;
-background: #F7F5F0;
-border: 2px solid #17181A;
+background: #F0F1ED;
+border: 2px solid #1D2021;
 ```
 
 Placement:
@@ -432,8 +432,8 @@ Use four simple CSS/SVG corner marks around the main copy.
 ```text
 ┌                           ┐
 
-     REAL PROJECTS.
-     REAL REWARDS.
+     BUILD YOUR OWN
+     TECHNICAL STACK.
 
 └                           ┘
 ```
@@ -441,7 +441,7 @@ Use four simple CSS/SVG corner marks around the main copy.
 Stroke:
 
 ```css
-2px solid #17181A
+2px solid #1D2021
 ```
 
 ---
@@ -476,7 +476,7 @@ Each bar:
 24–28 px wide
 10–12 px gap
 ~45° slant
-#FBC834
+#D9B64C
 ```
 
 Never turn the entire site into hazard stripes.
@@ -516,8 +516,8 @@ Four-card row:
 Card style:
 
 ```css
-background: #F7F5F0;
-border: 1.5px solid #17181A;
+background: #F0F1ED;
+border: 1.5px solid #1D2021;
 padding: 28px;
 min-height: 260px;
 ```
@@ -584,16 +584,16 @@ Use four equal dark cards.
 
 ```css
 .track-card {
-  background: #202225;
+  background: #292C2D;
   color: #FFFFFF;
-  border: 1.5px solid #17181A;
+  border: 1.5px solid #1D2021;
 }
 ```
 
 Accent:
 
 ```css
-color: #FBC834;
+color: #D9B64C;
 ```
 
 Do not use a rainbow of track-card background colors.
@@ -638,10 +638,10 @@ flat pixel-aware SVG
 Colors:
 
 ```text
-body       #FBC834
-edge       #D8AC29
-outline    #17181A
-highlight  #FBE079
+body       #D9B64C
+edge       #B3913B
+outline    #1D2021
+highlight  #EAD599
 ```
 
 The Bolt icon should appear consistently beside balances and reward prices.
@@ -667,8 +667,8 @@ These numbers are illustrative mockup content unless the economy plan explicitly
 Visual style:
 
 ```css
-background: #F7F5F0;
-border: 1.5px solid #17181A;
+background: #F0F1ED;
+border: 1.5px solid #1D2021;
 ```
 
 Rows:
@@ -728,15 +728,15 @@ max-width: 920px;
 Row:
 
 ```css
-background: #F7F5F0;
-border: 1.5px solid #17181A;
+background: #F0F1ED;
+border: 1.5px solid #1D2021;
 min-height: 64px;
 ```
 
 Arrow:
 
 ```css
-color: #C94A42;
+color: #A96F6C;
 ```
 
 Recommended questions:
@@ -790,7 +790,7 @@ Code of Conduct
 Use:
 
 ```css
-border-top: 1.5px solid #17181A;
+border-top: 1.5px solid #1D2021;
 background: rgba(247,245,240,.75);
 ```
 
@@ -818,9 +818,9 @@ LOADOUT SVGs should be hand-built and reusable.
 Example icon palette:
 
 ```text
-Outline      #17181A
-Primary      #FBC834
-Secondary    #F7F5F0
+Outline      #1D2021
+Primary      #D9B64C
+Secondary    #F0F1ED
 Muted        #A5A5A5
 ```
 
@@ -834,10 +834,10 @@ SVGs should look like small engineering-manual symbols rather than emoji.
 
 ```css
 .button-primary {
-  background: #FBC834;
-  color: #17181A;
-  border: 2px solid #17181A;
-  box-shadow: 3px 3px 0 #17181A;
+  background: #D9B64C;
+  color: #1D2021;
+  border: 2px solid #1D2021;
+  box-shadow: 3px 3px 0 #1D2021;
 }
 ```
 
@@ -845,10 +845,10 @@ SVGs should look like small engineering-manual symbols rather than emoji.
 
 ```css
 .button-secondary {
-  background: #F7F5F0;
-  color: #17181A;
-  border: 2px solid #17181A;
-  box-shadow: 3px 3px 0 #17181A;
+  background: #F0F1ED;
+  color: #1D2021;
+  border: 2px solid #1D2021;
+  box-shadow: 3px 3px 0 #1D2021;
 }
 ```
 
@@ -857,13 +857,13 @@ SVGs should look like small engineering-manual symbols rather than emoji.
 Primary:
 
 ```css
-background: #FBCF50;
+background: #E1C56D;
 ```
 
 Secondary:
 
 ```css
-background: #E5E3DE;
+background: #DDE0DC;
 ```
 
 ---
@@ -873,8 +873,8 @@ background: #E5E3DE;
 Inputs:
 
 ```css
-background: #F7F5F0;
-border: 1.5px solid #17181A;
+background: #F0F1ED;
+border: 1.5px solid #1D2021;
 height: 48px;
 padding-inline: 16px;
 font-family: var(--font-ui);
@@ -1041,7 +1041,7 @@ military/tactical branding
 The public page should visually prioritize:
 
 ```text
-1. REAL PROJECTS. REAL REWARDS.
+1. BUILD YOUR OWN TECHNICAL STACK.
 2. RSVP / JOIN
 3. What LOADOUT is
 4. How it works
@@ -1061,24 +1061,24 @@ The homepage should explain the program before showing economy complexity.
 ```css
 :root {
   /* COLORS */
-  --canvas: #F1EFEA;
-  --surface: #F7F5F0;
-  --surface-muted: #E5E3DE;
+  --canvas: #E8E9E6;
+  --surface: #F0F1ED;
+  --surface-muted: #DDE0DC;
 
-  --ink: #17181A;
-  --graphite: #202225;
-  --graphite-2: #2B2D30;
+  --ink: #1D2021;
+  --graphite: #292C2D;
+  --graphite-2: #34383A;
 
   --steel: #A5A5A5;
-  --steel-dark: #606161;
+  --steel-dark: #575E60;
   --grid: #D8D6D1;
 
-  --yellow: #FBC834;
-  --yellow-dark: #D8AC29;
-  --yellow-soft: #FBCF50;
+  --yellow: #D9B64C;
+  --yellow-dark: #B3913B;
+  --yellow-soft: #E1C56D;
 
-  --danger: #C94A42;
-  --success: #5D9E63;
+  --danger: #A96F6C;
+  --success: #718C79;
   --white: #FFFFFF;
 
   /* TYPOGRAPHY */
@@ -1112,3 +1112,9 @@ The homepage should explain the program before showing economy complexity.
 # 30. One-line design rule
 
 > **LOADOUT should look like a clean technical field manual for teenage builders: off-white engineering paper, black pixel typography, graphite technical panels, Bolt Yellow highlights, simple custom SVGs, and almost no decorative effects that could not be recreated directly in CSS.**
+
+## Implemented public-site refinement — 2026-10-04
+
+The selected headline is BUILD YOUR OWN / TECHNICAL STACK. RSVP now uses https://rsvp.soon.it/loadout as the confirmed interest destination. Pixl-inspired entrance choreography and the accessible Continue scrolling cue are active. Clouds use horizontal-only bounded parallax, ±72px desktop/±36px mobile; CSS sizes are clamp(200px,26vw,420px) and220px mobile, with static reduced-motion behavior. The current .ulpi/design/DESIGN.md table is the compact active token record.
+
+Desktop amendment — 2026-10-05: above 1100px, the hero frame is widened to 900px and each headline span stays on one line, producing exactly two rows. Side labels hide at 1101–1300px to avoid overlap. Mobile wrapping remains responsive. Production-browser geometry checks cover 1280, 1440, 1659 and 1920px widths.

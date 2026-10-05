@@ -20,7 +20,7 @@ LOADOUT focuses on work that expands technical capability for the builder or oth
 
 ## Operating Context
 
-This repository is preparing a public landing page. There is currently no LOADOUT login, RSVP endpoint, project submission flow, active reward catalogue, or deployment origin in the product tree. The page may explain canonical planned concepts, but must not imply they are operational.
+The public homepage now links to the user-confirmed external draft-interest RSVP at https://rsvp.soon.it/loadout. It explains canonical planned concepts and category previews. Participant login, project submission, live reward inventory, and deployment origin remain separately configured future work; RSVP interest does not establish enrollment or programme acceptance.
 
 ## Capabilities and Constraints
 

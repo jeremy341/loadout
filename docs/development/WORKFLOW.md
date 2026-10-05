@@ -17,7 +17,7 @@ Human review is recommended when both maintainers are available. It is optional 
 
 ## Product and source layout
 
-`apps/landing` contains the LOADOUT public homepage, adapted from the verified Pixl baseline. The temporary source-only assets and locale pages were removed. The three source references remain under `references/` as independently pinned Git submodules; exact SHAs, paths, licenses, and reuse decisions are in `docs/source-audit/`. YSWS Template and Stardance remain reference-only.
+`apps/landing` contains the LOADOUT public homepage, adapted from the verified Pixl baseline. The temporary source-only assets and locale pages were removed. The three source references remain under `references/` as independently pinned Git submodules; exact SHAs, paths, licenses, reuse decisions, and clone instructions are in `docs/source-audit/`. Run `git submodule update --init` (not recursive); Stardance's nested `secrets` remote is unavailable, while the parent Stardance checkout remains intact at its pin.
 
 ## Current setup status
 

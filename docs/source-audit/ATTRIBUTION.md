@@ -2,7 +2,7 @@
 
 ## Reference handling
 
-`references/` contains three pinned Git submodules. A limited Pixl landing subset was copied for Stage A local comparison and then redesigned in Stage B. The final homepage retains adapted Next.js, Lenis, navigation, and reveal patterns; copied Pixl media and source-specific pages were removed. No YSWS Template or Stardance files are copied. Use `git clone --recurse-submodules` to populate references in a fresh checkout.
+`references/` contains three pinned top-level Git submodules. A limited Pixl landing subset was copied for Stage A local comparison and then redesigned in Stage B. The final homepage retains adapted Next.js, Lenis, navigation, and reveal patterns; copied Pixl media and source-specific pages were removed. No YSWS Template or Stardance files are copied. Use `git submodule update --init` to populate the references in a fresh checkout. Do not recurse into Stardance's nested `secrets` submodule: its GitHub remote returned “Repository not found” on 2026-10-05.
 
 ## Pixl
 

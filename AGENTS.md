@@ -23,13 +23,15 @@ Read [the human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md) befo
 For a complete checkout, clone the default `main` branch and initialize all pinned source submodules:
 
 ```powershell
-git clone --recurse-submodules https://github.com/jeremy341/loadout.git
+git clone https://github.com/jeremy341/loadout.git
 cd loadout
-git submodule update --init --recursive
+git submodule update --init
 git submodule status
 ```
 
 This downloads Pixl, YSWS Template, and Stardance at their pinned SHAs. The 26 tracked design images are ordinary repository files and arrive with the clone.
+
+Do not recurse into Stardance's nested `secrets` submodule. Its pinned remote `hackclub/stardance-secrets` returned “Repository not found” on 2026-10-05; the parent Stardance checkout remains available at its recorded SHA.
 
 Use Bun 1.3.14 and Node.js supported by the checked-in lockfile. From the repository root:
 

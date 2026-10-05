@@ -1,3 +1,9 @@
+export const heroCopy = {
+  headlineLines: ["BUILD YOUR OWN", "TECHNICAL STACK."],
+  tagline: "Build your own technical stack.",
+  support: "Ship tools, systems, compute, and hardware. Grow your Digital Loadout. Equip your next harder build.",
+} as const;
+
 export const overviewItems = [
   {
     icon: "layers",
@@ -28,7 +34,7 @@ export const overviewItems = [
 export const processSteps = [
   { icon: "user", title: "Find your next build", description: "Identify a capability you want to create or improve." },
   { icon: "list", title: "Pick a track", description: "Tools, Systems, Compute, or Hardware." },
-  { icon: "code", title: "Build and ship", description: "Track real work, journal your progress, and ship a working artifact." },
+  { icon: "code", title: "Build and ship", description: "Keep an attributable journal as you build, then ship a working artifact. Hackatime and Lapse are planned tracking tools." },
   { icon: "document", title: "Review & verify", description: "Check project fit, evidence, and quality through review." },
   { icon: "bolt", title: "Earn Bolts", description: "Approved work contributes to global Bolts and per-track XP." },
   { icon: "gift", title: "Grow your loadout", description: "Keep your shipped work. Upgrade equipment for the next build." },
@@ -75,11 +81,19 @@ export const shopCategories = [
 ] as const;
 
 export const faqItems = [
-  { question: "Who can join?", answer: "LOADOUT is being prepared for technical builders. Joining and eligibility details will be published when the program is ready to open." },
-  { question: "What projects count?", answer: "Build something that meaningfully expands technical capability for you or other builders. Developer tools, runtimes, infrastructure, compute tooling, and embedded systems are good directions. A basic portfolio, CRUD app, game, or chatbot wrapper usually needs deeper original technical work to fit." },
-  { question: "Do I need a team?", answer: "You can build solo or collaborate. Team projects need clear contribution records, and the same work must not be claimed twice." },
-  { question: "How do tracks work?", answer: "Tools, Systems, Compute, and Hardware are the four tracks. Track XP records progress within a field across 15 lifetime levels. Research Mode is a modifier for experiments and technical investigations, and can apply within any track." },
-  { question: "How do I earn Bolts?", answer: "A ship goes through project-fit, validity, and quality review. The quality assessment considers Originality, Technical Depth, Execution, and Documentation. Approved work can earn global Bolts and separate Track XP; reward amounts depend on the program's final policy." },
-  { question: "How do rewards work?", answer: "Bolts are the planned spendable currency for rewards that improve your Physical Loadout. Track specialization can improve eligible field pricing. The categories shown are a preview of the planned direction; the catalogue, prices, and availability will be published separately." },
-  { question: "What are requisitions and Custom Orders?", answer: "Field Requisitions are rare, one-use opportunities earned through track progression, and do not stack on one purchase. Custom Orders are a planned way to request specialist technical gear outside the regular catalogue. Neither is an active request service yet." },
+  { question: "Who can join?", answer: "LOADOUT is in development. RSVP opens a draft interest form; eligibility and launch details have not been published." },
+  { question: "What kinds of projects fit?", answer: "Projects should show original technical work. Examples of project types include a renderer or netcode, an inference runtime or GPU backend, and local-first sync. These are examples, not participant projects or guaranteed approvals." },
+  { question: "Can I work with a team or across tracks?", answer: "Teams can collaborate when each person's work is attributable in the journal. A ship that spans tracks receives a final Track XP allocation from reviewers; contributors receive credit for their own approved work." },
+  { question: "How is work tracked?", answer: "Planned tracking uses Hackatime for coding and Lapse for eligible hardware and non-code work. Journals connect your tracked time to progress, decisions, and evidence. Full tracking guidelines will be published before launch." },
+  { question: "How does AI assistance work?", answer: "AI can help with research, explanation, and debugging. Declare your assistance and show your authorship, understanding, and original work. The full policy will be published before launch." },
+  { question: "How do tracks work?", answer: "Tools, Systems, Compute, and Hardware are the four tracks. Track XP is non-spendable and recorded per track across 15 lifetime levels; Bolts are global spendable currency. Research Mode can apply within any track, and research submissions need reproducible technical outputs." },
+  { question: "How do Requisitions work?", answer: "Requisition milestones are LV.3, LV.6, LV.9, LV.12, and LV.15. A Requisition is one-use and never expires. Only one can apply to an order, and it cannot bypass Mastery level requirements. Custom Orders remain subject to fit, budget, region, and fulfillment." },
+  { question: "How do I RSVP?", answer: "The RSVP link opens an external draft interest form. Sending interest does not enroll you or confirm eligibility." },
 ] as const;
+
+export const researchCopy = {
+  title: "Research Mode",
+  description: "Investigate a technical question and share reproducible technical outputs. Research Mode is a modifier, not a separate track.",
+} as const;
+
+export const requisitionMilestones = ["LV.3", "LV.6", "LV.9", "LV.12", "LV.15"] as const;

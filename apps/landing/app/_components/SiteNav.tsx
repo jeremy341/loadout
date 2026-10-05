@@ -27,8 +27,8 @@ export function SiteNav() {
       if (frame) return;
       frame = requestAnimationFrame(() => {
         const y = window.scrollY;
-        if (y > 160 && y > last + 4) setHidden(true);
-        else if (y < last - 4 || y <= 160) setHidden(false);
+        if (y > 120 && y > last + 4) setHidden(true);
+        else if (y < last - 4 || y <= 120) setHidden(false);
         last = y;
         frame = 0;
       });
@@ -50,13 +50,13 @@ export function SiteNav() {
       <div className="desktop-nav">{links.map(([label, href]) => <a href={href} key={href}>{label}</a>)}</div>
       <div className="nav-actions"><span className="language"><LoadoutIcon name="globe" /> EN</span>
         {siteConfig.loginUrl && <a className="button button-small button-outline" href={siteConfig.loginUrl}>Login</a>}
-        <a className="button button-small" href={siteConfig.joinUrl ?? "#tracks"}>{siteConfig.joinUrl ? "Join LOADOUT" : "Explore tracks"}</a>
+        <a className="button button-small" href={siteConfig.joinUrl ?? "#tracks"}>{siteConfig.joinUrl ? "RSVP now" : "Explore tracks"}</a>
       </div>
       <button ref={toggle} className="mobile-menu-button" aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} aria-controls={open ? "mobile-navigation" : undefined} onClick={() => setOpen(!open)}><span /><span /><span /></button>
     </nav>
     {open && <nav className="mobile-nav" id="mobile-navigation" aria-label="Mobile navigation">{links.map(([label, href]) => <a href={href} key={href} onClick={() => selectDestination(href)}>{label}<LoadoutIcon name="arrow" /></a>)}
       {siteConfig.loginUrl && <a href={siteConfig.loginUrl}>Login</a>}
-      <a href={siteConfig.joinUrl ?? "#tracks"} onClick={() => siteConfig.joinUrl ? setOpen(false) : selectDestination("#tracks")}>{siteConfig.joinUrl ? "Join LOADOUT" : "Explore tracks"}</a>
+      <a href={siteConfig.joinUrl ?? "#tracks"} onClick={() => siteConfig.joinUrl ? setOpen(false) : selectDestination("#tracks")}>{siteConfig.joinUrl ? "RSVP now" : "Explore tracks"}</a>
     </nav>}
   </header>;
 }

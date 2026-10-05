@@ -5,7 +5,7 @@ test("root page explains the canonical fields and exposes working section anchor
   await page.goto("/");
   await expect(page).toHaveTitle(/LOADOUT/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("REAL PROJECTS.REAL REWARDS.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName("Build your own technical stack.");
   await expect(page.locator(".track-card h3")).toHaveText(["Tools", "Systems", "Compute", "Hardware"]);
   await expect(page.locator("#research")).toContainText("Research Mode");
   await expect(page.locator("#research")).toContainText("modifier");
@@ -14,22 +14,24 @@ test("root page explains the canonical fields and exposes working section anchor
     expect(anchor).not.toBe("#");
     await expect(page.locator(anchor!)).toHaveCount(1);
   }
-  await expect(page.locator('a[href*="pixl"]')).toHaveCount(0);
-  await expect(page.locator("body")).not.toContainText(/Pixl|RSVP NOW|up to \d+%/i);
+  await expect(page.locator('main a[href*="pixl"]')).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText(/Pixl|up to \d+%/i);
 });
 
-test("unset registration and production metadata use the local preview state", async ({ page, request }) => {
+test("confirmed RSVP preserves the local preview metadata state", async ({ page, request }) => {
   await page.goto("/");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-  await expect(page.locator('a').filter({ hasText: /^Login$|^Join LOADOUT$/ })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /RSVP now/i })).toHaveCount(3);
+  for (const link of await page.getByRole("link", { name: /RSVP now/i }).all()) await expect(link).toHaveAttribute("href", "https://rsvp.soon.it/loadout");
+  await expect(page.getByRole("link", { name: /^Login$/ })).toHaveCount(0);
   expect((await request.get("/robots.txt")).status()).toBe(200);
   expect(await (await request.get("/robots.txt")).text()).toContain("Disallow: /");
   expect((await request.get("/api/rsvp")).status()).toBe(404);
   expect((await request.get("/en")).status()).toBe(404);
 });
 
-for (const [width, height] of [[1440, 900], [390, 844]]) {
+for (const [width, height] of [[1280, 800], [1440, 900], [1659, 948], [1920, 1080], [390, 844]]) {
   test(`hero fills the first screen at ${width}×${height}`, async ({ page }) => {
     await page.setViewportSize({ width, height });
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -40,6 +42,12 @@ for (const [width, height] of [[1440, 900], [390, 844]]) {
     expect(hero!.height).toBeGreaterThanOrEqual(height);
     expect(about!.y).toBeGreaterThanOrEqual(height);
     expect(actions!.y + actions!.height).toBeLessThan(height);
+    await page.evaluate(() => document.fonts.ready);
+    const titleLines = await page.locator(".hero h1 span").evaluateAll((lines) => lines.map((line) => ({ height: line.getBoundingClientRect().height, lineHeight: Number.parseFloat(getComputedStyle(line).lineHeight), width: line.clientWidth, contentWidth: line.scrollWidth })));
+    for (const line of titleLines) {
+      expect(line.height).toBeLessThanOrEqual(line.lineHeight + 2);
+      expect(line.contentWidth).toBeLessThanOrEqual(line.width + 1);
+    }
   });
 }
 
@@ -117,10 +125,76 @@ test("larger clouds respond to scrolling with parallax", async ({ page }) => {
   await page.goto("/");
   const cloud = page.locator(".pixel-cloud").first();
   await page.waitForTimeout(700);
-  const before = await cloud.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m42);
-  expect((await cloud.boundingBox())!.width).toBeGreaterThan(290);
+  const before = await cloud.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m41);
+  expect((await cloud.boundingBox())!.width).toBeGreaterThan(360);
+  expect(await cloud.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m42)).toBe(0);
   await page.mouse.wheel(0, 450);
-  await expect.poll(async () => Math.abs(await cloud.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m42) - before)).toBeGreaterThan(8);
+  await expect.poll(async () => Math.abs(await cloud.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m41) - before)).toBeGreaterThan(8);
+  expect(await cloud.evaluate((element) => new DOMMatrixReadOnly(getComputedStyle(element).transform).m42)).toBe(0);
+});
+
+test("section anchors preserve normal browser history", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.getByRole("link", { name: /Continue scrolling/i }).click();
+  await expect(page).toHaveURL(/#about$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/$/);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(10);
+});
+
+test("essential content and FAQ remain available without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await page.goto("http://localhost:3000/");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".faq-noscript")).toContainText("Hackatime");
+  await expect(page.locator(".faq-noscript")).toBeVisible();
+  await expect(page.getByRole("link", { name: /Continue scrolling/i })).toHaveAttribute("href", "#about");
+  await context.close();
+});
+
+test("short landscape layout keeps hero actions and scroll cue separate", async ({ page }) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const facts = await page.locator(".hero-facts").boundingBox();
+  const cue = await page.locator(".scroll-cue").boundingBox();
+  const hero = await page.locator(".hero").boundingBox();
+  expect(cue!.y).toBeGreaterThan(facts!.y + facts!.height);
+  expect(cue!.y + cue!.height).toBeLessThanOrEqual(hero!.height);
+});
+
+test("keyboard scrolling reaches the next content naturally", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.keyboard.press("PageDown");
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(200);
+});
+
+test("touch scrolling stays native and unobstructed", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const page = await context.newPage();
+  await page.goto("http://localhost:3000/");
+  const session = await context.newCDPSession(page);
+  await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: 195, y: 650 }] });
+  for (let y = 610; y >= 250; y -= 40) {
+    await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: 195, y }] });
+    await page.waitForTimeout(30);
+  }
+  await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(200);
+  await context.close();
+});
+
+test("continue scrolling is a keyboard-accessible section action", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const cue = page.getByRole("link", { name: /Continue scrolling/i });
+  await expect(cue).toHaveAttribute("href", "#about");
+  await cue.focus();
+  await cue.press("Enter");
+  await expect(page.getByRole("heading", { name: "What is LOADOUT?", exact: true })).toBeFocused();
 });
 
 test("clouds hydrate consistently with normal and reduced motion", async ({ page }) => {
@@ -142,7 +216,7 @@ test("clouds hydrate consistently with normal and reduced motion", async ({ page
 test("normal motion keeps smooth anchor scrolling and card hover feedback", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await page.locator(".hero-actions a").first().click();
+  await page.locator(".hero-actions").getByRole("link", { name: "Explore tracks", exact: true }).click();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000);
   const card = page.locator(".track-card").first();
   await card.scrollIntoViewIfNeeded();

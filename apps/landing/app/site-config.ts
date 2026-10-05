@@ -1,3 +1,7 @@
+import { heroCopy } from "./site-content";
+
+export const DEFAULT_RSVP_URL = "https://rsvp.soon.it/loadout";
+
 type PublicSiteInputs = {
   siteUrl?: string;
   joinUrl?: string;
@@ -20,10 +24,10 @@ export function createSiteConfig(inputs: PublicSiteInputs = {}) {
   const siteUrl = httpsUrl(inputs.siteUrl);
   return {
     name: "LOADOUT",
-    title: "LOADOUT — Real projects. Real rewards.",
+    title: `LOADOUT — ${heroCopy.tagline}`,
     description: "Build your own technical stack. Explore LOADOUT, a technical builder program for tools, systems, compute, and hardware.",
     origin: siteUrl ? new URL(siteUrl).origin : undefined,
-    joinUrl: httpsUrl(inputs.joinUrl),
+    joinUrl: inputs.joinUrl === undefined ? DEFAULT_RSVP_URL : httpsUrl(inputs.joinUrl),
     loginUrl: httpsUrl(inputs.loginUrl),
     communityUrl: httpsUrl(inputs.communityUrl),
     githubUrl: "https://github.com/jeremy341/loadout",

@@ -7,7 +7,7 @@
 
 > **Build your own technical stack.**
 
-> **Visual amendment (2026-10-04):** Follow the workspace-root LOADOUT_DESIGN_SYSTEM.md and the latest supplied hero/full-page screenshots for public-site composition. Use “REAL PROJECTS. REAL REWARDS.” as the display headline and “Build your own technical stack” as its product-positioning support. Keep the hero centered and open, with technical side labels, corner marks, grid paper, and yellow CTA styling; do not add the older right-side pixel-builder scene. The screenshot's progression and field-pricing sections may inform the section rhythm, but its numeric offers and copy are illustrative only.
+> **Visual amendment (2026-10-04):** Follow the workspace-root LOADOUT_DESIGN_SYSTEM.md and the latest supplied hero/full-page screenshots for public-site composition. Use the user-selected “BUILD YOUR OWN / TECHNICAL STACK.” headline. The grey/muted palette, confirmed RSVP link, Pixl entrance/cue, and horizontal clouds follow implemented Plan10. Keep the hero centered and open, with technical side labels, corner marks, grid paper, and yellow CTA styling; do not add the older right-side pixel-builder scene. The screenshot's progression and field-pricing sections may inform the section rhythm, but its numeric offers and copy are illustrative only.
 
 ## 0. Purpose
 
@@ -114,7 +114,7 @@ Public marketing can use the industrial identity slightly more strongly than the
 - glassmorphism
 - large gradient blobs
 - generic AI landing-page cards
-- giant decorative SVG clouds
+- decorative SVG scenery that obscures content (the approved larger, low-contrast edge clouds remain intentional)
 - fake military or weapons branding
 
 > **Industrial through graphic design, not through fake machinery.**

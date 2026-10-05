@@ -16,7 +16,7 @@ bun install --frozen-lockfile
 
 This downloads Pixl, YSWS Template, and Stardance at the exact commits recorded in `docs/source-audit/SOURCE_BASES.md`. Their files are available in `references/`; the 26 tracked concept images are under `docs/design/references/`. Verify the pins before a source audit. Do not modify submodule contents or copy them into app code.
 
-**Initial clone transition:** GitHub's default `main` still needs the baseline-sync PR. Until that PR is merged, clone with `--branch development` to get the complete current repository. The active catch-up PR is prepared from a temporary branch to `main`. After it merges, ordinary clones can use default `main`.
+GitHub's default `main` now contains the complete current baseline. Use that branch for routine clones and all new temporary work branches.
 
 ## 2. Start each task
 
@@ -27,7 +27,7 @@ This downloads Pixl, YSWS Template, and Stardance at the exact commits recorded 
 
 ## 3. Slack kickoff, branches, and review flow
 
-Before starting substantive work, post a brief kickoff in `#loadout-development` with the scope, temporary branch name, and intended PR target. If the AI runtime has no connected Slack tool, ask the human collaborator to post it; do not claim that it was sent. Then make a short-lived branch. After the baseline-sync PR is merged, branch from the latest `main`. Until then, branch from the fully populated `development` ref. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Every task PR targets `main`.
+Before starting substantive work, post a brief kickoff in `#loadout-development` with the scope, temporary branch name, and intended PR target. If the AI runtime has no connected Slack tool, ask the human collaborator to post it; do not claim that it was sent. Then make a short-lived branch from the latest `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Every task PR targets `main`.
 
 Either trusted maintainer may create/push short-lived branches, open/review PRs, and merge into `main` after all required checks pass. Human review is encouraged but is not required. Do not add owner-only, Jeremy-only, CODEOWNER-only, latest-pusher, or other one-person approval rules. Direct pushes to permanent branches should be blocked once GitHub rules are configured and verified. Do not claim these rules are active based only on local documentation. `development` and `testing` are retained staging/history branches; do not use them for routine feature work.
 

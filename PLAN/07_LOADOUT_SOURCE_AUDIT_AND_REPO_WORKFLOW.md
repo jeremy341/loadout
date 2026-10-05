@@ -557,7 +557,7 @@ CONTRIBUTORS
 work through PRs
 ```
 
-The cofounder GitHub username is `fazin-ahamed`. Invite them with write permission so they can work and merge independently across time zones. The current invitation is pending acceptance; record that state in `docs/development/WORKFLOW.md` and `docs/development/BRANCH_PROTECTION_SETUP.md`, and continue other bootstrap work. Do not claim their access is active until GitHub confirms acceptance.
+The cofounder GitHub username is `fazin-ahamed`; GitHub reports active `write` permission as of 2026-10-05. Both maintainers can work and merge independently across time zones.
 
 ### Required task kickoff
 
@@ -639,7 +639,7 @@ Do not create expensive test sharding or large nightly campaigns before the test
 
 # 17. Branch Protection
 
-Configure protection/rulesets when account capabilities permit. The standard PR destination is `main`; retain direct-push protection on `development` and `testing` while those permanent branches remain.
+Branch protection and required checks were applied and verified on 2026-10-05 for `main`, `development`, and `testing`. The standard PR destination is `main`; see `docs/development/BRANCH_PROTECTION_SETUP.md` for the exact verified rules.
 
 Recommended starting policy:
 
@@ -878,7 +878,7 @@ This workflow plan is correctly implemented when:
 - after the baseline-sync PR, a default-branch clone contains all plans, tracked design images, and initialized source submodules
 - the UI skill workflow and the Slack kickoff channel are documented for human and AI contributors
 - the repository remains `jeremy341/loadout` under the personal account initially, with no temporary organization
-- `fazin-ahamed` is invited with write permission, and the documentation records whether the invitation is pending or accepted
+- `fazin-ahamed` has verified `write` permission
 - both owner and write collaborator can create/push short-lived branches, open/review/merge `main` PRs when required checks pass
 - no required owner-specific or CODEOWNER approval blocks either maintainer
 - required CI checks pass before lane merges, and direct pushes to permanent lanes are blocked without bypasses

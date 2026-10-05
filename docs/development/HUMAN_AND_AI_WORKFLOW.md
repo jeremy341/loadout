@@ -7,14 +7,14 @@ This guide applies equally to human contributors and coding agents. Repository-w
 All plan documents, design reference images, and source repositories are already represented in Git. Clone the repository and initialize its pinned source submodules; do not manually copy source code, images, or references between directories:
 
 ```powershell
-git clone --recurse-submodules https://github.com/jeremy341/loadout.git
+git clone https://github.com/jeremy341/loadout.git
 cd loadout
-git submodule update --init --recursive
+git submodule update --init
 git submodule status
 bun install --frozen-lockfile
 ```
 
-This downloads Pixl, YSWS Template, and Stardance at the exact commits recorded in `docs/source-audit/SOURCE_BASES.md`. Their files are available in `references/`; the 26 tracked concept images are under `docs/design/references/`. Verify the pins before a source audit. Do not modify submodule contents or copy them into app code.
+This downloads Pixl, YSWS Template, and Stardance at the exact commits recorded in `docs/source-audit/SOURCE_BASES.md`. Their files are available in `references/`; the 26 tracked concept images are under `docs/design/references/`. Verify the pins before a source audit. Do not modify submodule contents or copy them into app code. Avoid `--recursive`: the nested `references/stardance/secrets` submodule points to a remote that returned “Repository not found” on 2026-10-05. The parent Stardance source at its recorded SHA is available.
 
 GitHub's default `main` now contains the complete current baseline. Use that branch for routine clones and all new temporary work branches.
 

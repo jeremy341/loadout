@@ -20,7 +20,9 @@ Human review is recommended when both maintainers are available. It is optional 
 
 ## Current setup status
 
-The homepage baseline, assets, audits, design, tests and CI were recorded in focused local commits and integrated into local `development` at the user's request. The approved RSVP/motion/content and desktop-width refinement follows from `chore/reference-layout` into local `development`. This local integration is explicitly user-authorized; the normal published workflow remains PR-based. Remote protections and CodeScene activation remain unverified. CI defines `Repository integrity`, `Landing quality`, and `Landing browser`; these must report successfully on GitHub before they become lane requirements. Local evidence on 2026-10-05: build, lint, TypeScript, four unit tests and 24 browser cases pass. Commit/merge actions here do not publish changes or promote testing/main.
+The homepage baseline, assets, plans, design references, audits, tests and CI are pushed on `development`. The 2026-10-05 head is recorded in GitHub; `Repository integrity` passed for the bootstrap push. Remote branch protections and CodeScene activation remain unverified. CI defines `Repository integrity`, `Landing quality`, and `Landing browser`; check the GitHub Actions run list for the actual result from each workflow before making them required. Local evidence on 2026-10-05: build, lint, TypeScript, four unit tests and 24 browser cases pass.
+
+Vercel project `jerry-team1/landing` uses root directory `apps/landing`. The first demo is requested on Production; the Vercel project is not connected to the Git repository yet, so this is a deliberate CLI deployment. Future Git auto-deploys require connecting `jeremy341/loadout` and setting `main` as the Production Branch. See [Vercel deployment setup](VERCEL_PREVIEW.md).
 
 ## Pull request checklist
 

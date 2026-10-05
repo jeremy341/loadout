@@ -1219,7 +1219,7 @@ Rename:
 pixl.json → loadout.json
 ```
 
-Suggested LOADOUT config:
+Suggested LOADOUT application config (the `#loadout` value below is an unverified product-integration placeholder. Contributor kickoff uses `#loadout-development`; do not assume the two channels serve the same purpose):
 
 ```json
 {

@@ -2,37 +2,54 @@
 
 This guide applies equally to human contributors and coding agents. Repository-wide guardrails are in [`AGENTS.md`](../../AGENTS.md). Branch and GitHub permission details are in [`WORKFLOW.md`](WORKFLOW.md) and [`BRANCH_PROTECTION_SETUP.md`](BRANCH_PROTECTION_SETUP.md).
 
-## 1. Start with the current project state
+## 1. Clone the complete workspace
+
+All plan documents, design reference images, and source repositories are already represented in Git. Clone the repository and initialize its pinned source submodules; do not manually copy source code, images, or references between directories:
+
+```powershell
+git clone https://github.com/jeremy341/loadout.git
+cd loadout
+git submodule update --init
+git submodule status
+bun install --frozen-lockfile
+```
+
+This downloads Pixl, YSWS Template, and Stardance at the exact commits recorded in `docs/source-audit/SOURCE_BASES.md`. Their files are available in `references/`; the 26 tracked concept images are under `docs/design/references/`. Verify the pins before a source audit. Do not modify submodule contents or copy them into app code. Avoid `--recursive`: the nested `references/stardance/secrets` submodule points to a remote that returned “Repository not found” on 2026-10-05. The parent Stardance source at its recorded SHA is available.
+
+GitHub's default `main` now contains the complete current baseline. Use that branch for routine clones and all new temporary work branches.
+
+## 2. Start each task
 
 1. Read `AGENTS.md`, this guide, and the relevant current plan under `PLAN/`.
 2. Check `git status --short --branch`, the current branch, and recent commits. Preserve existing work; do not silently reset, delete, or replace it.
 3. Check plan status and source-audit decisions before treating a screenshot, research note, or old prompt as current product requirements.
 4. If an important requirement is unclear, complete independent safe work and identify the decision that still needs the owner's input.
 
-## 2. Branch and review flow
+## 3. Slack kickoff, branches, and review flow
 
-Start a short-lived branch from `development`, using `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/`. Open a pull request into `development`. Promote with separate PRs from `development` to `testing`, then `testing` to `main`.
+Before starting substantive work, post a brief kickoff in `#loadout-development` with the scope, temporary branch name, and intended PR target. If the AI runtime has no connected Slack tool, ask the human collaborator to post it; do not claim that it was sent. Then make a short-lived branch from the latest `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Every task PR targets `main`.
 
-Either trusted maintainer may create branches, push their own work, open and review PRs, and merge after the required checks pass. Human approval is encouraged but is not a merge requirement. Do not add owner-only, Jeremy-only, CODEOWNER-only, latest-pusher, or other one-person approval rules. Direct pushes to protected lane branches are blocked by PR requirements once the GitHub rules are configured and verified. Do not claim these rules are active based only on local documentation.
+Either trusted maintainer may create/push short-lived branches, open/review PRs, and merge into `main` after all required checks pass. Human review is encouraged but is not required. Do not add owner-only, Jeremy-only, CODEOWNER-only, latest-pusher, or other one-person approval rules. Direct pushes to permanent branches should be blocked once GitHub rules are configured and verified. Do not claim these rules are active based only on local documentation. `development` and `testing` are retained staging/history branches; do not use them for routine feature work.
 
 Group commits around reviewable changes. Use clear messages such as “Added …”, “Updated …”, or “Documented …”. Do not mix a broad feature migration into a homepage or documentation change.
 
-## 3. Make changes and verify them
+## 4. Make changes and verify them
 
 - Keep product code under `apps/landing`; preserve the independent pinned source submodules in `references/`.
-- Treat `PLAN/00–10` as the current planning set, but check each document's status. The master plan and bootstrap prompts are preserved historical context; do not execute old prompts again.
+- Treat `PLAN/00–11` as the current planning set, but check each document's status. Plan 11 is approved design only; do not start Era implementation from it alone. The master plan and bootstrap prompts are preserved historical context; do not execute old prompts again.
 - Keep program policy and numeric promises consistent with approved canonical plans and owner-provided public data.
 - For website changes, inspect desktop and mobile layouts, keyboard use, reduced-motion behavior, and no-JavaScript fallbacks when relevant.
+- Load all seven skills in [UI skills](UI_SKILLS.md) on every UI change. `frontend-design-ui-ux` produces the design spec only; implementation follows its completed handoff.
 - Run `bun run lint`, `bun run typecheck`, `bun run test`, `bun run build`, and `bun run test:e2e` for a full landing-page change. State which checks ran and report failures plainly.
 - Review `git diff --check`, `git diff --stat`, and the actual staged diff before committing. Stage explicit paths rather than the whole workspace when unrelated files may exist.
 
-## 4. Keep the repository safe and reproducible
+## 5. Keep the repository safe and reproducible
 
 Never commit `.env` values, access tokens, credentials, private keys, local Vercel configuration, dependencies, build output, test output, caches, or temporary files. Commit `.env.example` only with public, non-secret defaults. Keep image references in `docs/design/references/`; they guide design and do not establish program facts or represent production assets.
 
 When using a source repository, keep its recorded commit pin, license status, exact paths, and ADAPT / REIMPLEMENT / REFERENCE ONLY / IGNORE decisions current in `docs/source-audit/`. Do not copy reference code or media into LOADOUT without a recorded rights decision.
 
-## 5. Preview and publish
+## 6. Preview and publish
 
 For the Vercel project settings and first-demo checklist, see [`VERCEL_PREVIEW.md`](VERCEL_PREVIEW.md). `apps/landing` is the application root in the Bun workspace. `main` is the production branch; pushes to `development` should create a preview when the Vercel project is connected and configured. Verify the actual Vercel build, deployment URL, branch, and commit before sharing a demo. A successful local build does not establish a deployment.
 

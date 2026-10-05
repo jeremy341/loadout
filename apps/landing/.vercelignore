@@ -1,0 +1,11 @@
+# Vercel installs dependencies on its build machine.
+node_modules/
+.next/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Local configuration must stay on the developer's machine.
+.env
+.env.*

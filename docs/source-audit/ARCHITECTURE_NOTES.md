@@ -14,7 +14,7 @@ All three sources are pinned as independent Git submodules under `references/`. 
 
 ## LOADOUT starting shape
 
-The LOADOUT product root intentionally has no `apps/`, `packages/`, or deployable application code while the website redesign and implementation architecture are being planned. Pixl remains the PRIMARY ENGINEERING BASE for later source-guided implementation, but its app tree is available only through the pinned `references/pixl/` submodule. The audit records Bun/Turborepo/Next as likely engineering tools, but no workspace code is included until the redesign direction is confirmed. The earlier landing prototype and restored Pixl landing surface are not part of this branch. Do not recreate either page until the separate redesign is ready.
+The repo has a minimal Bun workspace and a Next.js public homepage under `apps/landing`. The verified Stage A Pixl baseline was redesigned in the same application, preserving useful scrolling, navigation, motion, and container patterns. The site is a static public explanation with optional confirmed links and preview-safe metadata. Participant, admin, economy, review, and shop backends remain outside this slice. Exact source mappings are in `PUBLIC_SITE_PORT.md`.
 
 ## Data, identity, and permission boundaries
 
@@ -38,10 +38,10 @@ Pixl migration systems include the Drizzle SQL journal under `references/pixl/ap
 
 ## Environment surface and risks
 
-The reference applications contain example environment files, not LOADOUT credentials. LOADOUT currently has no app-specific environment surface. Before deployment, enumerate the owned environment variables and issue LOADOUT-specific secrets. Pixl's RSVP route and the prior Vercel/Next config proxied to Pixl; neither is part of the LOADOUT product tree. No literal live secret was identified in the inspected landing configuration.
+The homepage's optional public configuration is listed in `apps/landing/.env.example`: owned origin, Join/Login/community HTTPS URLs, and indexing permission. No credentials are required for this static page. Pixl's RSVP, proxy/rewrite configuration, and source services are excluded. Future integrations require their own scoped credentials and migration-specific review.
 
 Other source-coupled risks include Pixl OAuth callback URLs, Supabase project IDs, media buckets, Slack channels, email templates, hostname constants, and old shop/project content. They remain deferred pending migration-specific review. A secret scan and reference-presence scan are required before publication.
 
 ## Testing and CI
 
-LOADOUT has no application tests or build yet. The current CI baseline checks repository whitespace and verifies the three submodule URLs and pinned commit IDs without checking out their source trees. Pixl's Bun tests, the YSWS Template's Jest/Nest tests, and Stardance's Rails/Minitest suite remain attached to their upstream submodules and are not run as LOADOUT tests.
+The landing workspace has lint, typecheck, configuration unit tests, production build, and Playwright browser/accessibility checks. CI definitions cover these alongside repository whitespace and source pins, without checking out reference sources. The definitions have not yet run on GitHub. The references' other test suites remain upstream evidence and are not LOADOUT tests.

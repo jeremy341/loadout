@@ -16,16 +16,18 @@ Human review is recommended when both maintainers are available. It is optional 
 
 ## Product and source layout
 
-The LOADOUT product tree intentionally contains no app or package source while the website redesign is being planned. The three source references live under `references/` as independent pinned Git submodules; their exact SHAs and reuse limits are in `docs/source-audit/SOURCE_BASES.md`. Do not copy code from the unlicensed references into LOADOUT without permission.
+`apps/landing` contains the LOADOUT public homepage, adapted from the verified Pixl baseline. The temporary source-only assets and locale pages were removed. The three source references remain under `references/` as independently pinned Git submodules; exact SHAs, paths, licenses, and reuse decisions are in `docs/source-audit/`. YSWS Template and Stardance remain reference-only.
 
 ## Current setup status
 
-The clean source-reference, audit-documentation, workflow, and CI commits on `chore/reference-layout` have been promoted through local `development`, `testing`, and `main` merge commits. The previous unpushed lane history is preserved locally as `backup/local-lanes-before-clean-layout`. Nothing has been pushed. The remote's latest state could not be refreshed because the configured network proxy refused the GitHub connection; the last locally recorded `origin/main` is initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d`. Do not claim that branch rules are active or that this history has been published.
+The homepage baseline, assets, plans, design references, audits, tests and CI are pushed on `development`. The 2026-10-05 head is recorded in GitHub; `Repository integrity` passed for the bootstrap push. Remote branch protections and CodeScene activation remain unverified. CI defines `Repository integrity`, `Landing quality`, and `Landing browser`; check the GitHub Actions run list for the actual result from each workflow before making them required. Local evidence on 2026-10-05: build, lint, TypeScript, four unit tests and 24 browser cases pass.
+
+Vercel project `jerry-team1/loadout` uses root directory `apps/landing`. Its first production demo is live at [loadout-jerry-team1.vercel.app](https://loadout-jerry-team1.vercel.app/), deployed from `development` commit `2ea9161cdb7125063e6d2c707ea41e0b06e001aa` at the user's request. The exact `loadout.vercel.app` alias is already in use. Vercel Authentication is disabled, and an anonymous request succeeds. The Vercel project is not connected to the Git repository yet, so Git pushes do not trigger deployments. To enable future auto-deploys, connect `jeremy341/loadout` and set `main` as the Production Branch. See [Vercel deployment setup](VERCEL_PREVIEW.md).
 
 ## Pull request checklist
 
 1. Branch from `development` and keep the change scoped.
-2. Run applicable CI and local checks; there is no app build/test suite until LOADOUT-owned code is added.
+2. Run lint, typecheck, unit tests, production build, and Playwright checks. CI runs these in `Landing quality` and `Landing browser`, alongside `Repository integrity`.
 3. Open a PR to `development` and wait for the required checks.
 4. Request optional review when useful; no one person's approval is mandatory.
 5. Merge once required checks pass, then promote through `testing` and `main` with separate PRs.

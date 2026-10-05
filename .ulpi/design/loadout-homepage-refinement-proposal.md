@@ -67,3 +67,9 @@ Draft preflight: specific product identity, one visual language, readable contra
 ## Build handoff
 
 Use the existing Next/React/Bun/Framer Motion/Lenis stack. Implement `PLAN/10_LOADOUT_HOMEPAGE_RSVP_MOTION_AND_CONTENT_REFINEMENT.md` after review, retaining the current branch/dirty work. If delegated, agents run GPT-6 Luna at medium as the user's AGENTS instruction requires. The designer owns the proposal; the implementer owns code and verification. No additional comp/imagegen or broad product migration.
+
+## Execution result — 2026-10-04
+
+Approved and implemented. The active design lock is DESIGN.md. The RSVP default and safe overrides, selected two-line headline, fullscreen source-grounded choreography, continue cue, larger horizontal clouds, muted palette, static content additions and no-JS FAQ fallback are present. The final evidence is recorded in docs/source-audit/PUBLIC_SITE_PORT.md.
+
+The 2026-10-05 desktop amendment widens the frame to 900px above 1100px and holds each title span to one line. All four tested desktop widths show exactly two rows. Four unit tests and 24 production-browser cases pass, alongside lint, typecheck and build.

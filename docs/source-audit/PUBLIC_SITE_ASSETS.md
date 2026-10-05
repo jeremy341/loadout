@@ -8,6 +8,8 @@ Historical Stage A source: `references/pixl/apps/landing/public` at Pixl SHA `81
 - Fonts: `public/fonts/Jersey10-Regular.ttf`, `PixelifySans.ttf`, `IBMPlexMono-Regular.ttf`, and `IBMPlexMono-SemiBold.ttf`. They are self-hosted official Google Fonts files under SIL Open Font License 1.1; the family-specific OFL notices are included beside them. Sources: [Jersey 10](https://github.com/google/fonts/tree/main/ofl/jersey10), [Pixelify Sans](https://github.com/google/fonts/tree/main/ofl/pixelifysans), [IBM Plex Mono](https://github.com/google/fonts/tree/main/ofl/ibmplexmono).
 - The shop uses labeled planned category icons. It contains no copied product photos, invented prices, stock, or fulfillment claims.
 - `public/loadout/bolt.svg` is the authored yellow lightning currency glyph requested in the hero refinement. `LoadoutIcon` exposes it as `bolt`; the brand mark is independently named `brand`.
+- `public/loadout/scroll-down.svg` is an authored double downward chevron, also exposed as `down` in `LoadoutIcon`. The decorative glyph sits inside the keyboard-accessible Continue scrolling anchor.
+- The 2026-10-05 refinement uses muted yellow/grey SVG fills consistent with the active design tokens. Clouds size to `clamp(200px, 26vw, 420px)` on desktop and 220px on mobile; their movement is controlled by the component/CSS, not embedded SVG animation. Font files and license notices are unchanged.
 
 ## Historical baseline inventory
 

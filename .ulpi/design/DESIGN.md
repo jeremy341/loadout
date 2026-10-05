@@ -40,40 +40,23 @@ The hero is a fullscreen centered technical plate: large block lettering held in
 
 ## Color (locked)
 
-The supplied LOADOUT design system is the source of these colors. OKLCH values below are perceptual conversions of its sRGB hex values; retain the hex values at implementation boundaries. The neutrals carry a slight warm tint. Target surface distribution: roughly 70% canvas/surface, 20% ink/graphite, 8% Bolt Yellow, up to 2% semantic state colors.
+Active muted-grey palette, approved and implemented 2026-10-04. Hex values are authoritative. Paper remains neutral; yellow is an accent, with ink carrying structure and readable text.
 
-| Role | OKLCH | Hex | Use |
-|---|---|---|---|
-| Canvas | `oklch(0.952 0.007 89)` | `#F1EFEA` | Main page background |
-| Surface | `oklch(0.970 0.007 89)` | `#F7F5F0` | Navigation, content plates, FAQ rows |
-| Surface muted | `oklch(0.916 0.007 89)` | `#E5E3DE` | Quiet secondary panels and hover fill |
-| Grid / border muted | `oklch(0.876 0.007 89)` | `#D8D6D1` | Low-contrast background grid only |
-| Ink | `oklch(0.209 0.004 264)` | `#17181A` | Main text, rules, outlines |
-| Graphite | `oklch(0.251 0.006 258)` | `#202225` | Dark track/progression panels |
-| Graphite raised | `oklch(0.296 0.006 258)` | `#2B2D30` | Hover/secondary dark-panel surface |
-| Muted text | `oklch(0.492 0.001 197)` | `#606161` | Secondary text on light surfaces |
-| Accent: Bolt Yellow | `oklch(0.855 0.161 88)` | `#FBC834` | Primary action, Bolt symbol, small markers |
-| Accent pressed | `oklch(0.764 0.145 88)` | `#D8AC29` | Pressed border / Bolt edge; not a second accent |
-| Accent light | `oklch(0.870 0.149 90)` | `#FBCF50` | Primary-action hover fill |
-| Success | `oklch(0.640 0.110 146)` | `#5D9E63` | Status icon/border only, never large area |
-| Warning | `oklch(0.855 0.161 88)` | `#FBC834` | Status icon/border; same accent |
-| Danger | `oklch(0.581 0.163 27)` | `#C94A42` | Status icon/border only; do not use for FAQ arrows |
-| Info | `oklch(0.722 0.000 90)` | `#A5A5A5` | Non-text status boundary or divider only |
+| Role | Hex | Use |
+|---|---|---|
+| Canvas | #E8E9E6 | Paper/grid background |
+| Surface | #F0F1ED | Opaque cards, nav, FAQ |
+| Muted surface | #DDE0DC | Secondary plates |
+| Ink | #1D2021 | Text, rules, outlines |
+| Graphite / raised | #292C2D / #34383A | Track plates |
+| Muted text | #575E60 | Secondary copy |
+| Rule | #9DA5A4 | Panel boundaries |
+| Bolt yellow | #D9B64C | RSVP, lightning currency, markers |
+| Yellow light / highlight / edge | #E1C56D / #EAD599 / #B3913B | Feedback and SVG detail |
+| Success / danger | #718C79 / #A96F6C | Labelled status shapes |
+| Progression steel / warm / mastery | #B8BEBD / #B89C7A / #A77C78 | Small checkpoint badges |
 
-Contrast checks, WCAG relative luminance on the listed hex values:
-
-| Foreground / background | Ratio | Result |
-|---|---:|---|
-| Ink on canvas | 15.46:1 | AAA |
-| Ink on surface | 16.31:1 | AAA |
-| Muted text on canvas | 5.41:1 | AA |
-| Muted text on surface | 5.70:1 | AA |
-| Ink on Bolt Yellow | 11.35:1 | AAA |
-| White on graphite | 15.95:1 | AAA |
-| White on raised graphite | 13.81:1 | AAA |
-| Ink on muted surface | 13.85:1 | AAA |
-
-Do not use white text on Bolt Yellow. Semantic colors are decorative icon details paired with a visible ink outline and an adjacent ink label; the status never relies on color alone. Grid lines are decorative and must not be used as control boundaries. Links and controls use ink outlines and visible focus treatment so affordances do not rely on yellow alone.
+Calculated principal sRGB contrast ratios: ink/canvas 13.45:1; muted/canvas 5.43:1; ink/yellow 8.39:1; surface/graphite 12.40:1. Automated desktop/mobile checks find no serious or critical accessibility violations; this is bounded evidence, not full certification. Status symbols keep ink outlines and adjacent labels. Focus uses ink plus the accent; white text is not used on yellow.
 
 ## Type (locked)
 
@@ -92,17 +75,19 @@ The block display face contrasts with the quiet technical mono. Load only licens
 - **Borders:** `1.5px` ink for standard panels, `2px` for the hero frame and key containers. Rules stay straight and deliberate.
 - **Shadow:** hard offset only: `2px 2px 0 ink` and `4px 4px 0 ink`. Buttons may compress the offset when pressed. No blurred elevation.
 - **Grid:** clean CSS graph grid at `24px` with a faint `120px` guide. Keep it low contrast; no paper stains, noise, or texture images.
-- **Motion:** fast `120ms`, base `180ms`, emphasis `300ms`, rare entrance/reveal ceiling `500ms`; easing `cubic-bezier(0.16, 1, 0.3, 1)`. Exits are shorter than entrances. No bounce/elastic. Honor `prefers-reduced-motion` and keep content visible without JavaScript.
+- **Motion:** fast `120ms`, base `180ms`, emphasis `300ms`; Pixl-derived hero entrances use `800–900ms` with easing `cubic-bezier(0.22, 1, 0.36, 1)`. Card reveals use `600ms` and `100ms` child stagger; FAQ disclosure uses `350ms`. No bounce/elastic. Honor `prefers-reduced-motion` and keep content visible without JavaScript.
 - **Responsive breakpoints:** `640px`, `768px`, `1024px`, `1280px`. Design from mobile upward and prevent horizontal overflow.
 - **Focus:** 3px Bolt Yellow outline with 2px ink offset on light surfaces; on yellow surfaces use a 3px ink outline. Focus is never removed.
 
 ## Graphic and icon language
 
-Use authored, flat SVGs on a 24px or 32px grid, with ink outlines, no more than three colors, square geometry, and no gradient or gloss. The logo mark is a compact machine mark; Bolts use a custom yellow lightning silhouette. Track marks vary by silhouette and label. The slash motif frames the fullscreen hero. Pale clouds are about 40% larger than the initial page and use bounded spring-smoothed scroll parallax, with their discrete drift on a separate inner layer. Reduced motion disables both transforms and drift.
+Use authored, flat SVGs on a 24px or 32px grid, with ink outlines, no more than three colors, square geometry, and no gradient or gloss. The logo mark is a compact machine mark; Bolts use a custom yellow lightning silhouette. Track marks vary by silhouette and label. The slash motif frames the fullscreen hero. Pale clouds size to `clamp(200px, 26vw, 420px)` on desktop and `220px` on mobile, with bounded horizontal scroll parallax of ±72px/±36px and horizontal drift on a separate inner layer. Reduced motion disables transforms and drift.
 
 ## Motion principles
 
-Motion supports orientation and feedback. Smooth scrolling stays user-controlled and preserves anchor/focus behavior. A scroll-aware header may tuck while scrolling down and reveal on upward movement; focus, hover, pointer interaction, or an open menu pins it visible. The hero receives one short entrance sequence. Sections reveal gently when entering view; reveal code must fail open with all content visible. Buttons show tactile press/hover feedback. FAQ rows animate height and icon state. No looping decoration or autoplay media.
+Motion supports orientation and feedback. Smooth scrolling stays user-controlled and preserves anchor/focus behavior. A scroll-aware header may tuck while scrolling down and reveal on upward movement; focus, hover, pointer interaction, or an open menu pins it visible. The hero receives one entrance sequence. Sections reveal gently when entering view; reveal code must fail open with all content visible. Buttons show tactile press/hover feedback. FAQ rows animate height and icon state. User-requested cloud drift and the continue cue are the bounded decorative loops; no autoplay media.
+
+On desktop above 1100px, the hero frame is 900px wide and the selected headline uses two explicit lines: BUILD YOUR OWN / TECHNICAL STACK. Hide side labels at 1101–1300px to keep them clear of the widened frame. Smaller viewports retain responsive wrapping and may grow beyond one screen rather than clip content.
 
 At `prefers-reduced-motion: reduce`, disable smooth scrolling, entrance and scroll reveals, transforms, and animated disclosure; use native scrolling and immediate expanded/collapsed state. The complete page and every answer remain usable.
 

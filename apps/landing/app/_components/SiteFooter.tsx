@@ -8,5 +8,5 @@ export function SiteFooter() {
     <div className="footer-column"><h3>Resources</h3><a href="#project-fit">Project fit</a><a href="#process">How it works</a><a href="#research">Research Mode</a><a href="https://hackclub.com/conduct/">Code of Conduct</a></div>
     <div className="footer-column"><h3>Community</h3><a href={siteConfig.githubUrl}>LOADOUT on GitHub</a>{siteConfig.communityUrl && <a href={siteConfig.communityUrl}>LOADOUT community</a>}<a href="https://hackclub.com/slack/">Hack Club Slack</a></div>
     <div className="footer-column"><h3>Hack Club</h3><a href="https://hackclub.com/">Hack Club</a><a href="https://hackclub.com/philosophy/">Philosophy</a><a href="https://hackclub.com/ysws/">You Ship, We Ship</a></div>
-  </div><div className="footer-bottom"><span className="language"><LoadoutIcon name="globe" /> English</span><span>Build your own technical stack.</span><span className="slashes" aria-hidden="true" /></div></footer>;
+  </div><div className="footer-bottom"><span className="language"><LoadoutIcon name="globe" /> English</span><span>Build your own technical stack.</span><span className="footer-attribution">Landing-page base adapted from <a href="https://github.com/hackclub/pixl" target="_blank" rel="noreferrer">Pixl</a> under the MIT License.</span><span className="slashes" aria-hidden="true" /></div></footer>;
 }

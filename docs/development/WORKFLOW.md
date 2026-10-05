@@ -4,29 +4,33 @@ Repository: public personal-account repository `jeremy341/loadout`. The intended
 
 ## Branch lanes
 
-- `development` is the integration lane.
-- `testing` is the staging/release-candidate lane.
-- `main` is the production lane.
+- `main` is the canonical default and routine PR destination.
+- `development` and `testing` are retained staging/history lanes. Use them only under an explicit migration or release plan.
 
-Normal work starts from `development` on a short-lived branch. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Open a pull request from that branch into `development`. Promote `development` to `testing` with a separate PR, then `testing` to `main` with another separate PR. Do not merge feature work directly into `testing` or `main`.
+All work uses a short-lived branch: branch from the latest `main`, make a focused change, and open a PR into `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Do not commit task work directly to `main`, `development`, or `testing`.
 
-Both trusted maintainers can create and push short-lived branches, open and review PRs, and merge a lane PR once that target lane's required CI checks pass. Jeremy owns the personal-account repository. `fazin-ahamed` was invited with write permission; GitHub showed the invitation awaiting acceptance when last checked on 2026-10-04.
+**Initial baseline sync complete:** PR #1 merged the full populated `development` baseline and contributor updates into `main` at merge commit `f55b883b09d2f2e583ffc76fa452128afd5da1e2`. The default `main` branch now contains the application, plans, tracked design images, and pinned source submodules. Clone `main` and branch every task from it.
+
+Both trusted maintainers can create/push short-lived branches, open/review PRs, and merge a check-green PR to `main`. Jeremy owns the personal-account repository. GitHub verified `fazin-ahamed` has `write` permission on 2026-10-05.
 
 Human review is recommended when both maintainers are available. It is optional and must not be a merge gate. There are no owner-only, Jeremy-only, CODEOWNER-only, or latest-pusher approval requirements.
 
 ## Product and source layout
 
-The LOADOUT product tree intentionally contains no app or package source while the website redesign is being planned. The three source references live under `references/` as independent pinned Git submodules; their exact SHAs and reuse limits are in `docs/source-audit/SOURCE_BASES.md`. Do not copy code from the unlicensed references into LOADOUT without permission.
+`apps/landing` contains the LOADOUT public homepage, adapted from the verified Pixl baseline. The temporary source-only assets and locale pages were removed. The three source references remain under `references/` as independently pinned Git submodules; exact SHAs, paths, licenses, reuse decisions, and clone instructions are in `docs/source-audit/`. Run `git submodule update --init` (not recursive); Stardance's nested `secrets` remote is unavailable, while the parent Stardance checkout remains intact at its pin.
 
 ## Current setup status
 
-The clean source-reference, audit-documentation, workflow, and CI commits on `chore/reference-layout` have been promoted through local `development`, `testing`, and `main` merge commits. The previous unpushed lane history is preserved locally as `backup/local-lanes-before-clean-layout`. Nothing has been pushed. The remote's latest state could not be refreshed because the configured network proxy refused the GitHub connection; the last locally recorded `origin/main` is initializer `1a3119aecf18175e8b881613ad6912ca03c93a0d`. Do not claim that branch rules are active or that this history has been published.
+PR #1 synced the full application, plans, images, and source pins from `development` into `main`; PR #2 finalized default-branch onboarding. All three CI checks passed on both PRs. GitHub branch protection is active on `main`, `development`, and `testing`: PR required, `Repository integrity`, `Landing quality`, and `Landing browser` required, zero approval count, no bypasses, admins enforced, no force pushes or branch deletion. Local verification from 2026-10-05: build, lint, TypeScript, four unit tests, and 24 browser cases pass.
+
+Vercel project `jerry-team1/loadout` uses root directory `apps/landing`. Its public production demo is live at [loadout-jerry-team1.vercel.app](https://loadout-jerry-team1.vercel.app/). See [Vercel deployment setup](VERCEL_PREVIEW.md). The main GitHub branch is the future production source. The Vercel project still lacks a Git repository connection, so auto-deploy is not active.
 
 ## Pull request checklist
 
-1. Branch from `development` and keep the change scoped.
-2. Run applicable CI and local checks; there is no app build/test suite until LOADOUT-owned code is added.
-3. Open a PR to `development` and wait for the required checks.
-4. Request optional review when useful; no one person's approval is mandatory.
-5. Merge once required checks pass, then promote through `testing` and `main` with separate PRs.
-6. Preserve a clear record for policy, scoring, payout, security, and deployment changes.
+1. Clone default `main` with `--recurse-submodules` and verify the pins.
+2. Post a kickoff in `#loadout-development` before substantive work.
+3. Create a short-lived branch from `main` and keep the change scoped.
+4. Run lint, typecheck, unit tests, production build, and Playwright checks. CI runs these in `Landing quality` and `Landing browser`, alongside `Repository integrity`.
+5. Open a PR to `main` and wait for every required check.
+6. Request optional review when useful; no one person's approval is mandatory. Either trusted maintainer may merge after checks pass.
+7. Preserve a clear record for policy, scoring, payout, security, and deployment changes.

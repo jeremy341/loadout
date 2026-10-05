@@ -1,12 +1,20 @@
 # Local tools and dependencies
 .claude/
 node_modules/
+.superpowers/
+.vercel/
+**/.vercel/
 
-# Build output
+# Next.js and test output
+.next/
 coverage/
 dist/
 out/
+playwright-report/
+test-results/
 *.tsbuildinfo
+.impeccable/build/
+.impeccable/review/
 
 # Local configuration and secrets
 .env

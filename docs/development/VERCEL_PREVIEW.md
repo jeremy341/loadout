@@ -24,3 +24,13 @@ After deploying, verify all of the following in Vercel:
 - metadata remains noindex and the production URL is the generated Vercel domain.
 
 Record the deployment URL and commit in `docs/development/WORKFLOW.md` after verification. Local build output and a successful Git push alone do not prove a Vercel deployment.
+
+## First production demo — 2026-10-05
+
+- Public URL: https://landing-mu-taupe.vercel.app/
+- Project: `jerry-team1/landing`; root directory: `apps/landing`.
+- Deployment: `dpl_9pZDHxdLzqrvZF9iMQFxChxQa9UH`, target `production`, status `READY`.
+- Deployed source: pushed `development` commit `2ea9161cdb7125063e6d2c707ea41e0b06e001aa`.
+- Vercel built Next.js 16.3.5 with Bun 1.3.14. The build compiled, typechecked, generated the static routes, and completed successfully.
+- Anonymous GET returned HTTP 200. The response contains the LOADOUT title, selected headline, and RSVP URL.
+- This was a one-time production demo explicitly requested from `development`. The Vercel project's Git repository connection and Production Branch remain unset; Git pushes do not trigger deployments yet. The normal development/testing/main release lanes still apply to later changes.

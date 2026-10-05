@@ -1,6 +1,6 @@
 # Source bases and versions
 
-Recorded 2026-10-04 from the pinned reference checkouts. Each reference is an independent Git submodule under `references/`; the parent repository records only its URL and exact commit pointer. `git clone --recurse-submodules` checks out the source locally. The commit IDs are immutable pins, not claims that upstream is still at its latest commit.
+Recorded 2026-10-04 from the pinned reference checkouts. Each reference is an independent Git submodule under `references/`; the parent repository records only its URL and exact commit pointer. Initialize these top-level references with `git submodule update --init`. The commit IDs are immutable pins, not claims that upstream is still at its latest commit.
 
 | Source and role | Remote | Branch at audit | Exact SHA | License / permission basis | Reference path |
 |---|---|---|---|---|---|
@@ -21,7 +21,7 @@ git -C references/ysws-template status --short
 git -C references/stardance status --short
 ```
 
-To populate the reference folders in a fresh clone, use `git clone --recurse-submodules <repository-url>` or run `git submodule update --init --recursive` after cloning.
+To populate the top-level reference folders in a fresh clone, run `git submodule update --init`. Pixl and YSWS Template do not declare nested submodules in these pins. Stardance declares `references/stardance/secrets` at `f7c450aa3a128015a57681a9262b9db2dcf72385`, URL `../stardance-secrets.git` (GitHub `hackclub/stardance-secrets`). Initializing that nested submodule returned “Repository not found” on 2026-10-05. Its access is unavailable in this environment; do not recurse, vendor, or infer its contents. The pinned parent Stardance checkout is fully initialized and remains available for source reading.
 
 ## Scope boundaries
 

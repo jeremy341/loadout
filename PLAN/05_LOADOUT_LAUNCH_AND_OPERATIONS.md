@@ -263,6 +263,8 @@ Before Season 00, publish these rules clearly:
 21. Custom Orders require **level + Bolts + program fit + fulfillment approval**.
 22. Imported/prior YSWS work cannot generate a second payout for the same work.
 
+Era launch rules are planned separately in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`. Before enabling an Era, operators must approve its theme, objective set, weekly-reset timezone, minimum-duration/threshold configuration, reviewer criteria, and audit/correction path. An unconfigured Era must not show live progress, a countdown, or a payout bonus.
+
 The niche and economy must remain strict enough that a builder can understand both **why a project belongs** and **why a shop price is what it is**.
 
 ---

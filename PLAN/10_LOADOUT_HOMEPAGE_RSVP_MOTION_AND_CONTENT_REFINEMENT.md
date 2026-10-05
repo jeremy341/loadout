@@ -15,7 +15,7 @@
 ## Global constraints
 
 - Preserve dirty work on `chore/reference-layout`; no reset, blanket cleanup, forced history rewrite, temporary organization, or lane promotion during planning.
-- Branch flow remains short-lived branch → PR to development → promotion PR to testing → promotion PR to main. Both trusted maintainers may merge after required checks pass; zero required human approvals, no Jeremy/owner-only gate.
+- Contributor workflow adopted 2026-10-05: short-lived branch → PR to `main`; either trusted maintainer merges after required checks pass. Zero required human approvals and no Jeremy/owner-only gate. The earlier development/testing sequence is historical implementation context.
 - Pixl source pin is `8141b992e92e05583246fd914c63a101100f6fe4`; keep MIT attribution. Reference checkouts remain unchanged. YSWS Template/Stardance stay reference-only.
 - Canonical tracks: Tools, Systems, Compute, Hardware. Research Mode is a modifier. Bolts global; Track XP per-track and non-spendable; 15 lifetime levels. Quality: Originality, Technical Depth, Execution, Documentation.
 - User-confirmed RSVP URL: **https://rsvp.soon.it/loadout**. Its page is a draft-program RSVP and routes users through its own login. No agent test submits a form, authenticates, or enrolls anyone.

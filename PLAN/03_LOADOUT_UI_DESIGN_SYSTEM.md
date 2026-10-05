@@ -452,13 +452,16 @@ Update for:
 
 Industrial look should be strongest here because this page is essentially a technical procurement form.
 
-## 18. Missions / Seasons
+## 18. Missions / Seasons / Eras
 
 Preserve:
 - weekly missions
 - seasonal quests
+- optional Era Objectives
 - streak
 - season progress
+- current Era state and community progress when backed by live data
+- advancement-ready state and next eligible reset when configured
 - rewards
 - earnings chart
 
@@ -469,7 +472,7 @@ Use:
 - one season illustration
 - small industrial label marks
 
-Avoid giant game-like quest art.
+Avoid giant game-like quest art. Keep Seasons (competitive period), Eras (community technical progression), and weekly resets (mission refresh/possible advancement check) visually and semantically distinct. Never render sample progress, counts, or countdowns as live values.
 
 ## 19. Community / Leaderboards
 
@@ -513,6 +516,10 @@ Before accepting a screen, ask:
 - Does it look like a real product rather than concept art?
 
 If not, simplify it.
+
+## UI implementation skill workflow
+
+Every UI change follows `docs/development/UI_SKILLS.md`: start with a spec-only `frontend-design-ui-ux` pass bound to the locked design system, then implement with `frontend-design` and `design-taste-frontend`. Load `emilkowal-animations` for motion and the SVG/pixel-art specialist skills as listed there. These skills do not authorize changes to product behavior or policy.
 
 ## 22. Logo / brand direction
 

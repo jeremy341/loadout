@@ -437,6 +437,14 @@ Research Mode, benchmarks, profilers, test infrastructure, reproducible technica
 
 ---
 
+## Community Eras
+
+Eras are a shared technical-progression layer, separate from competitive seasons. They use non-spendable Era Points, not a new currency. Approved projects that a reviewer marks as qualifying earn a separate **10% of their approved base Bolt award**. Era qualification adds no Track XP and does not alter the quality multiplier or the four quality dimensions. The reviewer records a reason. No partial Era-bonus percent is used in the approved design.
+
+Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing multiplier or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
+
+---
+
 # 23. Seasonal Quests
 
 Optional small challenges.

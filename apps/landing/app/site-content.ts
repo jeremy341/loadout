@@ -1,72 +1,21 @@
 export const heroCopy = {
   headlineLines: ["BUILD YOUR OWN", "TECHNICAL STACK."],
   tagline: "Build your own technical stack.",
-  support: "Ship tools, systems, compute, and hardware. Grow your Digital Loadout. Equip your next harder build.",
+  support: "Build tools, systems, compute, and hardware. Earn Bolts for equipment and Track XP in the fields your work uses.",
 } as const;
 
-export const overviewItems = [
-  {
-    icon: "layers",
-    index: "01",
-    title: "Choose a track",
-    description: "Pick a technical field that fits what you want to build.",
-  },
-  {
-    icon: "code",
-    index: "02",
-    title: "Ship real projects",
-    description: "Build a working artifact and document how it works.",
-  },
-  {
-    icon: "bolt",
-    index: "03",
-    title: "Earn Bolts",
-    description: "Bolts are global currency for the reward shop.",
-  },
-  {
-    icon: "gift",
-    index: "04",
-    title: "Grow your loadout",
-    description: "Your Digital Loadout grows with shipped work; rewards build your Physical Loadout.",
-  },
-] as const;
-
-export const processSteps = [
-  { icon: "user", title: "Find your next build", description: "Identify a capability you want to create or improve." },
-  { icon: "list", title: "Pick a track", description: "Tools, Systems, Compute, or Hardware." },
-  { icon: "code", title: "Build and ship", description: "Keep an attributable journal as you build, then ship a working artifact. Hackatime and Lapse are planned tracking tools." },
-  { icon: "document", title: "Review & verify", description: "Check project fit, evidence, and quality through review." },
-  { icon: "bolt", title: "Earn Bolts", description: "Approved work contributes to global Bolts and per-track XP." },
-  { icon: "gift", title: "Grow your loadout", description: "Keep your shipped work. Upgrade equipment for the next build." },
-] as const;
-
 export const projectFitItems = [
-  { icon: "document", status: "lower", title: "Portfolio clone", description: "A copy of an existing site or tutorial project." },
-  { icon: "wrench", status: "higher", title: "Real-world utility", description: "A tool that solves a practical problem or improves a workflow." },
-  { icon: "people", status: "lower", title: "Chatbot wrapper", description: "A thin interface around a model without meaningful added work." },
-  { icon: "terminal", status: "higher", title: "Custom tool or runtime", description: "A new tool, framework, or system with original functionality." },
+  { icon: "document", status: "lower", title: "Copied tutorial site", description: "Recreating a tutorial without adding substantial technical work shows little original work." },
+  { icon: "wrench", status: "higher", title: "Workflow command-line tool", description: "Build a command that removes a repeated step from a real workflow." },
+  { icon: "people", status: "lower", title: "Basic AI chat screen", description: "A simple screen around an AI model adds little technical work on its own." },
+  { icon: "terminal", status: "higher", title: "Inference runtime", description: "Build software that runs a model on a device or GPU. That can show original Compute work." },
 ] as const;
 
 export const tracks = [
-  { name: "Tools", icon: "wrench", topics: "Developer tools, debuggers, SDKs, CLIs, and automation." },
-  { name: "Systems", icon: "gear", topics: "Infrastructure, runtimes, networks, protocols, and databases." },
-  { name: "Compute", icon: "chip", topics: "GPU work, inference runtimes, graphics, and performance tooling." },
-  { name: "Hardware", icon: "board", topics: "Embedded systems, physical devices, robotics, and electronics." },
-] as const;
-
-export const progressionMilestones = ["LV.1", "LV.5", "LV.10", "LV.15"] as const;
-
-export const fieldCategories = [
-  { icon: "laptop", title: "Laptops & PCs", description: "Equipment for your next technical build." },
-  { icon: "gear", title: "Development tools", description: "Tools that help you build, test, and ship." },
-  { icon: "cloud", title: "Cloud & compute", description: "Resources for experiments and infrastructure." },
-  { icon: "wrench", title: "Makers & hardware", description: "Physical tools for ideas beyond the screen." },
-] as const;
-
-export const rewards = [
-  { stage: "01", token: "Shipped work", explainer: "A project is shared with enough detail to review what you built." },
-  { stage: "02", token: "Quality review", explainer: "Review considers originality, technical depth, execution, and documentation." },
-  { stage: "03", token: "Bolts and progress", explainer: "Reviewed work can contribute to track XP and global Bolts." },
+  { name: "Tools", icon: "wrench", topics: "Make tools that help people build and test software, such as command-line tools, debuggers, and automation." },
+  { name: "Systems", icon: "gear", topics: "Build the software and infrastructure other projects rely on, such as runtimes, networks, and databases." },
+  { name: "Compute", icon: "chip", topics: "Make programs do more or run faster with graphics, GPUs, and model-running software." },
+  { name: "Hardware", icon: "board", topics: "Build physical technology such as circuit boards, embedded devices, and robots." },
 ] as const;
 
 export const shopCategories = [
@@ -77,23 +26,25 @@ export const shopCategories = [
   { icon: "storage", title: "Storage" },
   { icon: "flask", title: "Fabrication" },
   { icon: "domain", title: "Domains" },
-  { icon: "box", title: "Custom gear" },
+  { icon: "box", title: "Custom equipment" },
 ] as const;
 
 export const faqItems = [
   { question: "Who can join?", answer: "LOADOUT is in development. RSVP opens a draft interest form; eligibility and launch details have not been published." },
-  { question: "What kinds of projects fit?", answer: "Projects should show original technical work. Examples of project types include a renderer or netcode, an inference runtime or GPU backend, and local-first sync. These are examples, not participant projects or guaranteed approvals." },
-  { question: "Can I work with a team or across tracks?", answer: "Teams can collaborate when each person's work is attributable in the journal. A ship that spans tracks receives a final Track XP allocation from reviewers; contributors receive credit for their own approved work." },
-  { question: "How is work tracked?", answer: "Planned tracking uses Hackatime for coding and Lapse for eligible hardware and non-code work. Journals connect your tracked time to progress, decisions, and evidence. Full tracking guidelines will be published before launch." },
-  { question: "How does AI assistance work?", answer: "AI can help with research, explanation, and debugging. Declare your assistance and show your authorship, understanding, and original work. The full policy will be published before launch." },
-  { question: "How do tracks work?", answer: "Tools, Systems, Compute, and Hardware are the four tracks. Track XP is non-spendable and recorded per track across 15 lifetime levels; Bolts are global spendable currency. Research Mode can apply within any track, and research submissions need reproducible technical outputs." },
-  { question: "How do Requisitions work?", answer: "Requisition milestones are LV.3, LV.6, LV.9, LV.12, and LV.15. A Requisition is one-use and never expires. Only one can apply to an order, and it cannot bypass Mastery level requirements. Custom Orders remain subject to fit, budget, region, and fulfillment." },
+  { question: "What happens when my project is reviewed?", answer: "Reviewers check project fit and evidence, then score Originality (what is new), Technical Depth (the hard technical work), Execution (whether it works), and Documentation (whether another builder can understand it). They assign Track XP to fields shown by your work. Accepted projects can earn Bolts." },
+  { question: "What are Bolts and Track XP?", answer: "Bolts are global, spendable currency for prizes. Track XP cannot be spent; it raises a separate persistent level in Tools, Systems, Compute, or Hardware. Levels do not multiply the Bolts you earn." },
+  { question: "Can my project use more than one track?", answer: "Yes. Choose tracks based on the work you do, not just the kind of product you make. Reviewers assign Track XP to the fields supported by your actual work." },
+  { question: "Can I work with a team?", answer: "Yes. Keep your journal clear about your own contribution. Reviewers credit each person for their own approved work and assign XP to the tracks that work used." },
+  { question: "What kinds of project work may fit?", answer: "Fit depends on the technical work, not just the product label. The examples above are possible directions, not guaranteed approvals. Using AI does not automatically rule out a project; reviewers assess what you built and can explain." },
+  { question: "How is work tracked?", answer: "The planned tools are Hackatime for coding and Lapse for eligible hardware and other non-code work. Your journal connects tracked time to notes about what you built, why you made choices, and how you checked the result. Full tracking instructions will be published before launch." },
+  { question: "Can I use AI while building?", answer: "Yes. Explain how you used AI and show what you understand and built yourself. AI use alone does not make a project ineligible." },
+  { question: "What are Community Eras?", answer: "An Era is a shared technical theme, separate from competitive Seasons. Approved projects add non-spendable Era Points toward a community target. Objectives are optional, and Era changes do not reset your personal progress or accepted projects." },
+  { question: "How do Field Requisitions work?", answer: "A matching Requisition raises the savings limit on an eligible order. Each is one-use, never expires, cannot be transferred, and only one can be used per order. Minimum item values and level requirements still apply." },
+  { question: "How do Custom Orders work?", answer: "Request specific equipment outside the regular shop. The team reviews the request and sends a quote for you to accept or decline. Requests are not open yet." },
   { question: "How do I RSVP?", answer: "The RSVP link opens an external draft interest form. Sending interest does not enroll you or confirm eligibility." },
 ] as const;
 
 export const researchCopy = {
   title: "Research Mode",
-  description: "Investigate a technical question and share reproducible technical outputs. Research Mode is a modifier, not a separate track.",
+  description: "An optional modifier for any track: test a technical question and share results another builder can reproduce. It is not a fifth track.",
 } as const;
-
-export const requisitionMilestones = ["LV.3", "LV.6", "LV.9", "LV.12", "LV.15"] as const;

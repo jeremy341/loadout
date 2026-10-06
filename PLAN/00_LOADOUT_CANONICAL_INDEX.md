@@ -107,7 +107,7 @@ Source and development workflow:
 - feature/UI/architecture audit
 - independent fresh-history `jeremy341/loadout` repo
 - licensing/attribution tracking
-- temporary work branches and PRs into `main`; retained staging lane context
+- short-lived branch → `development` PR → `testing` promotion PR → `main` production PR; see Plan 07 for the active staged workflow
 - contributor/PR workflow
 - CI + CodeScene
 - later transfer readiness for `hackclub/loadout`

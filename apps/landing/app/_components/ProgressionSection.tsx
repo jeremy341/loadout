@@ -1,5 +1,5 @@
 import { EquipmentSection } from "./EquipmentSection";
-import { LevelBadge } from "./icons/LevelBadge";
+import { LoadoutIcon } from "./icons/LoadoutIcon";
 import { SectionHeading } from "./SectionHeading";
 
 const milestones = [
@@ -27,7 +27,7 @@ export function ProgressionSection() {
         <div className="progression-rail" role="group" aria-label="Field Requisition milestones">
           {milestones.map((milestone) => (
             <div className="progression-stop" key={milestone.level}>
-              <span className="progression-marker" aria-hidden="true"><LevelBadge variant={milestone.variant} /></span>
+              <span className={`progression-marker progression-marker-${milestone.variant}`} aria-hidden="true"><LoadoutIcon name="star" /></span>
               <strong className="progression-level">{milestone.level}</strong>
               <span className="progression-award">{milestone.variant === "master" ? "Master Requisition" : `Requisition ${milestone.award}`}</span>
             </div>

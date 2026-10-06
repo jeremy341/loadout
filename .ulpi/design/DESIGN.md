@@ -110,6 +110,10 @@ At `prefers-reduced-motion: reduce`, disable smooth scrolling, entrance and scro
 - Write from the builder's point of view. Explain program terms when first used. Avoid claims that imply dates, eligibility, current inventory, endorsements, participant totals, or pricing unless supplied by an approved live configuration.
 - Keep sentences short. Avoid fake stats, testimonials, invented project examples, buzzwords, and decorative em dashes.
 
+## Who's Behind LOADOUT? (2026-10-06)
+
+The final content section sits after FAQ and before the footer. It uses a vertical organizer directory beside a graphite Hack Club context panel, bound to the existing tokens and typography. Public names and responsibilities are user-supplied; no portraits, invented profile links, statistics, partner claims, or new sprite assets are needed. It is static and remains visible without JavaScript. The exact component and content contract is in `whos-behind-loadout.md`.
+
 ## Named anti-slop bans
 
 The direction fails if it uses any of these without a brief-backed reason: purple/blue glow or gradient, default beige/cream tokens, gradient text, glassmorphism, oversized soft-radius SaaS panels, generic stock/AI industrial art, fake dashboard imagery, repeated equal-card grids, cards nested inside cards, unrelated eyebrow numbering, fake screws/rivets, scratch/grunge, a game-world backdrop, rainbow tracks, fake precision, dead CTA destinations, or scattered infinite animation. The graph paper, Bolt Yellow, block type, and sparse technical markers must explain the product or orient the reader; remove any mark that does neither.

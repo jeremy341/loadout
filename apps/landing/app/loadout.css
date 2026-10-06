@@ -991,11 +991,9 @@ h3 {
 }
 
 .faq-chevron {
-  width:11px;
-  height:15px;
-  stroke:#A96F6C;
-  stroke-width:2.5;
-  fill:none;
+  width:16px;
+  height:16px;
+  image-rendering:pixelated;
   transition:transform 250ms var(--ease);
   flex-shrink:0
 }

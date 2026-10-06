@@ -1,6 +1,8 @@
 # Restore the Earlier LOADOUT Icons
 
-Status: approved for implementation
+Status: superseded on 2026-10-06 by [the final pixel icon integration](pixel-icon-sprite-integration.md). Its instructions to activate bolt.svg no longer apply; current icon sources and mappings are recorded in [SPRITE_SHEET_INDEX.md](../../docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md).
+
+Historical status: approved for implementation before the final icon set was supplied.
 
 ## Design read
 

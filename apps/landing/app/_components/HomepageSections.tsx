@@ -101,7 +101,7 @@ function FaqItem({ question, answer, answerId, transition }: { question: string;
     <article className="faq-item">
       <h3 id={answerId}>
         <button className="faq-question" type="button" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((value) => !value)}>
-          <svg className="faq-chevron" viewBox="0 0 12 16" aria-hidden="true"><path d="m3 3 5 5-5 5" /></svg><span>{question}</span>
+          <LoadoutIcon name="faq-chevron" className="faq-chevron" /><span>{question}</span>
         </button>
       </h3>
       <motion.div id={panelId} className="faq-answer" role="region" aria-labelledby={answerId} aria-hidden={!open} inert={!open} initial={false} animate={open ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }} transition={transition}>

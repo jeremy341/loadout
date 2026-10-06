@@ -66,8 +66,7 @@
 .progression-marker::after { inset:4px; background:#B8BEBD; z-index:-1; }
 .progression-marker-two::after { background:var(--yellow); }
 .progression-marker-master::after { background:#A77C78; }
-.progression-marker svg { width:33px; height:33px; }
-.progression-marker svg path { fill:var(--surface); }
+.progression-marker .loadout-vector { width:32px; height:32px; }
 .progression-level { display:block; font-family:var(--font-pixel); font-size:26px; }
 .progression-award { display:block; font-size:16px; margin-top:8px; }
 .progression-levels { scroll-margin-top:110px; }

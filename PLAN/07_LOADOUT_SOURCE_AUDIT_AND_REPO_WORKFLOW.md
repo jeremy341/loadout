@@ -9,9 +9,9 @@ The LOADOUT product root is intentionally free of app/package code while the web
 **Status:** Canonical engineering workflow before large-scale LOADOUT implementation  
 **Sources to audit:** `hackclub/pixl`, `EDRipper/ysws-template`, and `hackclub/stardance`  
 **Actual product repo:** independent `jeremy341/loadout` repository initially  
-**Standard contribution flow (user decision, 2026-10-05):** short-lived branch → PR → `main`.
+**Active contribution flow (user decision, 2026-10-06):** short-lived branch → PR to `development` → promotion PR to `testing` → promotion PR to `main`.
 
-**Retained staging branches:** `development` and `testing` remain available for explicit migration/release needs, but are not routine feature/documentation PR targets.
+**Direct-push exception:** any account with repository write access may push the exact commit to `development` after that SHA has passed the development checks on a short-lived branch. `testing` and `main` stay PR-only. The personal-repository branch rule cannot be scoped to only two named maintainers.
 
 ## 0. Core Decision
 
@@ -438,13 +438,13 @@ The commit should contain:
 
 This is the one permitted bootstrap exception before normal protected-branch workflow begins.
 
-Afterward, do not develop directly on permanent lane branches.
+Do not use `testing` or `main` as development workspaces. The checked-commit direct-push exception for `development` is defined in §17.
 
 ---
 
-# 11. Default Branch and Retained Staging Branches
+# 11. Default Branch and Staged Release Lanes
 
-`main` is the canonical default branch and routine PR destination. Existing `development` and `testing` branches are retained as staging/history lanes, not as shared places for day-to-day work.
+`main` remains the canonical default branch and Vercel Production source. Routine work follows all three lanes; `development` is the integration lane, `testing` is the release-candidate lane, and `main` is production.
 
 ```text
 development
@@ -456,11 +456,11 @@ Intended roles:
 
 | Branch | Purpose | Deployment |
 |---|---|---|
-| `main` | canonical integrated product and release source | production |
-| `development` | retained integration/staging history; use only under an explicit plan | preview/manual |
-| `testing` | retained staging/release-candidate history; use only under an explicit plan | staging/manual |
+| `development` | integrate everyday changes; short-lived branches target it by PR | preview |
+| `testing` | validate a complete release candidate promoted from `development` | preview/staging |
+| `main` | canonical production source, reached only from `testing` by PR | production |
 
-The initial bootstrap baseline was synchronized to GitHub's default `main` by PR #1. `main` now contains the complete application, plans, docs, images, and source submodule pins. New contributors clone `main` and create short-lived task branches from it.
+The initial bootstrap baseline was synchronized to GitHub's default `main` by PR #1. `main` contains the complete application, plans, docs, images, and source submodule pins. New contributors clone `main`, fetch all three lanes, and create short-lived task branches from the latest `development` after the one-time catch-up.
 
 Historical branch relationships from bootstrap:
 
@@ -470,13 +470,13 @@ main
 └── development
 ```
 
-The initial remote lane histories were not identical; PR #1 reconciled the populated `development` baseline into `main`. Refresh remote refs before working and do not assume retained staging branches have the same state as `main`.
+The remote lanes need a one-time catch-up after the user-requested PR #8 merge into `main`. At the workflow-change start, `origin/main` was nine commits ahead of `origin/development`; `origin/testing` had nine commits absent from main and one testing-only commit. Route the workflow change into development first, then promote it through testing and main. Verify the final three tree hashes before recording the lanes as synchronized.
 
 ---
 
 # 12. Short-Lived Branches
 
-All new work branches from the latest `main`.
+After the one-time catch-up, all new work branches from the latest `development`. During catch-up only, a branch based on `main` may open a PR to `development` to restore the shared baseline before promotions continue.
 
 Prefixes:
 
@@ -517,22 +517,27 @@ random-test
 
 # 13. Pull-Request Flow
 
-Routine flow:
+The required flow is:
 
 ```text
 short-lived branch
         ↓ PR
+development
+        ↓ promotion PR
+testing
+        ↓ promotion PR
 main
 ```
 
 Normally:
 
-- create a short-lived branch for every task; never edit or push task work directly on `main`, `development`, or `testing`
-- open a PR into `main` and wait for every required GitHub check to pass
+- create a short-lived branch for every task and open a PR into `development`
+- either trusted maintainer may directly push the exact short-lived-branch commit to `development` after the development checks for that SHA have passed; an unverified SHA is rejected by required status checks
+- promote only `development` → `testing` and `testing` → `main`; the `Promotion lane` check rejects other head/base pairs
+- wait for every check required by the target lane before merging
 - either trusted maintainer may merge a check-green PR; human review is encouraged but not technically required
-- keep `development` and `testing` for explicitly planned staging/migration work only; they are not intermediate targets for every feature
+- never commit locally on `testing` or `main`; do not force-push or delete permanent lanes
 - delete short-lived branches after merge when safe
-- never delete the permanent lanes
 
 Do not require approval from Jeremy, the owner, a team, a CODEOWNER, or a person other than the latest pusher. Do not restrict the cofounder to review-only access. Human review remains optional.
 
@@ -561,7 +566,7 @@ The cofounder GitHub username is `fazin-ahamed`; GitHub reports active `write` p
 
 ### Required task kickoff
 
-Before starting a task, each human or AI contributor posts a concise kickoff in `#loadout-development` with the task scope, temporary branch, and intended PR target (`main`). Include material changes or blockers in follow-up messages and share the PR when it is ready. Never post tokens, credentials, or private participant data. Do not claim a Slack post was sent unless it was actually posted.
+Before starting a task, each human or AI contributor posts a concise kickoff in `#loadout-development` with the task scope, temporary branch, and intended target (`development`, `testing`, or `main`). Feature work targets `development`; testing and main are only reached through their promotion PRs. Include material changes or blockers in follow-up messages and share the PR when it is ready. Never post tokens, credentials, or private participant data. Do not claim a Slack post was sent unless it was actually posted.
 
 **OFFICIAL / FIRST-PARTY GitHub permission note (checked 2026-10-04):** a personal-account repository has owner and collaborator permission levels. Collaborators have write access and can create/push branches, open/review PRs, and merge PRs on protected branches when the PR has no required approval. Repository-wide settings and collaborator invitations remain owner tasks. See [personal-repository permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/permission-levels-for-a-personal-account-repository).
 
@@ -616,20 +621,21 @@ Do not assume third-party app authorization automatically follows an organizatio
 
 Copy the philosophy of the Poorup workflow, not its project-specific complexity.
 
-## Short-lived branch -> PR to main
+## Staged lane checks
 
-Fast checks:
+GitHub Actions runs checks for short-lived branch pushes so that a direct push to `development` can reuse successful results for the exact same commit SHA. It also runs on every PR and on pushes to the permanent lanes.
+
+`development` is the fast lane:
 
 ```text
+Repository integrity
 lint
 typecheck
 unit tests
-build
-basic security/static checks
-CodeScene diff review when available
+Promotion lane validation
 ```
 
-UI PRs also run browser/accessibility checks. For current repository scope, PRs into all permanent branches run the stable GitHub checks: `Repository integrity`, `Landing quality`, and `Landing browser`. The standard day-to-day PR base remains `main`. Do not invent required-check names. Add backend/database checks when those systems exist. If a future release uses `development` or `testing`, document that explicit staging plan; it does not replace the default PR flow.
+`testing` and `main` promotions run `Repository integrity`, full `Landing quality` including the production build, `Landing browser`, and `Promotion lane`. The release PR reruns the full checks on the main merge candidate; this ensures the exact candidate being promoted is green. Add backend/database checks when those systems exist. CodeScene remains advisory and is not a required branch check; Copilot code review is not part of this pipeline.
 
 Human review is recommended, but it must not be a required GitHub approval. Either trusted maintainer may merge after all required checks pass.
 
@@ -639,38 +645,41 @@ Do not create expensive test sharding or large nightly campaigns before the test
 
 # 17. Branch Protection
 
-Branch protection and required checks were applied and verified on 2026-10-05 for `main`, `development`, and `testing`. The standard PR destination is `main`; see `docs/development/BRANCH_PROTECTION_SETUP.md` for the exact verified rules.
+The previous all-PR protection configuration was verified on 2026-10-06. The active lane-specific configuration is recorded in `docs/development/BRANCH_PROTECTION_SETUP.md` after applying and reading back the new settings.
 
 Recommended starting policy:
 
-The goal is a **PR and CI gate with zero required human approvals**. Require a pull request and the appropriate passing CI checks on `development`, `testing`, and `main`; apply the rules to administrators and configure no bypass actors. Both trusted maintainers can create and push temporary branches and merge check-green PRs independently.
+The goal is a **lane and CI gate with zero required human approvals**. Apply rules to administrators and configure no bypass actors. Both maintainers can work independently and merge check-green PRs.
 
-## Retained `development` lane
+## `development` integration lane
 
-- changes through PR
-- direct updates blocked by required PR rule
-- required fast CI checks
+- feature PRs are the normal route; direct pushes of exact pre-checked commits are allowed
+- required fast checks: `Repository integrity`, `Landing quality`, and `Promotion lane`
+- no human approval required
+- no force pushes or deletion
+- push checks to feature branches provide successful statuses before the direct update
 - zero required approvals
 - no administrator or collaborator bypass
-- branch must be reasonably current
+- feature PRs must be up to date; direct pushes use the exact checked commit SHA
 
-## Retained `testing` lane
+## `testing` release-candidate lane
 
-- changes through PR
+- PR required; the only allowed source is `development`
 - direct updates blocked by required PR rule
 - zero required approvals
 - no administrator or collaborator bypass
 - required heavy CI
 - browser QA required when available
-- require branch up to date if practical
+- do not require source freshness; full CI runs on the promotion merge candidate
 
-## Routine destination: `main`
+## Production lane: `main`
 
-- changes through PR
+- PR required; the only allowed source is `testing`
 - direct updates blocked by required PR rule
 - zero required approvals
 - no administrator or collaborator bypass
 - production/release checks required
+- do not require source freshness; full CI runs on the promotion merge candidate
 - no force push
 - no branch deletion
 
@@ -720,7 +729,7 @@ docs/development/CODESCENE_SETUP.md
 
 # 19. Deployment Lanes
 
-`main` is the code/release source of truth. Existing `development` and `testing` refs are retained staging/history branches and are used only under an explicit release plan. The Vercel project is not Git-connected; its first public production demo was manually deployed from `development` at the user's request. Future automatic production deploys require a verified Vercel Git connection with `main` selected as its Production Branch.
+`main` is the production source of truth. Every release travels through `development` and `testing`. Vercel's production branch is `main`; use Preview deployments for development/testing changes and never treat a preview as a production release.
 
 Do not let an imported Pixl workflow deploy LOADOUT to a Pixl environment.
 
@@ -874,14 +883,14 @@ This workflow plan is correctly implemented when:
 - only the three declared reference submodules are committed; no reference code is vendored into the LOADOUT product tree
 - old Pixl deploy workflows cannot accidentally target source infrastructure
 - `development`, `testing`, and `main` exist
-- normal work uses short-lived branches and PRs into `main`
+- normal work follows short-lived branch → PR to `development` → promotion PR to `testing` → promotion PR to `main`
 - after the baseline-sync PR, a default-branch clone contains all plans, tracked design images, and initialized source submodules
 - the UI skill workflow and the Slack kickoff channel are documented for human and AI contributors
 - the repository remains `jeremy341/loadout` under the personal account initially, with no temporary organization
 - `fazin-ahamed` has verified `write` permission
-- both owner and write collaborator can create/push short-lived branches, open/review/merge `main` PRs when required checks pass
+- both maintainers can create/push short-lived branches, review PRs, and merge check-green lane PRs independently across time zones
 - no required owner-specific or CODEOWNER approval blocks either maintainer
-- required CI checks pass before lane merges, and direct pushes to permanent lanes are blocked without bypasses
+- required CI checks pass before merges; direct pushes to `development` are allowed only for an exact pre-checked commit; direct pushes to `testing` and `main` are blocked
 - `docs/development/WORKFLOW.md` and `docs/development/BRANCH_PROTECTION_SETUP.md` describe the flow, actual controls, and remaining setup
 - any personal-repository plan limitation is documented rather than routed through a temporary organization
 - CI is proportional to the current project size

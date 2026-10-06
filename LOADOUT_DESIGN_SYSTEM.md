@@ -1,5 +1,7 @@
 # LOADOUT — Website Design System
 
+**Proposed homepage amendment, 2026-10-05 (planning only):** Plan 12 and .ulpi/design/loadout-homepage-clarity-flow-and-eras.md specify clearer track/progression/Requisition copy, a separate Eras explanation, a Pixl-derived downward process, deliberately stepped Bolt/badge SVGs, larger footer typography, more section spacing, and larger clouds with farther horizontal movement. Preserve the implemented grey/yellow identity and hero. Proposed values and the optional arrow-only patch are explicitly separated from current production behavior in .ulpi/design/DESIGN.md. No UI assets or code changed in this planning phase.
+
 **Status:** Canonical visual system for the LOADOUT public website  
 **Reference:** Current long-form LOADOUT landing-page mockup  
 **Direction:** Industrial technical manual + pixel utility  
@@ -1118,3 +1120,10 @@ The homepage should explain the program before showing economy complexity.
 The selected headline is BUILD YOUR OWN / TECHNICAL STACK. RSVP now uses https://rsvp.soon.it/loadout as the confirmed interest destination. Pixl-inspired entrance choreography and the accessible Continue scrolling cue are active. Clouds use horizontal-only bounded parallax, ±72px desktop/±36px mobile; CSS sizes are clamp(200px,26vw,420px) and220px mobile, with static reduced-motion behavior. The current .ulpi/design/DESIGN.md table is the compact active token record.
 
 Desktop amendment — 2026-10-05: above 1100px, the hero frame is widened to 900px and each headline span stays on one line, producing exactly two rows. Side labels hide at 1101–1300px to avoid overlap. Mobile wrapping remains responsive. Production-browser geometry checks cover 1280, 1440, 1659 and 1920px widths.
+
+
+## Active homepage clarity refinement — 2026-10-05
+
+Plan 12 is approved and implemented locally. The final process is vertical with parallel Bolt/XP results; the old six-card process and illustrative smooth badges are retired. Actual Requisition milestones are LV.3/6/9/12/15 (I/I/II/II/Master). Community Eras, pricing, Field Requisitions, and Custom Orders have separate readable explanations. No live mechanics or invented prices/counters are implied.
+
+Homepage width is 1080px, superseding older 1440px homepage examples in this document. Major section padding is 72px desktop (88px process/progression/Eras), 56/64px tablet, and 44px mobile. Essential copy is 16px. Footer links have at least 44px targets and reflow five/two/one columns. Clouds now use clamp(280px,32vw,560px) desktop/260px mobile, X-only parallax ±112/±48px, and separate smooth ±12px drift over 48s; reduced motion is static. .ulpi/design/DESIGN.md records the active compact specification.

@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, type Transition } from "framer-motion";
-import Image from "next/image";
 import { useState, type CSSProperties } from "react";
 import { faqItems, projectFitItems, researchCopy, tracks } from "../site-content";
 import { LoadoutIcon } from "./icons/LoadoutIcon";
@@ -102,7 +101,7 @@ function FaqItem({ question, answer, answerId, transition }: { question: string;
     <article className="faq-item">
       <h3 id={answerId}>
         <button className="faq-question" type="button" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((value) => !value)}>
-          <Image className="faq-chevron" src="/loadout/icons/faq-chevron.svg" alt="" aria-hidden="true" width={32} height={32} unoptimized /><span>{question}</span>
+          <svg className="faq-chevron" viewBox="0 0 12 16" aria-hidden="true"><path d="m3 3 5 5-5 5" /></svg><span>{question}</span>
         </button>
       </h3>
       <motion.div id={panelId} className="faq-answer" role="region" aria-labelledby={answerId} aria-hidden={!open} inert={!open} initial={false} animate={open ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }} transition={transition}>

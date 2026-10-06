@@ -1,5 +1,7 @@
 # Pixel sprite SVG integration
 
+> Superseded for homepage UI icons by the approved [pre-sprite icon restoration](pre-sprite-icon-restoration.md). The sprite replacement is no longer the active source for UI icons; preserve the custom `/loadout/bolt.svg` asset for Bolt icons. Keep scenery and standalone non-icon assets that the restoration explicitly preserves.
+
 ## Design read
 
 This is a pixel-asset replacement for the LOADOUT industrial field-manual homepage. Use the 7×6 sprite sheet as the pixel source and keep its discrete 32×32 grid, transparent paper backdrop, opaque sprite pixels, and crisp edges.

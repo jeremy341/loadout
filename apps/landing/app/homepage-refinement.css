@@ -61,8 +61,13 @@
 .progression-rail { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:24px; padding-block:24px 40px; }
 .progression-stop { text-align:center; position:relative; }
 .progression-stop:not(:last-child)::after { content:""; position:absolute; top:39px; width:calc(100% - 80px); height:10px; left:calc(50% + 52px); background:var(--ink); clip-path:polygon(0 35%,85% 35%,85% 0,100% 50%,85% 100%,85% 65%,0 65%); }
-.progression-marker { display:block; width:80px; height:80px; margin:0 auto 18px; }
-.progression-marker svg,.progression-marker .loadout-vector { width:100%; height:100%; }
+.progression-marker { position:relative; isolation:isolate; display:grid; place-items:center; width:80px; height:80px; margin:0 auto 18px; }
+.progression-marker::before,.progression-marker::after { content:""; position:absolute; inset:0; clip-path:polygon(50% 0,94% 25%,94% 75%,50% 100%,6% 75%,6% 25%); background:var(--ink); z-index:-2; }
+.progression-marker::after { inset:4px; background:#B8BEBD; z-index:-1; }
+.progression-marker-two::after { background:var(--yellow); }
+.progression-marker-master::after { background:#A77C78; }
+.progression-marker svg { width:33px; height:33px; }
+.progression-marker svg path { fill:var(--surface); }
 .progression-level { display:block; font-family:var(--font-pixel); font-size:26px; }
 .progression-award { display:block; font-size:16px; margin-top:8px; }
 .progression-levels { scroll-margin-top:110px; }

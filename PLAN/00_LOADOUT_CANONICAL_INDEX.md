@@ -2,6 +2,12 @@
 
 **Status:** Current source-of-truth index after splitting the old master plan.
 
+**Homepage refinement, 2026-10-05:** [Plan 12](12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md) is approved and implemented locally. It covers the vertical process, lifetime progression, Community Eras, Requisition and Custom Order explanations, pixel SVGs, footer, spacing, and horizontal clouds. Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes.
+
+**Homepage information architecture, 2026-10-05:** [Plan 13](13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md) is approved and implemented locally. Its consolidated introduction, grouped tracks/fit, unchanged process diagram, unified gear/rewards section, and later community section supersede Plan 12 §5's sequence. Final local checks pass; publication is a separate step.
+
+**Progress and prizes hierarchy, 2026-10-05:** [Plan 14](14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) is approved and implemented locally. Levels, pricing, discounts, Requisitions, the prize catalog and Custom Orders now sit beneath one Progress & Prizes section. Final local checks pass; publication is a separate step.
+
 This file is intentionally short. The detailed plans live in the focused documents next to it.
 
 ## Canonical product decisions
@@ -122,6 +128,8 @@ Supporting external-context brief:
 - `09_LOADOUT_PUBLIC_SITE_PIXL_PORT_AND_REDESIGN.md` records the completed public landing port/redesign and source-informed motion audit.
 - `10_LOADOUT_HOMEPAGE_RSVP_MOTION_AND_CONTENT_REFINEMENT.md` records the completed RSVP, motion, horizontal-cloud, muted-palette, content, and desktop-width refinement.
 - `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md` records the user-approved Eras design. It is a product plan, not an implementation authorization.
+- `13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md` records the implemented homepage order, consolidation, preserved How it works section, and final local verification.
+- `14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md` records the implemented progression/prize hierarchy, terminology, retained anchors and local verification.
 
 ### Historical bootstrap sequence (completed)
 

@@ -50,6 +50,10 @@ bun run build
 bun run test:e2e
 ```
 
+### Authenticated GitHub CLI
+
+Before an authenticated GitHub CLI operation, check `gh auth status --hostname github.com` in the command environment that will run it. This machine's sandboxed command runner can see a stale or isolated Windows keyring even when the user's PowerShell has a valid `jeremy341` login. If the sandbox reports an invalid keyring, use a narrowly scoped host-backed/elevated `gh` invocation and verify its status before proceeding; do not keep repeating browser logins or switch repository folders. Never ask the user to paste a token, set a persistent `GH_TOKEN` as a workaround, run `gh auth token`/`--show-token`, or print credentials. If host-backed execution is unavailable, ask the user to run the required CLI command and share only its non-secret output.
+
 Do not commit local `.env` files, credentials, `.vercel/`, `node_modules/`, `.next/`, Playwright output, caches, or generated review captures. Keep `.env.example` free of private values.
 
 ## Working with AI agents

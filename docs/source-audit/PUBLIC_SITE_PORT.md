@@ -88,3 +88,29 @@ The final reference is `codex-clipboard-6ecd3256-5ec8-4580-a85b-8105eafacdd8.png
 Hero refinement verification: the exact 1659×948 reference viewport and mobile first screen were reviewed. The yellow lightning currency SVG is distinct from the brand mark. Cloud display springs initialize at zero on both server and client; preference-dependent activation happens after hydration, avoiding the reduced-motion attribute mismatch found during development.
 
 The final capture set is `.impeccable/review/final/desktop.png`, `desktop-viewport.png`, `mobile.png`, `mobile-viewport.png`, and `hero-reference.png`. These local review artifacts are ignored by Git. The detector's sole grid-background advisory is retained as an intentional user-requested design choice. Privacy/contact/rules URLs, dates, eligibility, and the live catalogue remain owner-provided setup inputs.
+
+
+## Plan 12 homepage refinement — 2026-10-05
+
+The earlier verification sections above apply to the previous homepage revision, not this new local diff. No automated tests were run or edited in this refinement.
+
+| Pinned Pixl source at 8141b992e92e05583246fd914c63a101100f6fe4 | Classification | Current LOADOUT target |
+|---|---|---|
+| apps/landing/app/_components/Flow.tsx: Node, MiniCard | ADAPT | HowItWorks.tsx and homepage-refinement.css central framed nodes, readable padding, hard-shadow feedback. |
+| Flow.tsx: Down, Fork, ArrowHead, FlowDiagram | ADAPT | Six semantic ordered actions, crisp central downward connectors, parallel Bolts/Track XP results nested under review, and mobile stacking. |
+| Flow.tsx: LADDER, generated config, media | IGNORE | No Pixl currency, chapter/reward policy, videos, rates, or progress-fill values. |
+| apps/landing/app/_components/Footer.tsx | ADAPT | SiteFooter.tsx and larger five/two/one-column footer rhythm, ordinary grouped links. Source identity/copy not reused. |
+| Description.tsx, Story.tsx | REFERENCE ONLY | Layout/hierarchy context; no source crew, story, launch countdown, or copied media. |
+| SmoothScroll.tsx, Menu.tsx | REFERENCE ONLY | Preserve the existing audited adapters; no new scrolling/navigation integration. |
+| LOADOUT Bolt/star/ticket/LevelBadge SVG geometry | REIMPLEMENT | Authored stepped integer-grid family; no third-party artwork copied. |
+
+Pixl's MIT notice and all reference repository pins are retained. YSWS Template/Stardance remain reference-only for this public UI work; no Rails code or specialist scoring policy was introduced.
+
+Implemented: clearer program/track/review copy; lifetime progression and five Requisition milestones; Community Eras and separate Season distinction; pricing/Requisition/Custom Order explanation; removal of redundant review/award rows; wider vertical spacing and 16px essential text; larger footer; larger clouds with farther X-only motion. The hero headline, fullscreen behavior, RSVP URL, Lenis/navigation/FAQ baseline, and backend scope remain unchanged.
+
+ESLint, TypeScript, and production build pass through the host runner. Manual responsive/browser inspection is pending because the old error tab was rejected by browser URL policy; a replacement preview opening was requested. This is local, uncommitted work on feature/homepage-clarity-flow-eras. No publication or pipeline completion is claimed.
+
+
+### Copy clarification follow-up
+
+The user approved the visual result and requested a plain-language rewrite. The new brief is .ulpi/design/homepage-copy-clarity.md. The reopened browser resolves the earlier error-tab blocker. The current wording was manually inspected at desktop and 390/320px mobile, including the Requisition example and expanded Custom Order FAQ; no horizontal page overflow was observed. No styles, assets, motion, routes, or source reuse decisions changed in the copy follow-up. Automated tests, lint/typecheck/build suites, CI, and publication were not run for the string-only revision; previous build evidence applies to the preceding code revision.

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactNode, SVGProps } from "react";
 
 export type IconName =
@@ -10,9 +11,8 @@ type LoadoutIconProps = { name: IconName; className?: string } & Omit<SVGProps<S
 
 const ink = "var(--ink, #1D2021)";
 const gold = "var(--yellow, #D9B64C)";
-const icons: Record<IconName, ReactNode> = {
+const icons: Record<Exclude<IconName, "bolt">, ReactNode> = {
   down: <><path d="M4 4h6v5h5v5h2v-5h5V4h6M4 15h6v5h5v5h2v-5h5v-5h6" fill="none" stroke={ink} strokeWidth="5"/><path d="M4 4h6v5h5v5h2v-5h5V4h6M4 15h6v5h5v5h2v-5h5v-5h6" fill="none" stroke={gold} strokeWidth="2"/></>,
-  bolt: <><path d="M17 2 5 18h9l-3 12 16-19H17l4-9z" fill={gold}/><path d="m16 7-6 8h5" fill="none" stroke="var(--highlight, #EAD599)" strokeWidth="2"/></>,
   brand: <><path d="M12 3h8l9 9v8l-9 9h-8l-9-9v-8z" fill={gold}/><path d="m13 8 6 0 5 5v6l-5 5h-6l-5-5v-6z" fill={ink}/><path d="M13 11h6v2h3v6h-3v2h-6v-2h-3v-6h3z" fill={gold}/></>,
   layers: <><path d="m4 12 12-7 12 7-12 7z" fill={gold}/><path d="m4 12 12-7 12 7-12 7z"/><path d="m4 18 12 7 12-7M4 23l12 7 12-7" fill={gold}/><path d="m4 18 12 7 12-7M4 23l12 7 12-7"/></>,
   code: <><path d="M5 6h22v20H5z" fill={gold}/><path d="M5 6h22v20H5z"/><path d="M5 10h22M9 6V4h4v2m8 0V4h4v2"/><path d="m12 15-3 3 3 3m8-6 3 3-3 3m-2-7-3 8" fill="none"/><path d="m12 15-3 3 3 3m8-6 3 3-3 3m-2-7-3 8"/></>,
@@ -45,6 +45,10 @@ const icons: Record<IconName, ReactNode> = {
 };
 
 export function LoadoutIcon({ name, className, ...props }: LoadoutIconProps) {
+  if (name === "bolt") {
+    return <Image className={`loadout-vector ${className ?? ""}`.trim()} src="/loadout/bolt.svg" alt="" aria-hidden="true" draggable={false} width={32} height={32} unoptimized />;
+  }
+
   return (
     <svg
       className={className}

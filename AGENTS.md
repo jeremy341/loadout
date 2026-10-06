@@ -5,8 +5,9 @@ Read [the human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md) befo
 ## Contribution rules
 
 - Post the task kickoff in `#loadout-development` before starting substantive work.
-- Always work on a short-lived branch and open a PR into `main`; merge only after required checks pass.
-- Never commit task work directly on `main`, `development`, or `testing`. `development` is the temporary full-baseline clone source until the catch-up PR merges; afterward, the retained `development` and `testing` refs are only for explicit staging/release plans.
+- Use the staged path: short-lived branch → PR into `development` → promotion PR into `testing` → promotion PR into `main`. Never send feature work straight to `testing` or `main`.
+- `development` accepts either a normal feature PR or a direct push of the exact commit whose required fast checks have already passed on its short-lived branch. Do not push an unverified commit there. `testing` and `main` remain PR-only.
+- Start feature branches from the latest `development` after the one-time lane catch-up is complete. Do not commit task work directly on `testing` or `main`.
 - Human review is welcome but is not a required approval. Do not add one-person merge gates.
 
 ## Project boundaries
@@ -27,9 +28,13 @@ git clone https://github.com/jeremy341/loadout.git
 cd loadout
 git submodule update --init
 git submodule status
+git fetch origin development testing
+git switch --track origin/development
+git switch -c feature/short-task-name
 ```
 
 This downloads Pixl, YSWS Template, and Stardance at their pinned SHAs. The 26 tracked design images are ordinary repository files and arrive with the clone.
+After the one-time lane catch-up, start everyday work from `development`; follow `docs/development/WORKFLOW.md` for the promotion PRs.
 
 Do not recurse into Stardance's nested `secrets` submodule. Its pinned remote `hackclub/stardance-secrets` returned “Repository not found” on 2026-10-05; the parent Stardance checkout remains available at its recorded SHA.
 
@@ -49,6 +54,10 @@ bun run test
 bun run build
 bun run test:e2e
 ```
+
+### Authenticated GitHub CLI
+
+Before an authenticated GitHub CLI operation, check `gh auth status --hostname github.com` in the command environment that will run it. This machine's sandboxed command runner can see a stale or isolated Windows keyring even when the user's PowerShell has a valid `jeremy341` login. If the sandbox reports an invalid keyring, use a narrowly scoped host-backed/elevated `gh` invocation and verify its status before proceeding; do not keep repeating browser logins or switch repository folders. Never ask the user to paste a token, set a persistent `GH_TOKEN` as a workaround, run `gh auth token`/`--show-token`, or print credentials. If host-backed execution is unavailable, ask the user to run the required CLI command and share only its non-secret output.
 
 Do not commit local `.env` files, credentials, `.vercel/`, `node_modules/`, `.next/`, Playwright output, caches, or generated review captures. Keep `.env.example` free of private values.
 

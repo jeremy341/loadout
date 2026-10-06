@@ -4,14 +4,24 @@ Repository: public personal-account repository `jeremy341/loadout`. The intended
 
 ## Branch lanes
 
-- `main` is the canonical default and routine PR destination.
-- `development` and `testing` are retained staging/history lanes. Use them only under an explicit migration or release plan.
+The required promotion order is:
 
-All work uses a short-lived branch: branch from the latest `main`, make a focused change, and open a PR into `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Do not commit task work directly to `main`, `development`, or `testing`.
+```text
+short-lived branch
+  └─ PR → development
+       └─ promotion PR → testing
+            └─ promotion PR → main
+```
 
-**Initial baseline sync complete:** PR #1 merged the full populated `development` baseline and contributor updates into `main` at merge commit `f55b883b09d2f2e583ffc76fa452128afd5da1e2`. The default `main` branch now contains the application, plans, tracked design images, and pinned source submodules. Clone `main` and branch every task from it.
+- `development` is the active integration lane. Open routine feature, fix, docs, and chore PRs here. Either maintainer may also push a commit directly after that exact SHA has passed the fast checks on a short-lived branch. Because this is a personal-account repo, the same direct-push capability also applies to any other collaborator with write access.
+- `testing` is the release-candidate lane. Only promote `development` into it by PR.
+- `main` is the production lane. Only promote `testing` into it by PR; Vercel Production deploys from `main`.
 
-Both trusted maintainers can create/push short-lived branches, open/review PRs, and merge a check-green PR to `main`. Jeremy owns the personal-account repository. GitHub verified `fazin-ahamed` has `write` permission on 2026-10-05.
+Never open a feature PR directly into `testing` or `main`. Do not commit on `testing` or `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes for short-lived branches. After the one-time lane catch-up, create them from the latest `development`.
+
+**Current lane catch-up:** GitHub `main` contains the PR #8 merge `432c6445bf7cfb17ca8a1c13169be67c6be200be`; the live `development` and `testing` refs were behind it when this workflow change began. Route this workflow change first into `development`, then promote it through `testing` and `main`. Compare the final tree hashes before calling all three lanes synchronized.
+
+Both trusted maintainers can create/push short-lived branches, open/review PRs, and merge a check-green PR at each lane without waiting for the other. The development direct-push rule also applies to every repository collaborator with write access. Jeremy owns the personal-account repository; GitHub verified `fazin-ahamed` and `NeticYTOF` have `write` access on 2026-10-06.
 
 Human review is recommended when both maintainers are available. It is optional and must not be a merge gate. There are no owner-only, Jeremy-only, CODEOWNER-only, or latest-pusher approval requirements.
 
@@ -19,18 +29,32 @@ Human review is recommended when both maintainers are available. It is optional 
 
 `apps/landing` contains the LOADOUT public homepage, adapted from the verified Pixl baseline. The temporary source-only assets and locale pages were removed. The three source references remain under `references/` as independently pinned Git submodules; exact SHAs, paths, licenses, reuse decisions, and clone instructions are in `docs/source-audit/`. Run `git submodule update --init` (not recursive); Stardance's nested `secrets` remote is unavailable, while the parent Stardance checkout remains intact at its pin.
 
-## Current setup status
+## CI and merge rules
 
-PR #1 synced the full application, plans, images, and source pins from `development` into `main`; PR #2 finalized default-branch onboarding. All three CI checks passed on both PRs. GitHub branch protection is active on `main`, `development`, and `testing`: PR required, `Repository integrity`, `Landing quality`, and `Landing browser` required, zero approval count, no bypasses, admins enforced, no force pushes or branch deletion. Local verification from 2026-10-05: build, lint, TypeScript, four unit tests, and 24 browser cases pass.
+GitHub Actions runs on branch pushes and on PRs to the three lanes. `Promotion lane` accepts only a short-lived branch → `development`, `development` → `testing`, or `testing` → `main` PR.
 
-Vercel project `jerry-team1/loadout` uses root directory `apps/landing`. Its public production demo is live at [loadout-jerry-team1.vercel.app](https://loadout-jerry-team1.vercel.app/). See [Vercel deployment setup](VERCEL_PREVIEW.md). The main GitHub branch is the future production source. The Vercel project still lacks a Git repository connection, so auto-deploy is not active.
+| Target | Required checks | Human approval | Direct push |
+|---|---|---|---|
+| `development` | `Repository integrity`, fast `Landing quality`, `Promotion lane` | None | Allowed only for an exact commit whose checks already passed on a short-lived branch |
+| `testing` | `Repository integrity`, full `Landing quality` including build, `Landing browser`, `Promotion lane` | None | Blocked; use a promotion PR from `development` |
+| `main` | `Repository integrity`, full `Landing quality` including build, `Landing browser`, `Promotion lane` | None | Blocked; use a promotion PR from `testing` |
+
+Both maintainers may open, review, and merge check-green PRs independently across time zones. Human review is encouraged, never required; no Jeremy-only, owner-only, CODEOWNER, or latest-pusher gate is allowed. CodeScene remains advisory and is not a required branch check.
+
+The currently verified GitHub settings before this rollout required a PR and the same three checks on all lanes. `BRANCH_PROTECTION_SETUP.md` records the post-rollout live settings after they are applied and read back from GitHub.
+
+PR #1 synced the initial full baseline and PR #2 finalized onboarding. PR #8 later merged the final homepage icon work into `main` at `432c6445bf7cfb17ca8a1c13169be67c6be200be`.
+
+Vercel project `jerry-team1/loadout-ysws` was verified on 2026-10-06 as connected to `jeremy341/loadout`, rooted at `apps/landing`, and tracking `main` as its Production Branch. Its only assigned Production domain is [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Vercel creates unique Preview URLs for PR deployments; use the stable Production URL for public sharing. See [Vercel deployment setup](VERCEL_PREVIEW.md) for the verified configuration and preview behavior.
 
 ## Pull request checklist
 
-1. Clone default `main` with `--recurse-submodules` and verify the pins.
+1. Clone default `main` with `--recurse-submodules` and verify the pins. Fetch `development` and `testing` too.
 2. Post a kickoff in `#loadout-development` before substantive work.
-3. Create a short-lived branch from `main` and keep the change scoped.
-4. Run lint, typecheck, unit tests, production build, and Playwright checks. CI runs these in `Landing quality` and `Landing browser`, alongside `Repository integrity`.
-5. Open a PR to `main` and wait for every required check.
-6. Request optional review when useful; no one person's approval is mandatory. Either trusted maintainer may merge after checks pass.
-7. Preserve a clear record for policy, scoring, payout, security, and deployment changes.
+3. Create a short-lived branch from the latest `development` and keep the change scoped.
+4. Push the short-lived branch so its exact commit gets CI; the development lane runs integrity and fast quality checks.
+5. Open a PR to `development` and wait for every required check. Direct-push only the exact checked commit if choosing the direct-push path.
+6. Promote `development` → `testing` by PR; wait for integrity, full quality/build, browser, and promotion checks.
+7. Promote `testing` → `main` by PR; wait for the same full checks. This is the only production route.
+8. Request optional review when useful; no one person's approval is mandatory. Either trusted maintainer may merge after checks pass.
+9. Preserve a clear record for policy, scoring, payout, security, and deployment changes.

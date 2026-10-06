@@ -470,7 +470,7 @@ main
 └── development
 ```
 
-The remote lanes need a one-time catch-up after the user-requested PR #8 merge into `main`. At the workflow-change start, `origin/main` was nine commits ahead of `origin/development`; `origin/testing` had nine commits absent from main and one testing-only commit. Route the workflow change into development first, then promote it through testing and main. Verify the final three tree hashes before recording the lanes as synchronized.
+The one-time catch-up completed after PR #8. PR #9 brought the updated main baseline into `development`, PR #10 promoted `development` into `testing`, and PR #11 promoted `testing` into `main`. On 2026-10-06, the three refs were different merge commits but had the same tree hash: `36ab682f9388f142a6a296d0b6f00b50ed532fc7`.
 
 ---
 
@@ -645,9 +645,9 @@ Do not create expensive test sharding or large nightly campaigns before the test
 
 # 17. Branch Protection
 
-The previous all-PR protection configuration was verified on 2026-10-06. The active lane-specific configuration is recorded in `docs/development/BRANCH_PROTECTION_SETUP.md` after applying and reading back the new settings.
+The lane-specific protection configuration was applied and verified from GitHub's API on 2026-10-06. See `docs/development/BRANCH_PROTECTION_SETUP.md` for the branch-by-branch status checks, PR requirements, approval count, and bypass settings.
 
-Recommended starting policy:
+Verified lane policy (2026-10-06):
 
 The goal is a **lane and CI gate with zero required human approvals**. Apply rules to administrators and configure no bypass actors. Both maintainers can work independently and merge check-green PRs.
 

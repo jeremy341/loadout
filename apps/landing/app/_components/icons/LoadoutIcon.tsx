@@ -3,13 +3,14 @@ import Image from "next/image";
 export type IconName =
   | "bolt" | "layers" | "code" | "gift" | "user" | "list" | "document" | "wrench"
   | "gear" | "chip" | "board" | "flask" | "globe" | "people" | "arrow" | "star"
-  | "laptop" | "cloud" | "key" | "box" | "cap" | "stickers" | "hoodie" | "terminal"
+  | "laptop" | "cloud" | "box" | "cap" | "hoodie" | "terminal"
   | "domain" | "ticket" | "storage" | "check" | "cross" | "brand" | "down" | "faq-chevron"
   | "requisition-i" | "requisition-ii" | "requisition-master";
 
 type LoadoutIconProps = { name: IconName; className?: string };
 
-const spriteNames: Record<Exclude<IconName, "bolt" | "brand">, string> = {
+const spriteNames: Record<Exclude<IconName, "brand">, string> = {
+  bolt: "bolt",
   layers: "layers",
   code: "code",
   gift: "gift",
@@ -27,10 +28,8 @@ const spriteNames: Record<Exclude<IconName, "bolt" | "brand">, string> = {
   star: "xp-star",
   laptop: "laptop",
   cloud: "cloud",
-  key: "key",
   box: "equipment-box",
   cap: "cap",
-  stickers: "stickers",
   hoodie: "hoodie",
   terminal: "terminal",
   domain: "domain",
@@ -47,10 +46,6 @@ const spriteNames: Record<Exclude<IconName, "bolt" | "brand">, string> = {
 
 export function LoadoutIcon({ name, className }: LoadoutIconProps) {
   const classes = [name === "brand" ? "" : "loadout-vector", className].filter(Boolean).join(" ");
-
-  if (name === "bolt") {
-    return <Image className={classes} src="/loadout/bolt.svg" alt="" aria-hidden="true" draggable={false} width={32} height={32} unoptimized />;
-  }
 
   if (name === "brand") {
     return (

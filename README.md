@@ -4,7 +4,7 @@
 
 ## Current state
 
-`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The public production demo is live at [loadout-jerry-team1.vercel.app](https://loadout-jerry-team1.vercel.app/); indexing remains disabled. Contributors use temporary branches and PRs into `main`, as described in [the development workflow](docs/development/WORKFLOW.md).
+`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The public production demo is live at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/); indexing remains disabled. Contributors use the staged development → testing → main workflow described in [the development workflow](docs/development/WORKFLOW.md).
 
 ## Source references
 
@@ -22,4 +22,4 @@ See [the public-site port audit](docs/source-audit/PUBLIC_SITE_PORT.md) for base
 
 ## Development setup
 
-Start with [AGENTS.md](AGENTS.md), the [human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md), and [required UI skills](docs/development/UI_SKILLS.md). See also [Vercel deployment setup](docs/development/VERCEL_PREVIEW.md), [branch protection setup](docs/development/BRANCH_PROTECTION_SETUP.md), and [CodeScene setup](docs/development/CODESCENE_SETUP.md). Plans, bootstrap inputs, and their status are indexed in [`PLAN/README.md`](PLAN/README.md); design screenshots are indexed in [`docs/design/references/README.md`](docs/design/references/README.md). Run `bun install --frozen-lockfile`, then `bun run dev` for the local preview. Use `bun run lint`, `bun run typecheck`, `bun run test`, `bun run build`, and `bun run test:e2e` to verify changes. CI runs these jobs on PRs to `main` alongside `Repository integrity`.
+Start with [AGENTS.md](AGENTS.md), the [human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md), and [required UI skills](docs/development/UI_SKILLS.md). See also [Vercel deployment setup](docs/development/VERCEL_PREVIEW.md), [branch protection setup](docs/development/BRANCH_PROTECTION_SETUP.md), and [CodeScene setup](docs/development/CODESCENE_SETUP.md). Plans, bootstrap inputs, and their status are indexed in [`PLAN/README.md`](PLAN/README.md); design screenshots are indexed in [`docs/design/references/README.md`](docs/design/references/README.md). Run `bun install --frozen-lockfile`, then `bun run dev` for the local preview. Use `bun run lint`, `bun run typecheck`, `bun run test`, `bun run build`, and `bun run test:e2e` to verify changes. The staged CI checks run on short-lived branch pushes and PRs into development, testing, and main.

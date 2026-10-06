@@ -23,7 +23,7 @@ Human review is recommended when both maintainers are available. It is optional 
 
 PR #1 synced the full application, plans, images, and source pins from `development` into `main`; PR #2 finalized default-branch onboarding. All three CI checks passed on both PRs. GitHub branch protection is active on `main`, `development`, and `testing`: PR required, `Repository integrity`, `Landing quality`, and `Landing browser` required, zero approval count, no bypasses, admins enforced, no force pushes or branch deletion. Local verification from 2026-10-05: build, lint, TypeScript, four unit tests, and 24 browser cases pass.
 
-Vercel project `jerry-team1/loadout` uses root directory `apps/landing`. Its public production demo is live at [loadout-jerry-team1.vercel.app](https://loadout-jerry-team1.vercel.app/). See [Vercel deployment setup](VERCEL_PREVIEW.md). The main GitHub branch is the future production source. The Vercel project still lacks a Git repository connection, so auto-deploy is not active.
+Vercel project `jerry-team1/loadout-ysws` was verified on 2026-10-06 as connected to `jeremy341/loadout`, rooted at `apps/landing`, and tracking `main` as its Production Branch. Its only assigned Production domain is [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Vercel creates unique Preview URLs for PR deployments; use the stable Production URL for public sharing. See [Vercel deployment setup](VERCEL_PREVIEW.md) for the verified configuration and preview behavior.
 
 ## Pull request checklist
 

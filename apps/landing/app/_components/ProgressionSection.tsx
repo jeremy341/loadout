@@ -3,11 +3,11 @@ import { LoadoutIcon } from "./icons/LoadoutIcon";
 import { SectionHeading } from "./SectionHeading";
 
 const milestones = [
-  { level: "LV.3", award: "I", variant: "one" },
-  { level: "LV.6", award: "I", variant: "one" },
-  { level: "LV.9", award: "II", variant: "two" },
-  { level: "LV.12", award: "II", variant: "two" },
-  { level: "LV.15", award: "Master", variant: "master" },
+  { level: "LV.3", award: "I", variant: "one", icon: "requisition-i" },
+  { level: "LV.6", award: "I", variant: "one", icon: "requisition-i" },
+  { level: "LV.9", award: "II", variant: "two", icon: "requisition-ii" },
+  { level: "LV.12", award: "II", variant: "two", icon: "requisition-ii" },
+  { level: "LV.15", award: "Master", variant: "master", icon: "requisition-master" },
 ] as const;
 
 export function ProgressionSection() {
@@ -27,7 +27,7 @@ export function ProgressionSection() {
         <div className="progression-rail" role="group" aria-label="Field Requisition milestones">
           {milestones.map((milestone) => (
             <div className="progression-stop" key={milestone.level}>
-              <span className={`progression-marker progression-marker-${milestone.variant}`} aria-hidden="true"><LoadoutIcon name="star" /></span>
+              <span className={`progression-marker progression-marker-${milestone.variant}`} aria-hidden="true"><LoadoutIcon name={milestone.icon} /></span>
               <strong className="progression-level">{milestone.level}</strong>
               <span className="progression-award">{milestone.variant === "master" ? "Master Requisition" : `Requisition ${milestone.award}`}</span>
             </div>

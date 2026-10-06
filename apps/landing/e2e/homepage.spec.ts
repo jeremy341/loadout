@@ -22,7 +22,7 @@ test("confirmed RSVP preserves the local preview metadata state", async ({ page,
   await page.goto("/");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-  await expect(page.getByRole("link", { name: /RSVP now/i })).toHaveCount(3);
+  await expect(page.getByRole("link", { name: /RSVP now/i })).toHaveCount(2);
   for (const link of await page.getByRole("link", { name: /RSVP now/i }).all()) await expect(link).toHaveAttribute("href", "https://rsvp.soon.it/loadout");
   await expect(page.getByRole("link", { name: /^Login$/ })).toHaveCount(0);
   expect((await request.get("/robots.txt")).status()).toBe(200);
@@ -65,7 +65,7 @@ for (const width of [320, 390, 768, 1440]) {
 test("FAQ answers work with a keyboard and expose their expanded state", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const question = page.getByRole("button", { name: "How do tracks work?" });
+  const question = page.getByRole("button", { name: "Can my project use more than one track?" });
   await question.focus();
   await question.press("Enter");
   await expect(question).toHaveAttribute("aria-expanded", "true");
@@ -217,7 +217,8 @@ test("normal motion keeps smooth anchor scrolling and card hover feedback", asyn
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   await page.locator(".hero-actions").getByRole("link", { name: "Explore tracks", exact: true }).click();
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000);
+  await expect(page).toHaveURL(/#tracks$/);
+  await expect(page.getByRole("heading", { name: "Build across four tracks", exact: true })).toBeInViewport();
   const card = page.locator(".track-card").first();
   await card.scrollIntoViewIfNeeded();
   await expect(card).toBeVisible();

@@ -6,6 +6,8 @@
 
 **Current progression/prize hierarchy:** [Plan 14](14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) is implemented locally. Prices, discounts, Requisitions, the planned prize catalog and Custom Orders are subsections of one Progress & Prizes section.
 
+**Who's Behind LOADOUT?, 2026-10-06:** The user approved one final section after FAQ and before the footer, naming Jerry, Fazin / Wind, and Netic with their supplied organizing/development responsibilities. It pairs the organizer directory with factual Hack Club/YSWS context and LOADOUT's current proposal status. The bounded design and source-use record is in [the section spec](../.ulpi/design/whos-behind-loadout.md). It is implemented locally on `feature/whos-behind-loadout`; lint, typecheck, four unit tests, production build, and all 24 existing browser checks passed. Publication follows the documented lane PR workflow separately.
+
 **Owner:** Public-facing `apps/landing` experience  
 **Status:** Canonical plan for the first public LOADOUT page  
 **Depends on:** `00`, `01`, `02`, `03`, `04`  

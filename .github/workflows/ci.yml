@@ -2,7 +2,9 @@ name: Repository integrity
 
 on:
   push:
-    branches: [development, testing, main]
+    # Check the exact commit on short-lived branches before a maintainer may
+    # push that same checked commit directly to development.
+    branches: ['**']
   pull_request:
     branches: [development, testing, main]
   workflow_dispatch:
@@ -15,6 +17,32 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  promotion-lane:
+    name: Promotion lane
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Validate pull request source and target
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          case "${BASE_REF}:${HEAD_REF}" in
+            development:feature/*|development:fix/*|development:refactor/*|development:docs/*|development:experiment/*|development:chore/*)
+              ;;
+            testing:development)
+              ;;
+            main:testing)
+              ;;
+            *)
+              printf 'Unsupported promotion: %s -> %s\n' "$HEAD_REF" "$BASE_REF" >&2
+              exit 1
+              ;;
+          esac
+
   repository-integrity:
     name: Repository integrity
     runs-on: ubuntu-latest
@@ -81,11 +109,21 @@ jobs:
       - name: Unit tests
         run: bun run test
       - name: Production build
+        if: >-
+          github.ref == 'refs/heads/testing' ||
+          github.ref == 'refs/heads/main' ||
+          (github.event_name == 'pull_request' &&
+          (github.base_ref == 'testing' || github.base_ref == 'main'))
         run: bun run build
 
   landing-browser:
     name: Landing browser
     needs: landing-quality
+    if: >-
+      github.ref == 'refs/heads/testing' ||
+      github.ref == 'refs/heads/main' ||
+      (github.event_name == 'pull_request' &&
+      (github.base_ref == 'testing' || github.base_ref == 'main'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

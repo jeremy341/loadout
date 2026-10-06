@@ -1,38 +1,61 @@
 # Branch protection and repository access
 
-Repository: `jeremy341/loadout`, personal account. The desired repository visibility and owner/collaborator workflow are documented here; verify live settings before treating this page as current.
+Repository: `jeremy341/loadout`, personal account. Treat this document as a live settings record only after comparing it with GitHub's branch-protection API.
 
-## Collaborator
+## Collaborators
 
-`fazin-ahamed` has verified `write` permission on `jeremy341/loadout` as of 2026-10-05. Both maintainers can create branches and merge check-green PRs. Do not invite an additional guessed username.
+GitHub's live collaborator API showed these accounts on 2026-10-06:
 
-## Desired rules
+| Account | Access |
+|---|---|
+| `jeremy341` | admin/owner |
+| `fazin-ahamed` | write |
+| `NeticYTOF` | write |
 
-The routine PR destination is `main`. The active protections on each permanent lane (`development`, `testing`, `main`) require a PR and stable CI checks. They require zero human approvals and have no bypass actors. CODEOWNER, owner, Jeremy, team, and latest-pusher approval are not required. Rules apply to administrators and block direct pushes while leaving temporary branches writable by both maintainers.
+The development direct-push rule applies to both write collaborators and the owner. On a personal repository, GitHub cannot limit that branch rule to only a selected trusted maintainer.
 
-`development` and `testing` are retained staging/history branches, not the normal targets for feature work. Keep them protected from direct pushes while they remain active, but do not add them as promotion gates to every task.
+## Lane policy
 
-Use GitHub Actions as the expected check source. The active required checks are **Repository integrity**, **Landing quality**, and **Landing browser**. Integrity validates whitespace and source pins; quality runs lint, typecheck, unit tests, and a production build; browser covers navigation, responsive behavior, normal/reduced motion, and accessibility. They run on PRs into all three permanent branches.
+```text
+short-lived branch → PR → development → promotion PR → testing → promotion PR → main
+```
 
-All three permanent branches require checks from an up-to-date PR branch. Force pushes and branch deletion are disabled. Human approval counts remain zero.
+- `development`: feature PRs are the normal route. Direct pushes are allowed only for the exact commit SHA whose `Repository integrity`, fast `Landing quality`, and `Promotion lane` checks already passed on a short-lived branch. A fresh unverified commit remains blocked by required status checks.
+- `testing`: PR required, only from `development`.
+- `main`: PR required, only from `testing`.
+- Human approvals: zero required on every lane. No Jeremy-only, owner-only, CODEOWNER, latest-pusher, or other one-person rule.
+- Administrators are subject to rules. Do not add bypass actors. Force pushes and branch deletion stay disabled.
+- CodeScene and Codecov are not required GitHub branch checks; CodeScene feedback remains advisory. Copilot code review is not included.
 
-## Actual status
+## Required GitHub Actions checks
 
-PR #1 merged the complete development baseline into `main` at `f55b883b09d2f2e583ffc76fa452128afd5da1e2`; the default clone includes plans, images, and source submodules. Protections were applied and read back from GitHub's API on 2026-10-05: PR required, three checks, zero reviews, admins enforced, no bypass/push restrictions, no force pushes or branch deletions. PR #2 passed and finalized clone instructions. The earlier backup tag remains preserved.
+| Branch | Required status checks | PR rule |
+|---|---|---|
+| `development` | `Repository integrity`, `Landing quality`, `Promotion lane` | Not required; permits checked direct pushes |
+| `testing` | `Repository integrity`, `Landing quality`, `Landing browser`, `Promotion lane` | Required; only `development` may promote |
+| `main` | `Repository integrity`, `Landing quality`, `Landing browser`, `Promotion lane` | Required; only `testing` may promote |
 
-Verification record:
+Pushes to short-lived branches run CI so a direct update to `development` can reuse successful checks from the exact same commit SHA. `Landing browser` is skipped on the fast development lane and required on testing/main promotions. `Landing quality` runs lint, typecheck, and unit tests on development; testing and main also run the production build. `Promotion lane` validates the PR head/base pair and accepts only the three edges in the lane diagram.
 
-1. `main` contains the complete baseline and current onboarding docs (PRs #1 and #2).
-2. The exact required GitHub check names are recorded above and passed on those PRs.
-3. All three branches currently have zero approval requirements, admin enforcement, and no bypass list.
-4. Collaborator `fazin-ahamed` has verified write access; direct-push rejection follows from PR protection.
+Required status checks come from GitHub Actions. `development` requires an up-to-date branch so feature PRs and checked direct updates build on the current integration lane. `testing` and `main` do not require source-branch freshness: each promotion reruns the full checks on GitHub's merge candidate, avoiding reverse-merges of lane merge commits. Required checks must pass before a lane merge.
 
-## Personal-account limitations
+## Live verification record
 
-GitHub personal repositories use owner/collaborator permission levels. A write collaborator can merge PRs when repository rules permit it; repository-wide settings and collaborator invitations remain owner tasks. GitHub does not offer the organization-style “restrict who can push” branch restriction on a user-owned repository. Requiring PRs on the three exact lane branches is the intended direct-push block and does not prevent collaborator pushes to feature branches.
+### Verified before rollout on 2026-10-06
 
-Public repositories can use branch protections/rulesets on GitHub Free. If a setting is absent or unavailable in this repository, record the exact UI/API limitation and available plan requirement. Do not create a temporary organization or change repository visibility as a workaround.
+Immediately before this workflow update, GitHub reported `development`, `testing`, and `main` protected with `Repository integrity`, `Landing quality`, and `Landing browser`, strict up-to-date checks, `required_approving_review_count: 0`, enforced for administrators, and no force pushes or branch deletions. All three required a PR. No bypass actors were present.
+
+The live refs were not synchronized: `origin/main` was nine commits ahead of `origin/development`; `origin/testing` had nine commits absent from main and one testing-only commit. The workflow rollout must travel through development → testing → main, then compare the three final tree hashes.
+
+### Verified after rollout
+
+Update this section only after reading GitHub's live API response for all three branches. Record the verification date, required check names, PR requirement, approval count, admin enforcement, bypasses, and force/delete settings. Until then, the target table above is a desired configuration, not proof that it is active.
+
+## Personal-account limitation
+
+GitHub personal repositories do not provide the organization-style branch rule that limits pushes to a selected set of collaborators. Allowing direct updates to `development` therefore applies to every collaborator with write access. The checked-commit status gate still applies, and `testing`/`main` remain PR-only. If tighter identity-based push restrictions become necessary, document the GitHub limitation; do not create a temporary organization.
 
 ## Manual follow-up
 
-- None for branch access or protection as of 2026-10-05.
+- After pushing the updated workflow through the lanes, apply and verify the lane-specific protections above.
+- Keep human review recommended but optional; either trusted maintainer may merge when the target lane's required checks pass.

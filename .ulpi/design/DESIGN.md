@@ -11,6 +11,18 @@ visual_density: 4
 
 # LOADOUT Design Language
 
+## Current homepage order — 2026-10-05
+
+[Plan 13](../../PLAN/13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md) with the implemented [Plan 14 hierarchy](../../PLAN/14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) now govern the page composition: hero → concise About/Digital/Physical explanation → grouped tracks/Research/project fit → unchanged How it works → one Progress & prizes section containing lifetime levels, pricing/discounts, Requisitions, planned prizes and Custom Orders → Community Eras → FAQ → footer. The duplicate About step cards and broad equipment-category grid are removed. The underlying palette, type, icons, hero, process design, and motion remain the established identity. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
+
+## Active homepage refinement — 2026-10-05
+
+The user approved implementation of [the clarity spec](loadout-homepage-clarity-flow-and-eras.md) and [Plan 12](../../PLAN/12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md). The homepage now uses a central downward process and parallel Bolt/XP outcomes, five real Requisition milestones, explanatory Community Eras, separate pricing/Requisition/Custom Order copy, stepped SVG artwork, and a larger footer. The vertical process replaces the former six-card diagram; the optional small wrap-arrow patch is superseded.
+
+Active sizes: 72px major section padding on desktop, 88px for process/progression/Eras; 56/64px on tablet; 44px on mobile. Essential body copy is 16px at 1.65 line height. Footer links are 14px desktop/16px mobile with 44px minimum targets; columns reflow five/two/one. Outer content width remains 1080px. Cloud width is clamp(280px,32vw,560px), or 260px mobile; horizontal scroll range is ±112px/±48px with a separate ±12px inner drift over 48 seconds. Reduced motion keeps scenery static.
+
+The palette, typography, fullscreen two-line desktop hero, RSVP link, Lenis scrolling, navigation, and FAQ infrastructure remain the established baseline. New section styling lives in homepage-refinement.css after loadout.css. Retired six-card process, smooth level-badge, and reward-table styles have been removed.
+
 ## Latest reference amendment — 2026-10-04
 
 The user selected direct code implementation and supplied `codex-clipboard-6ecd3256-5ec8-4580-a85b-8105eafacdd8.png` as the current composition target. Preserve its paper grid, edge clouds, skyline, framed hero, overview cards, six-step flow, project-fit comparison, four dark track cards, separate Research Mode, progression, field-pricing cards, custom-order strip, reward rows, category grid, FAQ, and footer. Pale stepped SVG clouds drift gently, with a static reduced-motion fallback. Small progression badges follow the screenshot's steel/yellow/warm/red sequence; the rest of the page retains yellow/graphite.
@@ -29,7 +41,7 @@ The counterfactual test passes: this identity depends on LOADOUT's field-manual 
 
 ## Signature
 
-The hero is a fullscreen centered technical plate: large block lettering held inside four sparse corner marks, with small left/right labels and clear actions below. Keep the graph-paper whitespace and diagonal markers in the upper-left/lower-right corners. The 2026-10-04 hero reference is `codex-clipboard-15beff91-84dd-439c-8541-1ac5add39397.png`. The brand uses its compact machine mark; currency uses the newly requested yellow lightning Bolt SVG.
+The hero is a fullscreen centered technical plate: large block lettering held inside four sparse corner marks, with small left/right labels and clear actions below. Keep the graph-paper whitespace and diagonal markers in the upper-left/lower-right corners. The 2026-10-04 hero reference is `codex-clipboard-15beff91-84dd-439c-8541-1ac5add39397.png`. The brand uses its compact machine mark; currency uses the yellow lightning Bolt sprite from the approved 32×32 sheet.
 
 ## Register and design system
 
@@ -54,7 +66,7 @@ Active muted-grey palette, approved and implemented 2026-10-04. Hex values are a
 | Bolt yellow | #D9B64C | RSVP, lightning currency, markers |
 | Yellow light / highlight / edge | #E1C56D / #EAD599 / #B3913B | Feedback and SVG detail |
 | Success / danger | #718C79 / #A96F6C | Labelled status shapes |
-| Progression steel / warm / mastery | #B8BEBD / #B89C7A / #A77C78 | Small checkpoint badges |
+| Historical checkpoint accents | #B8BEBD / #B89C7A / #A77C78 | Earlier illustrative badges; new Requisition glyphs use ink/yellow/highlight |
 
 Calculated principal sRGB contrast ratios: ink/canvas 13.45:1; muted/canvas 5.43:1; ink/yellow 8.39:1; surface/graphite 12.40:1. Automated desktop/mobile checks find no serious or critical accessibility violations; this is bounded evidence, not full certification. Status symbols keep ink outlines and adjacent labels. Focus uses ink plus the accent; white text is not used on yellow.
 
@@ -70,7 +82,7 @@ The block display face contrasts with the quiet technical mono. Load only licens
 
 ## Scales (locked)
 
-- **Spacing:** 4px base; allowed values `0, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 128px`. Main sections use generous desktop padding and tighten by breakpoint. Content max width `1440px`; reading measure stays narrower.
+- **Spacing:** 4px base; allowed values `0, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 128px`. Main sections use generous desktop padding and tighten by breakpoint. Content max width `1080px`; reading measure stays narrower.
 - **Radius:** `2px, 4px, 6px`. Default panels are square or nearly square; no pill cards.
 - **Borders:** `1.5px` ink for standard panels, `2px` for the hero frame and key containers. Rules stay straight and deliberate.
 - **Shadow:** hard offset only: `2px 2px 0 ink` and `4px 4px 0 ink`. Buttons may compress the offset when pressed. No blurred elevation.
@@ -81,7 +93,7 @@ The block display face contrasts with the quiet technical mono. Load only licens
 
 ## Graphic and icon language
 
-Use authored, flat SVGs on a 24px or 32px grid, with ink outlines, no more than three colors, square geometry, and no gradient or gloss. The logo mark is a compact machine mark; Bolts use a custom yellow lightning silhouette. Track marks vary by silhouette and label. The slash motif frames the fullscreen hero. Pale clouds size to `clamp(200px, 26vw, 420px)` on desktop and `220px` on mobile, with bounded horizontal scroll parallax of ±72px/±36px and horizontal drift on a separate inner layer. Reduced motion disables transforms and drift.
+Use independent transparent 32×32 pixel PNGs for homepage icon glyphs, with ink outlines, a restrained ink-and-yellow palette, square geometry, and no gradient or gloss. Their final source files and app mapping live in `docs/design/references/2026-10-06/final-pixel-icons/` and `docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md`. Currency uses the final pixel Bolt sprite. Keep the LOADOUT brand mark, wordmark, lockup, favicon, and scenery assets separate. The slash motif frames the fullscreen hero. Pale clouds size to `clamp(280px, 32vw, 560px)` on desktop and `260px` on mobile, with bounded horizontal scroll parallax of ±112px/±48px and horizontal drift on a separate inner layer. Reduced motion disables transforms and drift.
 
 ## Motion principles
 

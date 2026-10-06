@@ -106,3 +106,7 @@ The `#progression`, `#field-pricing`, `#requisitions`, `#shop`, and `#custom-ord
 The HowItWorks file retains SHA256 `8C19395FBBBD082A2DC37B1156009D64A0A50071ABD8686291E4F1D940A255F2`. All 52 protected component/art files and all protected process/flow/shared heading style rules match the pre-task baseline. All seven requested UI skills were consulted; the frontend-design-ui-ux brief was implemented by the existing GPT-6 Luna medium engineer using the locked UI system and existing static pixel assets.
 
 Validation: lint, explicit TypeScript check, four existing unit tests, production build, and all 24 existing browser tests pass. Build and browser tests were run separately; the browser suite used one worker. No tests or dependencies were added or modified in this pass. The live browser was inspected at 1440px, 768px, 390px and 320px: no horizontal overflow, duplicate IDs or missing anchor destinations were found, and prize/Requisition layouts reflowed as planned. `git diff --check` passes.
+
+## 10. Follow-up content planning — 2026-10-06
+
+The user requested clearer, moderately detailed explanations for Community Eras, Field Requisitions, and Custom Orders. [Plan 16](16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md) owns that future copy brief. It preserves this section hierarchy and the economy rules in Plan 02. No homepage code was changed during planning. In particular, Plan 02 does not currently define a separate lifetime-hours minimum for Custom Orders; Plan 16 records that as an explicit pre-launch decision instead of inventing a threshold.

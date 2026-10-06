@@ -13,13 +13,13 @@ short-lived branch
             └─ promotion PR → main
 ```
 
-- `development` is the active integration lane. Open routine feature, fix, docs, and chore PRs here. Either maintainer may also push a commit directly after that exact SHA has passed the fast checks on a short-lived branch. Because this is a personal-account repo, the same direct-push capability also applies to any other collaborator with write access.
+- `development` is the active integration lane. Open routine feature, fix, docs, and chore PRs here. A write collaborator may also push a commit directly once that exact SHA has the required fast checks. GitHub does not verify that the commit came from a short-lived branch; that is the documented route for preparing a direct push. Because this is a personal-account repo, the same direct-push capability applies to every collaborator with write access.
 - `testing` is the release-candidate lane. Only promote `development` into it by PR.
 - `main` is the production lane. Only promote `testing` into it by PR; Vercel Production deploys from `main`.
 
 Never open a feature PR directly into `testing` or `main`. Do not commit on `testing` or `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes for short-lived branches. After the one-time lane catch-up, create them from the latest `development`.
 
-**Current lane catch-up:** GitHub `main` contains the PR #8 merge `432c6445bf7cfb17ca8a1c13169be67c6be200be`; the live `development` and `testing` refs were behind it when this workflow change began. Route this workflow change first into `development`, then promote it through `testing` and `main`. Compare the final tree hashes before calling all three lanes synchronized.
+**Lane catch-up complete:** PR #9 promoted the updated `main` baseline and workflow into `development`, PR #10 promoted it into `testing`, and PR #11 promoted it into `main`. On 2026-10-06, all three lane refs resolved to the same tree, `36ab682f9388f142a6a296d0b6f00b50ed532fc7`. The live branch rules were read back after those promotions; see [branch protection setup](BRANCH_PROTECTION_SETUP.md).
 
 Both trusted maintainers can create/push short-lived branches, open/review PRs, and merge a check-green PR at each lane without waiting for the other. The development direct-push rule also applies to every repository collaborator with write access. Jeremy owns the personal-account repository; GitHub verified `fazin-ahamed` and `NeticYTOF` have `write` access on 2026-10-06.
 
@@ -41,7 +41,7 @@ GitHub Actions runs on branch pushes and on PRs to the three lanes. `Promotion l
 
 Both maintainers may open, review, and merge check-green PRs independently across time zones. Human review is encouraged, never required; no Jeremy-only, owner-only, CODEOWNER, or latest-pusher gate is allowed. CodeScene remains advisory and is not a required branch check.
 
-The currently verified GitHub settings before this rollout required a PR and the same three checks on all lanes. `BRANCH_PROTECTION_SETUP.md` records the post-rollout live settings after they are applied and read back from GitHub.
+The lane-specific GitHub settings were applied and read back after the rollout. `BRANCH_PROTECTION_SETUP.md` records the exact live rules, collaborator access, and branch tree verification.
 
 PR #1 synced the initial full baseline and PR #2 finalized onboarding. PR #8 later merged the final homepage icon work into `main` at `432c6445bf7cfb17ca8a1c13169be67c6be200be`.
 

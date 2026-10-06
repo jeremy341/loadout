@@ -13,7 +13,7 @@ Read [the human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md) befo
 ## Project boundaries
 
 - The current application is the public homepage in `apps/landing`. Keep changes scoped to the user's request; broad participant, reviewer, reward, economy, or admin features need a separate approved plan.
-- Use `PLAN/00_LOADOUT_CANONICAL_INDEX.md` and plans `00–11` for current product decisions. `PLAN/LOADOUT_MASTER_PLAN_v4.md` and the original bootstrap prompts are historical context, not current execution instructions. Check a plan's status before acting on it. Plan 11 records the approved Eras design; it does not authorize building it.
+- Use `PLAN/00_LOADOUT_CANONICAL_INDEX.md` to resolve current plan ownership. Plans 01/02 own product/economy policy, Plan 11 owns Era rules, Plan 15 owns the future IRL concept, and Plan 16 owns the approved homepage clarity scope. Plans 09/10/12–14 retain homepage execution and hierarchy records. `PLAN/LOADOUT_MASTER_PLAN_v4.md` and the original bootstrap prompts are historical context. Check each plan's status: a homepage explanation does not authorize live economy/Era systems or an event launch.
 - LOADOUT retains its four quality dimensions: Originality, Technical Depth, Execution, and Documentation. Do not substitute scoring models from the reference repositories.
 - `references/` contains pinned submodules. Do not edit or vendor their content into the application. Follow `docs/source-audit/` for license and reuse decisions.
 - `docs/design/references/` contains visual proposals. Use them as design references; their mock content is not a source of program facts.

@@ -2,6 +2,8 @@
 
 **Status:** Future-stage planning concept recorded 2026-10-06. This is not an event announcement, booking, funding commitment, or launch requirement.
 
+**Homepage wording decision, 2026-10-06:** The user approved displaying this as a clearly labelled future concept with no dates, venue promises, or registration. That passes the public-content gate for concept copy only; the event readiness gates remain unresolved.
+
 **Working identity:** **LOADOUT IRL // RUHR**
 **Line:** **Build the next Era.**
 
@@ -126,9 +128,9 @@ Displaying an item does not mean it will be given away. Do not advertise equipme
 
 ## 8. Optional public-homepage section
 
-Plan 06 may eventually include one **LOADOUT IRL // RUHR — Build the next Era** section after Community Eras and before the FAQ. This is the additional future-facing homepage section requested during planning; it does not authorize site changes now.
+Plan 06 includes the proposed **LOADOUT IRL // RUHR — Build the next Era** section after Community Eras and before the FAQ. The later user instruction authorizes its homepage implementation as a future concept; it does not authorize organizing or launching the event.
 
-Keep it hidden until LOADOUT's public status permits the event to be described and organizers approve a public announcement. At that point, show only confirmed information. Before venue/date/registration are confirmed, use no location-specific booking claim, date, capacity, price, sponsor logo, or registration CTA. Do not present the proposed Ruhr venues as selected. The section should say clearly whether it is a concept, planned event, or open registration based on the actual approved state. Link the complete content rules in Plan 06 and Plan 16.
+The user subsequently approved a visible future-concept block on 2026-10-06. Show only that approved concept information, with a configuration switch to omit it. Before venue/date/registration are confirmed, use no location-specific booking claim, date, capacity, price, sponsor logo, or registration CTA. Do not present the proposed Ruhr venues as selected. The section must clearly say it is a future concept. A later planned/open-registration state needs separate confirmed details and approval. Link the complete content rules in Plan 06 and Plan 16.
 
 ## 9. Scale and readiness gates
 

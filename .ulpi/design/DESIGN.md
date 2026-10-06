@@ -110,6 +110,10 @@ At `prefers-reduced-motion: reduce`, disable smooth scrolling, entrance and scro
 - Write from the builder's point of view. Explain program terms when first used. Avoid claims that imply dates, eligibility, current inventory, endorsements, participant totals, or pricing unless supplied by an approved live configuration.
 - Keep sentences short. Avoid fake stats, testimonials, invented project examples, buzzwords, and decorative em dashes.
 
+## Homepage mechanics and event concept
+
+The 2026-10-06 clarity brief in `homepage-mechanics-clarity.md` retains these tokens. Use short titled steps for Era advancement and Custom Orders, plus one compact definition list for planned request tiers. Field Requisitions follow the normal discount-cap explanation; their milestone rail appears once. The owner-approved LOADOUT IRL future concept uses one opaque framed plate after Eras and before FAQ, with story copy and a proposed three-day itinerary. Its visibility is configurable. Do not add venue imagery, dates, registration, live progress, or event promises without confirmed data and separate approval.
+
 ## Who's Behind LOADOUT? (2026-10-06)
 
 The final content section sits after FAQ and before the footer. It uses a vertical organizer directory beside a graphite Hack Club context panel, bound to the existing tokens and typography. Public names and responsibilities are user-supplied; no portraits, invented profile links, statistics, partner claims, or new sprite assets are needed. It is static and remains visible without JavaScript. The exact component and content contract is in `whos-behind-loadout.md`.

@@ -178,6 +178,8 @@ Three lifetime records grow with approved work:
 
 Community Eras add a separate, non-spendable Era Points progress counter. Era Points do not replace or mix with those three records, do not change the four tracks, and do not change the four quality dimensions. Era behavior and the separate 10% qualifying-project Bolt bonus are defined in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
+The future `LOADOUT IRL // RUHR` concept uses the same four tracks and global Community Era. It creates no IRL-only progression or attendance advantage; event projects follow the ordinary online project/review/economy rules. See `15_LOADOUT_IRL_RUHR.md`; this concept does not authorize building or announcing an event.
+
 A user should immediately understand:
 
 > **Build your stack. Bolts are global; tracks shape access and price.**

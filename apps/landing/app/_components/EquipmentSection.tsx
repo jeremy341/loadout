@@ -8,16 +8,16 @@ export function EquipmentSection() {
         <div className="subsection-heading">
           <span className="section-eyebrow">Pricing</span>
           <h3 id="field-pricing-title">How levels affect prize prices and access</h3>
-          <p>Bolts are global currency for prizes. You can buy most prizes with Bolts even when they belong to another track; a level in the prize’s related track can lower its price. Normal savings caps limit discounts on expensive prizes, and some specialist prizes require a related level.</p>
+          <p>Bolts are global currency. You can buy most prizes across tracks, and a relevant track level can lower the price. Only a small set of Mastery prizes require a related level. On expensive prizes, a savings cap can limit how much of your normal track discount applies.</p>
         </div>
       </section>
 
       <section className="requisition-section" id="requisitions" aria-labelledby="requisitions-title">
         <div className="requisition-copy">
           <span className="section-eyebrow">Field Requisitions</span>
-          <h3 id="requisitions-title">Use more of a discount you earned</h3>
-          <p>A matching Field Requisition raises the savings cap for one eligible order, letting more of the discount you earned count. You still pay the remaining price in Bolts.</p>
-          <p className="savings-example"><strong>Example:</strong> Your Compute level earns a discount on a GPU. A Compute Requisition lets more of that discount apply to the order.</p>
+          <h3 id="requisitions-title">Save more on one eligible prize</h3>
+          <p>Your relevant track level earns an ordinary discount. On some expensive prizes, a cap limits how many Bolts that discount can save. A matching Field Requisition raises the cap on one eligible order so more of the same earned discount can apply. You keep your earned discount rate and pay the remaining price in Bolts.</p>
+          <p className="savings-example"><strong>Example:</strong> Your Compute level gives a discount on an eligible GPU prize. Its normal savings cap can prevent you using all of it. A matching Requisition lets you apply a larger share; the quote shows the extra saving before you confirm.</p>
         </div>
         <div className="requisition-rules-block">
           <h4>Use rules</h4>
@@ -52,14 +52,24 @@ export function EquipmentSection() {
         <div className="subsection-heading">
           <span className="section-eyebrow">Custom Orders</span>
           <h3 id="custom-orders-title">Ask for equipment outside the regular shop</h3>
-          <p>Request specific technical equipment outside the regular shop. The team reviews the request and provides a quote before you decide whether to spend Bolts.</p>
+          <p>Ship projects and have their work reviewed to build Track XP. Once you reach a relevant request tier, you can ask for equipment outside the planned prize catalog.</p>
         </div>
         <ol className="order-steps">
-          <li>Describe the equipment you need and how it would help your project.</li>
-          <li>The team checks project fit, your related track level and Bolt balance, the budget, and your region.</li>
-          <li>If approved, you receive a quote naming the item and Bolt price. You decide whether to accept; an eligible quote may allow one matching Field Requisition.</li>
+          <li><h4>Ship and reach a track tier</h4><p>Track your work, keep a journal, and ship your project. Only work and hours approved during review earn Track XP toward a request tier.</p></li>
+          <li><h4>Request and get a quote</h4><p>Describe the equipment and how it would help. The team checks your track level, whether the item fits LOADOUT, and whether it can be funded and delivered in your country. Then you receive a final Bolt quote.</p></li>
+          <li><h4>Accept the approved quote</h4><p>If you have enough Bolts, accept the quote to go ahead or decline it. A matching Requisition can lower an eligible quote; it does not waive the track-level requirement.</p></li>
         </ol>
-        <p className="order-limit">Requests are not open yet. The team must approve fulfillment before an order goes ahead.</p>
+        <div className="order-tiers">
+          <h4>Planned request tiers</h4>
+          <dl>
+            <div><dt>Field</dt><dd>LV.4</dd></div>
+            <div><dt>Power</dt><dd>LV.8</dd></div>
+            <div><dt>Root</dt><dd>LV.12</dd></div>
+            <div><dt>Bare Metal</dt><dd>LV.15</dd></div>
+          </dl>
+          <p>Requested items may carry further relevant-track requirements.</p>
+        </div>
+        <p className="order-limit"><strong>Planned feature.</strong> Custom Order requests are not open yet.</p>
       </section>
     </div>
   );

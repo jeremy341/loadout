@@ -10,6 +10,8 @@ import { SectionHeading } from "./SectionHeading";
 import { HowItWorks } from "./HowItWorks";
 import { ProgressionSection } from "./ProgressionSection";
 import { ErasSection } from "./ErasSection";
+import { IrlConceptSection } from "./IrlConceptSection";
+import { siteConfig } from "../site-config";
 
 export default function HomepageSections() {
   const reduceMotion = useReducedMotion();
@@ -69,6 +71,7 @@ export default function HomepageSections() {
       <HowItWorks />
       <Reveal><ProgressionSection /></Reveal>
       <Reveal><ErasSection /></Reveal>
+      {siteConfig.showIrlConcept && <Reveal><IrlConceptSection /></Reveal>}
 
       <Reveal>
         <section className="site-section faq-section" id="faq" aria-labelledby="faq-title">

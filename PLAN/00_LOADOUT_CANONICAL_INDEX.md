@@ -10,7 +10,7 @@
 
 **LOADOUT IRL // RUHR, 2026-10-06:** [Plan 15](15_LOADOUT_IRL_RUHR.md) records the future three-day Germany build-weekend concept, its proposed Ruhr location priorities, same-global-Era connection, and readiness gates. No venue, date, capacity, funding, partner, or event launch is confirmed. The earlier Plan 05 one-to-two-day sketch is superseded.
 
-**Homepage mechanics clarity, 2026-10-06:** [Plan 16](16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md) is a planning-only follow-up for plain-language Community Era, Field Requisition, and Custom Order explanations, plus a data-gated future IRL section. Plans 01/02/11 remain policy owners; no UI or economy implementation is authorized.
+**Homepage mechanics clarity, 2026-10-06:** [Plan 16](16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md) is implemented locally with clearer Community Era, Field Requisition, and Custom Order explanations, plus the user-approved visible future IRL concept. Final local checks pass. Plans 01/02/11 remain policy owners; live mechanics, event operations, and publication are separate scopes.
 
 This file is intentionally short. The detailed plans live in the focused documents next to it.
 

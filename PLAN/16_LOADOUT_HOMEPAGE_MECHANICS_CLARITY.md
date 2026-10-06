@@ -1,6 +1,6 @@
 # LOADOUT Homepage Mechanics Clarity — Eras, Requisitions, and Custom Orders
 
-**Status:** Planning-only content brief requested 2026-10-06. The current homepage copy was reported as unclear; this plan specifies a moderate-detail correction. No UI implementation or product-policy change is authorized here.
+**Status:** Implemented locally on `feature/homepage-mechanics-clarity`, 2026-10-06, after the user authorized the homepage scope and selected a visible, clearly labelled IRL future concept with no dates, venue promises, or registration. Event operations and economy/backend implementation remain separate scopes.
 
 **Owner:** Plan 06 owns the public homepage. Plan 14 owns the current Progress & Prizes section hierarchy. Plan 01 owns product meaning, Plan 02 owns economy/eligibility rules, and Plan 11 owns Community Era mechanics. Those policy plans govern if sample copy here disagrees.
 
@@ -100,7 +100,7 @@ The separate Field Requisition explanation should say that it may reduce an elig
 
 ## 5. Future LOADOUT IRL homepage section
 
-Plan 06 may add **LOADOUT IRL // RUHR — Build the next Era** after Community Eras and before the FAQ. This is the new future-facing section for Plan 15's event concept. It stays hidden until organizers approve public communication and have a meaningful, accurate status to show.
+Add **LOADOUT IRL // RUHR — Build the next Era** after Community Eras and before the FAQ as a clearly labelled future concept. The user approved that concept wording on 2026-10-06. Visibility is configurable; the approved concept is visible by default and an explicit false setting omits the section. This approval is limited to describing the idea and does not confirm that an event will run.
 
 Before a public event is approved, do not display a date, venue, capacity, ticket/registration, price, sponsor, partner, or claim that the event is confirmed. Once organizers authorize an announcement, show only verified fields and accurately label the state (concept, planned, or open registration). Do not imply an event-specific progression system or that attendance is required to participate online.
 
@@ -114,9 +114,9 @@ Before a public event is approved, do not display a date, venue, capacity, ticke
 - Do not call Field Requisitions “coupon requisitions” in navigation or headings. If a visitor compares them to a coupon, explain the difference in the body copy.
 - Do not describe planned mechanics as live, a request as a guarantee, or an example as an actual participant project.
 
-## 7. Planning-only review criteria
+## 7. Implementation review criteria
 
-Before a later UI implementation, confirm:
+For the authorized homepage implementation, confirm:
 
 - the Era section distinguishes personal XP, spendable Bolts, and shared Era Points and states the minimum-duration/weekly-reset rule correctly;
 - any +10% note is labeled planned until configured/live and explicitly says no Track XP bonus;
@@ -125,6 +125,20 @@ Before a later UI implementation, confirm:
 - any separate fixed approved-hours gate has an explicit owner decision before it is shown;
 - milestone levels appear once, no example economics are shown as live, and no request/RSVP path implies registration is open;
 - the How it works section remains untouched;
-- any LOADOUT IRL content is hidden until public status and fields are approved.
+- LOADOUT IRL is labelled a future concept, contains only approved concept facts, and is completely omitted when its visibility setting is false.
 
-This plan describes future content only. It does not edit the homepage or authorize economy/backend implementation.
+The later user instruction authorizes this homepage content and concept section. Plans 02, 11, and 15 remain the policy/operations owners; the UI must not implement their live mechanics or organize an event.
+
+## 8. Local implementation and verification — 2026-10-06
+
+The homepage now explains the ordinary discount cap before Field Requisition use, gives a word-only eligible GPU example, and describes the quote preview. Custom Orders show the reviewed-work → Track XP → relevant tier → request → final quote path, with the planned LV.4/8/12/15 tiers and a clear requests-not-open status. There is no invented fixed approved-hours gate. Eras distinguish shared Era Points from personal XP and Bolts, show titled advancement steps, and label the separate +10% base-Bolt/no-XP bonus as planned.
+
+The new `IrlConceptSection` appears after Eras and before FAQ. It is explicitly a future concept with a proposed Friday-to-Sunday format and no venue, date, funding, registration, or prize promise. `showIrlConcept` defaults to visible per the user's answer; explicit false omits it. An unset environment value uses the approved default, while a defined value enables it only when it is exactly `true`.
+
+The existing organizer feature was preserved through a local merge into the temporary branch. HowItWorks retains SHA256 `8C19395FBBBD082A2DC37B1156009D64A0A50071ABD8686291E4F1D940A255F2`; all 42 protected process/flow rules in `homepage-refinement.css` match the pre-refinement baseline. Hero, sprites, tracks, scenery, and motion controllers were preserved.
+
+Verification: root lint, explicit TypeScript check, all five configuration tests, production build, and all 24 existing browser checks pass. No existing browser assertions were changed. The browser checks cover keyboard navigation, reduced motion, native touch scroll, no-JavaScript content, responsive overflow, and serious/critical automated accessibility findings. A tablet visual review prompted a scoped change to stack Custom Order steps below 900px; the final build and browser suite were rerun after it. The sandbox-only Bun EPERM did not recur in host-backed checks.
+
+The changed surfaces were inspected through the local browser at 1440px, 768px, 390px, and 320px. No overflowing text was observed in the changed headings, steps, tier list, or IRL panel; the viewport override was reset afterward. A review screenshot is saved outside Git in the workspace's temporary capture folder. `git diff --check` passes.
+
+The requested project-frontend/project-code-quality skills and all seven repository UI skills were consulted. The spec is `.ulpi/design/homepage-mechanics-clarity.md`; a GPT-6 Luna medium engineer implemented its bounded app scope. No asset creation or sprite animation was needed. Changes are local; promotion and Vercel publication follow the staged lane workflow separately.

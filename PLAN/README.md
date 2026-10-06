@@ -4,7 +4,7 @@ These files preserve the LOADOUT planning bundle so collaborators can review the
 
 Plans 00–08 hold product, economy, UI, migration, workflow, and ecosystem context. Plan 09 records the homepage port/redesign; Plan 10 records the RSVP, motion, content and desktop-width refinement and its verification; Plan 11 records the approved Eras design and its implementation gates.
 
-Plan 15 records the future `LOADOUT IRL // RUHR` Germany build-weekend concept and is not an event launch authorization. Plan 16 specifies a planning-only homepage copy clarification for Community Eras, Field Requisitions, and Custom Orders, and a hidden-until-approved IRL section. Plan 01 owns product meaning, Plan 02 owns economy rules, Plan 11 owns Era mechanics, Plan 14 owns the implemented page hierarchy, and Plan 05 owns operations readiness.
+Plan 15 records the future `LOADOUT IRL // RUHR` Germany build-weekend concept and is not an event launch authorization. Plan 16's homepage clarification and user-approved future-concept IRL section are implemented locally, with final checks recorded in that plan. Plan 01 owns product meaning, Plan 02 owns economy rules, Plan 11 owns Era mechanics, Plan 14 owns the implemented page hierarchy, and Plan 05 owns operations readiness. Publication remains a separate staged-lane step.
 
 **Homepage refinement, 2026-10-05:** [Plan 12](12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md) is approved and implemented locally. It covers the vertical process, lifetime progression, Community Eras, Requisition and Custom Order explanations, pixel SVGs, footer, spacing, and horizontal clouds. Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes.
 

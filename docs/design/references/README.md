@@ -9,7 +9,15 @@ These user-provided concept screenshots are preserved for the design team. They 
 - [`LOADOUT Hackathon Landingpage.png`](LOADOUT%20Hackathon%20Landingpage.png) — long-form page concept.
 - [`LOADOUT Hackathon Landingpagenew one real.png`](LOADOUT%20Hackathon%20Landingpagenew%20one%20real.png) and [`LOADOUT Hackathon Landingpagenew one real.2png.png`](LOADOUT%20Hackathon%20Landingpagenew%20one%20real.2png.png) — later page variants.
 
-## Iteration folders
+## Homepage refinement references — 2026-10-05
+
+- [process-wrap-arrow-reference.png](2026-10-05/process-wrap-arrow-reference.png) — the requested square-corner 03 → 04 connector in the existing desktop process grid. Its sample labels are not program policy.
+- [progression-current-before.png](2026-10-05/progression-current-before.png) — the supplied current progression screenshot, preserved as audit evidence before the proposed redesign.
+- [loadout-32px-sprite-design-sheet.png](2026-10-05/loadout-32px-sprite-design-sheet.png) — six-row source atlas for LOADOUT's transparent 32×32 pixel SVGs; see the [cell index and asset mapping](2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md). The logo and moving background clouds remain separate.
+
+These captures support Plan 12 and its .ulpi design spec. The sprite sheet now also serves as the source for standalone production SVGs under `apps/landing/public/loadout/icons/`.
+
+## Earlier iteration folders
 
 - `UI/old ui/` — earlier concepts and explorations.
 - `UI/planned ui/` — planned section and page concepts.

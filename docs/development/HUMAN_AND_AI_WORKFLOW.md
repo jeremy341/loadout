@@ -16,7 +16,14 @@ bun install --frozen-lockfile
 
 This downloads Pixl, YSWS Template, and Stardance at the exact commits recorded in `docs/source-audit/SOURCE_BASES.md`. Their files are available in `references/`; the 26 tracked concept images are under `docs/design/references/`. Verify the pins before a source audit. Do not modify submodule contents or copy them into app code. Avoid `--recursive`: the nested `references/stardance/secrets` submodule points to a remote that returned “Repository not found” on 2026-10-05. The parent Stardance source at its recorded SHA is available.
 
-GitHub's default `main` now contains the complete current baseline. Use that branch for routine clones and all new temporary work branches.
+GitHub's default `main` contains the complete repository. Also fetch `development` and `testing`; `development` is the normal base for new temporary work branches after the one-time lane catch-up.
+
+After fetching the current lanes, branch from `development`:
+
+```powershell
+git switch --track origin/development
+git switch -c feature/short-task-name
+```
 
 ## 2. Start each task
 
@@ -27,9 +34,17 @@ GitHub's default `main` now contains the complete current baseline. Use that bra
 
 ## 3. Slack kickoff, branches, and review flow
 
-Before starting substantive work, post a brief kickoff in `#loadout-development` with the scope, temporary branch name, and intended PR target. If the AI runtime has no connected Slack tool, ask the human collaborator to post it; do not claim that it was sent. Then make a short-lived branch from the latest `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes. Every task PR targets `main`.
+Before starting substantive work, post a brief kickoff in `#loadout-development` with the scope, temporary branch name, and intended lane. If the AI runtime has no connected Slack tool, ask the human collaborator to post it; do not claim that it was sent. Then make a short-lived branch from the latest `development` (except for the one-time lane catch-up). Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes.
 
-Either trusted maintainer may create/push short-lived branches, open/review PRs, and merge into `main` after all required checks pass. Human review is encouraged but is not required. Do not add owner-only, Jeremy-only, CODEOWNER-only, latest-pusher, or other one-person approval rules. Direct pushes to permanent branches should be blocked once GitHub rules are configured and verified. Do not claim these rules are active based only on local documentation. `development` and `testing` are retained staging/history branches; do not use them for routine feature work.
+Use this order for every change:
+
+```text
+short-lived branch → PR into development → promotion PR into testing → promotion PR into main
+```
+
+Either trusted maintainer may create and push short-lived branches, open/review PRs, and merge a check-green PR without waiting for Jeremy or an owner-only approval. PRs from feature branches target `development`; only `development` promotes to `testing`, and only `testing` promotes to `main`. The `Promotion lane` check rejects other source/target pairs.
+
+Direct pushes to `development` are also allowed, but the exact commit must first be pushed to a short-lived branch and pass `Repository integrity`, fast `Landing quality`, and the skipped-success `Promotion lane` check. Push that same checked commit to `development`; a fresh unverified commit will be rejected by required status checks. `testing` and `main` remain PR-only. Do not add owner-only, Jeremy-only, CODEOWNER-only, latest-pusher, or other one-person approval rules. Verify live settings in `BRANCH_PROTECTION_SETUP.md`; do not treat local docs as proof.
 
 Group commits around reviewable changes. Use clear messages such as “Added …”, “Updated …”, or “Documented …”. Do not mix a broad feature migration into a homepage or documentation change.
 
@@ -51,7 +66,7 @@ When using a source repository, keep its recorded commit pin, license status, ex
 
 ## 6. Preview and publish
 
-For the Vercel project settings and first-demo checklist, see [`VERCEL_PREVIEW.md`](VERCEL_PREVIEW.md). `apps/landing` is the application root in the Bun workspace. `main` is the production branch; pushes to `development` should create a preview when the Vercel project is connected and configured. Verify the actual Vercel build, deployment URL, branch, and commit before sharing a demo. A successful local build does not establish a deployment.
+For Vercel settings, see [`VERCEL_PREVIEW.md`](VERCEL_PREVIEW.md). `apps/landing` is the application root. `development` and `testing` are preview lanes; only a `testing` → `main` promotion reaches the production branch. Verify the deployment URL, lane, and commit before sharing a demo. A successful local build does not establish a deployment.
 
 Do not promote a preview to production or change domains as part of demo preparation. Publish only to the branch and environment the owner requested. Never expose environment values in logs or reports.
 

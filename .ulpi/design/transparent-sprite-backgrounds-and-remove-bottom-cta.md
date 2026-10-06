@@ -1,5 +1,7 @@
 # Transparent sprite backgrounds and bottom CTA removal
 
+Status: historical cleanup brief. The current homepage uses the final transparent 32×32 PNG set documented in `pixel-icon-sprite-integration.md` and `docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md`.
+
 ## Design read
 
 This is a cleanup of the industrial field-manual homepage. Pixel icons must sit directly on graph paper and cards with no paper-colored tile; the full-width hero remains the page's primary RSVP action.

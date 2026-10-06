@@ -1,6 +1,6 @@
 # LOADOUT — UI & Design System
 
-**Homepage refinement, 2026-10-05:** [Plan 12](12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md) is approved and implemented locally. It covers the vertical process, lifetime progression, Community Eras, Requisition and Custom Order explanations, pixel SVGs, footer, spacing, and horizontal clouds. Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes.
+**Homepage refinement, 2026-10-05:** [Plan 12](12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md) is approved and implemented locally. It covers the vertical process, lifetime progression, Community Eras, Requisition and Custom Order explanations, final 32×32 pixel sprite icons, footer, spacing, and horizontal clouds. Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes.
 
 ## 0. Direction
 
@@ -535,7 +535,7 @@ The LOADOUT mark should remain:
 - not lightning-bolt cliché
 - separate from the Bolt currency icon
 
-The currency icon is now an authored yellow lightning glyph, following the user's 2026-10-04 visual amendment. Keep that currency symbol distinct from the brand mark.
+The currency icon uses the final yellow lightning sprite from the 2026-10-06 final icon set. Keep that currency symbol distinct from the brand mark. The earlier bolt.svg remains an unused source file.
 
 Potential visual motifs:
 - modular slot

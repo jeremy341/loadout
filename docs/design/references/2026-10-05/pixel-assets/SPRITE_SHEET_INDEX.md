@@ -1,50 +1,46 @@
-# LOADOUT pixel sprite assets
+# LOADOUT final pixel icon assets
 
-The 32×32 sprites extracted from the [2026-10-06 grid guide](../../2026-10-06/pixel-assets/loadout-32px-sprite-grid-guide.png) are active homepage icon assets. The guide has 7 columns and 6 rows; each tile is 32×32 logical pixels enlarged 8×. Extraction sampled the center of each 8×8 block to avoid the grid, then converted the exact paper color (`#EDEFEE`) to transparency. The exported files are individual 32×32 RGBA PNGs in `apps/landing/public/loadout/sprites/`.
+The active homepage icon art now comes from the owner's final PNG set, preserved in docs/design/references/2026-10-06/final-pixel-icons/source/. That archive has all 42 original files copied from the workspace's finnally/ folder. Each active app sprite is a transparent 32×32 RGBA PNG in apps/landing/public/loadout/sprites/.
 
-The four brand cells are intentionally excluded: row 5, column 2 (machine mark), and row 6, columns 5–7 (wordmark, lockup, favicon). The custom Bolt SVG and scene/cloud artwork also remain separate. The sheet's Bolt tile is kept as `bolt-reference.png` and is not used in place of `apps/landing/public/loadout/bolt.svg`.
+The app exports crop each source to its visible alpha bounds and fit it proportionally inside 28×28 pixels using nearest-neighbor sampling. This gives every glyph a 2px transparent margin without adding a background or smoothing the art.
 
-| Row | Column | File | Homepage mapping |
-|---:|---:|---|---|
-| 1 | 1 | `bolt-reference.png` | Reference only; custom Bolt SVG remains active |
-| 1 | 2 | `layers.png` | `LoadoutIcon layers` |
-| 1 | 3 | `code.png` | `LoadoutIcon code` |
-| 1 | 4 | `gift.png` | `LoadoutIcon gift` |
-| 1 | 5 | `builder.png` | `LoadoutIcon user` |
-| 1 | 6 | `list.png` | `LoadoutIcon list` |
-| 1 | 7 | `document.png` | `LoadoutIcon document` |
-| 2 | 1 | `wrench.png` | `LoadoutIcon wrench` |
-| 2 | 2 | `gear.png` | `LoadoutIcon gear` |
-| 2 | 3 | `cpu.png` | `LoadoutIcon chip` |
-| 2 | 4 | `board.png` | `LoadoutIcon board` |
-| 2 | 5 | `flask.png` | `LoadoutIcon flask` |
-| 2 | 6 | `globe.png` | `LoadoutIcon globe` |
-| 2 | 7 | `people.png` | `LoadoutIcon people` |
-| 3 | 1 | `arrow-right.png` | `LoadoutIcon arrow` |
-| 3 | 2 | `xp-star.png` | `LoadoutIcon star` |
-| 3 | 3 | `laptop.png` | `LoadoutIcon laptop` |
-| 3 | 4 | `cloud.png` | `LoadoutIcon cloud` |
-| 3 | 5 | `key.png` | `LoadoutIcon key` |
-| 3 | 6 | `equipment-box.png` | `LoadoutIcon box` |
-| 3 | 7 | `cap.png` | `LoadoutIcon cap` |
-| 4 | 1 | `stickers.png` | `LoadoutIcon stickers` |
-| 4 | 2 | `hoodie.png` | `LoadoutIcon hoodie` |
-| 4 | 3 | `terminal.png` | `LoadoutIcon terminal` |
-| 4 | 4 | `domain.png` | `LoadoutIcon domain` |
-| 4 | 5 | `ticket.png` | `LoadoutIcon ticket` |
-| 4 | 6 | `storage.png` | `LoadoutIcon storage` |
-| 4 | 7 | `check.png` | `LoadoutIcon check` |
-| 5 | 1 | `cross.png` | `LoadoutIcon cross` |
-| 5 | 2 | — | Brand mark; excluded |
-| 5 | 3 | `down.png` | `LoadoutIcon down` |
-| 5 | 4 | `faq-chevron.png` | FAQ disclosure control |
-| 5 | 5 | `requisition-i.png` | Progression milestones LV.3 and LV.6 |
-| 5 | 6 | `requisition-ii.png` | Progression milestones LV.9 and LV.12 |
-| 5 | 7 | `requisition-master.png` | Progression milestone LV.15 |
-| 6 | 1 | `slashes.png` | Decorative reference; separate scene SVG remains active |
-| 6 | 2 | `skyline-cottage.png` | Decorative reference; separate scene SVG remains active |
-| 6 | 3 | `skyline-tower.png` | Decorative reference; separate scene SVG remains active |
-| 6 | 4 | `skyline-workshop.png` | Decorative reference; separate scene SVG remains active |
-| 6 | 5–7 | — | Wordmark, lockup, favicon; excluded |
+| App sprite | Final source file | LoadoutIcon |
+|---|---|---|
+| bolt.png | ChatGPT-Bild 6. Okt. 2026, 12_19_58-1.png | bolt |
+| layers.png | ChatGPT-Bild 6. Okt. 2026, 12_19_59-2.png | layers |
+| code.png | ChatGPT-Bild 6. Okt. 2026, 12_20_00-3.png | code |
+| gift.png | ChatGPT-Bild 6. Okt. 2026, 12_20_02-4.png | gift |
+| builder.png | ChatGPT-Bild 6. Okt. 2026, 12_20_03-5.png | user |
+| list.png | ChatGPT-Bild 6. Okt. 2026, 12_20_05-6.png | list |
+| document.png | ChatGPT-Bild 6. Okt. 2026, 12_20_06-7.png | document |
+| wrench.png | ChatGPT-Bild 6. Okt. 2026, 12_20_07-8.png | wrench |
+| gear.png | ChatGPT-Bild 6. Okt. 2026, 12_20_08-9.png | gear |
+| cpu.png | ChatGPT-Bild 6. Okt. 2026, 12_20_10-10.png | chip |
+| board.png | ChatGPT-Bild 6. Okt. 2026, 12_22_39-1.png | board |
+| flask.png | ChatGPT-Bild 6. Okt. 2026, 12_22_40-2.png | flask |
+| globe.png | ChatGPT-Bild 6. Okt. 2026, 12_22_42-3.png | globe |
+| arrow-right.png | ChatGPT-Bild 6. Okt. 2026, 12_22_46-5.png | arrow |
+| xp-star.png | ChatGPT-Bild 6. Okt. 2026, 12_22_47-6.png | star |
+| laptop.png | ChatGPT-Bild 6. Okt. 2026, 12_22_48-7.png | laptop |
+| cloud.png | ChatGPT-Bild 6. Okt. 2026, 12_22_49-8.png | cloud |
+| equipment-box.png | ChatGPT-Bild 6. Okt. 2026, 12_22_52-10.png | box |
+| people.png | 22_worker_team.png | people |
+| cap.png | 21_graduation_cap.png | cap |
+| hoodie.png | 23_hoodie.png | hoodie |
+| terminal.png | 24_terminal.png | terminal |
+| domain.png | 25_dev_badge.png | domain |
+| ticket.png | 26_ticket.png | ticket |
+| storage.png | 27_storage_drive.png | storage |
+| check.png | 28_checkmark.png | check |
+| cross.png | 29_cross.png | cross |
+| down.png | 31_double_down_chevrons.png | down |
+| faq-chevron.png | 32_right_chevron.png | faq-chevron |
+| requisition-i.png | 33_badge_I.png | requisition-i |
+| requisition-ii.png | 34_badge_II.png | requisition-ii |
+| requisition-master.png | 35_badge_crown.png | requisition-master |
 
-The page's icon component uses matching sprites for existing glyph calls. The machine mark, wordmark, favicon, moving clouds, `slashes.svg`, `skyline.svg`, and `scroll-down.svg` are not replaced by these sprite exports.
+## Kept separate
+
+The final pixel Bolt is now active in LoadoutIcon. The previous bolt.svg remains in public/loadout as an unused original. The LOADOUT brand mark, wordmark, lockup, and favicon are unchanged. The moving clouds and existing slashes/skyline scene SVGs are unchanged.
+
+The archive also retains source art for the octagon/nut marks, double slashes, house, building, warehouse, layout, and queue. Those cells are references for the brand or scenery and are not loaded as homepage glyphs. No active homepage calls use a Key or Stickers icon.

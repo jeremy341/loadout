@@ -93,7 +93,7 @@ The block display face contrasts with the quiet technical mono. Load only licens
 
 ## Graphic and icon language
 
-Use authored, flat SVGs on a 24px or 32px grid, with ink outlines, a restrained ink-and-yellow palette, square geometry, and no gradient or gloss. Homepage icons and progression badges use the independent transparent 32×32 cells in `docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md`. The logo mark, wordmark, lockup, and favicon remain separate brand assets. The slash motif frames the fullscreen hero. Pale clouds size to `clamp(280px, 32vw, 560px)` on desktop and `260px` on mobile, with bounded horizontal scroll parallax of ±112px/±48px and horizontal drift on a separate inner layer. Reduced motion disables transforms and drift.
+Use independent transparent 32×32 pixel PNGs for homepage icon glyphs, with ink outlines, a restrained ink-and-yellow palette, square geometry, and no gradient or gloss. Their source and filename map live in `docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md`. Keep the custom Bolt SVG, logo mark, wordmark, lockup, favicon, and scenery assets separate. The slash motif frames the fullscreen hero. Pale clouds size to `clamp(280px, 32vw, 560px)` on desktop and `260px` on mobile, with bounded horizontal scroll parallax of ±112px/±48px and horizontal drift on a separate inner layer. Reduced motion disables transforms and drift.
 
 ## Motion principles
 

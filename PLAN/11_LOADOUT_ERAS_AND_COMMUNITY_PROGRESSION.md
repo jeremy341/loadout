@@ -102,6 +102,10 @@ Show one compact community-progression section. Keep the homepage's primary stor
 
 Use illustrative sequence copy until live Era configuration exists. Do not show a percentage, point threshold, countdown, next Era date, or active-era bonus that is not backed by real configured data.
 
+### Physical event continuity
+
+A future LOADOUT IRL event uses the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Bolts, or attendance-gated progression is created. The detailed event concept is in `15_LOADOUT_IRL_RUHR.md`. Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
+
 ### Builder dashboard
 
 The dashboard may show the current Era, verified community progress, the +10% qualifying-project bonus, the next eligible reset, and **ADVANCEMENT READY** when the configured threshold is reached before that reset. Do not substitute timers or mock values for server state.

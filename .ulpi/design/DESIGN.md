@@ -11,9 +11,9 @@ visual_density: 4
 
 # LOADOUT Design Language
 
-## Current homepage order — 2026-10-05
+## Current homepage order — 2026-10-06
 
-[Plan 13](../../PLAN/13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md) with the implemented [Plan 14 hierarchy](../../PLAN/14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) now govern the page composition: hero → concise About/Digital/Physical explanation → grouped tracks/Research/project fit → unchanged How it works → one Progress & prizes section containing lifetime levels, pricing/discounts, Requisitions, planned prizes and Custom Orders → Community Eras → FAQ → footer. The duplicate About step cards and broad equipment-category grid are removed. The underlying palette, type, icons, hero, process design, and motion remain the established identity. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
+The current owner-directed composition supersedes the earlier separate About placement: hero → Tracks and Research Mode → How it works, including Digital/Physical Loadout outcomes → Project Fit → Progress & Prizes → Community Eras → optional LOADOUT IRL concept → FAQ → Who's Behind LOADOUT → footer. The hero now carries the primary orientation copy. A fixed LOADOUT DOCS tab pulls up a preview sheet and links to the full field manual at `/docs`. Plan 14 still owns the Progress & Prizes grouping, but its earlier About placement and unchanged-process constraint have been superseded by the current user-approved page update. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
 
 ## Active homepage refinement — 2026-10-05
 
@@ -36,6 +36,10 @@ An industrial field manual for young technical builders, expressed through clean
 ## Direction and counterfactual test
 
 **Committed direction: industrial / signage.** LOADOUT is about building technical capability and equipment. Its engineering-paper canvas, precise black rules, technical labels, and Bolt Yellow cue make that subject legible without borrowing a game world or generic SaaS style. Pixel display type gives the identity its builder culture.
+
+## Docs surface lock
+
+Documentation is a full-screen **technical/utilitarian field manual**, not a Pixl clone. It uses the same graph-paper canvas, paper surfaces, graphite plates, Jersey 10 display type, IBM Plex Mono reading type, ink rules, and Bolt Yellow evidence markers as the homepage. Docs vary by composition only: ruled evidence tables, comparison ledgers, process diagrams, and a persistent rail are allowed; new colors, radii, shadows, or type families are not. Every screen must read as the same product if placed side by side.
 
 The counterfactual test passes: this identity depends on LOADOUT's field-manual concept, pixel typography, physical Bolt token, and Digital/Physical Loadout loop. It is not a reusable generic tech-program template.
 
@@ -86,7 +90,7 @@ The block display face contrasts with the quiet technical mono. Load only licens
 - **Radius:** `2px, 4px, 6px`. Default panels are square or nearly square; no pill cards.
 - **Borders:** `1.5px` ink for standard panels, `2px` for the hero frame and key containers. Rules stay straight and deliberate.
 - **Shadow:** hard offset only: `2px 2px 0 ink` and `4px 4px 0 ink`. Buttons may compress the offset when pressed. No blurred elevation.
-- **Grid:** clean CSS graph grid at `24px` with a faint `120px` guide. Keep it low contrast; no paper stains, noise, or texture images.
+- **Grid:** clean CSS graph grid at `24px` with a faint `120px` guide. Keep it low contrast; a subtle CSS-generated grain overlay may reinforce the paper surface. Do not use paper-stain imagery or high-contrast texture.
 - **Motion:** fast `120ms`, base `180ms`, emphasis `300ms`; Pixl-derived hero entrances use `800–900ms` with easing `cubic-bezier(0.22, 1, 0.36, 1)`. Card reveals use `600ms` and `100ms` child stagger; FAQ disclosure uses `350ms`. No bounce/elastic. Honor `prefers-reduced-motion` and keep content visible without JavaScript.
 - **Responsive breakpoints:** `640px`, `768px`, `1024px`, `1280px`. Design from mobile upward and prevent horizontal overflow.
 - **Focus:** 3px Bolt Yellow outline with 2px ink offset on light surfaces; on yellow surfaces use a 3px ink outline. Focus is never removed.
@@ -109,6 +113,14 @@ At `prefers-reduced-motion: reduce`, disable smooth scrolling, entrance and scro
 - **Action vocabulary:** Explore, Read, Join, Ship, Review, Earn, Upgrade. Keep labels consistent between nav, CTA, and destination.
 - Write from the builder's point of view. Explain program terms when first used. Avoid claims that imply dates, eligibility, current inventory, endorsements, participant totals, or pricing unless supplied by an approved live configuration.
 - Keep sentences short. Avoid fake stats, testimonials, invented project examples, buzzwords, and decorative em dashes.
+
+## Homepage mechanics and event concept
+
+The 2026-10-06 clarity brief in `homepage-mechanics-clarity.md` retains these tokens. Use short titled steps for Era advancement and Custom Orders, plus one compact definition list for planned request tiers. Field Requisitions follow the normal discount-cap explanation; their milestone rail appears once. The owner-approved LOADOUT IRL future concept uses one opaque framed plate after Eras and before FAQ, with story copy and a proposed three-day itinerary. Its visibility is configurable. Do not add venue imagery, dates, registration, live progress, or event promises without confirmed data and separate approval.
+
+## Who's Behind LOADOUT? (2026-10-06)
+
+The final content section sits after FAQ and before the footer. It uses a vertical organizer directory beside a graphite Hack Club context panel, bound to the existing tokens and typography. Public names and responsibilities are user-supplied; no portraits, invented profile links, statistics, partner claims, or new sprite assets are needed. It is static and remains visible without JavaScript. The exact component and content contract is in `whos-behind-loadout.md`.
 
 ## Named anti-slop bans
 

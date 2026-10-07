@@ -10,6 +10,11 @@ describe("public site configuration", () => {
     expect(config.allowIndexing).toBe(false);
   });
 
+  test("the IRL concept is visible by default and can be explicitly hidden", () => {
+    expect(createSiteConfig().showIrlConcept).toBe(true);
+    expect(createSiteConfig({ showIrlConcept: false }).showIrlConcept).toBe(false);
+  });
+
   test("an explicit empty or unsafe override disables RSVP", () => {
     for (const joinUrl of ["", "http://example.com", "javascript:alert(1)", "https://user:password@example.com"]) {
       expect(createSiteConfig({ joinUrl }).joinUrl).toBeUndefined();

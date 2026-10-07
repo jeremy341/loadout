@@ -7,6 +7,7 @@ type PublicSiteInputs = {
   joinUrl?: string;
   loginUrl?: string;
   communityUrl?: string;
+  showIrlConcept?: boolean;
   allowIndexing?: boolean;
 };
 
@@ -30,6 +31,7 @@ export function createSiteConfig(inputs: PublicSiteInputs = {}) {
     joinUrl: inputs.joinUrl === undefined ? DEFAULT_RSVP_URL : httpsUrl(inputs.joinUrl),
     loginUrl: httpsUrl(inputs.loginUrl),
     communityUrl: httpsUrl(inputs.communityUrl),
+    showIrlConcept: inputs.showIrlConcept ?? true,
     githubUrl: "https://github.com/jeremy341/loadout",
     allowIndexing: Boolean(siteUrl && inputs.allowIndexing),
   };
@@ -40,5 +42,8 @@ export const siteConfig = createSiteConfig({
   joinUrl: process.env.NEXT_PUBLIC_LOADOUT_JOIN_URL,
   loginUrl: process.env.NEXT_PUBLIC_LOADOUT_LOGIN_URL,
   communityUrl: process.env.NEXT_PUBLIC_LOADOUT_COMMUNITY_URL,
+  showIrlConcept: process.env.NEXT_PUBLIC_LOADOUT_IRL_CONCEPT === undefined
+    ? undefined
+    : process.env.NEXT_PUBLIC_LOADOUT_IRL_CONCEPT === "true",
   allowIndexing: process.env.LOADOUT_ALLOW_INDEXING === "true" && process.env.VERCEL_ENV !== "preview",
 });

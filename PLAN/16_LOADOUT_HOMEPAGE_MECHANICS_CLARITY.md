@@ -142,3 +142,29 @@ Verification: root lint, explicit TypeScript check, all five configuration tests
 The changed surfaces were inspected through the local browser at 1440px, 768px, 390px, and 320px. No overflowing text was observed in the changed headings, steps, tier list, or IRL panel; the viewport override was reset afterward. A review screenshot is saved outside Git in the workspace's temporary capture folder. `git diff --check` passes.
 
 The requested project-frontend/project-code-quality skills and all seven repository UI skills were consulted. The spec is `.ulpi/design/homepage-mechanics-clarity.md`; a GPT-6 Luna medium engineer implemented its bounded app scope. No asset creation or sprite animation was needed. Changes are local; promotion and Vercel publication follow the staged lane workflow separately.
+
+## Next proposed pass: whole-page visual clarity
+
+The owner later asked for a full homepage plan that lowers visible copy through diagrams and interactive cards while keeping information available. [Plan 17](17_LOADOUT_HOMEPAGE_VISUAL_CLARITY_AND_DISCLOSURE.md) is that planning proposal. It does not authorize replacing this implemented content or changing its underlying product rules.
+
+## Era homepage overview follow-up — 2026-10-06
+
+The owner approved a focused copy reduction: the website should explain only that a Community Era is a shared technical theme advanced by approved projects. Do not list illustrative Era names or publish detailed timing, objectives, Season comparisons, or bonus mechanics on the homepage. Full product rules remain here and in Plan 11; see .ulpi/design/community-era-overview.md for the visual specification.
+
+### Era overview implementation update — 2026-10-06
+
+The public Era section now contains one short planned-concept definition and a generic three-part overview. Named Era examples, detailed timing/target/reset rules, objectives, Season comparisons, and the bonus were removed from the website. Repeated Era explanations were removed from How it works, Progression, and the IRL copy; the FAQ gives only the short definition. The policy remains in Plan 11 and Plan 02.
+
+Verification: lint, typecheck, five unit tests, all 25 landing browser tests, and the production build pass. Desktop and mobile previews were visually checked. This change is local only.
+
+### Compact Era facts follow-up — 2026-10-06
+
+The owner added a compact fact strip to the homepage: shared Era Points, a planned +10% base-Bolt award, and zero Track XP from that bonus. Keep the bonus explicitly planned and state that final launch configuration is still being finalized. Named Era themes and timing/reset rules remain off the homepage.
+
+## Custom Order tier display follow-up — 2026-10-06
+
+The owner requested removal of the public Planned request tiers panel. Keep only a generic relevant-tier requirement on the homepage; the Field/Power/Root/Bare Metal numeric ladder remains in Plan 02 and is not deleted from policy.
+
+Custom Order display follow-up — 2026-10-06: the public homepage no longer shows the numeric planned-tier ladder. Keep the generic related-tier requirement and not-open status; the numeric policy remains in Plan 02.
+
+The hero's “Continue scrolling” cue remains visible and animated but is a static, non-interactive hint. Visitors use navigation links or normal page scrolling to move through the homepage.

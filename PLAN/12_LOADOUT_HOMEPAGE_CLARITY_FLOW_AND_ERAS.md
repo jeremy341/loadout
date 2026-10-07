@@ -239,3 +239,7 @@ ESLint, TypeScript, and the Next.js production build pass locally through the ho
 ## Follow-up: clearer explanations
 
 The user accepted the look and requested clearer copy. .ulpi/design/homepage-copy-clarity.md records the string-only brief and implementation. The copy now defines Bolts/XP/loadouts, explains multi-track review and equipment benefits, gives a word-only Compute/GPU Requisition example, and walks through Custom Orders and Community Eras in plain language. Layout and motion remain unchanged. The previous browser error-tab blocker is resolved through the user's reopened localhost tab. Desktop and 390/320px mobile copy wrapping and the Custom Order FAQ were inspected; no horizontal overflow was observed in those views. Automated tests, CI, publication, and the separate pipeline task remain outside this pass.
+
+## Follow-up planning note — 2026-10-06
+
+The user later reported that the current Eras, Custom Order, and Requisition explanations are still unclear and requested modestly more detail. [Plan 16](16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md) records the next content brief while preserving this completed implementation record. No website files were changed by that planning request.

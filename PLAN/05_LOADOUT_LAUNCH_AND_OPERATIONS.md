@@ -217,20 +217,7 @@ LOADOUT should be especially legible to sponsors in:
 
 # 57. LOADOUT IRL
 
-Long-term Germany-based event.
-
-Online participants can:
-- apply
-- redeem travel support
-- bring shipped projects
-- build new projects
-- meet sponsors
-- attend workshops
-
-Possible first region:
-**Ruhrgebiet / NRW**
-
-This is a later expansion, not an MVP requirement.
+Potential future physical extension, after the online loop and operating gates are ready. It is not an MVP requirement or a confirmed event. The current concept is `LOADOUT IRL // RUHR — Build the next Era.` Use the same online tracks, review, and global Era rules; do not promise travel support, applications, sponsors, or attendance. Plan 15 owns the proposal and its prerequisites.
 
 ---
 
@@ -470,35 +457,8 @@ A smaller, technically coherent community is preferable to a much larger general
 
 ---
 
-# LOADOUT IRL — Germany Concept
+# LOADOUT IRL — Germany roadmap pointer
 
-This is a **later-stage extension**, not a prerequisite for the YSWS launch.
+The later-stage Germany concept is now owned by [Plan 15 — LOADOUT IRL // RUHR](15_LOADOUT_IRL_RUHR.md). It replaces this section's earlier one-to-two-day format sketch with the user's newer three-calendar-day Friday-to-Sunday recommendation, Ruhr city/venue research order, and same-global-Era connection. It remains a future concept: no venue, date, attendance capacity, funding, partner, or event operation is confirmed.
 
-Potential format:
-- 1–2 day builder weekend / hackathon in Germany
-- small, technical, hands-on
-- centered on Tools / Systems / Compute / Hardware
-- workshops around embedded systems, FPGA, GPU/compute, networking, developer tooling, fabrication, measurement, and performance
-- sponsor hardware benches / compute credits / equipment demos
-- shipping session at the end
-- projects can count toward LOADOUT only under the normal eligibility/review rules
-
-Brand direction:
-- German engineering / manufacturing / workshop culture
-- precision, systems, hardware, industrial design
-- **not** weapons/military branding
-- not a generic student hackathon aesthetic
-
-Possible names:
-- `LOADOUT IRL`
-- `LOADOUT Build Weekend`
-- `LOADOUT // Germany`
-- `LOADOUT Workshop 01`
-
-When to pursue it:
-1. after the online progression/economy loop works;
-2. after sponsor/fulfillment operations are stable;
-3. after there is a real German/European participant base;
-4. when a venue and hardware/industry sponsors can make it meaningfully technical.
-
-The IRL event should strengthen LOADOUT's engineering identity, not distract from getting the YSWS itself working.
+Do not pursue it until the online project/review/reward loop, fulfillment, regional demand, organizer capacity, safeguarding, venue research, and realistic funding are ready. Plan 15 is the detailed source; this operations plan retains only the roadmap and launch boundary.

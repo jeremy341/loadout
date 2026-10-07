@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   useEffect(() => {
+    if (pathname.startsWith("/docs")) return;
+
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     let lenis: Lenis | undefined;
     let observer: ResizeObserver | undefined;
@@ -33,7 +38,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       preference.removeEventListener("change", syncPreference);
       stop();
     };
-  }, []);
+  }, [pathname]);
 
   return <>{children}</>;
 }

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { LoadoutIcon } from "./icons/LoadoutIcon";
 import { siteConfig } from "../site-config";
 
-const links = [["About", "#about"], ["Tracks", "#tracks"], ["How it works", "#process"], ["Progress & Prizes", "#progression"], ["FAQ", "#faq"]];
+const links = [["Tracks", "#tracks"], ["How it works", "#process"], ["Progress & Prizes", "#progression"], ["FAQ", "#faq"]];
 
 export function SiteNav() {
   const [hidden, setHidden] = useState(false);

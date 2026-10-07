@@ -210,3 +210,52 @@
   .flow-node { transition:none; }
   .flow-node:hover { transform:none; }
 }
+
+/* Homepage mechanics clarity and the future IRL concept. */
+.era-records { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; margin:0 auto 28px; max-width:960px; }
+.era-records > div { padding:16px 0 0; border-top:2px solid var(--ink); }
+.era-records dt { font-family:var(--font-pixel); font-size:22px; }
+.era-records dd { margin:8px 0 0; color:var(--muted); font-size:16px; line-height:1.6; }
+.era-advancement { margin-top:40px; }
+.era-advancement > h3 { font-size:28px; margin-bottom:8px; }
+.era-rules { grid-template-columns:repeat(3,minmax(0,1fr)); list-style:none; }
+.era-rule { padding:0 0 0 18px; border-left:3px solid var(--yellow); }
+.era-rule h4 { font-family:var(--font-pixel); font-size:22px; margin:0 0 8px; }
+.era-rule p { font-size:16px; line-height:1.65; margin:0; }
+.era-bonus { max-width:900px; margin:32px auto 0; padding:24px; background:var(--surface); border:1.5px solid var(--ink); }
+.era-bonus strong { font-family:var(--font-pixel); font-size:22px; }
+.era-bonus p { margin:8px 0 0; font-size:16px; line-height:1.65; }
+.progression-section .order-steps h4 { font-family:var(--font-pixel); font-size:21px; line-height:1.2; margin:0 0 10px; }
+.progression-section .order-steps p { margin:0; color:var(--muted); }
+.order-tiers { max-width:760px; margin:32px auto 0; padding:24px; background:var(--surface); border-block:1.5px solid var(--ink); }
+.order-tiers h4 { font-family:var(--font-pixel); font-size:22px; margin:0 0 12px; }
+.order-tiers dl { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px 24px; margin:0; }
+.order-tiers dl > div { display:flex; justify-content:space-between; align-items:baseline; gap:8px; padding-top:8px; border-top:1px solid var(--rule); }
+.order-tiers dt,.order-tiers dd { margin:0; font-size:16px; }
+.order-tiers dd { font-family:var(--font-pixel); }
+.order-tiers p { margin:12px 0 0; color:var(--muted); font-size:16px; line-height:1.6; }
+.irl-concept-section { scroll-margin-top:110px; }
+.irl-concept-plate { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr); gap:40px; padding:32px; background:var(--surface); border:2px solid var(--ink); box-shadow:4px 4px 0 var(--ink); }
+.irl-story p,.irl-itinerary li p { font-size:16px; line-height:1.65; }
+.irl-story p + p { margin-top:24px; }
+.irl-status { margin-top:28px !important; padding-top:16px; border-top:1px solid var(--rule); }
+.irl-status strong { font-family:var(--font-pixel); }
+.irl-itinerary h3 { font-size:24px; margin:0 0 16px; }
+.irl-itinerary ol { list-style:none; padding:0; margin:0; }
+.irl-itinerary li { display:grid; grid-template-columns:84px minmax(0,1fr); gap:16px; padding:16px 0; border-top:1px solid var(--rule); }
+.irl-day { font-size:14px; color:var(--muted); }
+.irl-itinerary h4 { font-family:var(--font-pixel); font-size:22px; margin:0 0 4px; }
+.irl-itinerary li p { margin:0; color:var(--muted); }
+@media (max-width:900px) {
+  .era-records { grid-template-columns:1fr; gap:16px; }
+  .era-rules { grid-template-columns:1fr; }
+  .progression-section .order-steps { grid-template-columns:1fr; }
+  .irl-concept-plate { grid-template-columns:1fr; gap:28px; }
+}
+@media (max-width:700px) {
+  .era-advancement > h3 { font-size:26px; }
+  .order-tiers { padding-inline:16px; }
+  .order-tiers dl { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .irl-concept-plate { padding:24px 16px; }
+  .irl-itinerary li { grid-template-columns:1fr; gap:4px; }
+}

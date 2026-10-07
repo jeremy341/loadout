@@ -443,6 +443,8 @@ Eras are a shared technical-progression layer, separate from competitive seasons
 
 Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing multiplier or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
+If a future physical weekend is approved, its projects use this same shared Era and this same reviewer-gated bonus. There is no event-specific Bolt or XP rule; see `15_LOADOUT_IRL_RUHR.md`. This is a cross-reference only and does not settle the open stacking/configuration questions above.
+
 ---
 
 # 23. Seasonal Quests

@@ -47,4 +47,3 @@ An experiment, benchmark, reproduction, or investigation can fit without becomin
 ## Before you invest in a borderline idea
 
 Describe the capability, what is original, and how you will demonstrate it. Ask **#loadout-help** about fit rather than relying on a broad category name.
-

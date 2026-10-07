@@ -35,4 +35,3 @@ A request is not an order. You need the relevant progression and enough Bolts to
 ## Before buying anything
 
 Ordering is not open. Final prices, availability, delivery terms, and support procedures remain pending. Spending time on a project does not reserve a particular prize.
-

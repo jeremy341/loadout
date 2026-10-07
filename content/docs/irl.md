@@ -33,4 +33,3 @@ The regular RSVP records program interest; it does not reserve an event place. D
 ## What must happen first
 
 The team must confirm feasibility and publish event details before inviting registration. Until then, [help and feedback](/docs/help) is the place to ask about the idea, and [current status](/docs/eligibility) explains the wider program draft.
-

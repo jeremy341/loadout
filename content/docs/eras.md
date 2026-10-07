@@ -37,4 +37,3 @@ The public bonus configuration remains pending. Era relevance does not replace a
 | Seasons | Competitive periods and rankings. |
 
 Accepted projects and lifetime Track XP stay with you across both Era changes and Seasons. No sequence of named Eras or launch dates is promised here.
-

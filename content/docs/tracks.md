@@ -32,4 +32,3 @@ Track XP builds lasting progress in the fields you actually demonstrate. Related
 ## Research is a mode
 
 Research Mode can apply to any of the four tracks. It does not create a fifth track or replace the usual review.
-

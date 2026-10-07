@@ -34,4 +34,3 @@ Track XP records progress in a field. Bolts are the spendable balance for eligib
 ## Where to read next
 
 Start with [what you can build](/docs/projects), then [the four tracks](/docs/tracks) and [what a ship should include](/docs/shipping).
-

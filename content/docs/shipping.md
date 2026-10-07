@@ -39,4 +39,3 @@ Connect tracked work to decisions, experiments, failures, and improvements. [Tra
 A later ship should identify genuinely new work. Explain the difference from the earlier accepted version and submit only the new contribution.
 
 The same implementation or hours cannot be rewarded twice. [Project review](/docs/review) explains the review stages.
-

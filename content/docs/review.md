@@ -46,4 +46,3 @@ If you revise a ship, explain what you changed and provide the evidence requeste
 The planned appeal process should let builders question decisions about fit, approved work, quality, or track allocation. Its final submission route and timing are not yet published.
 
 Keep the review reference and state which decision you are asking about. Use **#loadout-help** for clarification; it cannot promise a particular outcome.
-

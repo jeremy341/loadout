@@ -11,6 +11,7 @@
     "lint": "bun run --filter @loadout/landing lint",
     "typecheck": "bun run --filter @loadout/landing typecheck",
     "test": "bun run --filter @loadout/landing test",
-    "test:e2e": "bun run --filter @loadout/landing test:e2e"
+    "test:e2e": "bun run --filter @loadout/landing test:e2e",
+    "docs:release-summary": "bun run apps/landing/scripts/docs-release-summary.ts"
   }
 }

@@ -1,5 +1,7 @@
 # Versioned LOADOUT planning snapshots
 
+Current authority is resolved by [Plan00](00_LOADOUT_CANONICAL_INDEX.md). The homepage/initial Docs have been published through PR24; older “locally implemented” notes are execution history. [Plan18](18_LOADOUT_DOCS_REFRESH.md) adds the approved Docs-only refresh. Master plans, bootstrap prompts and superseded design proposals stay at stable paths as historical inputs; do not rerun them.
+
 These files preserve the LOADOUT planning bundle so collaborators can review the current product direction and the decisions that led to the first public-site demo. Plans 00–17 are the current planning set; check each document's status and use the newest user-approved decisions when plans disagree.
 
 Plans 00–08 hold product, economy, UI, migration, workflow, and ecosystem context. Plan 09 records the homepage port/redesign; Plan 10 records the RSVP, motion, content and desktop-width refinement and its verification; Plan 11 records the approved Eras design and its implementation gates.

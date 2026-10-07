@@ -107,6 +107,18 @@ h3 {
   min-height:100vh
 }
 
+.site-shell::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  opacity:.16;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.42'/%3E%3C/svg%3E");
+  background-size:180px 180px
+}
+
 .site-shell main,.site-footer {
   position:relative;
   z-index:1
@@ -647,13 +659,12 @@ h3 {
   border:1.5px solid var(--rule);
   border-radius:2px;
   position:relative;
-  transition:transform 200ms var(--ease),border-color 200ms var(--ease),box-shadow 200ms var(--ease)
+  transition:background-color 140ms var(--ease),border-color 140ms var(--ease)
 }
 
 .overview-card:hover,.field-card:hover,.shop-card:hover,.fit-card:hover {
-  transform:translateY(-4px);
   border-color:var(--ink);
-  box-shadow:0 4px 0 #BFC5C1
+  background-color:var(--canvas)
 }
 
 .overview-card {
@@ -803,35 +814,6 @@ h3 {
   color:#d0d1cc
 }
 
-.track-arrow {
-  position:absolute;
-  bottom:12px;
-  right:12px;
-  display:grid;
-  place-items:center;
-  width:30px;
-  height:28px;
-  border:1px solid var(--ink);
-  background:var(--yellow);
-  color:var(--ink);
-  border-radius:2px;
-  transition:transform 160ms var(--ease)
-}
-
-.track-arrow svg {
-  width:19px;
-  height:19px
-}
-
-.track-arrow .loadout-vector {
-  width:19px;
-  height:19px
-}
-
-.track-arrow:hover {
-  transform:translateX(2px)
-}
-
 .research-strip {
   position:relative;
   display:flex;
@@ -861,12 +843,6 @@ h3 {
   display:block;
   font-size:11px;
   margin-top:4px
-}
-
-.research-strip .track-arrow {
-  top:50%;
-  bottom:auto;
-  transform:translateY(-50%)
 }
 
 .progression-note {
@@ -958,13 +934,13 @@ h3 {
 @media(hover:hover) {
   .faq-item:has(.faq-question:hover) {
     transform:translate(-2px,-2px);
-    box-shadow:2px 2px 0 var(--rule);
+    box-shadow:6px 6px 0 var(--rule);
   }
 }
 
 .faq-item:active {
-  transform:none;
-  box-shadow:none;
+  transform:translate(1px,1px);
+  box-shadow:2px 2px 0 var(--ink);
 }
 
 .faq-item h3 {
@@ -983,11 +959,15 @@ h3 {
   text-align:left;
   min-height:43px;
   padding:10px 17px;
-  transition:background 160ms ease-out
+  transition:background 160ms ease-out,transform 160ms var(--ease)
 }
 
 .faq-question:hover {
   background:#DDE0DC
+}
+
+.faq-question:active {
+  transform:scale(.99);
 }
 
 .faq-chevron {
@@ -1025,13 +1005,8 @@ h3 {
 }
 
 .footer-inner {
-  max-width:var(--page);
-  width:calc(100% - 64px);
-  margin:auto;
-  display:grid;
-  grid-template-columns:1.8fr 1fr 1.3fr 1.3fr 1fr;
-  gap:32px;
-  padding:30px 0 26px
+  width:100%;
+  padding:30px 64px 26px
 }
 
 .footer-intro .brand svg,.footer-intro .brand .loadout-vector {
@@ -1046,7 +1021,7 @@ h3 {
 .footer-intro p {
   font-size:11px;
   line-height:1.65;
-  max-width:255px;
+  max-width:720px;
   margin:12px 0
 }
 
@@ -1064,8 +1039,8 @@ h3 {
   display:block;
   font-size:10px;
   color:var(--muted);
-  line-height:1.85;
-  margin-bottom:2px
+  line-height:1.5;
+  margin-bottom:4px
 }
 
 .footer-column a:hover {
@@ -1074,26 +1049,18 @@ h3 {
 }
 
 .footer-bottom {
-  width:calc(100% - 64px);
-  max-width:var(--page);
+  width:100%;
   display:flex;
   align-items:center;
   gap:18px;
   border-top:1px solid #d5d6d0;
-  margin:auto;
-  padding:14px 0 20px;
+  padding:14px 64px 20px;
   color:var(--muted);
   font-size:10px
 }
 
-.footer-bottom>span:nth-child(2) {
+.footer-bottom>span:last-child {
   margin-left:auto
-}
-
-.footer-bottom .slashes {
-  color:var(--yellow);
-  width:64px;
-  height:17px
 }
 
 @keyframes hero-title-enter {
@@ -1180,6 +1147,8 @@ h3 {
   min-height:64px;
   min-width:160px;
   padding:8px 14px;
+  pointer-events:none;
+  user-select:none;
   font-family:var(--font-pixel);
   font-size:14px;
   text-transform:uppercase;
@@ -1190,10 +1159,6 @@ h3 {
   width:28px;
   height:28px;
   animation:scroll-arrow 1400ms ease-in-out infinite;
-}
-
-.scroll-cue:hover .scroll-cue-arrow,.scroll-cue:focus-visible .scroll-cue-arrow {
-  animation-play-state:paused;
 }
 
 .reveal[data-stagger] .reveal-item {
@@ -1769,10 +1734,6 @@ h3 {
   }
   .nav-actions .button {
     min-height:44px;
-  }
-  .track-arrow {
-    width:44px;
-    height:44px;
   }
   .track-card {
     padding-bottom:56px;

@@ -26,7 +26,6 @@ export function HowItWorks() {
             {index < steps.length - 1 && <span className="flow-connector" aria-hidden="true" />}
             {index === steps.length - 1 && <>
               <div className="flow-outcomes">
-                <p className="flow-outcome-label">Two separate outcomes from approved work</p>
                 <span className="flow-fork" aria-hidden="true" />
                 <Reveal><ul className="flow-branches" aria-label="Two outcomes of approved work">
                   <li className="flow-result"><LoadoutIcon name="bolt" /><h3>Bolts to spend</h3><p>Bolts are your reward-shop balance, usable across all tracks.</p></li>
@@ -35,7 +34,12 @@ export function HowItWorks() {
                 <span className="flow-merge" aria-hidden="true" />
               </div>
               <div className="flow-artifact">
-                <Reveal><p>Accepted projects become part of your Digital Loadout: your portfolio of work to show and build on.</p></Reveal>
+                <span className="flow-fork" aria-hidden="true" />
+                <Reveal><ul className="flow-branches flow-loadout-branches" aria-label="Two parts of your Loadout">
+                  <li className="flow-result"><LoadoutIcon name="document" /><h3>Digital Loadout</h3><p>Your accepted projects and the portfolio you build from them.</p></li>
+                  <li className="flow-result"><LoadoutIcon name="box" /><h3>Physical Loadout</h3><p>The equipment and tools you use to build your next project.</p></li>
+                </ul></Reveal>
+                <span className="flow-merge" aria-hidden="true" />
                 <span className="flow-connector" aria-hidden="true" />
               </div>
             </>}
@@ -45,7 +49,7 @@ export function HowItWorks() {
           <Reveal><article className="flow-node">
             <span className="flow-step-number">05</span>
             <span className="flow-icon" aria-hidden="true"><LoadoutIcon name="box" /></span>
-            <div className="flow-copy"><h3>Choose your next upgrade</h3><p>Use Bolts for gear. Your level in a related track can lower its price or unlock some items. A Field Requisition can raise the usual savings limit. Custom Orders let you request equipment outside the shop.</p><p className="flow-links"><a href="#progression">How levels help</a><a href="#requisitions">How Requisitions save</a><a href="#eras">Community Eras</a></p></div>
+            <div className="flow-copy"><h3>Choose your next upgrade</h3><p>Use Bolts for gear. Your level in a related track can lower its price or unlock some items. A Field Requisition can apply an extra track discount. Custom Orders let you request equipment outside the shop.</p><p className="flow-links"><a href="#progression">How levels help</a><a href="#requisitions">How Requisitions save</a><a href="#eras">Community Eras</a></p></div>
           </article></Reveal>
           <span className="flow-connector" aria-hidden="true" />
         </li>
@@ -57,7 +61,6 @@ export function HowItWorks() {
           </article></Reveal>
         </li>
       </ol>
-      <p className="flow-note">Community Era objectives are optional build ideas. They are not another track or a requirement for project review.</p>
     </section>
   );
 }

@@ -13,10 +13,10 @@ function ScrollCloud({ top, side, variant, index }: { top: number; side: "left" 
   const ref = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const [range, setRange] = useState(112);
+  const [range, setRange] = useState(160);
   useEffect(() => {
     const smallScreen = window.matchMedia("(max-width: 700px)");
-    const sync = () => setRange(smallScreen.matches ? 48 : 112);
+    const sync = () => setRange(smallScreen.matches ? 72 : 160);
     const frame = requestAnimationFrame(sync);
     smallScreen.addEventListener("change", sync);
     return () => { cancelAnimationFrame(frame); smallScreen.removeEventListener("change", sync); };

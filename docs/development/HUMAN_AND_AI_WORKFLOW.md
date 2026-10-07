@@ -51,7 +51,7 @@ Group commits around reviewable changes. Use clear messages such as “Added …
 ## 4. Make changes and verify them
 
 - Keep product code under `apps/landing`; preserve the independent pinned source submodules in `references/`.
-- Treat `PLAN/00–11` as the current planning set, but check each document's status. Plan 11 is approved design only; do not start Era implementation from it alone. The master plan and bootstrap prompts are preserved historical context; do not execute old prompts again.
+- Follow `PLAN/00_LOADOUT_CANONICAL_INDEX.md` for the current planning set and each document's status. Plans 01/02 own product/economy policy, Plan 11 owns Eras, Plan 15 owns the future IRL concept, and Plan 16 owns the homepage clarity scope. A public explanation does not authorize implementing live mechanics or running an event. The master plan and bootstrap prompts are historical context; do not execute old prompts again.
 - Keep program policy and numeric promises consistent with approved canonical plans and owner-provided public data.
 - For website changes, inspect desktop and mobile layouts, keyboard use, reduced-motion behavior, and no-JavaScript fallbacks when relevant.
 - Load all seven skills in [UI skills](UI_SKILLS.md) on every UI change. `frontend-design-ui-ux` produces the design spec only; implementation follows its completed handoff.

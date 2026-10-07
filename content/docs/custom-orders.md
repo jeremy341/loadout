@@ -41,4 +41,3 @@ If specifications or sourcing change, obtain an updated quote before treating th
 ## Current status
 
 > **Requests are not open.** There is no live order form or fulfillment promise. Public tier rules, prices, delivery terms, and cancellation procedures will be confirmed before ordering begins.
-

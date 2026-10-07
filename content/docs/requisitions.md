@@ -41,4 +41,3 @@ A Field Requisition belongs to its field. Rare General Requisitions are planned 
 You do not receive a public discount code to share. The intended model is scarce progression inventory applied to an eligible purchase.
 
 Ordering and Requisition redemption are not live. [Pricing](/docs/pricing) explains the savings cap; [Custom Orders](/docs/custom-orders) explains requests.
-

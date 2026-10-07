@@ -39,4 +39,3 @@ The point is to develop capability over several builds, not to spend XP or resta
 ## Where progress becomes useful
 
 [Pricing](/docs/pricing) explains field discounts. [Requisitions](/docs/requisitions) can extend a discount's savings allowance for one eligible order. [Custom Orders](/docs/custom-orders) cover requests outside the regular catalog.
-

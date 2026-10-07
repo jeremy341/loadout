@@ -53,4 +53,3 @@ No event is confirmed and event registration is not open. See the [future IRL co
 ### Where do I ask another question?
 
 Use **#loadout-help**, with a page link and the specific question. See [help and feedback](/docs/help).
-

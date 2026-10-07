@@ -33,4 +33,3 @@ Project fit is a separate question: a technically relevant project does not auto
 Use the current public Docs for the program explanation. Values marked pending are not promises; examples illustrate a mechanism rather than a guaranteed outcome.
 
 Ask in **#loadout-help** if something is unclear. The team should clarify uncertain rules before you rely on them; [help and feedback](/docs/help) explains what to include.
-

@@ -41,4 +41,3 @@ Team members record their own contributions. A later version includes only new w
 ## When evidence is incomplete
 
 Explain gaps honestly. More recorded time does not resolve missing artifacts or unclear authorship. A reviewer should identify the evidence needed; see [review feedback](/docs/review#feedback).
-

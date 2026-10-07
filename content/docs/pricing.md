@@ -35,4 +35,3 @@ A discount cannot unlock equipment with a separate level requirement. Requisitio
 Treat examples as explanations of the sequence, not as current prices. Exact field affinities, discount calibration, caps, minimum item values, and tax or delivery treatment must be confirmed before launch.
 
 For an item outside the catalog, the [Custom Order process](/docs/custom-orders) uses the approved final quote, not your initial estimate.
-

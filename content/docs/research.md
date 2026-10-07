@@ -33,4 +33,3 @@ An experiment that disproves your idea can teach another builder something. Expl
 Research still follows project-fit, validity, authorship, and quality review. It does not bypass tracking or turn borrowed work into your own contribution.
 
 A reproducible report is intended to earn additional Track XP. The exact bonus and final requirements remain pending. Read [shipping](/docs/shipping) and [project review](/docs/review).
-

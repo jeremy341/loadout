@@ -35,4 +35,3 @@ Each member keeps their own tracked work and journal. Describe who did what and 
 State your role, the work you implemented, the help you received, and what you verified. Include a clear AI declaration where relevant.
 
 If responsibilities overlap, explain the collaboration instead of duplicating the same contribution. [Tracking](/docs/tracking) and [review](/docs/review) describe how evidence and authorship fit together.
-

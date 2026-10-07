@@ -1,60 +1,80 @@
 # Development workflow
 
-Repository: public personal-account repository `jeremy341/loadout`. The intended later destination is `hackclub/loadout` only if the YSWS is accepted and Hack Club approves a transfer. Do not create an interim organization.
+This is the authoritative contribution workflow for people and AI. Repository: `jeremy341/loadout`. A future transfer to `hackclub/loadout` requires acceptance and Hack Club approval; do not create a temporary organization.
 
-## Branch lanes
+## Start a task
 
-The required promotion order is:
+1. Read AGENTS.md, this guide, and the relevant canonical plan or design brief.
+2. Check status, branch, recent commits, and current remote lanes. Preserve existing user work.
+3. Post the scope, temporary branch and intended lane in `#loadout-development`. If no Slack tool is available, ask a maintainer to post; do not claim it was sent.
+4. Start a temporary `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/` or `chore/` branch from the latest development.
+5. Implement only the authorized scope. Group reviewable changes into natural commits such as “Added …” or “Updated …”.
 
-```text
-short-lived branch
-  └─ PR → development
-       └─ promotion PR → testing
-            └─ promotion PR → main
+For dirty checkouts, classify tracked and untracked deltas against the live base before interpreting a raw diff. Use an isolated worktree when needed; do not silently reset, stash or delete the user's files.
+
+## Clone and run
+
+```powershell
+git clone https://github.com/jeremy341/loadout.git
+cd loadout
+git submodule update --init
+git submodule status
+git fetch origin development testing main
+git switch --track origin/development
+git switch -c feature/short-task-name
+bun install --frozen-lockfile
+bun run dev
 ```
 
-- `development` is the active integration lane. Open routine feature, fix, docs, and chore PRs here. A write collaborator may also push a commit directly once that exact SHA has the required fast checks. GitHub does not verify that the commit came from a short-lived branch; that is the documented route for preparing a direct push. Because this is a personal-account repo, the same direct-push capability applies to every collaborator with write access.
-- `testing` is the release-candidate lane. Only promote `development` into it by PR.
-- `main` is the production lane. Only promote `testing` into it by PR; Vercel Production deploys from `main`.
+Do not use `--recursive` or `--recurse-submodules`: Stardance's nested secrets repository was unavailable during audit. The three parent references remain pinned and available; see [SOURCE_BASES.md](../source-audit/SOURCE_BASES.md). Tracked images under `docs/design/references/` arrive with the clone.
 
-Never open a feature PR directly into `testing` or `main`. Do not commit on `testing` or `main`. Use `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/`, or `chore/` prefixes for short-lived branches. After the one-time lane catch-up, create them from the latest `development`.
+Use Bun1.3.14. See [SETUP.md](SETUP.md) for ports, environment names and Windows execution notes.
 
-**Lane catch-up complete:** PR #9 promoted the updated `main` baseline and workflow into `development`, PR #10 promoted it into `testing`, and PR #11 promoted it into `main`. On 2026-10-06, all three lane refs resolved to the same tree, `36ab682f9388f142a6a296d0b6f00b50ed532fc7`. The live branch rules were read back after those promotions; see [branch protection setup](BRANCH_PROTECTION_SETUP.md).
+## Promotion path
 
-Both trusted maintainers can create/push short-lived branches, open/review PRs, and merge a check-green PR at each lane without waiting for the other. The development direct-push rule also applies to every repository collaborator with write access. Jeremy owns the personal-account repository; GitHub verified `fazin-ahamed` and `NeticYTOF` have `write` access on 2026-10-06.
+```text
+temporary branch → PR into development → promotion PR into testing → promotion PR into main
+```
 
-Human review is recommended when both maintainers are available. It is optional and must not be a merge gate. There are no owner-only, Jeremy-only, CODEOWNER-only, or latest-pusher approval requirements.
+| Lane | Required checks | Direct push |
+| --- | --- | --- |
+| development | Repository integrity, fast Landing quality, Promotion lane | Existing rules allow an exact commit whose required checks are satisfied; ordinary contributions use a PR. |
+| testing | Repository integrity, full Landing quality/build, Landing browser, Promotion lane | Blocked; only development promotion PRs. |
+| main | Repository integrity, full Landing quality/build, Landing browser, Promotion lane | Blocked; only testing promotion PRs. |
 
-## Product and source layout
+Either trusted maintainer may open, review and merge a check-green PR while another is offline. Human review is optional. Do not add Jeremy-only, owner-only, CODEOWNER-only or latest-pusher approval gates.
 
-`apps/landing` contains the LOADOUT public homepage, adapted from the verified Pixl baseline. The temporary source-only assets and locale pages were removed. The three source references remain under `references/` as independently pinned Git submodules; exact SHAs, paths, licenses, reuse decisions, and clone instructions are in `docs/source-audit/`. Run `git submodule update --init` (not recursive); Stardance's nested `secrets` remote is unavailable, while the parent Stardance checkout remains intact at its pin.
+GitHub's personal-repository rules cannot constrain development direct pushes to named write collaborators. Check live protections rather than treating this guide as proof; [BRANCH_PROTECTION_SETUP.md](BRANCH_PROTECTION_SETUP.md) records the settings and dated evidence.
 
-## CI and merge rules
+CodeScene is advisory. Codecov upload is not implemented; [QUALITY_INTEGRATIONS.md](QUALITY_INTEGRATIONS.md) distinguishes setup from working coverage.
 
-GitHub Actions runs on branch pushes and on PRs to the three lanes. `Promotion lane` accepts only a short-lived branch → `development`, `development` → `testing`, or `testing` → `main` PR.
+## Verify and publish
 
-| Target | Required checks | Human approval | Direct push |
-|---|---|---|---|
-| `development` | `Repository integrity`, fast `Landing quality`, `Promotion lane` | None | Allowed only for an exact commit whose checks already passed on a short-lived branch |
-| `testing` | `Repository integrity`, full `Landing quality` including build, `Landing browser`, `Promotion lane` | None | Blocked; use a promotion PR from `development` |
-| `main` | `Repository integrity`, full `Landing quality` including build, `Landing browser`, `Promotion lane` | None | Blocked; use a promotion PR from `testing` |
+Run the relevant checks; a full Docs or landing change uses:
 
-Both maintainers may open, review, and merge check-green PRs independently across time zones. Human review is encouraged, never required; no Jeremy-only, owner-only, CODEOWNER, or latest-pusher gate is allowed. CodeScene remains advisory and is not a required branch check.
+```powershell
+bun run lint
+bun run typecheck
+bun run test
+bun run build
+bun run test:e2e
+git diff --check
+```
 
-The lane-specific GitHub settings were applied and read back after the rollout. `BRANCH_PROTECTION_SETUP.md` records the exact live rules, collaborator access, and branch tree verification.
+Review the actual diff and stage explicit paths if unrelated work exists. Docs source/link tests are included in the unit command. Website work also requires viewport, keyboard and reduced-motion evidence; follow [UI_SKILLS.md](UI_SKILLS.md).
 
-PR #1 synced the initial full baseline and PR #2 finalized onboarding. PR #8 later merged the final homepage icon work into `main` at `432c6445bf7cfb17ca8a1c13169be67c6be200be`.
+Push the temporary branch, open the development PR and wait for required checks. After merge, promote development to testing, then testing to main. Do not bypass a failed check or send feature work directly to main.
 
-Vercel project `jerry-team1/loadout-ysws` was verified on 2026-10-06 as connected to `jeremy341/loadout`, rooted at `apps/landing`, and tracking `main` as its Production Branch. Its only assigned Production domain is [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Vercel creates unique Preview URLs for PR deployments; use the stable Production URL for public sharing. See [Vercel deployment setup](VERCEL_PREVIEW.md) for the verified configuration and preview behavior.
+Vercel Production follows main at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Preview URLs are deployment-specific. Verify commit, readiness and stable URL before announcing publication; see [deployment and rollback](DEPLOYMENT_AND_ROLLBACK.md).
 
-## Pull request checklist
+## Authenticated GitHub CLI
 
-1. Clone default `main` with `--recurse-submodules` and verify the pins. Fetch `development` and `testing` too.
-2. Post a kickoff in `#loadout-development` before substantive work.
-3. Create a short-lived branch from the latest `development` and keep the change scoped.
-4. Push the short-lived branch so its exact commit gets CI; the development lane runs integrity and fast quality checks.
-5. Open a PR to `development` and wait for every required check. Direct-push only the exact checked commit if choosing the direct-push path.
-6. Promote `development` → `testing` by PR; wait for integrity, full quality/build, browser, and promotion checks.
-7. Promote `testing` → `main` by PR; wait for the same full checks. This is the only production route.
-8. Request optional review when useful; no one person's approval is mandatory. Either trusted maintainer may merge after checks pass.
-9. Preserve a clear record for policy, scoring, payout, security, and deployment changes.
+Run `gh auth status --hostname github.com` in the command environment that will run authenticated operations. A sandbox may see a stale Windows keyring while the user's PowerShell is logged in. Use a narrowly scoped host-backed/elevated invocation, verify status, then run the authorized command. Changing directories or repeatedly logging in does not resolve that separation.
+
+Never ask for a pasted token, use `gh auth token` or `--show-token`, set a persistent GH_TOKEN workaround, or expose credentials. If host execution is unavailable, ask the user for non-secret command output.
+
+## Handoff and documentation changes
+
+Record what changed, the PR/commit, actual check results, deployment evidence, and unresolved decisions. Public content follows [CONTENT_AUTHORING.md](CONTENT_AUTHORING.md); internal changes update the owning document and index.
+
+Never commit secrets, .env values, .vercel, dependencies, caches, build output, Playwright output or review captures. Repository plans and design history are retained with status labels; no blanket cleanup.

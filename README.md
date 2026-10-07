@@ -6,6 +6,12 @@
 
 `apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The public production demo is live at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/); indexing remains disabled. Contributors use the staged development → testing → main workflow described in [the development workflow](docs/development/WORKFLOW.md).
 
+## Documentation
+
+The public [LOADOUT Docs](https://loadout-ysws.vercel.app/docs/start) explain the program draft in detail. Reviewed Markdown lives in `content/docs/`, separate from internal repository instructions. [The documentation index](docs/README.md) links setup, architecture, authoring, integration status and the Netics/Rivet handoff.
+
+No live participant, reviewer, order, economy or event service is implemented by this site.
+
 ## Source references
 
 The `references/` folders are pinned Git submodules, each with its own upstream history and independent commit:

@@ -19,6 +19,10 @@ test("the docs tab opens the participant guide and the sidebar switches topics",
 test("long docs scroll inside their panes instead of growing the page", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 700 });
   await page.goto("/docs/start");
+  const scrollbarWidths = await page.locator(".docs-nav, .docs-main, .docs-toc").evaluateAll((panes) =>
+    panes.map((pane) => getComputedStyle(pane).scrollbarWidth),
+  );
+  expect(scrollbarWidths).toEqual(["none", "none", "none"]);
   const desktop = await page.evaluate(() => ({
     viewport: innerHeight,
     page: document.documentElement.scrollHeight,

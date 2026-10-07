@@ -217,7 +217,6 @@
   border-right-color: var(--rule);
   z-index: 1;
   padding: 28px 14px 32px;
-  scrollbar-gutter: stable;
 }
 .docs .docs-nav-head { padding-bottom: 20px; }
 .docs .docs-nav-head p { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
@@ -307,7 +306,7 @@
 /* Keep the docs application within the viewport; each column scrolls only when its own content needs room. */
 .docs { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; align-items: stretch; grid-template-rows: minmax(0, 1fr); }
 .docs .docs-nav { height: 100%; min-height: 0; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; }
-.docs .docs-main { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; scroll-behavior: smooth; }
+.docs .docs-main { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-behavior: smooth; }
 .docs .docs-toc { height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 @media (max-width: 1180px) {
   .docs { grid-template-rows: minmax(0, 1fr); }
@@ -319,4 +318,19 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .docs .docs-main { scroll-behavior: auto; }
+}
+
+/* Keep each Docs pane scrollable without showing platform scrollbar chrome. */
+.docs .docs-nav,
+.docs .docs-main,
+.docs .docs-toc {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.docs .docs-nav::-webkit-scrollbar,
+.docs .docs-main::-webkit-scrollbar,
+.docs .docs-toc::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }

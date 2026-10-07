@@ -8,6 +8,12 @@
 
 **Progress and prizes hierarchy, 2026-10-05:** [Plan 14](14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) is approved and implemented locally. Levels, pricing, discounts, Requisitions, the prize catalog and Custom Orders now sit beneath one Progress & Prizes section. Final local checks pass; publication is a separate step.
 
+**LOADOUT IRL // RUHR, 2026-10-06:** [Plan 15](15_LOADOUT_IRL_RUHR.md) records the future three-day Germany build-weekend concept, its proposed Ruhr location priorities, same-global-Era connection, and readiness gates. No venue, date, capacity, funding, partner, or event launch is confirmed. The earlier Plan 05 one-to-two-day sketch is superseded.
+
+**Homepage mechanics clarity, 2026-10-06:** [Plan 16](16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md) is implemented locally with clearer Community Era, Field Requisition, and Custom Order explanations, plus the user-approved visible future IRL concept. Final local checks pass. Plans 01/02/11 remain policy owners; live mechanics, event operations, and publication are separate scopes.
+
+**Homepage visual clarity proposal, 2026-10-06:** [Plan 17](17_LOADOUT_HOMEPAGE_VISUAL_CLARITY_AND_DISCLOSURE.md) proposes reducing whole-page reading density through track-card turns, paired fit examples, and compact Progress & Prizes, Custom Order, and Era flows. Its broad interactive-card/disclosure scope remains planning only. A separate owner-directed homepage update is recorded in [Plan 06](06_LOADOUT_PUBLIC_HOMEPAGE.md); that request authorizes only the listed current-tree changes, not the remaining Plan 17 tasks.
+
 This file is intentionally short. The detailed plans live in the focused documents next to it.
 
 ## Canonical product decisions
@@ -130,6 +136,12 @@ Supporting external-context brief:
 - `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md` records the user-approved Eras design. It is a product plan, not an implementation authorization.
 - `13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md` records the implemented homepage order, consolidation, preserved How it works section, and final local verification.
 - `14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md` records the implemented progression/prize hierarchy, terminology, retained anchors and local verification.
+
+### Future event and public-copy plans
+
+- `15_LOADOUT_IRL_RUHR.md` owns the future in-person event concept and its operational readiness gates. It does not authorize an event launch.
+- `16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md` owns the planned copy clarification and optional data-gated event section. Plans 01, 02, 11, and 14 remain authoritative for the underlying product/economy decisions and current page hierarchy.
+- `17_LOADOUT_HOMEPAGE_VISUAL_CLARITY_AND_DISCLOSURE.md` proposes an accessible whole-page visual-density pass. It changes presentation only and is awaiting owner review before implementation.
 
 ### Historical bootstrap sequence (completed)
 

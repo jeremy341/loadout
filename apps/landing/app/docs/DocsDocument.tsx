@@ -1,17 +1,7 @@
 import Link from "next/link";
+import { faqItems } from "../site-content";
 import { docsItems } from "./docs-data";
 import { guides, type GuideSection } from "./guide-content";
-
-const faqItems = [
-  { question: "Who can join?", answer: "LOADOUT is in development. RSVP records interest; it does not enroll you or confirm eligibility. Joining details will be published before launch." },
-  { question: "Can one project use more than one track?", answer: "Yes. Choose the fields that match the technical work. Reviewers assign Track XP to the contributions they can verify." },
-  { question: "Can I use AI or work in a team?", answer: "AI assistance and team projects are allowed. Declare AI use, explain your own contribution, and keep each person's work attributable." },
-  { question: "Does spending Bolts lower my levels?", answer: "No. Bolts are spendable global currency. Track XP and accepted work stay with your profile." },
-  { question: "Are prizes available now?", answer: "No. Prize categories, prices, and availability are still being planned." },
-  { question: "Are Custom Orders open?", answer: "Not yet. A future request will need reviewed Track XP in a relevant field, enough Bolts for the final quote, and an approved fulfillment plan." },
-  { question: "Do Eras reset my progress?", answer: "No. Era Points track shared community progress. Your accepted projects, track levels, and personal balances persist." },
-  { question: "Does RSVP enroll me?", answer: "No. It records interest and does not confirm eligibility or a place in a future program." },
-];
 
 function GuideSectionBody({ section }: { section: GuideSection }) {
   return <>

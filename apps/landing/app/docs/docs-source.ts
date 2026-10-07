@@ -10,20 +10,38 @@ export function publicDocsDirectory() {
   const root = join(process.cwd(), 'content', 'docs');
   return existsSync(root) ? root : resolve(process.cwd(), '../../content/docs');
 }
-export function parsePublicDoc(slug: string, source: string): DocsPage {
-  if (!/^[a-z][a-z0-9-]*$/.test(slug)) throw new Error(`Invalid Docs slug: ${slug}`);
+function readHeader(source: string, slug: string) {
   const match = source.replace(/^\uFEFF/, '').match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) throw new Error(`${slug}: frontmatter required`);
-  const metadata = parse(match[1]) as Record<string, unknown>;
+  return { metadata: parse(match[1]) as unknown, body: match[2].trim() };
+}
+function metadataRecord(value: unknown, slug: string): Record<string, unknown> {
+  if (!value || typeof value !== 'object') throw new Error(`${slug}: invalid metadata keys`);
   const keys = ['title', 'description', 'group', 'order', 'status'];
-  if (!metadata || typeof metadata !== 'object' || Object.keys(metadata).some((key) => !keys.includes(key))) throw new Error(`${slug}: invalid metadata keys`);
-  if (typeof metadata.title !== 'string' || !metadata.title.trim() || typeof metadata.description !== 'string' || !metadata.description.trim()) throw new Error(`${slug}: title and description required`);
-  if (!docsGroupLabels.includes(metadata.group as typeof docsGroupLabels[number])) throw new Error(`${slug}: unknown group`);
-  if (!Number.isInteger(metadata.order) || Number(metadata.order) <= 0 || metadata.status !== 'draft') throw new Error(`${slug}: positive order and draft status required`);
-  const body = match[2].trim();
+  if (Object.keys(value).some((key) => !keys.includes(key))) throw new Error(`${slug}: invalid metadata keys`);
+  return value as Record<string, unknown>;
+}
+function requiredText(value: unknown, slug: string): string {
+  if (typeof value !== 'string' || !value.trim()) throw new Error(`${slug}: title and description required`);
+  return value;
+}
+function publicMetadata(value: unknown, slug: string) {
+  const metadata = metadataRecord(value, slug);
+  const label = requiredText(metadata.title, slug);
+  const description = requiredText(metadata.description, slug);
+  const group = metadata.group as typeof docsGroupLabels[number];
+  if (!docsGroupLabels.includes(group)) throw new Error(`${slug}: unknown group`);
+  const validOrder = Number.isInteger(metadata.order) && Number(metadata.order) > 0;
+  if (!validOrder || metadata.status !== 'draft') throw new Error(`${slug}: positive order and draft status required`);
+  return { label, description, group, order: Number(metadata.order), status: 'draft' as const };
+}
+export function parsePublicDoc(slug: string, source: string): DocsPage {
+  if (!/^[a-z][a-z0-9-]*$/.test(slug)) throw new Error(`Invalid Docs slug: ${slug}`);
+  const { metadata, body } = readHeader(source, slug);
+  const details = publicMetadata(metadata, slug);
   const { headings } = parseDocsMarkdown(body);
   if (!body || !headings.length) throw new Error(`${slug}: body and headings required`);
-  return { slug, label: metadata.title, description: metadata.description, group: String(metadata.group), order: Number(metadata.order), status: 'draft', body, headings };
+  return { slug, ...details, body, headings };
 }
 export function getDocs(): DocsPage[] {
   const directory = publicDocsDirectory();
@@ -50,23 +68,24 @@ export function getDocsSearchIndex(pages = getDocs()) {
   }
   return index.toJSON();
 }
+type MarkdownNode = { type: string; url?: string; children?: MarkdownNode[] };
+function markdownLinks(node: MarkdownNode): string[] {
+  if (node.type === 'link' && node.url) return [node.url];
+  return node.children?.flatMap(markdownLinks) ?? [];
+}
+function linkError(page: DocsPage, pages: DocsPage[], url: string): string | undefined {
+  const internal = url.startsWith('#') || url.startsWith('/docs/');
+  if (!internal) return url.startsWith('https://') || url === '/' ? undefined : `${page.slug}: unsupported link ${url}`;
+  const [route, anchor] = url.split('#');
+  const slug = route ? route.slice('/docs/'.length) : page.slug;
+  const target = pages.find((item) => item.slug === (docsAliases[slug] ?? slug));
+  if (!target) return `${page.slug}: broken link ${url}`;
+  if (anchor && !target.headings.some((heading) => heading.id === anchor)) return `${page.slug}: broken link ${url}`;
+  return undefined;
+}
 export function validateDocsLinks(pages = getDocs()): string[] {
-  const errors: string[] = [];
-  for (const page of pages) {
-    const { tree } = parseDocsMarkdown(page.body);
-    function check(node: { type: string; url?: string; children?: typeof tree.children }) {
-      if (node.type === 'link' && node.url) {
-        const url = node.url;
-        if (url.startsWith('#') || url.startsWith('/docs/')) {
-          const [route, anchor] = url.split('#');
-          const slug = route ? route.slice('/docs/'.length) : page.slug;
-          const target = pages.find((item) => item.slug === (docsAliases[slug] ?? slug));
-          if (!target || (anchor && !target.headings.some((heading) => heading.id === anchor))) errors.push(`${page.slug}: broken link ${url}`);
-        } else if (!url.startsWith('https://') && url !== '/') errors.push(`${page.slug}: unsupported link ${url}`);
-      }
-      node.children?.forEach(check);
-    }
-    tree.children.forEach(check);
-  }
-  return errors;
+  return pages.flatMap((page) => {
+    const links = markdownLinks(parseDocsMarkdown(page.body).tree);
+    return links.map((url) => linkError(page, pages, url)).filter((error): error is string => error !== undefined);
+  });
 }

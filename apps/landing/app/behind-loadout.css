@@ -1,5 +1,6 @@
 .behind-loadout-section {
   padding-block:80px;
+  border-top:1px solid var(--rule);
 }
 
 .behind-loadout-layout {
@@ -88,6 +89,20 @@
 
 .organizer-build-link:hover {
   color:var(--muted);
+}
+
+.organizer-build-link {
+  transition:transform 160ms var(--ease),color 160ms var(--ease);
+}
+
+@media (hover:hover) {
+  .organizer-build-link:hover {
+    transform:translateY(-1px) scale(1.03);
+  }
+}
+
+.organizer-build-link:active {
+  transform:scale(.97);
 }
 
 .behind-loadout-context {

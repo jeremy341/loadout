@@ -5,7 +5,6 @@ import { useState, type CSSProperties } from "react";
 import { faqItems, projectFitItems, researchCopy, tracks } from "../site-content";
 import { LoadoutIcon } from "./icons/LoadoutIcon";
 import Reveal from "./Reveal";
-import { DigitalPhysicalLoadout } from "./DigitalPhysicalLoadout";
 import { SectionHeading } from "./SectionHeading";
 import { HowItWorks } from "./HowItWorks";
 import { ProgressionSection } from "./ProgressionSection";
@@ -19,15 +18,6 @@ export default function HomepageSections() {
 
   return (
     <>
-      <Reveal>
-        <section className="site-section about-section" id="about" aria-labelledby="about-title">
-          <SectionHeading eyebrow="About" title="What is LOADOUT?" headingId="about-title">
-            LOADOUT is a technical builder program in development. Build tools, systems, or devices that help people build, run, or understand technology, and document your work. Accepted projects become part of your Digital Loadout and can earn Bolts for equipment.
-          </SectionHeading>
-          <DigitalPhysicalLoadout />
-        </section>
-      </Reveal>
-
       <Reveal stagger>
         <section className="site-section tracks-section" id="tracks" aria-labelledby="tracks-title">
           <SectionHeading eyebrow="Tracks" title="Build across four tracks" headingId="tracks-title">
@@ -36,39 +26,41 @@ export default function HomepageSections() {
           <div className="track-grid">
             {tracks.map((track, index) => (
               <article className="track-card reveal-item" style={{ "--reveal-index": index } as CSSProperties} key={track.name}>
-                <div className="track-top"><span className="track-id">0{index + 1}</span><span className="track-icon" aria-hidden="true"><LoadoutIcon name={track.icon} /></span></div>
+                <div className="track-top"><span className="track-id">0{index + 1}</span><span className="track-meta">FIELD // ACTIVE</span><span className="track-icon" aria-hidden="true"><LoadoutIcon name={track.icon} /></span></div>
                 <h3>{track.name}</h3>
                 <p className="track-topics">{track.topics}</p>
-                <a className="track-arrow" href="#project-fit" aria-label={`Explore project fit for ${track.name}`}><LoadoutIcon name="arrow" /></a>
+                <span className="track-footer">TRACK XP // EARNED ON SHIP</span>
               </article>
             ))}
           </div>
           <div className="research-strip" id="research" aria-labelledby="research-title">
             <span className="research-icon" aria-hidden="true"><LoadoutIcon name="flask" /></span>
             <div className="research-copy"><h3 id="research-title">{researchCopy.title}</h3><small>{researchCopy.description}</small></div>
-            <a className="track-arrow" href="#process" aria-label="See how to ship a research project"><LoadoutIcon name="arrow" /></a>
+            <span className="research-status">BONUS TRACK XP // REPORT REQUIRED</span>
           </div>
-          <section className="project-fit-subsection" id="project-fit" aria-labelledby="fit-title">
-            <div className="subsection-heading">
-              <span className="section-eyebrow">Project fit</span>
-              <h3 id="fit-title">What kinds of projects may fit?</h3>
-              <p>Reviewers first check whether your technical work belongs in LOADOUT. A project’s label alone doesn’t decide whether it qualifies, and these examples don’t guarantee approval.</p>
-            </div>
-            <div className="fit-grid">
-              {projectFitItems.map((item) => (
-                <article className={`fit-card fit-card-${item.status}`} key={item.title}>
-                  <span className="fit-status" aria-hidden="true"><LoadoutIcon name={item.status === "higher" ? "check" : "cross"} /></span>
-                  <div className="fit-copy"><h4>{item.title}</h4><p>{item.description}</p></div>
-                  <span className="fit-label">{item.status === "higher" ? "Higher fit" : "Lower fit"}</span>
-                </article>
-              ))}
-            </div>
-            <p className="capability-note">If a project fits, it is then reviewed across Originality, Technical Depth, Execution, and Documentation.</p>
-          </section>
         </section>
       </Reveal>
 
       <HowItWorks />
+      <Reveal>
+        <section className="site-section project-fit-subsection" id="project-fit" aria-labelledby="fit-title">
+          <div className="subsection-heading">
+            <span className="section-eyebrow">Project fit check</span>
+            <h3 id="fit-title">Technical work matters more than the label.</h3>
+            <p>Reviewers look at what you built, not just what you call it.</p>
+          </div>
+          <div className="fit-ledger">
+            {projectFitItems.map((item) => (
+              <article className={`fit-ledger-row fit-ledger-${item.status}`} key={item.title}>
+                <span className="fit-status" aria-hidden="true"><LoadoutIcon name={item.status === "higher" ? "check" : "cross"} /></span>
+                <div className="fit-copy"><span className="fit-row-signal">{item.status === "higher" ? "TECHNICAL SIGNAL // STRONGER" : "TECHNICAL SIGNAL // WEAKER"}</span><h4>{item.title}</h4><p>{item.description}</p></div>
+                <span className="fit-label">{item.status === "higher" ? "Higher signal" : "Lower signal"}</span>
+              </article>
+            ))}
+          </div>
+          <p className="capability-note">If it fits, reviewers assess Originality, Technical Depth, Execution, and Documentation.</p>
+        </section>
+      </Reveal>
       <Reveal><ProgressionSection /></Reveal>
       <Reveal><ErasSection /></Reveal>
       {siteConfig.showIrlConcept && <Reveal><IrlConceptSection /></Reveal>}

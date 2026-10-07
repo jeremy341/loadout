@@ -5,10 +5,10 @@ export const heroCopy = {
 } as const;
 
 export const projectFitItems = [
-  { icon: "document", status: "lower", title: "Copied tutorial site", description: "Recreating a tutorial without adding substantial technical work shows little original work." },
   { icon: "wrench", status: "higher", title: "Workflow command-line tool", description: "Build a command that removes a repeated step from a real workflow." },
-  { icon: "people", status: "lower", title: "Basic AI chat screen", description: "A simple screen around an AI model adds little technical work on its own." },
   { icon: "terminal", status: "higher", title: "Inference runtime", description: "Build software that runs a model on a device or GPU. That can show original Compute work." },
+  { icon: "document", status: "lower", title: "Copied tutorial site", description: "Recreating a tutorial without adding substantial technical work shows little original work." },
+  { icon: "people", status: "lower", title: "Basic AI chat screen", description: "A simple screen around an AI model adds little technical work on its own." },
 ] as const;
 
 export const tracks = [
@@ -38,13 +38,21 @@ export const faqItems = [
   { question: "What kinds of project work may fit?", answer: "Fit depends on the technical work, not just the product label. The examples above are possible directions, not guaranteed approvals. Using AI does not automatically rule out a project; reviewers assess what you built and can explain." },
   { question: "How is work tracked?", answer: "The planned tools are Hackatime for coding and Lapse for eligible hardware and other non-code work. Your journal connects tracked time to notes about what you built, why you made choices, and how you checked the result. Full tracking instructions will be published before launch." },
   { question: "Can I use AI while building?", answer: "Yes. Explain how you used AI and show what you understand and built yourself. AI use alone does not make a project ineligible." },
-  { question: "What are Community Eras?", answer: "An Era is a shared technical theme, separate from competitive Seasons. Approved projects add non-spendable Era Points. It lasts at least 14 days and changes only at an eligible weekly reset after reaching its target. Objectives are optional, and your personal progress and accepted projects persist." },
+  { question: "What are Community Eras?", answer: "An Era is a shared technical theme that approved projects help the community move forward. Projects can follow optional objectives across the four tracks and contribute Era Points to shared progress; these are separate from personal Track XP and spendable Bolts." },
+  { question: "What is Research Mode?", answer: "Research Mode is an optional modifier for any track. Publish a clear, reproducible technical report with your project to earn bonus Track XP and reach higher levels, which can improve your discounts in that track. It is not a fifth track; the exact bonus and review criteria will be published before launch." },
   { question: "How do Field Requisitions work?", answer: "A matching Requisition raises the savings cap so more of your earned track discount can apply to one eligible order. It adds no Bolts or discount rate. Each is one-use, never expires, cannot be transferred, and only one can be used per order. Minimum item values and level requirements still apply." },
-  { question: "How do Custom Orders work?", answer: "Reviewed shipped work earns Track XP toward a planned relevant-track request tier. The team reviews item fit and fulfillment, then provides a final Bolt quote to accept or decline. Custom Order requests are not open yet." },
+  { question: "How do Custom Orders work?", answer: "Reviewed shipped work earns Track XP toward a relevant-track request tier. The team reviews item fit and fulfillment, then provides a final Bolt quote to accept or decline. Custom Order requests are not open yet." },
   { question: "How do I RSVP?", answer: "The RSVP link opens an external draft interest form. Sending interest does not enroll you or confirm eligibility." },
 ] as const;
 
 export const researchCopy = {
   title: "Research Mode",
-  description: "An optional modifier for any track: test a technical question and share results another builder can reproduce. It is not a fifth track.",
+  description: "Add it to any track. Publish a reproducible technical report with your project to earn bonus Track XP and reach that track's discounts sooner. It is not a fifth track.",
+} as const;
+
+export const erasCopy = {
+  description: "A shared technical theme advanced by approved projects across the four tracks.",
+  distinction: "Era Points are shared progress, separate from personal Track XP.",
+  bonus: "Qualifying projects are planned to earn 10% of their approved base Bolt award.",
+  steps: ["Approved projects", "Shared Era Points", "Next technical theme"],
 } as const;

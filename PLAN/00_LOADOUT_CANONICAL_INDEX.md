@@ -2,6 +2,10 @@
 
 **Status:** Current source-of-truth index after splitting the old master plan.
 
+**Published baseline, verified2026-10-07:** the homepage and original Docs reached main through the staged pipeline, most recently PR24 at `74b43e22c4ff5524a62690673cb6d87cf2d0be73`. Earlier “implemented locally / publication separate” notes describe historical task boundaries, not an unpublished current website. Plan17 remains a proposal.
+
+**Docs refresh,2026-10-07:** [Plan18](18_LOADOUT_DOCS_REFRESH.md) and [the scoped brief](../.ulpi/design/docs-refresh.md) own the approved Docs-only implementation. Public explanations use reviewed Markdown; Plans01/02/11/15 retain policy authority. Unsettled numeric values stay unpublished, tutorials/live mechanics are excluded, and Netics owns the separate Rivet integration.
+
 **Homepage refinement, 2026-10-05:** [Plan 12](12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md) is approved and implemented locally. It covers the vertical process, lifetime progression, Community Eras, Requisition and Custom Order explanations, pixel SVGs, footer, spacing, and horizontal clouds. Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes.
 
 **Homepage information architecture, 2026-10-05:** [Plan 13](13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md) is approved and implemented locally. Its consolidated introduction, grouped tracks/fit, unchanged process diagram, unified gear/rewards section, and later community section supersede Plan 12 §5's sequence. Final local checks pass; publication is a separate step.

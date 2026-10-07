@@ -13,7 +13,7 @@ visual_density: 4
 
 ## Current homepage order — 2026-10-06
 
-The current owner-directed composition supersedes the earlier separate About placement: hero → Tracks and Research Mode → How it works, including Digital/Physical Loadout outcomes → Project Fit → Progress & Prizes → Community Eras → optional LOADOUT IRL concept → FAQ → Who's Behind LOADOUT → footer. The hero now carries the primary orientation copy. A fixed LOADOUT DOCS tab pulls up a preview sheet and links to the full field manual at `/docs`. Plan 14 still owns the Progress & Prizes grouping, but its earlier About placement and unchanged-process constraint have been superseded by the current user-approved page update. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
+The current owner-directed composition supersedes the earlier separate About placement: hero → Tracks and Research Mode → How it works, including Digital/Physical Loadout outcomes → Project Fit → Progress & Prizes → Community Eras → optional LOADOUT IRL concept → FAQ → Who's Behind LOADOUT → footer. The hero now carries the primary orientation copy. The fixed LOADOUT DOCS tab links directly to `/docs`, which redirects to `/docs/start`; it does not open a preview sheet. Plan 14 still owns the Progress & Prizes grouping, but its earlier About placement and unchanged-process constraint have been superseded by the current user-approved page update. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
 
 ## Active homepage refinement — 2026-10-05
 
@@ -38,6 +38,8 @@ An industrial field manual for young technical builders, expressed through clean
 **Committed direction: industrial / signage.** LOADOUT is about building technical capability and equipment. Its engineering-paper canvas, precise black rules, technical labels, and Bolt Yellow cue make that subject legible without borrowing a game world or generic SaaS style. Pixel display type gives the identity its builder culture.
 
 ## Docs surface lock
+
+The approved [Docs refresh](docs-refresh.md) extends the reading surface only: 280px directory, flexible left-aligned article up to1100px, 240px contents rail, paragraphs72ch, local public-content search and native bounded panes with hidden scrollbars. This width exception is Docs-specific; homepage composition and tokens stay fixed.
 
 Documentation is a full-screen **technical/utilitarian field manual**, not a Pixl clone. It uses the same graph-paper canvas, paper surfaces, graphite plates, Jersey 10 display type, IBM Plex Mono reading type, ink rules, and Bolt Yellow evidence markers as the homepage. Docs vary by composition only: ruled evidence tables, comparison ledgers, process diagrams, and a persistent rail are allowed; new colors, radii, shadows, or type families are not. Every screen must read as the same product if placed side by side.
 

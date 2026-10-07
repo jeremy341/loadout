@@ -2,9 +2,15 @@
 
 **Homepage refinement, 2026-10-05:** [Plan 12](12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md) is approved and implemented locally. It covers the vertical process, lifetime progression, Community Eras, Requisition and Custom Order explanations, pixel SVGs, footer, spacing, and horizontal clouds. Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes.
 
-**Current section order:** [Plan 13](13_LOADOUT_HOMEPAGE_INFORMATION_ARCHITECTURE.md) is approved and implemented locally. It supersedes Plan 12 §5's sequence and consolidates repeated homepage explanations. The How it works component and its styling remain unchanged.
+**Current section order, 2026-10-06:** The owner-approved homepage simplification supersedes Plan 13's separate About placement and untouched-process constraint. The hero now carries LOADOUT's orientation copy, followed by Tracks/Research Mode, How it works (with Digital/Physical outcomes), Project Fit, Progress & Prizes, Community Eras, optional LOADOUT IRL, FAQ, Who's Behind LOADOUT, and the footer. Track/project-fit examples remain available; the separate About explanation was removed to reduce repetition. A fixed LOADOUT DOCS tab pulls up a preview sheet and links to the full field manual at `/docs`. The full card-turn and progressive-disclosure proposal in Plan 17 remains a separate, unimplemented scope.
 
 **Current progression/prize hierarchy:** [Plan 14](14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) is implemented locally. Prices, discounts, Requisitions, the planned prize catalog and Custom Orders are subsections of one Progress & Prizes section.
+
+**Future event and copy clarity, 2026-10-06:** [Plan 15](15_LOADOUT_IRL_RUHR.md) owns the future `LOADOUT IRL // RUHR` event concept. [Plan 16](16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md) is implemented locally with clearer Era, Field Requisition, and Custom Order explanations and the user-approved visible future-concept block. Its local checks pass; event operations, live mechanics, and publication remain separate scopes.
+
+**Visual density follow-up, 2026-10-06:** [Plan 17](17_LOADOUT_HOMEPAGE_VISUAL_CLARITY_AND_DISCLOSURE.md) is the proposed whole-homepage pass for shorter first-read copy, connected diagrams, and press-to-turn track cards. It preserves the approved section order, program facts, and unchanged How it works component. No implementation is authorized by this plan request.
+
+**Who's Behind LOADOUT?, 2026-10-06:** The user approved one final section after FAQ and before the footer, naming Jerry, Fazin / Wind, and Netic with their supplied organizing/development responsibilities. It pairs the organizer directory with factual Hack Club/YSWS context and LOADOUT's current proposal status. The bounded design and source-use record is in [the section spec](../.ulpi/design/whos-behind-loadout.md). It is implemented locally on `feature/whos-behind-loadout`; lint, typecheck, four unit tests, production build, and all 24 existing browser checks passed. Publication follows the documented lane PR workflow separately.
 
 **Owner:** Public-facing `apps/landing` experience  
 **Status:** Canonical plan for the first public LOADOUT page  
@@ -820,3 +826,9 @@ The public homepage is ready for the first release when:
 ## 22. Community Eras — future, compact homepage treatment
 
 The approved Era mechanic may be explained in one compact community-progression section; it must not displace the homepage's core projects → skills → progression → rewards story. Example sequence labels are illustrative until configured. Do not publish an active Era, progress meter, threshold, reset countdown, objective, or +10% bonus as current without real approved program configuration. A project receives the bonus only after reviewer approval. The current production homepage does not implement Era progress; plan this as a separate future UI change using `docs/development/UI_SKILLS.md` and Plan 11.
+
+## 23. Mechanics clarity and future LOADOUT IRL section
+
+The implemented sequence in Plans 13 and 14 remains the page-order authority. Plan 16 is the next content brief: distinguish personal Track XP, global Bolts, and shared Era Points; state the Era's 14-day minimum, threshold, and eligible-reset behavior in short copy; explain a Field Requisition as a one-use way to realize more of an already-earned track discount past the normal cap; and walk through Custom Order eligibility from reviewed shipped work to relevant Track Level, sufficient Bolts for a final quote, and fulfillment review. Do not label Requisitions as coupons or invent a separate approved-hours threshold.
+
+The user approved a separate **LOADOUT IRL // RUHR — Build the next Era** block after Community Eras and before the FAQ, clearly labelled as a future concept. Show no unconfirmed date, venue, registration, capacity, price, partner, sponsor, or event-specific progression claim. Keep visibility configurable. Plan 15 owns event facts and readiness; Plan 11 owns Era rules. The current UI authorization covers concept copy, not event launch or backend mechanics.

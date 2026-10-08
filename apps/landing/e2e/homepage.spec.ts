@@ -143,6 +143,33 @@ for (const width of [320, 390, 768, 1440]) {
   });
 }
 
+for (const width of [320, 390, 471, 700, 701, 900, 901, 1440]) {
+  test(`Research Mode keeps readable copy and separate labels at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const strip = page.locator("#research");
+    const heading = strip.getByRole("heading", { name: "Research Mode" });
+    const description = strip.locator("small");
+    const status = strip.locator(".research-status");
+    const [panel, title, copy, label] = await Promise.all([
+      strip.boundingBox(), heading.boundingBox(), description.boundingBox(), status.boundingBox(),
+    ]);
+    for (const bounds of [title!, copy!, label!]) {
+      expect(bounds.x).toBeGreaterThanOrEqual(panel!.x);
+      expect(bounds.x + bounds.width).toBeLessThanOrEqual(panel!.x + panel!.width);
+    }
+    const overlaps = title!.x < label!.x + label!.width && title!.x + title!.width > label!.x && title!.y < label!.y + label!.height && title!.y + title!.height > label!.y;
+    expect(overlaps).toBe(false);
+    expect(copy!.width).toBeGreaterThan(panel!.width * (width <= 700 ? 0.75 : 0.4));
+    for (const text of [heading, description, status]) {
+      expect(await text.evaluate((element) => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
+    }
+    if (width <= 900) expect(label!.y).toBeGreaterThanOrEqual(copy!.y + copy!.height);
+  });
+}
+
 test("FAQ answers work with a keyboard and expose their expanded state", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");

@@ -23,7 +23,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     function syncPreference() {
       stop();
       if (preference.matches) return;
-      lenis = new Lenis({ anchors: { offset: -90 }, duration: 1.1 });
+      lenis = new Lenis({ anchors: { offset: -90 }, duration: 0.7 });
       function raf(time: number) {
         lenis?.raf(time);
         frame = requestAnimationFrame(raf);

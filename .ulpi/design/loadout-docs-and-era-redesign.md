@@ -1,5 +1,7 @@
 # LOADOUT Docs and Community Era Redesign
 
+**Status:** Superseded by the approved Docs refresh brief in [`docs-refresh.md`](docs-refresh.md) and the current public Era overview in [Plan 11](../../plans/11-eras-and-community-progression.md). Keep as historical research only; do not treat these earlier content/layout proposals as the active Docs specification.
+
 ## Design Read
 
 An industrial field manual that feels like a usable build dossier, not a marketing microsite: paper, graphite, ruled evidence, and practical depth.
@@ -14,14 +16,14 @@ Every screen must read as the same product if placed side by side.
 
 Use the canonical plans as the source of truth:
 
-- `PLAN/00_LOADOUT_CANONICAL_INDEX.md`
-- `PLAN/01_LOADOUT_PRODUCT_AND_PROGRAM.md`
-- `PLAN/02_LOADOUT_ECONOMY_AND_REWARDS.md`
-- `PLAN/03_LOADOUT_UI_DESIGN_SYSTEM.md`
-- `PLAN/11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`
-- `PLAN/14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md`
-- `PLAN/15_LOADOUT_IRL_RUHR.md`
-- `PLAN/16_LOADOUT_HOMEPAGE_MECHANICS_CLARITY.md`
+- `plans/00-index.md`
+- `plans/01-product-and-program.md`
+- `plans/02-economy-and-rewards.md`
+- `docs/design/system/design-system.md`
+- `plans/11-eras-and-community-progression.md`
+- `plans/02-economy-and-rewards.md`
+- `plans/15-loadout-irl-ruhr.md`
+- `plans/06-public-homepage.md`
 - `.ulpi/design/community-era-overview.md`
 
 The public docs must explain, without inventing live values:

@@ -1,5 +1,7 @@
 # Mobile responsiveness repair
 
+**Status:** Implemented in the development lane and promoted through PR #29. This is a historical repair brief; check current homepage code and Plan 06 before making another mobile adjustment.
+
 Scope: homepage layout only, based on the supplied Research Mode screenshot.
 Keep the locked paper/pixel design, copy, assets, motion and product behavior.
 
@@ -17,7 +19,7 @@ and no content escapes a panel or introduces horizontal page scrolling. Preserve
 keyboard navigation, FAQ states, native touch scrolling and reduced motion.
 Check neighboring layouts; change them only if a specific defect is reproduced.
 
-Preflight: read AGENTS.md, WORKFLOW.md, UI_SKILLS.md and locked DESIGN.md.
+Preflight: read AGENTS.md, WORKFLOW.md, ui-skills.md and locked DESIGN.md.
 Loaded design-taste-frontend, frontend-testing-debugging and vercel-cli.
 The six other named UI skills are unavailable in this environment; no SVG,
 sprite, animation or design-system changes are in scope. No collaborator message

@@ -1,6 +1,6 @@
 # Who's Behind LOADOUT?
 
-Status: approved and implemented locally on 2026-10-06 on `feature/whos-behind-loadout`. The placement amendment is binding: FAQ → this section → footer.
+**Status:** Implemented. Plan 06 owns the current placement and public copy; this brief records the design constraints. The placement is FAQ → this section → footer.
 
 ## Design read and identity
 

@@ -28,7 +28,6 @@ export default function Home() {
       <ThemeSwitch />
       <ScrambleHeadings selector=".home .h1" duration={1800} />
       <div style={{ display: "contents" }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICON_SPRITE }} />
-      <div className="strata" aria-hidden="true" />
       <SheetRuler />
       <NoiseGrain />
       <div className="in">

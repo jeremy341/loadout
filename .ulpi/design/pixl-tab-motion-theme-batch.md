@@ -57,3 +57,9 @@ Design read: event landing page for teenage technical builders, in a Ruhr mine a
 - Grain: `NoiseGrain` is the Stasis-style film grain, a full-screen canvas of random grey noise at 20% opacity redrawn every 100ms, on the homepage and the docs. Reduced motion gets one still frame. This replaces the pixel-tile grain tried the round before.
 - Rulers: the homepage has a pixel ruler along the top (tick every 32px, number every 160px) and one down the left edge (heavy mark every 800px). The right-hand ruler and the docs rulers were removed.
 - Docs: restyled after the Pixl docs. Boxed sidebar with a 4px right rule and collapsible groups (label, count, chevron), Pixl's block back button, ink hover and sand active links, Pixelify Sans headings at 46px and 30px, Poppins text (loaded on the docs only), 2px rules with 4px block shadows on fact rows, callouts, quick answers and previous/next cards, and an "On this page" list that marks the section being read. The drafting grid behind the docs was dropped.
+
+## Old icons, depth ruler, no scroll darkening (11 October 2026)
+
+- Icons: the cards use the first site's pixel sprites (`public/loadout/sprites`) again, as `<symbol>`s in `ICON_SPRITE`. The theme tints them with a filter: as drawn in light mode; in dark mode the yellow is pulled toward the sand of the RSVP button and each icon gets a faint sand edge, because the old black outlines vanish into the dark cards.
+- The page no longer darkens as you scroll: the `.strata` overlay is removed in both themes.
+- The left ruler is the depth of the page in metres, pinned to the depth strips. The ticks are every 10 m and the numbers every 50 m, and the heavy mark beside each "-N M" strip reads the same number ("-500" beside the "-500 M" strip). Above the first strip it counts up (+). The top ruler stays in pixels. The right-hand ruler stays removed.

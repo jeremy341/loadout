@@ -78,9 +78,6 @@ body:has(.home):has(#theme:checked) { background:#DDD3BF }
   .home .pit b { font-size:40px }
 }
 @keyframes dep {from{--d:0}to{--d:9}}
-.home { --sd: rgba(0,0,0,.4) }
-.home:has(#theme:checked) { --sd: rgba(40,25,10,.28) }
-.home .strata { position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent 0,transparent 8%,var(--sd) 100%) }
 .home .stp { position:absolute;z-index:3;border:3px solid var(--ac);color:var(--ac);font:700 24px/1 var(--font-pixel),monospace;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:8px 16px;box-shadow:inset 0 0 0 3px var(--bg),inset 0 0 0 5px var(--ac);opacity:.88;pointer-events:none }
 .home .stp small { display:block;margin-top:6px;font:400 12px var(--font-dot),var(--font-mono-art),monospace;letter-spacing:.2em }
 .home .stp.s1 { top:84px;right:170px;transform:rotate(-7deg) }
@@ -221,13 +218,6 @@ html:has(.home) { scroll-behavior:smooth }
 @media(max-width:800px) {
   .home .ar { font-size:7px;top:40px }
 }
-.home .ic { shape-rendering:crispEdges }
-.home .ic-o { fill:var(--ic-o) }
-.home .ic-d { fill:var(--ic-d) }
-.home .ic-g { fill:var(--ic-g) }
-.home .ic-l { fill:var(--ic-l) }
-.home { --ic-o:#0b0907;--ic-d:#bdb8ad;--ic-g:#f7f5ef;--ic-l:#ffffff }
-.home:has(#theme:checked) { --ic-o:#1a1714;--ic-d:#b7870c;--ic-g:#f6c320;--ic-l:#ffe789 }
 @media(max-width:800px) {
   .home .row, .home .lad { grid-template-columns:1fr }
   .home .row > .card { border-right:0;border-bottom:1px solid var(--fg) }
@@ -1002,9 +992,8 @@ html:has(.home) { scroll-behavior:smooth }
 .home #eras .row.r2 .card .cn { line-height: 1; }
 
 /* ===== Dark palette: warm charcoal page, one box colour, soft outlines, no bottom darkening, amber highlights ===== */
-.home:not(:has(#theme:checked)) { --bg: #1C1916; --mut: #A89E8B; --pl1: #27231F; --pl2: #27231F; --sd: transparent; --surface: #27231F; --edge: rgba(239, 230, 212, .28); --hl: #E3A83F; }
+.home:not(:has(#theme:checked)) { --bg: #1C1916; --mut: #A89E8B; --pl1: #27231F; --pl2: #27231F; --surface: #27231F; --edge: rgba(239, 230, 212, .28); --hl: #E3A83F; }
 body:has(.home):not(:has(#theme:checked)) { background: #1C1916; }
-.home:not(:has(#theme:checked)) .strata { background: none; }
 
 /* One box colour for cards, strips, rows, steps, panels and the nav. */
 .home:not(:has(#theme:checked)) .card, .home:not(:has(#theme:checked)) .strip, .home:not(:has(#theme:checked)) .lgr, .home:not(:has(#theme:checked)) .era > div, .home:not(:has(#theme:checked)) .asd, .home:not(:has(#theme:checked)) .ft-sheet, .home:not(:has(#theme:checked)) .fq2, .home:not(:has(#theme:checked)) .nav, .home:not(:has(#theme:checked)) .nav-sheet,
@@ -1032,7 +1021,6 @@ body:has(.home):not(:has(#theme:checked)) { background: #1C1916; }
 .home .hero .ar-right { right: 5%; }
 
 /* ===== Dark mode: icons in the same sand as the RSVP button; margin ASCII a little more visible ===== */
-.home:not(:has(#theme:checked)) { --ic-o: #141210; --ic-d: #A58B5F; --ic-g: #DCC49C; --ic-l: #F1E0BC; }
 .home { --arc: rgba(239, 230, 212, .14); --arh: rgba(239, 230, 212, .4); }
 .home:has(#theme:checked) { --arc: rgba(26, 23, 20, .17); --arh: rgba(26, 23, 20, .42); }
 
@@ -1113,3 +1101,9 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .faq-noscript p { margin: 0 0 16px; color: var(--mut); }
 .home .faq-noscript dt { margin-top: 18px; font: 700 18px/1.3 var(--font-pixel), monospace; text-transform: uppercase; }
 .home .faq-noscript dd { margin: 6px 0 0; color: var(--mut); line-height: 1.7; }
+
+/* ===== Icons: the first site's pixel sprites, tinted by the theme ===== */
+/* Light mode shows them as drawn (yellow and black). In the dark theme the yellow is pulled toward the sand of the RSVP button. */
+.home .ic { image-rendering: pixelated; }
+/* The black outlines of the old icons would sink into the dark cards, so each icon gets a faint sand edge there. */
+.home:not(:has(#theme:checked)) .ic { filter: sepia(.28) saturate(.62) brightness(.97) contrast(1.02) drop-shadow(1px 0 0 rgba(220,196,156,.5)) drop-shadow(-1px 0 0 rgba(220,196,156,.5)) drop-shadow(0 1px 0 rgba(220,196,156,.5)) drop-shadow(0 -1px 0 rgba(220,196,156,.5)); }

@@ -1,5 +1,6 @@
-/* Rulers like the edge of a technical drawing, on the homepage. Measured in pixels: a short tick every 32px,
-   a longer one with a number every 160px, a heavy one every 800px down the left side. */
+/* Rulers like the edge of a technical drawing, on the homepage. The top one is measured in pixels: a short tick every
+   32px, a longer one with a number every 160px. The left side is depth in metres: a tick every 10 m, a number every 50 m,
+   and a heavy mark at each "-100 M" depth strip (SheetRuler.tsx pins the ticks to the strips). */
 .rl-top, .rl-side { --rl: var(--fg, #EFE6D4); --rl-soft: color-mix(in srgb, var(--rl) 60%, transparent); pointer-events: none; user-select: none; font: 400 11px/1 var(--font-dot), monospace; letter-spacing: .06em; color: var(--rl); overflow: hidden; }
 
 .rl-top { position: absolute; top: 0; left: 0; right: 0; z-index: 3; height: 12px;
@@ -8,17 +9,17 @@
     linear-gradient(90deg, var(--rl-soft) 0 1px, transparent 1px) 0 0 / 32px 5px repeat-x; }
 .rl-top span { position: absolute; top: 1px; padding-left: 5px; white-space: nowrap; }
 
-.rl-side { position: absolute; top: 0; left: 0; bottom: 0; z-index: 3; width: 60px;
-  background:
-    linear-gradient(180deg, var(--rl) 0 1px, transparent 1px) 0 0 / 16px 160px repeat-y,
-    linear-gradient(180deg, var(--rl-soft) 0 1px, transparent 1px) 0 0 / 8px 32px repeat-y; }
-.rl-side span { position: absolute; left: 0; padding: 5px 0 0 6px; white-space: nowrap; }
-.rl-side .rl-major { font-size: 13px; }
-.rl-side .rl-major::before { content: ""; position: absolute; left: 0; top: 0; width: 30px; height: 2px; background: var(--hl, var(--ac, var(--rl))); }
+.rl-side { position: absolute; top: 0; left: 0; bottom: 0; z-index: 3; width: 60px; }
+.rl-side span { position: absolute; left: 0; height: 0; padding: 5px 0 0 6px; white-space: nowrap; font-size: 11px; opacity: .9; }
+.rl-side span::before { content: ""; position: absolute; left: 0; top: 0; height: 1px; width: 8px; background: var(--rl); opacity: .7; }
+.rl-side .rl-half::before { width: 18px; opacity: 1; }
+.rl-side .rl-major { font-size: 13px; opacity: 1; }
+.rl-side .rl-major::before { width: 30px; height: 2px; background: var(--hl, var(--ac, var(--rl))); opacity: 1; }
 
 @media (max-width: 700px) {
-  .rl-side { width: 12px; background-size: 9px 160px, 5px 32px; }
+  .rl-side { width: 12px; }
   .rl-side span { font-size: 0; }
-  .rl-side .rl-major { font-size: 0; }
+  .rl-side .rl-half::before { width: 8px; }
   .rl-side .rl-major::before { width: 12px; }
+  .rl-side .rl-ten::before { width: 4px; }
 }

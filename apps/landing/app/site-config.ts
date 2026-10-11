@@ -25,7 +25,7 @@ export function createSiteConfig(inputs: PublicSiteInputs = {}) {
   const siteUrl = httpsUrl(inputs.siteUrl);
   return {
     name: "LOADOUT",
-    title: `LOADOUT — ${heroCopy.tagline}`,
+    title: `LOADOUT: ${heroCopy.tagline}`,
     description: "Build your own technical stack. Explore LOADOUT, a technical builder program for tools, systems, compute, and hardware.",
     origin: siteUrl ? new URL(siteUrl).origin : undefined,
     joinUrl: inputs.joinUrl === undefined ? DEFAULT_RSVP_URL : httpsUrl(inputs.joinUrl),

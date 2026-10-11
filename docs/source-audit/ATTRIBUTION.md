@@ -16,6 +16,10 @@ EDRipper/ysws-template at `1ac191fa5eee1e57983b29ab7101f700c166e207` on `master`
 
 Hack Club Stardance at `3a0fe8148b07c1edfe005e94dfc9d1faa4b64c14` on `main` is the PEER REVIEW / QUALITY SCORING / MULTIPLIER SPECIALIST REFERENCE. The checkout has no LICENSE file and no reported repository license. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. LOADOUT does not adopt Stardance's Rails architecture, four voting criteria, score formula, or payout formula.
 
+## Stasis
+
+Hack Club Stasis at `7a230ced9ad793f0ad4cda30a7d71c02a58da6b6` on `main` is a hardware hackathon reference. The pinned checkout has no root LICENSE file, and GitHub reports no repository license for it (checked 2026-10-11, when the pin matched upstream `main`). Reuse permission was reported by the project owner on 2026-10-11: an informal written reply from Hack Club, quoted as "Yea sure youre free to use it no worrys". The sender, date and channel still need to be recorded here. LOADOUT's reuse is limited to the components listed in `DECISIONS.md`. Stasis copy, artwork, photos, logos, event dates, location, scale and operating claims are not copied. Credit Stasis wherever its code is adapted.
+
 ## Future additions
 
 Before copying code or assets from either reference without an identified license, establish a compatible license or explicit permission, preserve required notices, record the exact source SHA and paths, and update `SOURCE_BASES.md` and `DECISIONS.md`.

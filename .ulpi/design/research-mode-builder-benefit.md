@@ -1,5 +1,7 @@
 # Research Mode builder benefit
 
+**Status:** Proposal only. Do not publish or implement a Research Mode XP bonus unless the canonical product/economy plans explicitly approve it. Plans 01/02 own eligibility and rewards; Plan 06 owns homepage copy.
+
 ## Decision
 
 Research Mode is an optional modifier that can be added to any of the four LOADOUT tracks. A builder who publishes a clear, reproducible technical report alongside their project can earn bonus Track XP.

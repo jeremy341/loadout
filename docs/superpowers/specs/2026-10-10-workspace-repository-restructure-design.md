@@ -4,7 +4,7 @@
 
 Design for owner review before implementation. The goal is to make the LOADOUT workspace and Git repository easy to navigate, establish one clear home for each kind of file, rename LOADOUT-owned material consistently, and reduce stale or repeated planning documents without losing unique decisions or artwork.
 
-The repository at `loadout/` remains the canonical source. The three pinned source repositories remain separate and read-only. Public Docs, internal engineering documentation, product policy, design briefs, and reference material remain separate audiences.
+The repository at `loadout/` remains the canonical source. The pinned source repositories remain separate and read-only. Public Docs, internal engineering documentation, product policy, design briefs, and reference material remain separate audiences.
 
 ## Current evidence
 
@@ -45,7 +45,7 @@ Use Git's worktree-aware move operation for each existing secondary checkout. Pr
 
 Move unique parent artwork into its canonical repository location as part of the repo phase, verify it is present in the merged repository and on GitHub, then remove the old parent copies. Move inventory reports into `reports/inventory/`. Move human-authored notes/captures out of `.tmp/` into `scratch/notes/`; keep generated caches and runtime temporary files in `.tmp/`.
 
-The parent `PLAN/` is reconciled against repository plans first, then moved to `planning/PLAN-snapshot/` as the previously approved one-time snapshot. Label the repository copy canonical; do not add ongoing synchronization.
+The parent `plans/` is reconciled against repository plans first, then moved to `planning/PLAN-snapshot/` as the previously approved one-time snapshot. Label the repository copy canonical; do not add ongoing synchronization.
 
 ## Phase 2: repository layout
 
@@ -80,7 +80,7 @@ loadout/
 └─ .ulpi/design/                      active briefs and the tool-required design entrypoint
 ```
 
-Keep the root `README.md`, `AGENTS.md`, `PRODUCT.md`, package/configuration files, `.github/`, and `references/` path stable. Rename `PLAN/` to lowercase `plans/`, keep stable numeric plan IDs, and use lowercase kebab-case descriptive filenames. Update every repository link and contributor instruction in the same change. Keep `.ulpi/design/DESIGN.md` as the design tool entrypoint; establish a single canonical design-system document under `docs/design/system/` and make the entrypoint a concise link rather than a second policy copy.
+Keep the root `README.md`, `AGENTS.md`, `PRODUCT.md`, package/configuration files, `.github/`, and `references/` path stable. Rename `plans/` to lowercase `plans/`, keep stable numeric plan IDs, and use lowercase kebab-case descriptive filenames. Update every repository link and contributor instruction in the same change. Keep `.ulpi/design/DESIGN.md` as the design tool entrypoint; establish a single canonical design-system document under `docs/design/system/` and make the entrypoint a concise link rather than a second policy copy.
 
 ## Asset ownership and naming
 
@@ -93,18 +93,18 @@ Keep the root `README.md`, `AGENTS.md`, `PRODUCT.md`, package/configuration file
 
 ## Document reconciliation and disposition
 
-Keep product authority explicit: product/program in Plan 01, economy in Plan 02, the public homepage in Plan 06, Era rules in Plan 11, IRL concept in Plan 15, the unresolved visual-clarity proposal in Plan 17, and current Docs policy/content in Plan 18 plus `docs/` and `content/docs/`. Preserve Plan 05 operations and Plan 08 as dated ecosystem context unless link and content review proves a specific portion superseded.
+Keep product authority explicit: product/program in Plan 01, economy in Plan 02, the public homepage in Plan 06, Era rules in Plan 11, IRL concept in Plan 15, and the unresolved visual-clarity proposal in Plan 17. Current Docs implementation and publishing facts live in `docs/development/architecture.md`, `docs/development/content-authoring.md`, and `content/docs/`. Preserve Plan 05 operations and Plan 08 as dated ecosystem context unless link and content review proves a specific portion superseded.
 
 Before retiring a document, transfer unique decisions and evidence to its canonical owner and check all inbound links. Candidate consolidations are:
 
-- Merge `PLAN/README.md` into the canonical index. Replace `LOADOUT_MASTER_PLAN_v4.md` with a concise historical index to numbered plans.
+- Merge `plans/00-index.md` into the canonical index. Replace `LOADOUT_MASTER_PLAN_v4.md` with a concise historical index to numbered plans.
 - Extract lasting material from `PROMPT_00` and `PROMPT_01`, then remove the obsolete executable prompts.
 - Merge Plan 03 into the design system and Plan 07 into contributor/source-audit documentation.
 - Reconcile Plans 04, 09, 10, 12, 13, 14, and 16 into current homepage, product, design, source-audit, or operational owners; retire only those with no unique decisions afterward.
-- Review Plan 18's completed status against the current `main` implementation. Preserve the completed rollout facts in the docs index and implementation records before considering retirement.
-- Keep `docs/development/WORKFLOW.md` as the one full contribution workflow. Merge unique guidance from `HUMAN_AND_AI_WORKFLOW.md`; reduce `AGENTS.md` to essential rules and links.
+- Plan 18's completion was verified against merged PRs #25–28, including production promotion in PR #28. Its status is recorded in `plans/master-plan-history.md`, current Docs facts are in the internal owner guides, and the completed plan is retired.
+- Keep `docs/development/WORKFLOW.md` as the one full contribution workflow. Merge unique guidance from `WORKFLOW.md`; reduce `AGENTS.md` to essential rules and links.
 - Retain focused setup, architecture, content-authoring, deployment/rollback, quality-integration, and Rivet handoff guides. Refresh their dated status; do not collapse them into one manual.
-- Reconcile source-audit overlap among `FEATURE_MATRIX.md`, `UI_MATRIX.md`, `PUBLIC_SITE_PORT.md`, `PUBLIC_SITE_ASSETS.md`, `PIXL_MOTION_PARITY.md`, and `ARCHITECTURE_NOTES.md`. Preserve `SOURCE_BASES.md`, `DECISIONS.md`, and `ATTRIBUTION.md` as clear owners for pins, reuse decisions, and credits unless their contents are fully transferred.
+- Reconcile source-audit overlap among `reference-comparison.md`, `reference-comparison.md`, `landing-port-and-assets.md`, `landing-port-and-assets.md`, `landing-port-and-assets.md`, and `reference-architecture.md`. Preserve `source-bases.md`, `decisions.md`, and `attribution.md` as clear owners for pins, reuse decisions, and credits unless their contents are fully transferred.
 - In `.ulpi/design/`, preserve the current design lock, Plan 17's unresolved proposal, the Docs refresh record until status is reconciled, and any still-open concept. Merge completed briefs into canonical plans/design references and remove superseded briefs only after link checks.
 
 These are candidates, not permission to delete by filename alone. The implementation manifest must classify every affected file as keep, move, rename, rewrite, merge, or delete and name its destination or canonical owner.

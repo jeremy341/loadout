@@ -1,26 +1,25 @@
 # LOADOUT design references
 
-These user-provided concept screenshots are preserved for the design team. They show evolving visual directions, including superseded concepts. They are references only: copy, prices, milestones, eligibility, rewards, and UI shown in a mockup are not program commitments. The current implemented homepage and approved values live in `apps/landing` and the current product plans.
+This folder contains user-provided concept screenshots and sprite-source art. The mockups are visual references, not product policy: copy, prices, eligibility, milestones, rewards, dates, and registration shown in an image are not commitments.
 
-## Main landing-page concepts
+## Landing-page concepts
 
-- [`hero section real.png`](hero%20section%20real.png) — desktop hero reference.
-- [`hero section.png`](hero%20section.png) — earlier hero concept.
-- [`LOADOUT Hackathon Landingpage.png`](LOADOUT%20Hackathon%20Landingpage.png) — long-form page concept.
-- [`LOADOUT Hackathon Landingpagenew one real.png`](LOADOUT%20Hackathon%20Landingpagenew%20one%20real.png) and [`LOADOUT Hackathon Landingpagenew one real.2png.png`](LOADOUT%20Hackathon%20Landingpagenew%20one%20real.2png.png) — later page variants.
+- [`hero-desktop-concept.png`](hero-desktop-concept.png) — supplied desktop hero reference.
+- [`hero-concept-early.png`](hero-concept-early.png) — earlier hero direction.
+- [`landing-page-concept-01.png`](landing-page-concept-01.png), [`landing-page-concept-02.png`](landing-page-concept-02.png), and [`landing-page-concept-03.png`](landing-page-concept-03.png) — full-page design iterations.
+- [`homepage-workshop/`](homepage-workshop/) — supplied workshop background concept, cloud sheet, and decorative-motif reference sheet.
 
-## Homepage refinement references — 2026-10-05
+## Homepage and process references
 
-- [process-wrap-arrow-reference.png](2026-10-05/process-wrap-arrow-reference.png) — the requested square-corner 03 → 04 connector in the existing desktop process grid. Its sample labels are not program policy.
-- [progression-current-before.png](2026-10-05/progression-current-before.png) — the supplied current progression screenshot, preserved as audit evidence before the proposed redesign.
-- [loadout-32px-sprite-design-sheet.png](2026-10-05/loadout-32px-sprite-design-sheet.png) — six-row source atlas for LOADOUT's transparent 32×32 pixel SVGs; see the [cell index and asset mapping](2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md). The logo and moving background clouds remain separate.
+- [`2026-10-05/process-wrap-arrow-reference.png`](2026-10-05/process-wrap-arrow-reference.png) — square-corner 03 → 04 process connector reference; its example labels are not policy.
+- [`2026-10-05/progression-current-before.png`](2026-10-05/progression-current-before.png) — screenshot preserved as progression audit evidence.
+- [`2026-10-05/loadout-32px-sprite-design-sheet.png`](2026-10-05/loadout-32px-sprite-design-sheet.png) and [`2026-10-05/pixel-assets/loadout-pixel-icon-sheet.png`](2026-10-05/pixel-assets/loadout-pixel-icon-sheet.png) — supplied sprite-sheet references. The source-to-runtime mapping and renamed source files are in [`../asset-catalog.md`](../asset-catalog.md).
+- [`2026-10-06/final-pixel-icons/source/`](2026-10-06/final-pixel-icons/source/) — the 42 original, semantically renamed pixel-art PNGs; source pixels and transparency were preserved.
 
-These captures support Plan 12 and its .ulpi design spec. The sprite sheet now also serves as the source for standalone production SVGs under `apps/landing/public/loadout/icons/`.
+## UI explorations
 
-## Earlier iteration folders
+- [`ui/earlier-concepts/`](ui/earlier-concepts/) — early concept images from October 2–3.
+- [`ui/planned-concepts/`](ui/planned-concepts/) — planned section/page directions from October 4.
+- [`ui/alternate-concepts/`](ui/alternate-concepts/) — alternate UI direction.
 
-- `UI/old ui/` — earlier concepts and explorations.
-- `UI/planned ui/` — planned section and page concepts.
-- `UI/possible ui/` — alternate directions under consideration.
-
-All 26 original image files from the workspace `UI/` folder and its root design references are preserved here. The repository does not include arbitrary temporary clipboard images, browser caches, generated test captures, or dependency caches.
+These images support design discussions only. Use current application code, canonical plans, and the design system for shipped behavior and product facts. See [`docs/README.md`](../../README.md) for documentation ownership and [`docs/source-audit/`](../../source-audit/) for upstream attribution and reuse rules.

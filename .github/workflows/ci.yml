@@ -85,6 +85,7 @@ jobs:
           pixl|https://github.com/hackclub/pixl.git|8141b992e92e05583246fd914c63a101100f6fe4
           ysws-template|https://github.com/EDRipper/ysws-template.git|1ac191fa5eee1e57983b29ab7101f700c166e207
           stardance|https://github.com/hackclub/stardance.git|3a0fe8148b07c1edfe005e94dfc9d1faa4b64c14
+          stasis|https://github.com/hackclub/stasis.git|7a230ced9ad793f0ad4cda30a7d71c02a58da6b6
           REFERENCES
 
   landing-quality:

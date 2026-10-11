@@ -35,7 +35,7 @@ function ScrollCloud({ top, side, variant, index }: { top: number; side: "left" 
   }, [reduceMotion, targetX, x, range]);
 
   return <motion.div ref={ref} className={`pixel-cloud cloud-${side}`} style={{ top: `${top}%`, x }}>
-    <svg className="cloud-art" style={{ animationDelay: `${-index * 3}s` }} viewBox="0 0 200 70"><image href={`/loadout/cloud-${variant}.svg`} width="200" height="70" /></svg>
+    <svg className="cloud-art" style={{ animationDelay: `${-index * 3}s` }} viewBox="0 0 200 70"><image href={`/loadout/hero/scenery/cloud-0${variant}.svg`} width="200" height="70" /></svg>
   </motion.div>;
 }
 
@@ -43,6 +43,5 @@ export function PaperScenery() {
   return <div className="paper-scenery" aria-hidden="true">
     {clouds.map(([top, side, variant], index) => <ScrollCloud key={index} top={top} side={side} variant={variant} index={index} />)}
     {Array.from({ length: 22 }, (_, index) => <span className={`registration-mark mark-${index % 2 ? "right" : "left"}`} style={{ top: `${2 + index * 4.1}%` }} key={`mark-${index}`}>+</span>)}
-    <div className="pixel-skyline" />
   </div>;
 }

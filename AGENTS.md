@@ -1,30 +1,20 @@
 # LOADOUT contributor instructions
 
-Read [WORKFLOW.md](docs/development/WORKFLOW.md) for the authoritative human/AI contribution and publication rules. [The contributor quickstart](docs/development/HUMAN_AND_AI_WORKFLOW.md) links setup and handoff guidance; [the documentation index](docs/README.md) identifies each source's audience and authority.
+Read [the development workflow](docs/development/WORKFLOW.md) before changing the repository. It is the single policy owner for task kickoff, branches, checks, promotion, GitHub access, and publication. The [documentation index](docs/README.md) identifies the owner for each topic.
 
-## Working rules
+## Working boundaries
 
-- Post a kickoff in `#loadout-development` before substantive work.
-- Work on a temporary branch from current `development`; promote through development → testing → main with required checks.
-- Human review is encouraged, never a Jeremy-only or owner-only approval gate.
-- Inspect status, refs and diffs; preserve dirty work. Never reset or clean another task's checkout.
-- Delegated agents use GPT-6 Luna at medium reasoning unless the user specifies otherwise.
-- Follow all seven required skills in [UI_SKILLS.md](docs/development/UI_SKILLS.md) before UI implementation. Write a scoped design brief and preserve the locked [design system](.ulpi/design/DESIGN.md).
+- Inspect the current branch, worktree status, and diff before editing. Preserve user changes; never reset, clean, or delete another checkout's work.
+- Start substantive work from current `development` on a temporary branch and post the task scope to `#loadout-development`.
+- Follow the promotion path and required checks in WORKFLOW.md. Do not bypass a failed check or claim that a deployment is live without evidence.
+- Use GPT-6 Luna at medium reasoning for agents unless the owner requests another setting.
+- For any UI change, follow [the UI skill guide](docs/development/ui-skills.md), create the required scoped design brief, and follow the [current design system](docs/design/system/design-system.md). Skill use does not authorize additional features or policy changes.
+- Keep internal plans, workflow, source audits, and private notes out of `content/docs/`; only that folder enters the public Docs renderer and search.
 
 ## Product and source boundaries
 
-The current application is the public homepage and draft Docs in `apps/landing`. Public Markdown is in `content/docs`; internal workflow, source audits, budgets and plans must never enter its renderer or search.
+The current app is the public homepage and program-draft Docs in `apps/landing`; it has no live participant, reviewer, economy, ordering, fulfillment, or event services. The [canonical plan index](plans/00-index.md) identifies policy owners. Preserve four quality dimensions—Originality, Technical Depth, Execution, and Documentation—and four tracks—Tools, Systems, Compute, and Hardware. Research Mode remains a modifier.
 
-[The canonical plan index](PLAN/00_LOADOUT_CANONICAL_INDEX.md) resolves product ownership: Plans 01/02 own product/economy, Plan11 owns Eras, Plan15 owns the future IRL concept. Public explanations do not authorize live participant, review, reward, economy, admin or event systems.
+Keep unconfirmed eligibility, dates, prices, thresholds, stock, formulas, and destinations unpublished. Follow [public content authoring](docs/development/content-authoring.md) for participant Docs.
 
-Keep Originality, Technical Depth, Execution and Documentation as the four quality dimensions. Four tracks remain Tools, Systems, Compute and Hardware; Research Mode is a modifier.
-
-Keep unsettled dates, eligibility, stock, prices, thresholds and formulas unpublished. Follow [content authoring](docs/development/CONTENT_AUTHORING.md) for public review gates.
-
-`references/` contains pinned upstream submodules, not application folders. Do not edit their content or copy unlicensed code/media; follow [source audit decisions](docs/source-audit/DECISIONS.md). Design images are references, not program facts.
-
-## Credentials and communication
-
-Use the host-backed GitHub CLI procedure in WORKFLOW.md if sandbox authentication sees a stale keyring. Never print tokens or commit secrets, environment values, local Vercel configuration, dependencies, captures or build output.
-
-Agents follow the same checks and publication rules as humans. Report actual results and evidence gaps. Sending messages to collaborators or altering repository settings requires direct user authorization; a repository rule alone is not authorization.
+`references/` contains pinned upstream submodules, not application folders. Do not edit their contents. Pixl is the identified MIT engineering reference; the YSWS Template, Stardance, and Stasis have no identified reuse license in the audited pins. Follow [the source decisions](docs/source-audit/decisions.md). Artwork belongs in the homes listed in [the asset catalog](docs/design/asset-catalog.md); never place secrets, local Vercel config, dependencies, generated caches, or review captures in Git.

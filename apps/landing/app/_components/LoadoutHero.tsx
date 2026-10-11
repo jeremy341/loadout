@@ -4,10 +4,26 @@ import { heroCopy } from "../site-content";
 import { ScrollCue } from "./ScrollCue";
 
 export function LoadoutHero() {
-  return <section className="hero" aria-labelledby="hero-title">
+  return <section className="hero" id="about" aria-labelledby="hero-title">
     <span className="slashes hero-slashes" aria-hidden="true" />
     <span className="slashes hero-slashes hero-slashes-bottom" aria-hidden="true" />
     <div className="hero-fragments" aria-hidden="true"><span /><span /><span /><span /></div>
+    <pre className="hero-ascii hero-ascii-left" aria-hidden="true">{`       .--------.
+       | .----. |
+       | |####| |
+  .----+-'____'-+----.
+  |    |  |  |  |    |
+ _|____|__|__|__|____|_
+      /|  |  |  |\\
+     /_|__|__|__|_\\`}</pre>
+    <pre className="hero-ascii hero-ascii-right" aria-hidden="true">{`     +----------+
+     |  .----.  |
+ .---+--| [] |--+---.
+ |   |  |    |  |   |
+ |   |  |    |  |   |
+_|___|__|____|__|___|_
+     |  |    |  |
+     |__|____|__|`}</pre>
     <div className="hero-inner">
       <div className="hero-badge"><span className="slashes" aria-hidden="true" /><span>TECHNICAL BUILDERS</span><span className="slashes" aria-hidden="true" /></div>
       <div className="hero-frame">

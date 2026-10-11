@@ -1,6 +1,6 @@
 # Progress and prizes: implementation brief
 
-**Authorization:** The user requested implementing Plan 14 with all seven UI skills on 2026-10-05.
+**Status:** Implemented and consolidated. Plan 02 owns economy rules and Plan 06 owns homepage presentation; this brief records the hierarchy change and is historical, not a duplicate source of policy.
 **Identity lock:** Existing `DESIGN.md` governs the grey paper, muted yellow, pixel typography, rules, art, and motion. This is a content-hierarchy refinement for new technical builders. Preserve the industrial field-manual direction, bespoke components, and current design/motion/density values 7/4/4.
 
 ## Component and reading-order contract
@@ -24,7 +24,7 @@ Keep unique heading/anchor IDs, sticky-header scroll margins, and existing focus
 
 All seven requested skills are loaded. frontend-design-ui-ux supplies this design/handoff; frontend-design and design-taste guide the shared hierarchy and restrained existing identity; emilkowal-animations preserves existing transform/opacity and reduced-motion behavior; svg-design/pixel-art-sprites/Pixel Art Animator preserve transparent, labelled static art without creating unnecessary frames or assets. The user's approved pixel art, scroll cue, dark track cards, and preserved process override generic stylistic suggestions.
 
-Handoff to the existing GPT-6 Luna medium engineering agent: implement this contract and Plan 14 directly. Use locked tokens and existing assets; don't redesign protected components or create new product rules. Review contrast/focus and responsive sizing, preserve normal and reduced motion, and leave publication to a separate user request.
+Historical implementation handoff: the changes described here were consolidated into Plan 06, while Plan 02 remains the economy authority. Use those current owners and the asset catalog; do not treat this completed brief as current authorization.
 
 Design preflight: existing signature/identity retained; distinct intro, track cards, process diagram, milestone rail, nested explanations/catalog, Era sequence, FAQ layouts preserved. Static/unavailable/FAQ states are covered. No new external action is introduced. Review score 25/32: distinctiveness 3, hierarchy 3, consistency 4, accessibility 3, state coverage 3, clarity 3, restraint 3, motion purpose 3. Validate the implemented result in desktop/mobile views.
 
@@ -37,4 +37,4 @@ Design preflight: existing signature/identity retained; distinct intro, track ca
 
 ## Completed review
 
-Implemented locally on 2026-10-05; [Plan 14](../../PLAN/14_LOADOUT_PROGRESS_AND_PRIZES_HIERARCHY.md) records the execution and evidence. The combined section has one h2 and all four prize destinations nested within it, eight prize cards once, and responsive four/two/one columns. The 52 protected files and process/shared heading rules match the baseline. Lint, typecheck, four unit checks, separate production build and the existing 24-test browser suite all pass. The live layout was inspected at desktop, tablet and both mobile sizes specified above.
+Implemented on 2026-10-05 and consolidated into [Plan 06](../../plans/06-public-homepage.md); [Plan 02](../../plans/02-economy-and-rewards.md) owns mechanics. The combined section has one h2 and nests the pricing, Requisition, planned-prize, and Custom Order material. The historical test and visual evidence above is not a substitute for checking the current UI.

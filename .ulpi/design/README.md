@@ -1,0 +1,40 @@
+# LOADOUT design briefs index
+
+[`DESIGN.md`](DESIGN.md) is the tool-compatible entrypoint and links to the canonical [design system](../../docs/design/system/design-system.md). Product rules stay in the numbered plans; briefs describe presentation and implementation scope. An old brief does not authorize a repeat change.
+
+## Open or unresolved
+
+| Brief | Status and owner |
+|---|---|
+| [`homepage-visual-clarity.md`](homepage-visual-clarity.md) | Open proposal, linked to Plan 17. It does not authorize homepage changes until the owner approves that scope. |
+| [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md) | Product proposal only. Plans 01/02 must settle any bonus before it is implemented or published. |
+
+## Implemented locally
+
+| Brief | Scope |
+|---|---|
+| [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |
+| [`redesign-foundation.md`](redesign-foundation.md) | Current homepage colors, three font roles, grid/grain, thin borders, and light track panels. EN/DE and reference interactions are later passes. |
+
+## Completed implementation records
+
+| Brief | Current owner |
+|---|---|
+| [`community-era-overview.md`](community-era-overview.md) | Plan 11 for policy; Plan 06 for homepage copy. |
+| [`docs-refresh.md`](docs-refresh.md) | `docs/development/architecture.md` and `content-authoring.md`; production promotion recorded in PR #28. |
+| [`homepage-copy-clarity.md`](homepage-copy-clarity.md), [`homepage-information-architecture.md`](homepage-information-architecture.md) | Plan 06. |
+| [`homepage-mechanics-clarity.md`](homepage-mechanics-clarity.md), [`loadout-homepage-clarity-flow-and-eras.md`](loadout-homepage-clarity-flow-and-eras.md), [`progress-and-prizes.md`](progress-and-prizes.md) | Plans 02/06/11/15 own the relevant product facts; Plan 06 owns page composition. |
+| [`loadout-homepage-refinement-proposal.md`](loadout-homepage-refinement-proposal.md), [`loadout-public-landing.md`](loadout-public-landing.md) | Plan 06 and the landing implementation record. |
+| [`loadout-irl-compact-card.md`](loadout-irl-compact-card.md) | Plans 06 and 15. |
+| [`mobile-responsiveness.md`](mobile-responsiveness.md) | Plan 06 and current responsive implementation; PR #29 records the mobile repair. |
+| [`pixel-icon-sprite-integration.md`](pixel-icon-sprite-integration.md), [`transparent-sprite-backgrounds-and-remove-bottom-cta.md`](transparent-sprite-backgrounds-and-remove-bottom-cta.md) | [`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md). |
+| [`whos-behind-loadout.md`](whos-behind-loadout.md) | Plan 06 and current homepage. |
+
+## Superseded records
+
+| Brief | Replaced by |
+|---|---|
+| [`loadout-docs-and-era-redesign.md`](loadout-docs-and-era-redesign.md) | The approved Docs refresh and Plan 11's current Era policy. |
+| [`pixel-sprite-svg-integration.md`](pixel-sprite-svg-integration.md), [`pre-sprite-icon-restoration.md`](pre-sprite-icon-restoration.md) | The final PNG icon set and asset catalog. Keep the owner-supplied Bolt SVG as a separate source asset. |
+
+Completed and superseded briefs are retained as historical decisions. Use current owners and implementation code for present behavior.

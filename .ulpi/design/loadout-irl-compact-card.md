@@ -2,7 +2,7 @@
 feature: compact LOADOUT IRL Ruhr card
 design_language: ./DESIGN.md
 surface: public landing page
-status: ready for implementation
+status: implemented as a labeled future concept; details and readiness owned by Plan 15 and Plan 06
 ---
 
 # Design Read

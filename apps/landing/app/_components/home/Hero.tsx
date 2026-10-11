@@ -1,4 +1,4 @@
-import { RSVP_URL } from "./rsvp-url";
+import { RSVP_ENABLED, RSVP_URL } from "./rsvp-url";
 import { ART } from "./art";
 import { AsciiField } from "./AsciiField";
 import { HoverScramble } from "./HoverScramble";
@@ -80,7 +80,7 @@ export function Hero() {
       <div className="hero-actions">
         <MagneticCorners>
           <a className="btn pri hero-btn" href={RSVP_URL}>
-            RSVP NOW →
+            {RSVP_ENABLED ? "RSVP NOW →" : "EXPLORE TRACKS →"}
           </a>
         </MagneticCorners>
         <MagneticCorners>

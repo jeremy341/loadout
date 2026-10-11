@@ -19,7 +19,7 @@ export function LoadoutIrl() {
           {"// Ruhr"}
         </h2>
         <p className="lead">
-          A planned three-day hackathon in Germany’s Ruhr area.
+          A proposed three-day hackathon in Germany’s Ruhr area. It is a future concept, not an announced event.
         </p>
         <div className="row r3">
           <div className="card t">

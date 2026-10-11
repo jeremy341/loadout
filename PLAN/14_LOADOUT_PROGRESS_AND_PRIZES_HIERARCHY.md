@@ -1,6 +1,7 @@
 # LOADOUT Progress and Prizes Hierarchy
 
 **Status:** Approved and implemented locally on 2026-10-05 on `feature/homepage-clarity-flow-eras`. Final local checks pass. No commit, push, or deployment in this pass.
+**Current homepage update, 2026-10-06:** The owner-approved simplification removes the separate About block and adds Digital/Physical Loadout outcomes to How it works. This supersedes the original About placement and untouched-process constraint below; the Progress & Prizes grouping remains in force.
 **Implementation brief:** [.ulpi/design/progress-and-prizes.md](../.ulpi/design/progress-and-prizes.md).
 **Scope:** Rename the gear-facing section to prizes and nest pricing, discounts, and prize choices within the existing personal-progression section.
 **Policy owners:** Plans 01, 02, and 11 remain authoritative for program, economy, and Era rules.

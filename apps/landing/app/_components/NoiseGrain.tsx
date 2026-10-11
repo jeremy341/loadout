@@ -36,38 +36,38 @@ function drawGrain(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D,
   context.fillRect(x, y, canvas.width, canvas.height);
 }
 
+// Starts the grain on a canvas and returns the function that stops it. Visitors who ask for
+// reduced motion get a single still frame instead of a frame every 100ms.
+function startGrain(canvas: HTMLCanvasElement) {
+  const context = canvas.getContext("2d");
+  const pattern = context && makeNoisePattern(context);
+  if (!context || !pattern) return undefined;
+
+  const draw = () => drawGrain(canvas, context, pattern);
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    draw();
+  };
+  resize();
+  window.addEventListener("resize", resize);
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const timer = still ? 0 : window.setInterval(() => {
+    if (document.visibilityState === "visible") draw();
+  }, INTERVAL);
+
+  return () => {
+    window.removeEventListener("resize", resize);
+    window.clearInterval(timer);
+  };
+}
+
 // Film grain in the manner of the Stasis homepage: a full-screen canvas of random grey noise that
 // refreshes ten times a second, drawn very faintly over the whole page. Stasis re-rolls every pixel
 // on each frame; here one noise tile is rolled once and laid down at a random offset each frame,
-// which looks the same and costs almost nothing. It never takes pointer input, and visitors who
-// ask for reduced motion get a single still frame.
+// which looks the same and costs almost nothing. It never takes pointer input.
 export function NoiseGrain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d");
-    const pattern = context ? makeNoisePattern(context) : null;
-    if (!canvas || !context || !pattern) return;
-
-    const draw = () => drawGrain(canvas, context, pattern);
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      draw();
-    };
-    resize();
-    window.addEventListener("resize", resize);
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = still ? 0 : window.setInterval(() => {
-      if (document.visibilityState === "visible") draw();
-    }, INTERVAL);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      window.clearInterval(timer);
-    };
-  }, []);
-
+  useEffect(() => (canvasRef.current ? startGrain(canvasRef.current) : undefined), []);
   return <canvas ref={canvasRef} className="grain" aria-hidden="true" role="presentation" />;
 }

@@ -5,25 +5,21 @@ import { AsciiField } from "./AsciiField";
 type Step = { label?: string; icon: string; title: string; text: string; nudge?: boolean };
 
 const STEPS: Step[] = [
-  { label: "STEP 01", icon: "list", title: "Choose a project and its tracks", text: "Pick something to make or improve, then choose the fields your project will use." },
-  { label: "STEP 02", icon: "code", title: "Build it and keep a journal", text: "A journal is a build log: note what changed, why you chose that approach, and how you checked the result. Hackatime and Lapse are the planned tools for tracking coding and eligible non-code work." },
-  { label: "STEP 03", icon: "document", title: "Share a working version", text: "Share your project, demo or other evidence, and instructions. Explain what you built, any AI help, and what still needs work. Research projects must include results others can reproduce." },
-  { label: "STEP 04", icon: "check", title: "Get your work reviewed", text: "Reviewers check that your project adds useful original technical work and that you show enough evidence. Then they score it and assign XP to the tracks your work used." },
+  { label: "STEP 01", icon: "list", title: "Choose a project and its tracks", text: "Pick something to make or improve, then choose its tracks." },
+  { label: "STEP 02", icon: "code", title: "Build it and keep a journal", text: "A journal is a build log: what changed, why you chose that approach, and how you checked the result." },
+  { label: "STEP 03", icon: "document", title: "Share a working version", text: "Share your project, a demo or other evidence, and instructions. Explain what you built, any AI help, and what still needs work." },
+  { label: "STEP 04", icon: "check", title: "Get your work reviewed", text: "Reviewers check for original technical work and enough evidence, then score it and assign XP to the tracks your work used." },
 ];
 
-// Outcomes of a review, shown side by side.
-const OUTCOMES: Step[][] = [
-  [
-    { icon: "bolt", nudge: true, title: "Bolts to spend", text: "Bolts are your reward-shop balance, usable across all tracks." },
-    { icon: "xp-star", title: "Track XP to keep", text: "XP cannot be spent. It raises a separate level in each track; those levels can affect gear prices and access." },
-  ],
-  [
-    { icon: "document", title: "Digital Loadout", text: "Your accepted projects and the portfolio you build from them." },
-    { icon: "equipment-box", title: "Physical Loadout", text: "The equipment and tools you use to build your next project." },
-  ],
+// What an accepted review adds, side by side. The Physical Loadout is not one of them:
+// it is what spending Bolts buys, so it belongs to the upgrade step below.
+const OUTCOMES: Step[] = [
+  { icon: "bolt", nudge: true, title: "Bolts to spend", text: "Your reward-shop balance, usable across all tracks." },
+  { icon: "xp-star", title: "Track XP to keep", text: "XP cannot be spent. It raises a separate level in each track, which can lower prices or unlock gear." },
+  { icon: "document", title: "Digital Loadout", text: "Each accepted project joins your portfolio." },
 ];
 
-const UPGRADE: Step = { label: "STEP 05", icon: "equipment-box", title: "Choose your next upgrade", text: "Use Bolts for gear. Your level in a related track can lower its price or unlock some items. A Field Requisition can apply an extra track discount. Custom Orders let you request equipment outside the shop." };
+const UPGRADE: Step = { label: "STEP 05", icon: "equipment-box", title: "Choose your next upgrade", text: "Use Bolts for gear. Your level in a related track can lower its price or unlock some items. Gear you buy becomes your Physical Loadout." };
 const UPGRADE_LINKS = [["#progression", "How levels help"], ["#requisitions", "How Requisitions save"], ["#eras", "Community Eras"]] as const;
 const AGAIN: Step = { label: "STEP 06", icon: "wrench", title: "Build again", text: "Put new skills and equipment to work on your next project." };
 
@@ -63,9 +59,6 @@ export function HowItWorks() {
           How it
           works
         </h2>
-        <p className="lead">
-          Build, ship, and use what you learn to take on the next project.
-        </p>
         <div className="fl">
           {STEPS.map((step) => (
             <Fragment key={step.label}>
@@ -73,14 +66,10 @@ export function HowItWorks() {
               <i className="fc"></i>
             </Fragment>
           ))}
-          {OUTCOMES.map((pair) => (
-            <Fragment key={pair[0].title}>
-              <div className="br2">
-                {pair.map((outcome) => <StepCard step={outcome} key={outcome.title} />)}
-              </div>
-              <i className="fc"></i>
-            </Fragment>
-          ))}
+          <div className="br2 br3">
+            {OUTCOMES.map((outcome) => <StepCard step={outcome} key={outcome.title} />)}
+          </div>
+          <i className="fc"></i>
           <StepCard step={UPGRADE}>
             <div className="lnks">
               {UPGRADE_LINKS.map(([href, text]) => <a href={href} key={href}>{text}</a>)}

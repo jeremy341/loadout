@@ -296,9 +296,9 @@ test("the docs tag is Pixl's bottom tab: pinned to the bottom edge, 2/4/4/2 bord
   await expect(tab).toHaveCSS("border-bottom-width", "6px");
 });
 
-test("the dark theme is the warm charcoal", async ({ page }) => {
+test("the dark theme is graphite", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".home")).toHaveCSS("background-color", "rgb(28, 25, 22)");
+  await expect(page.locator(".home")).toHaveCSS("background-color", "rgb(34, 38, 39)");
 });
 
 test("depth markers are tall strips with a large number", async ({ page }) => {
@@ -363,22 +363,22 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
   await page.goto("/");
   const colour = (selector: string) => page.locator(selector).first().evaluate((el) => getComputedStyle(el).backgroundColor);
   const box = await colour("#tracks .card");
-  expect(box).toBe("rgb(39, 35, 31)");
+  expect(box).toBe("rgb(44, 49, 50)");
   for (const selector of ["#research", ".lgr", ".nav", "#process .fn", ".era > div"]) expect(await colour(selector)).toBe(box);
-  await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgba(239, 230, 212, 0.28)");
+  await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgba(233, 235, 231, 0.22)");
   await expect(page.locator(".strata")).toHaveCount(0);
-  await expect(page.locator("#process .lnks a").first()).toHaveCSS("color", "rgb(227, 168, 63)");
+  await expect(page.locator("#process .lnks a").first()).toHaveCSS("color", "rgb(111, 194, 187)");
   await page.locator("label.tg").click();
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgb(26, 23, 20)");
 });
-test("the cards use the first site's pixel icons, tinted by the theme", async ({ page }) => {
+test("the cards use the first site's pixel icons, as drawn in both themes", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#tracks .card .ic use").first()).toHaveAttribute("href", "#i-wrench");
   await expect(page.locator("symbol#i-wrench image")).toHaveAttribute("href", "/loadout/sprites/wrench.png");
   const missing = await page.evaluate(() => [...document.querySelectorAll(".home use")].map((use) => use.getAttribute("href")!).filter((href) => !document.querySelector(href)));
   expect(missing).toEqual([]);
   const filter = () => page.locator("#tracks .card .ic").first().evaluate((element) => getComputedStyle(element).filter);
-  expect(await filter()).not.toBe("none");
+  expect(await filter()).toBe("none");
   await page.locator("label.tg").click();
   expect(await filter()).toBe("none");
 });
@@ -618,7 +618,7 @@ test("the logo is the first site's hexagon mark with the Jersey 10 name", async 
   await expect(logo.locator(".lg-text")).toHaveText("LOADOUT");
   const mark = await logo.locator(".lg-mark svg").boundingBox();
   expect([mark!.width, mark!.height]).toEqual([32, 32]);
-  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(220, 196, 156)");
+  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(224, 189, 85)");
   await page.locator("label.tg").click();
   await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(227, 194, 107)");
 });

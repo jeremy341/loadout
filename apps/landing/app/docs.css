@@ -2,9 +2,9 @@
    shadows, square corners, Pixelify Sans headings and Poppins text. The colours are LOADOUT's own
    (warm charcoal or beige, set by the same #theme switch as the homepage). */
 .docs {
-  --bg: #1C1916; --fg: #EFE6D4; --mut: #A89E8B; --ac: #DCC49C; --acf: #141210; --hl: #E3A83F;
-  --ink: var(--fg); --dim: #B8AE9B; --panel: #27231F; --panel-2: #332E28; --stroke: #4A453D;
-  --drop: 4px 4px 0 #000; --drop-lg: 8px 8px 0 #000;
+  --bg: #222627; --fg: #E9EBE7; --mut: #A7AEAB; --ac: #E0BD55; --acf: #16191A; --hl: #6FC2BB;
+  --ink: var(--fg); --dim: #B4BBB8; --panel: #2C3132; --panel-2: #373D3E; --stroke: #4A5254;
+  --drop: 4px 4px 0 #0C0E0E; --drop-lg: 8px 8px 0 #0C0E0E;
   --sidebar: 300px; --ease: cubic-bezier(.22, 1, .36, 1);
   --logo-bg: var(--ac); --logo-fg: var(--acf);
   font-family: var(--font-poppins), system-ui, sans-serif;
@@ -16,7 +16,7 @@
   --dim: #4F4739; --panel: #E8DFCC; --panel-2: #D6CCB7; --stroke: #1A1714;
   --drop: 4px 4px 0 #1A1714; --drop-lg: 8px 8px 0 #1A1714;
 }
-body:has(.docs) { background: #1C1916; }
+body:has(.docs) { background: #222627; }
 body:has(.docs #theme:checked) { background: #DDD3BF; }
 
 /* Three columns (sidebar, article, "on this page"). Each column scrolls by itself, so the sheet fits the window. */

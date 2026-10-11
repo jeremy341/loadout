@@ -372,6 +372,45 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
   await page.locator("label.tg").click();
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgb(26, 23, 20)");
 });
+test("the hero title keeps its width through the entrance and the scramble", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const title = page.locator(".hero .h1");
+  // The entrance moves and fades the title; it must not scale it, or its width changes.
+  const keyframes = await title.evaluate((el) => el.getAnimations().map((a) => JSON.stringify((a.effect as KeyframeEffect | null)?.getKeyframes() ?? [])).join(" "));
+  expect(keyframes).not.toMatch(/scale/);
+  // The width of each line, from its first letter to its last. During the scramble the letters
+  // sit in fixed boxes; afterwards it is the real text, ending at the last letter.
+  const lineWidths = () => page.locator(".hero .h1 > span").evaluateAll((spans) => spans.map((span) => {
+    const boxes = span.querySelectorAll<HTMLElement>(".scr-c");
+    if (boxes.length) return boxes[boxes.length - 1].getBoundingClientRect().right - boxes[0].getBoundingClientRect().left;
+    const text = span.firstChild as Text;
+    const lastLetter = Math.max(...[...(text.textContent ?? "")].map((char, index) => (/[A-Za-z0-9]/.test(char) ? index : -1)));
+    const range = document.createRange();
+    range.setStart(text, 0);
+    range.setEnd(text, lastLetter + 1);
+    return range.getBoundingClientRect().width;
+  }));
+  await expect(page.locator(".hero .h1 .scr-c").first()).toBeAttached();
+  const during = await lineWidths();
+  await expect(page.locator(".hero .h1 .scr-c")).toHaveCount(0, { timeout: 5000 });
+  const after = await lineWidths();
+  expect(during).toHaveLength(after.length);
+  // Each letter takes its real advance, kerning included, so the line keeps its width.
+  for (let i = 0; i < after.length; i++) expect(Math.abs(during[i] - after[i])).toBeLessThanOrEqual(1);
+});
+
+test("the ASCII art drifts unless reduced motion is requested", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const field = page.locator(".hero .ar-left");
+  await expect.poll(() => field.evaluate((el) => el.getAnimations().length)).toBeGreaterThan(0);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => field.evaluate((el) => el.getAnimations().length)).toBe(0);
+});
+
 test("the cards use the first site's pixel icons: as drawn in light mode, turned blue in dark mode", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#tracks .card .ic use").first()).toHaveAttribute("href", "#i-wrench");

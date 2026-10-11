@@ -1,8 +1,8 @@
 # Homepage mechanics clarity and LOADOUT IRL concept
 
-**Status:** Approved for implementation by the user on 2026-10-06. The user explicitly selected a visible IRL future-concept section with no dates, venue promises, or registration.
+**Status:** Implemented in the current homepage and consolidated into Plans 06 and 15. This brief is historical execution context; it is not an independent policy source.
 **Design system:** Bespoke, bound to `DESIGN.md` and its existing grey grid paper, Jersey 10 display type, IBM Plex Mono body, graphite structure, muted Bolt Yellow, 1080px content width, and responsive spacing.
-**Policy:** Plans 01/02/11 govern program, economy, and Eras. Plan 15 governs the event concept; Plan 16 governs this content refinement.
+**Policy:** Plans 01/02/11 govern program, economy, and Eras. Plan 15 governs the event concept; Plan 06 owns homepage copy and presentation.
 
 ## Design read
 
@@ -95,10 +95,10 @@ Self-critique: distinctiveness 3, hierarchy 3, consistency 4, accessibility 3, s
 
 **Engineering target:** Next.js senior engineer, GPT-6 Luna at medium. Implement this spec using the existing locked components and tokens. Do not redesign unrelated sections.
 
-**Owned files:** `ErasSection.tsx`, `EquipmentSection.tsx`, optional copy-only `ProgressionSection.tsx`, new `IrlConceptSection.tsx`, `HomepageSections.tsx` composition, `site-content.ts`, `site-config.ts`, the existing config test and landing env example, scoped `homepage-refinement.css`, and a conditional footer anchor if useful. Root agent owns `.ulpi/`, PLAN/docs status updates, integration, final review, commits, and publication decisions.
+**Owned files:** `ErasSection.tsx`, `EquipmentSection.tsx`, optional copy-only `ProgressionSection.tsx`, new `IrlConceptSection.tsx`, `HomepageSections.tsx` composition, `site-content.ts`, `site-config.ts`, the existing config test and landing env example, scoped `homepage-refinement.css`, and a conditional footer anchor if useful. Root agent owns `.ulpi/`, plans/docs status updates, integration, final review, commits, and publication decisions.
 
 **Verification:** add one meaningful config test for default concept visibility and explicit false. Run lint/typecheck/config tests/build and existing browser checks once against final source; adjust an existing assertion only if changed legitimate copy/heading makes it stale. Verify rendered desktop/tablet/mobile, section order, planned labels, absence of live event claims/forms, reduced motion, and no-JavaScript content. Preserve the HowItWorks hash and all process/flow CSS.
 
 ## Implemented result
 
-Implemented locally on 2026-10-06. The required concept-visibility test is added; five configuration tests and all 24 existing browser checks pass, as do lint, TypeScript, and the final production build. No existing browser assertions were changed. Live browser review covered 1440/768/390/320px; Custom Order steps were stacked at the tablet breakpoint to avoid narrow reading columns. The final browser suite/build were rerun after that refinement. HowItWorks and all 42 protected process/flow CSS rules match the baseline. See Plan 16's implementation record for scope and evidence. Publication is separate.
+Implemented on 2026-10-06 and consolidated into [Plan 06](../../plans/06-public-homepage.md), with event policy owned by Plan 15. The recorded concept-visibility test, five configuration tests, 24 browser checks, lint, TypeScript, and production build passed. This is historical implementation evidence; check current application code for present behavior. Publication and event operations remain separate.

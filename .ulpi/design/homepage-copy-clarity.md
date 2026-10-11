@@ -1,6 +1,8 @@
 # Homepage copy clarity — 2026-10-05
 
-Approved request: make the explanations easier to understand. Bind to DESIGN.md and Plan 12; keep the existing layout, hero headline, assets, styles, animations, links, semantics, and program rules.
+**Status:** Completed implementation brief. Plan 06 now owns homepage wording and current policy references; this document records the 2026-10-05 copy pass and is not an active instruction set.
+
+Approved request: make the explanations easier to understand. Bind to DESIGN.md and Plan 06; keep the existing layout, hero headline, assets, styles, animations, links, semantics, and program rules.
 
 ## Writing direction
 

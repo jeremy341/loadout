@@ -4,7 +4,7 @@ Status: implemented 2026-10-11. Scope: `apps/landing` homepage and the docs rout
 
 ## UI-skill record
 
-The seven skills in `docs/development/UI_SKILLS.md` were not available in the session that built this. The owner told the session to proceed. They were not used; re-review against them once installed.
+The seven skills in `docs/development/ui-skills.md` were not available in the session that built this. The owner told the session to proceed. They were not used; re-review against them once installed.
 
 ## Changes
 
@@ -43,7 +43,7 @@ Buttons (nav RSVP, hero RSVP and Explore tracks, hero badge) follow main: Pixeli
 
 ## Numbered rulers and filler clean-up (11 October 2026)
 
-Skills loaded for this batch: frontend-design, design-taste-frontend, web-design-guidelines, accessibility, copywriting. The other names in `docs/development/UI_SKILLS.md` (frontend-design-ui-ux, emilkowal-animations, svg-design, pixel-art-sprites, Pixel Art Animator) are not installed on this machine and were not used.
+Skills loaded for this batch: frontend-design, design-taste-frontend, web-design-guidelines, accessibility, copywriting. The other names in `docs/development/ui-skills.md` (frontend-design-ui-ux, emilkowal-animations, svg-design, pixel-art-sprites, Pixel Art Animator) are not installed on this machine and were not used.
 
 Design read: event landing page for teenage technical builders, in a Ruhr mine and drawing-sheet language; the redesign is preserved, so the dials stay where the page already is.
 

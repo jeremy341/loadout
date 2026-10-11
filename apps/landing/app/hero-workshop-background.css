@@ -1,3 +1,5 @@
+/* Not loaded. The hero workshop background was abandoned on 11 October 2026; nothing imports
+   HeroWorkshopBackground.tsx, the only file that loads this stylesheet. Kept as an asset. */
 .hero--workshop-background {
   isolation: isolate;
 }

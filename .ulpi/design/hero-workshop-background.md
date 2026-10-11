@@ -1,6 +1,8 @@
 # Hero workshop background
 
-Status: owner-approved background-only implementation,2026-10-08. Bind to DESIGN.md existing paper/graphite/yellow pixel identity.
+Status: abandoned on 11 October 2026 by owner decision. Nothing renders this background. `HeroWorkshopBackground.tsx`, `hero-workshop-background.css` and the `hero-workshop` PNGs are kept as assets; wiring them into the hero needs a new owner decision.
+
+Earlier status: owner-approved background-only implementation, 2026-10-08. Bind to DESIGN.md existing paper/graphite/yellow pixel identity.
 
 Reference: workspace `New homepage designs/Industrielle Pixel-Art-Werkstatt mit Freiraum.png` (1672x941). Compose the individual user-supplied transparent PNGs; the full scene and sprite sheets are references. Six `old pngs` duplicates are not separate art.
 

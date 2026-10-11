@@ -69,3 +69,18 @@ Design read: event landing page for teenage technical builders, in a Ruhr mine a
 - Track XP and levels: the rail follows main's: five stops with a 64px requisition marker (no hexagon badge), an ink arrow between stops, the level in Pixelify 26px and the award in 16px, and plain text for "Choose where to grow.". The scroll-driven amber line is gone.
 - Logo: the first site's hexagon mark (yellow hexagon, dark inner hexagon, yellow cross, 32px) with the Jersey 10 name, in the nav, footer and docs. The favicon is main's again.
 - Animations ported from main: the Bolt icon nudge in the process outcomes, the era connector entrance and the IRL status entrance. The level markers already entered in sequence; their delays now start at the second marker. All of it is off under reduced motion. Main's drifting clouds were tried and removed at the owner's request; its skyline and registration marks are not brought back.
+
+## Dark theme: graphite, yellow and teal (11 October 2026)
+
+The warm charcoal dark theme felt flat next to the light one: one low-saturation brown family, a washed-out sand accent and boxes that barely left the page. The dark theme is now the first site's graphite and Bolt Yellow with a cool secondary:
+
+| Token | Value |
+|---|---|
+| Page | #222627 |
+| Boxes and docs panels | #2C3132 |
+| Text / muted text | #E9EBE7 / #A7AEAB |
+| Primary accent (buttons, logo, markers, icons) | #E0BD55 with #16191A text |
+| Secondary accent (links, brackets, ruler marks, active contents item, selection) | teal #6FC2BB |
+| Box outline | rgba(233, 235, 231, .22) |
+
+The old pixel icons are no longer desaturated or edged in dark mode; they show in their own yellow. Light mode is unchanged.

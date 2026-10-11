@@ -24,10 +24,16 @@ export function HoverScramble({ text }: { text: string }) {
     return () => pending.forEach((id) => window.clearTimeout(id));
   }, []);
 
-  function scrambleAt(index: number) {
+  // The letter's box, or nothing when it is a space, a symbol or past the end of the line.
+  function letterBox(index: number) {
     const box = line.current?.children[index] as HTMLElement | undefined;
+    return box && LETTER.test(text[index]) ? box : null;
+  }
+
+  function scrambleAt(index: number) {
+    const box = letterBox(index);
     const real = text[index];
-    if (!box || !LETTER.test(real) || busy.current.has(index)) return;
+    if (!box || busy.current.has(index)) return;
     // Fix the letter's box to its real width so the line does not shift while it changes.
     if (!box.style.width) {
       box.style.width = `${box.getBoundingClientRect().width}px`;

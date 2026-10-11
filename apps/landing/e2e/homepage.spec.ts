@@ -546,3 +546,21 @@ for (const width of [320, 390, 471, 700, 701, 900, 901, 1440]) {
     }
   });
 }
+
+test("essential content and FAQ remain available without JavaScript", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await page.goto(baseURL!);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".faq-noscript")).toContainText("Hackatime");
+  await expect(page.locator(".faq-noscript")).toBeVisible();
+  await context.close();
+});
+
+test("Loadout IRL is described as a proposal, not an announced event", async ({ page }) => {
+  await page.goto("/");
+  const irl = page.locator("#loadout-irl");
+  await expect(irl).toContainText("proposed");
+  await expect(irl).toContainText("not an announced event");
+  await expect(irl).not.toContainText("A planned three-day");
+});

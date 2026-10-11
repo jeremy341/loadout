@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "../../site-config";
-import { RSVP_URL } from "./rsvp-url";
+import { RSVP_ENABLED, RSVP_URL } from "./rsvp-url";
 import { Logo } from "./Logo";
 
 // The bar carries the four in-page sections, as main does. DOCS is reached from the mobile
@@ -92,7 +92,7 @@ export function SiteNav() {
           <span className="pxw su"><i className="a" /></span>
         </label>
         {siteConfig.loginUrl && <a href={siteConfig.loginUrl}>LOGIN</a>}
-        <a className="btn pri" href={RSVP_URL}>RSVP NOW</a>
+        <a className="btn pri" href={RSVP_URL}>{RSVP_ENABLED ? "RSVP NOW" : "EXPLORE TRACKS"}</a>
       </div>
       <button
         ref={toggle}

@@ -366,17 +366,21 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
   expect(box).toBe("rgb(39, 35, 31)");
   for (const selector of ["#research", ".lgr", ".nav", "#process .fn", ".era > div"]) expect(await colour(selector)).toBe(box);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgba(239, 230, 212, 0.28)");
-  await expect(page.locator(".strata")).toHaveCSS("background-image", "none");
+  await expect(page.locator(".strata")).toHaveCount(0);
   await expect(page.locator("#process .lnks a").first()).toHaveCSS("color", "rgb(227, 168, 63)");
   await page.locator("label.tg").click();
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgb(26, 23, 20)");
 });
-test("dark-mode icons use the sand of the RSVP button", async ({ page }) => {
+test("the cards use the first site's pixel icons, tinted by the theme", async ({ page }) => {
   await page.goto("/");
-  const rsvp = await page.locator(".nav-actions a.btn").evaluate((el) => getComputedStyle(el).backgroundColor);
-  const fill = await page.locator("#tracks .card .ic").first().evaluate((el) => getComputedStyle(el).getPropertyValue("--ic-g").trim().toLowerCase());
-  expect(fill).toBe("#dcc49c");
-  expect(rsvp).toBe("rgb(220, 196, 156)");
+  await expect(page.locator("#tracks .card .ic use").first()).toHaveAttribute("href", "#i-wrench");
+  await expect(page.locator("symbol#i-wrench image")).toHaveAttribute("href", "/loadout/sprites/wrench.png");
+  const missing = await page.evaluate(() => [...document.querySelectorAll(".home use")].map((use) => use.getAttribute("href")!).filter((href) => !document.querySelector(href)));
+  expect(missing).toEqual([]);
+  const filter = () => page.locator("#tracks .card .ic").first().evaluate((element) => getComputedStyle(element).filter);
+  expect(await filter()).not.toBe("none");
+  await page.locator("label.tg").click();
+  expect(await filter()).toBe("none");
 });
 
 test("buttons use main's style: bordered, rounded 2px, block shadow, capitals", async ({ page }) => {
@@ -390,15 +394,26 @@ test("buttons use main's style: bordered, rounded 2px, block shadow, capitals", 
   }
 });
 
-test("one ruler runs down the left side, numbered in pixels, and none on the right", async ({ page }) => {
+test("the left ruler is the depth of the page: beside each depth strip it shows the same number", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const sides = page.locator(".home > .rl-side");
-  await expect(sides).toHaveCount(1);
-  const mark = sides.locator(".rl-major").first();
-  await expect(mark).toHaveText("-800");
-  expect(await mark.evaluate((element) => element.getBoundingClientRect().top + window.scrollY)).toBe(800);
-  expect((await sides.boundingBox())!.x).toBe(0);
+  await expect(page.locator(".home > .rl-side")).toHaveCount(1);
+  await expect(page.locator(".home > .rl-right")).toHaveCount(0);
+  const result = await page.evaluate(() => {
+    const centre = (element: Element) => { const box = element.getBoundingClientRect(); return box.top + box.height / 2 + window.scrollY; };
+    const strips = [...document.querySelectorAll(".home .pit")].map((pit) => ({ depth: Number(pit.querySelector("b")!.textContent!.replace(/[^0-9]/g, "")), y: centre(pit) }));
+    const marks = [...document.querySelectorAll(".home > .rl-side .rl-major")].map((mark) => ({ text: mark.textContent!, y: mark.getBoundingClientRect().top + window.scrollY }));
+    return { strips, marks };
+  });
+  expect(result.strips.length).toBeGreaterThan(8);
+  for (const strip of result.strips) {
+    const text = strip.depth === 0 ? "0" : "\u2212" + strip.depth;
+    const mark = result.marks.find((entry) => entry.text === text);
+    expect(mark, "ruler number " + text).toBeTruthy();
+    expect(Math.abs(mark!.y - strip.y)).toBeLessThanOrEqual(2);
+  }
+  expect(result.marks.some((entry) => entry.text === "\u2212500")).toBe(true);
 });
 
 test("the grain is a full-screen noise canvas that redraws and never takes input", async ({ page }) => {

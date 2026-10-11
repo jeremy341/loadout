@@ -1,5 +1,7 @@
 # LOADOUT Public Landing Page
 
+**Status:** Implemented as the current public homepage. Plan 06 and the current application own live copy and behavior; this remains a historical design specification.
+
 ## Implementation amendment — 2026-10-04
 
 The latest direct user request authorizes UI implementation and supplies the cloud/grid reference recorded in `DESIGN.md`. That amendment governs presentation where the earlier briefs below differ. The page now includes project-fit cards, a custom-order/requisition panel, canonical 15-level checkpoints, and SVG planned-category previews. These are concept explanations, not live inventory or invented commercial offers. Navigation uses actual section destinations when registration configuration is absent. The user-requested grid, pixel typography, repeated card layouts, and section labels are intentional exceptions to generic anti-pattern heuristics.

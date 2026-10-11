@@ -1,11 +1,11 @@
 ---
 surface: public homepage
 mode: persuade
-status: approved; implemented locally; visual review in progress
+status: implemented; historical brief
 date: 2026-10-05
 design_system: bespoke
 binds_to: DESIGN.md
-plan: ../../PLAN/12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md
+plan: ../../plans/06-public-homepage.md
 ---
 
 # LOADOUT Homepage Clarity and Flow Spec
@@ -144,7 +144,7 @@ The current CSS outer page width is 1080px. Preserve that width during this refi
 
 Provisional design assessment: aesthetic impact 4, context fit 5, feasibility 4, performance safety 4, consistency risk 3; DFII 14. This judges the proposal's suitability, not a built page. The strongest risks are the longer process's reading load and large-cloud overlap; the narrow node measure, reduced repetition, bounded scenery, and responsive stacking address them in the contract.
 
-Identity: preserved grey/yellow/pixel field manual. Planned layout families: central flow/fork, track grid, milestone rail, pricing/order explanations, Era sequence, FAQ, footer. Product truth is mapped to Plans 01/02/11 in Plan 12. No fabricated live values or destinations. State/accessibility behavior is specified, but rendered contrast, visual fidelity, and responsive geometry are not yet verified because UI implementation is outside this phase.
+Identity: preserved grey/yellow/pixel field manual. The brief proposed a central flow/fork, track grid, milestone rail, pricing/order explanations, Era sequence, FAQ, and footer. Product truth remains with Plans 01/02/11; Plan 06 owns homepage composition. This proposal is implemented history, not current visual verification.
 
 The tiny arrow scope and full process replacement are alternatives, not two required final diagrams. No automated tests, test-file edits, backend features, or CI changes occur in this planning phase.
 
@@ -152,8 +152,8 @@ The tiny arrow scope and full process replacement are alternatives, not two requ
 
 Implementation uses the existing Next.js components and locked tokens. The content/SVG handoff was carried out by GPT-6 Luna medium agents per the user's instruction; shared stylesheet, scenery, and footer integration were handled sequentially.
 
-Read this spec, DESIGN.md, and Plan 12 together. Implement the approved scope and use the existing motion/container infrastructure. Preserve the selected hero, public RSVP, product-policy boundaries, and reference licenses. The user subsequently approved the UI build. Backend mechanics, publishing, automated tests, and pipeline work remain separate scopes.
+This spec was paired with the design lock and Plan 06 during implementation. The approved scope used existing motion/container infrastructure, preserved the selected hero and RSVP, and kept product-policy boundaries. It did not authorize backend mechanics or changes to the release pipeline.
 
 ## Approved build record
 
-The user approved the full vertical composition. It is implemented locally in the components listed in Plan 12, using the locked grey/pixel identity. The draft copy deck remains a design record; rendered source is authoritative for current wording. The optional tiny-arrow alternative was superseded. Lint, typecheck, and build pass; automated tests and CI were not changed or run. Manual visual review is pending the browser preview reopening.
+The user approved the full vertical composition and it was implemented using the locked grey/pixel identity. Plan 06 and current application code now own the result; this copy deck is historical. The optional tiny-arrow alternative was superseded. The earlier recorded lint, typecheck, and build passed; that record did not include automated tests or CI and is not current verification.

@@ -1,23 +1,16 @@
----
-project: LOADOUT public website
-register: brand
-aesthetic_direction: industrial / signage
-color_strategy: restrained
-design_system: bespoke
-design_variance: 7
-motion_intensity: 4
-visual_density: 4
----
+# LOADOUT design brief entrypoint
 
-# LOADOUT Design Language
+The canonical cross-site visual rules live in [the LOADOUT design system](../../docs/design/system/design-system.md). Keep this file as the tool-compatible entrypoint for new UI briefs; do not duplicate tokens or per-page implementation history here. See the [briefs index](README.md) for open, completed, and superseded design records.
 
-## Current homepage order — 2026-10-06
+## Current owners
 
-The current owner-directed composition supersedes the earlier separate About placement: hero → Tracks and Research Mode → How it works, including Digital/Physical Loadout outcomes → Project Fit → Progress & Prizes → Community Eras → optional LOADOUT IRL concept → FAQ → Who's Behind LOADOUT → footer. The hero now carries the primary orientation copy. The fixed LOADOUT DOCS tab links directly to `/docs`, which redirects to `/docs/start`; it does not open a preview sheet. Plan 14 still owns the Progress & Prizes grouping, but its earlier About placement and unchanged-process constraint have been superseded by the current user-approved page update. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
+- [Plan 06](../../plans/06-public-homepage.md) owns public homepage composition and copy scope.
+- The internal [Docs architecture](../../docs/development/architecture.md) and [public content authoring guide](../../docs/development/content-authoring.md) own the Docs surface and publishing rules; Docs pane widths do not change the homepage system.
+- [Plan 01](../../plans/01-product-and-program.md), [Plan 02](../../plans/02-economy-and-rewards.md), [Plan 11](../../plans/11-eras-and-community-progression.md), and [Plan 15](../../plans/15-loadout-irl-ruhr.md) own program facts and readiness gates.
 
-## Active homepage refinement — 2026-10-05
+## Brief rules
 
-The user approved implementation of [the clarity spec](loadout-homepage-clarity-flow-and-eras.md) and [Plan 12](../../PLAN/12_LOADOUT_HOMEPAGE_CLARITY_FLOW_AND_ERAS.md). The homepage now uses a central downward process and parallel Bolt/XP outcomes, five real Requisition milestones, explanatory Community Eras, separate pricing/Requisition/Custom Order copy, stepped SVG artwork, and a larger footer. The vertical process replaces the former six-card diagram; the optional small wrap-arrow patch is superseded.
+Each feature brief in this folder states its own surface, status, components, interaction, responsive behavior, and accessibility constraints. An implemented or superseded brief is historical context; it does not authorize a repeat change. If a brief conflicts with a current owner plan or this entrypoint, follow the current owner and update the brief's status.
 
 Active sizes: 72px major section padding on desktop, 88px for process/progression/Eras; 56/64px on tablet; 44px on mobile. Essential body copy is 16px at 1.65 line height. Footer links are 14px desktop/16px mobile with 44px minimum targets; columns reflow five/two/one. Outer content width remains 1080px. Cloud width is clamp(280px,32vw,560px), or 260px mobile; horizontal scroll range is ±112px/±48px with a separate ±12px inner drift over 48 seconds. Reduced motion keeps scenery static.
 

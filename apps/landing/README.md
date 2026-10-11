@@ -1,6 +1,6 @@
 # LOADOUT public landing
 
-The LOADOUT public homepage lives in this Next.js application, adapted from the verified Pixl landing baseline. Its source audit and MIT provenance are recorded in `../../docs/source-audit/PUBLIC_SITE_PORT.md`. SVGs are authored for LOADOUT; self-hosted fonts include their OFL licenses.
+The LOADOUT public homepage lives in this Next.js application, adapted from the verified Pixl landing baseline. Its source audit and MIT provenance are recorded in `../../docs/source-audit/landing-port-and-assets.md`. SVGs are authored for LOADOUT; self-hosted fonts include their OFL licenses.
 
 Run `bun run dev` for development, or `bun run build` then `bun run start` for a production preview. Verification commands are `bun run lint`, `bun run typecheck`, `bun run test`, and `bun run test:e2e`. `bun run capture` uses Node/Playwright to record desktop/mobile screenshots under the repository's ignored `.impeccable/review/final/` folder while a local server is running.
 

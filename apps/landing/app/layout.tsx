@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { DotGothic16, JetBrains_Mono } from "next/font/google";
 import "./loadout.css";
-import "./homepage-refinement.css";
-import "./behind-loadout.css";
+import "./home.css";
+import "./docs.css";
 import { SmoothScroll } from "./_components/SmoothScroll";
 import { siteConfig } from "./site-config";
 
@@ -12,6 +13,8 @@ const mono = localFont({ src: [
   { path: "../public/fonts/IBMPlexMono-Regular.ttf", weight: "400" },
   { path: "../public/fonts/IBMPlexMono-SemiBold.ttf", weight: "600" },
 ], variable: "--font-ui", display: "swap" });
+const dot = DotGothic16({ subsets: ["latin"], weight: "400", variable: "--font-dot", display: "swap" });
+const artMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-art", display: "swap" });
 
 export const metadata: Metadata = {
   title: siteConfig.title,
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en" className={`${display.variable} ${pixel.variable} ${mono.variable}`}>
+  return <html lang="en" className={`${display.variable} ${pixel.variable} ${mono.variable} ${dot.variable} ${artMono.variable}`}>
     <body><SmoothScroll>{children}</SmoothScroll></body>
   </html>;
 }

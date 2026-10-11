@@ -1,6 +1,6 @@
 # Transparent sprite backgrounds and bottom CTA removal
 
-Status: historical cleanup brief. The current homepage uses the final transparent 32×32 PNG set documented in `pixel-icon-sprite-integration.md` and `docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md`.
+**Status:** Completed historical cleanup brief. The current transparent 32×32 PNG sources and runtime mappings are in [`pixel-icon-sprite-integration.md`](pixel-icon-sprite-integration.md) and the [asset catalog](../../docs/design/asset-catalog.md).
 
 ## Design read
 

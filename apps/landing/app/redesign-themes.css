@@ -1,0 +1,44 @@
+/* The navigator theme control applies only to the homepage shell. */
+.site-shell[data-theme="dark"] {
+  --canvas:#141210;
+  --surface:#1D1A17;
+  --surface-muted:#28231D;
+  --grid:#4B4339;
+  --ink:#EFE6D4;
+  --graphite:#29241F;
+  --graphite-raised:#383128;
+  --yellow:#DCC49C;
+  --yellow-soft:#E8D4B4;
+  --yellow-edge:#A8895E;
+  --rust:#E0652A;
+  --rust-contrast:#F28B55;
+  --muted:#B5AA98;
+  --steel:#7A7060;
+  --rule:#766D5F;
+  color-scheme:dark;
+}
+.site-shell[data-theme="dark"]::before { mix-blend-mode:screen; }
+.site-shell[data-theme="dark"] .nav-theme-toggle .theme-moon { opacity:1; }
+.site-shell[data-theme="dark"] .nav-theme-toggle .theme-sun { opacity:.35; }
+.site-shell[data-theme="dark"] .button,
+.site-shell[data-theme="dark"] .hero-badge>span:nth-child(2),
+.site-shell[data-theme="dark"] .flow-step-number,
+.site-shell[data-theme="dark"] .card-index,
+.site-shell[data-theme="dark"] .docs-tab,
+.site-shell[data-theme="dark"] .skip-link,
+.site-shell[data-theme="dark"] .fit-card-higher .fit-label,
+.site-shell[data-theme="dark"] .project-fit-subsection .fit-ledger-higher .fit-label,
+.site-shell[data-theme="dark"] .irl-status-label,
+.site-shell[data-theme="dark"] .era-bonus,
+.site-shell[data-theme="dark"] .era-bonus span,
+.site-shell[data-theme="dark"] .progression-section .order-steps li::before { color:var(--canvas); }
+.site-shell[data-theme="dark"] ::selection { color:var(--canvas); background:var(--yellow); }
+.site-shell[data-theme="dark"] .era-concept-rail li:hover,
+.site-shell[data-theme="dark"] .era-concept-rail li:hover .era-step-number { color:var(--canvas); }
+.site-shell[data-theme="dark"] .button-outline { color:var(--ink); }
+.site-shell[data-theme="dark"] .track-card { background-color:#1D1A17; background-image:linear-gradient(135deg,#1D1A17,#151310); }
+.site-shell[data-theme="dark"] .track-card:hover { background-image:linear-gradient(135deg,#28231D,#1D1A17); }
+.site-shell[data-theme="dark"] .track-meta,
+.site-shell[data-theme="dark"] .track-topics { color:var(--muted); }
+.site-shell[data-theme="dark"] .site-footer { background:var(--surface); }
+.site-shell[data-theme="light"] { color-scheme:light; }

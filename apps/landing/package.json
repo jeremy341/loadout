@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "bun test app/site-config.test.ts app/docs",
+    "test": "bun test app/site-config.test.ts app/asset-paths.test.ts app/docs",
     "capture": "node scripts/capture-homepage.mjs",
     "test:e2e": "playwright test"
   },

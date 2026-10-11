@@ -1,12 +1,21 @@
 @import "tailwindcss";
 :root {
-  --canvas:#E8E9E6;
-  --surface:#F0F1ED;
-  --ink:#1D2021;
-  --graphite:#292C2D;
-  --yellow:#D9B64C;
-  --muted:#575E60;
-  --rule:#9DA5A4;
+  --canvas:#DDD3BF;
+  --surface:#E9E2D4;
+  --surface-muted:#D2C8B7;
+  --grid:#C9BEAC;
+  --ink:#1A1714;
+  --graphite:#29241F;
+  --graphite-raised:#383128;
+  --yellow:#D7B34D;
+  --yellow-soft:#E3C26B;
+  --yellow-edge:#A88737;
+  --rust:#C4491F;
+  --muted:#5A5145;
+  --steel:#999184;
+  --rule:#A69D8E;
+  --success:#65775D;
+  --danger:#A94B3E;
   --page:1080px;
   --ease:cubic-bezier(.22,1,.36,1)
 }
@@ -26,8 +35,12 @@ body {
   font-family:var(--font-ui),monospace;
   font-size:14px;
   line-height:1.45;
-  background-image:linear-gradient(rgba(76,83,85,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(76,83,85,.04) 1px,transparent 1px);
-  background-size:24px 24px
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--grid) 58%,transparent) 1px,transparent 1px),
+    linear-gradient(90deg,color-mix(in srgb,var(--grid) 58%,transparent) 1px,transparent 1px),
+    linear-gradient(color-mix(in srgb,var(--grid) 28%,transparent) 1px,transparent 1px),
+    linear-gradient(90deg,color-mix(in srgb,var(--grid) 28%,transparent) 1px,transparent 1px);
+  background-size:24px 24px,24px 24px,120px 120px,120px 120px
 }
 
 ::selection {
@@ -44,7 +57,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background:#969c9d;
+  background:var(--steel);
   border:3px solid var(--canvas)
 }
 
@@ -104,7 +117,14 @@ h3 {
   position:relative;
   isolation:isolate;
   overflow:clip;
-  min-height:100vh
+  min-height:100vh;
+  background-color:var(--canvas);
+  background-image:
+    linear-gradient(color-mix(in srgb,var(--grid) 58%,transparent) 1px,transparent 1px),
+    linear-gradient(90deg,color-mix(in srgb,var(--grid) 58%,transparent) 1px,transparent 1px),
+    linear-gradient(color-mix(in srgb,var(--grid) 28%,transparent) 1px,transparent 1px),
+    linear-gradient(90deg,color-mix(in srgb,var(--grid) 28%,transparent) 1px,transparent 1px);
+  background-size:24px 24px,24px 24px,120px 120px,120px 120px
 }
 
 .site-shell::before {
@@ -113,7 +133,7 @@ h3 {
   inset:0;
   z-index:2;
   pointer-events:none;
-  opacity:.16;
+  opacity:.18;
   mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.42'/%3E%3C/svg%3E");
   background-size:180px 180px
@@ -255,7 +275,7 @@ h3 {
 }
 
 .button:hover {
-  background:#E1C56D;
+  background:var(--yellow-soft);
   transform:translate(-1px,-2px);
   box-shadow:3px 4px 0 var(--ink)
 }
@@ -270,7 +290,7 @@ h3 {
 }
 
 .button-outline:hover {
-  background:#DDE0DC
+  background:var(--surface-muted)
 }
 
 .button-small {
@@ -332,7 +352,34 @@ h3 {
   text-align:center
 }
 
+.hero-ascii {
+  position:absolute;
+  z-index:0;
+  margin:0;
+  color:var(--muted);
+  font-family:var(--font-ui),monospace;
+  font-size:clamp(9px,.72vw,13px);
+  line-height:1.08;
+  letter-spacing:0;
+  white-space:pre;
+  opacity:.56;
+  user-select:none;
+  pointer-events:none
+}
+
+.hero-ascii-left {
+  top:17%;
+  left:2.4%
+}
+
+.hero-ascii-right {
+  right:2.6%;
+  bottom:11%
+}
+
 .hero-inner {
+  position:relative;
+  z-index:2;
   width:min(100%,760px)
 }
 
@@ -362,8 +409,8 @@ h3 {
   position:absolute;
   width:9px;
   height:9px;
-  background:#8b8d89;
-  box-shadow:12px 12px 0 #8b8d89;
+  background:var(--steel);
+  box-shadow:12px 12px 0 var(--steel);
   opacity:.6;
 }
 
@@ -392,8 +439,8 @@ h3 {
   width:48px;
   height:13px;
   background:currentColor;
-  mask:url('/loadout/slashes.svg') center/100% 100% no-repeat;
-  color:#a9afb0;
+  mask:url('/loadout/hero/scenery/hazard-stripes.svg') center/100% 100% no-repeat;
+  color:var(--steel);
   flex-shrink:0;
   font-size:0!important;
   line-height:0!important
@@ -486,7 +533,7 @@ h3 {
 .hero-side {
   position:absolute;
   top:82px;
-  color:#575E60;
+  color:var(--muted);
   text-align:left;
   font-size:14px;
   line-height:1.5
@@ -535,7 +582,7 @@ h3 {
 }
 
 .hero-facts li+li {
-  border-left:1px solid #8b9192;
+  border-left:1px solid var(--rule);
   padding-left:20px
 }
 
@@ -579,7 +626,7 @@ h3 {
   position:absolute;
   font-size:26px;
   font-weight:600;
-  color:#b6babc;
+  color:var(--steel);
   line-height:1
 }
 
@@ -589,16 +636,6 @@ h3 {
 
 .mark-right {
   right:3.5%
-}
-
-.pixel-skyline {
-  position:absolute;
-  left:0;
-  bottom:240px;
-  width:100%;
-  height:230px;
-  background:url('/loadout/skyline.svg') bottom center/100% 100% no-repeat;
-  opacity:.65
 }
 
 @keyframes cloud-drift {
@@ -629,7 +666,7 @@ h3 {
   font-size:10px;
   font-weight:600;
   margin-bottom:5px;
-  color:#575d60
+  color:var(--muted)
 }
 
 .section-heading h2 {
@@ -750,8 +787,8 @@ h3 {
   left:10px;
   right:10px;
   padding:5px;
-  background:#dcdfdf;
-  border:1px solid #a1a7a7;
+  background:var(--surface-muted);
+  border:1px solid var(--rule);
   font-family:var(--font-pixel);
   text-transform:uppercase;
   text-align:center;
@@ -761,7 +798,7 @@ h3 {
 
 .fit-card-higher .fit-label {
   background:var(--yellow);
-  border-color:#be9c38
+  border-color:var(--yellow-edge)
 }
 
 .track-card {
@@ -779,9 +816,9 @@ h3 {
 }
 
 .track-card:hover {
-  background-color:#34383A;
+  background-color:var(--graphite-raised);
   transform:translateY(-5px);
-  box-shadow:0 5px 0 #AEB6B1
+  box-shadow:0 5px 0 var(--steel)
 }
 
 .track-top {
@@ -793,7 +830,7 @@ h3 {
   top:-7px;
   left:-11px;
   font-size:10px;
-  color:#b9b8aa
+  color:var(--surface-muted)
 }
 
 .track-icon {
@@ -811,7 +848,7 @@ h3 {
 .track-topics {
   font-size:12px;
   line-height:1.45;
-  color:#d0d1cc
+  color:var(--surface-muted)
 }
 
 .research-strip {
@@ -963,7 +1000,7 @@ h3 {
 }
 
 .faq-question:hover {
-  background:#DDE0DC
+  background:var(--surface-muted)
 }
 
 .faq-question:active {
@@ -1053,7 +1090,7 @@ h3 {
   display:flex;
   align-items:center;
   gap:18px;
-  border-top:1px solid #d5d6d0;
+  border-top:1px solid var(--rule);
   padding:14px 64px 20px;
   color:var(--muted);
   font-size:10px
@@ -1191,7 +1228,7 @@ h3 {
   gap:26px;
   margin-top:16px;
   padding:16px;
-  background:#DDE0DC;
+  background:var(--surface-muted);
 }
 
 .loadout-currency strong {
@@ -1301,6 +1338,9 @@ h3 {
 }
 
 @media(max-width:1100px) {
+  .hero-ascii {
+    display:none
+  }
   .desktop-nav {
     gap:16px
   }
@@ -1653,12 +1693,6 @@ h3 {
   }
   .mark-right {
     right:8px
-  }
-  .pixel-skyline {
-    height:180px;
-    bottom:550px;
-    background-size:auto 100%;
-    opacity:.5
   }
 }
 

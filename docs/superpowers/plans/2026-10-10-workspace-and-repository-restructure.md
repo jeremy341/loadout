@@ -37,7 +37,7 @@
 
 **Files:**
 - Read: parent `LOADOUT_WORKSPACE_FILES.csv`, `LOADOUT_DUPLICATE_GROUPS.csv`, `LOADOUT_WORKSPACE_AUDIT.md`
-- Read: repository `plans/` (currently `PLAN/`), `.ulpi/design/`, `docs/`, `content/docs/`, `references/README.md`, `docs/design/references/README.md`
+- Read: repository `plans/` (currently `plans/`), `.ulpi/design/`, `docs/`, `content/docs/`, `references/README.md`, `docs/design/references/README.md`
 - Create: `docs/development/restructure-manifest.md`
 
 **Interfaces:**
@@ -54,7 +54,7 @@ git worktree list --porcelain
 git submodule status
 ```
 
-Expected: implementation checkout is clean at current `development`; the original `loadout/` and `hero-workshop-background/` checkouts remain dirty and separate; the three submodule SHAs match `references/SOURCE_BASES.md`.
+Expected: implementation checkout is clean at current `development`; the original `loadout/` and `hero-workshop-background/` checkouts remain dirty and separate; the three submodule SHAs match `references/source-bases.md`.
 
 - [ ] **Step 2: Compare exact local/remote duplicate groups**
 
@@ -62,7 +62,7 @@ For each candidate, record all paths and mark whether copies are across worktree
 
 - [ ] **Step 3: Build the disposition manifest**
 
-Include every parent asset and note, all authored Markdown in `PLAN/`, `docs/`, `.ulpi/design/`, and all renamed public image paths. Record specific merge destinations for completed plan/brief decisions and separate the current `content/docs/` pages from internal docs.
+Include every parent asset and note, all authored Markdown in `plans/`, `docs/`, `.ulpi/design/`, and all renamed public image paths. Record specific merge destinations for completed plan/brief decisions and separate the current `content/docs/` pages from internal docs.
 
 - [ ] **Step 4: Check links and user content in the manifest**
 
@@ -70,19 +70,16 @@ Verify each proposed deletion has a canonical owner and no unique information; v
 
 Expected: manifest has no unresolved keep/delete ambiguity; no files have been moved or deleted in this task.
 
-- [ ] **Step 5: Commit the manifest**
+- [ ] **Step 5: Keep the manifest uncommitted**
 
-```powershell
-git add docs/development/restructure-manifest.md
-git commit -m "Record workspace and repository file dispositions"
-```
+The owner requested no implementation commits in this run. Leave the manifest with the rest of the working changes.
 
 ## Task 2: Organize parent workspace paths without losing work
 
 **Files:**
 - Move with Git: `docs-participant-manual/`, `docs-refresh/`, `docs-scrollbar-chrome/`, `hero-workshop-background/`, `homepage-refresh-full/` → `worktrees/`
 - Move: root `LOADOUT_WORKSPACE_AUDIT.md`, `LOADOUT_WORKSPACE_FILES.csv`, `LOADOUT_DUPLICATE_GROUPS.csv` → `reports/inventory/`
-- Move: parent `PLAN/` → `planning/PLAN-snapshot/` only after it is reconciled in Task 7
+- Move: parent `plans/` → `planning/PLAN-snapshot/` only after it is reconciled in Task 6
 - Move: human notes/captures from `.tmp/` → `scratch/notes/` only after validating each destination
 - Preserve: generated/runtime files under `.tmp/`
 
@@ -124,7 +121,7 @@ Run `git worktree list --porcelain` and compare branch, HEAD, status, and ignore
 
 **Files:**
 - Move/copy from parent `New homepage designs/` and loose image files according to `docs/development/restructure-manifest.md`
-- Create: `assets/README.md`, `docs/design/ASSET_CATALOG.md`
+- Create: `assets/README.md`, `docs/design/asset-catalog.md`
 - Move final used images to `apps/landing/public/loadout/hero/`, `icons/`, or `sprites/`
 - Move editable masters to `assets/editable/`; unapproved images to `assets/inbox/`; distinct old variants to `assets/archive/homepage-variants/`
 - Modify: app components/CSS that refer to renamed website assets
@@ -157,15 +154,15 @@ Update only paths in TSX, CSS, Markdown, and asset catalogs. Preserve the curren
 
 - [ ] **Step 6: Verify asset references and visual parity**
 
-Search for every old filename/path. Confirm each used asset returns at its new path, all references resolve, and the local homepage shows the same images in the same places. Remove a source duplicate only after the retained app file is committed in this branch and verified.
+Search for every old filename/path. Confirm each used asset returns at its new path, all references resolve, and the local homepage shows the same images in the same places. Remove a source duplicate only after the retained app file exists in this branch, its hash/path is verified, and the canonical catalog records it.
 
 ## Task 4: Rename and reconcile the canonical plan library
 
 **Files:**
-- Rename: `PLAN/` → `plans/`
+- Rename: `plans/` → `plans/`
 - Rename surviving numbered plan files to lowercase kebab-case while preserving numeric IDs
 - Rewrite: `plans/00-canonical-index.md`
-- Merge/rewrite: master plan, `PLAN/README.md`, `PROMPT_00`, `PROMPT_01`, and completed plan records as mapped in Task 1
+- Merge/rewrite: master plan, `plans/00-index.md`, `PROMPT_00`, `PROMPT_01`, and completed plan records as mapped in Task 1
 - Modify: every Markdown link, AGENTS rule, workflow instruction, README, docs index, and design brief pointing to plan paths
 
 **Interfaces:**
@@ -174,11 +171,11 @@ Search for every old filename/path. Confirm each used asset returns at its new p
 
 - [ ] **Step 1: Reconcile dirty plan drafts**
 
-Diff the original dirty `loadout/PLAN/` files against this branch and current `development`. Apply only authorized plan/document changes. Do not copy website app files or UI implementation changes.
+Diff the original dirty `loadout/plans/` files against this branch and current `development`. Apply only authorized plan/document changes. Do not copy website app files or UI implementation changes.
 
 - [ ] **Step 2: Create the target `plans/` tree and move retained plans**
 
-Preserve numeric IDs. Use the manifest's exact new filenames. Keep canonical product and economy owners, Plan 05, Plan 06, Plan 08, Plan 11, Plan 15, unresolved Plan 17, and Plan 18 until its completion state has been verified.
+Preserve numeric IDs. Use the manifest's exact new filenames. Keep canonical product and economy owners, Plan 05, Plan 06, Plan 08, Plan 11, Plan 15, and unresolved Plan 17. Plan 18 was verified complete through PRs #25–28 and production promotion in PR #28; its useful record is in the Docs guides and plan history.
 
 - [ ] **Step 3: Reconcile completed plans before retiring candidates**
 
@@ -186,7 +183,7 @@ Transfer unique decisions from Plans 03, 04, 07, 09, 10, 12, 13, 14, and 16 to t
 
 - [ ] **Step 4: Update all plan path references**
 
-Search LOADOUT-owned Markdown, AGENTS, app docs, workflow files, and `.ulpi/design/` for `PLAN/`, old filenames, and old headings. Update links and anchors. Leave reference submodule content untouched.
+Search LOADOUT-owned Markdown, AGENTS, app docs, workflow files, and `.ulpi/design/` for `plans/`, old filenames, and old headings. Update links and anchors. Leave reference submodule content untouched.
 
 - [ ] **Step 5: Verify plan links and canonical owners**
 
@@ -210,7 +207,7 @@ Rewrite `docs/README.md` to map public content, workflow, setup, architecture, d
 
 - [ ] **Step 2: Consolidate contribution rules**
 
-Keep one full `docs/development/WORKFLOW.md`. Merge useful content from `HUMAN_AND_AI_WORKFLOW.md`, update `AGENTS.md` to link to authoritative workflow and design system, and remove the duplicate guide only if its lasting instructions are transferred.
+Keep one full `docs/development/WORKFLOW.md`. Merge useful content from `WORKFLOW.md`, update `AGENTS.md` to link to authoritative workflow and design system, and remove the duplicate guide only if its lasting instructions are transferred.
 
 - [ ] **Step 3: Consolidate overlapping source-audit records**
 
@@ -218,7 +215,7 @@ Compare line-by-line before combining the feature/UI matrices and public-site po
 
 - [ ] **Step 4: Set one design-system source**
 
-Move/rename the canonical design-system content to `docs/design/system/`. Keep `.ulpi/design/DESIGN.md` as the tool-compatible entrypoint pointing to the canonical file. Transfer unique rules from Plan 03 and the root `LOADOUT_DESIGN_SYSTEM.md` before deleting or replacing duplicate copies.
+Move/rename the canonical design-system content to `docs/design/system/`. Keep `.ulpi/design/DESIGN.md` as the tool-compatible entrypoint pointing to the canonical file. Transfer unique rules from Plan 03 and the root `docs/design/system/design-system.md` before deleting or replacing duplicate copies.
 
 - [ ] **Step 5: Rename LOADOUT-owned Markdown files**
 
@@ -255,7 +252,7 @@ For each source copy, confirm the app/repository target exists, compare hashes, 
 
 Move remaining reviewed user-authored notes and reports to their parent destinations. Keep `.tmp/` generated/runtime files. Rebuild the workspace inventory and compare retained paths, sizes, and hashes to the pre-move inventory.
 
-## Task 7: Validate, commit, and promote through the PR lanes
+## Task 7: Validate the local result
 
 **Files:**
 - All paths in Tasks 1–6
@@ -263,7 +260,7 @@ Move remaining reviewed user-authored notes and reports to their parent destinat
 
 **Interfaces:**
 - Consumes: completed workspace/repository changes.
-- Produces: reviewed logical commits on the short-lived branch, then promotion PRs through the existing protected lanes.
+- Produces: a verified working tree on the short-lived branch. The owner requested no implementation commit in this run; push, PR, and promotion remain separate future actions.
 
 - [ ] **Step 1: Review the complete changed-path list**
 
@@ -289,19 +286,14 @@ Expected: each command exits successfully. If a command fails, record the exact 
 
 Run the app and compare the homepage before/after at desktop and mobile sizes. Confirm no section layout, color, animation, or behavior changed.
 
-- [ ] **Step 5: Create natural, focused commits**
+- [ ] **Step 5: Leave implementation changes uncommitted**
 
-Separate workspace/docs inventory and policy, asset reorganization/path updates, plan/docs consolidation, and workspace snapshot changes into reviewable commits. Keep all commits on `chore/workspace-repo-restructure`.
+Do not stage or commit implementation changes. If the owner later requests a commit, use focused groups for workspace/doc inventory, asset organization/path updates, plan/doc consolidation, and workspace snapshot changes.
 
-- [ ] **Step 6: Open the PR to development and follow promotion checks**
+- [ ] **Step 6: Defer PR and lane promotion**
 
-Open a PR from the short-lived branch to `development`; wait for required checks and review. Promote the exact passing changes with PRs to `testing` and then `main`. Verify the final GitHub tree and deployed Docs/homepage. Do not force-push or delete remote branches.
+Do not push, open a PR, or promote in this run. When separately requested, follow the normal temporary branch → development → testing → main path and verify each required check and production deployment.
 
 ## Commit sequence
 
-1. `Record workspace and repository file dispositions`
-2. `Organize workspace asset and report paths`
-3. `Move website art into canonical asset folders`
-4. `Rename and consolidate canonical plans`
-5. `Clarify internal docs and reference ownership`
-6. `Refresh parent plan snapshot`
+Suggested future commit subjects, only if requested: “Recorded workspace and repository file dispositions”; “Organized workspace assets and reports”; “Moved website art into canonical asset folders”; “Renamed and consolidated canonical plans”; “Clarified internal docs and reference ownership”; “Refreshed the parent plan snapshot”.

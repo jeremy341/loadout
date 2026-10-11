@@ -26,9 +26,9 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Do not use `--recursive` or `--recurse-submodules`: Stardance's nested secrets repository was unavailable during audit. The three parent references remain pinned and available; see [SOURCE_BASES.md](../source-audit/SOURCE_BASES.md). Tracked images under `docs/design/references/` arrive with the clone.
+Do not use `--recursive` or `--recurse-submodules`: Stardance's nested secrets repository was unavailable during audit. The four top-level references remain pinned; see [source bases](../source-audit/source-bases.md). Tracked images under `docs/design/references/` arrive with the clone.
 
-Use Bun1.3.14. See [SETUP.md](SETUP.md) for ports, environment names and Windows execution notes.
+Use Bun 1.3.14. See [local setup](setup.md) for ports, environment names and Windows execution notes.
 
 ## Promotion path
 
@@ -44,9 +44,9 @@ temporary branch → PR into development → promotion PR into testing → promo
 
 Either trusted maintainer may open, review and merge a check-green PR while another is offline. Human review is optional. Do not add Jeremy-only, owner-only, CODEOWNER-only or latest-pusher approval gates.
 
-GitHub's personal-repository rules cannot constrain development direct pushes to named write collaborators. Check live protections rather than treating this guide as proof; [BRANCH_PROTECTION_SETUP.md](BRANCH_PROTECTION_SETUP.md) records the settings and dated evidence.
+GitHub's personal-repository rules cannot constrain development direct pushes to named write collaborators. Check live protections rather than treating this guide as proof; [branch protection setup](branch-protection-setup.md) records the settings and dated evidence.
 
-CodeScene is advisory. Codecov upload is not implemented; [QUALITY_INTEGRATIONS.md](QUALITY_INTEGRATIONS.md) distinguishes setup from working coverage.
+CodeScene is advisory. Codecov upload is not implemented; [quality integrations](quality-integrations.md) distinguishes setup from working coverage.
 
 ## Verify and publish
 
@@ -61,11 +61,11 @@ bun run test:e2e
 git diff --check
 ```
 
-Review the actual diff and stage explicit paths if unrelated work exists. Docs source/link tests are included in the unit command. Website work also requires viewport, keyboard and reduced-motion evidence; follow [UI_SKILLS.md](UI_SKILLS.md).
+Review the actual diff and stage explicit paths if unrelated work exists. Docs source/link tests are included in the unit command. Website work also requires viewport, keyboard and reduced-motion evidence; follow [the UI skill guide](ui-skills.md).
 
 Push the temporary branch, open the development PR and wait for required checks. After merge, promote development to testing, then testing to main. Do not bypass a failed check or send feature work directly to main.
 
-Vercel Production follows main at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Preview URLs are deployment-specific. Verify commit, readiness and stable URL before announcing publication; see [deployment and rollback](DEPLOYMENT_AND_ROLLBACK.md).
+Vercel Production follows main at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Preview URLs are deployment-specific. Verify commit, readiness and stable URL before announcing publication; see [deployment and rollback](deployment-and-rollback.md).
 
 ## Authenticated GitHub CLI
 
@@ -75,6 +75,10 @@ Never ask for a pasted token, use `gh auth token` or `--show-token`, set a persi
 
 ## Handoff and documentation changes
 
-Record what changed, the PR/commit, actual check results, deployment evidence, and unresolved decisions. Public content follows [CONTENT_AUTHORING.md](CONTENT_AUTHORING.md); internal changes update the owning document and index.
+Record what changed, the PR/commit, actual check results, deployment evidence, and unresolved decisions. Public content follows [content authoring](content-authoring.md); internal changes update the owning document and [documentation index](../README.md).
 
-Never commit secrets, .env values, .vercel, dependencies, caches, build output, Playwright output or review captures. Repository plans and design history are retained with status labels; no blanket cleanup.
+## Human and AI contributors
+
+People and AI follow the same scope, preservation, review, and publication rules. Provide AI contributors with the task's audience, authorized changes, exclusions, and current plan/design brief; they must read the owning sources and must not treat old prompts, screenshots, or source-reference content as current policy. AI-generated changes remain subject to the same checks and human review options as other work. Agents use GPT-6 Luna at medium reasoning unless the owner requests another setting.
+
+Never commit secrets, .env values, .vercel, dependencies, caches, build output, Playwright output or review captures. Before retiring internal plans or design records, move unique current decisions to their owner, update inbound links, and record the disposition. Do not apply blanket deletion to active proposals, user drafts, or reference sources.

@@ -6,6 +6,7 @@ This repository has separate public, contributor, and planning material. Use the
 |---|---|---|---|
 | [`content/docs/`](../content/docs/) | Builders and visitors | Public explanation of the current program draft | Draft; no live submission or reward services |
 | [`development/WORKFLOW.md`](development/WORKFLOW.md) | Contributors and AI agents | Contribution, branch, review, verification, and release process | Current operating policy |
+| [`development/agent-commits.md`](development/agent-commits.md) | Contributors and AI agents | Commit messages, co-author lines and grouping commits | Current operating rule |
 | [`development/setup.md`](development/setup.md) | Developers | Local setup and environment names | Current implementation reference |
 | [`development/architecture.md`](development/architecture.md) | Developers | Application boundaries and runtime architecture | Current implementation reference |
 | [`design/system/design-system.md`](design/system/design-system.md) | Designers and UI contributors | Shared visual tokens, layout, motion, and asset rules | Current design authority |

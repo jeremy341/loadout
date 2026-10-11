@@ -2,12 +2,11 @@ import { LoadoutIcon } from "./icons/LoadoutIcon";
 import { siteConfig } from "../site-config";
 import { heroCopy } from "../site-content";
 import { ScrollCue } from "./ScrollCue";
+import { HeroWorkshopBackground } from "./HeroWorkshopBackground";
 
 export function LoadoutHero() {
-  return <section className="hero" aria-labelledby="hero-title">
-    <span className="slashes hero-slashes" aria-hidden="true" />
-    <span className="slashes hero-slashes hero-slashes-bottom" aria-hidden="true" />
-    <div className="hero-fragments" aria-hidden="true"><span /><span /><span /><span /></div>
+  return <section className="hero hero--workshop-background" aria-labelledby="hero-title">
+    <HeroWorkshopBackground />
     <div className="hero-inner">
       <div className="hero-badge"><span className="slashes" aria-hidden="true" /><span>TECHNICAL BUILDERS</span><span className="slashes" aria-hidden="true" /></div>
       <div className="hero-frame">

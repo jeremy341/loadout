@@ -425,7 +425,7 @@ test("the grain is a full-screen noise canvas that redraws and never takes input
   await expect(grain).toHaveCount(1);
   await expect(grain).toHaveCSS("pointer-events", "none");
   await expect(grain).toHaveCSS("position", "fixed");
-  await expect(grain).toHaveCSS("opacity", "0.4");
+  await expect(grain).toHaveCSS("opacity", "0.3");
   await expect(grain).toHaveAttribute("aria-hidden", "true");
   const sample = () => grain.evaluate((canvas: HTMLCanvasElement) => {
     const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 64).data;

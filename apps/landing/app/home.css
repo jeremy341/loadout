@@ -259,6 +259,11 @@ html:has(.home) { scroll-behavior:smooth }
 }
 .home .ar span { pointer-events: none; transition: none; }
 .home .ar span:hover { color: inherit; }
+/* ASCII art drifts gently, a few pixels at a time; both layers share the container, so they move together. */
+@keyframes ar-drift { from { transform: translate3d(-4px, 4px, 0); } to { transform: translate3d(5px, -10px, 0); } }
+.home .ar { will-change: transform; animation: ar-drift 11s ease-in-out infinite alternate; }
+.home .ar-right { animation-duration: 13s; animation-delay: -4s; }
+@media (prefers-reduced-motion: reduce) { .home .ar { animation: none; } }
 
 /* FAQ accordion: button questions, animated answers (pre-redesign behaviour). */
 .home .fq2-list { border-bottom: 1px solid var(--fg); }
@@ -804,7 +809,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home .row > .card:nth-child(8) { --reveal-index: 7; }
 
 /* Hero entrance (main: hero-title-enter, hero-badge-enter, hero-support-enter, scroll-cue-enter, scroll-arrow). */
-@keyframes hero-title-enter { from { opacity: 0; transform: translateY(-80px) scale(.85); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hero-title-enter { from { opacity: 0; transform: translateY(-80px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes hero-badge-enter { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes hero-support-enter { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes scroll-cue-enter { from { opacity: 0; } to { opacity: 1; } }

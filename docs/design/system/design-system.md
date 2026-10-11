@@ -55,7 +55,7 @@ Do not use blue/purple glow, gradients, or glass as decoration. Keep rust limite
 - The active Bolt glyph is `sprites/bolt.png`. Keep the owner-supplied custom `apps/landing/public/loadout/bolt.svg` intact as a separate original asset.
 - Keep the LOADOUT logo/wordmark/favicon separate from currency and utility sprites.
 - Render pixel artwork with nearest-neighbor or `image-rendering: pixelated`; preserve transparency and source pixels. Do not add smoothing, backgrounds, or filters to sprite files.
-- Current scenery vectors are grouped under `apps/landing/public/loadout/hero/scenery/`. The 31 `hero-workshop` PNGs are prepared asset material but are not referenced by the current development homepage implementation. The dirty hero implementation remains separate until separately integrated.
+- Scenery vectors are kept under `apps/landing/public/loadout/hero/scenery/`, and the current homepage does not render them. The 31 `hero-workshop` PNGs are kept from the abandoned workshop hero background and are not rendered. Do not wire them into the hero without a new owner decision.
 - New unapproved files belong in `assets/inbox/`. Keep editable sources under `assets/editable/`, distinct old variants under `assets/archive/`, and visual-only examples under `docs/design/references/`. Do not keep identical live exports in multiple folders.
 
 ## Motion and reduced motion

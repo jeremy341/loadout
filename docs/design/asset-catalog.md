@@ -56,23 +56,23 @@ Original source artwork remains in `docs/design/references/2026-10-06/final-pixe
 | Runtime file | Purpose |
 | --- | --- |
 | `apps/landing/public/loadout/hero/scenery/industrial-skyline.svg` | Preserved source; the new ASCII hero treatment no longer displays this skyline. |
-| `apps/landing/public/loadout/hero/scenery/hazard-stripes.svg` | Existing slash decoration used by homepage CSS. |
-| `apps/landing/public/loadout/hero/scenery/cloud-01.svg` – `cloud-03.svg` | Current standalone cloud drawings with existing horizontal scroll motion. |
-| `apps/landing/public/loadout/hero/scenery/scroll-cue.svg` | Preserved downward-scroll artwork. |
+| `apps/landing/public/loadout/hero/scenery/hazard-stripes.svg` | Kept. The current homepage does not reference it. |
+| `apps/landing/public/loadout/hero/scenery/cloud-01.svg` – `cloud-03.svg` | Kept. The current homepage does not render clouds. |
+| `apps/landing/public/loadout/hero/scenery/scroll-cue.svg` | Kept. The current homepage does not reference it. |
 | `apps/landing/public/loadout/bolt.svg` | Owner-supplied custom Bolt SVG; kept byte-for-byte at its original URL. |
 
 The homepage also uses `apps/landing/public/loadout/sprites/bolt.png` for the final pixel Bolt glyph. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
 
 ### Workshop scenery PNGs
 
-`apps/landing/public/loadout/hero-workshop/` contains the 31 verified PNGs from the dirty hero worktree. Their names remain compatible with `HeroWorkshopBackground.tsx`. They are staged in the public asset tree but are not referenced by the current `development` homepage code; the hero implementation remains a separate dirty-worktree change.
+`apps/landing/public/loadout/hero-workshop/` contains the 31 verified PNGs from the abandoned hero workshop background. They are kept but not rendered. `HeroWorkshopBackground.tsx` and `hero-workshop-background.css` are kept with them, and nothing imports them. The workshop background was abandoned on 11 October 2026.
 
 ## Editable and incoming source artwork
 
 - `assets/inbox/icons/` holds the unintegrated Bolt and track references plus Rivet images. These are not included in homepage UI.
 - `assets/editable/icons/loadout-icon-palette.ase` is the icon palette source.
 - `assets/editable/homepage/rail-components-source.ase` is the editable rail source.
-- The numbered cloud PNGs in `apps/landing/public/loadout/hero-workshop/` are prepared for later hero scenery; the current development homepage does not reference them yet.
+- The numbered cloud PNGs in `apps/landing/public/loadout/hero-workshop/` are kept from the abandoned workshop background and are not rendered.
 - `docs/design/references/homepage-workshop/` holds the supplied full-page workshop concept and cloud/decorative source sheets as visual references.
 - `assets/archive/homepage-variants/` holds distinct older and alternate structures/workbench images. The three byte-identical old copies removed earlier are not included.
 

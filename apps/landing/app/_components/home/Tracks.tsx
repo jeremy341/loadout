@@ -22,7 +22,7 @@ export function Tracks() {
           four tracks
         </h2>
         <p className="lead">
-          Choose the fields your project uses; one project can use more than one. Reviewers assign Track XP to each field based on the work they see.
+          Choose the fields your project uses. One project can use more than one.
         </p>
         <div className="row">
           <div className="card t">
@@ -38,7 +38,7 @@ export function Tracks() {
               Tools
             </div>
             <div className="m dsc">
-              Make tools that help people build and test software, such as command-line tools, debuggers, and automation.
+              Command-line tools, debuggers, and automation that help people build software.
             </div>
           </div>
           <div className="card t">
@@ -54,7 +54,7 @@ export function Tracks() {
               Systems
             </div>
             <div className="m dsc">
-              Build the software and infrastructure other projects rely on, such as runtimes, networks, and databases.
+              Runtimes, networks, and databases other projects rely on.
             </div>
           </div>
           <div className="card t">
@@ -70,7 +70,7 @@ export function Tracks() {
               Compute
             </div>
             <div className="m dsc">
-              Make programs do more or run faster with graphics, GPUs, and model-running software.
+              Faster, more capable programs: graphics, GPUs, and model-running software.
             </div>
           </div>
           <div className="card t">
@@ -86,7 +86,7 @@ export function Tracks() {
               Hardware
             </div>
             <div className="m dsc">
-              Build physical technology such as circuit boards, embedded devices, and robots.
+              Circuit boards, embedded devices, and robots.
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export function Tracks() {
               Research Mode
             </b>
             <div className="m dsc">
-              Add it to any track. Publish a reproducible technical report with your project to earn bonus Track XP and reach that track&apos;s discounts sooner. It is not a fifth track.
+              Add it to any track. Publish a reproducible report with your project for bonus Track XP and faster discounts in that track. It is not a fifth track.
             </div>
           </div>
           <span className="chip">

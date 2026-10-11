@@ -19,7 +19,7 @@ export function LoadoutIrl() {
           {"// Ruhr"}
         </h2>
         <p className="lead">
-          A proposed three-day hackathon in Germany’s Ruhr area. It is a future concept, not an announced event.
+          A proposed three-day hackathon in Germany’s Ruhr area, not an announced event.
         </p>
         <div className="row r3">
           <div className="card t">
@@ -72,10 +72,7 @@ export function LoadoutIrl() {
           </div>
         </div>
         <div className="asd" style={{ marginTop: "34px" }}>
-          <span className="chip">
-            Planned concept
-          </span>
-          <div className="m dsc" style={{ marginTop: "12px" }}>
+          <div className="m dsc">
             Dates, venue, funding, and registration are not confirmed yet.
           </div>
         </div>

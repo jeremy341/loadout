@@ -30,7 +30,7 @@ export function ProjectFit() {
               Workflow command-line tool
             </h4>
             <div className="m dsc">
-              Build a command that removes a repeated step from a real workflow.
+              Removes a repeated step from a real workflow.
             </div>
           </div>
           <span className="chip">
@@ -46,7 +46,7 @@ export function ProjectFit() {
               Inference runtime
             </h4>
             <div className="m dsc">
-              Build software that runs a model on a device or GPU. That can show original Compute work.
+              Runs a model on a device or GPU, which can show original Compute work.
             </div>
           </div>
           <span className="chip">
@@ -62,7 +62,7 @@ export function ProjectFit() {
               Copied tutorial site
             </h4>
             <div className="m dsc">
-              Recreating a tutorial without adding substantial technical work shows little original work.
+              Recreating a tutorial adds little original work.
             </div>
           </div>
           <span className="chip">
@@ -78,7 +78,7 @@ export function ProjectFit() {
               Basic AI chat screen
             </h4>
             <div className="m dsc">
-              A simple screen around an AI model adds little technical work on its own.
+              A thin screen around an AI model adds little technical work.
             </div>
           </div>
           <span className="chip">
@@ -100,7 +100,7 @@ export function ProjectFit() {
           </span>
         </div>
         <p className="note">
-          If it fits, reviewers assess Originality, Technical Depth, Execution, and Documentation.
+          If it fits, reviewers score these four things. The examples are possible directions, not guaranteed approvals.
         </p>
       </div>
     </>

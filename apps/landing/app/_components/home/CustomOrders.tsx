@@ -20,7 +20,7 @@ export function CustomOrders() {
           orders
         </h2>
         <p className="lead">
-          Reach the relevant track tier, describe what you need, and receive a custom Bolt quote for equipment outside the planned prize catalog.
+          Reach the relevant track tier, then request equipment outside the planned prize catalog.
         </p>
         <div className="row r3">
           <div className="card sm">
@@ -33,7 +33,7 @@ export function CustomOrders() {
               Reach a track tier
             </div>
             <div className="m dsc">
-              Ship reviewed work and earn enough Track XP in the relevant field.
+              Ship reviewed work and earn Track XP in that field.
             </div>
           </div>
           <div className="card sm">
@@ -46,7 +46,7 @@ export function CustomOrders() {
               Submit a request
             </div>
             <div className="m dsc">
-              Explain what you need, how it supports your work, and which track it belongs to.
+              Say what you need, why, and which track it fits.
             </div>
           </div>
           <div className="card sm">
@@ -59,26 +59,15 @@ export function CustomOrders() {
               Review the quote
             </div>
             <div className="m dsc">
-              The team checks fit, funding, and delivery, then gives you a final Bolt quote to accept or decline.
+              The team checks fit, funding, and delivery, then sends a Bolt quote to accept or decline.
             </div>
           </div>
-        </div>
-        <div className="chips">
-          <span className="chip">
-            Requires track level
-          </span>
-          <span className="chip">
-            Custom quote
-          </span>
-          <span className="chip">
-            Accept or decline
-          </span>
         </div>
         <p className="note">
           <b>
             Custom Order requests are not open yet.
           </b>{" "}
-           A matching Field Requisition may apply an extra discount to an eligible quote. It does not replace the required track level.
+           A Field Requisition applies only when the approved quote marks it eligible. It does not replace the required track level.
         </p>
       </div>
     </>

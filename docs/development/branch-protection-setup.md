@@ -39,32 +39,26 @@ short-lived branch → PR → development → promotion PR → testing → promo
 - Administrators are subject to rules. Do not add bypass actors. Force pushes and branch deletion stay disabled.
 - CodeScene and Codecov are not required GitHub branch checks; CodeScene feedback remains advisory. Copilot code review is not included.
 
-## Lean pipeline: target settings (proposed 2026-10-11, not yet applied)
+## Lane settings (read back 2026-10-11)
 
-[The development workflow](WORKFLOW.md) moves one checked commit through the lanes instead of merging it three times. The live rules above still describe GitHub today. These steps make the new flow possible. The pull request that added this section changed no GitHub setting.
+Applied on 2026-10-11:
 
-1. **Align the lanes once.** A push to testing can only fast-forward, and testing and main hold merge commits that development does not. A dry run on 2026-10-11 showed that merging both into development is conflict-free and changes no file. Do it on a checked branch:
+- Repository merge options: squash merges and merge commits allowed, rebase merges off, merged branches deleted automatically.
+- `development` moved by fast-forward to `main`'s commit. Content unchanged.
+- Co-author lines removed from all three lanes' history (same file tree on all three).
 
-   ```powershell
-   git fetch origin
-   git switch -c chore/align-lanes origin/development
-   git merge origin/testing origin/main -m "Align the lanes so later promotions are fast-forwards"
-   git push -u origin HEAD            # wait for green checks
-   git push origin HEAD:development
-   ```
+Current rules, read back after the owner's last change:
 
-2. **testing: stop requiring a PR.** Keep the four required checks, administrator enforcement, no force pushes and no deletion. A direct push then succeeds only for a commit whose checks already passed.
+| Branch | PR required | Force pushes | Required checks |
+|---|---|---|---|
+| `development` | No | Allowed (owner) | Repository integrity, Landing quality, Promotion lane |
+| `testing` | Yes | Off | Repository integrity, Landing quality, Landing browser, Promotion lane |
+| `main` | Yes | Off | Repository integrity, Landing quality, Landing browser, Promotion lane |
 
-   ```powershell
-   gh api -X DELETE repos/jeremy341/loadout/branches/testing/protection/required_pull_request_reviews
-   ```
+Owner decisions still open:
 
-3. **development: require linear history** (Settings, Branches, development, "Require linear history"). This blocks merge commits and still allows squash merges and fast-forward pushes. Do it after step 1, because step 1 is itself a merge commit.
-4. **main (optional).** main stays PR-only, so each release is one merge commit. To make it fast-forward too, delete its PR requirement the same way as step 2. The Lane lineage job already covers it.
-
-Rollback: turn "Require a pull request before merging" back on for testing in the same settings page.
-
-What the workflow now guarantees: a docs-only change skips lint, build and browsers but still reports the required checks green; any other change runs the full set on its exact commit, so that commit is safe to push to every lane. GitHub cannot test ancestry before a push lands, so the Lane lineage job reports afterwards if testing or main receives a commit that is not on its source lane.
+1. **testing: remove the PR requirement.** Settings → Branches → testing → untick "Require a pull request before merging". Then promotion from development is a fast-forward push and needs no PR. Keep the required checks and keep force pushes off. Until this is done, promotion to testing is a PR from development merged with a merge commit.
+2. **development: PR-free or PR-required.** It is PR-free now, which allows a direct push of an already-checked commit. Feature work still goes through a squash-merged PR by convention. Turn the PR requirement back on if you want it enforced.
 
 ## Required GitHub Actions checks
 

@@ -5,7 +5,7 @@ import "../grain.css";
 
 const TILE = 512; // px, the noise tile that is shifted around
 const INTERVAL = 100; // ms between two frames, as on Stasis
-const ALPHA = 51; // of 255 per pixel; the canvas itself is then drawn at 20% opacity (grain.css)
+const ALPHA = 51; // of 255 per pixel; the canvas itself is then drawn at 40% opacity (grain.css)
 
 // One tile of random grey noise, turned into a repeating pattern. A pattern is a snapshot of the
 // tile at the moment it is made, so it is made after the noise is in.
@@ -63,7 +63,7 @@ function startGrain(canvas: HTMLCanvasElement) {
 }
 
 // Film grain in the manner of the Stasis homepage: a full-screen canvas of random grey noise that
-// refreshes ten times a second, drawn very faintly over the whole page. Stasis re-rolls every pixel
+// refreshes ten times a second, drawn softly over the whole page. Stasis re-rolls every pixel
 // on each frame; here one noise tile is rolled once and laid down at a random offset each frame,
 // which looks the same and costs almost nothing. It never takes pointer input.
 export function NoiseGrain() {

@@ -2,7 +2,7 @@
    shadows, square corners, Pixelify Sans headings and Poppins text. The colours are LOADOUT's own
    (warm charcoal or beige, set by the same #theme switch as the homepage). */
 .docs {
-  --bg: #222627; --fg: #E9EBE7; --mut: #A7AEAB; --ac: #E0BD55; --acf: #16191A; --hl: #6FC2BB;
+  --bg: #222627; --fg: #E9EBE7; --mut: #A7AEAB; --ac: #5E9EF4; --acf: #16191A; --hl: #6FC2BB;
   --ink: var(--fg); --dim: #B4BBB8; --panel: #2C3132; --panel-2: #373D3E; --stroke: #4A5254;
   --drop: 4px 4px 0 #0C0E0E; --drop-lg: 8px 8px 0 #0C0E0E;
   --sidebar: 300px; --ease: cubic-bezier(.22, 1, .36, 1);
@@ -207,3 +207,6 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
 @media (forced-colors: active) {
   .docs-nav .section-link.active { border: 2px solid Highlight; }
 }
+
+/* Dark mode: the DOCS word in the sidebar brand follows the blue accent. */
+.docs:not(:has(#theme:checked)) .docs-brand > span:last-child { color: var(--ac); }

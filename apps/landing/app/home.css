@@ -1,6 +1,6 @@
 /* Homepage styles ported from the LOADOUT redesign reference. Scoped under .home. */
 body:has(.home) { margin:0;background:#222627 }
-.home { --bg:#222627;--fg:#E9EBE7;--mut:#A7AEAB;--ac:#E0BD55;--acf:#16191A;--ln:rgba(233,235,231,.06);position:relative;overflow:hidden;background:var(--bg);color:var(--fg);font-family:var(--font-dot),var(--font-mono-art),monospace;max-width:none;margin:0;padding:24px 0 0;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:32px 32px }
+.home { --bg:#222627;--fg:#E9EBE7;--mut:#A7AEAB;--ac:#5E9EF4;--acf:#16191A;--ln:rgba(233,235,231,.06);position:relative;overflow:hidden;background:var(--bg);color:var(--fg);font-family:var(--font-dot),var(--font-mono-art),monospace;max-width:none;margin:0;padding:24px 0 0;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:32px 32px }
 .home * { box-sizing:border-box }
 .home .in { position:relative;z-index:2 }
 .home .hex { width:26px;height:28px;background:var(--fg);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:inline-flex;align-items:center;justify-content:center }
@@ -1078,8 +1078,9 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .faq-noscript dd { margin: 6px 0 0; color: var(--mut); line-height: 1.7; }
 
 /* ===== Icons: the first site's pixel sprites ===== */
-/* Shown as drawn (yellow and black) in both themes. */
+/* Light mode shows them as drawn (yellow and black). Dark mode turns the yellow to the theme's blue; the black outlines stay. */
 .home .ic { image-rendering: pixelated; }
+.home:not(:has(#theme:checked)) .ic { filter: hue-rotate(170deg) saturate(.95); }
 
 /* ===== Logo: the first site's hexagon mark (32px) ===== */
 .home .lg-mark { display: inline-grid; flex: none; width: 32px; height: 32px; }

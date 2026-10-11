@@ -2,8 +2,9 @@ name: Repository integrity
 
 on:
   push:
-    # Check the exact commit on short-lived branches before a maintainer may
-    # push that same checked commit directly to development.
+    # Every branch is checked on its exact commit. The commit that passed here is
+    # the same commit that is fast-forwarded into development, testing and main,
+    # so it is never merged or rebuilt again.
     branches: ['**']
   pull_request:
     branches: [development, testing, main]
@@ -42,6 +43,48 @@ jobs:
               exit 1
               ;;
           esac
+
+  lane-lineage:
+    # Testing and main may be moved by a direct push of an already checked commit.
+    # GitHub cannot test ancestry before a push lands, so this reports it afterwards:
+    # the lane must only move forward, and only to or past a commit of its source lane.
+    name: Lane lineage
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/testing' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check the lane only moved forward from its source lane
+        env:
+          LANE: ${{ github.ref_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          case "$LANE" in
+            testing) source="origin/development" ;;
+            main) source="origin/testing" ;;
+          esac
+
+          if [[ -n "$BEFORE_SHA" && ! "$BEFORE_SHA" =~ ^0+$ ]] && git cat-file -e "${BEFORE_SHA}^{commit}" 2>/dev/null; then
+            if ! git merge-base --is-ancestor "$BEFORE_SHA" "$AFTER_SHA"; then
+              printf '::error::%s did not move forward from %s.\n' "$LANE" "$BEFORE_SHA"
+              exit 1
+            fi
+          fi
+
+          if git merge-base --is-ancestor "$AFTER_SHA" "$source" || git merge-base --is-ancestor "$source" "$AFTER_SHA"; then
+            printf '%s is on the %s line.\n' "$AFTER_SHA" "$source"
+          else
+            printf '::error::%s is not on the %s line. Only commits that reached the source lane belong here.\n' "$AFTER_SHA" "$source"
+            exit 1
+          fi
 
   repository-integrity:
     name: Repository integrity
@@ -88,6 +131,10 @@ jobs:
           stasis|https://github.com/hackclub/stasis.git|7a230ced9ad793f0ad4cda30a7d71c02a58da6b6
           REFERENCES
 
+  # The two landing jobs always run and always report, so a required check is never
+  # "skipped" by accident. A documentation-only change finishes after the first step.
+  # Every code change gets the full set (lint, typecheck, unit tests, production build,
+  # browser suite), so one green commit is good enough for every lane.
   landing-quality:
     name: Landing quality
     runs-on: ubuntu-latest
@@ -96,50 +143,68 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          fetch-depth: 0
           persist-credentials: false
+      - name: Find out whether the app is affected
+        id: changed
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: bash .github/scripts/app-changed.sh
       - name: Set up Bun
+        if: steps.changed.outputs.app == 'true'
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: 1.3.14
       - name: Install locked dependencies
+        if: steps.changed.outputs.app == 'true'
         run: bun install --frozen-lockfile
       - name: Lint
+        if: steps.changed.outputs.app == 'true'
         run: bun run lint
       - name: Typecheck
+        if: steps.changed.outputs.app == 'true'
         run: bun run typecheck
       - name: Unit tests
+        if: steps.changed.outputs.app == 'true'
         run: bun run test
       - name: Production build
-        if: >-
-          github.ref == 'refs/heads/testing' ||
-          github.ref == 'refs/heads/main' ||
-          (github.event_name == 'pull_request' &&
-          (github.base_ref == 'testing' || github.base_ref == 'main'))
+        if: steps.changed.outputs.app == 'true'
         run: bun run build
 
   landing-browser:
     name: Landing browser
     needs: landing-quality
-    if: >-
-      github.ref == 'refs/heads/testing' ||
-      github.ref == 'refs/heads/main' ||
-      (github.event_name == 'pull_request' &&
-      (github.base_ref == 'testing' || github.base_ref == 'main'))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          fetch-depth: 0
           persist-credentials: false
+      - name: Find out whether the app is affected
+        id: changed
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: bash .github/scripts/app-changed.sh
       - name: Set up Bun
+        if: steps.changed.outputs.app == 'true'
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: 1.3.14
       - name: Install locked dependencies
+        if: steps.changed.outputs.app == 'true'
         run: bun install --frozen-lockfile
       - name: Install Chromium
+        if: steps.changed.outputs.app == 'true'
         run: bunx playwright install --with-deps chromium
         working-directory: apps/landing
       - name: Browser and accessibility checks
+        if: steps.changed.outputs.app == 'true'
         run: bun run test:e2e

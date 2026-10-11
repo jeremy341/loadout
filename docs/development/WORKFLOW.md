@@ -73,7 +73,7 @@ Rules that keep the history short:
 - **Batch small tweaks.** Fold a run of tweaks (a value changed a few times, copy cuts plus a colour) into one branch and one PR, not a PR per tweak.
 - **Skips.** Landing quality and Landing browser still report green, but lint, build and browsers do not run, when a change only touches `docs/`, `plans/`, `.ulpi/`, `assets/` or the root Markdown files ([the rule](../../.github/scripts/app-changed.sh)). Any code, content, workflow or dependency change runs everything. `[skip ci]` is not used because required checks must report.
 - **Lineage.** testing and main only move forward, by a commit that already reached their source lane. The Lane lineage job reports a break. Never force-push testing or main; repair with a normal revert.
-- **No AI co-author lines.** Do not add co-author lines that name an AI tool to commit messages (see AGENTS.md).
+- **No AI co-author lines.** Do not add co-author lines that name an AI tool to commit messages. Commit grouping and the pre-commit check are in [agent commit rules](agent-commits.md).
 
 Either trusted maintainer may open, review and merge a check-green PR while another is offline. Human review is optional. Do not add Jeremy-only, owner-only, CODEOWNER-only or latest-pusher approval gates.
 

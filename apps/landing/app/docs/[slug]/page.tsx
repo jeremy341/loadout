@@ -14,7 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = getDocs().find((entry) => entry.slug === (docsAliases[slug] ?? slug));
-  return { title: "LOADOUT Docs — " + (item?.label ?? "Document"), description: item?.description };
+  return { title: "LOADOUT Docs: " + (item?.label ?? "Document"), description: item?.description };
 }
 
 export default async function DocsSlugPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -429,18 +429,17 @@ test("the docs have no rulers and use the Pixl layout: boxed sidebar, hard rules
   await expect(page.locator(".docs > canvas.grain")).toHaveCount(1);
   await expect(page.locator(".docs-nav")).toHaveCSS("border-right-width", "4px");
   await expect(page.locator(".doc h1")).toHaveCSS("font-size", "46px");
-  await expect(page.locator(".doc-ledger").first()).toHaveCSS("border-top-width", "2px");
-  expect(await page.locator(".doc-ledger").first().evaluate((element) => getComputedStyle(element).boxShadow)).toMatch(/4px 4px 0px/);
+  await expect(page.locator(".doc-foot a").first()).toHaveCSS("border-top-width", "2px");
+  expect(await page.locator(".doc-foot a").first().evaluate((element) => getComputedStyle(element).boxShadow)).toMatch(/4px 4px 0px/);
   await expect(page.locator(".docs-nav .section-link.active")).toHaveText("What is LOADOUT?");
-  await expect(page.locator(".docs-toc [aria-current=true]")).toHaveCount(1);
-  const grid = await page.locator(".docs").evaluate((element) => getComputedStyle(element).backgroundImage);
-  expect(grid).toBe("none");
+  await expect(page.locator(".docs-toc [aria-current]")).toHaveCount(1);
+  expect(await page.locator(".docs").evaluate((element) => getComputedStyle(element).backgroundImage)).toBe("none");
 });
 
 test("the docs sidebar groups fold with their chevron and the back button lifts like Pixl's", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/docs/start");
-  const group = page.locator(".docs-group").first();
+  const group = page.locator(".docs-group").nth(1);
   await expect(group).toHaveJSProperty("open", true);
   await group.locator("summary").click();
   await expect(group).toHaveJSProperty("open", false);
@@ -456,3 +455,94 @@ test("the page has no long dashes and no repeated filler labels", async ({ page 
   expect(text).not.toMatch(/[—–]/);
   expect(text).not.toMatch(/FIG\. \d|EARNED ON SHIP|TECHNICAL SIGNAL|PLANNED PRIZE\n|OUTCOME/);
 });
+
+test("the LOADOUT Docs tab opens the field manual and its section links work", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("link", { name: "Open LOADOUT documentation" }).click();
+  await expect(page).toHaveURL(/\/docs\/start$/);
+  await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
+  const docsNav = page.getByRole("navigation", { name: "Documentation sections" });
+  await expect(docsNav).toBeVisible();
+  await docsNav.getByRole("link", { name: "Bolts, XP & levels" }).click();
+  await expect(page).toHaveURL(/\/docs\/progress$/);
+  await expect(page.locator("h1", { hasText: "Bolts, XP & levels" })).toBeInViewport();
+  await page.getByRole("link", { name: "BACK TO LOADOUT" }).click();
+  await expect(page).toHaveURL(/\/$/);
+});
+
+test("the LOADOUT Docs page reflows without horizontal scrolling", async ({ page }) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/docs");
+    const sizes = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, viewport: window.innerWidth }));
+    expect(sizes.scroll).toBeLessThanOrEqual(sizes.viewport);
+  }
+});
+
+test("the LOADOUT Docs tab has a direct keyboard and pointer route", async ({ page }) => {
+  await page.goto("/");
+  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  await expect(tab).toBeVisible();
+  await tab.focus();
+  await expect(tab).toBeFocused();
+  await tab.click();
+  await expect(page).toHaveURL(/\/docs\/start$/);
+});
+
+test("Community Eras explain shared progression without leaking Era rules elsewhere", async ({ page }) => {
+  await page.goto("/");
+  const eras = page.locator("#eras");
+  await expect(eras.getByRole("heading", { name: "Build the next Era together." })).toBeVisible();
+  await expect(eras).not.toContainText("Planned community concept");
+  await expect(eras).toContainText("A shared technical theme advanced by approved projects across the four tracks.");
+  await expect(eras).toContainText("Approved projects");
+  await expect(eras).toContainText("Shared Era Points");
+  await expect(eras).toContainText("Next technical theme");
+  await expect(eras).toContainText("+10%");
+  await expect(eras).toContainText("Era Points are separate from Bolts and Track XP.");
+  await expect(eras).toContainText("Planned rule");
+  await expect(eras).not.toContainText(/Steam|Electrification|Computing|Networks|Acceleration|14 days|weekly reset|target|Season/i);
+  for (const selector of ["#process", "#progression", "#loadout-irl"]) {
+    await expect(page.locator(selector)).not.toContainText(/Era objectives|Era Points|Era changes/i);
+  }
+  const eraQuestion = page.getByRole("button", { name: "What are Community Eras?" });
+  await eraQuestion.click();
+  await expect(eraQuestion).toHaveAttribute("aria-expanded", "true");
+  const eraFaq = page.locator(".fq2").filter({ hasText: "What are Community Eras?" });
+  await expect(eraFaq).toContainText("An Era is a shared technical theme that approved projects help the community move forward.");
+  await expect(eraFaq).not.toContainText(/14 days|weekly reset|target|\+10%/i);
+});
+
+test("Custom Orders keep the request path without showing the planned tier card", async ({ page }) => {
+  await page.goto("/");
+  const customOrders = page.locator("#custom-orders");
+  await expect(customOrders).toContainText("relevant track tier");
+  await expect(customOrders).toContainText("Custom Order requests are not open yet");
+  await expect(customOrders).not.toContainText(/Planned request tiers|Bare Metal|LV\.4|LV\.8|LV\.12|LV\.15/);
+});
+
+for (const width of [320, 390, 471, 700, 701, 900, 901, 1440]) {
+  test(`Research Mode keeps readable copy and separate labels at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const strip = page.locator("#research");
+    const heading = strip.locator("b");
+    const description = strip.locator(".dsc");
+    const status = strip.locator(".chip");
+    const [panel, title, copy, label] = await Promise.all([
+      strip.boundingBox(), heading.boundingBox(), description.boundingBox(), status.boundingBox(),
+    ]);
+    for (const bounds of [title!, copy!, label!]) {
+      expect(bounds.x).toBeGreaterThanOrEqual(panel!.x);
+      expect(bounds.x + bounds.width).toBeLessThanOrEqual(panel!.x + panel!.width + 1);
+    }
+    const overlaps = title!.x < label!.x + label!.width && title!.x + title!.width > label!.x && title!.y < label!.y + label!.height && title!.y + title!.height > label!.y;
+    expect(overlaps).toBe(false);
+    expect(copy!.width).toBeGreaterThan(panel!.width * (width <= 700 ? 0.6 : 0.35));
+    for (const text of [heading, description, status]) {
+      expect(await text.evaluate((element) => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
+    }
+  });
+}

@@ -13,7 +13,7 @@ visual_density: 4
 
 ## Current homepage order — 2026-10-06
 
-The current owner-directed composition supersedes the earlier separate About placement: hero → Tracks and Research Mode → How it works, including Digital/Physical Loadout outcomes → Project Fit → Progress & Prizes → Community Eras → optional LOADOUT IRL concept → FAQ → Who's Behind LOADOUT → footer. The hero now carries the primary orientation copy. A fixed LOADOUT DOCS tab pulls up a preview sheet and links to the full field manual at `/docs`. Plan 14 still owns the Progress & Prizes grouping, but its earlier About placement and unchanged-process constraint have been superseded by the current user-approved page update. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
+The current owner-directed composition supersedes the earlier separate About placement: hero → Tracks and Research Mode → How it works, including Digital/Physical Loadout outcomes → Project Fit → Progress & Prizes → Community Eras → optional LOADOUT IRL concept → FAQ → Who's Behind LOADOUT → footer. The hero now carries the primary orientation copy. The fixed LOADOUT DOCS tab links directly to `/docs`, which redirects to `/docs/start`; it does not open a preview sheet. Plan 14 still owns the Progress & Prizes grouping, but its earlier About placement and unchanged-process constraint have been superseded by the current user-approved page update. See [the Progress & prizes brief](progress-and-prizes.md) for its nested heading and anchor contract.
 
 ## Active homepage refinement — 2026-10-05
 
@@ -39,7 +39,11 @@ An industrial field manual for young technical builders, expressed through clean
 
 ## Docs surface lock
 
-Documentation is a full-screen **technical/utilitarian field manual**, not a Pixl clone. It uses the same graph-paper canvas, paper surfaces, graphite plates, Jersey 10 display type, IBM Plex Mono reading type, ink rules, and Bolt Yellow evidence markers as the homepage. Docs vary by composition only: ruled evidence tables, comparison ledgers, process diagrams, and a persistent rail are allowed; new colors, radii, shadows, or type families are not. Every screen must read as the same product if placed side by side.
+The approved [Docs refresh](docs-refresh.md) extends the reading surface only: 280px directory, flexible left-aligned article up to1100px, 240px contents rail, paragraphs72ch, local public-content search and native bounded panes with hidden scrollbars. This width exception is Docs-specific; homepage composition and tokens stay fixed.
+
+**Pixl-style docs (owner-directed, 2026-10-11).** The Docs now follow the layout and components of the Pixl docs: a boxed 300px sidebar with a 4px right rule and collapsible groups (label, count, chevron), Pixl's block button (2px border, 4px right and bottom edges that lift on hover), sidebar links with an ink hover block and a sand active block, Pixelify Sans headings (46px and 30px), Poppins text loaded on the Docs only, 2px rules with 4px block shadows on tables, callouts, search results and previous/next cards, a 760px article and a 240px "On this page" rail. The graph-paper background is dropped on the Docs. Colours, the logo, the film grain and the theme switch stay LOADOUT's own. This supersedes the widths in the Docs refresh above and the earlier "not a Pixl clone" rule.
+
+Documentation is a full-screen **technical/utilitarian field manual** in LOADOUT's own palette. It shares the homepage's warm charcoal or beige themes, sand and amber accents, ink rules, and the pixel logo. Docs vary by composition only: ruled evidence tables, comparison ledgers, process diagrams, and a persistent rail are allowed; new colors, radii, shadows, or type families are not. Every screen must read as the same product if placed side by side.
 
 The counterfactual test passes: this identity depends on LOADOUT's field-manual concept, pixel typography, physical Bolt token, and Digital/Physical Loadout loop. It is not a reusable generic tech-program template.
 

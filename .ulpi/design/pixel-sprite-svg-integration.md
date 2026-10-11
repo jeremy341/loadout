@@ -1,6 +1,6 @@
 # Pixel sprite SVG integration
 
-> Superseded for homepage UI icons by the approved [pre-sprite icon restoration](pre-sprite-icon-restoration.md). The sprite replacement is no longer the active source for UI icons; preserve the custom `/loadout/bolt.svg` asset for Bolt icons. Keep scenery and standalone non-icon assets that the restoration explicitly preserves.
+> **Status: superseded.** The website uses the transparent PNG sprites recorded in [`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md). The owner-supplied `bolt.svg` remains preserved as a separate source asset and is not the active currency glyph. Do not apply this older SVG-export proposal.
 
 ## Design read
 

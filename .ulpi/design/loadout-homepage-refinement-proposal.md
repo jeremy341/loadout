@@ -1,6 +1,6 @@
 # LOADOUT homepage refinement — design proposal
 
-Status: planning proposal, 2026-10-04. These are proposed values and copy, not a replacement for the active design lock until implementation is authorized. Implements the seven-item scope summarized in chat and the source audit at `docs/source-audit/PIXL_MOTION_PARITY.md`.
+**Status:** Implemented; historical proposal. The current design authority is [DESIGN.md](DESIGN.md), the homepage owner is [Plan 06](../../plans/06-public-homepage.md), and implementation evidence is in the [landing audit](../../docs/source-audit/landing-port-and-assets.md). Do not reapply proposed values without checking those owners.
 
 ## Direction
 
@@ -66,10 +66,10 @@ Draft preflight: specific product identity, one visual language, readable contra
 
 ## Build handoff
 
-Use the existing Next/React/Bun/Framer Motion/Lenis stack. Implement `PLAN/10_LOADOUT_HOMEPAGE_RSVP_MOTION_AND_CONTENT_REFINEMENT.md` after review, retaining the current branch/dirty work. If delegated, agents run GPT-6 Luna at medium as the user's AGENTS instruction requires. The designer owns the proposal; the implementer owns code and verification. No additional comp/imagegen or broad product migration.
+Use the existing Next/React/Bun/Framer Motion/Lenis stack. Implement `plans/06-public-homepage.md` after review, retaining the current branch/dirty work. If delegated, agents run GPT-6 Luna at medium as the user's AGENTS instruction requires. The designer owns the proposal; the implementer owns code and verification. No additional comp/imagegen or broad product migration.
 
 ## Execution result — 2026-10-04
 
-Approved and implemented. The active design lock is DESIGN.md. The RSVP default and safe overrides, selected two-line headline, fullscreen source-grounded choreography, continue cue, larger horizontal clouds, muted palette, static content additions and no-JS FAQ fallback are present. The final evidence is recorded in docs/source-audit/PUBLIC_SITE_PORT.md.
+Approved and implemented. The active design lock is DESIGN.md. The RSVP default and safe overrides, selected two-line headline, fullscreen source-grounded choreography, continue cue, larger horizontal clouds, muted palette, static content additions and no-JS FAQ fallback are present. The final evidence is recorded in docs/source-audit/landing-port-and-assets.md.
 
 The 2026-10-05 desktop amendment widens the frame to 900px above 1100px and holds each title span to one line. All four tested desktop widths show exactly two rows. Four unit tests and 24 production-browser cases pass, alongside lint, typecheck and build.

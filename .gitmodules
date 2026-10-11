@@ -7,3 +7,6 @@
 [submodule "references/stardance"]
 	path = references/stardance
 	url = https://github.com/hackclub/stardance.git
+[submodule "references/stasis"]
+	path = references/stasis
+	url = https://github.com/hackclub/stasis.git

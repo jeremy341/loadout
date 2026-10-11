@@ -10,7 +10,7 @@ export function DocsDocument({ page, previous, next }: { page: DocsPage; previou
     <main className="docs-main" id="docs-main" data-lenis-prevent tabIndex={0} aria-label="Documentation content">
       <article className="doc">
         <header className="doc-header">
-          <p className="doc-kicker">LOADOUT // BUILDER GUIDE</p>
+          <span className="eyebrow">{page.group}</span>
           <h1>{page.label}</h1>
           <p className="lead">{page.description}</p>
           <span className="docs-status">In development · Draft reference</span>
@@ -23,7 +23,7 @@ export function DocsDocument({ page, previous, next }: { page: DocsPage; previou
           {previous ? <Link href={`/docs/${previous.slug}`}><span>PREVIOUS</span><b>{previous.label}</b></Link> : <span />}
           {next ? <Link className="next" href={`/docs/${next.slug}`}><span>NEXT</span><b>{next.label}</b></Link> : <Link className="next" href="/"><span>FINISH</span><b>Return to LOADOUT</b></Link>}
         </nav>
-        <div className="doc-sign">LOADOUT // BUILD YOUR OWN TECHNICAL STACK</div>
+        <div className="doc-sign">Built by the LOADOUT team</div>
       </article>
     </main>
     <DocsToc headings={page.headings} />

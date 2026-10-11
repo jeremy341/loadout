@@ -48,14 +48,6 @@ export function Progression() {
             </div>
           ))}
         </div>
-        <div className="asd" style={{ marginTop: "40px" }}>
-          <b className="cn" style={{ fontSize: "22px" }}>
-            Choose where to grow.
-          </b>
-          <div className="m dsc" style={{ marginTop: "8px" }}>
-            Level up several tracks for discounts across more fields, or focus on one track to build deeper skills and bigger discounts there.
-          </div>
-        </div>
       </div>
     </>
   );

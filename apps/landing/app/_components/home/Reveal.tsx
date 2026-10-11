@@ -1,5 +1,8 @@
 "use client";
 
+// Scroll reveal ported from main (cd1834a): fades and slides a section up once it is in view, and
+// can stagger the cards inside it. Content stays visible until hydration, and with reduced motion.
+
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 

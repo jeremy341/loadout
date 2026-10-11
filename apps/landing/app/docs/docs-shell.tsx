@@ -6,6 +6,9 @@ import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import type { MouseEvent } from "react";
 import type { DocsGroup } from "./docs-data";
 import { DocsSearch } from "./DocsSearch";
+import { ThemeSwitch } from "../_components/ThemeSwitch";
+import { NoiseGrain } from "../_components/NoiseGrain";
+import { Logo } from "../_components/home/Logo";
 
 const STORAGE_KEY = "loadout-docs-groups-v1";
 const CHANGE_EVENT = "loadout-docs-groups-change";
@@ -69,9 +72,12 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
   function navigate() { setMobileOpen(false); }
 
   return <div className="docs">
+    <ThemeSwitch />
+    <NoiseGrain />
     <a className="docs-skip" href="#docs-main">Skip to documentation</a>
     <aside className="docs-nav" aria-label="Documentation directory">
-      <div className="docs-nav-head"><Link className="docs-brand" href="/">LOADOUT <span>DOCS</span></Link><p>Build, ship, and understand LOADOUT</p></div>
+      <div className="docs-nav-head"><Link className="docs-brand" href="/"><Logo /><span>DOCS</span></Link>
+        <label className="tg docs-theme" htmlFor="theme"><span className="pxw mo"><i className="b" /></span><span className="pxw su"><i className="a" /></span></label></div>
       <Link className="docs-back-button" href="/">← BACK TO LOADOUT</Link>
       <DocsSearch key={pathname} />
       <button className="docs-mobile-toggle" type="button" aria-expanded={mobileOpen} aria-controls="docs-navigation" onClick={() => setMobileOpen(!mobileOpen)}>Browse topics <span aria-hidden="true">{mobileOpen ? "−" : "+"}</span></button>

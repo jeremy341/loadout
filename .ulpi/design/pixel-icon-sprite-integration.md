@@ -1,5 +1,7 @@
 # Final pixel icon integration
 
+**Status:** Implemented. The runtime sprite mappings and preserved source artwork are cataloged in [`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md); this brief explains the export decision and is not a second asset list.
+
 **Design read:** Keep LOADOUT’s industrial field-manual identity and replace the active homepage glyphs with the owner's final icon artwork from finnally/.
 
 ## Source and export
@@ -7,7 +9,7 @@
 - The full owner-supplied PNG set is archived in docs/design/references/2026-10-06/final-pixel-icons/source/.
 - Active app sprites are transparent 32×32 PNGs in apps/landing/public/loadout/sprites/.
 - Each exported sprite is cropped to its nontransparent artwork, then fit proportionally inside a 28×28 area on the 32×32 canvas using nearest-neighbor sampling. This preserves the source pixel art and leaves a transparent 2px margin.
-- LoadoutIcon uses the new sprites for every active icon glyph, including currency Bolt, FAQ chevron, and Requisition milestones.
+- LoadoutIcon uses the new sprites for every active icon glyph, including currency Bolt, FAQ chevron, and Requisition milestones. See the complete [asset catalog](../../docs/design/asset-catalog.md) for current source/runtime mappings.
 - The LOADOUT brand mark, wordmark, lockup, favicon, and scene/cloud SVGs stay separate. The previous Bolt SVG stays on disk as an unused source file.
 
 ## Homepage treatment
@@ -25,4 +27,4 @@
 
 ## Handoff
 
-Implement in the existing Next.js landing app. The row/name-to-output mapping is recorded in docs/design/references/2026-10-05/pixel-assets/SPRITE_SHEET_INDEX.md.
+The original row/name-to-output mapping has been consolidated into the [asset catalog](../../docs/design/asset-catalog.md).

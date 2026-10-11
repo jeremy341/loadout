@@ -2,13 +2,14 @@
 
 Paths in source rows are relative to their upstream repository root; local roots are `references/pixl/`, `references/ysws-template/`, and `references/stardance/`.
 
-Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in SOURCE_BASES.md. All three repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template and Stardance code are not copied. `PUBLIC_SITE_PORT.md` records final source/target paths.
+Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in [source-bases.md](source-bases.md). The four repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template, Stardance, and Stasis code/media are reference-only; no Stasis implementation or event claims have been copied. [`landing-port-and-assets.md`](landing-port-and-assets.md) records final landing source/target paths.
 
 The source name in each row maps to these exact versions and permission bases:
 
 - Pixl: SHA 8141b992e92e05583246fd914c63a101100f6fe4; root MIT license, copyright (c) 2026 Pixl.
 - YSWS Template: SHA 1ac191fa5eee1e57983b29ab7101f700c166e207; no root license or README, no repository license metadata, backend package metadata UNLICENSED.
 - Stardance: SHA 3a0fe8148b07c1edfe005e94dfc9d1faa4b64c14; no LICENSE file and no repository license metadata.
+- Stasis: SHA 7a230ced9ad793f0ad4cda30a7d71c02a58da6b6; no root LICENSE file and no repository license metadata at the pin (checked 2026-10-11). Reuse permission reported by the project owner on 2026-10-11; see ATTRIBUTION.md.
 
 | Source | Exact source path(s) | Decision | LOADOUT treatment |
 |---|---|---|---|
@@ -41,6 +42,16 @@ The source name in each row maps to these exact versions and permission bases:
 | Stardance | app/controllers/admin/payout_reviews_controller.rb; app/policies/admin/payout_review_policy.rb; test/controllers/admin/payout_reviews_controller_test.rb; test/policies/admin/payout_review_policy_test.rb | ADAPT | Keep review/reporting interfaces read-only where possible and authorize admin overrides explicitly. |
 | Stardance | app/models/post/ship_event/payouts.rb; app/models/vote.rb; test/models/vote_test.rb | REIMPLEMENT | Define LOADOUT-specific missing-review reassignment, outlier/collusion review, reason feedback, and appeals before launch. The observed median is not outlier trimming. |
 | Stardance | Gemfile; config/application.rb; config/database.yml; config/puma.rb | IGNORE | Do not adopt Rails, its persistence stack, or its deployment architecture. |
+| Stasis | lib/scramble.ts (`useScramble`); app/page.tsx (`ScrambleText`) | ADAPT (implemented) | `ScrambleHeadings.tsx`: dependency-free, section headings only, each letter keeps a box fixed to its real width, the heading's accessible name is the real text while it runs, and reduced motion leaves headings untouched. No GSAP. |
+| Stasis | app/components/MagneticCorners.tsx | ADAPT (implemented) | `MagneticCorners.tsx` on the two hero buttons: CSS-variable corner brackets, no React re-render on pointer move, fine pointers only, reduced motion turns off the pull. No click-forwarding hitbox. |
+| Stasis | app/components/HoverScramble.tsx | ADAPT (implemented) | `HoverScramble.tsx` on the existing hero facts line only: per-letter scramble with a one-letter ripple on hover; the real text stays in the page; reduced motion leaves it still. No Stasis banner text or event facts. |
+| Stasis | app/components/Footer.tsx (wordmark reveal) | ADAPT (implemented) | `FooterWordmark.tsx`: our LOADOUT wordmark in our display font, faint base plus a pointer-lit copy. Their footer copy, links, credit line and wordmark artwork are not used. Their footer-height padding is not needed because our footer is in normal flow. |
+| Stasis | app/components/ASCIIArt.tsx (cursor-reveal mechanism) | ADAPT (implemented, switched off) | `AsciiField.tsx` rebuilds the idea with CSS variables and our own sprite-derived art. All homepage uses were removed on 2026-10-11 at the owner's request; the component and art data stay in the repo. Their artwork is not used (row below). |
+| Stasis | app/components/NoiseOverlay.tsx | ADAPT (idea only) | `app/_components/NoiseGrain.tsx` is a separate implementation of the same idea (a faint full-screen canvas of grey noise refreshed ten times a second); it rolls one noise tile and shifts it, so no Stasis code was taken. |
+| Stasis | app/components/DottedLine.tsx | NOT ADOPTED | Our dashed dividers are our own CSS. Their dotted-line SVG assets are not used. |
+| Stasis | app/components/PageBorder.tsx (frame lines, corner stars, corner readouts, Konami arrows) | NOT ADOPTED for now | Conflicts with the owner's removal of edge decorations from the homepage. The fake readouts ("STATUS: OPERATIONAL", IP/MAC) are never adopted. Revisit only on request. |
+| Stasis | app/components/AsteroidCat.tsx; ImageCarousel.tsx; signup counter and bar in app/page.tsx; EventJsonLd.tsx; badge bracket panel in app/page.tsx | UNDECIDED | Blocked on: a license check of the `lots-o-nekos` package and our own sprite; approved prize or item data and images; a live count source (the app has no live services); approved event dates; a LOADOUT use for the panel. |
+| Stasis | app/page.tsx copy and FAQ; lib/ascii-art.ts artwork; README.md; SPEC.md; public art, photos and logos | NOT ADOPTED | Copy, artwork, photos, logos, event dates, location, scale and operating claims are not copied, even under the reuse permission. |
 
 ## Stardance behavior and test evidence
 

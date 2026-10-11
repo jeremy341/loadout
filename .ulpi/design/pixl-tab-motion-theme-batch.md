@@ -63,3 +63,9 @@ Design read: event landing page for teenage technical builders, in a Ruhr mine a
 - Icons: the cards use the first site's pixel sprites (`public/loadout/sprites`) again, as `<symbol>`s in `ICON_SPRITE`. The theme tints them with a filter: as drawn in light mode; in dark mode the yellow is pulled toward the sand of the RSVP button and each icon gets a faint sand edge, because the old black outlines vanish into the dark cards.
 - The page no longer darkens as you scroll: the `.strata` overlay is removed in both themes.
 - The left ruler is the depth of the page in metres, pinned to the depth strips. The ticks are every 10 m and the numbers every 50 m, and the heavy mark beside each "-N M" strip reads the same number ("-500" beside the "-500 M" strip). Above the first strip it counts up (+). The top ruler stays in pixels. The right-hand ruler stays removed.
+
+## Main's levels rail, old logo and missing animations (11 October 2026)
+
+- Track XP and levels: the rail follows main's: five stops with a 64px requisition marker (no hexagon badge), an ink arrow between stops, the level in Pixelify 26px and the award in 16px, and plain text for "Choose where to grow.". The scroll-driven amber line is gone.
+- Logo: the first site's hexagon mark (yellow hexagon, dark inner hexagon, yellow cross, 32px) with the Jersey 10 name, in the nav, footer and docs. The favicon is main's again.
+- Animations ported from main: the Bolt icon nudge in the process outcomes, the era connector entrance and the IRL status entrance. The level markers already entered in sequence; their delays now start at the second marker. All of it is off under reduced motion. Main's drifting clouds were tried and removed at the owner's request; its skyline and registration marks are not brought back.

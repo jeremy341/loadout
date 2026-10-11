@@ -22,11 +22,6 @@ body:has(.home) { margin:0;background:#141210 }
 .home .cn { font:700 38px/1 var(--font-pixel);text-transform:uppercase }
 .home .card ul { list-style:none;margin:auto 0 0;padding:14px 0 0;border-top:1px dashed var(--mut);font-size:12px;line-height:2 }
 .home .card li:before { content:"[ ] ";color:var(--ac);font-weight:800 }
-.home .lad { display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative }
-.home .lad:before { content:"";position:absolute;left:0;right:0;top:46px;border-top:2px dashed var(--mut) }
-.home .st { position:relative;padding-right:28px }
-.home .bd { width:92px;height:100px;background:var(--fg);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:flex;align-items:center;justify-content:center;margin-bottom:22px }
-.home .bd b { width:80px;height:88px;background:var(--bg);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:flex;align-items:center;justify-content:center;font:700 34px var(--font-pixel);color:var(--ac) }
 .home .faq { border-top:1px solid var(--fg);padding:40px 0 }
 .home .fq { display:flex;justify-content:space-between;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase }
 .home .fa { max-width:620px;font-size:13px;line-height:1.7;color:var(--mut);margin-top:12px }
@@ -53,21 +48,11 @@ body:has(.home):has(#theme:checked) { background:#DDD3BF }
 .home:has(#theme:checked) { --bg:#DDD3BF;--fg:#1A1714;--mut:#6B6354;--ac:#C4491F;--acf:#FBF3E4;--ln:rgba(26,23,20,.08);--rv:#9b907b;--rvh:#f5eedd;--pl1:#d6ccb7;--pl2:#cbbfa8;--sh:rgba(60,40,10,.14) }
 .home:has(#theme:checked) .pri, .home:has(#theme:checked) .tag { background:#E3C26B;color:#1A1714;border-color:#1A1714 }
 .home:has(#theme:checked) .nav .btn { background:#E3C26B!important;color:#1A1714!important;border-color:#1A1714!important }
-.home:has(#theme:checked) .st:last-child .bd { background:#E3C26B!important }
 .home .tg { display:flex;align-items:center;gap:8px;border:1px solid var(--fg);padding:7px 10px;cursor:pointer;color:var(--fg) }
 .home .tg .su { opacity:.35 }
 .home:has(#theme:checked) .tg .su { opacity:1 }
 .home:has(#theme:checked) .tg .mo { opacity:.35 }
 .home:has(#theme:focus-visible) .tg { outline:2px solid var(--ac);outline-offset:2px }
-.home .lf { position:absolute;left:0;right:0;top:46px;border-top:2px solid var(--ac);transform-origin:left;transform:scaleX(0);animation:lfill linear both;animation-timeline:view();animation-range:entry 20% cover 50% }
-@keyframes lfill {to{transform:scaleX(1)}}
-@media(prefers-reduced-motion:reduce) {
-  .home .lf { animation:none }
-  .home .lf { transform:none }
-}
-@media(max-width:800px) {
-  .home .lf { display:none }
-}
 .home { overflow:clip }
 .home .pit { position:relative;height:240px;margin-top:140px;border-top:1px dashed var(--mut);border-bottom:1px dashed var(--mut);background:repeating-linear-gradient(135deg,var(--ln) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:space-between;padding:0 24px }
 .home .pit b { font:700 72px/1 var(--font-pixel),monospace;color:var(--fg) }
@@ -223,8 +208,7 @@ html:has(.home) { scroll-behavior:smooth }
   .home .row > .card { border-right:0;border-bottom:1px solid var(--fg) }
   .home .in { padding-inline:16px }
   .home .asc { display:none }
-  .home .lad:before { display:none }
-  .home .st { margin-bottom:32px }
+    .home .st { margin-bottom:32px }
 }
 
 /* ---- Additions for the live site (not in the reference export) ---- */
@@ -715,8 +699,6 @@ html:has(.home) { scroll-behavior:smooth }
 /* Track XP rail: 64px markers, 26px levels with body line height. */
 .home .st { padding-right: 0; text-align: center; }
 .home .st .cn { line-height: 1.45; }
-.home .bd { width: 64px; height: 70px; margin: 0 auto 18px; }
-.home .bd b { width: 54px; height: 60px; font-size: 26px; }
 @media (max-width: 700px) { .home .st { text-align: left; } .home .bd { margin: 0 0 18px; } }
 
 /* Era steps and facts (main: number beside the name, 13px fact copy). */
@@ -824,10 +806,10 @@ html:has(.home) { scroll-behavior:smooth }
 
 /* Level markers enter in sequence (main: progression-marker-enter). */
 .home .bd { animation: marker-enter 500ms var(--ease) both; }
-.home .st:nth-child(3) .bd { animation-delay: 60ms; }
-.home .st:nth-child(4) .bd { animation-delay: 120ms; }
-.home .st:nth-child(5) .bd { animation-delay: 180ms; }
-.home .st:nth-child(6) .bd { animation-delay: 240ms; }
+.home .st:nth-child(2) .bd { animation-delay: 60ms; }
+.home .st:nth-child(3) .bd { animation-delay: 120ms; }
+.home .st:nth-child(4) .bd { animation-delay: 180ms; }
+.home .st:nth-child(5) .bd { animation-delay: 240ms; }
 
 /* Hover and press feel from main: buttons nudge up-left and scale, cards slide up-left with a hard shadow. */
 .home .btn { transition: transform 160ms var(--ease), box-shadow 160ms var(--ease), background-color 160ms var(--ease); }
@@ -1007,7 +989,6 @@ body:has(.home):not(:has(#theme:checked)) { background: #1C1916; }
 /* Amber for small highlights only. */
 .home:not(:has(#theme:checked)) .lnks a, .home:not(:has(#theme:checked)) .gh, .home:not(:has(#theme:checked)) .asd a, .home:not(:has(#theme:checked)) .card li:before, .home:not(:has(#theme:checked)) .fq2-icon, .home:not(:has(#theme:checked)) .era small, .home:not(:has(#theme:checked)) .sn { color: var(--hl); }
 .home:not(:has(#theme:checked)) #behind-loadout .asd p:nth-of-type(3) { color: var(--hl); }
-.home:not(:has(#theme:checked)) .lf { border-top-color: var(--hl); }
 .home:not(:has(#theme:checked)) .mc-c { border-color: var(--hl); }
 
 /* ===== Muted margin ASCII (AsciiField.tsx): barely visible, lights up faintly near the cursor; wide screens only ===== */
@@ -1046,18 +1027,12 @@ body:has(.home):not(:has(#theme:checked)) { background: #1C1916; }
 .home .ar { font-size: clamp(6px, .72vw, 10px); line-height: 1.15; }
 
 /* ===== Logo in main's button style: sand badge, 2px border, hard block shadow; name in Jersey 10 ===== */
-.home { --logo-edge: var(--fg); }
-.home:has(#theme:checked) { --logo-edge: #1A1714; }
 .home .lg { display: inline-flex; align-items: center; gap: 10px; }
-.home .lg-mark { display: inline-grid; place-items: center; flex: none; width: 32px; height: 32px; background: var(--logo-bg); border: 2px solid var(--logo-edge); border-radius: 2px; box-shadow: 2px 2px 0 var(--logo-edge); }
-.home .lg-mark svg { display: block; width: 20px; height: 16px; fill: var(--logo-fg); }
 .home .lg-text { font-family: var(--font-display), monospace; line-height: 1; letter-spacing: -.02em; color: var(--fg); }
 .home .nav > a.logo .lg-text { font-size: 36px; }
 @media (max-width: 700px) {
   .home .lg { gap: 8px; }
-  .home .lg-mark { width: 28px; height: 28px; }
-  .home .lg-mark svg { width: 15px; height: 12px; }
-  .home .nav > a.logo .lg-text { font-size: 31px; }
+      .home .nav > a.logo .lg-text { font-size: 31px; }
 }
 
 /* ===== Buttons in main's style: Pixelify Sans caps, 2px border, 2px radius, hard block shadow that grows on hover ===== */
@@ -1107,3 +1082,30 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .ic { image-rendering: pixelated; }
 /* The black outlines of the old icons would sink into the dark cards, so each icon gets a faint sand edge there. */
 .home:not(:has(#theme:checked)) .ic { filter: sepia(.28) saturate(.62) brightness(.97) contrast(1.02) drop-shadow(1px 0 0 rgba(220,196,156,.5)) drop-shadow(-1px 0 0 rgba(220,196,156,.5)) drop-shadow(0 1px 0 rgba(220,196,156,.5)) drop-shadow(0 -1px 0 rgba(220,196,156,.5)); }
+
+/* ===== Logo: the first site's hexagon mark (32px) ===== */
+.home .lg-mark { display: inline-grid; flex: none; width: 32px; height: 32px; }
+.home .lg-mark svg { display: block; width: 32px; height: 32px; }
+.home .lg-a { fill: var(--logo-bg); }
+.home .lg-b { fill: var(--logo-fg); }
+@media (max-width: 700px) { .home .lg-mark, .home .lg-mark svg { width: 28px; height: 28px; } }
+
+/* ===== Track XP and levels as on main: five stops, a 64px marker, an arrow between stops, level and award below ===== */
+.home .lad { display: grid; position: relative; }
+.home .st { position: relative; }
+.home .bd { position: relative; display: grid; place-items: center; width: 64px; height: 64px; margin: 0 auto 18px; }
+.home .bd .ic { width: 56px; height: 56px; }
+.home .st:not(:last-child)::after { content: ""; position: absolute; top: 31px; left: calc(50% + 42px); width: calc(100% - 64px); height: 10px; background: var(--fg); clip-path: polygon(0 35%, 85% 35%, 85% 0, 100% 50%, 85% 100%, 85% 65%, 0 65%); }
+@media (max-width: 700px) { .home .st:not(:last-child)::after { display: none; } .home .bd { margin: 0 0 18px; } }
+
+/* ===== Animations from main: bolt nudge, era connector and IRL status entrances ===== */
+@keyframes bolt-nudge { from { transform: translateY(0); } to { transform: translateY(-3px) rotate(-2deg); } }
+@keyframes era-connector-enter { from { border-color: transparent; } }
+@keyframes irl-status-enter { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+.home .ic.nudge { animation: bolt-nudge 2400ms ease-in-out infinite alternate; }
+.home .era > div + div { animation: era-connector-enter 500ms var(--ease) both; }
+.home #loadout-irl .asd { animation: irl-status-enter 500ms var(--ease) 120ms both; }
+@media (prefers-reduced-motion: reduce) { .home .ic.nudge, .home .era > div + div, .home #loadout-irl .asd { animation: none; } }
+.home .st .cn { display: block; }
+.home .st .dsc { display: block; margin-top: 8px; }
+.home #progression .asd { background: none !important; }

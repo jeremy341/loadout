@@ -30,7 +30,7 @@ export function Tracks() {
               <span>
                 TRACK 01
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-wrench"></use>
               </svg>
             </div>
@@ -46,7 +46,7 @@ export function Tracks() {
               <span>
                 TRACK 02
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-gear"></use>
               </svg>
             </div>
@@ -62,7 +62,7 @@ export function Tracks() {
               <span>
                 TRACK 03
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-cpu"></use>
               </svg>
             </div>
@@ -78,7 +78,7 @@ export function Tracks() {
               <span>
                 TRACK 04
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-board"></use>
               </svg>
             </div>
@@ -91,7 +91,7 @@ export function Tracks() {
           </div>
         </div>
         <div className="strip" id="research">
-          <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+          <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
             <use href="#i-flask"></use>
           </svg>
           <div>

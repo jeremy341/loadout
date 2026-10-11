@@ -2,7 +2,7 @@ import { ART } from "./art";
 import { Fragment, type ReactNode } from "react";
 import { AsciiField } from "./AsciiField";
 
-type Step = { label?: string; icon: string; title: string; text: string };
+type Step = { label?: string; icon: string; title: string; text: string; nudge?: boolean };
 
 const STEPS: Step[] = [
   { label: "STEP 01", icon: "list", title: "Choose a project and its tracks", text: "Pick something to make or improve, then choose the fields your project will use." },
@@ -14,7 +14,7 @@ const STEPS: Step[] = [
 // Outcomes of a review, shown side by side.
 const OUTCOMES: Step[][] = [
   [
-    { icon: "bolt", title: "Bolts to spend", text: "Bolts are your reward-shop balance, usable across all tracks." },
+    { icon: "bolt", nudge: true, title: "Bolts to spend", text: "Bolts are your reward-shop balance, usable across all tracks." },
     { icon: "xp-star", title: "Track XP to keep", text: "XP cannot be spent. It raises a separate level in each track; those levels can affect gear prices and access." },
   ],
   [
@@ -32,7 +32,7 @@ function StepCard({ step, children }: { step: Step; children?: ReactNode }) {
     <div className="card fn">
       <div className="ct">
         {step.label && <span>{step.label}</span>}
-        <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+        <svg className={step.nudge ? "ic nudge" : "ic"} viewBox="0 0 32 32" aria-hidden="true">
           <use href={"#i-" + step.icon}></use>
         </svg>
       </div>

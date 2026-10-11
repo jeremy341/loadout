@@ -39,26 +39,37 @@ short-lived branch → PR → development → promotion PR → testing → promo
 - Administrators are subject to rules. Do not add bypass actors. Force pushes and branch deletion stay disabled.
 - CodeScene and Codecov are not required GitHub branch checks; CodeScene feedback remains advisory. Copilot code review is not included.
 
-## Lane settings (read back 2026-10-11)
+## Lane settings
 
-Applied on 2026-10-11:
+Applied on 2026-10-11 (repository options):
 
-- Repository merge options: squash merges and merge commits allowed, rebase merges off, merged branches deleted automatically.
-- `development` moved by fast-forward to `main`'s commit. Content unchanged.
+- Merge options: squash merges and merge commits allowed; rebase merges off; merged branches deleted automatically; squash commits take the PR title with an empty body.
+- `development` moved by fast-forward to `main`'s commit, then one squash commit for the docs update. No content changes on the lanes.
 - Co-author lines removed from all three lanes' history (same file tree on all three).
 
-Current rules, read back after the owner's last change:
+### Recommended rules
 
-| Branch | PR required | Force pushes | Required checks |
-|---|---|---|---|
-| `development` | No | Allowed (owner) | Repository integrity, Landing quality, Promotion lane |
-| `testing` | Yes | Off | Repository integrity, Landing quality, Landing browser, Promotion lane |
-| `main` | Yes | Off | Repository integrity, Landing quality, Landing browser, Promotion lane |
+| Branch | PR required | Force pushes | Required checks | Why |
+|---|---|---|---|---|
+| `development` | Yes, 0 approvals | Off | Repository integrity, Landing quality, Promotion lane | Every change arrives as a squash-merged PR, so the history stays one commit per change. |
+| `testing` | No | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | Promotion is a fast-forward push of a commit that already passed. No PR per batch. |
+| `main` | Yes, 0 approvals | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | One release PR per batch, merged with a merge commit, so main records each release. |
 
-Owner decisions still open:
+### Current rules (read back on 2026-10-11)
 
-1. **testing: remove the PR requirement.** Settings → Branches → testing → untick "Require a pull request before merging". Then promotion from development is a fast-forward push and needs no PR. Keep the required checks and keep force pushes off. Until this is done, promotion to testing is a PR from development merged with a merge commit.
-2. **development: PR-free or PR-required.** It is PR-free now, which allows a direct push of an already-checked commit. Feature work still goes through a squash-merged PR by convention. Turn the PR requirement back on if you want it enforced.
+| Branch | PR required | Force pushes |
+|---|---|---|
+| `development` | No | On |
+| `testing` | Yes | Off |
+| `main` | Yes | Off |
+
+### Owner toggles to reach the recommended rules
+
+1. **development:** Settings → Branches → development → tick "Require a pull request before merging" (0 approvals). Leave the required checks as they are.
+2. **testing:** Settings → Branches → testing → untick "Require a pull request before merging". Leave the required checks and keep force pushes off.
+3. **development (recommended, optional):** turn "Allow force pushes" off once no history rewrite is planned. Turn it on only for a rewrite, then off again.
+
+Until toggle 2 is done, promotion to testing is a PR from development merged with a merge commit. Until toggle 1 is done, development accepts direct pushes of a commit that already passed.
 
 ## Required GitHub Actions checks
 

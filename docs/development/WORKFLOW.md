@@ -41,9 +41,9 @@ short-lived branch → PR (squash) → development → testing → main
 
 | Lane | How a commit gets in | Required checks |
 | --- | --- | --- |
-| development | Squash-merged PR from a short-lived branch. Direct pushes only for a commit that already passed. | Repository integrity, Landing quality, Promotion lane |
-| testing | Fast-forward push of a development commit. Until the owner removes the PR requirement on testing, a PR from development, merged with a merge commit. | Repository integrity, Landing quality, Landing browser, Promotion lane |
-| main | Release PR from testing, merged with a merge commit. Vercel deploys main. | Repository integrity, Landing quality, Landing browser, Promotion lane |
+| development | Squash-merged PR from a short-lived branch. PR required; no direct pushes. Force pushes off. | Repository integrity, Landing quality, Promotion lane |
+| testing | Fast-forward push of a development commit that already passed. No PR. Force pushes off. Until the owner has removed the PR requirement, a PR from development, merged with a merge commit. | Repository integrity, Landing quality, Landing browser, Promotion lane |
+| main | Release PR from testing, merged with a merge commit, one per batch. PR required; force pushes off. Vercel deploys main. | Repository integrity, Landing quality, Landing browser, Promotion lane |
 
 Checks belong to the commit. The commit that passed on development already has its browser-suite result, so promoting it to testing or main does not run the suite again. Docs-only changes skip the heavy steps (see Skips below).
 
@@ -68,7 +68,7 @@ gh pr merge <number> --merge
 
 Rules that keep the history short:
 
-- **One change, one squash.** Squash is the only way a PR reaches development. Branch commits do not reach development, so you do not have to tidy them.
+- **One change, one squash.** Squash is the only way a PR reaches development. The squash commit takes the PR title and an empty body, so branch commits and tool trailers do not reach development history. Branch commits do not reach development, so you do not have to tidy them.
 - **Stay current by rebasing, not merging.** Do not merge `development` into your branch and do not press "Update branch". Run `git fetch origin && git rebase origin/development`, then `git push --force-with-lease` on your own branch.
 - **Batch small tweaks.** Fold a run of tweaks (a value changed a few times, copy cuts plus a colour) into one branch and one PR, not a PR per tweak.
 - **Skips.** Landing quality and Landing browser still report green, but lint, build and browsers do not run, when a change only touches `docs/`, `plans/`, `.ulpi/`, `assets/` or the root Markdown files ([the rule](../../.github/scripts/app-changed.sh)). Any code, content, workflow or dependency change runs everything. `[skip ci]` is not used because required checks must report.

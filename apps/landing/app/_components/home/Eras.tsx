@@ -68,7 +68,7 @@ export function Eras() {
               Bolt bonus
             </div>
             <div className="m dsc">
-              Qualifying projects may receive this Bolt bonus on the approved base award.
+              Qualifying projects may earn it on the approved base award.
             </div>
           </div>
         </div>

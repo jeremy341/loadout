@@ -32,7 +32,7 @@ export function PlannedPrizes() {
           prizes
         </h2>
         <p className="lead">
-          Planned prizes may include developer hardware, boards, compute, tools, storage, fabrication, domains, and custom equipment. None are currently available to order.
+          These are plans. None are available to order yet.
         </p>
         <div className="row g2">
           {PRIZES.map(([icon, name]) => (

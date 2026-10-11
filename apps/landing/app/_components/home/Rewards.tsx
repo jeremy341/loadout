@@ -63,7 +63,7 @@ export function Rewards() {
           </div>
         </div>
         <p className="note">
-          Requisitions do not add Bolts, remove level requirements, or apply to Custom Orders.
+          Requisitions do not add Bolts or remove level requirements. On a Custom Order, one applies only when the approved quote marks it eligible.
         </p>
       </div>
     </>

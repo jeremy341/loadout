@@ -67,7 +67,7 @@ export function CustomOrders() {
           <b>
             Custom Order requests are not open yet.
           </b>{" "}
-           A matching Field Requisition may apply an extra discount to an eligible quote. It does not replace the required track level.
+           A Field Requisition applies only when the approved quote marks it eligible. It does not replace the required track level.
         </p>
       </div>
     </>

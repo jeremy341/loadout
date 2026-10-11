@@ -70,7 +70,7 @@ Design read: event landing page for teenage technical builders, in a Ruhr mine a
 - Logo: the first site's hexagon mark (yellow hexagon, dark inner hexagon, yellow cross, 32px) with the Jersey 10 name, in the nav, footer and docs. The favicon is main's again.
 - Animations ported from main: the Bolt icon nudge in the process outcomes, the era connector entrance and the IRL status entrance. The level markers already entered in sequence; their delays now start at the second marker. All of it is off under reduced motion. Main's drifting clouds were tried and removed at the owner's request; its skyline and registration marks are not brought back.
 
-## Dark theme: graphite, yellow and teal (11 October 2026)
+## Dark theme: graphite, blue and teal (11 October 2026)
 
 The warm charcoal dark theme felt flat next to the light one: one low-saturation brown family, a washed-out sand accent and boxes that barely left the page. The dark theme is now the first site's graphite and Bolt Yellow with a cool secondary:
 
@@ -79,8 +79,10 @@ The warm charcoal dark theme felt flat next to the light one: one low-saturation
 | Page | #222627 |
 | Boxes and docs panels | #2C3132 |
 | Text / muted text | #E9EBE7 / #A7AEAB |
-| Primary accent (buttons, logo, markers, icons) | #E0BD55 with #16191A text |
+| Primary accent (buttons, logo, docs tab, markers, icons) | blue #5E9EF4 with #16191A text |
 | Secondary accent (links, brackets, ruler marks, active contents item, selection) | teal #6FC2BB |
 | Box outline | rgba(233, 235, 231, .22) |
 
-The old pixel icons are no longer desaturated or edged in dark mode; they show in their own yellow. Light mode is unchanged.
+The old pixel icons are no longer desaturated or edged in dark mode. Light mode is unchanged.
+
+The yellow of the first draft of this palette (#E0BD55) was then changed to blue (#5E9EF4) at the owner's request, everywhere in dark mode: buttons, logo, docs tab, docs links, markers, stamp and footer wordmark. The old icons are turned from yellow to blue with a hue rotation in dark mode and stay yellow in light mode.

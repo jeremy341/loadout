@@ -371,14 +371,14 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
   await page.locator("label.tg").click();
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgb(26, 23, 20)");
 });
-test("the cards use the first site's pixel icons, as drawn in both themes", async ({ page }) => {
+test("the cards use the first site's pixel icons: as drawn in light mode, turned blue in dark mode", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#tracks .card .ic use").first()).toHaveAttribute("href", "#i-wrench");
   await expect(page.locator("symbol#i-wrench image")).toHaveAttribute("href", "/loadout/sprites/wrench.png");
   const missing = await page.evaluate(() => [...document.querySelectorAll(".home use")].map((use) => use.getAttribute("href")!).filter((href) => !document.querySelector(href)));
   expect(missing).toEqual([]);
   const filter = () => page.locator("#tracks .card .ic").first().evaluate((element) => getComputedStyle(element).filter);
-  expect(await filter()).toBe("none");
+  expect(await filter()).toContain("hue-rotate");
   await page.locator("label.tg").click();
   expect(await filter()).toBe("none");
 });
@@ -618,7 +618,7 @@ test("the logo is the first site's hexagon mark with the Jersey 10 name", async 
   await expect(logo.locator(".lg-text")).toHaveText("LOADOUT");
   const mark = await logo.locator(".lg-mark svg").boundingBox();
   expect([mark!.width, mark!.height]).toEqual([32, 32]);
-  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(224, 189, 85)");
+  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(94, 158, 244)");
   await page.locator("label.tg").click();
   await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(227, 194, 107)");
 });

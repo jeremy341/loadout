@@ -4,7 +4,7 @@ Status: implemented 2026-10-11. Scope: `apps/landing` homepage only; docs route 
 
 ## UI-skill record
 
-The seven skills in `docs/development/UI_SKILLS.md` were not available in the session that built this (the skill catalog returned none of them). The owner told the session to proceed anyway. They were not used, and this change should be re-reviewed against them once they are installed. Source basis: `docs/source-audit/DECISIONS.md` (Stasis rows).
+The seven skills in `docs/development/ui-skills.md` were not available in the session that built this (the skill catalog returned none of them). The owner told the session to proceed anyway. They were not used, and this change should be re-reviewed against them once they are installed. Source basis: `docs/source-audit/DECISIONS.md` (Stasis rows).
 
 ## Changes
 

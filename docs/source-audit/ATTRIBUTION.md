@@ -2,11 +2,11 @@
 
 ## Reference handling
 
-`references/` contains three pinned top-level Git submodules. A limited Pixl landing subset was copied for Stage A local comparison and then redesigned in Stage B. The final homepage retains adapted Next.js, Lenis, navigation, and reveal patterns; copied Pixl media and source-specific pages were removed. No YSWS Template or Stardance files are copied. Use `git submodule update --init` to populate the references in a fresh checkout. Do not recurse into Stardance's nested `secrets` submodule: its GitHub remote returned “Repository not found” on 2026-10-05.
+`references/` contains four pinned top-level Git submodules. A limited Pixl landing subset was copied for Stage A local comparison and then redesigned in Stage B. The final homepage retains adapted Next.js, Lenis, navigation, and reveal patterns; copied Pixl media and source-specific pages were removed. No YSWS Template, Stardance, or Stasis files are copied. Use `git submodule update --init` to populate the references in a fresh checkout. Do not recurse into Stardance's nested `secrets` submodule: its GitHub remote returned “Repository not found” on 2026-10-05.
 
 ## Pixl
 
-Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is the PRIMARY ENGINEERING BASE. Its upstream root license is MIT; the full original notice remains in `references/pixl/LICENSE`. The top-level LOADOUT `LICENSE` retains both the Jerry and Pixl copyright notices. Exact source/target mappings and final reuse decisions are in `PUBLIC_SITE_PORT.md`; owned SVGs and licensed fonts are recorded in `PUBLIC_SITE_ASSETS.md`. Pixl and Hack Club do not endorse LOADOUT by virtue of this reuse.
+Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is the PRIMARY ENGINEERING BASE. Its upstream root license is MIT; the full original notice remains in `references/pixl/LICENSE`. The top-level LOADOUT `LICENSE` retains both the Jerry and Pixl copyright notices. Exact source/target mappings and final reuse decisions are in `landing-port-and-assets.md`; owned SVGs and licensed fonts are recorded in `landing-port-and-assets.md`. Pixl and Hack Club do not endorse LOADOUT by virtue of this reuse.
 
 ## YSWS Template
 
@@ -22,7 +22,7 @@ Hack Club Stasis at `7a230ced9ad793f0ad4cda30a7d71c02a58da6b6` on `main` is a ha
 
 ## Future additions
 
-Before copying code or assets from either reference without an identified license, establish a compatible license or explicit permission, preserve required notices, record the exact source SHA and paths, and update `SOURCE_BASES.md` and `DECISIONS.md`.
+Before copying code, text, or assets from any reference without an identified license, establish a compatible license or explicit permission, preserve required notices, record the exact source SHA and paths, and update `source-bases.md` and `decisions.md`.
 
 ## Public Docs navigation audit — 2026-10-07
 

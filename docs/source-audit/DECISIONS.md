@@ -2,7 +2,7 @@
 
 Paths in source rows are relative to their upstream repository root; local roots are `references/pixl/`, `references/ysws-template/`, and `references/stardance/`.
 
-Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in SOURCE_BASES.md. All three repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template and Stardance code are not copied. `PUBLIC_SITE_PORT.md` records final source/target paths.
+Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in [source-bases.md](source-bases.md). The four repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template, Stardance, and Stasis code/media are reference-only; no Stasis implementation or event claims have been copied. [`landing-port-and-assets.md`](landing-port-and-assets.md) records final landing source/target paths.
 
 The source name in each row maps to these exact versions and permission bases:
 

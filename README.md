@@ -1,31 +1,26 @@
 # LOADOUT
 
-**Build your own technical stack.** LOADOUT is a technical-builder YSWS concept focused on tools, systems, compute, and hardware. Its product model and program details are still being prepared; this repository does not represent an accepted Hack Club program or a promise of dates, rewards, or availability.
+**Build your own technical stack.** LOADOUT is a technical-builder YSWS concept focused on tools, systems, compute, and hardware. The program is still being prepared; this repository does not claim acceptance, launch dates, eligibility, or available rewards.
 
-## Current state
+## The website
 
-`apps/landing` is the LOADOUT public homepage, adapted from the verified Pixl landing baseline. It follows the supplied paper-grid and pixel-cloud reference, with the four canonical tracks, separate Research Mode, progression, planned reward categories, and FAQ. The public production demo is live at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/); indexing remains disabled. Contributors use the staged development → testing → main workflow described in [the development workflow](docs/development/WORKFLOW.md).
+`apps/landing` contains the public homepage and program-draft Docs. Visit [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/) or read the [public Docs](https://loadout-ysws.vercel.app/docs/start). Public Markdown is maintained in `content/docs/`; internal plans, workflow, source audits, and design notes are not published or indexed.
 
-## Documentation
+The site has no live participant accounts, project-submission, review, reward, ordering, or event service. The RSVP link expresses interest and does not enroll anyone.
 
-The public [LOADOUT Docs](https://loadout-ysws.vercel.app/docs/start) explain the program draft in detail. Reviewed Markdown lives in `content/docs/`, separate from internal repository instructions. [The documentation index](docs/README.md) links setup, architecture, authoring, integration status and the Netics/Rivet handoff.
+## Working on the repository
 
-No live participant, reviewer, order, economy or event service is implemented by this site.
+Start with [`AGENTS.md`](AGENTS.md) and the [documentation index](docs/README.md). [Local setup](docs/development/setup.md) covers installation and environment names. [The development workflow](docs/development/WORKFLOW.md) owns task kickoff, branches, checks, promotion, and release. Plans and their status are indexed in [`plans/00-index.md`](plans/00-index.md); the visual system is in [`docs/design/system/design-system.md`](docs/design/system/design-system.md).
 
-## Source references
+Use Bun 1.3.14. From the repository root, run `bun install --frozen-lockfile` and then `bun run dev`. The standard check commands are documented in WORKFLOW.md. Do not commit secrets, local settings, caches, dependencies, or generated review captures.
 
-The `references/` folders are pinned Git submodules, each with its own upstream history and independent commit:
+## Upstream references
 
-- **Pixl** — PRIMARY ENGINEERING BASE
-- **YSWS Template** — GENERAL YSWS OPERATIONS / INFRASTRUCTURE REFERENCE
-- **Stardance** — PEER REVIEW / QUALITY SCORING / MULTIPLIER SPECIALIST REFERENCE
+`references/` contains four pinned Git submodules. The top-level repository records their URLs and exact commits, not copied source trees. Initialize them with `git submodule update --init`; do not use recursive initialization because Stardance declares an inaccessible nested `secrets` repository.
 
-Clone the complete repository from default `main` with `git clone https://github.com/jeremy341/loadout.git`, then run `git submodule update --init`. This downloads the three pinned source repositories. Do not add `--recursive`: Stardance declares a nested `secrets` submodule whose remote was unavailable on 2026-10-05. The full parent Stardance source checkout remains available at its pinned SHA. The homepage adapts Pixl's Next.js composition, Lenis scrolling, scroll-direction navigation, and motion patterns; its MIT notices remain preserved. The temporary Pixl assets, locale pages, copy, configuration, and service routes have been removed from the application. YSWS Template and Stardance remain reference-only because no reuse license was identified. The tracked screenshots are in `docs/design/references/` and are downloaded with the repo.
+- **Pixl** is the primary engineering reference. Its MIT notice is preserved. LOADOUT adapts selected landing composition and interaction patterns.
+- **YSWS Template** is an operations and infrastructure reference. No compatible reuse license was identified.
+- **Stardance** is a review-mechanics reference. No compatible reuse license was identified.
+- **Stasis** is a Hack Club hardware-hackathon/event-program reference. No compatible reuse license was identified; do not reuse its code, copy, or media without permission.
 
-See [the source audit](docs/source-audit/SOURCE_BASES.md) for exact SHAs, license facts, source paths, and reuse decisions. LOADOUT keeps its own scoring dimensions: Originality, Technical Depth, Execution, and Documentation; Stardance does not replace that model.
-
-See [the public-site port audit](docs/source-audit/PUBLIC_SITE_PORT.md) for baseline verification, final source/target mappings, asset boundaries, and homepage evidence.
-
-## Development setup
-
-Start with [AGENTS.md](AGENTS.md), the [human and AI workflow](docs/development/HUMAN_AND_AI_WORKFLOW.md), and [required UI skills](docs/development/UI_SKILLS.md). See also [Vercel deployment setup](docs/development/VERCEL_PREVIEW.md), [branch protection setup](docs/development/BRANCH_PROTECTION_SETUP.md), and [CodeScene setup](docs/development/CODESCENE_SETUP.md). Plans, bootstrap inputs, and their status are indexed in [`PLAN/README.md`](PLAN/README.md); design screenshots are indexed in [`docs/design/references/README.md`](docs/design/references/README.md). Run `bun install --frozen-lockfile`, then `bun run dev` for the local preview. Use `bun run lint`, `bun run typecheck`, `bun run test`, `bun run build`, and `bun run test:e2e` to verify changes. The staged CI checks run on short-lived branch pushes and PRs into development, testing, and main.
+Do not copy Template or Stardance code or media without permission. Exact pins, rights, decisions, and comparisons are in [`docs/source-audit/`](docs/source-audit/).

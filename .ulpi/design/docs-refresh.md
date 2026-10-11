@@ -1,6 +1,6 @@
 # LOADOUT Docs refresh — approved implementation brief
 
-Status: approved by the owner on 2026-10-07. Docs only. The homepage and its assets/Lenis behavior are outside this change.
+**Status:** Implemented and promoted through production in PR #28. This is the completed Docs design brief; current layout behavior is in [`docs/development/architecture.md`](../../docs/development/architecture.md), while participant wording and publication gates are in [`content-authoring.md`](../../docs/development/content-authoring.md).
 
 ## Design read
 An industrial field manual with an open reading surface, compact directory, and yellow navigation markers. Preserve DESIGN.md tokens and fonts. Pixl's left-aligned article and persistent grouped directory are navigation references; its game rules and theme selector are not adopted. Direction: technical/utilitarian. DFII: impact 4, fit 5, feasibility 4, performance 4, consistency risk 2 = 15 (strong existing-system fit; no new aesthetic).

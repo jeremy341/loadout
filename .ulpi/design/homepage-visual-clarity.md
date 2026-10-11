@@ -95,7 +95,7 @@ Short FAQ answers point back to primary sections. Preserve unique facts: per-per
 - React Flow / @xyflow/react: IGNORE; a static homepage needs no interactive graph editor.
 - Native details controls: ADAPT for optional examples and policy edge rules.
 
-Pins and rights are recorded in docs/source-audit/SOURCE_BASES.md. Pixl is MIT; the YSWS Template and Stardance have no identified reuse license here. Do not copy their assets, source, or product policies.
+Pins and rights are recorded in docs/source-audit/source-bases.md. Pixl is MIT; the YSWS Template and Stardance have no identified reuse license here. Do not copy their assets, source, or product policies.
 
 ## Review criteria
 

@@ -1,26 +1,26 @@
 # LOADOUT documentation index
 
-Documents serve different audiences. Follow the owning source instead of treating every Markdown file as a public rule.
+This repository has separate public, contributor, and planning material. Use the canonical owner listed here; do not treat every Markdown file as participant guidance.
 
-| Source | Audience | Owner / authority | Status |
-| --- | --- | --- | --- |
-| content/docs | Builders and interested visitors | Maintainers review public wording against canonical plans. | Published program draft; not a live program. |
-| [WORKFLOW](development/WORKFLOW.md) | Human and AI contributors | Repository contribution/promotion policy. | Current operational guide. |
-| [SETUP](development/SETUP.md), [ARCHITECTURE](development/ARCHITECTURE.md) | Developers | Implemented checkout/runtime facts. | Current implementation reference. |
-| [CONTENT_AUTHORING](development/CONTENT_AUTHORING.md) | Docs maintainers | Public content/source and release-feed gate. | Current publishing guide. |
-| [Deployment](development/DEPLOYMENT_AND_ROLLBACK.md), [integrations](development/QUALITY_INTEGRATIONS.md) | Maintainers | Dated host/CI evidence and runbooks. | Refresh evidence before changes. |
-| [Rivet handoff](development/RIVET_HANDOFF.md) | Netics and maintainers | Separate bot integration checklist. | Prepared; not a bot deployment. |
-| [Source audit](source-audit/SOURCE_BASES.md) | Engineers/reviewers | Pins, licenses, source paths, reuse decisions. | Preserve reference boundaries. |
-| [Canonical plans](../PLAN/00_LOADOUT_CANONICAL_INDEX.md) | Organizers/developers | Plans01/02 product/economy;11 Eras;15 IRL. | Policies/proposals with explicit readiness gates. |
-| [Locked design](../.ulpi/design/DESIGN.md), scoped briefs | UI contributors | Current tokens plus per-change contracts. | Historical briefs do not override later approved work. |
-| [Design references](design/references/README.md) | Designers | Visual examples only. | Not program facts. |
+| Source | Audience | Authority | Status |
+|---|---|---|---|
+| [`content/docs/`](../content/docs/) | Builders and visitors | Public explanation of the current program draft | Draft; no live submission or reward services |
+| [`development/WORKFLOW.md`](development/WORKFLOW.md) | Contributors and AI agents | Contribution, branch, review, verification, and release process | Current operating policy |
+| [`development/setup.md`](development/setup.md) | Developers | Local setup and environment names | Current implementation reference |
+| [`development/architecture.md`](development/architecture.md) | Developers | Application boundaries and runtime architecture | Current implementation reference |
+| [`design/system/design-system.md`](design/system/design-system.md) | Designers and UI contributors | Shared visual tokens, layout, motion, and asset rules | Current design authority |
+| [`development/content-authoring.md`](development/content-authoring.md) | Docs maintainers | Public Markdown source and publication gate | Current publishing guide |
+| [`development/deployment-and-rollback.md`](development/deployment-and-rollback.md), [`development/quality-integrations.md`](development/quality-integrations.md) | Maintainers | Hosting, CI, integrations, and evidence | Operational records; refresh before relying on dated status |
+| [`development/rivet-handoff.md`](development/rivet-handoff.md) | Rivet maintainers | Handoff between the website and Rivet's public Docs source | Website-side handoff only; bot changes are separate |
+| [`source-audit/`](source-audit/) | Engineers and reviewers | Reference pins, licenses, attribution, and comparative audits | Preserve source boundaries; upstream repos stay pinned |
+| [`../plans/00-index.md`](../plans/00-index.md) | Organizers and maintainers | Product decisions, proposals, and plan status | Product rules are not automatically public copy |
+| [`.ulpi/design/DESIGN.md`](../.ulpi/design/DESIGN.md), [briefs index](../.ulpi/design/README.md), [`design/references/README.md`](design/references/README.md) | UI contributors | Tool entrypoint, brief status, and visual references | Design references are not product facts |
+| [`development/restructure-manifest.md`](development/restructure-manifest.md) | Repository maintainers | File disposition and migration record | One-time cleanup audit; the Git repo remains canonical |
 
 ## Publication boundary
 
-Only content/docs enters public Docs/search. This directory, PLAN and design history are internal repository references. Do not put a workflow, budget, source audit or private evidence into the public source.
+Only reviewed files in `content/docs/` enter the website's public Docs renderer and search index. Internal workflows, plans, source audits, design history, workspace reports, and private notes remain outside that pipeline.
 
-## Historical and local material
+## Keeping documentation current
 
-Master-plan/bootstrap prompts are retained historical inputs, not executable current tasks. [The cleanup inventory](development/REPOSITORY_INVENTORY.md) distinguishes published files, old checkout deltas and parent-folder artwork.
-
-Link to the owning document rather than maintaining copies. Mark superseded material before considering deletion, check inbound links, and preserve unique content.
+Update the owning file and its inbound index when a policy or implementation fact changes. Historical plans should link to current owners and state whether they are open, completed, or superseded. Do not duplicate full workflow policy in `AGENTS.md` or quickstarts.

@@ -400,6 +400,7 @@ test("the left ruler is the depth of the page: beside each depth strip it shows 
   await page.goto("/");
   await expect(page.locator(".home > .rl-side")).toHaveCount(1);
   await expect(page.locator(".home > .rl-right")).toHaveCount(0);
+  await expect.poll(() => page.locator(".home > .rl-side .rl-major").count()).toBeGreaterThan(8);
   const result = await page.evaluate(() => {
     const centre = (element: Element) => { const box = element.getBoundingClientRect(); return box.top + box.height / 2 + window.scrollY; };
     const strips = [...document.querySelectorAll(".home .pit")].map((pit) => ({ depth: Number(pit.querySelector("b")!.textContent!.replace(/[^0-9]/g, "")), y: centre(pit) }));
@@ -578,4 +579,46 @@ test("Loadout IRL is described as a proposal, not an announced event", async ({ 
   await expect(irl).toContainText("proposed");
   await expect(irl).toContainText("not an announced event");
   await expect(irl).not.toContainText("A planned three-day");
+});
+
+test("Track XP and levels follow main: five stops, requisition markers and arrows between them", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const rail = page.getByRole("group", { name: "Field Requisition milestones" });
+  await expect(rail.locator(".st")).toHaveCount(5);
+  await expect(rail.locator(".st .cn")).toHaveText(["LV.3", "LV.6", "LV.9", "LV.12", "LV.15"]);
+  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition I", "Requisition I", "Requisition II", "Requisition II", "Master Requisition"]);
+  await expect(rail.locator(".st .bd use")).toHaveCount(5);
+  const marker = await rail.locator(".bd").first().boundingBox();
+  expect([marker!.width, marker!.height]).toEqual([64, 64]);
+  await expect(rail.locator(".st").first()).toHaveCSS("text-align", "center");
+  const arrow = await rail.locator(".st").first().evaluate((element) => { const style = getComputedStyle(element, "::after"); return { content: style.content, clip: style.clipPath, height: style.height }; });
+  expect(arrow.content).toBe('""');
+  expect(arrow.clip).toContain("polygon");
+  expect(arrow.height).toBe("10px");
+  expect(await rail.locator(".st").last().evaluate((element) => getComputedStyle(element, "::after").content)).toBe("none");
+});
+
+test("the first site's animations are present: bolt nudge, era and IRL entrances", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  await expect(page.locator("#process .ic.nudge")).toHaveCSS("animation-name", "bolt-nudge");
+  await expect(page.locator("#eras .era > div + div").first()).toHaveCSS("animation-name", "era-connector-enter");
+  await expect(page.locator("#loadout-irl .asd")).toHaveCSS("animation-name", "irl-status-enter");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator("#process .ic.nudge")).toHaveCSS("animation-name", "none");
+  await expect(page.locator(".scenery")).toHaveCount(0);
+});
+
+test("the logo is the first site's hexagon mark with the Jersey 10 name", async ({ page }) => {
+  await page.goto("/");
+  const logo = page.locator(".nav a.logo");
+  await expect(logo.locator(".lg-mark svg path")).toHaveCount(3);
+  await expect(logo.locator(".lg-text")).toHaveText("LOADOUT");
+  const mark = await logo.locator(".lg-mark svg").boundingBox();
+  expect([mark!.width, mark!.height]).toEqual([32, 32]);
+  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(220, 196, 156)");
+  await page.locator("label.tg").click();
+  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(227, 194, 107)");
 });

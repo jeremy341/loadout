@@ -27,7 +27,7 @@ export function LoadoutIrl() {
               <span>
                 TAG 01 · FRÜHSCHICHT
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-list"></use>
               </svg>
             </div>
@@ -43,7 +43,7 @@ export function LoadoutIrl() {
               <span>
                 TAG 02 · SPÄTSCHICHT
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-wrench"></use>
               </svg>
             </div>
@@ -59,7 +59,7 @@ export function LoadoutIrl() {
               <span>
                 TAG 03 · NACHTSCHICHT
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-document"></use>
               </svg>
             </div>

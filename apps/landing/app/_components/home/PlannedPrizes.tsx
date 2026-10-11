@@ -38,7 +38,7 @@ export function PlannedPrizes() {
           {PRIZES.map(([icon, name]) => (
             <div className="card sm" key={name}>
               <div className="ct">
-                <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+                <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                   <use href={"#i-" + icon}></use>
                 </svg>
               </div>

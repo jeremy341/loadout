@@ -6,7 +6,7 @@
   --ink: var(--fg); --dim: #B8AE9B; --panel: #27231F; --panel-2: #332E28; --stroke: #4A453D;
   --drop: 4px 4px 0 #000; --drop-lg: 8px 8px 0 #000;
   --sidebar: 300px; --ease: cubic-bezier(.22, 1, .36, 1);
-  --logo-bg: var(--ac); --logo-fg: var(--acf); --logo-edge: var(--fg);
+  --logo-bg: var(--ac); --logo-fg: var(--acf);
   font-family: var(--font-poppins), system-ui, sans-serif;
   line-height: 1.5;
   color: var(--ink);
@@ -41,8 +41,10 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
 .docs-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-pixel), monospace; font-weight: 700; font-size: 19px; letter-spacing: .3px; color: var(--ink); text-decoration: none; }
 .docs-brand > span:last-child { color: var(--hl); }
 .docs .lg { display: inline-flex; align-items: center; gap: 8px; }
-.docs .lg-mark { display: inline-grid; place-items: center; flex: none; width: 28px; height: 28px; background: var(--logo-bg); border: 2px solid var(--logo-edge); border-radius: 2px; box-shadow: 2px 2px 0 var(--logo-edge); }
-.docs .lg-mark svg { display: block; width: 15px; height: 12px; fill: var(--logo-fg); }
+.docs .lg-mark { display: inline-grid; flex: none; width: 28px; height: 28px; }
+.docs .lg-a { fill: var(--logo-bg); }
+.docs .lg-b { fill: var(--logo-fg); }
+.docs .lg-mark svg { display: block; width: 28px; height: 28px; }
 .docs .lg-text { font-family: var(--font-display), monospace; font-size: 30px; font-weight: 400; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
 
 /* Theme switch, the same pixel icons as the homepage */

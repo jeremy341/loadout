@@ -28,7 +28,7 @@ export function BehindLoadout() {
         <div className="ppl">
           <div>
             <div className="org">
-              <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-builder"></use>
               </svg>
               <div>
@@ -44,7 +44,7 @@ export function BehindLoadout() {
               </div>
             </div>
             <div className="org">
-              <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-code"></use>
               </svg>
               <div>
@@ -60,7 +60,7 @@ export function BehindLoadout() {
               </div>
             </div>
             <div className="org">
-              <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-terminal"></use>
               </svg>
               <div>

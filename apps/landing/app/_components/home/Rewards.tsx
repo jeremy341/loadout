@@ -21,7 +21,7 @@ export function Rewards() {
               <span>
                 CURRENCY
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-bolt"></use>
               </svg>
             </div>
@@ -37,7 +37,7 @@ export function Rewards() {
               <span>
                 PROGRESSION
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-xp-star"></use>
               </svg>
             </div>
@@ -53,7 +53,7 @@ export function Rewards() {
               <span>
                 ONE-USE BOOST
               </span>
-              <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
                 <use href="#i-requisition-i"></use>
               </svg>
             </div>

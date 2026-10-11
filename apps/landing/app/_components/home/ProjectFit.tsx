@@ -22,7 +22,7 @@ export function ProjectFit() {
           Reviewers look at what you built, not just what you call it.
         </p>
         <div className="lgr hi">
-          <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+          <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
             <use href="#i-check"></use>
           </svg>
           <div>
@@ -38,7 +38,7 @@ export function ProjectFit() {
           </span>
         </div>
         <div className="lgr hi">
-          <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+          <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
             <use href="#i-check"></use>
           </svg>
           <div>
@@ -54,7 +54,7 @@ export function ProjectFit() {
           </span>
         </div>
         <div className="lgr lo">
-          <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+          <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
             <use href="#i-cross"></use>
           </svg>
           <div>
@@ -70,7 +70,7 @@ export function ProjectFit() {
           </span>
         </div>
         <div className="lgr lo">
-          <svg className="ic l" viewBox="0 0 16 16" aria-hidden="true">
+          <svg className="ic l" viewBox="0 0 32 32" aria-hidden="true">
             <use href="#i-cross"></use>
           </svg>
           <div>

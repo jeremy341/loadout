@@ -1,7 +1,15 @@
 import { ART } from "./art";
 import { AsciiField } from "./AsciiField";
 
-// Levels and rewards section ported from the LOADOUT redesign reference.
+// Levels and rewards section; the level rail follows main's: one marker per Field Requisition milestone.
+const MILESTONES = [
+  { level: "LV.3", award: "Requisition I", icon: "requisition-i" },
+  { level: "LV.6", award: "Requisition I", icon: "requisition-i" },
+  { level: "LV.9", award: "Requisition II", icon: "requisition-ii" },
+  { level: "LV.12", award: "Requisition II", icon: "requisition-ii" },
+  { level: "LV.15", award: "Master Requisition", icon: "requisition-master" },
+] as const;
+
 export function Progression() {
   return (
     <>
@@ -27,83 +35,18 @@ export function Progression() {
         <p className="note" style={{ margin: "0 0 34px" }}>
           Reach a marked level to earn a one-use Field Requisition: an extra discount on an eligible prize from that track.
         </p>
-        <div className="lad l5">
-          <div className="lf"></div>
-          <div className="st">
-            <div className="bd">
-              <b>
-                <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
-                  <use href="#i-requisition-i"></use>
+        <div className="lad l5" role="group" aria-label="Field Requisition milestones">
+          {MILESTONES.map((milestone) => (
+            <div className="st" key={milestone.level}>
+              <span className="bd" aria-hidden="true">
+                <svg className="ic" viewBox="0 0 32 32">
+                  <use href={"#i-" + milestone.icon}></use>
                 </svg>
-              </b>
+              </span>
+              <strong className="cn">{milestone.level}</strong>
+              <span className="m dsc">{milestone.award}</span>
             </div>
-            <div className="cn" style={{ fontSize: "24px" }}>
-              LV.3
-            </div>
-            <div className="m dsc">
-              Requisition I
-            </div>
-          </div>
-          <div className="st">
-            <div className="bd">
-              <b>
-                <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
-                  <use href="#i-requisition-i"></use>
-                </svg>
-              </b>
-            </div>
-            <div className="cn" style={{ fontSize: "24px" }}>
-              LV.6
-            </div>
-            <div className="m dsc">
-              Requisition I
-            </div>
-          </div>
-          <div className="st">
-            <div className="bd">
-              <b>
-                <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
-                  <use href="#i-requisition-ii"></use>
-                </svg>
-              </b>
-            </div>
-            <div className="cn" style={{ fontSize: "24px" }}>
-              LV.9
-            </div>
-            <div className="m dsc">
-              Requisition II
-            </div>
-          </div>
-          <div className="st">
-            <div className="bd">
-              <b>
-                <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
-                  <use href="#i-requisition-ii"></use>
-                </svg>
-              </b>
-            </div>
-            <div className="cn" style={{ fontSize: "24px" }}>
-              LV.12
-            </div>
-            <div className="m dsc">
-              Requisition II
-            </div>
-          </div>
-          <div className="st">
-            <div className="bd">
-              <b>
-                <svg className="ic" viewBox="0 0 16 16" aria-hidden="true">
-                  <use href="#i-requisition-master"></use>
-                </svg>
-              </b>
-            </div>
-            <div className="cn" style={{ fontSize: "24px" }}>
-              LV.15
-            </div>
-            <div className="m dsc">
-              Master Requisition
-            </div>
-          </div>
+          ))}
         </div>
         <div className="asd" style={{ marginTop: "40px" }}>
           <b className="cn" style={{ fontSize: "22px" }}>

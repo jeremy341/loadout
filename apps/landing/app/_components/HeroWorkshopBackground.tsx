@@ -1,5 +1,7 @@
 "use client";
 
+// Not rendered. The hero workshop background was abandoned on 11 October 2026, so
+// nothing imports this component. It is kept with its CSS and the hero-workshop PNGs.
 import Image from "next/image";
 import "../hero-workshop-background.css";
 

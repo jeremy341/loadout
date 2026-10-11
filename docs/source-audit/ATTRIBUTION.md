@@ -23,3 +23,9 @@ Hack Club Stasis at `7a230ced9ad793f0ad4cda30a7d71c02a58da6b6` on `main` is a ha
 ## Future additions
 
 Before copying code or assets from either reference without an identified license, establish a compatible license or explicit permission, preserve required notices, record the exact source SHA and paths, and update `SOURCE_BASES.md` and `DECISIONS.md`.
+
+## Public Docs navigation audit — 2026-10-07
+
+Pixl at the recorded `8141b992e92e05583246fd914c63a101100f6fe4` MIT pin supplies navigation references in `apps/web-shell/app/docs/docs-shell.tsx`, `apps/web-shell/app/docs/docs.css`, `apps/web-shell/app/docs/[slug]/doc-toc.tsx`, `apps/web-shell/lib/docs.ts`, and `packages/docs-engine/src/markdown.ts`.
+
+**ADAPT:** left alignment, grouped directory and current-heading indication. **REIMPLEMENT:** safe React Markdown, internal-pane anchors/search and LOADOUT topics. **REFERENCE ONLY:** Pixl content/tutorial organization. **IGNORE:** Pixl-specific economy, restoration and theme/config machinery. Code is independently implemented for LOADOUT's contract; existing MIT notices remain. No Template/Stardance code or media is adopted.

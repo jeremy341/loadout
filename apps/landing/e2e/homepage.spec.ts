@@ -116,7 +116,8 @@ for (const width of [390, 1440]) {
       }).length
     );
     expect(incomplete).toBe(0);
-    await expect(page.locator("#process .fn")).toHaveCount(10);
+    // four steps, three outcomes of review, then the upgrade and build-again steps
+    await expect(page.locator("#process .fn")).toHaveCount(9);
   });
 }
 
@@ -425,7 +426,7 @@ test("the grain is a full-screen noise canvas that redraws and never takes input
   await expect(grain).toHaveCount(1);
   await expect(grain).toHaveCSS("pointer-events", "none");
   await expect(grain).toHaveCSS("position", "fixed");
-  await expect(grain).toHaveCSS("opacity", "0.4");
+  await expect(grain).toHaveCSS("opacity", "0.35");
   await expect(grain).toHaveAttribute("aria-hidden", "true");
   const sample = () => grain.evaluate((canvas: HTMLCanvasElement) => {
     const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 64).data;
@@ -521,12 +522,7 @@ test("Community Eras explain shared progression without leaking Era rules elsewh
   for (const selector of ["#process", "#progression", "#loadout-irl"]) {
     await expect(page.locator(selector)).not.toContainText(/Era objectives|Era Points|Era changes/i);
   }
-  const eraQuestion = page.getByRole("button", { name: "What are Community Eras?" });
-  await eraQuestion.click();
-  await expect(eraQuestion).toHaveAttribute("aria-expanded", "true");
-  const eraFaq = page.locator(".fq2").filter({ hasText: "What are Community Eras?" });
-  await expect(eraFaq).toContainText("An Era is a shared technical theme that approved projects help the community move forward.");
-  await expect(eraFaq).not.toContainText(/14 days|weekly reset|target|\+10%/i);
+  await expect(page.locator("#faq")).not.toContainText(/14 days|weekly reset|target|\+10%/i);
 });
 
 test("Custom Orders keep the request path without showing the planned tier card", async ({ page }) => {
@@ -579,6 +575,36 @@ test("Loadout IRL is described as a proposal, not an announced event", async ({ 
   await expect(irl).toContainText("proposed");
   await expect(irl).toContainText("not an announced event");
   await expect(irl).not.toContainText("A planned three-day");
+});
+
+test("a section without a lead keeps a gap under its heading", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  for (const id of ["process", "field-pricing", "behind-loadout"]) {
+    const gap = await page.locator(`#${id}`).evaluate((section) => {
+      const heading = section.querySelector(":scope > .h2")!;
+      return heading.nextElementSibling!.getBoundingClientRect().top - heading.getBoundingClientRect().bottom;
+    });
+    expect(gap, id).toBeGreaterThanOrEqual(30);
+  }
+});
+
+test("the process chart has three outcomes of review and the Physical Loadout comes from the upgrade step", async ({ page }) => {
+  await page.goto("/");
+  const outcomes = page.locator("#process .br2");
+  await expect(outcomes).toHaveCount(1);
+  await expect(outcomes.locator(".cn")).toHaveText(["Bolts to spend", "Track XP to keep", "Digital Loadout"]);
+  await expect(outcomes).not.toContainText("Physical Loadout");
+  const upgrade = page.locator("#process .fl > .fn").filter({ hasText: "Choose your next upgrade" });
+  await expect(upgrade).toContainText("Physical Loadout");
+});
+
+test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#project-fit")).toContainText("not guaranteed approvals");
+  await expect(page.locator("#shop")).toContainText("None are available to order yet");
+  await expect(page.locator("#custom-orders")).toContainText("Custom Order requests are not open yet");
 });
 
 test("Track XP and levels follow main: five stops, requisition markers and arrows between them", async ({ page }) => {

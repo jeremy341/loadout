@@ -12,9 +12,6 @@ export function Rewards() {
           How rewards
           work
         </h2>
-        <p className="lead">
-          Use Bolts to get equipment. Build track levels to unlock better prices, then use a Field Requisition to stretch an eligible discount further.
-        </p>
         <div className="row r3">
           <div className="card t">
             <div className="ct">
@@ -29,7 +26,7 @@ export function Rewards() {
               Bolts
             </div>
             <div className="m dsc">
-              Spend global currency on most prizes across tracks.
+              Global currency for most prizes.
             </div>
           </div>
           <div className="card t">
@@ -45,7 +42,7 @@ export function Rewards() {
               Track levels
             </div>
             <div className="m dsc">
-              A related level can lower a prize price or unlock some Mastery items.
+              A related level lowers prices or unlocks some Mastery items.
             </div>
           </div>
           <div className="card t" id="requisitions">
@@ -61,12 +58,12 @@ export function Rewards() {
               Field Requisition
             </div>
             <div className="m dsc">
-              Use one on an eligible prize to apply an extra track discount.
+              One use: an extra track discount on an eligible prize.
             </div>
           </div>
         </div>
         <p className="note">
-          Requisitions do not add Bolts, remove level requirements, or apply to Custom Orders.
+          Requisitions do not add Bolts or remove level requirements. On a Custom Order, one applies only when the approved quote marks it eligible.
         </p>
       </div>
     </>

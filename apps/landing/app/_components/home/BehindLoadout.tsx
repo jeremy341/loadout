@@ -22,9 +22,6 @@ export function BehindLoadout() {
           Who’s behind
           LOADOUT?
         </h2>
-        <p className="lead">
-          The people building the program, the website, and the tools around it.
-        </p>
         <div className="ppl">
           <div>
             <div className="org">
@@ -55,7 +52,7 @@ export function BehindLoadout() {
                   Developer &amp; co-organizer
                 </div>
                 <div className="m dsc">
-                  Works on the program plan and helps develop LOADOUT.
+                  Plans the program and helps develop LOADOUT.
                 </div>
               </div>
             </div>
@@ -71,7 +68,7 @@ export function BehindLoadout() {
                   Developer &amp; co-organizer
                 </div>
                 <div className="m dsc">
-                  Develops Rivet, LOADOUT’s Slack bot, and helps organize the program.
+                  Builds Rivet, LOADOUT’s Slack bot, and helps organize.
                 </div>
               </div>
             </div>
@@ -87,10 +84,7 @@ export function BehindLoadout() {
               What is Hack Club?
             </h4>
             <p className="dsc">
-              Hack Club is a nonprofit community of teenagers who learn by making and sharing their own projects.
-            </p>
-            <p className="dsc">
-              Its You Ship, We Ship programs encourage building by offering prizes for projects.
+              Hack Club is a nonprofit community of teenagers who learn by making. Its You Ship, We Ship programs offer prizes for projects.
             </p>
             <p className="dsc">
               <b>

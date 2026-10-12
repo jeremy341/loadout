@@ -36,7 +36,7 @@ export function HoverScramble({ text }: { text: string }) {
     if (!box || busy.current.has(index)) return;
     // Fix the letter's box to its real width so the line does not shift while it changes.
     if (!box.style.width) {
-      box.style.width = `${box.getBoundingClientRect().width}px`;
+      box.style.width = `${parseFloat(getComputedStyle(box).width)}px`;
       box.style.display = "inline-block";
       box.style.textAlign = "center";
     }

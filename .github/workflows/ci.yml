@@ -2,10 +2,10 @@ name: Repository integrity
 
 on:
   push:
-    # Every branch is checked on its exact commit. The commit that passed here is
-    # the same commit that is fast-forwarded into development, testing and main,
-    # so it is never merged or rebuilt again.
-    branches: ['**']
+    # Pushes are checked only on the three lanes. A feature branch is checked by its
+    # pull request, so pushing it does not run the same checks a second time. The commit
+    # that passes on development is the one promoted to testing and main.
+    branches: [development, testing, main]
   pull_request:
     branches: [development, testing, main]
   workflow_dispatch:

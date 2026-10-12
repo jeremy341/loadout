@@ -5,8 +5,9 @@ Read [the development workflow](docs/development/WORKFLOW.md) before changing th
 ## Working boundaries
 
 - Inspect the current branch, worktree status, and diff before editing. Preserve user changes; never reset, clean, or delete another checkout's work.
-- Start substantive work from current `development` on a temporary branch and post the task scope to `#loadout-development`.
+- Pull `development` first, then start substantive work from `origin/development` on a temporary branch, and post the task scope to `#loadout-development` (see WORKFLOW.md).
 - Follow the promotion path and required checks in WORKFLOW.md. Do not bypass a failed check or claim that a deployment is live without evidence.
+- Before any commit, read [the agent commit rules](docs/development/agent-commits.md): no AI co-author lines, one commit per change.
 - Use GPT-6 Luna at medium reasoning for agents unless the owner requests another setting.
 - For any UI change, follow [the UI skill guide](docs/development/ui-skills.md), create the required scoped design brief, and follow the [current design system](docs/design/system/design-system.md). Skill use does not authorize additional features or policy changes.
 - Keep internal plans, workflow, source audits, and private notes out of `content/docs/`; only that folder enters the public Docs renderer and search.

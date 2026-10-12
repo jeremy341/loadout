@@ -6,9 +6,9 @@ This index records where LOADOUT-owned art lives, whether the website uses it, a
 
 ### Fonts
 
-The homepage foundation uses Pixelify Sans for display, Barlow Condensed for body/labels, and JetBrains Mono for technical details and actions. Fonts are self-hosted under `apps/landing/public/fonts/`. The Barlow Condensed 500/600/700 Latin WOFF2 files and JetBrains Mono variable Latin WOFF2 were extracted without modification from the owner's `Loadout – Redesign.html` export on 2026-10-10. The Latin subset covers English and German text.
+The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and buttons, IBM Plex Mono for body and utility text, and DotGothic16 for rulers. JetBrains Mono (ASCII art) and Poppins (Docs body) load through `next/font/google`. The self-hosted files under `apps/landing/public/fonts/` are Jersey 10, Pixelify Sans and IBM Plex Mono, with their OFL notices. The current font roles are in [the design system](../design/system/design-system.md).
 
-Official SIL Open Font License notices are included beside the assets: `BarlowCondensed-OFL.txt` and `JetBrainsMono-OFL.txt`. Their upstream sources are [Google Fonts Barlow Condensed](https://github.com/google/fonts/tree/main/ofl/barlowcondensed) and [Google Fonts JetBrains Mono](https://github.com/google/fonts/tree/main/ofl/jetbrainsmono). Existing Pixelify Sans, Jersey 10, and IBM Plex Mono sources/notices remain available; Docs retains its existing type roles in this homepage pass.
+Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
 ### Current icon sprites
 

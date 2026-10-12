@@ -107,6 +107,12 @@ Rules:
 - Under reduced motion the grain draws one still frame.
 - The grain is the only texture. Do not add paper images or gradients.
 
+## Corner brackets
+
+- Section headings (`.home .sect > .h2`) carry four registration marks: 16 pixels long, 2 pixels thick, in the ink colour (`--fg`), just outside the heading's text. The heading box is `fit-content`, so the marks hug the text and the layout does not move.
+- The hero frame uses the same ink corners. The hero buttons use the magnetic version (`MagneticCorners`): accent-coloured, they open and lean toward a fine pointer within 40 pixels. Touch and reduced motion get the static marks.
+- Do not add marks to cards, nested panels or every button. The marks are a heading device: one per section.
+
 ## Icons
 
 - Icons are 32 by 32 transparent pixel PNGs in `apps/landing/public/loadout/sprites/`, with ink outlines and a yellow fill. They render with `image-rendering: pixelated`. Never smooth or filter the files.

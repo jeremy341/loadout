@@ -494,6 +494,22 @@ html:has(.home) { scroll-behavior:smooth }
 }
 @media (prefers-reduced-motion: reduce) { .home .mc-c { transition: none; } }
 
+/* Section corner brackets: four registration marks around each section heading, drawn with gradients in the ink
+   colour, so the layout does not move. The heading box hugs its text and the marks sit just outside it. */
+.home .sect > .h2 { position: relative; width: fit-content; max-width: 100%; margin-inline: auto; }
+.home .sect > .h2::before {
+  content: ""; position: absolute; inset: -14px -18px; pointer-events: none;
+  background:
+    linear-gradient(var(--fg), var(--fg)) top left / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) top left / 2px 16px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) top right / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) top right / 2px 16px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom left / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom left / 2px 16px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom right / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom right / 2px 16px no-repeat;
+}
+
 /* Hover scramble on the hero facts (HoverScramble.tsx). The real text stays in the page for readers. */
 .home .hs-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .home .hs { white-space: nowrap; cursor: default; }

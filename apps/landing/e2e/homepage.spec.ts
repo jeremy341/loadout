@@ -404,6 +404,20 @@ test("the magnetic corners lean at most 4px", async ({ page }) => {
   expect(lean).toBeLessThanOrEqual(4);
 });
 
+test("section headings carry the four corner brackets, and nothing else gets them", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const headings = page.locator(".home .sect > .h2");
+  const count = await headings.count();
+  expect(count).toBeGreaterThanOrEqual(10);
+  for (let i = 0; i < count; i++) {
+    const marks = await headings.nth(i).evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
+    expect(marks.match(/linear-gradient/g)?.length ?? 0).toBe(8);
+  }
+  const cardMarks = await page.locator(".home .card").first().evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
+  expect(cardMarks.match(/linear-gradient/g)?.length ?? 0).toBe(0);
+});
+
 test("the footer wordmark glows yellow, not red, in light mode", async ({ page }) => {
   await page.goto("/");
   await page.locator("label.tg").click();

@@ -1102,7 +1102,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home #progression .asd { background: none !important; }
 
 /* Depth markers: a dashed rule above and below, a hatched band, the depth numeral on the left and a label on the right.
-   The hatching, numeral and label are faint, and light to the glow colour within 280px of the pointer (the footer
+   The hatching, numeral and label are faint, and light to the glow colour within 150px of the pointer (the footer
    wordmark's values). DepthGlow sets --mx and --my on each one. */
 .home { --glow: var(--ac); --glow-strength: 60%; }
 .home:has(#theme:checked) { --glow: #E3C26B; --glow-strength: 85%; }
@@ -1120,8 +1120,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .pit::before {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0 2px, transparent 2px 14px);
-  -webkit-mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
-  mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
+  mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
 }
 .home .pit b, .home .pit > span { position: relative; z-index: 1; }
 .home .pit b {
@@ -1129,8 +1129,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   white-space: nowrap;
   color: transparent;
   background-image:
-    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent));
+    radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent));
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -1147,8 +1147,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   text-transform: uppercase;
   color: transparent;
   background-image:
-    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent)),
+    radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent)),
     linear-gradient(var(--bg), var(--bg));
   -webkit-background-clip: text, text, border-box;
   background-clip: text, text, border-box;

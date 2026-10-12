@@ -338,6 +338,8 @@ test("depth numerals are faint and light up under the pointer, like the footer w
 test("deeper depth markers light more strongly, in the order of their numerals", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+  // DepthGlow sets the factor after hydration, so wait for it before reading the markers.
+  await expect.poll(() => page.locator(".pit").first().evaluate((el) => (el as HTMLElement).style.getPropertyValue("--depth-light"))).not.toBe("");
   const markers = await page.locator(".pit").evaluateAll((pits) =>
     pits.map((pit) => ({
       depth: Number((pit.querySelector("b")!.textContent ?? "").replace(/\D/g, "")),

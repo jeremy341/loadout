@@ -1,6 +1,6 @@
 # LOADOUT design briefs index
 
-[`DESIGN.md`](DESIGN.md) is the tool-compatible entrypoint and links to the canonical [design system](../../docs/design/system/design-system.md). Product rules stay in the numbered plans; briefs describe presentation and implementation scope. An old brief does not authorize a repeat change.
+[`DESIGN.md`](DESIGN.md) is the tool-compatible entrypoint and links to the canonical [design system](../../docs/design/system/design-system.md), which is the only current source for tokens, type, colour, grain, rulers, icons and motion. The briefs below are records of what was decided and built. A brief does not authorize a change, and where a brief disagrees with the design system, the design system wins. Product rules stay in the numbered plans; briefs describe presentation and implementation scope. An old brief does not authorize a repeat change.
 
 ## Open or unresolved
 
@@ -14,6 +14,7 @@
 | Brief | Scope |
 |---|---|
 | [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |
+| [`docs-phone-guides-drawer.md`](docs-phone-guides-drawer.md) | Docs on phones: the Guides drawer. The icons await licence confirmation. |
 | [`redesign-foundation.md`](redesign-foundation.md) | Current homepage colors, three font roles, grid/grain, thin borders, and light track panels. EN/DE and reference interactions are later passes. |
 
 ## Completed implementation records

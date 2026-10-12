@@ -10,8 +10,8 @@ const randomChar = () => CHARSET[Math.floor(Math.random() * CHARSET.length)];
 
 // The advance of every character in a text node, read from the real text with its kerning, so
 // letters placed at these widths land exactly where the real letters would. Read before anything
-// changes; the heading must not be scaled while it scrambles.
-function advances(node: Text): number[] {
+// changes. `scale` is the heading's entrance scale: dividing by it keeps the advances in layout pixels.
+function advances(node: Text, scale: number): number[] {
   const text = node.textContent ?? "";
   const range = document.createRange();
   const lefts: number[] = [];
@@ -23,7 +23,7 @@ function advances(node: Text): number[] {
     lefts.push(rect.left);
     right = rect.right;
   }
-  return lefts.map((left, i) => (i + 1 < lefts.length ? lefts[i + 1] : right) - left);
+  return lefts.map((left, i) => ((i + 1 < lefts.length ? lefts[i + 1] : right) - left) / scale);
 }
 
 // Scrambles one heading: every letter is shown as random characters, then locks to the real
@@ -40,7 +40,8 @@ function scramble(heading: HTMLElement, duration: number, onDone: () => void): (
 
   const swaps: { original: Text; inserted: ChildNode[] }[] = [];
   const letters: { box: HTMLSpanElement; real: string }[] = [];
-  const readings = textNodes.map((node) => advances(node));
+  const scale = heading.getBoundingClientRect().width / heading.offsetWidth || 1;
+  const readings = textNodes.map((node) => advances(node, scale));
   textNodes.forEach((original, nodeIndex) => {
     const advance = readings[nodeIndex];
     const inserted: ChildNode[] = [];

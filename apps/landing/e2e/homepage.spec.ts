@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const rsvpUrl = "https://rsvp.soon.it/loadout";
@@ -333,6 +333,33 @@ test("depth numerals are faint and light up under the pointer, like the footer w
   await expect.poll(() => numeral.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
   await expect.poll(() => label.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
   await expect.poll(() => marker.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
+});
+
+test("deeper depth markers light more strongly, in the order of their numerals", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const markers = await page.locator(".pit").evaluateAll((pits) =>
+    pits.map((pit) => ({
+      depth: Number((pit.querySelector("b")!.textContent ?? "").replace(/\D/g, "")),
+      light: Number((pit as HTMLElement).style.getPropertyValue("--depth-light")),
+    })),
+  );
+  expect(markers.length).toBeGreaterThan(1);
+  const byDepth = [...markers].sort((a, b) => a.depth - b.depth);
+  for (let i = 1; i < byDepth.length; i++) expect(byDepth[i].light).toBeGreaterThanOrEqual(byDepth[i - 1].light);
+  expect(Math.min(...markers.map((marker) => marker.light))).toBeGreaterThanOrEqual(0.4);
+  expect(Math.max(...markers.map((marker) => marker.light))).toBeCloseTo(1, 5);
+});
+
+test("touch screens get no depth glow under the pointer", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["iPhone 13"], baseURL });
+  const page = await context.newPage();
+  await page.goto("/");
+  await page.mouse.move(200, 400);
+  await page.mouse.move(210, 420);
+  await page.waitForTimeout(200);
+  expect(await page.locator(".pit").first().evaluate((el) => (el as HTMLElement).style.getPropertyValue("--mx"))).toBe("");
+  await context.close();
 });
 
 test("on phones the depth numerals stay on one line and the labels fit their strips", async ({ page }) => {

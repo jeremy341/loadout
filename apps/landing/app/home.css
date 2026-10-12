@@ -1119,7 +1119,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 }
 .home .pit::before {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0 2px, transparent 2px 14px);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0 2px, transparent 2px 14px);
   -webkit-mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
   mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
 }
@@ -1129,7 +1129,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   white-space: nowrap;
   color: transparent;
   background-image:
-    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0%, transparent 100%),
+    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
     linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent));
   -webkit-background-clip: text;
   background-clip: text;
@@ -1147,7 +1147,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   text-transform: uppercase;
   color: transparent;
   background-image:
-    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0%, transparent 100%),
+    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
     linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent)),
     linear-gradient(var(--bg), var(--bg));
   -webkit-background-clip: text, text, border-box;

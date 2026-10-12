@@ -1,73 +1,157 @@
 # LOADOUT design system
 
-**Status:** Current visual authority for LOADOUT-owned public web interfaces. Product facts remain owned by the canonical plans; the system defines presentation, not new mechanics.
+**Status:** Current visual authority for the homepage and the Docs. Verified against `apps/landing` on 2026-10-11. Product facts stay in the canonical plans; this file defines presentation only.
 
-The current reference-based typography and surface redesign is scoped to the homepage. Participant Docs keeps its existing type roles and pane behavior during this first pass.
+**Source of truth.** When this file and the code disagree, fix both in the same change:
 
-The navigator's moon/sun control selects light stone paper or dark coal. Dark canvas is `#141210`, foreground is `#EFE6D4`, muted copy is `#B5AA98`, and action gold is `#DCC49C`. Gold-filled controls use coal text in dark mode. The choice is stored as `loadout-theme` when browser storage is available; light is the initial default. The homepage navigator stays visible while scrolling, uses the reference's five labels and 30px desktop gaps, and adapts to an accessible menu below 1000px.
+- Homepage tokens and layout: `apps/landing/app/home.css`
+- Docs tokens and layout: `apps/landing/app/docs.css`
+- Fonts: `apps/landing/app/layout.tsx`, `apps/landing/app/docs/layout.tsx` and the files in `apps/landing/public/fonts/`
+- Grain: `apps/landing/app/grain.css` and `apps/landing/app/_components/NoiseGrain.tsx`
+- Rulers: `apps/landing/app/ruler.css` and `apps/landing/app/_components/SheetRuler.tsx`
+- Icons: `apps/landing/app/_components/home/art.ts` and `apps/landing/public/loadout/sprites/`
 
 ## Identity
 
-LOADOUT is an industrial field manual with pixel utility: warm stone paper, coal-ink rules, measured grid lines, subtle print grain, block display type, and readable technical mono. Use restrained Bolt Yellow and a small rust accent. The interface should feel like a practical build dossier from a working mine, not a game dashboard or generic SaaS template.
+LOADOUT looks like an industrial field manual for builders: an engineering-paper grid, measured rulers, depth markers down a mine section, pixel display type, and one accent per theme. It is plain and factual. It should not look like a game, a generic SaaS page or a glass dashboard.
 
-## Color tokens
+## Themes
 
-| Token | Value | Use |
+- Two themes from one switch. Dark graphite is the default; light is stone paper.
+- On the homepage the switch is the hidden checkbox `#theme`. On the Docs it is the shared `ThemeSwitch`. Both store the choice in `localStorage`.
+- Both themes must pass the same checks: contrast, focus and reduced motion.
+
+## Colour
+
+### Homepage
+
+| Token | Dark (default) | Light | Use |
+| --- | --- | --- | --- |
+| Canvas `--bg` | `#222627` | `#DDD3BF` | Page background |
+| Text `--fg` | `#E9EBE7` | `#1A1714` | Text, rules and outlines |
+| Muted `--mut` | `#A7AEAB` | `#6B6354` | Secondary text and labels |
+| Accent `--ac` | `#5E9EF4` blue | `#C4491F` rust | Logo, links and markers |
+| Accent text `--acf` | `#16191A` | `#FBF3E4` | Text on the accent |
+| Surfaces `--pl1`, `--pl2` | `#2C3132` | `#D6CCB7`, `#CBBFA8` | Cards, panels and track plates |
+| Card outline (dark) | `rgba(233, 235, 231, .22)` | the rule colour | Card and panel edges |
+| Secondary `--hl` | `#6FC2BB` teal | not set | Dark only: links, list markers, corner marks and text selection |
+| Primary button | blue with `#16191A` text | yellow `#E3C26B` with ink text and a 1px ink border | RSVP and the main actions |
+
+- In light mode the yellow button is the primary action, and rust marks links and small accents. Keep rust to small details.
+- In dark mode the icons are turned blue (see Icons). In light mode they show as drawn.
+- No blue or purple glow, gradients or glass as decoration.
+
+### Docs
+
+| Token | Dark | Light |
 | --- | --- | --- |
-| Canvas | `#DDD3BF` | Warm stone paper page background. |
-| Surface | `#E9E2D4` | Opaque cards, navigation, FAQ rows. |
-| Surface muted | `#D6CCB7` | Homepage plates; deeper metal shading reaches `#CBBFA8`. |
-| Grid | `#CBBFA8` | Low-contrast 40px homepage paper grid with a faint 200px guide. |
-| Ink | `#1A1714` | Text, borders, and outlines. |
-| Graphite | `#29241F` | Dark track and emphasis panels. |
-| Graphite raised | `#383128` | Secondary dark-panel surface. |
-| Steel | `#999184` | Dividers and subdued labels. |
-| Muted text | `#5A5145` | Secondary copy with readable contrast on paper and muted plates. |
-| Bolt Yellow | `#E3C26B` | Homepage primary actions and markers. |
-| Yellow soft / highlight / edge | `#E9CD83` / `#EBD59A` / `#A88737` | Hover, highlight, and pixel-art edge details. |
-| Rust | `#C4491F` | Small secondary accent for emphasis; never required to identify meaning. |
-| Rust text / plate text | `#84301B` / `#514A40` | Darker text accents with readable contrast on metal plates. |
-| Success / danger | `#65775D` / `#A94B3E` | Clearly labelled status only. |
+| Canvas `--bg` | `#222627` | `#DDD3BF` |
+| Text `--fg` | `#E9EBE7` | `#1A1714` |
+| Muted `--mut` | `#A7AEAB` | `#6B6354` |
+| Body secondary `--dim` | `#B4BBB8` | `#4F4739` |
+| Accent `--ac` | `#5E9EF4` blue | `#E3C26B` yellow |
+| Accent text `--acf` | `#16191A` | `#1A1714` |
+| Secondary `--hl` | `#6FC2BB` teal | `#C4491F` rust |
+| Panels `--panel`, `--panel-2` | `#2C3132`, `#373D3E` | `#E8DFCC`, `#D6CCB7` |
+| Stroke `--stroke` | `#4A5254` | `#1A1714` |
+| Hard shadow `--drop` | `4px 4px 0 #0C0E0E` | `4px 4px 0 #1A1714` |
 
-Do not use blue/purple glow, gradients, or glass as decoration. Keep rust limited to small accent details; mockup colors do not override these tokens.
+The homepage and the Docs choose their accents differently in light mode, on purpose: the Docs use yellow for active items, while the homepage uses yellow for buttons and rust for links.
 
-## Typography and layout
+## Typography
 
-- Homepage display: self-hosted `Pixelify Sans` 700 for headings, card titles, and the wordmark.
-- Homepage body and utility labels: self-hosted `Barlow Condensed` 500/600/700. Actions, ASCII, code, and technical values use self-hosted `JetBrains Mono` 400–800. Docs retains Jersey 10 and IBM Plex Mono in this homepage-only typography pass.
-- Use the 40px homepage paper grid with a faint 200px guide and a subtle static print-grain overlay. Keep the central content width near 1080px unless a scoped design brief sets a different reading layout. The active visual handoff is [Redesign foundation](../../../.ulpi/design/redesign-foundation.md).
-- Use a 4px spacing base. Keep section rhythm generous and consistent; cards should not collapse into dense text blocks.
-- The hero is a centered, framed, near-fullscreen page entrance. Existing copy, section flow, and frame geometry are owned by [Plan 06](../../../plans/06-public-homepage.md).
-- The homepage may use static, decorative ASCII mine-hoist/headframe details to frame the hero. Keep them outside the reading and action area, hide them when the viewport is too narrow, and mark them `aria-hidden`; do not use the prepared workshop PNGs as page backgrounds.
-- The implemented homepage content width is 1080px. Major section padding is 72px desktop (88px for process/progression/Eras), 56/64px tablet, and 44px mobile. Essential body copy is 16px; footer links are 14px desktop and 16px mobile, with 44px minimum targets.
+| Role | Font | Where |
+| --- | --- | --- |
+| Wordmark | Jersey 10 (`--font-display`) | The LOADOUT logo text, the nav logo (36px) and the Docs brand |
+| Headings | Pixelify Sans 400 to 700 (`--font-pixel`) | Homepage headings and card titles. Docs h1 46px/700, h2 30px/600, h3 14px uppercase/600 |
+| Buttons | Pixelify Sans | Homepage buttons (the hero and nav buttons were checked) |
+| Body and lead | IBM Plex Mono 400 and 600 (`--font-ui`) | Homepage body text, leads, notes, nav links (11px), hero side labels (14px) and depth markers |
+| Rulers | DotGothic16 (`--font-dot`) | Ruler numbers (11px) |
+| ASCII art | JetBrains Mono (`--font-mono-art`) | ASCII fields, loaded through `next/font/google` |
+| Docs body | Poppins 400, 500 and 600 (`--font-poppins`) | The Docs only, loaded in `docs/layout.tsx` |
 
-## Surfaces, borders, and controls
+Rules:
 
-- Prefer square corners and thin 1px coal rules for homepage cards and controls. Use restrained inset depth instead of block shadows.
-- Use warm paper reading surfaces and light metal track panels (`#D6CCB7` / `#CBBFA8`); keep their labels readable in coal ink.
-- Use Bolt Yellow selectively to show action, selection, progress, or status. Do not add decorative bolts/rivets to every surface.
-- Keep hover/focus feedback small and deliberate. Do not scale or rotate utility controls without a specific interaction need.
-- Use visible `:focus-visible` states and minimum 44px touch targets for primary interactive controls.
+- Pixel fonts are for signage: headings, buttons and the wordmark. IBM Plex Mono is for reading. Do not set two pixel fonts in one heading.
+- Homepage section headings are pixel, uppercase, 44px on desktop. Leads are 16px with a 1.65 line height, centred under the heading and no wider than 720px.
+- Essential body copy is 16px. Do not shrink it to fit.
+- Fonts are self-hosted, except JetBrains Mono and Poppins, which load through the framework, with `display: swap`.
+- The scramble on the hero title measures its letters only after the pixel font has loaded.
 
-## Pixel artwork and asset use
+## Layout
 
-- Current homepage glyphs are the transparent 32×32 PNGs in `apps/landing/public/loadout/sprites/`. Source-to-runtime mappings live in [the asset catalog](../asset-catalog.md).
-- The active Bolt glyph is `sprites/bolt.png`. Keep the owner-supplied custom `apps/landing/public/loadout/bolt.svg` intact as a separate original asset.
-- Keep the LOADOUT logo/wordmark/favicon separate from currency and utility sprites.
-- Render pixel artwork with nearest-neighbor or `image-rendering: pixelated`; preserve transparency and source pixels. Do not add smoothing, backgrounds, or filters to sprite files.
-- Scenery vectors are kept under `apps/landing/public/loadout/hero/scenery/`, and the current homepage does not render them. The 31 `hero-workshop` PNGs are kept from the abandoned workshop hero background and are not rendered. Do not wire them into the hero without a new owner decision.
-- New unapproved files belong in `assets/inbox/`. Keep editable sources under `assets/editable/`, distinct old variants under `assets/archive/`, and visual-only examples under `docs/design/references/`. Do not keep identical live exports in multiple folders.
+- Homepage content sits in a centre column 1080px wide. Section padding is set per breakpoint in `home.css`; change it there.
+- Spacing uses multiples of 4px.
+- The Docs use a boxed 300px sidebar, a reading column and a contents rail, with hard-edged panels.
+- Breakpoints in use are 360, 370, 560, 639, 640, 700, 800, 820, 900, 1024, 1080, 1100, 1359, 1360 and 1420px. Use the nearest existing breakpoint before adding one. The browser suite checks 320, 390, 471, 700, 900 and 1440px, and checks for horizontal scroll.
 
-## Motion and reduced motion
+## Surfaces, borders and controls
 
-Motion supports orientation and feedback. Use 120ms fast, 180ms base, and 300ms emphasis transitions; hero entrance remains an 800–900ms sequence with the established ease. Respect the existing native page and bounded Docs scrolling; the Docs route must not introduce body scrolling or Lenis. Keep hero and section reveals restrained. Clouds use horizontal parallax of ±112px desktop/±48px mobile, with separate ±12px inner drift over 48 seconds; size them at `clamp(280px,32vw,560px)` desktop and 260px mobile. Under `prefers-reduced-motion`, disable transforms, smooth movement, and reveals while keeping all content visible and keyboard-operable.
+- Corners are square. A few small details use a 2px or 3px radius, and the theme knob is round.
+- Cards and panels have a 1px outline. Docs controls use a 2px border with a 4px right and bottom edge, which lifts on hover.
+- Cards lift on hover. On narrower layouts the hover adds a 4px offset shadow. Do not use blurred elevation.
+- Primary homepage buttons are at least 52px tall, with 36px side padding, uppercase text and 0.1em letter spacing.
+- Touch targets are at least 44px for primary controls.
+- Focus is a visible `:focus-visible` outline in the accent colour, offset 2 to 3px. Never remove it.
 
-Do not add ambient factory motion, autoplay, or background animations that compete with reading. Follow `docs/development/ui-skills.md` for every UI change; skill use does not authorize a product-scope change.
+## Depth markers and rulers
 
-## Accessibility and responsive behavior
+- A depth marker divides two sections: two dashed rules over a hatched band, with the depth numeral on the left (for example "−300 M") and a label on the right in Jersey 10, the wordmark face, set on a plate in the page colour so the hatching never runs through it (for example "1. SOHLE / LEVELS & REWARDS", 32px on desktop, down to 20px on tablets and 16px on phones).
+- The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 7% of the text colour. Within 280px of the pointer they light to the glow colour (blue in dark mode at 60%, yellow `#E3C26B` in light mode at 85%), the same values as the footer wordmark (`DepthGlow`, `.home .pit` and `.home .pit b, .home .pit > span` in `home.css`). Touch visitors see the faint marker only.
+- The top ruler is in pixels: a tick every 32px and a number every 160px.
+- The left ruler is in metres: a tick every 10 m, a number every 50 m, and a heavier mark at each depth strip. Markers are pinned to those strips.
 
-Use semantic headings, lists, buttons, links, and labelled groups. Decorative scenery must be `aria-hidden`, non-interactive, and unable to create horizontal overflow. Keep keyboard focus visible. At narrow widths, preserve readable copy, direct routes, and no clipped controls. Docs-specific widths and internal-pane scrolling are owned by the [internal Docs architecture guide](../../development/architecture.md).
+## Grain and paper
 
-## Future product interfaces
+- The film grain is one full-screen canvas (`NoiseGrain`) at opacity 0.33 (`grain.css`). It is redrawn every 100ms from a 512px noise tile and never takes pointer input.
+- Under reduced motion the grain draws one still frame.
+- The grain is the only texture. Do not add paper images or gradients.
 
-Dashboard, profile, project submission, project exploration, shop, ordering, missions, and leaderboard concepts remain unapproved proposals in [Future platform UI](../../../plans/proposals/future-platform-ui.md). This system does not authorize those services or their live data.
+## Icons
+
+- Icons are 32 by 32 transparent pixel PNGs in `apps/landing/public/loadout/sprites/`, with ink outlines and a yellow fill. They render with `image-rendering: pixelated`. Never smooth or filter the files.
+- The homepage uses them as SVG symbols defined in `art.ts` (`ICON_SPRITE`). To add an icon, add its name to `SPRITE_NAMES` and add its PNG.
+- In dark mode the icons are turned blue by a CSS hue rotation (`hue-rotate(170deg) saturate(.95)`). In light mode they show as drawn.
+- The Bolt currency icon (`bolt.png`) nudges on its card. The owner's original `bolt.svg` stays unchanged.
+- The hero scenery vectors under `hero/scenery/` and the 31 `hero-workshop` PNGs are kept but not rendered. Do not wire them in without a new owner decision.
+
+## ASCII art
+
+- Decorative ASCII fields (`AsciiField`) use JetBrains Mono. Each has a faint base layer and a brighter copy that is revealed around the pointer.
+- The art drifts slowly, over about 11 to 13 seconds per cycle, and stops under reduced motion.
+- Fields are `aria-hidden`, do not take pointer input in sections, and are hidden on small screens.
+
+## Motion
+
+- Easing is `cubic-bezier(.22, 1, .36, 1)` (`--ease`). Nothing bounces.
+- Hero entrance: the title drops and scales from 85% to 100% over 800ms, and the badge and copy follow. The title scrambles while it settles, and each letter takes its real place.
+- Sections and cards reveal as they enter the view.
+- The hero facts scramble on hover.
+- The navigation hides on scroll down and returns on scroll up. Smooth scrolling stays under the user's control.
+- Under `prefers-reduced-motion: reduce`, entrances, reveals, scrambles, the ASCII drift, nudges and smooth scrolling all stop. Content stays fully usable.
+
+## Accessibility
+
+- The browser suites run axe checks on the homepage and the Docs (`e2e/homepage.spec.ts` and `e2e/docs.spec.ts`). A new colour must pass them in both themes.
+- The real text is always in the page. Scrambled letters are decorative, and the heading keeps its real text as its accessible name while it runs.
+- Rulers, grain, ASCII art and decorative icons are `aria-hidden`.
+- Every control is reachable by keyboard and shows a visible focus state.
+
+## Voice
+
+Plain, technical and direct, written for builders. Short sentences. No decorative dashes. Do not invent dates, prices, eligibility or participant numbers. Keep a control's label the same across the nav, the button and the page it opens. Program facts come from the plans.
+
+## Retired (do not bring back)
+
+- The beige-only page, with `#DDD3BF` as the only theme.
+- Barlow Condensed body text. The font files are not shipped.
+- The 2026-10-04 muted-grey palette (`#E8E9E6` canvas).
+- The warm-charcoal dark theme (`#141210`).
+- The yellow dark accent (`#E3C26B` or `#E0BD55` in dark mode). Dark accent is blue.
+- The pixel-tile grain and the desaturated icons in dark mode.
+
+## Where things are
+
+- Product facts: `plans/`.
+- Design briefs: `.ulpi/design/`. Only the entrypoint `DESIGN.md` and the design index's "current" rows are current. The rest are records.
+- Asset mapping and sources: [`docs/design/asset-catalog.md`](../asset-catalog.md).

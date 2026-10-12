@@ -54,7 +54,7 @@ Design read: event landing page for teenage technical builders, in a Ruhr mine a
 
 ## Grain, rulers and docs redesign (11 October 2026)
 
-- Grain: `NoiseGrain` is the Stasis-style film grain, a full-screen canvas of random grey noise at 35% opacity redrawn every 100ms (it was 20%, the Stasis value, which is invisible on the graphite and beige backgrounds), on the homepage and the docs. Reduced motion gets one still frame. This replaces the pixel-tile grain tried the round before.
+- Grain: `NoiseGrain` is the Stasis-style film grain, a full-screen canvas of random grey noise at 33% opacity redrawn every 100ms (it was 20%, the Stasis value, which is invisible on the graphite and beige backgrounds), on the homepage and the docs. Reduced motion gets one still frame. This replaces the pixel-tile grain tried the round before.
 - Rulers: the homepage has a pixel ruler along the top (tick every 32px, number every 160px) and one down the left edge (heavy mark every 800px). The right-hand ruler and the docs rulers were removed.
 - Docs: restyled after the Pixl docs. Boxed sidebar with a 4px right rule and collapsible groups (label, count, chevron), Pixl's block back button, ink hover and sand active links, Pixelify Sans headings at 46px and 30px, Poppins text (loaded on the docs only), 2px rules with 4px block shadows on fact rows, callouts, quick answers and previous/next cards, and an "On this page" list that marks the section being read. The drafting grid behind the docs was dropped.
 

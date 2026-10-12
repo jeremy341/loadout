@@ -5,7 +5,7 @@ import "../grain.css";
 
 const TILE = 512; // px, the noise tile that is shifted around
 const INTERVAL = 100; // ms between two frames, as on Stasis
-const ALPHA = 51; // of 255 per pixel; the canvas itself is then drawn at 35% opacity (grain.css)
+const ALPHA = 51; // of 255 per pixel; the canvas itself is then drawn at 33% opacity (grain.css)
 
 // One tile of random grey noise, turned into a repeating pattern. A pattern is a snapshot of the
 // tile at the moment it is made, so it is made after the noise is in.

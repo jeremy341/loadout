@@ -310,6 +310,57 @@ test("depth markers are tall strips with a large number", async ({ page }) => {
   await expect(pit.locator("b")).toHaveCSS("font-size", "88px");
 });
 
+test("depth numerals are faint and light up under the pointer, like the footer wordmark", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const numeral = page.locator(".pit b").first();
+  await expect(numeral).toHaveCSS("color", "rgba(0, 0, 0, 0)");
+  expect(await numeral.evaluate((el) => getComputedStyle(el).backgroundClip)).toContain("text");
+  // The label has the same glow and is set in Jersey 10, the wordmark face.
+  const label = page.locator(".pit > span").first();
+  expect(await label.evaluate((el) => getComputedStyle(el).backgroundClip)).toContain("text");
+  expect(await label.evaluate((el) => getComputedStyle(el).fontFamily)).toContain("display");
+  // The label has a plate in the page colour, so the hatching does not run through it.
+  expect(await label.evaluate((el) => getComputedStyle(el).backgroundClip)).toContain("border-box");
+  expect(parseFloat(await label.evaluate((el) => getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(14);
+  // The hatched band is back, and it lights near the pointer like the numerals do.
+  const marker = page.locator(".pit").first();
+  await expect(marker).toHaveCSS("background-image", /repeating-linear-gradient/);
+  await numeral.scrollIntoViewIfNeeded();
+  const box = await numeral.boundingBox();
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await expect.poll(() => numeral.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
+  await expect.poll(() => label.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
+  await expect.poll(() => marker.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
+});
+
+test("on phones the depth numerals stay on one line and the labels fit their strips", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+  const pits = page.locator(".pit");
+  const count = await pits.count();
+  expect(count).toBeGreaterThan(0);
+  for (let i = 0; i < count; i++) {
+    const fit = await pits.nth(i).evaluate((el) => {
+      const numeral = el.querySelector<HTMLElement>(":scope > b")!;
+      const label = el.querySelector<HTMLElement>(":scope > span")!;
+      const style = getComputedStyle(label);
+      const padding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+      const strip = el.getBoundingClientRect();
+      const box = label.getBoundingClientRect();
+      return {
+        numeralLines: Math.round(numeral.getBoundingClientRect().height / parseFloat(getComputedStyle(numeral).lineHeight)),
+        labelLines: Math.round((box.height - padding) / parseFloat(style.lineHeight)),
+        inside: box.top >= strip.top && box.bottom <= strip.bottom && box.left >= strip.left && box.right <= strip.right,
+      };
+    });
+    expect(fit.numeralLines, `depth marker ${i + 1} numeral lines`).toBe(1);
+    expect(fit.labelLines, `depth marker ${i + 1} label lines`).toBeLessThanOrEqual(2);
+    expect(fit.inside, `depth marker ${i + 1} label stays inside its strip`).toBe(true);
+  }
+});
+
 test("sections reveal with main's triggered slide-in, not a scroll-scrubbed fade", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
@@ -372,6 +423,49 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
   await page.locator("label.tg").click();
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgb(26, 23, 20)");
 });
+test("the hero title keeps its width through the entrance and the scramble", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const title = page.locator(".hero .h1");
+  // The entrance scales the title in, but its layout width never changes.
+  const layoutWidth = () => title.evaluate((el) => (el as HTMLElement).offsetWidth);
+  const layoutBefore = await layoutWidth();
+  await expect.poll(() => title.evaluate((el) => el.getAnimations().every((a) => a.playState === "finished"))).toBe(true);
+  expect(await layoutWidth()).toBe(layoutBefore);
+  // Each line from its first letter to its last, in layout pixels: the entrance scale is divided out.
+  const lineWidths = () => page.locator(".hero .h1").evaluate((el) => {
+    const scale = el.getBoundingClientRect().width / (el as HTMLElement).offsetWidth;
+    return [...el.querySelectorAll<HTMLElement>(":scope > span")].map((span) => {
+      const boxes = span.querySelectorAll<HTMLElement>(".scr-c");
+      if (boxes.length) return (boxes[boxes.length - 1].getBoundingClientRect().right - boxes[0].getBoundingClientRect().left) / scale;
+      const text = span.firstChild as Text;
+      const lastLetter = Math.max(...[...(text.textContent ?? "")].map((char, index) => (/[A-Za-z0-9]/.test(char) ? index : -1)));
+      const range = document.createRange();
+      range.setStart(text, 0);
+      range.setEnd(text, lastLetter + 1);
+      return range.getBoundingClientRect().width / scale;
+    });
+  });
+  // While the scramble runs, the letters take their real places.
+  await expect(page.locator(".hero .h1 .scr-c").first()).toBeAttached();
+  const during = await lineWidths();
+  await expect(page.locator(".hero .h1 .scr-c")).toHaveCount(0, { timeout: 5000 });
+  const after = await lineWidths();
+  expect(during).toHaveLength(after.length);
+  for (let i = 0; i < after.length; i++) expect(Math.abs(during[i] - after[i])).toBeLessThanOrEqual(1);
+});
+
+test("the ASCII art drifts unless reduced motion is requested", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const field = page.locator(".hero .ar-left");
+  await expect.poll(() => field.evaluate((el) => el.getAnimations().length)).toBeGreaterThan(0);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect.poll(() => field.evaluate((el) => el.getAnimations().length)).toBe(0);
+});
+
 test("the cards use the first site's pixel icons: as drawn in light mode, turned blue in dark mode", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#tracks .card .ic use").first()).toHaveAttribute("href", "#i-wrench");
@@ -426,7 +520,7 @@ test("the grain is a full-screen noise canvas that redraws and never takes input
   await expect(grain).toHaveCount(1);
   await expect(grain).toHaveCSS("pointer-events", "none");
   await expect(grain).toHaveCSS("position", "fixed");
-  await expect(grain).toHaveCSS("opacity", "0.35");
+  await expect(grain).toHaveCSS("opacity", "0.33");
   await expect(grain).toHaveAttribute("aria-hidden", "true");
   const sample = () => grain.evaluate((canvas: HTMLCanvasElement) => {
     const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 64).data;

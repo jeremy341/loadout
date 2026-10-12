@@ -32,39 +32,44 @@ The development direct-push rule applies to both write collaborators and the own
 short-lived branch → PR → development → promotion PR → testing → promotion PR → main
 ```
 
-- `development`: feature PRs are the normal route. Direct pushes are allowed only when the exact commit SHA already has successful `Repository integrity`, fast `Landing quality`, and `Promotion lane` statuses. A fresh unverified commit remains blocked by required status checks.
+- `development`: feature PRs are the normal route. A direct push is allowed only for a commit whose SHA already has successful `Repository integrity`, `Landing quality` and `Promotion lane` statuses; a fresh unverified commit remains blocked by required status checks.
 - `testing`: PR required, only from `development`.
 - `main`: PR required, only from `testing`.
 - Human approvals: zero required on every lane. No Jeremy-only, owner-only, CODEOWNER, latest-pusher, or other one-person rule.
 - Administrators are subject to rules. Do not add bypass actors. Force pushes and branch deletion stay disabled.
 - CodeScene and Codecov are not required GitHub branch checks; CodeScene feedback remains advisory. Copilot code review is not included.
 
-## Lean pipeline: target settings (proposed 2026-10-11, not yet applied)
+## Lane settings
 
-[The development workflow](WORKFLOW.md) moves one checked commit through the lanes instead of merging it three times. The live rules above still describe GitHub today. These steps make the new flow possible. The pull request that added this section changed no GitHub setting.
+Applied on 2026-10-11 (repository options):
 
-1. **Align the lanes once.** A push to testing can only fast-forward, and testing and main hold merge commits that development does not. A dry run on 2026-10-11 showed that merging both into development is conflict-free and changes no file. Do it on a checked branch:
+- Merge options: squash merges and merge commits allowed; rebase merges off; merged branches deleted automatically; squash commits take the PR title with an empty body.
+- `development` moved by fast-forward to `main`'s commit, then one squash commit for the docs update. No content changes on the lanes.
+- Co-author lines removed from all three lanes' history (same file tree on all three).
 
-   ```powershell
-   git fetch origin
-   git switch -c chore/align-lanes origin/development
-   git merge origin/testing origin/main -m "Align the lanes so later promotions are fast-forwards"
-   git push -u origin HEAD            # wait for green checks
-   git push origin HEAD:development
-   ```
+### Recommended rules
 
-2. **testing: stop requiring a PR.** Keep the four required checks, administrator enforcement, no force pushes and no deletion. A direct push then succeeds only for a commit whose checks already passed.
+| Branch | PR required | Force pushes | Required checks | Why |
+|---|---|---|---|---|
+| `development` | Yes, 0 approvals | Off | Repository integrity, Landing quality, Promotion lane | Every change arrives as a squash-merged PR, so the history stays one commit per change. |
+| `testing` | No | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | Promotion is a fast-forward push of a commit that already passed. No PR per batch. |
+| `main` | Yes, 0 approvals | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | One release PR per batch, merged with a merge commit, so main records each release. |
 
-   ```powershell
-   gh api -X DELETE repos/jeremy341/loadout/branches/testing/protection/required_pull_request_reviews
-   ```
+### Current rules (read back on 2026-10-11)
 
-3. **development: require linear history** (Settings, Branches, development, "Require linear history"). This blocks merge commits and still allows squash merges and fast-forward pushes. Do it after step 1, because step 1 is itself a merge commit.
-4. **main (optional).** main stays PR-only, so each release is one merge commit. To make it fast-forward too, delete its PR requirement the same way as step 2. The Lane lineage job already covers it.
+| Branch | PR required | Force pushes |
+|---|---|---|
+| `development` | No | On |
+| `testing` | Yes | Off |
+| `main` | Yes | Off |
 
-Rollback: turn "Require a pull request before merging" back on for testing in the same settings page.
+### Owner toggles to reach the recommended rules
 
-What the workflow now guarantees: a docs-only change skips lint, build and browsers but still reports the required checks green; any other change runs the full set on its exact commit, so that commit is safe to push to every lane. GitHub cannot test ancestry before a push lands, so the Lane lineage job reports afterwards if testing or main receives a commit that is not on its source lane.
+1. **development:** Settings → Branches → development → tick "Require a pull request before merging" (0 approvals). Leave the required checks as they are.
+2. **testing:** Settings → Branches → testing → untick "Require a pull request before merging". Leave the required checks and keep force pushes off.
+3. **development (recommended, optional):** turn "Allow force pushes" off once no history rewrite is planned. Turn it on only for a rewrite, then off again.
+
+Until toggle 2 is done, promotion to testing is a PR from development merged with a merge commit. Until toggle 1 is done, development accepts direct pushes of a commit that already passed.
 
 ## Required GitHub Actions checks
 
@@ -74,7 +79,7 @@ What the workflow now guarantees: a docs-only change skips lint, build and brows
 | `testing` | `Repository integrity`, `Landing quality`, `Landing browser`, `Promotion lane` | Required; only `development` may promote |
 | `main` | `Repository integrity`, `Landing quality`, `Landing browser`, `Promotion lane` | Required; only `testing` may promote |
 
-Pushes to branches run CI so a direct update to `development` can reuse successful checks from the exact same commit SHA. `Landing browser` is skipped on the fast development lane and required on testing/main promotions. `Landing quality` runs lint, typecheck, and unit tests on development; testing and main also run the production build. `Promotion lane` validates the PR head/base pair and accepts only the three edges in the lane diagram; on ordinary branch pushes it is skipped, which GitHub accepts as a satisfied required status.
+CI runs on pull requests into the three lanes and on pushes to the three lanes; pushes to feature branches run no CI, because their pull request already does. The commit that passes on development carries the checks that testing and main require, so promoting it does not rerun them. `Landing browser` runs when the app changed; it is required on testing and main, and the development push run supplies that result. `Landing quality` runs lint, typecheck, and unit tests on development; testing and main also run the production build. `Promotion lane` validates the PR head/base pair and accepts only the three edges in the lane diagram; on ordinary branch pushes it is skipped, which GitHub accepts as a satisfied required status.
 
 Required status checks come from GitHub Actions. `development` requires an up-to-date branch so feature PRs and checked direct updates build on the current integration lane. `testing` and `main` do not require source-branch freshness: each promotion reruns the full checks on GitHub's merge candidate, avoiding reverse-merges of lane merge commits. Required checks must pass before a lane merge.
 

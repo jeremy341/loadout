@@ -54,14 +54,6 @@ body:has(.home):has(#theme:checked) { background:#DDD3BF }
 .home:has(#theme:checked) .tg .mo { opacity:.35 }
 .home:has(#theme:focus-visible) .tg { outline:2px solid var(--ac);outline-offset:2px }
 .home { overflow:clip }
-.home .pit { position:relative;height:240px;margin-top:140px;border-top:1px dashed var(--mut);border-bottom:1px dashed var(--mut);background:repeating-linear-gradient(135deg,var(--ln) 0 2px,transparent 2px 14px);display:flex;align-items:center;justify-content:space-between;padding:0 24px }
-.home .pit b { font:700 72px/1 var(--font-pixel),monospace;color:var(--fg) }
-.home .pit span { font-size:12px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase;text-align:right;line-height:1.8 }
-.home .pit+.sect { padding-top:96px }
-@media(max-width:800px) {
-  .home .pit { height:160px;margin-top:80px }
-  .home .pit b { font-size:40px }
-}
 @keyframes dep {from{--d:0}to{--d:9}}
 .home .stp { position:absolute;z-index:3;border:3px solid var(--ac);color:var(--ac);font:700 24px/1 var(--font-pixel),monospace;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:8px 16px;box-shadow:inset 0 0 0 3px var(--bg),inset 0 0 0 5px var(--ac);opacity:.88;pointer-events:none }
 .home .stp small { display:block;margin-top:6px;font:400 12px var(--font-dot),var(--font-mono-art),monospace;letter-spacing:.2em }
@@ -69,7 +61,6 @@ body:has(.home):has(#theme:checked) { background:#DDD3BF }
 .home .stp.s2 { top:48px;right:70px;transform:rotate(7deg);width:132px;height:132px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;padding:0 }
 .home .m { font-size:13px }
 .home .ct, .home .lab, .home .st:after { font-size:13px }
-.home .pit span { font-size:14px }
 @media(max-width:800px) {
   .home .stp { display:none }
 }
@@ -88,7 +79,6 @@ body:has(.home):has(#theme:checked) { background:#DDD3BF }
 }
 .home .m, .home .ct, .home .lab { letter-spacing:.08em }
 .home .m, .home .ct, .home .lab, .home .st:after { font-size:12px }
-.home .pit span { font-size:13px }
 .home .ic { display:inline-block;flex:none;width:32px;height:32px;background-size:contain;background-repeat:no-repeat;background-position:center;image-rendering:pixelated }
 .home .ic.l { width:48px;height:48px }
 html:has(.home) { scroll-behavior:smooth }
@@ -259,6 +249,11 @@ html:has(.home) { scroll-behavior:smooth }
 }
 .home .ar span { pointer-events: none; transition: none; }
 .home .ar span:hover { color: inherit; }
+/* ASCII art drifts gently, a few pixels at a time; both layers share the container, so they move together. */
+@keyframes ar-drift { from { transform: translate3d(-4px, 4px, 0); } to { transform: translate3d(5px, -10px, 0); } }
+.home .ar { will-change: transform; animation: ar-drift 11s ease-in-out infinite alternate; }
+.home .ar-right { animation-duration: 13s; animation-delay: -4s; }
+@media (prefers-reduced-motion: reduce) { .home .ar { animation: none; } }
 
 /* FAQ accordion: button questions, animated answers (pre-redesign behaviour). */
 .home .fq2-list { border-bottom: 1px solid var(--fg); }
@@ -296,8 +291,6 @@ html:has(.home) { scroll-behavior:smooth }
 
 /* Layout and sizing matched to main (site-nav, hero, site-section, section-heading). */
 .home .sect { padding-top: 36px; }
-.home .pit { height: 120px; margin-top: 36px; }
-.home .pit + .sect, .home .pit+.sect { padding-top: 36px; }
 .home .sect > .h2 { font-size: 44px; line-height: .95; margin-bottom: 24px; }
 .home .sect > .lead { font-size: 13px; line-height: 1.45; margin-top: 10px; }
 @media (max-width: 900px) {
@@ -310,8 +303,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home { font-family: var(--font-ui), monospace; }
 .home .m, .home .lab, .home .ct, .home .lab span, .home .tag, .home .nav, .home .fo, .home .sig, .home .chip { font-family: var(--font-dot), monospace; }
 .home .sect { padding-top: 72px; }
-.home .pit { height: 96px; margin-top: 72px; }
-.home .pit + .sect { padding-top: 72px; }
 .home .card { padding: 20px 22px 18px; }
 .home .card.t { min-height: 290px; }
 .home .card.t .cn { font-size: 30px; }
@@ -322,13 +313,11 @@ html:has(.home) { scroll-behavior:smooth }
 .home .fq2-a p { font-size: 14px; line-height: 1.65; padding: 4px 18px 18px; }
 .home .dsc { font-size: 12px; line-height: 1.5; }
 .home .lead { font-size: 14px; }
-@media (max-width: 800px) { .home .pit { height: 72px; margin-top: 48px; } .home .sect { padding-top: 48px; } }
+@media (max-width: 800px) { .home .sect { padding-top: 48px; } }
 
 /* Second pass against main's components: section rhythm, reward cards, flow text, footer grid. */
 .home .sect { padding-top: 36px; }
 .home #process, .home #progression { padding-top: 88px; }
-.home .pit { height: 72px; margin-top: 36px; }
-.home .pit + .sect { padding-top: 36px; }
 .home .sect > .lead { font-size: 13px; line-height: 1.45; }
 .home .row.r3 .card.t { min-height: 0; padding: 20px; }
 .home .fn .dsc { font-size: 16px; line-height: 1.65; }
@@ -526,7 +515,6 @@ html:has(.home) { scroll-behavior:smooth }
 
 /* Content column and section rhythm (main: .site-section 1080px column, 72px block padding). */
 .home .sect { padding-block: 72px; }
-.home .pit { height: 72px; margin-top: 0; }
 .home .pit + .sect { padding-top: 72px; }
 .home #process, .home #progression { padding-block: 88px; }
 .home #eras { padding-block: 104px; }
@@ -761,15 +749,7 @@ html:has(.home) { scroll-behavior:smooth }
 
 @media (max-width: 700px) { .home .hero .hero-facts { min-height: 18px; } }
 
-/* ===== Batch 3: bigger depth markers, yellow wordmark glow in light mode ===== */
-.home .pit { height: 160px; margin-top: 0; padding: 0 32px; }
-.home .pit b { font-size: 88px; }
-.home .pit span { font-size: 16px; }
-@media (max-width: 700px) {
-  .home .pit { height: 110px; padding: 0 16px; }
-  .home .pit b { font-size: 52px; }
-  .home .pit span { font-size: 13px; }
-}
+/* ===== Batch 3: yellow wordmark glow in light mode ===== */
 .home:has(#theme:checked) .ft-mark-lit { color: #E3C26B; opacity: .9; }
 .home .mc[data-active] { --o: 7px; }
 .home .mc-c { transition: transform .25s ease-out, opacity .15s; }
@@ -1120,3 +1100,61 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .st .cn { display: block; }
 .home .st .dsc { display: block; margin-top: 8px; }
 .home #progression .asd { background: none !important; }
+
+/* Depth markers: a dashed rule above and below, a hatched band, the depth numeral on the left and a label on the right.
+   The hatching, numeral and label are faint, and light to the glow colour within 280px of the pointer (the footer
+   wordmark's values). DepthGlow sets --mx and --my on each one. */
+.home { --glow: var(--ac); --glow-strength: 60%; }
+.home:has(#theme:checked) { --glow: #E3C26B; --glow-strength: 85%; }
+.home .pit {
+  position: relative;
+  height: 160px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed var(--mut);
+  border-bottom: 1px dashed var(--mut);
+  background: repeating-linear-gradient(135deg, var(--ln) 0 2px, transparent 2px 14px);
+}
+.home .pit::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0 2px, transparent 2px 14px);
+  -webkit-mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
+  mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
+}
+.home .pit b, .home .pit > span { position: relative; z-index: 1; }
+.home .pit b {
+  font: 700 88px/1 var(--font-pixel), monospace;
+  white-space: nowrap;
+  color: transparent;
+  background-image:
+    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+/* The label is Jersey 10, the wordmark face. It sits on a plate in the page colour, so the hatching does not run
+   through the letters. The plate is the last background layer and is clipped to the whole box; the glow layers are
+   clipped to the letters. */
+.home .pit > span {
+  padding: 4px 10px;
+  font-family: var(--font-display), monospace;
+  font-size: clamp(20px, 2.2vw, 32px);
+  letter-spacing: .04em;
+  line-height: 1.2;
+  text-align: right;
+  text-transform: uppercase;
+  color: transparent;
+  background-image:
+    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent)),
+    linear-gradient(var(--bg), var(--bg));
+  -webkit-background-clip: text, text, border-box;
+  background-clip: text, text, border-box;
+}
+@media (max-width: 700px) {
+  .home .pit { height: 110px; padding: 0 16px; }
+  .home .pit b { font-size: 44px; }
+  .home .pit > span { font-size: 16px; }
+}

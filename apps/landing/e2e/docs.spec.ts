@@ -158,6 +158,101 @@ test("docs use bounded internal panes on desktop and mobile", async ({ page }, t
   await expect.poll(() => main.evaluate((node) => node.scrollTop)).toBeGreaterThan(afterPageDown);
 });
 
+test("on phones the guide stays in place and Guides opens the directory as a drawer", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/projects");
+  const heading = page.getByRole("heading", { level: 1, name: "What can I build?" });
+  await expect(heading).toBeInViewport();
+  const headingTop = (await heading.boundingBox())!.y;
+  const toggle = page.getByRole("button", { name: "Guides", exact: true });
+  const search = page.getByRole("searchbox", { name: "Search documentation" });
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(search).toBeHidden();
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(search).toBeVisible();
+  await expect(page.getByRole("button", { name: "Close guides" })).toBeFocused();
+  expect((await heading.boundingBox())!.y).toBe(headingTop);
+  const axe = await new AxeBuilder({ page }).analyze();
+  expect(axe.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? ""))).toEqual([]);
+});
+
+test("the phone drawer closes with its X, a tap on the scrim or Escape, and returns focus to Guides", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/projects");
+  const toggle = page.getByRole("button", { name: "Guides", exact: true });
+  const search = page.getByRole("searchbox", { name: "Search documentation" });
+  await toggle.click();
+  await page.getByRole("button", { name: "Close guides" }).click();
+  await expect(search).toBeHidden();
+  await expect(toggle).toBeFocused();
+  await toggle.click();
+  await page.locator(".docs-scrim").click({ position: { x: 365, y: 400 } });
+  await expect(search).toBeHidden();
+  await expect(toggle).toBeFocused();
+  await toggle.click();
+  await page.keyboard.press("Escape");
+  await expect(search).toBeHidden();
+  await expect(toggle).toBeFocused();
+});
+
+test("the phone drawer's back link goes to the homepage", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/projects");
+  await page.getByRole("button", { name: "Guides", exact: true }).click();
+  await page.getByRole("link", { name: /BACK TO LOADOUT/ }).click();
+  await expect(page).toHaveURL(/\/$/);
+});
+
+test("choosing a guide in the phone drawer opens it and closes the drawer", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/projects");
+  await page.getByRole("button", { name: "Guides", exact: true }).click();
+  await page.getByRole("navigation", { name: "Documentation sections" }).getByRole("link", { name: "Project review", exact: true }).click();
+  await expect(page).toHaveURL(/\/docs\/review$/);
+  await expect(page.getByRole("searchbox", { name: "Search documentation" })).toBeHidden();
+  await expect(page.getByRole("heading", { level: 1, name: "Project review" })).toBeInViewport();
+});
+
+test("the phone top bar fits inside the screen at 320px", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/docs/projects");
+  const theme = await page.locator(".docs-theme").boundingBox();
+  const toggle = await page.getByRole("button", { name: "Guides", exact: true }).boundingBox();
+  const brand = await page.locator(".docs-brand").boundingBox();
+  expect(theme!.x + theme!.width).toBeLessThanOrEqual(320);
+  expect(toggle!.x + toggle!.width).toBeLessThanOrEqual(320);
+  expect(brand!.x + brand!.width).toBeLessThanOrEqual(320);
+  await expect(page.locator(".docs-brand")).toHaveAccessibleName(/LOADOUT\s*DOCS/i);
+});
+
+test("Tab stays inside the phone drawer while it is open", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/projects");
+  await page.getByRole("button", { name: "Guides", exact: true }).click();
+  const inside = () => page.evaluate(() => document.getElementById("docs-guides")!.contains(document.activeElement));
+  for (let i = 0; i < 50; i++) {
+    await page.keyboard.press("Tab");
+    expect(await inside()).toBe(true);
+  }
+  await page.keyboard.press("Shift+Tab");
+  expect(await inside()).toBe(true);
+});
+
+test("Escape clears the search first, then closes the phone drawer", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/projects");
+  await page.getByRole("button", { name: "Guides", exact: true }).click();
+  const search = page.getByRole("searchbox", { name: "Search documentation" });
+  await search.fill("track");
+  await page.keyboard.press("Escape");
+  await expect(search).toHaveValue("");
+  await expect(search).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(search).toBeHidden();
+  await expect(page.getByRole("button", { name: "Guides", exact: true })).toBeFocused();
+});
+
 test("opening another guide starts its internal article at the top", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 700 });
   await page.goto('/docs/projects');

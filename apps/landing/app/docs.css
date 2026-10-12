@@ -38,6 +38,13 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
 /* Sidebar */
 .docs-nav { padding: 22px 12px 32px; background: var(--panel); border-right: 4px solid var(--stroke); }
 .docs-nav-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 6px 18px 8px; }
+.docs-nav-actions { display: flex; align-items: center; gap: 8px; }
+.docs-guides-head, .docs-scrim { display: none; }
+/* One-bit icons from the local pack, drawn at 32px (exactly 2x their 16px grid) and filled with the text colour. */
+.docs-icon { display: block; width: 32px; height: 32px; background: currentColor; image-rendering: pixelated; -webkit-mask: no-repeat center / 32px 32px; mask: no-repeat center / 32px 32px; }
+.docs-icon-guides { -webkit-mask-image: url(/loadout/icons/docs-guides.png); mask-image: url(/loadout/icons/docs-guides.png); }
+.docs-icon-close { -webkit-mask-image: url(/loadout/icons/docs-close.png); mask-image: url(/loadout/icons/docs-close.png); }
+.docs-guides { display: contents; }
 .docs-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-pixel), monospace; font-weight: 700; font-size: 19px; letter-spacing: .3px; color: var(--ink); text-decoration: none; }
 .docs-brand > span:last-child { color: var(--hl); }
 .docs .lg { display: inline-flex; align-items: center; gap: 8px; }
@@ -58,7 +65,7 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
 .docs .pxw .b { box-shadow: 4px 0px 0 currentColor,6px 0px 0 currentColor,8px 0px 0 currentColor,10px 0px 0 currentColor,2px 2px 0 currentColor,4px 2px 0 currentColor,6px 2px 0 currentColor,0px 4px 0 currentColor,2px 4px 0 currentColor,4px 4px 0 currentColor,0px 6px 0 currentColor,2px 6px 0 currentColor,4px 6px 0 currentColor,2px 8px 0 currentColor,4px 8px 0 currentColor,6px 8px 0 currentColor,4px 10px 0 currentColor,6px 10px 0 currentColor,8px 10px 0 currentColor,10px 10px 0 currentColor; }
 
 /* Buttons: Pixl's block button, 2px border with 4px right and bottom edges that lift on hover */
-.docs-back-button, .docs-mobile-toggle {
+.docs-back-button, .docs-guides-toggle {
   display: flex; align-items: center; justify-content: center; gap: 7px;
   min-height: 44px; margin: 0 6px 16px; padding: 9px 17px;
   font-family: var(--font-pixel), monospace; font-size: 15px; font-weight: 600; letter-spacing: .5px; text-decoration: none; white-space: nowrap;
@@ -66,10 +73,10 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
   border: solid var(--stroke); border-width: 2px 4px 4px 2px; border-radius: 0; cursor: pointer;
   transition: border-bottom-width .13s var(--ease), transform .13s var(--ease);
 }
-.docs-back-button:hover, .docs-mobile-toggle:hover { color: var(--bg); border-bottom-width: 8px; transform: translate(-2px, -2px); }
-.docs-back-button:active, .docs-mobile-toggle:active { border-bottom-width: 2px; transform: translate(0, 2px); }
-.docs-mobile-toggle { display: none; width: calc(100% - 12px); margin-bottom: 0; color: var(--acf); background: var(--ac); }
-.docs-mobile-toggle:hover { color: var(--acf); }
+.docs-back-button:hover, .docs-guides-toggle:hover { color: var(--bg); border-bottom-width: 8px; transform: translate(-2px, -2px); }
+.docs-back-button:active, .docs-guides-toggle:active { border-bottom-width: 2px; transform: translate(0, 2px); }
+.docs-guides-toggle { display: none; width: calc(100% - 12px); margin-bottom: 0; color: var(--acf); background: var(--ac); }
+.docs-guides-toggle:hover { color: var(--acf); }
 
 /* Collapsible groups: label, count, chevron */
 .docs-group { margin-top: 4px; }
@@ -172,19 +179,31 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
   .docs { grid-template-columns: var(--sidebar) minmax(0, 1fr); }
   .docs-toc { display: none; }
 }
-/* Phones and narrow windows: sidebar on top, folded behind a "Browse topics" button */
+/* Phones and narrow windows: the top bar keeps the brand, the theme switch and a Guides button. The directory is the
+   desktop sidebar's markup in a drawer from the left, hidden until the button opens it. */
 @media (max-width: 820px) {
   .docs { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
-  .docs-nav { height: auto; max-height: 42dvh; padding: 16px 12px; border-right: 0; border-bottom: 4px solid var(--stroke); }
-  .docs-nav-head { padding-bottom: 12px; }
-  .docs-back-button { margin-bottom: 12px; }
-  .docs-mobile-toggle { display: flex; justify-content: space-between; }
-  .docs-navigation { display: none; margin-top: 16px; }
-  .docs-navigation[data-open="true"] { display: block; }
-  .docs-main { padding: 30px 20px 72px; }
+  .docs-nav { height: auto; padding: 10px 12px; border-right: 0; border-bottom: 4px solid var(--stroke); overflow: visible; }
+  .docs-nav-head { padding: 0; }
+  .docs-guides-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-height: 44px; margin: 0; padding: 0; color: var(--ink); background: var(--panel-2); }
+  .docs-guides-toggle[aria-expanded="true"] { color: var(--acf); background: var(--ac); }
+  .docs-guides { display: block; position: fixed; top: 0; bottom: 0; left: 0; z-index: 30; width: min(340px, 88vw); height: auto; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 0 12px 28px; background: var(--panel); border-right: 4px solid var(--stroke); box-shadow: var(--drop-lg); transform: translateX(-104%); visibility: hidden; transition: transform .22s cubic-bezier(.32, .72, 0, 1), visibility 0s linear .22s; }
+  .docs-guides[data-open="true"] { transform: none; visibility: visible; transition: transform .22s cubic-bezier(.32, .72, 0, 1); }
+  .docs-guides-head { display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; margin: 0 -12px 14px; padding: 10px 12px; background: var(--panel); border-bottom: 2px solid var(--stroke); }
+  .docs-guides-head > span { font-family: var(--font-pixel), monospace; font-weight: 600; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink); }
+  .docs-guides-close { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; color: var(--ink); background: var(--panel-2); border: solid var(--stroke); border-width: 2px 4px 4px 2px; cursor: pointer; }
+  .docs-scrim { display: block; position: fixed; inset: 0; z-index: 29; padding: 0; border: 0; background: rgb(0 0 0 / .5); cursor: pointer; }
+  .docs-back-button { display: flex; margin: 0 0 16px; }
+  .docs-main { padding: 28px 20px 72px; }
+}
+@media (prefers-reduced-motion: reduce) { .docs-guides, .docs-guides[data-open="true"] { transition: none; } }
+/* Very narrow phones: the wordmark is visually hidden so the brand, the theme switch and the Guides button fit one row.
+   The word stays in the DOM, so the link keeps its name. */
+@media (max-width: 370px) {
+  .docs-brand .lg-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 @media (max-width: 1080px) {
-  .docs-inline-toc { display: block; margin: 18px 0 8px; background: var(--panel); border: 2px solid var(--stroke); box-shadow: var(--drop); }
+  .docs-inline-toc { display: block; margin: 18px 0 8px; background: var(--panel); border: 2px solid var(--stroke); box-shadow: none; }
   .docs-inline-toc summary { min-height: 44px; padding: 12px 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
   .docs-inline-toc nav { display: grid; padding: 0 12px 12px; }
   .docs-inline-toc a { min-height: 40px; padding: 10px 8px; font-size: 14px; color: var(--ink); text-decoration: none; border-top: 2px solid var(--stroke); }
@@ -201,8 +220,8 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
 }
 @media (prefers-reduced-motion: reduce) {
   .docs-main { scroll-behavior: auto; }
-  .docs-back-button, .docs-mobile-toggle, .docs-nav .section-link, .docs-group summary, .docs-group summary::after, .docs-toc a, .doc-foot a { transition: none; }
-  .docs-back-button:hover, .docs-mobile-toggle:hover, .docs-nav .section-link:hover, .doc .doc-foot a:hover { transform: none; }
+  .docs-back-button, .docs-guides-toggle, .docs-nav .section-link, .docs-group summary, .docs-group summary::after, .docs-toc a, .doc-foot a { transition: none; }
+  .docs-back-button:hover, .docs-guides-toggle:hover, .docs-nav .section-link:hover, .doc .doc-foot a:hover { transform: none; }
 }
 @media (forced-colors: active) {
   .docs-nav .section-link.active { border: 2px solid Highlight; }

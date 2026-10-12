@@ -83,7 +83,7 @@ export function DocsSearch() {
     if (event.key === "ArrowDown" && hits.length) {
       event.preventDefault();
       document.getElementById("docs-search-result-0")?.focus();
-    } else if (event.key === "Escape") {
+    } else if (event.key === "Escape" && event.currentTarget.value !== "") {
       event.preventDefault();
       clearSearch();
     }

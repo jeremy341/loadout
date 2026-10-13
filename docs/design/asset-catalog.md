@@ -10,6 +10,10 @@ The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and but
 
 Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
+### Pixel font
+
+`apps/landing/public/fonts/PixelifySans.ttf` is Pixelify Sans with a widened opening in the capital C and the lowercase c. The stock font (`PixelifySans.original.ttf`) and the script that patches it (`patch-pixelify-c.py`) are in `assets/editable/fonts/`; the licence (SIL Open Font License 1.1, no reserved font name) stays in `apps/landing/public/fonts/PixelifySans-OFL.txt`. See `assets/editable/fonts/README.md`.
+
 ### Logo and share image
 
 The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and the touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are the 1200 by 630 share image (under 300 KB), each with its `.alt.txt`. The editable SVG sources, including the custom pixel wordmark, are in `assets/editable/logo/`. The helmet comes from the one-bit icon pack; the owner confirmed it can be used.

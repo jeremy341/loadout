@@ -4,6 +4,7 @@ import { DotGothic16, JetBrains_Mono } from "next/font/google";
 import "./loadout.css";
 import "./home.css";
 import "./rock-bottom.css";
+import "./depth-dark.css";
 import "./docs.css";
 import { SmoothScroll } from "./_components/SmoothScroll";
 import { siteConfig } from "./site-config";

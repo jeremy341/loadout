@@ -617,9 +617,9 @@ test("the LOADOUT Docs tab opens the field manual and its section links work", a
   await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
   const docsNav = page.getByRole("navigation", { name: "Documentation sections" });
   await expect(docsNav).toBeVisible();
-  await docsNav.getByRole("link", { name: "Bolts, XP & levels" }).click();
+  await docsNav.getByRole("link", { name: "Ore, XP & levels" }).click();
   await expect(page).toHaveURL(/\/docs\/progress$/);
-  await expect(page.locator("h1", { hasText: "Bolts, XP & levels" })).toBeInViewport();
+  await expect(page.locator("h1", { hasText: "Ore, XP & levels" })).toBeInViewport();
   await page.getByRole("link", { name: "BACK TO LOADOUT" }).click();
   await expect(page).toHaveURL(/\/$/);
 });
@@ -653,7 +653,7 @@ test("Community Eras explain shared progression without leaking Era rules elsewh
   await expect(eras).toContainText("Shared Era Points");
   await expect(eras).toContainText("Next technical theme");
   await expect(eras).toContainText("+10%");
-  await expect(eras).toContainText("Era Points are separate from Bolts and Track XP.");
+  await expect(eras).toContainText("Era Points are separate from Ore and Track XP.");
   await expect(eras).toContainText("Planned rule");
   await expect(eras).not.toContainText(/Steam|Electrification|Computing|Networks|Acceleration|14 days|weekly reset|target|Season/i);
   for (const selector of ["#process", "#progression", "#loadout-irl"]) {
@@ -731,7 +731,7 @@ test("the process chart has three outcomes of review and the Physical Loadout co
   await page.goto("/");
   const outcomes = page.locator("#process .br2");
   await expect(outcomes).toHaveCount(1);
-  await expect(outcomes.locator(".cn")).toHaveText(["Bolts to spend", "Track XP to keep", "Digital Loadout"]);
+  await expect(outcomes.locator(".cn")).toHaveText(["Ore to spend", "Track XP to keep", "Digital Loadout"]);
   await expect(outcomes).not.toContainText("Physical Loadout");
   const upgrade = page.locator("#process .fl > .fn").filter({ hasText: "Choose your next upgrade" });
   await expect(upgrade).toContainText("Physical Loadout");
@@ -763,10 +763,10 @@ test("Track XP and levels follow main: five stops, requisition markers and arrow
   expect(await rail.locator(".st").last().evaluate((element) => getComputedStyle(element, "::after").content)).toBe("none");
 });
 
-test("the first site's animations are present: bolt nudge, era and IRL entrances", async ({ page }) => {
+test("the first site's animations are present: ore nudge, era and IRL entrances", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await expect(page.locator("#process .ic.nudge")).toHaveCSS("animation-name", "bolt-nudge");
+  await expect(page.locator("#process .ic.nudge")).toHaveCSS("animation-name", "ore-nudge");
   await expect(page.locator("#eras .era > div + div").first()).toHaveCSS("animation-name", "era-connector-enter");
   await expect(page.locator("#loadout-irl .asd")).toHaveCSS("animation-name", "irl-status-enter");
   await page.emulateMedia({ reducedMotion: "reduce" });

@@ -7,11 +7,11 @@
 | Topic | Canonical owner | Boundary |
 | --- | --- | --- |
 | Product identity, eligibility, tracks, quality dimensions | [01 Product and program](01-product-and-program.md) | Policy source; public copy must not create new eligibility or scoring rules. |
-| Bolts, Track XP, levels, pricing and prizes | [02 Economy and rewards](02-economy-and-rewards.md) | Exact rates, prices and thresholds remain unpublished unless approved. |
+| Ore, Track XP, levels, pricing and prizes | [02 Economy and rewards](02-economy-and-rewards.md) | Exact rates, prices and thresholds remain unpublished unless approved. |
 | Launch and operating gates | [05 Launch and operations](05-launch-and-operations.md) | Planning controls; not a live order or fulfillment system. |
 | Public homepage | [06 Public homepage](06-public-homepage.md) | Current public-site wording, structure and approved scope. |
 | YSWS ecosystem research | [08 YSWS ecosystem context](08-ysws-ecosystem-context.md) | Dated reference research; LOADOUT plans override generic patterns. |
-| Community Eras | [11 Eras and community progression](11-eras-and-community-progression.md) | Shared community progression; separate from personal XP and Bolts. |
+| Community Eras | [11 Eras and community progression](11-eras-and-community-progression.md) | Shared community progression; separate from personal XP and Ore. |
 | LOADOUT IRL concept | [15 LOADOUT IRL Ruhr](15-loadout-irl-ruhr.md) | Future concept only; no event, venue or dates are confirmed. |
 | Homepage visual-clarity proposal | [17 Homepage visual clarity](17-homepage-visual-clarity.md) | Proposal, not authorization to change the homepage. |
 | Locked visual system | [Design system](../docs/design/system/design-system.md) | Visual authority; design briefs do not override later owner decisions. |
@@ -26,7 +26,7 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 ## Plan map
 
 - `01-product-and-program.md` — product and program policy.
-- `02-economy-and-rewards.md` — personal progress, Bolts, pricing and prizes.
+- `02-economy-and-rewards.md` — personal progress, Ore, pricing and prizes.
 - `05-launch-and-operations.md` — launch readiness and operational planning.
 - `06-public-homepage.md` — approved public homepage.
 - `08-ysws-ecosystem-context.md` — dated external context.

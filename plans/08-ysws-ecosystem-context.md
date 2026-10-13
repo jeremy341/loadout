@@ -6,7 +6,7 @@
 
 **Research date: 2026-10-04.** Public pages and repositories below were accessed on this date. Program dates, inventory, rules, and service capabilities can change; verify them again before publishing participant-facing claims.
 
-This is a research brief, not a LOADOUT product-plan revision. Plans `00–07` were read first and remain authoritative. LOADOUT remains the technical-capability YSWS defined by those plans: Tools, Systems, Compute, Hardware; Research Mode; a permanent Digital Loadout; global Bolts; reviewer-assigned track XP; field-aware rewards; capped discounts; Requisitions; and its own **Industrial Field Manual + Pixel Utility** identity.
+This is a research brief, not a LOADOUT product-plan revision. Plans `00–07` were read first and remain authoritative. LOADOUT remains the technical-capability YSWS defined by those plans: Tools, Systems, Compute, Hardware; Research Mode; a permanent Digital Loadout; global Ore; reviewer-assigned track XP; field-aware rewards; capped discounts; Requisitions; and its own **Industrial Field Manual + Pixel Utility** identity.
 
 Significant claims use these labels:
 
@@ -67,7 +67,7 @@ The public YSWS guide explicitly introduces a short **Universal rules** list. Th
 | Minimum hours, theme, tech stack, reward math, AI use, team credit, calendar, review scoring, and customs rules. | **PROGRAM-SPECIFIC** | These vary across public program rules. No cross-program common numeric threshold or formula was found. |
 | Appeals, partial-hour approval, exact reviewer permissions, or a universal AI policy. | **UNCERTAIN / NEEDS HUMAN CONFIRMATION** | No ecosystem-wide standard was found in the public sources reviewed. A program may publish its own policy. |
 
-**Loadout-specific distinction:** The four technical tracks, a Capability Statement, a technical-fit gate, a proposed 40% AI-implementation ceiling, journals assigned to tracked minutes, reviewer-controlled multi-track XP allocation, and the Bolts/Requisition economy come from LOADOUT’s own plans. They are not established Hack Club-wide YSWS requirements.
+**Loadout-specific distinction:** The four technical tracks, a Capability Statement, a technical-fit gate, a proposed 40% AI-implementation ceiling, journals assigned to tracked minutes, reviewer-controlled multi-track XP allocation, and the Ore/Requisition economy come from LOADOUT’s own plans. They are not established Hack Club-wide YSWS requirements.
 
 ## 4. Common but non-universal patterns
 
@@ -175,7 +175,7 @@ This is a representative map, not a claim that every program uses every stage.
 - **OFFICIAL / FIRST-PARTY:** The YSWS guide warns that customs/import fees may apply outside the US. Stardance says its listed prize prices may vary by region and describes shipping to many countries. The sources do not establish one universal tax, shipping, customs, stock, or replacement policy.
 - **INFERENCE:** International fulfillment can make nominally equal rewards unequal in landed cost, delivery time, or availability. A regional credit/card alternative can help but creates its own eligibility, merchant, receipt, currency, and legal rules.
 
-**LOADOUT RECOMMENDATION:** Keep Bolts as LOADOUT program currency and model order quote, sponsorship, stock, location, shipping/tax treatment, reservation, cancellation/refund, and fulfillment status as distinct concepts. Do not promise a fixed public cash conversion. Use HCB only if the responsible Hack Club/HCB team has approved the sponsor/fiscal path and exact card or reimbursement workflow.
+**LOADOUT RECOMMENDATION:** Keep Ore as LOADOUT program currency and model order quote, sponsorship, stock, location, shipping/tax treatment, reservation, cancellation/refund, and fulfillment status as distinct concepts. Do not promise a fixed public cash conversion. Use HCB only if the responsible Hack Club/HCB team has approved the sponsor/fiscal path and exact card or reimbursement workflow.
 
 ## 10. Authentication, permissions, and account systems
 
@@ -273,7 +273,7 @@ The examples below teach different things. Older programs are explicitly marked 
 | **Hack Club verification / eligibility** | **OFFICIAL / FIRST-PARTY:** Hack Club’s teen-verification process plus each program’s age and eligibility rules. The exact requirements and data access must be checked for the actual program. |
 | **Nest** | **OFFICIAL / FIRST-PARTY:** A Hack Club member-facing hosting service for websites, game servers, and project backends, described in the public Services guide. Not a requirement for shipping a project. |
 | **Signal** | **LOADOUT-SPECIFIC:** LOADOUT’s planned recognition of meaningful external project reach/usage. Not a general Hack Club metric or universal reward rule. |
-| **Bolts** | **LOADOUT-SPECIFIC:** LOADOUT’s planned single global spendable program currency. Not a Hack Club-wide currency. |
+| **Ore** | **LOADOUT-SPECIFIC:** LOADOUT’s planned single global spendable program currency. Not a Hack Club-wide currency. |
 | **Requisition** | **LOADOUT-SPECIFIC:** LOADOUT’s planned scarce, one-use specialization benefit for eligible reward orders. Not an ecosystem-standard voucher. |
 | **Digital Loadout** | **LOADOUT-SPECIFIC:** LOADOUT’s permanent record of accepted shipped technical artifacts. Not a Hack Club account feature. |
 
@@ -292,7 +292,7 @@ The examples below teach different things. Older programs are explicitly marked 
 - **LOADOUT RECOMMENDATION:** Preserve the existing evidence chain: time source → journal entry → project capability statement → submitted ship → review decision. Reject duplicate minute assignment and make each project’s eligible work window visible.
 - **LOADOUT RECOMMENDATION:** Separate the LOADOUT Fit gate, work/time validity, and quality review. Give a participant actionable feedback and a clear review-state timeline.
 - **LOADOUT RECOMMENDATION:** Make one clear participant path with optional Slack community access, tracker setup, evidence examples, submission steps, and reward/fulfillment status. Explain which steps are required in LOADOUT.
-- **LOADOUT RECOMMENDATION:** Balance rewards for international participants. Show regional availability and fulfillment limitations before order confirmation; do not promise an item, shipping date, or public Bolt conversion until configuration supports it.
+- **LOADOUT RECOMMENDATION:** Balance rewards for international participants. Show regional availability and fulfillment limitations before order confirmation; do not promise an item, shipping date, or public Ore conversion until configuration supports it.
 - **LOADOUT RECOMMENDATION:** Keep separate least-privilege roles for reviewers, support, moderators, admins, and fulfillment operators, with audit records for sensitive actions.
 - **LOADOUT RECOMMENDATION:** Use real LOADOUT project artifacts and a distinctive handmade visual language. Borrow the ecosystem’s warmth and specificity, not another program’s branding or lore.
 

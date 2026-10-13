@@ -27,7 +27,7 @@ A project can be useful and still be outside LOADOUT's focus. A relevant project
 | Execution | Does the result work for its intended purpose? |
 | Documentation | Can another builder understand, verify, or reproduce it? |
 
-Quality informs the Bolt multiplier. Exact scoring calibration and payout values remain pending; these dimensions are not a published calculator.
+Quality informs the Ore multiplier. Exact scoring calibration and payout values remain pending; these dimensions are not a published calculator.
 
 ## AI use and team projects {#authorship}
 

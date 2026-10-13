@@ -6,9 +6,9 @@ This short proposal preserves the distinct future-platform ideas formerly embedd
 
 ## Possible surfaces
 
-- **Builder dashboard:** profile, overall level, Bolts, recent activity, missions, rewards, and progress, only when backed by real participant data.
+- **Builder dashboard:** profile, overall level, Ore, recent activity, missions, rewards, and progress, only when backed by real participant data.
 - **Builder profile:** the four canonical tracks, achievements, shipped projects, and Digital Loadout artifacts. Research Mode remains a project mode, not a fifth track.
-- **Project submission and detail:** capability statement, primary and optional secondary tracks, optional Research Mode, repo/demo, documentation/evidence, review outcome, XP/Bolts result, and project history. A submission system is not live.
+- **Project submission and detail:** capability statement, primary and optional secondary tracks, optional Research Mode, repo/demo, documentation/evidence, review outcome, XP/Ore result, and project history. A submission system is not live.
 - **Explore:** searchable project cards, filters, builder attribution, and real project information. Do not invent participant counts or activity.
 - **Shop and Field Requisitions:** explain the normal track discount, savings cap, level requirement, item eligibility, and extra Requisition saving only after the product configuration is approved and live.
 - **Custom Orders:** show relevant tracks, required level, request review, approved quote, and status only after the request and fulfillment system exists.
@@ -18,7 +18,7 @@ This short proposal preserves the distinct future-platform ideas formerly embedd
 ## Design guardrails
 
 - Use the canonical [design system](../../docs/design/system/design-system.md); do not reuse Plan 03's superseded palette tokens.
-- Keep flat, square instrument-panel surfaces, clear labels, sparse Bolt Yellow, and readable technical copy.
+- Keep flat, square instrument-panel surfaces, clear labels, sparse Ore Yellow, and readable technical copy.
 - Use animation only for feedback; honor reduced motion and keep all content available without JavaScript.
 - Do not invent rewards, points, eligibility, rates, prices, live progress, or services.
 - Each surface needs its own approved product scope, data contract, accessibility review, and release plan.

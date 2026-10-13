@@ -133,7 +133,7 @@ Rules:
 - Icons are 32 by 32 transparent pixel PNGs in `apps/landing/public/loadout/sprites/`, with ink outlines and a yellow fill. They render with `image-rendering: pixelated`. Never smooth or filter the files.
 - The homepage uses them as SVG symbols defined in `art.ts` (`ICON_SPRITE`). To add an icon, add its name to `SPRITE_NAMES` and add its PNG.
 - In dark mode the icons are turned blue by a CSS hue rotation (`hue-rotate(170deg) saturate(.95)`). In light mode they show as drawn.
-- The Bolt currency icon (`bolt.png`) nudges on its card. The owner's original `bolt.svg` stays unchanged.
+- The Ore currency icon (`ore.png`, the gem) nudges on its card. The owner's original `bolt.svg` is not shown anywhere and stays unchanged.
 - The hero scenery vectors under `hero/scenery/` and the 31 `hero-workshop` PNGs are kept but not rendered. Do not wire them in without a new owner decision.
 
 ## ASCII art

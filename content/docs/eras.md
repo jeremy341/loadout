@@ -24,7 +24,7 @@ Themes, point calculations, thresholds, and schedules are not published as live 
 
 ## A planned project bonus {#bonus}
 
-A reviewer separately checks whether a project meaningfully matches the active objectives. A qualifying project is intended to receive a separate Bolt bonus, not extra Track XP.
+A reviewer separately checks whether a project meaningfully matches the active objectives. A qualifying project is intended to receive a separate Ore bonus, not extra Track XP.
 
 The public bonus configuration remains pending. Era relevance does not replace any of the four quality dimensions.
 

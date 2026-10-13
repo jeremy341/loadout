@@ -24,7 +24,7 @@ Use H2/H3 headings, Markdown links/lists, GFM tables and blockquote notes. No ra
 
 Check every factual claim against its owning plan. Plans01/02 own product/economy,11 Eras,15 IRL. A plan's draft number is not permission to publish a price, threshold, formula or schedule.
 
-Already-approved public invariants include the four tracks, Research Mode as a modifier, separate Bolts/Track XP, fifteen lifetime levels, the four quality dimensions, and Field Requisition milestones3/6/9/12/15. Exact prices, XP rates, score/multiplier calibration, Custom Order tier values, Era point formulas/thresholds/bonus configuration, dates and personal eligibility remain unpublished.
+Already-approved public invariants include the four tracks, Research Mode as a modifier, separate Ore/Track XP, fifteen lifetime levels, the four quality dimensions, and Field Requisition milestones3/6/9/12/15. Exact prices, XP rates, score/multiplier calibration, Custom Order tier values, Era point formulas/thresholds/bonus configuration, dates and personal eligibility remain unpublished.
 
 These pages describe intended mechanics, not functioning submission/order/registration systems. Keep the status clear. Re-read source claims, not just the current website, when changing wording.
 

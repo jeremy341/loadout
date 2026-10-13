@@ -27,7 +27,7 @@ For example, a device may combine firmware, electronics, and a profiling tool. T
 
 Track XP builds lasting progress in the fields you actually demonstrate. Related levels can improve field pricing and qualify you for some specialist prizes or Custom Orders.
 
-[Track progress](/docs/progress) explains why levels differ from Bolts. [Pricing](/docs/pricing) explains how specialization relates to a purchase.
+[Track progress](/docs/progress) explains why levels differ from Ore. [Pricing](/docs/pricing) explains how specialization relates to a purchase.
 
 ## Research is a mode
 

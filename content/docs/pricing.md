@@ -6,15 +6,15 @@ order: 120
 status: draft
 ---
 
-Field pricing is intended to make relevant track progress useful when buying equipment. It does not change your project's Bolt award.
+Field pricing is intended to make relevant track progress useful when buying equipment. It does not change your project's Ore award.
 
 ## How a price is determined
 
-1. The item has a configured base Bolt price and field relevance.
+1. The item has a configured base Ore price and field relevance.
 2. Your related track progress determines the ordinary field discount.
 3. The item's savings cap limits that discount where applicable.
 4. An eligible Requisition may extend the allowance for one purchase.
-5. You pay the final quoted balance in Bolts.
+5. You pay the final quoted balance in Ore.
 
 The catalog must show a final price before you commit to an order. Rates, prices, and savings allowances remain unpublished.
 

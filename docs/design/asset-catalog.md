@@ -24,7 +24,7 @@ The 32×32 transparent PNGs in `apps/landing/public/loadout/sprites/` are the cu
 
 | Source PNG | Runtime sprite |
 | --- | --- |
-| `bolt-source.png` | `bolt.png` |
+| `RPG_Gem_Jewelcrafting_Diamond_Points_Currency.png` (one-bit icon pack, 16 by 16, each pixel doubled) | `ore.png` |
 | `layers-source.png` | `layers.png` |
 | `code-source.png` | `code.png` |
 | `gift-source.png` | `gift.png` |
@@ -69,7 +69,7 @@ Original source artwork remains in `docs/design/references/2026-10-06/final-pixe
 | `apps/landing/public/loadout/hero/scenery/scroll-cue.svg` | Kept. The current homepage does not reference it. |
 | `apps/landing/public/loadout/bolt.svg` | Owner-supplied custom Bolt SVG; kept byte-for-byte at its original URL. |
 
-The homepage also uses `apps/landing/public/loadout/sprites/bolt.png` for the final pixel Bolt glyph. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
+The homepage uses `apps/landing/public/loadout/sprites/ore.png`, the ore gem, as the currency icon. The owner's `bolt.svg` is not shown anywhere and is kept as it was. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
 
 ### Workshop scenery PNGs
 

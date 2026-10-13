@@ -97,7 +97,7 @@ Rules:
 ## Depth markers and rulers
 
 - A depth marker divides two sections: two dashed rules over a hatched band, with the depth numeral on the left (for example "−300 M") and a label on the right in Jersey 10, the wordmark face, set on a plate in the page colour so the hatching never runs through it (for example "1. SOHLE / LEVELS & REWARDS", 32px on desktop, down to 20px on tablets and 16px on phones).
-- The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 7% of the text colour. Within 280px of the pointer they light to the glow colour (blue in dark mode at 60%, yellow `#E3C26B` in light mode at 85%), the same values as the footer wordmark (`DepthGlow`, `.home .pit` and `.home .pit b, .home .pit > span` in `home.css`). Touch visitors see the faint marker only.
+- The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 3% of the text colour. Within 150px of the pointer they light to the glow colour: blue in dark mode at 60%, amber-red `#D9661F` in light mode at 85%, for the deepest marker. Deeper markers light more strongly: `DepthGlow` sets `--depth-light` on each marker from its numeral, from 40% of that strength at the shallowest to 100% at the deepest. The glow runs only on devices with a fine pointer (`hover: hover` and `pointer: fine`); touch screens see the faint marker only. The rules are `DepthGlow` and the `.home .pit` rules in `home.css`.
 - The top ruler is in pixels: a tick every 32px and a number every 160px.
 - The left ruler is in metres: a tick every 10 m, a number every 50 m, and a heavier mark at each depth strip. Markers are pinned to those strips.
 
@@ -106,6 +106,19 @@ Rules:
 - The film grain is one full-screen canvas (`NoiseGrain`) at opacity 0.33 (`grain.css`). It is redrawn every 100ms from a 512px noise tile and never takes pointer input.
 - Under reduced motion the grain draws one still frame.
 - The grain is the only texture. Do not add paper images or gradients.
+
+## Corner brackets
+
+- Section headings (`.home .sect > .h2`) carry four registration marks: 16 pixels long, 2 pixels thick, in the ink colour (`--fg`), just outside the heading's text. The heading box is `fit-content`, so the marks hug the text and the layout does not move.
+- The hero frame uses the same ink corners. The hero buttons use the magnetic version (`MagneticCorners`): accent-coloured, they open and lean toward a fine pointer within 40 pixels. Touch and reduced motion get the static marks.
+- Do not add marks to cards, nested panels or every button. The marks are a heading device: one per section.
+
+## Logo
+
+- The mark is a miner's helmet from the one-bit icon pack (the owner confirmed it can be used) on an octagon plate, 24 by 24 pixels (`Logo.tsx`). It is drawn as four SVG paths and shown at 24 pixels, so each mark pixel is one site pixel. Beside it the name is real text in Jersey 10.
+- The plate is the theme's accent (`--logo-bg`), the outline is ink (`--logo-fg`) and the helmet is the paper colour (`--logo-fill`: `--fg` in dark mode, `#FBF3E4` in light mode).
+- On hover, with a fine pointer and no reduced-motion request, the helmet's lamp blinks once. Nothing else moves.
+- The favicon (`icon.svg`) and the Apple touch icon (`apple-icon.png`) use the same mark. The share image (`opengraph-image.jpg`, also served as `twitter-image.jpg`) is 1200 by 630 and under 300 KB: the mark, the pixel wordmark, the grid, grain under the text, corner marks and the depth strip. The sources are in `assets/editable/logo/`.
 
 ## Icons
 

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const rsvpUrl = "https://rsvp.soon.it/loadout";
@@ -335,6 +335,35 @@ test("depth numerals are faint and light up under the pointer, like the footer w
   await expect.poll(() => marker.evaluate((el) => el.style.getPropertyValue("--mx"))).not.toBe("");
 });
 
+test("deeper depth markers light more strongly, in the order of their numerals", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  // DepthGlow sets the factor after hydration, so wait for it before reading the markers.
+  await expect.poll(() => page.locator(".pit").first().evaluate((el) => (el as HTMLElement).style.getPropertyValue("--depth-light"))).not.toBe("");
+  const markers = await page.locator(".pit").evaluateAll((pits) =>
+    pits.map((pit) => ({
+      depth: Number((pit.querySelector("b")!.textContent ?? "").replace(/\D/g, "")),
+      light: Number((pit as HTMLElement).style.getPropertyValue("--depth-light")),
+    })),
+  );
+  expect(markers.length).toBeGreaterThan(1);
+  const byDepth = [...markers].sort((a, b) => a.depth - b.depth);
+  for (let i = 1; i < byDepth.length; i++) expect(byDepth[i].light).toBeGreaterThanOrEqual(byDepth[i - 1].light);
+  expect(Math.min(...markers.map((marker) => marker.light))).toBeGreaterThanOrEqual(0.4);
+  expect(Math.max(...markers.map((marker) => marker.light))).toBeCloseTo(1, 5);
+});
+
+test("touch screens get no depth glow under the pointer", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ ...devices["iPhone 13"], baseURL });
+  const page = await context.newPage();
+  await page.goto("/");
+  await page.mouse.move(200, 400);
+  await page.mouse.move(210, 420);
+  await page.waitForTimeout(200);
+  expect(await page.locator(".pit").first().evaluate((el) => (el as HTMLElement).style.getPropertyValue("--mx"))).toBe("");
+  await context.close();
+});
+
 test("on phones the depth numerals stay on one line and the labels fit their strips", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
@@ -402,6 +431,20 @@ test("the magnetic corners lean at most 4px", async ({ page }) => {
   }).toPass();
   const lean = await corner.evaluate((el) => Math.abs(parseFloat((el as HTMLElement).style.getPropertyValue("--mc-x"))));
   expect(lean).toBeLessThanOrEqual(4);
+});
+
+test("section headings carry the four corner brackets, and nothing else gets them", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const headings = page.locator(".home .sect > .h2");
+  const count = await headings.count();
+  expect(count).toBeGreaterThanOrEqual(10);
+  for (let i = 0; i < count; i++) {
+    const marks = await headings.nth(i).evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
+    expect(marks.match(/linear-gradient/g)?.length ?? 0).toBe(8);
+  }
+  const cardMarks = await page.locator(".home .card").first().evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
+  expect(cardMarks.match(/linear-gradient/g)?.length ?? 0).toBe(0);
 });
 
 test("the footer wordmark glows yellow, not red, in light mode", async ({ page }) => {
@@ -731,14 +774,46 @@ test("the first site's animations are present: bolt nudge, era and IRL entrances
   await expect(page.locator(".scenery")).toHaveCount(0);
 });
 
-test("the logo is the first site's hexagon mark with the Jersey 10 name", async ({ page }) => {
+test("the logo is the miner's helmet mark with the Jersey 10 name", async ({ page }) => {
   await page.goto("/");
   const logo = page.locator(".nav a.logo");
-  await expect(logo.locator(".lg-mark svg path")).toHaveCount(3);
+  await expect(logo.locator(".lg-mark svg path")).toHaveCount(4);
   await expect(logo.locator(".lg-text")).toHaveText("LOADOUT");
   const mark = await logo.locator(".lg-mark svg").boundingBox();
-  expect([mark!.width, mark!.height]).toEqual([32, 32]);
-  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(94, 158, 244)");
+  expect([mark!.width, mark!.height]).toEqual([24, 24]);
+  await expect(logo.locator(".lg-a")).toHaveCSS("fill", "rgb(94, 158, 244)");
+  await expect(logo.locator(".lg-c")).toHaveCSS("fill", "rgb(233, 235, 231)");
   await page.locator("label.tg").click();
-  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(227, 194, 107)");
+  await expect(logo.locator(".lg-a")).toHaveCSS("fill", "rgb(227, 194, 107)");
+  await expect(logo.locator(".lg-c")).toHaveCSS("fill", "rgb(251, 243, 228)");
+});
+
+test("the logo's lamp blinks on hover, and holds still for reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const logo = page.locator(".nav a.logo");
+  const lamp = logo.locator(".lg-lamp");
+  await expect(lamp).toHaveCSS("animation-name", "none");
+  await logo.hover();
+  await expect(lamp).toHaveCSS("animation-name", "lg-lamp");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.mouse.move(5, 5);
+  await logo.hover();
+  await expect(lamp).toHaveCSS("animation-name", "none");
+});
+
+test("the page advertises the share image, the touch icon and the favicon", async ({ page, request }) => {
+  await page.goto("/");
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+  for (const [attribute, name] of [["property", "og:image"], ["name", "twitter:image"]]) {
+    const url = await page.locator(`meta[${attribute}="${name}"]`).first().getAttribute("content");
+    expect(url, name).toBeTruthy();
+    const parsed = new URL(url!);
+    const response = await request.get(parsed.pathname + parsed.search);
+    expect(response.status(), name).toBe(200);
+    expect(response.headers()["content-type"]).toContain("image/jpeg");
+    expect((await response.body()).length, `${name} stays under 300 KB`).toBeLessThan(300_000);
+  }
+  await expect(page.locator('link[rel="icon"]').first()).toHaveAttribute("href", /icon\.svg/);
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
 });

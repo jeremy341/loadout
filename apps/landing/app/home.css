@@ -494,6 +494,22 @@ html:has(.home) { scroll-behavior:smooth }
 }
 @media (prefers-reduced-motion: reduce) { .home .mc-c { transition: none; } }
 
+/* Section corner brackets: four registration marks around each section heading, drawn with gradients in the ink
+   colour, so the layout does not move. The heading box hugs its text and the marks sit just outside it. */
+.home .sect > .h2 { position: relative; width: fit-content; max-width: 100%; margin-inline: auto; }
+.home .sect > .h2::before {
+  content: ""; position: absolute; inset: -14px -18px; pointer-events: none;
+  background:
+    linear-gradient(var(--fg), var(--fg)) top left / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) top left / 2px 16px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) top right / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) top right / 2px 16px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom left / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom left / 2px 16px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom right / 16px 2px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) bottom right / 2px 16px no-repeat;
+}
+
 /* Hover scramble on the hero facts (HoverScramble.tsx). The real text stays in the page for readers. */
 .home .hs-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .home .hs { white-space: nowrap; cursor: default; }
@@ -901,8 +917,8 @@ html:has(.home) { scroll-behavior:smooth }
 .home:has(#theme:checked) #behind-loadout .asd, .home:has(#theme:checked) .ft-sheet { background: color-mix(in srgb, var(--bg) 30%, transparent); }
 
 /* ===== LOADOUT logo: pixel slot-and-bolt mark with a heavy pixel wordmark (Logo.tsx) ===== */
-.home { --logo-bg: var(--ac); --logo-fg: var(--acf); }
-.home:has(#theme:checked) { --logo-bg: #E3C26B; --logo-fg: #1A1714; }
+.home { --logo-bg: var(--ac); --logo-fg: var(--acf); --logo-fill: var(--fg); }
+.home:has(#theme:checked) { --logo-bg: #E3C26B; --logo-fg: #1A1714; --logo-fill: #FBF3E4; }
 .home .lg { display: inline-flex; align-items: center; gap: 10px; }
 .home .ft-brand { margin-bottom: 8px; }
 @media (max-width: 700px) {
@@ -1074,12 +1090,17 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .ic { image-rendering: pixelated; }
 .home:not(:has(#theme:checked)) .ic { filter: hue-rotate(170deg) saturate(.95); }
 
-/* ===== Logo: the first site's hexagon mark (32px) ===== */
-.home .lg-mark { display: inline-grid; flex: none; width: 32px; height: 32px; }
-.home .lg-mark svg { display: block; width: 32px; height: 32px; }
+/* ===== Logo: the miner's helmet mark (24px, so one mark pixel is one site pixel) ===== */
+.home .lg-mark { display: inline-grid; flex: none; width: 24px; height: 24px; }
+.home .lg-mark svg { display: block; width: 24px; height: 24px; }
 .home .lg-a { fill: var(--logo-bg); }
 .home .lg-b { fill: var(--logo-fg); }
-@media (max-width: 700px) { .home .lg-mark, .home .lg-mark svg { width: 28px; height: 28px; } }
+.home .lg-c, .home .lg-lamp { fill: var(--logo-fill); }
+/* The lamp blinks once when the logo is hovered, on devices with a fine pointer and no reduced-motion request. */
+@keyframes lg-lamp { 0% { fill: var(--logo-bg); } 18% { fill: var(--logo-fill); } 36% { fill: var(--logo-bg); } 54%, 100% { fill: var(--logo-fill); } }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .home a:hover .lg-lamp { animation: lg-lamp .9s steps(1, end) 1; }
+}
 
 /* ===== Track XP and levels as on main: five stops, a 64px marker, an arrow between stops, level and award below ===== */
 .home .lad { display: grid; position: relative; }
@@ -1102,10 +1123,10 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home #progression .asd { background: none !important; }
 
 /* Depth markers: a dashed rule above and below, a hatched band, the depth numeral on the left and a label on the right.
-   The hatching, numeral and label are faint, and light to the glow colour within 280px of the pointer (the footer
+   The hatching, numeral and label are faint, and light to the glow colour within 150px of the pointer (the footer
    wordmark's values). DepthGlow sets --mx and --my on each one. */
 .home { --glow: var(--ac); --glow-strength: 60%; }
-.home:has(#theme:checked) { --glow: #E3C26B; --glow-strength: 85%; }
+.home:has(#theme:checked) { --glow: #D9661F; --glow-strength: 85%; }
 .home .pit {
   position: relative;
   height: 160px;
@@ -1119,9 +1140,9 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 }
 .home .pit::before {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0 2px, transparent 2px 14px);
-  -webkit-mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
-  mask-image: radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0 2px, transparent 2px 14px);
+  -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
+  mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 100%);
 }
 .home .pit b, .home .pit > span { position: relative; z-index: 1; }
 .home .pit b {
@@ -1129,8 +1150,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   white-space: nowrap;
   color: transparent;
   background-image:
-    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent));
+    radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent));
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -1147,8 +1168,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   text-transform: uppercase;
   color: transparent;
   background-image:
-    radial-gradient(circle 280px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) var(--glow-strength), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 7%, transparent), color-mix(in srgb, var(--fg) 7%, transparent)),
+    radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent)),
     linear-gradient(var(--bg), var(--bg));
   -webkit-background-clip: text, text, border-box;
   background-clip: text, text, border-box;

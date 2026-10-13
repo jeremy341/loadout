@@ -6,13 +6,13 @@
   --ink: var(--fg); --dim: #B4BBB8; --panel: #2C3132; --panel-2: #373D3E; --stroke: #4A5254;
   --drop: 4px 4px 0 #0C0E0E; --drop-lg: 8px 8px 0 #0C0E0E;
   --sidebar: 300px; --ease: cubic-bezier(.22, 1, .36, 1);
-  --logo-bg: var(--ac); --logo-fg: var(--acf);
+  --logo-bg: var(--ac); --logo-fg: var(--acf); --logo-fill: var(--fg);
   font-family: var(--font-poppins), system-ui, sans-serif;
   line-height: 1.5;
   color: var(--ink);
 }
 .docs:has(#theme:checked) {
-  --bg: #DDD3BF; --fg: #1A1714; --mut: #6B6354; --ac: #E3C26B; --acf: #1A1714; --hl: #C4491F;
+  --bg: #DDD3BF; --fg: #1A1714; --mut: #6B6354; --ac: #E3C26B; --acf: #1A1714; --hl: #C4491F; --logo-fill: #FBF3E4;
   --dim: #4F4739; --panel: #E8DFCC; --panel-2: #D6CCB7; --stroke: #1A1714;
   --drop: 4px 4px 0 #1A1714; --drop-lg: 8px 8px 0 #1A1714;
 }
@@ -48,10 +48,15 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
 .docs-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-pixel), monospace; font-weight: 700; font-size: 19px; letter-spacing: .3px; color: var(--ink); text-decoration: none; }
 .docs-brand > span:last-child { color: var(--hl); }
 .docs .lg { display: inline-flex; align-items: center; gap: 8px; }
-.docs .lg-mark { display: inline-grid; flex: none; width: 28px; height: 28px; }
+.docs .lg-mark { display: inline-grid; flex: none; width: 24px; height: 24px; }
 .docs .lg-a { fill: var(--logo-bg); }
 .docs .lg-b { fill: var(--logo-fg); }
-.docs .lg-mark svg { display: block; width: 28px; height: 28px; }
+.docs .lg-c, .docs .lg-lamp { fill: var(--logo-fill); }
+.docs .lg-mark svg { display: block; width: 24px; height: 24px; }
+@keyframes lg-lamp { 0% { fill: var(--logo-bg); } 18% { fill: var(--logo-fill); } 36% { fill: var(--logo-bg); } 54%, 100% { fill: var(--logo-fill); } }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .docs a:hover .lg-lamp { animation: lg-lamp .9s steps(1, end) 1; }
+}
 .docs .lg-text { font-family: var(--font-display), monospace; font-size: 30px; font-weight: 400; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
 
 /* Theme switch, the same pixel icons as the homepage */

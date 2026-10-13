@@ -66,6 +66,25 @@ gh pr create --base main --head testing --title "Release: short summary" --body 
 gh pr merge <number> --merge
 ```
 
+### Fast lane
+
+For a change that is ready and small, one command carries it through all three lanes. The checks are the same ones, on the same commit, in the same order as above. The command only does the waiting and the merging.
+
+```powershell
+pwsh scripts/ship.ps1 status           # lane heads, what is waiting, open pull requests (changes nothing)
+pwsh scripts/ship.ps1 run 71 -DryRun   # checks everything and prints the plan (changes nothing)
+pwsh scripts/ship.ps1 run 71           # ships pull request 71
+```
+
+`run` waits for the pull request's checks, squash-merges it into development, opens the development to testing pull request and merges it with a merge commit once its checks pass, then opens the testing to main release pull request and merges it the same way. Merging that last pull request deploys to production. Run it only for a change you are ready to ship.
+
+- It stops at the first check that fails. It never forces a push, never bypasses a check and never touches branch protection. Run it again to carry on after a fix or a timeout.
+- It refuses while other changes already wait between main and development, because the promotion pull requests carry everything on development. Release those first, or pass `-IncludeQueued` to ship them together.
+- It accepts a pull request into development from a `feature/`, `fix/`, `refactor/`, `docs/`, `experiment/` or `chore/` branch, and refuses drafts.
+- It needs PowerShell 7 and the GitHub CLI signed in with write access to the repository.
+
+Why not a pull request straight into main? The lanes must stay on one line (development contains testing, testing contains main; the Lane lineage job reports a break). A commit that reached main without passing through development would leave development behind main. Main also accepts pull requests only from testing (Promotion lane), and the protections apply to administrators with no bypass. Why promotion pull requests and not a fast-forward push to testing? Testing and main hold merge commits that development does not (for example #61, #67 and #70), so `git push origin origin/development:refs/heads/testing` would be rejected as not a fast-forward.
+
 Rules that keep the history short:
 
 - **One change, one squash.** Squash is the only way a PR reaches development. The squash commit takes the PR title and an empty body, so branch commits and tool trailers do not reach development history. Branch commits do not reach development, so you do not have to tidy them.

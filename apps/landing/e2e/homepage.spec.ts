@@ -731,14 +731,46 @@ test("the first site's animations are present: bolt nudge, era and IRL entrances
   await expect(page.locator(".scenery")).toHaveCount(0);
 });
 
-test("the logo is the first site's hexagon mark with the Jersey 10 name", async ({ page }) => {
+test("the logo is the miner's helmet mark with the Jersey 10 name", async ({ page }) => {
   await page.goto("/");
   const logo = page.locator(".nav a.logo");
-  await expect(logo.locator(".lg-mark svg path")).toHaveCount(3);
+  await expect(logo.locator(".lg-mark svg path")).toHaveCount(4);
   await expect(logo.locator(".lg-text")).toHaveText("LOADOUT");
   const mark = await logo.locator(".lg-mark svg").boundingBox();
-  expect([mark!.width, mark!.height]).toEqual([32, 32]);
-  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(94, 158, 244)");
+  expect([mark!.width, mark!.height]).toEqual([24, 24]);
+  await expect(logo.locator(".lg-a")).toHaveCSS("fill", "rgb(94, 158, 244)");
+  await expect(logo.locator(".lg-c")).toHaveCSS("fill", "rgb(233, 235, 231)");
   await page.locator("label.tg").click();
-  await expect(logo.locator(".lg-a").first()).toHaveCSS("fill", "rgb(227, 194, 107)");
+  await expect(logo.locator(".lg-a")).toHaveCSS("fill", "rgb(227, 194, 107)");
+  await expect(logo.locator(".lg-c")).toHaveCSS("fill", "rgb(251, 243, 228)");
+});
+
+test("the logo's lamp blinks on hover, and holds still for reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const logo = page.locator(".nav a.logo");
+  const lamp = logo.locator(".lg-lamp");
+  await expect(lamp).toHaveCSS("animation-name", "none");
+  await logo.hover();
+  await expect(lamp).toHaveCSS("animation-name", "lg-lamp");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.mouse.move(5, 5);
+  await logo.hover();
+  await expect(lamp).toHaveCSS("animation-name", "none");
+});
+
+test("the page advertises the share image, the touch icon and the favicon", async ({ page, request }) => {
+  await page.goto("/");
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+  for (const [attribute, name] of [["property", "og:image"], ["name", "twitter:image"]]) {
+    const url = await page.locator(`meta[${attribute}="${name}"]`).first().getAttribute("content");
+    expect(url, name).toBeTruthy();
+    const parsed = new URL(url!);
+    const response = await request.get(parsed.pathname + parsed.search);
+    expect(response.status(), name).toBe(200);
+    expect(response.headers()["content-type"]).toContain("image/jpeg");
+    expect((await response.body()).length, `${name} stays under 300 KB`).toBeLessThan(300_000);
+  }
+  await expect(page.locator('link[rel="icon"]').first()).toHaveAttribute("href", /icon\.svg/);
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
 });

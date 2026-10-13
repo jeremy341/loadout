@@ -901,8 +901,8 @@ html:has(.home) { scroll-behavior:smooth }
 .home:has(#theme:checked) #behind-loadout .asd, .home:has(#theme:checked) .ft-sheet { background: color-mix(in srgb, var(--bg) 30%, transparent); }
 
 /* ===== LOADOUT logo: pixel slot-and-bolt mark with a heavy pixel wordmark (Logo.tsx) ===== */
-.home { --logo-bg: var(--ac); --logo-fg: var(--acf); }
-.home:has(#theme:checked) { --logo-bg: #E3C26B; --logo-fg: #1A1714; }
+.home { --logo-bg: var(--ac); --logo-fg: var(--acf); --logo-fill: var(--fg); }
+.home:has(#theme:checked) { --logo-bg: #E3C26B; --logo-fg: #1A1714; --logo-fill: #FBF3E4; }
 .home .lg { display: inline-flex; align-items: center; gap: 10px; }
 .home .ft-brand { margin-bottom: 8px; }
 @media (max-width: 700px) {
@@ -1074,12 +1074,17 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .ic { image-rendering: pixelated; }
 .home:not(:has(#theme:checked)) .ic { filter: hue-rotate(170deg) saturate(.95); }
 
-/* ===== Logo: the first site's hexagon mark (32px) ===== */
-.home .lg-mark { display: inline-grid; flex: none; width: 32px; height: 32px; }
-.home .lg-mark svg { display: block; width: 32px; height: 32px; }
+/* ===== Logo: the miner's helmet mark (24px, so one mark pixel is one site pixel) ===== */
+.home .lg-mark { display: inline-grid; flex: none; width: 24px; height: 24px; }
+.home .lg-mark svg { display: block; width: 24px; height: 24px; }
 .home .lg-a { fill: var(--logo-bg); }
 .home .lg-b { fill: var(--logo-fg); }
-@media (max-width: 700px) { .home .lg-mark, .home .lg-mark svg { width: 28px; height: 28px; } }
+.home .lg-c, .home .lg-lamp { fill: var(--logo-fill); }
+/* The lamp blinks once when the logo is hovered, on devices with a fine pointer and no reduced-motion request. */
+@keyframes lg-lamp { 0% { fill: var(--logo-bg); } 18% { fill: var(--logo-fill); } 36% { fill: var(--logo-bg); } 54%, 100% { fill: var(--logo-fill); } }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .home a:hover .lg-lamp { animation: lg-lamp .9s steps(1, end) 1; }
+}
 
 /* ===== Track XP and levels as on main: five stops, a 64px marker, an arrow between stops, level and award below ===== */
 .home .lad { display: grid; position: relative; }

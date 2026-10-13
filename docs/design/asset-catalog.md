@@ -10,6 +10,10 @@ The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and but
 
 Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
+### Logo and share image
+
+The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and the touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are the 1200 by 630 share image (under 300 KB), each with its `.alt.txt`. The editable SVG sources, including the custom pixel wordmark, are in `assets/editable/logo/`. The helmet comes from the one-bit icon pack; the owner confirmed it can be used.
+
 ### Current icon sprites
 
 The 32×32 transparent PNGs in `apps/landing/public/loadout/sprites/` are the current homepage glyphs. `LoadoutIcon` maps these filenames to UI names.

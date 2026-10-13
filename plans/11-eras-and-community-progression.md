@@ -2,7 +2,7 @@
 
 **Status:** Approved product design, recorded 2026-10-05. This plan documents the mechanic; implementation is not part of this change.
 
-**Canonical owner:** This plan owns Era cadence, advancement, Era Points, the Era Bolt bonus, and Era objectives. Plan 01 owns product meaning, Plan 02 owns the economy formula, Plan 03 owns UI states, Plan 05 owns launch operations, and Plan 06 owns the compact public explanation. If copies disagree, this plan governs Era-specific behavior.
+**Canonical owner:** This plan owns Era cadence, advancement, Era Points, the Era Ore bonus, and Era objectives. Plan 01 owns product meaning, Plan 02 owns the economy formula, Plan 03 owns UI states, Plan 05 owns launch operations, and Plan 06 owns the compact public explanation. If copies disagree, this plan governs Era-specific behavior.
 
 ## Product decision
 
@@ -46,7 +46,7 @@ The authoritative reset timezone, reset-hour behavior, downtime/retry policy, an
 ## Era Points
 
 - Approved projects contribute non-spendable Era Points to shared Era progress.
-- Era Points are a distinct progress measure, separate from global spendable Bolts and lifetime per-track XP.
+- Era Points are a distinct progress measure, separate from global spendable Ore and lifetime per-track XP.
 - Era Points cannot be transferred, purchased, or spent.
 - A builder can see the contribution recorded for their approved project and the shared progress counter.
 - Candidate conceptual relationship:
@@ -63,11 +63,11 @@ The authoritative reset timezone, reset-hour behavior, downtime/retry policy, an
 - A project may receive the Era bonus only when it meaningfully matches the active Era objectives.
 - The builder may request Era-bonus review when submitting a project; this request does not affect normal eligibility or the base review.
 - A reviewer makes a separate **binary** decision: qualifies or does not qualify. Do not implement partial percentages in the initial design.
-- A qualifying project receives **+10% of its approved base Bolt award**. Example: 720 approved base Bolts → 72 Era bonus → 792 total Bolts.
+- A qualifying project receives **+10% of its approved base Ore award**. Example: 720 approved base Ore → 72 Era bonus → 792 total Ore.
 - There is **no Era bonus to Track XP**. Era relevance is not a fifth quality dimension and must not alter LOADOUT's four quality dimensions: Originality, Technical Depth, Execution, and Documentation.
 - Non-qualifying Era relevance never makes an otherwise valid LOADOUT project invalid and never reduces its normal approved award.
 - Store the reviewer decision and a short reason in the audit record. The review UI should distinguish the Era decision from the quality score and any other multiplier.
-- The final stacking order against existing Bolt multipliers, ceilings, corrections, and duplicate-award protections must be resolved in the economy implementation plan before code ships. The +10% value does not silently change other formulas.
+- The final stacking order against existing Ore multipliers, ceilings, corrections, and duplicate-award protections must be resolved in the economy implementation plan before code ships. The +10% value does not silently change other formulas.
 
 ## Era objectives
 
@@ -92,7 +92,7 @@ These are different systems:
 | **Era** | Shared technological progression | Advances only when both the threshold and minimum-duration rules are satisfied at an eligible weekly reset |
 | **Weekly reset** | Schedule boundary | Refreshes weekly missions and checks whether a ready Era may advance |
 
-Lifetime Bolts, the Digital Loadout, lifetime Track XP, and project history do not reset when an Era changes. Era Points are not a second currency. The exact archived-history presentation is still open.
+Lifetime Ore, the Digital Loadout, lifetime Track XP, and project history do not reset when an Era changes. Era Points are not a second currency. The exact archived-history presentation is still open.
 
 ## Product surfaces
 
@@ -104,7 +104,7 @@ Use illustrative sequence copy until live Era configuration exists. Do not show 
 
 ### Physical event continuity
 
-A future LOADOUT IRL event uses the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Bolts, or attendance-gated progression is created. The detailed event concept is in [Plan 15](15-loadout-irl-ruhr.md). Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
+A future LOADOUT IRL event uses the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Ore, or attendance-gated progression is created. The detailed event concept is in [Plan 15](15-loadout-irl-ruhr.md). Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
 
 ### Builder dashboard
 
@@ -131,7 +131,7 @@ Before building the mechanic, resolve and record:
 2. The reset timezone, weekly reset time, durable schedule source, and missed-job recovery behavior.
 3. The points formula, point precision/caps, threshold for each Era, and aggregation/reversal rules.
 4. Whether historical per-builder Era contributions remain visible after an Era ends.
-5. The exact base Bolt amount and bonus stacking/cap rules, with worked examples.
+5. The exact base Ore amount and bonus stacking/cap rules, with worked examples.
 6. Reviewer qualification criteria, required reason, and moderator override/re-review behavior.
 7. The initial optional objective count and cross-track objective examples.
 8. Which values may be public before launch and how unavailable/unconfigured Era state is displayed.

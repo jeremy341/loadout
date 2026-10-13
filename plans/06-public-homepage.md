@@ -45,7 +45,7 @@ TRACK + JOURNAL REAL WORK
         ↓
 SHIP
         ↓
-EARN TRACK XP + GLOBAL BOLTS
+EARN TRACK XP + GLOBAL ORE
         ↓
 GROW YOUR DIGITAL LOADOUT
         ↓
@@ -104,7 +104,7 @@ Public marketing can use the industrial identity slightly more strongly than the
 - off-white technical-paper canvas
 - subtle graph-paper grid
 - graphite and steel structure
-- Bolt Yellow as the primary LOADOUT accent and the Bolt currency color
+- Ore Yellow as the primary LOADOUT accent and the Ore currency color
 - pixel/block display typography
 - readable mono labels
 - restrained pixel builder art
@@ -251,7 +251,7 @@ SHIP
 Submit a real working artifact.
 
 LEVEL
-Earn Track XP and global Bolts.
+Earn Track XP and global Ore.
 
 UPGRADE
 Improve your physical loadout.
@@ -428,13 +428,13 @@ Do not turn this into a full dashboard mockup. It is a marketing preview.
 
 ---
 
-# 7. Bolts + Progression
+# 7. Ore + Progression
 
 Heading:
 
 ```text
 04 / PROGRESSION
-BOLTS ARE GLOBAL.
+ORE IS GLOBAL.
 TRACKS SHAPE ACCESS AND PRICE.
 ```
 
@@ -447,7 +447,7 @@ cannot be spent
 proves depth
 unlocks specialist advantages
 
-BOLTS
+ORE
 global spendable currency
 earned from approved work
 used for equipment and rewards
@@ -560,7 +560,7 @@ CAN'T FIND WHAT YOUR NEXT BUILD NEEDS?
 
 Copy:
 
-> Long-term builders can request specialized technical equipment outside the normal shop, subject to track progression, Bolts, program fit, budget, region, safety, and fulfillment.
+> Long-term builders can request specialized technical equipment outside the normal shop, subject to track progression, Ore, program fit, budget, region, safety, and fulfillment.
 
 Example categories:
 
@@ -617,7 +617,7 @@ Recommended questions:
 2. What projects count?
 3. Can one project use multiple tracks?
 4. What is Research Mode?
-5. What are Bolts?
+5. What is Ore?
 6. What are Requisitions?
 7. How do Custom Orders work?
 8. How is work tracked?
@@ -812,7 +812,7 @@ The public homepage is ready for the first release when:
 - only four tracks are presented
 - Research is clearly a mode
 - the Digital Loadout / Physical Loadout loop is visible
-- global Bolts are explained correctly
+- global Ore is explained correctly
 - Requisitions are presented as scarce specialization rewards
 - Custom Orders are presented without promising unavailable fulfillment
 - no fake dates, prices, inventory, sponsors, testimonials, or RSVP URLs appear
@@ -829,6 +829,6 @@ The Era mechanic may be explained in one compact community-progression section; 
 
 ## 23. Mechanics clarity and future LOADOUT IRL section
 
-The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Bolts, and shared Era Points; explain a Field Requisition as a one-use way to realize more of an already-earned track discount past the normal cap; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Bolts for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
+The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use way to realize more of an already-earned track discount past the normal cap; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
 
 The user approved a separate **LOADOUT IRL // RUHR — Build the next Era** block after Community Eras and before the FAQ, clearly labelled as a future concept. Show no unconfirmed date, venue, registration, capacity, price, partner, sponsor, or event-specific progression claim. Keep visibility configurable. Plan 15 owns event facts and readiness; Plan 11 owns Era rules. The UI authorization covers concept copy, not event launch or backend mechanics.

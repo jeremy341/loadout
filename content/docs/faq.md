@@ -26,9 +26,9 @@ No. It is a mode for investigation, experiments, benchmarks, or reproductions wi
 
 The draft supports individual and team projects. Each builder is credited for their approved contribution. See [AI and team contributions](/docs/ai-teams).
 
-### Are Bolts the same as XP?
+### Is Ore the same as XP?
 
-No. Bolts are spendable currency; Track XP is lifetime field progress. Era Points represent shared community progress. See [progress](/docs/progress).
+No. Ore is spendable currency; Track XP is lifetime field progress. Era Points represent shared community progress. See [progress](/docs/progress).
 
 ### Do hours guarantee a prize?
 
@@ -36,11 +36,11 @@ No. Work must fit, be evidenced, and pass review. Prices, stock, and fulfillment
 
 ### What does a Requisition do?
 
-It extends the allowance for your existing field discount on one eligible order. It does not add Bolts or bypass level gates. See [Requisitions](/docs/requisitions).
+It extends the allowance for your existing field discount on one eligible order. It does not add Ore or bypass level gates. See [Requisitions](/docs/requisitions).
 
 ### Can I request something outside the catalog?
 
-Custom Orders are planned, but not open. They require relevant progression, team review, and enough Bolts for an accepted final quote. See [Custom Orders](/docs/custom-orders).
+Custom Orders are planned, but not open. They require relevant progression, team review, and enough Ore for an accepted final quote. See [Custom Orders](/docs/custom-orders).
 
 ### Does an Era reset my levels?
 

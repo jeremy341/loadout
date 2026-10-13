@@ -22,7 +22,7 @@ This document owns the definition of LOADOUT itself: who/what qualifies, how pro
 **Build projects. Level up your profile. Upgrade your loadout. Build harder stuff.**
 
 ### Economy line
-**Levels unlock it. Bolts buy it.**
+**Levels unlock it. Ore buys it.**
 
 ### The two halves of a LOADOUT
 
@@ -157,7 +157,7 @@ originality + technical depth + execution + documentation
         ↓
 APPROVED HOURS × QUALITY
         ↓
-EARN BOLTS + TRACK XP
+EARN ORE + TRACK XP
         ↓
 ADD SHIP TO DIGITAL LOADOUT
         ↓
@@ -174,15 +174,15 @@ Three lifetime records grow with approved work:
 
 1. **Digital Loadout** — the technical artifacts the builder has shipped.
 2. **Track XP / Levels** — persistent proof of technical depth across the four tracks.
-3. **Bolts** — spendable currency from approved work.
+3. **Ore** — spendable currency from approved work.
 
-Community Eras add a separate, non-spendable Era Points progress counter. Era Points do not replace or mix with those three records, do not change the four tracks, and do not change the four quality dimensions. Era behavior and the separate 10% qualifying-project Bolt bonus are defined in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
+Community Eras add a separate, non-spendable Era Points progress counter. Era Points do not replace or mix with those three records, do not change the four tracks, and do not change the four quality dimensions. Era behavior and the separate 10% qualifying-project Ore bonus are defined in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
 The future `LOADOUT IRL // RUHR` concept uses the same four tracks and global Community Era. It creates no IRL-only progression or attendance advantage; event projects follow the ordinary online project/review/economy rules. See [Plan 15](15-loadout-irl-ruhr.md); this concept does not authorize building or announcing an event.
 
 A user should immediately understand:
 
-> **Build your stack. Bolts are global; tracks shape access and price.**
+> **Build your stack. Ore is global; tracks shape access and price.**
 
 ---
 
@@ -211,7 +211,7 @@ Each project stores:
 - Journals
 - Ship history
 - Review history
-- Earned Bolts
+- Earned Ore
 - Track XP earned
 - Signal/usage metrics
 - AI declaration
@@ -497,11 +497,11 @@ Compute    +350 XP
 Systems    +150 XP
 ```
 
-The **Bolt reward does not split into track wallets**:
+The **Ore reward does not split into track wallets**:
 
 ```text
 Project reward
-+620 BOLTS
++620 ORE
 ```
 
 Rules:
@@ -1031,7 +1031,7 @@ Hardware           0%
 Tools              0%
                   100%
 
-BOLTS
+ORE
 +589 B
 
 TRACK XP
@@ -1188,7 +1188,7 @@ TECHNICAL CAPABILITY GAP
 → REVIEWER ALLOCATES TRACK XP
 → ADD IT TO YOUR DIGITAL LOADOUT
 → LEVEL THE RELEVANT TRACKS
-→ EARN GLOBAL BOLTS
+→ EARN GLOBAL ORE
 → GET BETTER FIELD PRICING / UNLOCKS
 → SAVE OR USE RARE REQUISITIONS
 → UPGRADE YOUR PHYSICAL LOADOUT
@@ -1231,7 +1231,7 @@ REQUISITIONS
 GENERAL REQUISITIONS
 → reward exceptional community contribution without permanent privilege
 
-BOLTS
+ORE
 → one understandable spendable currency
 
 SHOP
@@ -1247,7 +1247,7 @@ Core identity:
 
 Economy lines:
 
-> **Bolts are global. Tracks shape access and price.**
+> **Ore is global. Tracks shape access and price.**
 
 > **Breadth gives flexibility. Depth gives leverage. Mastery gives access.**
 
@@ -1259,7 +1259,7 @@ Main catchphrase:
 
 # 71. Final One-Paragraph Pitch
 
-> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Bolts. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Expensive-item discounts are capped, while five rare Requisitions across each LV.1–15 track let long-term specialists unlock much larger one-time savings. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
+> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Expensive-item discounts are capped, while five rare Requisitions across each LV.1–15 track let long-term specialists unlock much larger one-time savings. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
 
 ---
 
@@ -1271,7 +1271,7 @@ Main catchphrase:
 >
 > **YOU SHIP:** developer tools, systems, compute, or hardware that make you or other builders more capable.
 >
-> Every accepted ship joins your **Digital Loadout**, earns **global Bolts**, and levels the technical tracks it actually used.
+> Every accepted ship joins your **Digital Loadout**, earns **global Ore**, and levels the technical tracks it actually used.
 >
 > Your track levels give better pricing and specialist unlocks. Most cross-track gear is still buyable, while mastery gear rewards real specialization.
 >

@@ -1,6 +1,6 @@
 # LOADOUT design briefs index
 
-[`DESIGN.md`](DESIGN.md) is the tool-compatible entrypoint and links to the canonical [design system](../../docs/design/system/design-system.md), which is the only current source for tokens, type, colour, grain, rulers, icons and motion. The briefs below are records of what was decided and built. A brief does not authorize a change, and where a brief disagrees with the design system, the design system wins. Product rules stay in the numbered plans; briefs describe presentation and implementation scope. An old brief does not authorize a repeat change.
+[`DESIGN.md`](DESIGN.md) is the tool-compatible entrypoint and links to the canonical [design system](../../docs/design/system/design-system.md), which is the only current source for tokens, type, colour, grain, rulers, icons and motion. The briefs below are records of what was decided and built. A brief does not authorize a change, and where a brief disagrees with the design system, the design system wins. Product rules stay in the numbered plans; briefs describe presentation and implementation scope. An old brief does not authorize a repeat change. Briefs written before 2026-10-13 call the global currency Bolts; it is called Ore now (see [`ore-currency.md`](ore-currency.md)). Briefs are records and are not rewritten.
 
 ## Open or unresolved
 
@@ -16,6 +16,7 @@
 | [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |
 | [`section-corner-brackets.md`](section-corner-brackets.md) | Four corner marks on the section headings, matching the hero frame. |
 | [`logo-helmet-mark.md`](logo-helmet-mark.md) | The miner's helmet logo, favicon, share image and the lamp blink. |
+| [`ore-currency.md`](ore-currency.md) | The global currency is called Ore, with the ore gem icon, replacing Bolts. |
 | [`rock-bottom-404.md`](rock-bottom-404.md) | The 404 page ("rock bottom") and the cave-in error page. |
 | [`pixel-font-open-c.md`](pixel-font-open-c.md) | An open C and c in the pixel font, so a C no longer reads as an O. |
 | [`docs-phone-guides-drawer.md`](docs-phone-guides-drawer.md) | Docs on phones: the Guides drawer. The icons await licence confirmation. |

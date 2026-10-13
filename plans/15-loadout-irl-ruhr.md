@@ -13,7 +13,7 @@
 
 LOADOUT may later run a physical Germany build weekend connected directly to the online YSWS. The event should make the Digital Loadout / Physical Loadout idea tangible while using the existing online program, review, tracks, economy, and Community Era rules.
 
-This is post-online-launch work. It is not needed for the initial online MVP. Event attendance must not become necessary for online progression, and attending must not grant an event-only Track XP, Bolt, level, or permanent advantage. Event projects use the normal eligibility, evidence, review, attribution, and award rules.
+This is post-online-launch work. It is not needed for the initial online MVP. Event attendance must not become necessary for online progression, and attending must not grant an event-only Track XP, Ore, level, or permanent advantage. Event projects use the normal eligibility, evidence, review, attribution, and award rules.
 
 Keep the identity centered on practical engineering and the Ruhr's industrial context. Do not use weapons or military styling, imply travel support, promise sponsors, or make the event look like a generic student hackathon. The older one- or two-day sketch in the parent workspace was superseded by this Friday-to-Sunday concept.
 
@@ -25,7 +25,7 @@ The event uses the **same shared global Era** as online participants. It does no
 
 - Continue using the four LOADOUT tracks: **Tools, Systems, Compute, Hardware**. Research Mode is an optional project modifier, not a fifth track.
 - Approved event projects contribute to the normal global Era Points total under Plan 11. Their points are not spendable currency or Track XP.
-- Apply the existing Era build-bonus rule without an event-specific variant: a separate reviewer decision determines whether a project qualifies for the planned **+10% of its approved base Bolt award**. It adds **no Track XP** and does not change the four quality dimensions.
+- Apply the existing Era build-bonus rule without an event-specific variant: a separate reviewer decision determines whether a project qualifies for the planned **+10% of its approved base Ore award**. It adds **no Track XP** and does not change the four quality dimensions.
 - Keep the Era active for at least 14 days. Reaching its threshold makes it **ADVANCEMENT READY**; transition occurs only at the next eligible weekly reset under Plan 11.
 - An event contribution does not force an Era transition on Sunday. If the threshold is crossed, the event can show that the next Era unlocks at the next eligible reset.
 
@@ -39,7 +39,7 @@ LOADOUT IRL CONTRIBUTION
 +2,184
 
 ERA BUILD BONUS
-+10% BOLTS
++10% ORE
 
 NEXT ADVANCEMENT CHECK
 MONDAY
@@ -116,7 +116,7 @@ Avoid making the weekend only a generic first/second/third-place contest. Option
 - Best Research / Measurement
 - Best Overall Loadout
 
-These are options, not a required award list. Define a fair, published judging approach before the event if any are used. Awards must not change the global Bolt/XP economy without a separate approved rule. Normal YSWS review remains the source of project eligibility and participant progression; an award does not silently guarantee a project payout.
+These are options, not a required award list. Define a fair, published judging approach before the event if any are used. Awards must not change the global Ore/XP economy without a separate approved rule. Normal YSWS review remains the source of project eligibility and participant progression; an award does not silently guarantee a project payout.
 
 ## 7. Digital and Physical Loadout on site
 
@@ -144,7 +144,7 @@ Do not proceed to event launch/booking until organizers have evidence that:
 
 - the online project → review → progression loop works reliably;
 - peer/project reviews and participant support are reliable;
-- the Bolt/XP economy and reward fulfillment are stable enough;
+- the Ore/XP economy and reward fulfillment are stable enough;
 - there is meaningful German/European participant demand;
 - staffing and organizer workload are sustainable;
 - venue requirements, safeguarding, youth-event rules, insurance, accessibility, travel and sleeping arrangements are understood;
@@ -173,7 +173,7 @@ Venue agreements, youth/legal requirements, safeguarding procedures, insurance, 
 ## 11. Explicit non-goals
 
 - No implementation, booking, event application, or public announcement.
-- No new event-only progression, track, Era, payout, Bolt, XP, shop, or prize rule.
+- No new event-only progression, track, Era, payout, Ore, XP, shop, or prize rule.
 - No 72-hour no-sleep framing.
 - No assumption of Hack Club acceptance, venue partnership, sponsor, or funding.
 - No implication that every displayed item will be given to participants.

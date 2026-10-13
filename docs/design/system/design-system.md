@@ -120,6 +120,13 @@ Rules:
 - On hover, with a fine pointer and no reduced-motion request, the helmet's lamp blinks once. Nothing else moves.
 - The favicon (`icon.svg`) and the Apple touch icon (`apple-icon.png`) use the same mark. The share image (`opengraph-image.jpg`, also served as `twitter-image.jpg`) is 1200 by 630 and under 300 KB: the mark, the pixel wordmark, the grid, grain under the text, corner marks and the depth strip. The sources are in `assets/editable/logo/`.
 
+## Error pages
+
+- An unknown address and an unknown docs page share one 404 (`app/not-found.tsx`); a failed render shows the cave-in page (`app/error.tsx`). Both are one screen with nothing to scroll: the hero's tag, title, copy and buttons (no corner brackets) over a page-sized depth marker. The depth numeral sits behind the copy (`−1404 M`, deeper than the deepest homepage marker; the cave-in page is at `−500 M`), ore flecks sit at the edges, and the rim is dark. The dark theme is near black (`#0e1112`) on these pages, so the lamp is the only light.
+- The 404 says the requested path, offers "Back to the surface" and "Read the guides", sends a real 404 status and `noindex`. The cave-in page has a "Try again" button.
+- Exception to the type roles: on these pages the tag, title and buttons are set in Jersey 10 (the wordmark face), not Pixelify Sans. At these sizes Pixelify's C closes into an O ("ROOK BOTTOM"), and its E, Z and 0 read as a backwards 3, a 2 and an O. Jersey's letters stay distinct. Everything else on these pages follows the usual roles.
+- The miner's lamp is the depth glow at a larger radius (300 px, 190 px on phones). It starts in the middle of the page, follows a fine pointer, and sways gently on touch screens. When the page opens the numeral falls from `−0 M` to its depth (1.8 s, speeding up), lands with one thud and fades back to 3% ink, and the title glitches for about a third of a second (a tear and a split into the accent and paper colours) then again every 8 seconds. Reduced motion shows the final depth at once, keeps the lamp still and never glitches.
+
 ## Icons
 
 - Icons are 32 by 32 transparent pixel PNGs in `apps/landing/public/loadout/sprites/`, with ink outlines and a yellow fill. They render with `image-rendering: pixelated`. Never smooth or filter the files.

@@ -59,7 +59,7 @@ export function CustomOrders() {
               Review the quote
             </div>
             <div className="m dsc">
-              The team checks fit, funding, and delivery, then sends a Bolt quote to accept or decline.
+              The team checks fit, funding, and delivery, then sends an Ore quote to accept or decline.
             </div>
           </div>
         </div>

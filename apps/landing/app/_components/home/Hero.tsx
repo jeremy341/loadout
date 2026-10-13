@@ -73,7 +73,7 @@ export function Hero() {
           <span>technical stack.</span>
         </h1>
         <p>
-          Build tools, systems, compute, and hardware. Earn Bolts for equipment and Track XP in the fields your work uses.
+          Build tools, systems, compute, and hardware. Earn Ore for equipment and Track XP in the fields your work uses.
         </p>
       </div>
 

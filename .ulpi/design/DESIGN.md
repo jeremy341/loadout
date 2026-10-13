@@ -18,7 +18,7 @@ Committed direction: industrial and signage. The engineering-paper canvas, the r
 
 ## Counterfactual test
 
-The identity depends on the field-manual concept, the pixel display type, the Bolt currency icon and the Digital and Physical Loadout loop. If a screen could belong to any tech programme, it has failed.
+The identity depends on the field-manual concept, the pixel display type, the Ore currency icon and the Digital and Physical Loadout loop. If a screen could belong to any tech programme, it has failed.
 
 ## Brief rules
 
@@ -30,7 +30,7 @@ The identity depends on the field-manual concept, the pixel display type, the Bo
 
 - The four lifetime tracks are Tools, Systems, Compute and Hardware.
 - Research Mode is a modifier, not a fifth track.
-- Bolts are global and spendable. Track XP is separate.
+- Ore is global and spendable. Track XP is separate.
 - Shipped work grows the Digital Loadout. Rewards upgrade the Physical Loadout.
 
 ## Named anti-slop bans

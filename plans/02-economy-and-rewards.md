@@ -1,8 +1,10 @@
 # LOADOUT — Economy, Progression & Rewards Plan
 
-This document owns all rules that affect XP, Bolts, reward pricing, specialization, Requisitions, Custom Orders, seasons, and economic balance.
+This document owns all rules that affect XP, Ore, reward pricing, specialization, Requisitions, Custom Orders, seasons, and economic balance.
 
-> **Bolts are global. Tracks shape access and price.**
+> **Ore is global. Tracks shape access and price.**
+
+> Naming: the global currency was called Bolts until 2026-10-13. It is called Ore now and its icon is the ore gem. Old briefs, audits and manifests still say Bolts; they are records and are not rewritten.
 
 > **Depth gives leverage. Breadth gives flexibility. Mastery gives access.**
 
@@ -93,14 +95,14 @@ Signal can raise the normal ceiling for exceptional external traction.
 
 ---
 
-# 11. Bolt + XP Formula
+# 11. Ore + XP Formula
 
 LOADOUT has **one global currency** and **four independent XP progressions**.
 
-Recommended Bolt model:
+Recommended Ore model:
 
 ```text
-APPROVED HOURS × QUALITY MULTIPLIER + GLOBAL BONUSES = BOLTS
+APPROVED HOURS × QUALITY MULTIPLIER + GLOBAL BONUSES = ORE
 ```
 
 Recommended XP model:
@@ -124,7 +126,7 @@ GLOBAL SIGNAL BONUS
 +50 B
 
 TOTAL
-507 BOLTS
+507 ORE
 
 TOTAL TRACK XP
 +820 XP
@@ -134,7 +136,7 @@ Compute   70%  → +574 XP
 Systems   30%  → +246 XP
 ```
 
-Bolts:
+Ore:
 - are global;
 - can be spent;
 - do not belong to one track;
@@ -190,10 +192,10 @@ A referral becomes valid when the new builder:
 
 ```text
 NEW BUILDER
-+25 Bolts
++25 Ore
 
 REFERRER
-+50 Bolts
++50 Ore
 ```
 
 ## Referral Milestones
@@ -220,7 +222,7 @@ special badge + bonus
 rare sponsor/community reward
 ```
 
-Building must remain the main source of Bolts.
+Building must remain the main source of Ore.
 
 ---
 
@@ -389,7 +391,7 @@ Examples:
 Rewards:
 - badges
 - profile cosmetics
-- modest Bolts
+- modest Ore
 - seasonal progression
 
 Achievements should not dominate the economy.
@@ -400,7 +402,7 @@ Achievements should not dominate the economy.
 
 # 22. Seasons
 
-Lifetime Bolts, Digital Loadout artifacts, Track XP, and project history persist.
+Lifetime Ore, Digital Loadout artifacts, Track XP, and project history persist.
 
 Competitive season rankings reset.
 
@@ -439,11 +441,11 @@ Research Mode, benchmarks, profilers, test infrastructure, reproducible technica
 
 ## Community Eras
 
-Eras are a shared technical-progression layer, separate from competitive seasons. They use non-spendable Era Points, not a new currency. Approved projects that a reviewer marks as qualifying earn a separate **10% of their approved base Bolt award**. Era qualification adds no Track XP and does not alter the quality multiplier or the four quality dimensions. The reviewer records a reason. No partial Era-bonus percent is used in the approved design.
+Eras are a shared technical-progression layer, separate from competitive seasons. They use non-spendable Era Points, not a new currency. Approved projects that a reviewer marks as qualifying earn a separate **10% of their approved base Ore award**. Era qualification adds no Track XP and does not alter the quality multiplier or the four quality dimensions. The reviewer records a reason. No partial Era-bonus percent is used in the approved design.
 
 Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing multiplier or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
-If a future physical weekend is approved, its projects use this same shared Era and this same reviewer-gated bonus. There is no event-specific Bolt or XP rule; see [Plan 15](15-loadout-irl-ruhr.md). This is a cross-reference only and does not settle the open stacking/configuration questions above.
+If a future physical weekend is approved, its projects use this same shared Era and this same reviewer-gated bonus. There is no event-specific Ore or XP rule; see [Plan 15](15-loadout-irl-ruhr.md). This is a cross-reference only and does not settle the open stacking/configuration questions above.
 
 ---
 
@@ -486,10 +488,10 @@ Quests add variety, not the majority of payouts.
 Use multiple leaderboards.
 
 ## Season
-Bolts earned this season.
+Ore earned this season.
 
 ## Lifetime
-All-time Bolts.
+All-time Ore.
 
 ## Hours
 Approved hours.
@@ -516,7 +518,7 @@ This keeps late joiners competitive.
 
 # 25. Leaderboard, Reviewer & Community Rewards
 
-Avoid large recurring Bolt prizes and avoid **permanent global percentage discounts** for leaderboard position.
+Avoid large recurring Ore prizes and avoid **permanent global percentage discounts** for leaderboard position.
 
 Permanent global discounts create a positive-feedback loop:
 
@@ -589,7 +591,7 @@ Every reward should pass:
 
 The economy rule is:
 
-> **Bolts are global. Tracks shape access and price.**
+> **Ore is global. Tracks shape access and price.**
 
 And the progression rule is:
 
@@ -690,10 +692,10 @@ Recommended fields:
 primary_track
 related_tracks[]
 access_class
-base_bolt_price
+base_ore_price
 cross_track_markup_percent
 minimum_track_level
-normal_discount_cap_bolts
+normal_discount_cap_ore
 requisition_eligible
 stock
 region
@@ -886,7 +888,7 @@ Default cap bands may guide admins, but **every expensive item should be balance
 
 Illustrative defaults:
 
-| Base Bolt price | Suggested normal cap |
+| Base Ore price | Suggested normal cap |
 |---:|---:|
 | under 750 B | full normal discount |
 | 750–1,749 B | ~100–150 B |
@@ -955,7 +957,7 @@ Rules:
 - stack in the builder's inventory until used;
 - maximum **one Requisition per order**;
 - cannot bypass a Mastery level requirement;
-- cannot be converted directly to Bolts;
+- cannot be converted directly to Ore;
 - refunded/reissued only when an order is cancelled for program/fulfillment reasons, not buyer regret.
 
 Working default values:
@@ -1220,7 +1222,7 @@ Custom Orders are a flagship LOADOUT feature.
 After enough real building, participants can request technical equipment that is **not in the normal shop**.
 
 Custom Orders require:
-1. enough global **Bolts**;
+1. enough global **Ore**;
 2. the relevant **Track Level** or Custom Order tier;
 3. program fit;
 4. fulfillment approval.
@@ -1256,7 +1258,7 @@ Hardware / Compute
 Required
 Hardware LV.8 OR Compute LV.10
 
-Base Bolt estimate
+Base Ore estimate
 4,200 B
 ```
 
@@ -1296,7 +1298,7 @@ The same rules apply:
 - confirmation modal;
 - savings remain bounded.
 
-Because Custom Order real-world prices can vary, the discount should be calculated from the **final approved Bolt quote**, not the participant's original estimate.
+Because Custom Order real-world prices can vary, the discount should be calculated from the **final approved Ore quote**, not the participant's original estimate.
 
 ## 28.4 Request Form
 
@@ -1324,7 +1326,7 @@ YOUR RELEVANT PROGRESSION
 Systems LV.10
 Compute LV.8
 
-ESTIMATED BOLT QUOTE
+ESTIMATED ORE QUOTE
 8,420 B
 
 REQUISITION
@@ -1350,7 +1352,7 @@ OPTIONAL REQUISITION SELECTION
 ↓
 FINAL CONFIRMATION
 ↓
-BOLTS RESERVED / REQUISITION RESERVED
+ORE RESERVED / REQUISITION RESERVED
 ↓
 PURCHASED
 ↓
@@ -1359,7 +1361,7 @@ SHIPPED
 DELIVERED
 ```
 
-If the program rejects or cannot fulfill an approved purchase after reservation, release the Bolt hold and restore the Requisition.
+If the program rejects or cannot fulfill an approved purchase after reservation, release the Ore hold and restore the Requisition.
 
 ## 28.6 Rules
 
@@ -1373,7 +1375,7 @@ Allowed if:
 - available in the builder's country;
 - shipping/tax is reasonable.
 
-The item does **not** need to fund the exact project that earned the Bolts.
+The item does **not** need to fund the exact project that earned the Ore.
 
 That is intentional. The reward is for becoming a stronger builder.
 
@@ -1394,7 +1396,7 @@ DROP 003
 1× GPU
 ```
 
-Drops give builders reasons to save Bolts.
+Drops give builders reasons to save Ore.
 
 ---
 
@@ -1452,16 +1454,16 @@ Sponsor integration should be relevant to building, not just logo placement.
 
 Model worst-case liability before launch.
 
-Basic Bolt issuance example:
+Basic Ore issuance example:
 
 ```text
 200 builders
 × 30 approved hours
 × 10× average multiplier
-= 60,000 Bolts
+= 60,000 Ore
 ```
 
-You need to know what **60,000 Bolts** can become in real fulfillment cost.
+You need to know what **60,000 Ore** can become in real fulfillment cost.
 
 But v4 also requires modeling **discount liability**.
 
@@ -1490,13 +1492,13 @@ Keep configuration server/admin controlled so prices, caps, and Requisition valu
 
 ---
 
-# 66. Bolt Pricing Philosophy
+# 66. Ore Pricing Philosophy
 
 Do not permanently promise a fixed public conversion such as:
 
-> `1 Bolt = $X`
+> `1 Ore = $X`
 
-Bolts are program currency.
+Ore is program currency.
 
 Pricing can reflect:
 - fulfillment cost;
@@ -1509,7 +1511,7 @@ Pricing can reflect:
 - scarcity;
 - desired progression pace.
 
-Each reward has a **base Bolt price**. The user's checkout quote is then derived from:
+Each reward has a **base Ore price**. The user's checkout quote is then derived from:
 1. relevant track affinity;
 2. cross-track markup when applicable;
 3. permanent track discount;
@@ -1520,7 +1522,7 @@ Each reward has a **base Bolt price**. The user's checkout quote is then derived
 Conceptually:
 
 ```text
-BASE BOLT PRICE
+BASE ORE PRICE
         ↓
 RELEVANT TRACK?
         ├─ no → CROSS-TRACK MARKUP
@@ -1537,7 +1539,7 @@ FINAL QUOTE
 
 Pricing must be explainable in the UI. Do not make users reverse-engineer why something costs more for them.
 
-Custom Orders should use an approved final Bolt quote before any Requisition is reserved or consumed.
+Custom Orders should use an approved final Ore quote before any Requisition is reserved or consumed.
 
 ---
 
@@ -1586,13 +1588,13 @@ Visible but mostly level-gated:
 - workstation/server upgrade
 
 ## Custom
-Locked behind the relevant Custom Order tier + enough Bolts + program fit.
+Locked behind the relevant Custom Order tier + enough Ore + program fit.
 
 For each launch item configure:
 - primary/related track;
 - access class;
 - cross-track markup;
-- base Bolt price;
+- base Ore price;
 - normal savings cap;
 - Requisition eligibility;
 - stock/region.
@@ -1614,7 +1616,7 @@ These are product decisions unless intentionally changed later:
 1. Four tracks: **Tools, Systems, Compute, Hardware**.
 2. Research is a mode.
 3. Track max level: **15**.
-4. Bolts are global.
+4. Ore is global.
 5. Reviewers control final multi-track XP allocation.
 6. Most rewards are cross-track purchasable.
 7. Cross-track purchases can cost more.
@@ -1672,7 +1674,7 @@ max ~1,000 B
 Tune against:
 - sponsor budget;
 - actual fulfillment prices;
-- observed Bolt issuance;
+- observed Ore issuance;
 - redemption rates;
 - track popularity;
 - stock;
@@ -1682,7 +1684,7 @@ Tune against:
 ## Questions To Resolve Before Public Season 00
 
 - Exact XP thresholds for LV.1–15.
-- Exact Bolt multiplier calibration.
+- Exact Ore multiplier calibration.
 - Default cross-track markup by Open/Specialist class.
 - Exact normal savings-cap bands.
 - Which launch rewards are Mastery.

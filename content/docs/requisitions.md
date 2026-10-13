@@ -30,7 +30,7 @@ The item must meet the field and minimum-value requirements. A Custom Order must
 
 - One use, non-transferable, and no expiry.
 - At most one Requisition on an order.
-- It does not add Bolts or create a permanent discount.
+- It does not add Ore or create a permanent discount.
 - It does not remove a level requirement.
 - It does not make an unsupported request fulfillable.
 

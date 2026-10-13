@@ -10,7 +10,7 @@ Custom Orders are planned for equipment or resources outside the regular prize c
 
 ## What makes you eligible?
 
-You need **approved work, the relevant track level or request tier, and enough Bolts for the final quote**.
+You need **approved work, the relevant track level or request tier, and enough Ore for the final quote**.
 
 Tracked hours alone do not unlock a request. Shipped, reviewed contributions build Track XP, which advances the relevant level. Exact XP thresholds and public request-tier requirements remain pending.
 
@@ -21,8 +21,8 @@ A Requisition cannot bypass a level gate.
 1. Explain the item, its purpose, and how it relates to your projects.
 2. Provide an item or supplier reference and any important specifications.
 3. The team checks track fit, budget, availability, and delivery feasibility.
-4. If support is possible, the team provides the final Bolt quote and requirements.
-5. You accept the quote with sufficient Bolts, or decline it.
+4. If support is possible, the team provides the final Ore quote and requirements.
+5. You accept the quote with sufficient Ore, or decline it.
 
 The request is not a purchase, and your estimate is not the final price.
 

@@ -55,7 +55,7 @@ export function Eras() {
               Era Points
             </div>
             <div className="m dsc">
-              Era Points are separate from Bolts and Track XP.
+              Era Points are separate from Ore and Track XP.
             </div>
           </div>
           <div className="card sm">
@@ -65,7 +65,7 @@ export function Eras() {
               </span>
             </div>
             <div className="cn">
-              Bolt bonus
+              Ore bonus
             </div>
             <div className="m dsc">
               Qualifying projects may earn it on the approved base award.
@@ -73,7 +73,7 @@ export function Eras() {
           </div>
         </div>
         <p className="note">
-          Planned rule; final launch configuration is still being finalized. Era changes do not reset lifetime Bolts, Track XP, or shipped work.
+          Planned rule; final launch configuration is still being finalized. Era changes do not reset lifetime Ore, Track XP, or shipped work.
         </p>
       </div>
     </>

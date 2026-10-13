@@ -32,6 +32,7 @@ export default function Home() {
       <div style={{ display: "contents" }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICON_SPRITE }} />
       <SheetRuler />
       <NoiseGrain />
+      <div className="depth-dark" aria-hidden="true" />
       <div className="in">
         <SiteNav />
         <main id="main">

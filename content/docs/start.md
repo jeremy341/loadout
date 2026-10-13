@@ -21,9 +21,9 @@ That could be a debugging tool, a synchronization engine, a custom renderer, or 
 | Digital Loadout | Accepted projects and the technical work you can show. |
 | Physical Loadout | Equipment and resources that support your next build. |
 
-The intended loop is: **build → document → ship for review → earn Track XP and Bolts → build again**.
+The intended loop is: **build → document → ship for review → earn Track XP and Ore → build again**.
 
-Track XP records progress in a field. Bolts are the spendable balance for eligible prizes. They serve different purposes; [progress explains the difference](/docs/progress).
+Track XP records progress in a field. Ore is the spendable balance for eligible prizes. They serve different purposes; [progress explains the difference](/docs/progress).
 
 ## Joining LOADOUT {#status}
 

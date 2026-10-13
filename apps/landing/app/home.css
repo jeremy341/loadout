@@ -617,7 +617,7 @@ html:has(.home) { scroll-behavior:smooth }
 /* FAQ (main: 900px list, boxed 8px apart, 16px questions, 16px answers). */
 .home .fq2-list { max-width: 900px; margin: 0 auto; border-bottom: 0; }
 .home .fq2 { border: 1.5px solid var(--mut); margin-bottom: 8px; }
-.home .fq2-q { min-height: 56px; padding: 16px 17px; font-size: 16px; }
+.home .fq2-q { min-height: 56px; padding: 16px 17px; font-size: 16px; letter-spacing: .09em; }
 .home .fq2-a p { margin: 0; max-width: 800px; padding: 5px 42px 18px; font-size: 16px; line-height: 1.65; }
 
 /* Who is behind LOADOUT (main: behind-loadout.css, 1.2fr/1fr, 40px gap, 28px names, 16px copy, 32px box). */
@@ -1111,11 +1111,11 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .st:not(:last-child)::after { content: ""; position: absolute; top: 31px; left: calc(50% + 42px); width: calc(100% - 64px); height: 10px; background: var(--fg); clip-path: polygon(0 35%, 85% 35%, 85% 0, 100% 50%, 85% 100%, 85% 65%, 0 65%); }
 @media (max-width: 700px) { .home .st:not(:last-child)::after { display: none; } .home .bd { margin: 0 0 18px; } }
 
-/* ===== Animations from main: bolt nudge, era connector and IRL status entrances ===== */
-@keyframes bolt-nudge { from { transform: translateY(0); } to { transform: translateY(-3px) rotate(-2deg); } }
+/* ===== Animations from main: ore nudge, era connector and IRL status entrances ===== */
+@keyframes ore-nudge { from { transform: translateY(0); } to { transform: translateY(-3px) rotate(-2deg); } }
 @keyframes era-connector-enter { from { border-color: transparent; } }
 @keyframes irl-status-enter { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
-.home .ic.nudge { animation: bolt-nudge 2400ms ease-in-out infinite alternate; }
+.home .ic.nudge { animation: ore-nudge 2400ms ease-in-out infinite alternate; }
 .home .era > div + div { animation: era-connector-enter 500ms var(--ease) both; }
 .home #loadout-irl .asd { animation: irl-status-enter 500ms var(--ease) 120ms both; }
 @media (prefers-reduced-motion: reduce) { .home .ic.nudge, .home .era > div + div, .home #loadout-irl .asd { animation: none; } }

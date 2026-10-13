@@ -1,0 +1,26 @@
+.home { --depth-core: rgba(6, 8, 9, .6); --depth-rim: rgba(0, 0, 0, .86); }
+.home:has(#theme:checked) { --depth-core: rgba(26, 23, 20, 0); --depth-rim: rgba(26, 23, 20, .32); }
+
+/* The mine gets darker the deeper you read (.ulpi/design/depth-darkness.md). One fixed layer sits behind the content
+   (above the page and its grid, below the sections, the nav and the grain), so it darkens the backdrop and never the
+   text or the cards. Its opacity follows the scroll position through a CSS scroll-driven animation, so there is no
+   scroll listener and no React state: it goes from nothing at the top to the full shade at the bottom, the depth of the
+   last marker. The dark theme ends near the 404 page's black with a darker rim; the light theme keeps its paper and
+   only deepens the rim. A browser without scroll-driven animations keeps the page as it was. */
+.home .depth-dark { display: none; }
+
+@supports (animation-timeline: scroll()) {
+  .home .depth-dark {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(ellipse 90% 85% at 50% 50%, var(--depth-core) 35%, var(--depth-rim) 100%);
+    animation: depth-descend linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes depth-descend { from { opacity: 0; } to { opacity: 1; } }

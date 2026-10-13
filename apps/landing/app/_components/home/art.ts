@@ -12,5 +12,5 @@ export const ART: Record<string, string> = {
 
 // The pixel icons from the first LOADOUT site (public/loadout/sprites), as symbols for <use>. Their colours
 // follow the theme through a filter in home.css, so the shapes stay exactly the old ones.
-const SPRITE_NAMES = ["arrow-right", "board", "bolt", "builder", "cap", "check", "cloud", "code", "cpu", "cross", "document", "domain", "down", "equipment-box", "faq-chevron", "flask", "gear", "gift", "globe", "hoodie", "laptop", "layers", "list", "people", "requisition-i", "requisition-ii", "requisition-master", "storage", "terminal", "ticket", "wrench", "xp-star"];
+const SPRITE_NAMES = ["arrow-right", "board", "builder", "cap", "check", "cloud", "code", "cpu", "cross", "document", "domain", "down", "equipment-box", "faq-chevron", "flask", "gear", "gift", "globe", "hoodie", "laptop", "layers", "list", "ore", "people", "requisition-i", "requisition-ii", "requisition-master", "storage", "terminal", "ticket", "wrench", "xp-star"];
 export const ICON_SPRITE = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>${SPRITE_NAMES.map((name) => `<symbol id="i-${name}" viewBox="0 0 32 32"><image href="/loadout/sprites/${name}.png" width="32" height="32"></image></symbol>`).join("")}</defs></svg>`;

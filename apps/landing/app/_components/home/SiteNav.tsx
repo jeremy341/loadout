@@ -26,7 +26,8 @@ function NavLink({ href, onClick, children }: { href: string; onClick?: () => vo
 // Behaviour carried over from the pre-redesign nav: the bar hides while scrolling down
 // past the first screen, returns on scroll up, and stays visible while the mobile menu
 // or keyboard focus is inside it. Escape closes the menu and returns focus to its button.
-export function SiteNav() {
+// Off the homepage (the 404 page) `anchorBase="/"` turns the in-page anchors into links back to the homepage.
+export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -77,12 +78,12 @@ export function SiteNav() {
       onFocusCapture={() => setFocused(true)}
       onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}
     >
-      <a className="logo" href="#top" aria-label="LOADOUT home" onClick={() => setOpen(false)}>
+      <a className="logo" href={`${anchorBase}#top`} aria-label="LOADOUT home" onClick={() => setOpen(false)}>
         <Logo />
       </a>
       <div className="nav-links">
         {sections.map(([label, href]) => (
-          <NavLink key={href} href={href}>{label}</NavLink>
+          <NavLink key={href} href={anchorBase + href}>{label}</NavLink>
         ))}
       </div>
       <div className="nav-actions">
@@ -108,7 +109,7 @@ export function SiteNav() {
       {open && (
         <nav className="nav-sheet" id="mobile-navigation" aria-label="Mobile navigation">
           {sheetLinks.map(([label, href]) => (
-            <NavLink key={href} href={href} onClick={() => { if (href.startsWith("#")) selectDestination(href); else setOpen(false); }}>
+            <NavLink key={href} href={href.startsWith("#") ? anchorBase + href : href} onClick={() => { if (!anchorBase && href.startsWith("#")) selectDestination(href); else setOpen(false); }}>
               {label}<span aria-hidden="true">→</span>
             </NavLink>
           ))}

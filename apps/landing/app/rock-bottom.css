@@ -1,0 +1,102 @@
+/* Rock bottom: the 404 and cave-in pages (.ulpi/design/rock-bottom-404.md). The hero's classes carry the tag, the title,
+   the copy and the buttons. This file makes the page one screen of rock: a depth marker (.pit) as big as the window, with
+   a depth numeral behind the copy that falls to its number, ore flecks at the edges, a very dark rock (the dark theme is
+   near black here, so the lamp is the only light), a title that glitches when the depth lands, and a miner's lamp that
+   starts in the middle of the page and follows a fine pointer. Colours come from the theme tokens in home.css. */
+
+/* One screen, no scrolling. */
+/* Much darker than the homepage: the dark theme goes near black. home.css sets --bg per theme with :not(:has(...)), so this uses the same selector. */
+.home:not(:has(#theme:checked)).rb-page { --bg: #0e1112; }
+.home.rb-page { --rb-lamp: 300px; --glow-strength: 36%; min-height: 100svh; }
+.home:has(#theme:checked).rb-page { --glow-strength: 42%; }
+.home .hero.rb { min-height: 100svh; padding: 92px 24px 64px; }
+/* The tag, the title and the buttons are set in Jersey 10, the wordmark face, not Pixelify Sans: Pixelify's C closes into
+   an O ("ROOK BOTTOM", "BAOK"), and at small sizes its E, Z and 0 read as a backwards 3, a 2 and an O. Jersey's letters
+   stay distinct. For the title, Jersey is about 6.1 em wide for the 17 characters of the first line, so the size divisor
+   is 6.4. The height limit keeps the title, the copy and the buttons on one screen on a short window. */
+.home .rb .tag { font-family: var(--font-display), monospace; font-weight: 400; font-size: 21px; letter-spacing: .06em; line-height: 22px; }
+.home .rb .hero-btn { font-family: var(--font-display), monospace; font-weight: 400; font-size: 28px; letter-spacing: .04em; }
+.home .rb .h1 { font-family: var(--font-display), monospace; font-weight: 400; line-height: 1; letter-spacing: .01em; font-size: min(clamp(104px, 8.4vw, 124px), calc((min(900px, 100vw - 48px) - 60px) / 6.4), 12.4vh); }
+.home .rb-path { font: inherit; overflow-wrap: anywhere; padding: 1px 6px; background: var(--ln); border: 1px solid var(--mut); }
+
+/* The rock face: the depth marker, filling the page behind the copy. The lamp is the pointer's glow (DepthGlow sets --mx
+   and --my); until the pointer has moved it sits in the middle of the page, and on touch screens it sways gently. */
+@property --rb-ink { syntax: "<percentage>"; inherits: false; initial-value: 3%; }
+@property --rb-lamp-x { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+.home.rb-page .rb-rock.pit { position: absolute; inset: 0; z-index: 0; height: auto; padding: 0; border: 0; justify-content: center; overflow: hidden; pointer-events: none; }
+.home.rb-page .rb-rock.pit::before {
+  -webkit-mask-image: radial-gradient(circle var(--rb-lamp) at var(--mx, var(--rb-lamp-x)) var(--my, 46%), #000 0%, transparent 100%);
+  mask-image: radial-gradient(circle var(--rb-lamp) at var(--mx, var(--rb-lamp-x)) var(--my, 46%), #000 0%, transparent 100%);
+}
+/* A dark rim, so the lit middle reads as light in a dark mine. */
+.home.rb-page .rb-rock.pit::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, transparent 38%, rgba(0, 0, 0, .78) 100%); }
+.home:has(#theme:checked).rb-page .rb-rock.pit::after { background: radial-gradient(ellipse 85% 80% at 50% 48%, transparent 50%, rgba(0, 0, 0, .4) 100%); }
+
+/* The numeral: the homepage marker's, as big as the window allows. It rests at 3% ink like the other markers and lights
+   under the lamp. While it falls it is visible (11%), then it fades back into the rock with one thud. Touch screens
+   rest it at 6%. */
+.home.rb-page .rb-rock b {
+  --rb-ink: 3%;
+  font-size: min(22vw, 48vh);
+  transition: --rb-ink .9s ease-out;
+  background-image:
+    radial-gradient(circle var(--rb-lamp) at var(--mx, var(--rb-lamp-x)) var(--my, 50%), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
+    linear-gradient(color-mix(in srgb, var(--fg) var(--rb-ink), transparent), color-mix(in srgb, var(--fg) var(--rb-ink), transparent));
+}
+@media (hover: none) { .home.rb-page .rb-rock b { --rb-ink: 6%; } }
+.home.rb-page .rb-rock b[data-falling] { --rb-ink: 11%; transition: none; }
+@keyframes rb-thud { 50% { transform: translateY(8px); } }
+@keyframes rb-sway { from { --rb-lamp-x: 34%; } to { --rb-lamp-x: 66%; } }
+@media (prefers-reduced-motion: no-preference) {
+  .home.rb-page .rb-rock b[data-landed] { animation: rb-thud .24s steps(2, end) 1; }
+  @media (hover: none) { .home.rb-page .rb-rock.pit { animation: rb-sway 9s ease-in-out infinite alternate; } }
+}
+
+/* The glitch: when the depth lands (data-landed), each title line tears sideways and splits into the accent and the paper
+   colour for a third of a second, in steps, then again every 8 seconds. It is two transforms and a text-shadow on the
+   real text, so nothing is duplicated for screen readers. Reduced motion never starts it. */
+@keyframes rb-glitch-a {
+  0% { transform: translateX(-9px) skewX(-9deg); text-shadow: -5px 0 var(--ac), 5px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  1% { transform: translateX(7px); text-shadow: 4px 0 var(--ac), -4px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  2% { transform: translateX(-3px) skewX(5deg); text-shadow: -3px 0 var(--ac); }
+  3% { transform: translateX(2px); text-shadow: 2px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  4%, 51% { transform: none; text-shadow: none; }
+  52% { transform: translateX(5px); text-shadow: -3px 0 var(--ac), 3px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  53%, 100% { transform: none; text-shadow: none; }
+}
+@keyframes rb-glitch-b {
+  0% { transform: translateX(10px) skewX(8deg); text-shadow: 5px 0 var(--ac), -5px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  1% { transform: translateX(-8px); text-shadow: -4px 0 var(--ac); }
+  2% { transform: translateX(4px) skewX(-5deg); text-shadow: 3px 0 var(--ac), -3px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  3% { transform: translateX(-2px); text-shadow: none; }
+  4%, 52% { transform: none; text-shadow: none; }
+  53% { transform: translateX(-5px); text-shadow: 3px 0 var(--ac), -3px 0 color-mix(in srgb, var(--fg) 45%, transparent); }
+  54%, 100% { transform: none; text-shadow: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .home.rb-page:has(.rb-num[data-landed]) .h1 > span:first-child { animation: rb-glitch-a 8s steps(1, end) infinite; }
+  .home.rb-page:has(.rb-num[data-landed]) .h1 > span:last-child { animation: rb-glitch-b 8s steps(1, end) infinite; }
+}
+
+/* Ore flecks at the edges: faint everywhere, lit to the glow colour under the lamp. They share the rock's box, so they
+   use the same --mx and --my. */
+.home .rb-ore { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .3; }
+.home .rb-ore i { position: absolute; width: 8px; height: 8px; background: var(--glow); box-shadow: 8px 0 var(--glow), 0 8px var(--glow); }
+@media (hover: hover) and (pointer: fine) {
+  .home .rb-ore {
+    opacity: 1;
+    -webkit-mask-image: radial-gradient(circle var(--rb-lamp) at var(--mx, var(--rb-lamp-x)) var(--my, 46%), #000 0%, rgba(0, 0, 0, .14) 100%);
+    mask-image: radial-gradient(circle var(--rb-lamp) at var(--mx, var(--rb-lamp-x)) var(--my, 46%), #000 0%, rgba(0, 0, 0, .14) 100%);
+  }
+}
+
+.home .rb-foot { position: absolute; left: 0; right: 0; bottom: 20px; z-index: 1; margin: 0; text-align: center; font-size: 12px; line-height: 1.4; letter-spacing: .12em; text-transform: uppercase; color: var(--mut); }
+.home .rb-foot span { margin-left: 10px; opacity: .8; }
+
+@media (max-width: 700px) {
+  .home.rb-page { --rb-lamp: 190px; }
+  .home .hero.rb { padding: 92px 20px 56px; }
+  .home .rb .tag { font-size: 17px; }
+  .home .rb .hero-btn { font-size: 22px; }
+  .home .rb .h1 { font-size: min(54px, calc((100vw - 100px) / 6.4), 11vh); }
+}

@@ -19,11 +19,11 @@ export function Rewards() {
                 CURRENCY
               </span>
               <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#i-bolt"></use>
+                <use href="#i-ore"></use>
               </svg>
             </div>
             <div className="cn">
-              Bolts
+              Ore
             </div>
             <div className="m dsc">
               Global currency for most prizes.
@@ -63,7 +63,7 @@ export function Rewards() {
           </div>
         </div>
         <p className="note">
-          Requisitions do not add Bolts or remove level requirements. On a Custom Order, one applies only when the approved quote marks it eligible.
+          Requisitions do not add Ore or remove level requirements. On a Custom Order, one applies only when the approved quote marks it eligible.
         </p>
       </div>
     </>

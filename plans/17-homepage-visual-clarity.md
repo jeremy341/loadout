@@ -18,7 +18,7 @@
 - Keep the current section order: Hero → About → Tracks & Project Fit → unchanged How it works → Progress & Prizes → Community Eras → future IRL concept → FAQ → Who’s Behind LOADOUT → footer.
 - For the Era-only approved slice, remove only the redundant Era-objectives note from HowItWorks.tsx; preserve every other process step and its styling.
 - Do not change existing .process-* or .flow-* rules.
-- Keep all four tracks, current project-fit judgments, quality dimensions, Track XP/Bolt distinctions, Requisition rules, Custom Order gates, and event status. Era product rules remain unchanged internally; the public summary follows the brief scope in Task 6.
+- Keep all four tracks, current project-fit judgments, quality dimensions, Track XP/Ore distinctions, Requisition rules, Custom Order gates, and event status. Era product rules remain unchanged internally; the public summary follows the brief scope in Task 6.
 - Hidden track examples are supplemental only. Names and essential purpose remain visible; hidden details use explicit controls.
 - Use existing sprite art and CSS/SVG connectors. Do not add a graph library, image assets, dependencies, live data, or user-authored project examples.
 - Keep unconfirmed prices, hours gates, inventory, dates, venue, and live status absent.
@@ -95,7 +95,7 @@ Use an ordered flow:
     Related Track level → earned field discount → normal savings cap → one eligible Requisition raises that cap once
 
 - [ ] Keep the five milestone rail as the only location listing when Requisitions are earned.
-- [ ] Keep global Bolts, personal Track XP, and remaining Bolt cost labeled.
+- [ ] Keep global Ore, personal Track XP, and remaining Ore cost labeled.
 - [ ] Use an example without invented prices or percentages.
 - [ ] Put secondary usage rules in a titled native disclosure or accessible accordion.
 - [ ] Keep the planned prize categories and no-order status visible.
@@ -108,11 +108,11 @@ Use an ordered flow:
 
 **Test:** e2e/homepage.spec.ts.
 
-Use a static ordered flow: Reviewed ship → relevant Track tier → request equipment → final Bolt quote → accept or decline.
+Use a static ordered flow: Reviewed ship → relevant Track tier → request equipment → final Ore quote → accept or decline.
 
 - [ ] Do not show the numbered tier ladder on the public homepage; the relevant-track-tier gate and requests-not-open status are enough. The numeric tier policy remains in Plan 02.
 - [ ] Say reviewed shipped work earns Track XP toward the related tier; tracked hours alone do not unlock a request.
-- [ ] Say requests are not open and the builder needs enough Bolts to accept the final quote.
+- [ ] Say requests are not open and the builder needs enough Ore to accept the final quote.
 - [ ] Put fit, budget, country, availability, safe/legal delivery, shipping/tax, fulfillment, and quote-specific Requisition eligibility in one titled disclosure.
 - [ ] Do not invent a fixed lifetime-hours minimum.
 

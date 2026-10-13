@@ -20,7 +20,7 @@ DROP 003
 1× GPU
 ```
 
-Drops give builders reasons to save Bolts.
+Drops give builders reasons to save Ore.
 
 ---
 
@@ -234,11 +234,11 @@ Before Season 00, publish these rules clearly:
 5. A larger app may receive credit only for its eligible technical core.
 6. Research is a **mode**, not a catch-all track.
 7. Hackatime/Lapse time must be tied to journals.
-8. Tracked time alone does not earn Bolts.
+8. Tracked time alone does not earn Ore.
 9. Each tracked minute can only be assigned once.
 10. Each shipped minute can only be rewarded once.
 11. AI may assist, but the participant must remain the primary builder.
-12. Bolts are one **global** currency.
+12. Ore is one **global** currency.
 13. Reviewers decide the final multi-track XP split.
 14. Track levels cap at **15** and persist across seasons.
 15. Most shop items are cross-track purchasable, but the relevant track affects price.
@@ -247,7 +247,7 @@ Before Season 00, publish these rules clearly:
 18. Field Requisitions are earned at LV.3, 6, 9, 12, and 15 only.
 19. Requisitions are one-use, non-transferable, non-expiring, and limited to one per order.
 20. Requisitions never bypass a level wall.
-21. Custom Orders require **level + Bolts + program fit + fulfillment approval**.
+21. Custom Orders require **level + Ore + program fit + fulfillment approval**.
 22. Imported/prior YSWS work cannot generate a second payout for the same work.
 
 Era launch rules are planned separately in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`. Before enabling an Era, operators must approve its theme, objective set, weekly-reset timezone, minimum-duration/threshold configuration, reviewer criteria, and audit/correction path. An unconfigured Era must not show live progress, a countdown, or a payout bonus.
@@ -280,7 +280,7 @@ Determine:
 - expected users
 - expected approved hours
 - average multiplier
-- total Bolt liability
+- total Ore liability
 - LV.1–15 XP thresholds
 - per-track reward balance
 - cross-track markups
@@ -307,7 +307,7 @@ Priority:
 - shipping
 - fit review
 - multi-track XP allocation
-- Bolts
+- Ore
 - track level-up
 - one field-aware shop item
 - one capped discount
@@ -327,7 +327,7 @@ Test:
 - discount caps
 - Requisition desirability
 - whether any track is economically dominant
-- Bolt inflation
+- Ore inflation
 - AI policy
 - reward flow
 
@@ -382,9 +382,9 @@ Full launch only after the field economy is understandable and no single track i
 - percentage of projects used by another builder
 
 ## Economy
-- Bolts issued
-- Bolts spent
-- outstanding Bolt liability
+- Ore issued
+- Ore spent
+- outstanding Ore liability
 - reward demand by track
 - cross-track purchase rate
 - average permanent discount actually realized
@@ -446,7 +446,7 @@ fit review + validity review + quality review
 ↓
 Digital Loadout artifact
 ↓
-XP + Bolts
+XP + Ore
 ↓
 unlock capability-focused rewards
 ```

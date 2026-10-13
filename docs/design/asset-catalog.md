@@ -10,6 +10,10 @@ The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and but
 
 Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
+### Pixel font
+
+`apps/landing/public/fonts/PixelifySans.ttf` is Pixelify Sans with a widened opening in the capital C and the lowercase c. The stock font (`PixelifySans.original.ttf`) and the script that patches it (`patch-pixelify-c.py`) are in `assets/editable/fonts/`; the licence (SIL Open Font License 1.1, no reserved font name) stays in `apps/landing/public/fonts/PixelifySans-OFL.txt`. See `assets/editable/fonts/README.md`.
+
 ### Logo and share image
 
 The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and the touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are the 1200 by 630 share image (under 300 KB), each with its `.alt.txt`. The editable SVG sources, including the custom pixel wordmark, are in `assets/editable/logo/`. The helmet comes from the one-bit icon pack; the owner confirmed it can be used.
@@ -20,7 +24,7 @@ The 32×32 transparent PNGs in `apps/landing/public/loadout/sprites/` are the cu
 
 | Source PNG | Runtime sprite |
 | --- | --- |
-| `bolt-source.png` | `bolt.png` |
+| `RPG_Gem_Jewelcrafting_Diamond_Points_Currency.png` (one-bit icon pack, 16 by 16, each pixel doubled) | `ore.png` |
 | `layers-source.png` | `layers.png` |
 | `code-source.png` | `code.png` |
 | `gift-source.png` | `gift.png` |
@@ -65,7 +69,7 @@ Original source artwork remains in `docs/design/references/2026-10-06/final-pixe
 | `apps/landing/public/loadout/hero/scenery/scroll-cue.svg` | Kept. The current homepage does not reference it. |
 | `apps/landing/public/loadout/bolt.svg` | Owner-supplied custom Bolt SVG; kept byte-for-byte at its original URL. |
 
-The homepage also uses `apps/landing/public/loadout/sprites/bolt.png` for the final pixel Bolt glyph. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
+The homepage uses `apps/landing/public/loadout/sprites/ore.png`, the ore gem, as the currency icon. The owner's `bolt.svg` is not shown anywhere and is kept as it was. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
 
 ### Workshop scenery PNGs
 

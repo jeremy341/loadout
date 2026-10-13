@@ -10,7 +10,7 @@ LOADOUT is a web-based technical-builder YSWS concept for prospective builders e
 
 LOADOUT focuses on technical work that expands capability for the builder or other builders. Its four tracks are Tools, Systems, Compute, and Hardware. Research Mode is a project modifier, not a fifth track. The intended progression connects shipped work to a Digital Loadout and planned rewards to a Physical Loadout.
 
-The four quality dimensions are Originality, Technical Depth, Execution, and Documentation. Bolts are planned global spendable currency; Track XP records non-spendable progress by track. Exact payout formulas and prices are not approved for publication.
+The four quality dimensions are Originality, Technical Depth, Execution, and Documentation. Ore is planned global spendable currency; Track XP records non-spendable progress by track. Exact payout formulas and prices are not approved for publication.
 
 ## Current product boundary
 
@@ -22,7 +22,7 @@ Do not claim program acceptance, dates, eligibility, sponsors, participation cou
 
 - [Plan index](plans/00-index.md) maps product and program policy owners.
 - [Plan 01](plans/01-product-and-program.md) owns product/program policy.
-- [Plan 02](plans/02-economy-and-rewards.md) owns Bolts, Track XP, progression, prices, prizes, Requisitions, and Custom Orders.
+- [Plan 02](plans/02-economy-and-rewards.md) owns Ore, Track XP, progression, prices, prizes, Requisitions, and Custom Orders.
 - [Plan 11](plans/11-eras-and-community-progression.md) owns shared Era policy.
 - [Plan 15](plans/15-loadout-irl-ruhr.md) owns the future IRL concept.
 - [Plan 06](plans/06-public-homepage.md) owns homepage scope and copy.

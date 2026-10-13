@@ -38,7 +38,7 @@ One screen, never scrolling: the page is `100svh`, the hero block is centred in 
 
 - Tag: `SOHLE · ERROR 404`.
 - Title: `Sorry, you’ve hit rock bottom.` (uppercase, two lines).
-- Type: the tag, title and buttons are set in Jersey 10 (`--font-display`), an owner-requested exception to the Pixelify headings and buttons of the design system: Pixelify's C closes into an O at these sizes ("ROOK BOTTOM", "BAOK") and its E, Z and 0 are hard to tell apart in the small tag. The depth numeral stays Pixelify.
+- Type: the tag, title and buttons are set in Jersey 10 (`--font-display`), an owner-requested exception to the Pixelify headings and buttons of the design system: Pixelify's C closed into an O at these sizes ("ROOK BOTTOM", "BAOK"; fixed since, see [pixel-font-open-c.md](pixel-font-open-c.md)) and its E, Z and 0 are hard to tell apart in the small tag. The depth numeral stays Pixelify. Reverting these three to Pixelify is possible now that the C is open.
 - Lead: `Nothing is down here at /the-path. You dug past everything we built. The only way back is up.`
 - Buttons: `BACK TO THE SURFACE ↑` (primary, to `/`) and `READ THE GUIDES` (to `/docs`). No corner marks on this page.
 - Numeral: `min(22vw, 48vh)` tall, centred behind the copy. Thirteen ore flecks at the edges, none behind the text.

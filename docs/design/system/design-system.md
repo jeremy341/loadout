@@ -77,6 +77,7 @@ Rules:
 - Essential body copy is 16px. Do not shrink it to fit.
 - Fonts are self-hosted, except JetBrains Mono and Poppins, which load through the framework, with `display: swap`.
 - The scramble on the hero title measures its letters only after the pixel font has loaded.
+- `PixelifySans.ttf` is a patched copy of the stock font: the capital C and the lowercase c have a wider opening, because in the stock font a C differs from an O only by a one-pixel notch that shrinks to a hairline in the bold weights ("ROCK" read "ROOK"). Nothing else in the font changed, and the advance widths are identical, so no text reflows. The stock font and the script that makes the patched one are in `assets/editable/fonts/` (brief: `.ulpi/design/pixel-font-open-c.md`). Regenerate with `python assets/editable/fonts/patch-pixelify-c.py` and check with `--check`.
 
 ## Layout
 
@@ -100,6 +101,7 @@ Rules:
 - The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 3% of the text colour. Within 150px of the pointer they light to the glow colour: blue in dark mode at 60%, amber-red `#D9661F` in light mode at 85%, for the deepest marker. Deeper markers light more strongly: `DepthGlow` sets `--depth-light` on each marker from its numeral, from 40% of that strength at the shallowest to 100% at the deepest. The glow runs only on devices with a fine pointer (`hover: hover` and `pointer: fine`); touch screens see the faint marker only. The rules are `DepthGlow` and the `.home .pit` rules in `home.css`.
 - The top ruler is in pixels: a tick every 32px and a number every 160px.
 - The left ruler is in metres: a tick every 10 m, a number every 50 m, and a heavier mark at each depth strip. Markers are pinned to those strips.
+- The homepage gets darker the deeper you scroll (`app/depth-dark.css`, brief `.ulpi/design/depth-darkness.md`). One fixed, `aria-hidden` layer behind the content follows the scroll position through a CSS scroll-driven animation: nothing at the top, the full shade at the footer. In the dark theme the shade ends near the 404's black (`#0e1112`) with a darker rim; in the light theme the paper stays and only the rim deepens. It darkens the backdrop, never the text or the cards. A browser without scroll-driven animations shows the page as before. The 404, the cave-in page and the Docs do not use it.
 
 ## Grain and paper
 
@@ -124,7 +126,7 @@ Rules:
 
 - An unknown address and an unknown docs page share one 404 (`app/not-found.tsx`); a failed render shows the cave-in page (`app/error.tsx`). Both are one screen with nothing to scroll: the hero's tag, title, copy and buttons (no corner brackets) over a page-sized depth marker. The depth numeral sits behind the copy (`−1404 M`, deeper than the deepest homepage marker; the cave-in page is at `−500 M`), ore flecks sit at the edges, and the rim is dark. The dark theme is near black (`#0e1112`) on these pages, so the lamp is the only light.
 - The 404 says the requested path, offers "Back to the surface" and "Read the guides", sends a real 404 status and `noindex`. The cave-in page has a "Try again" button.
-- Exception to the type roles: on these pages the tag, title and buttons are set in Jersey 10 (the wordmark face), not Pixelify Sans. At these sizes Pixelify's C closes into an O ("ROOK BOTTOM"), and its E, Z and 0 read as a backwards 3, a 2 and an O. Jersey's letters stay distinct. Everything else on these pages follows the usual roles.
+- Exception to the type roles: on these pages the tag, title and buttons are set in Jersey 10 (the wordmark face), not Pixelify Sans. It was chosen when Pixelify's C closed into an O ("ROOK BOTTOM"; the C is open now), and Jersey also keeps the E, Z and 0 distinct in the small tag, where Pixelify's read as a backwards 3, a 2 and an O. Everything else on these pages follows the usual roles.
 - The miner's lamp is the depth glow at a larger radius (300 px, 190 px on phones). It starts in the middle of the page, follows a fine pointer, and sways gently on touch screens. When the page opens the numeral falls from `−0 M` to its depth (1.8 s, speeding up), lands with one thud and fades back to 3% ink, and the title glitches for about a third of a second (a tear and a split into the accent and paper colours) then again every 8 seconds. Reduced motion shows the final depth at once, keeps the lamp still and never glitches.
 
 ## Icons
@@ -132,7 +134,7 @@ Rules:
 - Icons are 32 by 32 transparent pixel PNGs in `apps/landing/public/loadout/sprites/`, with ink outlines and a yellow fill. They render with `image-rendering: pixelated`. Never smooth or filter the files.
 - The homepage uses them as SVG symbols defined in `art.ts` (`ICON_SPRITE`). To add an icon, add its name to `SPRITE_NAMES` and add its PNG.
 - In dark mode the icons are turned blue by a CSS hue rotation (`hue-rotate(170deg) saturate(.95)`). In light mode they show as drawn.
-- The Bolt currency icon (`bolt.png`) nudges on its card. The owner's original `bolt.svg` stays unchanged.
+- The Ore currency icon (`ore.png`, the gem) nudges on its card. The owner's original `bolt.svg` is not shown anywhere and stays unchanged.
 - The hero scenery vectors under `hero/scenery/` and the 31 `hero-workshop` PNGs are kept but not rendered. Do not wire them in without a new owner decision.
 
 ## ASCII art

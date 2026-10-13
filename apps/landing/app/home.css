@@ -617,7 +617,7 @@ html:has(.home) { scroll-behavior:smooth }
 /* FAQ (main: 900px list, boxed 8px apart, 16px questions, 16px answers). */
 .home .fq2-list { max-width: 900px; margin: 0 auto; border-bottom: 0; }
 .home .fq2 { border: 1.5px solid var(--mut); margin-bottom: 8px; }
-.home .fq2-q { min-height: 56px; padding: 16px 17px; font-size: 16px; }
+.home .fq2-q { min-height: 56px; padding: 16px 17px; font-size: 16px; letter-spacing: .09em; }
 .home .fq2-a p { margin: 0; max-width: 800px; padding: 5px 42px 18px; font-size: 16px; line-height: 1.65; }
 
 /* Who is behind LOADOUT (main: behind-loadout.css, 1.2fr/1fr, 40px gap, 28px names, 16px copy, 32px box). */

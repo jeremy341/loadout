@@ -1,6 +1,6 @@
 # Cursor packs (inbox)
 
-Candidate art for the custom cursor ([Plan 19](../../../plans/19-credibility-prizes-economy-cursor.md), workstream A). Nothing here is served by the website. Before a file is used, copy or redraw it to its final path under `apps/landing/public/loadout/`, record it in [`docs/source-audit/ATTRIBUTION.md`](../../../docs/source-audit/ATTRIBUTION.md) and [`docs/design/asset-catalog.md`](../../../docs/design/asset-catalog.md), and remove it from here.
+Candidate art for the custom cursor ([Plan 19](../../../plans/19-credibility-prizes-economy-cursor.md), workstream A). Nothing here is served by the website; the two tiles in use are copied to `assets/editable/cursors/source/`. Before a file is used, copy or redraw it to its final path under `apps/landing/public/loadout/`, record it in [`docs/source-audit/ATTRIBUTION.md`](../../../docs/source-audit/ATTRIBUTION.md) and [`docs/design/asset-catalog.md`](../../../docs/design/asset-catalog.md), and remove it from here.
 
 All packs arrived from the owner's downloads on 2026-10-14. Licence status means what the files themselves prove: **file** means the archive contains a licence text, **listing** means only the author's itch.io page said so and the archive has no licence file. Treat **listing** as unverified until the owner re-checks the page.
 
@@ -15,6 +15,6 @@ All packs arrived from the owner's downloads on 2026-10-14. Licence status means
 
 The owner supplied it without a note. Its layers (`cursor_loading`, `Hourglass`, `dark_base`, `light_base`, light and dark additions) match Gabl's busy and hourglass cursor, so it is probably Gabl's editable source. The owner should confirm where it came from before anything is built on it.
 
-## How these packs will be used
+## How these packs were used
 
-The main cursor is a pickaxe drawn in LOADOUT's own two-colour pixel style, not a stock cursor. The packs serve as references for the small states (busy, help, not allowed) and as a source for those states if drawing them is not worthwhile. Kenney's pack is the cleanest to recolour: it is white with a black outline, so it maps directly onto LOADOUT's dark and yellow. See Plan 19, workstream A.
+The homepage cursor uses Kenney's classic arrow (tile 0168) and index-finger hand (tile 0157), recoloured to LOADOUT's ink outline and theme fill. Those two tiles, the licence text and the generator are in `assets/editable/cursors/`. The other packs were candidates and stay here: Gabl's is a complete, good set (but asks that its art not be used to feed AI models), Megabyte's has many fun pointers (swords, a chunky arrow) but its licence is only confirmed by its listing, and KabGames' 8 by 8 set is only silhouettes. See `.ulpi/design/custom-cursor.md`.

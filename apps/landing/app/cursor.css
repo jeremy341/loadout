@@ -1,0 +1,23 @@
+/* The homepage cursor is a pixel arrow, like Pixl's, in LOADOUT's colours (.ulpi/design/custom-cursor.md): Kenney's classic
+   arrow and index-finger hand (CC0) recoloured to an ink outline and the theme's fill, blue in the dark theme like its icons
+   and yellow in the light theme. Links, buttons and labels get the hand. Fine pointers only: a touch screen has no cursor.
+   The docs and the 404 page keep the system arrow. The 32px image is the fallback; a screen with a pixel ratio of 2 gets
+   the 64px one. Hotspots: the arrow's tip is at 3 1 and the hand's fingertip at 15 3. */
+@media (pointer: fine) {
+  .home {
+    cursor: url("/loadout/cursors/arrow-dark.png") 3 1, auto;
+    cursor: image-set(url("/loadout/cursors/arrow-dark.png") 1x, url("/loadout/cursors/arrow-dark@2x.png") 2x) 3 1, auto;
+  }
+  .home:has(#theme:checked) {
+    cursor: url("/loadout/cursors/arrow-light.png") 3 1, auto;
+    cursor: image-set(url("/loadout/cursors/arrow-light.png") 1x, url("/loadout/cursors/arrow-light@2x.png") 2x) 3 1, auto;
+  }
+  .home :is(a[href], button, label, summary, [role="button"]) {
+    cursor: url("/loadout/cursors/hand-dark.png") 15 3, pointer;
+    cursor: image-set(url("/loadout/cursors/hand-dark.png") 1x, url("/loadout/cursors/hand-dark@2x.png") 2x) 15 3, pointer;
+  }
+  .home:has(#theme:checked) :is(a[href], button, label, summary, [role="button"]) {
+    cursor: url("/loadout/cursors/hand-light.png") 15 3, pointer;
+    cursor: image-set(url("/loadout/cursors/hand-light.png") 1x, url("/loadout/cursors/hand-light@2x.png") 2x) 15 3, pointer;
+  }
+}

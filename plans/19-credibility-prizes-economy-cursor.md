@@ -14,7 +14,7 @@ Compared with Pixl, Stardance and Stasis, LOADOUT explains its mechanism (Ore, T
 | Decision | Detail |
 |---|---|
 | Prizes stay a carousel | The belt from PR #86 stays: hover to pause, no pause button, still row with reduced motion. The earlier line "no automatic carousel" in the owner's draft is dropped. |
-| Real prize photos from Pixl | The owner has permission to use Pixl's product photos. The written permission is not in the repository yet; see section 9. |
+| Real prize photos from Pixl | The Pixl owner gave the LOADOUT owner full permission in Slack on 2026-10-14 and said everything in Pixl is under MIT. It is recorded in `ATTRIBUTION.md`; see section 9. |
 | Label | The collection is labelled "Proposed prizes" once. It stays honest: none are orderable. |
 | Cursor | Custom cursor, built from a pickaxe drawn in LOADOUT's own style, with the downloaded packs as references. Workstream A. |
 | Economy | The assistant drafts proposals with worked examples for the owner to edit. Nothing is published as decided until the owner approves it. |
@@ -33,7 +33,7 @@ Compared with Pixl, Stardance and Stasis, LOADOUT explains its mechanism (Ore, T
 | F | Economy proposals and Plan 02 | Owner decisions (section 7) | One PR for the proposal, one for each settled change |
 | G | Consistency pass | A to F | One PR |
 
-Order: **A and D first** (independent, visible), **C and E next**, **B when the permission note and prize list exist**, **F as soon as the owner starts answering**, **G last**. Workstreams stay in separate PRs so each can be checked and shipped on its own through the lanes.
+Order: **A and D first** (independent, visible), **C and E next**, **B when the prize list is approved**, **F as soon as the owner starts answering**, **G last**. Workstreams stay in separate PRs so each can be checked and shipped on its own through the lanes.
 
 ## 4. Workstream A: Custom cursor
 
@@ -61,7 +61,7 @@ Order: **A and D first** (independent, visible), **C and E next**, **B when the 
 - Replace the eight icon cards on the belt with product photos and short names, keeping LOADOUT's cards, colours, typography and borders.
 - The carousel stays: the same belt, the same hover pause, the same reduced-motion row. On a phone it keeps working as a belt; the horizontal-scroll row is only the reduced-motion form.
 - The list is chosen from items LOADOUT might really offer: technical equipment first (boards, tools, 3D printing, storage), not novelty items. The owner approves the list. Each card has a short name and one useful line. Prices are added only when the owner sets them (workstream F).
-- Photos: download from Pixl only under the permission in section 9, resize and convert to WebP (about 600 px on the long side), serve from `apps/landing/public/loadout/prizes/`, give each a real `alt`, and record the source in `ATTRIBUTION.md`.
+- Photos: copy from Pixl under the permission in section 9, resize and convert to WebP (about 600 px on the long side), serve from `apps/landing/public/loadout/prizes/`, give each a real `alt`, and record the source in `ATTRIBUTION.md`.
 - Label the collection "Proposed prizes" once, and keep "None are available to order yet".
 
 **Acceptance.** Every card has a photo, a name and alt text; the belt still loops without a jump; the photos total under 1.5 MB; Lighthouse and axe stay clean; and the e2e suite covers the new cards.
@@ -118,11 +118,11 @@ These come from the earlier audit of the site. The assistant will not invent the
 5. Dates, or an honest "decided / not decided" list.
 6. Two or three sentences about who made LOADOUT and why, in the owner's words, and a photo if the owner is comfortable.
 7. A voice reference for "like Macondo".
-8. Where Pixl's permission is recorded (section 9).
+8. The Pixl owner's name and the Slack message link, to complete the permission record (section 9).
 
 ## 9. Records and licensing
 
-- **Pixl photos.** The repository's reference notes say Pixl's code is MIT and make no statement about its images. The owner has permission, but it is not recorded. Before any photo is committed to this public repository, add to `docs/source-audit/ATTRIBUTION.md`: who gave permission, when, where it is written down, and any conditions (credit, no resale, removal on request).
+- **Pixl photos.** The Pixl owner gave permission in Slack on 2026-10-14 and said everything is under MIT. `docs/source-audit/ATTRIBUTION.md` records it. The LOADOUT owner adds the Pixl owner's name and the message link there. Every photo that is added is listed in the same file with its Pixl path, and Pixl's MIT notice stays in `LICENSE`.
 - **Cursor packs.** Recorded in [`assets/inbox/cursors/README.md`](../assets/inbox/cursors/README.md). Kenney and Gabl have licence files; Megabyte and KabGames are confirmed only by their listings.
 - **Stardance, Stasis, ysws-template.** Still reference only; no text, code or images are copied from them.
 

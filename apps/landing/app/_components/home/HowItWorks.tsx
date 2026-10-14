@@ -14,13 +14,13 @@ const STEPS: Step[] = [
 // What an accepted review adds, side by side. The Physical Loadout is not one of them:
 // it is what spending Ore buys, so it belongs to the upgrade step below.
 const OUTCOMES: Step[] = [
-  { icon: "ore", nudge: true, title: "Ore to spend", text: "Your reward-shop balance, usable across all tracks." },
-  { icon: "xp-star", title: "Track XP to keep", text: "XP cannot be spent. It raises a separate level in each track, which can lower prices or unlock gear." },
+  { icon: "ore", nudge: true, title: "Ore to spend", text: "Spend on prizes across all tracks." },
+  { icon: "xp-star", title: "Track XP to keep", text: "Lifetime progress in the tracks your work uses." },
   { icon: "document", title: "Digital Loadout", text: "Each accepted project joins your portfolio." },
 ];
 
-const UPGRADE: Step = { label: "STEP 05", icon: "equipment-box", title: "Choose your next upgrade", text: "Use Ore for gear. Your level in a related track can lower its price or unlock some items. Gear you buy becomes your Physical Loadout." };
-const UPGRADE_LINKS = [["#progression", "How levels help"], ["#requisitions", "How Requisitions save"], ["#eras", "Community Eras"]] as const;
+const UPGRADE: Step = { label: "STEP 05", icon: "equipment-box", title: "Choose your next upgrade", text: "Spend Ore on prizes for your next build. They become your Physical Loadout." };
+const UPGRADE_LINKS = [["#progression", "How levels help"], ["#requisitions", "How Requisitions save"], ["/docs/prizes", "Prize guide"]] as const;
 const AGAIN: Step = { label: "STEP 06", icon: "wrench", title: "Build again", text: "Put new skills and equipment to work on your next project." };
 
 function StepCard({ step, children }: { step: Step; children?: ReactNode }) {

@@ -1,6 +1,5 @@
 import { siteConfig } from "./site-config";
 import { ThemeSwitch } from "./_components/ThemeSwitch";
-import { SheetRuler } from "./_components/SheetRuler";
 import { NoiseGrain } from "./_components/NoiseGrain";
 import { DocsTab } from "./_components/home/DocsTab";
 import { ICON_SPRITE } from "./_components/home/art";
@@ -30,7 +29,6 @@ export default function Home() {
       <ScrambleHeadings selector=".home .h1" duration={1800} />
       <DepthGlow />
       <div style={{ display: "contents" }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICON_SPRITE }} />
-      <SheetRuler />
       <NoiseGrain />
       <div className="depth-dark" aria-hidden="true" />
       <div className="in">

@@ -13,6 +13,7 @@
 | YSWS ecosystem research | [08 YSWS ecosystem context](08-ysws-ecosystem-context.md) | Dated reference research; LOADOUT plans override generic patterns. |
 | Community Eras | [11 Eras and community progression](11-eras-and-community-progression.md) | Shared community progression; separate from personal XP and Ore. |
 | LOADOUT IRL concept | [15 LOADOUT IRL Ruhr](15-loadout-irl-ruhr.md) | Future concept only; no event, venue or dates are confirmed. |
+| Credibility, prizes, economy and cursor | [19 Credibility, prizes, economy and cursor](19-credibility-prizes-economy-cursor.md) | Work sequence and decisions across Plans 02, 06, 11 and 15; those plans stay the owners of their topics. |
 | Homepage visual-clarity proposal | [17 Homepage visual clarity](17-homepage-visual-clarity.md) | Proposal, not authorization to change the homepage. |
 | Locked visual system | [Design system](../docs/design/system/design-system.md) | Visual authority; design briefs do not override later owner decisions. |
 | Contribution and release workflow | [Contributor workflow](../docs/development/WORKFLOW.md) | Repository process; it is not participant-facing program content. |
@@ -33,6 +34,7 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 - `11-eras-and-community-progression.md` — Era policy.
 - `15-loadout-irl-ruhr.md` — future IRL concept.
 - `17-homepage-visual-clarity.md` — unresolved visual proposal.
+- `19-credibility-prizes-economy-cursor.md` — approved work sequence for credibility, prize photos, economy decisions and the custom cursor.
 - `master-plan-history.md` — short history of the retired master plan and completed proposals.
 
 ## Future proposals

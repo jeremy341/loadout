@@ -1,0 +1,28 @@
+/* The planned prizes ride a slow belt (.ulpi/design/prize-belt.md). Two copies of one list sit in a track that moves by
+   exactly half its width, so the loop never jumps: each copy carries its own trailing gap, which makes half the track
+   exactly one copy. The motion is one transform animation, no script. It pauses under the pointer and through a real
+   checkbox with a label (the pause control WCAG 2.2.2 asks for). With reduced motion the belt is a row to scroll by hand. */
+.home .pb { --pb-gap: 16px; margin-top: 28px; }
+
+.home .pb-pause { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.home .pb-toggle { display: inline-block; margin-bottom: 12px; padding: 6px 12px; border: 1px solid var(--fg); background: var(--bg); color: var(--fg); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+.home .pb-pause:focus-visible + .pb-toggle { outline: 2px solid var(--ac); outline-offset: 2px; }
+.home .pb-off, .home .pb-pause:checked + .pb-toggle .pb-on { display: none; }
+.home .pb-pause:checked + .pb-toggle .pb-off { display: inline; }
+
+.home .pb-view { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.home .pb-track { display: flex; width: max-content; animation: pb-scroll 70s linear infinite; will-change: transform; }
+.home .pb-half { display: flex; gap: var(--pb-gap); margin: 0; padding: 0 var(--pb-gap) 0 0; list-style: none; }
+.home .pb-half > li { display: flex; flex: 0 0 230px; }
+.home .pb-card { width: 100%; border: 1px solid var(--fg); }
+
+.home .pb-view:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
+.home .pb-view:hover .pb-track, .home .pb-pause:checked ~ .pb-view .pb-track { animation-play-state: paused; }
+
+@keyframes pb-scroll { to { transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .home .pb-track { animation: none; will-change: auto; }
+  .home .pb-view { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .home .pb-half[aria-hidden="true"], .home .pb-toggle, .home .pb-pause { display: none; }
+}

@@ -1,7 +1,5 @@
-
-
-// Planned prizes section ported from the LOADOUT redesign reference.
-// Icon and name of each planned prize; the cards carry no other text.
+// Planned prizes section: the planned categories ride a slow belt (.ulpi/design/prize-belt.md).
+// Icon and name of each planned prize; the cards carry no other text until real items and prices exist.
 const PRIZES = [
   ["laptop", "Developer hardware"],
   ["board", "Embedded boards"],
@@ -12,6 +10,27 @@ const PRIZES = [
   ["domain", "Domains"],
   ["equipment-box", "Custom equipment"],
 ] as const;
+
+function PrizeList({ hidden = false }: { hidden?: boolean }) {
+  return (
+    <ul className="pb-half" aria-hidden={hidden || undefined}>
+      {PRIZES.map(([icon, name]) => (
+        <li key={name}>
+          <div className="card sm pb-card">
+            <div className="ct">
+              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
+                <use href={"#i-" + icon}></use>
+              </svg>
+            </div>
+            <div className="cn">
+              <span style={{ fontSize: "22px" }}>{name}</span>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function PlannedPrizes() {
   return (
@@ -34,20 +53,18 @@ export function PlannedPrizes() {
         <p className="lead">
           These are plans. None are available to order yet.
         </p>
-        <div className="row g2">
-          {PRIZES.map(([icon, name]) => (
-            <div className="card sm" key={name}>
-              <div className="ct">
-                <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
-                  <use href={"#i-" + icon}></use>
-                </svg>
-              </div>
-              <div className="cn">
-                <span style={{ fontSize: "22px" }}>{name}</span>
-              </div>
-              <div className="m dsc"></div>
+        <div className="pb">
+          <input type="checkbox" id="pb-pause" className="pb-pause" />
+          <label htmlFor="pb-pause" className="pb-toggle">
+            <span className="pb-on">Pause</span>
+            <span className="pb-off">Play</span>
+          </label>
+          <div className="pb-view" role="region" aria-label="Planned prize categories" tabIndex={0}>
+            <div className="pb-track">
+              <PrizeList />
+              <PrizeList hidden />
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </>

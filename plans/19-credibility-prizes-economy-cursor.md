@@ -54,7 +54,7 @@ Order: **A and D first** (independent, visible), **C and E next**, **B when the 
 
 ## 5. Workstream B: Prize carousel with real photos
 
-- Replace the eight icon cards on the belt with product photos and short names, keeping LOADOUT's cards, colours, typography and borders.
+- Built: see `.ulpi/design/prize-photos.md`. The eight icon cards became product photo cards, keeping LOADOUT's cards, colours, typography and borders. Each category shows one example product on a white plate, with the category and the example name as real text; the photo is decorative, so its `alt` is empty.
 - The carousel stays: the same belt, the same hover pause, the same reduced-motion row. On a phone it keeps working as a belt; the horizontal-scroll row is only the reduced-motion form.
 - The list is chosen from items LOADOUT might really offer: technical equipment first (boards, tools, 3D printing, storage), not novelty items. The owner approves the list. Each card has a short name and one useful line. Prices are added only when the owner sets them (workstream F).
 - Photos: copy from Pixl under the permission in section 9, resize and convert to WebP (about 600 px on the long side), serve from `apps/landing/public/loadout/prizes/`, give each a real `alt`, and record the source in `ATTRIBUTION.md`.

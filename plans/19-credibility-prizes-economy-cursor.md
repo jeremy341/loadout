@@ -16,7 +16,7 @@ Compared with Pixl, Stardance and Stasis, LOADOUT explains its mechanism (Ore, T
 | Prizes stay a carousel | The belt from PR #86 stays: hover to pause, no pause button, still row with reduced motion. The earlier line "no automatic carousel" in the owner's draft is dropped. |
 | Real prize photos from Pixl | The Pixl owner gave the LOADOUT owner full permission in Slack on 2026-10-14 and said everything in Pixl is under MIT. It is recorded in `ATTRIBUTION.md`; see section 9. |
 | Label | The collection is labelled "Proposed prizes" once. It stays honest: none are orderable. |
-| Cursor | Custom cursor, built from a pickaxe drawn in LOADOUT's own style, with the downloaded packs as references. Workstream A. |
+| Cursor | A pixel arrow, with a pointing hand on links, built from Kenney's CC0 pack in LOADOUT's colours. The first try, a pickaxe, was dropped because it no longer looked like a mouse. Workstream A. |
 | Economy | The assistant drafts proposals with worked examples for the owner to edit. Nothing is published as decided until the owner approves it. |
 | Order | Friendlier writing, Build and ship guidance, then Eras and IRL, before the economy. |
 | Left out | The owner's item 5 (one connected rewards example inside "How rewards work") is not part of this plan. |
@@ -37,13 +37,9 @@ Order: **A and D first** (independent, visible), **C and E next**, **B when the 
 
 ## 4. Workstream A: Custom cursor
 
-**Design read.** A landing page for teenage builders in the locked industrial and signage language. The cursor should feel like a miner's tool and still read as a mouse pointer. The earlier approved direction stands: a pickaxe by default, the system hand on links and the system text cursor on text, and an optional miner's lamp near the faint depth numerals.
+**Design read.** A landing page for teenage builders in the locked industrial and signage language. The cursor must still look like a mouse pointer, be pixelated, and resemble Pixl's, fitted to LOADOUT. The system text cursor is not kept over body text, because the page is mostly text. An optional miner's lamp that follows the pointer is a separate decision (below).
 
-**Art.**
-- Draw the main pointer in the project's two-colour 32x32 pixel style (dark and yellow, recoloured per theme like the existing sprites). The 404 page already has a pickaxe to use as a starting point.
-- Hotspot at the pick's tip. Add a one-pixel outline so it stays visible on dark and light backgrounds.
-- Kenney's pack ([`assets/inbox/cursors/`](../assets/inbox/cursors/README.md)) is the main reference: it is CC0 and includes tool, hand and busy shapes, drawn in white with a black outline, which maps straight onto the palette. Gabl's pack is the second reference. Megabyte's and KabGames' licences are only confirmed by their listings.
-- Small states (hand, text, busy, not allowed): keep the system cursors for hand and text, and only draw a busy state if a loading state exists to need it.
+**Art.** The first attempt, a pickaxe drawn in house, was rejected: it no longer looked like a mouse. The owner chose a pixel arrow similar to Pixl's, fitted to LOADOUT. Built from Kenney's Cursor Pixel Pack (CC0): the classic arrow (tile 0168) and the index-finger hand (tile 0157), recoloured to an ink outline and the theme's fill (blue in the dark theme, yellow in the light theme). The hand shows over links, buttons and labels. Other packs in [`assets/inbox/cursors/`](../assets/inbox/cursors/README.md) were candidates; the choice and the reasons are in `.ulpi/design/custom-cursor.md`.
 
 **Build.**
 - CSS `cursor: url(...) x y, auto` on the homepage, with the system cursor as the fallback, for fine pointers only (`@media (pointer: fine)`).
@@ -52,9 +48,9 @@ Order: **A and D first** (independent, visible), **C and E next**, **B when the 
 
 **Accessibility.** The cursor never replaces focus indicators, keeps a clear outline, and is not used to carry meaning. Touch devices and `pointer: coarse` keep the default.
 
-**Records.** Add the chosen sources to `docs/source-audit/ATTRIBUTION.md` and `docs/design/asset-catalog.md`; move only approved files out of the inbox. Gabl asks that its art not be used to feed AI models. Looking at it for reference and recolouring it for a cursor is not that, and the condition is recorded so it is not forgotten.
+**Records.** The chosen sources are recorded in `docs/source-audit/ATTRIBUTION.md` and `docs/design/asset-catalog.md`; the editable sources and the generator are in `assets/editable/cursors/`. Of the four downloaded packs, Kenney's was used because it is CC0 by a licence file. Gabl asks that its art not be used to feed AI models, and Megabyte's and KabGames' licences are only confirmed by their listings; they stay in the inbox.
 
-**Acceptance.** The pickaxe shows over the homepage on a fine pointer in both themes, the system cursor shows on links, text fields and the docs, nothing changes on touch or with a missing image, an e2e test covers the CSS and the fallback, and the whole suite passes.
+**Acceptance.** The arrow shows over the homepage on a fine pointer in both themes, the hand shows on links and buttons, the system cursor shows on the docs and the 404 page, nothing changes on touch or with a missing image, an e2e test covers the CSS and the fallback, and the whole suite passes.
 
 ## 5. Workstream B: Prize carousel with real photos
 

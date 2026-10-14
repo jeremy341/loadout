@@ -27,27 +27,27 @@ Direction: a mine conveyor. The cards are the same riveted cards as the rest of 
 |---|---|
 | Default | The belt moves left slowly. |
 | Pointer over the belt | It pauses. |
-| Pause button | A real checkbox with a label. It pauses and resumes the belt for keyboard, touch and screen reader users. The label reads "Pause" while moving and "Play" while paused. WCAG 2.2.2 asks for this on anything that moves for more than five seconds. |
-| Reduced motion | No animation. The belt is a plain row the visitor scrolls by hand, the copy is hidden and the button is not shown. |
+| Belt has keyboard focus | It pauses too, so a visitor on a keyboard can stop it and read. The belt is a labelled region that takes focus. There is no pause button: the owner chose Pixl's hover-to-pause, which keeps the section clean. |
+| Reduced motion | No animation. The belt is a plain row the visitor scrolls by hand, the copy is hidden. |
 | Phone | The same belt with the same card width. |
 | Dark and light | The cards use the page's own tokens. |
 
 ## Accessibility
 
 - The visible list is a real `<ul>` with eight items; the moving copy is hidden from assistive technology.
-- The pause control is a native checkbox with a visible label and a visible focus ring.
+- Pausing is by pointer hover or by keyboard focus; the focused belt has a visible focus ring. There is no separate pause button (owner decision).
 - The belt is a labelled region that takes keyboard focus, so a visitor can scroll it with the arrow keys when it is a still row (reduced motion).
 - The section's sentence "These are plans. None are available to order yet." stays above the belt.
 
 ## Skills
 
-Loaded earlier in this conversation for UI work: `frontend-design-ui-ux` (this brief), `frontend-design`, `design-taste-frontend`, `emilkowal-animations`, `svg-design`, `pixel-art-sprites` and `pixel-art-animator`. Motion rules applied: animate only `transform`, pause on hover and on request, honour the user's motion setting, and give the motion a purpose (the conveyor). There is no new sprite work: the eight sprites already exist.
+Loaded earlier in this conversation for UI work: `frontend-design-ui-ux` (this brief), `frontend-design`, `design-taste-frontend`, `emilkowal-animations`, `svg-design`, `pixel-art-sprites` and `pixel-art-animator`. Motion rules applied: animate only `transform`, pause on hover and on focus, honour the user's motion setting, and give the motion a purpose (the conveyor). There is no new sprite work: the eight sprites already exist.
 
 ## Acceptance
 
 1. The section shows the eight planned prize cards once for assistive technology and twice visually.
 2. The track moves by exactly one copy per lap (half the track width) and the belt animates in the default state.
-3. Hovering the belt, or checking the pause control, pauses it.
-4. With reduced motion there is no animation, no copy and no pause button, and the row scrolls by hand.
+3. Hovering the belt, or focusing it with the keyboard, pauses it. There is no pause button.
+4. With reduced motion there is no animation, no copy, and the row scrolls by hand.
 5. "None are available to order yet" is still on the section.
 6. The whole browser suite, typecheck, lint and unit tests pass.

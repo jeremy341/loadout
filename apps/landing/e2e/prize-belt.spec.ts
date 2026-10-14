@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 // The planned prizes ride a slow belt (.ulpi/design/prize-belt.md): two copies of one list in a track that moves by half
-// its width, hidden from assistive technology in the second copy, paused by hover or a real checkbox, and still with
+// its width, hidden from assistive technology in the second copy, paused by hover or keyboard focus, and still with
 // reduced motion.
 const animationState = (page: import("@playwright/test").Page) =>
   page.locator(".pb-track").evaluate((track) => {
@@ -28,31 +28,28 @@ test("the prizes list once for assistive technology and the belt moves by exactl
   expect(await animationState(page)).toEqual({ name: "pb-scroll", play: "running" });
 });
 
-test("hovering the belt or using the pause control stops it", async ({ page }) => {
+test("hovering the belt or focusing it with the keyboard stops it", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
+  await expect(page.locator("label.pb-toggle, .pb-pause")).toHaveCount(0);
   await page.locator(".pb").scrollIntoViewIfNeeded();
   await page.locator(".pb-view").hover();
   await expect.poll(async () => (await animationState(page)).play).toBe("paused");
   await page.mouse.move(0, 0);
   await expect.poll(async () => (await animationState(page)).play).toBe("running");
-  const toggle = page.locator("label.pb-toggle");
-  await expect(toggle).toHaveText(/Pause/);
-  await toggle.click();
-  await page.mouse.move(0, 0);
+  await page.locator(".pb-view").focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".pb-view")).toBeFocused();
   await expect.poll(async () => (await animationState(page)).play).toBe("paused");
-  await expect(toggle).toContainText("Play");
-  await page.locator("label.pb-toggle").click();
-  await expect.poll(async () => (await animationState(page)).play).toBe("running");
 });
 
-test("with reduced motion the belt is a still row with no copy and no pause button", async ({ page }) => {
+test("with reduced motion the belt is a still row with no copy", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   expect((await animationState(page)).name).toBe("none");
   await expect(page.locator(".pb-half").nth(1)).toBeHidden();
-  await expect(page.locator("label.pb-toggle")).toBeHidden();
   await expect(page.locator(".pb-view")).toHaveCSS("overflow-x", "auto");
 });

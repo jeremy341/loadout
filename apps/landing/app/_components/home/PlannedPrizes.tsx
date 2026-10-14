@@ -54,11 +54,6 @@ export function PlannedPrizes() {
           These are plans. None are available to order yet.
         </p>
         <div className="pb">
-          <input type="checkbox" id="pb-pause" className="pb-pause" />
-          <label htmlFor="pb-pause" className="pb-toggle">
-            <span className="pb-on">Pause</span>
-            <span className="pb-off">Play</span>
-          </label>
           <div className="pb-view" role="region" aria-label="Planned prize categories" tabIndex={0}>
             <div className="pb-track">
               <PrizeList />

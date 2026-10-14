@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ART } from "./art";
 import { AsciiField } from "./AsciiField";
 
@@ -26,7 +27,7 @@ export function Rewards() {
               Ore
             </div>
             <div className="m dsc">
-              Global currency for most prizes.
+              Pay the final price in Ore.
             </div>
           </div>
           <div className="card t">
@@ -42,7 +43,7 @@ export function Rewards() {
               Track levels
             </div>
             <div className="m dsc">
-              A related level lowers prices or unlocks some Mastery items.
+              Apply the discount earned in that track.
             </div>
           </div>
           <div className="card t" id="requisitions">
@@ -58,13 +59,14 @@ export function Rewards() {
               Field Requisition
             </div>
             <div className="m dsc">
-              One use: an extra track discount on an eligible prize.
+              Apply more of your track discount to one eligible prize.
             </div>
           </div>
         </div>
-        <p className="note">
-          Requisitions do not add Ore or remove level requirements. On a Custom Order, one applies only when the approved quote marks it eligible.
-        </p>
+        <div className="lnks">
+          <Link href="/docs/pricing">Pricing guide →</Link>
+          <Link href="/docs/requisitions">Field Requisitions →</Link>
+        </div>
       </div>
     </>
   );

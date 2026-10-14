@@ -6,6 +6,8 @@
 
 | Brief | Status and owner |
 |---|---|
+| [`homepage-copy-depth-navigation.md`](homepage-copy-depth-navigation.md) | Owner-approved local copy reduction and interactive depth ruler. |
+| [`ascii-float-preview.md`](ascii-float-preview.md) | Owner-approved local ASCII floating motion with independent timing and mixed directions. |
 | [`homepage-visual-clarity.md`](homepage-visual-clarity.md) | Open proposal, linked to Plan 17. It does not authorize homepage changes until the owner approves that scope. |
 | [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md) | Product proposal only. Plans 01/02 must settle any bonus before it is implemented or published. |
 

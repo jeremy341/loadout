@@ -1,35 +1,41 @@
 ---
 title: "LOADOUT IRL"
-description: "A future build-weekend concept, with no confirmed event or registration."
+description: "The planned three-day build weekend in Germany's Ruhr region, what a day could look like, and how it connects to online LOADOUT."
 group: "COMMUNITY"
 order: 160
 status: draft
 ---
 
-LOADOUT IRL is a future three-day build-weekend concept in Germany's Ruhr region. It is an idea for building together, not a scheduled event.
+LOADOUT IRL is a planned three-day build weekend in Germany's Ruhr area. The idea is simple: spend a weekend building real projects next to other builders.
 
-## The proposed weekend {#weekend}
+> **Not confirmed yet.** The venue, dates, funding and registration are all still open. No registration is open through this site, so please don't book travel or buy equipment because of this page.
 
-| Day | Proposed focus |
+## The weekend {#weekend}
+
+It runs Friday to Sunday. It is a build weekend with proper rest, not a no-sleep marathon.
+
+| Day | What it could look like |
 | --- | --- |
-| Friday | Meet other builders, choose a technical project, and get started. |
-| Saturday | Build together, with space for workshops and rest. |
-| Sunday | Document, demonstrate, and share what you made. |
+| Friday | Check in, hear how the weekend works, look at the tracks, find a team or go solo, and start building. |
+| Saturday | The main build day. Workshops, mentors, checkpoints, optional side challenges, time to rest. |
+| Sunday | Finish, write up and measure your work, show it on a demo floor, and close the weekend. Optional awards are still being considered. |
 
-This outline explains the concept. It is not an itinerary for an announced event.
+This is the outline we're working from. Times, quiet hours and overnight arrangements aren't decided.
 
-## Part of the same LOADOUT {#online}
+## Same LOADOUT, on a weekend {#online}
 
-Event projects would use the same tracks, evidence expectations, and ordinary review as online projects. Attendance would be optional and would not create a separate progression advantage.
+Nothing about the event is a separate game.
 
-Projects would contribute to the same shared Community Era rather than an event-only progress system.
+- **Same tracks:** Tools, Systems, Compute and Hardware, plus Research Mode as a modifier.
+- **Same review:** event projects follow the normal rules for fit, evidence, authorship and quality. [Build & ship](/docs/shipping) describes what to bring.
+- **Same rewards:** Ore and Track XP work as they do online. Being there gives you no extra Ore, XP or level.
+- **Same Era:** approved event projects add Era Points to the one shared total that online builders add to. There is no event-only meter, and a good weekend does not force the next Era to start. [Community Eras](/docs/eras) explains how.
+- **Optional:** you will never need to go to an event to progress online.
 
-## A future concept {#status}
+## What's still open {#status}
 
-> **Unconfirmed.** Dates, venue, funding, and registration are not confirmed. No event registration is open through this site.
-
-The regular RSVP records program interest; it does not reserve an event place. Do not make travel or equipment plans on the basis of this concept.
+Where it will be, when it will happen, how it will be funded, and how you'd register. We'll publish those details before anyone is asked to sign up. Until then, the regular RSVP only records interest in the program and does not reserve a place.
 
 ## What must happen first
 
-The team must confirm feasibility and publish event details before inviting registration. Until then, [help and feedback](/docs/help) is the place to ask about the idea, and [current status](/docs/eligibility) explains the wider program draft.
+The team has to confirm that the event is realistic, safe and affordable before it invites anyone. Questions and ideas are welcome in [help and feedback](/docs/help). [Current status](/docs/eligibility) explains the wider program draft.

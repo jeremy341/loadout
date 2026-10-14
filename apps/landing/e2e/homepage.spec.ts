@@ -154,20 +154,6 @@ test("desktop and mobile have no serious or critical automated accessibility fin
   }
 });
 
-test("the top ruler spans the page above the nav bar and is numbered in pixels", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-  const tick = page.locator(".home > .tick");
-  await expect(tick).toHaveCount(1);
-  const ruler = (await tick.boundingBox())!;
-  const nav = (await page.locator(".nav").boundingBox())!;
-  expect(ruler.y).toBe(0);
-  expect(ruler.width).toBe(1440);
-  expect(ruler.y + ruler.height).toBeLessThanOrEqual(nav.y);
-  await expect(tick.locator("span").nth(2)).toHaveText("320");
-  expect((await tick.locator("span").nth(2).boundingBox())!.x).toBe(320);
-});
-
 test("margin ASCII is faint but visible, decorative and shown from 640px up", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
@@ -532,29 +518,6 @@ test("buttons use main's style: bordered, rounded 2px, block shadow, capitals", 
   }
 });
 
-test("the left ruler is the depth of the page: beside each depth strip it shows the same number", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
-  await expect(page.locator(".home > .rl-side")).toHaveCount(1);
-  await expect(page.locator(".home > .rl-right")).toHaveCount(0);
-  await expect.poll(() => page.locator(".home > .rl-side .rl-major").count()).toBeGreaterThan(8);
-  const result = await page.evaluate(() => {
-    const centre = (element: Element) => { const box = element.getBoundingClientRect(); return box.top + box.height / 2 + window.scrollY; };
-    const strips = [...document.querySelectorAll(".home .pit")].map((pit) => ({ depth: Number(pit.querySelector("b")!.textContent!.replace(/[^0-9]/g, "")), y: centre(pit) }));
-    const marks = [...document.querySelectorAll(".home > .rl-side .rl-major")].map((mark) => ({ text: mark.textContent!, y: mark.getBoundingClientRect().top + window.scrollY }));
-    return { strips, marks };
-  });
-  expect(result.strips.length).toBeGreaterThan(8);
-  for (const strip of result.strips) {
-    const text = strip.depth === 0 ? "0" : "\u2212" + strip.depth;
-    const mark = result.marks.find((entry) => entry.text === text);
-    expect(mark, "ruler number " + text).toBeTruthy();
-    expect(Math.abs(mark!.y - strip.y)).toBeLessThanOrEqual(2);
-  }
-  expect(result.marks.some((entry) => entry.text === "\u2212500")).toBe(true);
-});
-
 test("the grain is a full-screen noise canvas that redraws and never takes input", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -576,10 +539,9 @@ test("the grain is a full-screen noise canvas that redraws and never takes input
   await expect.poll(async () => (await sample()).hash, { timeout: 3000 }).not.toBe(first.hash);
 });
 
-test("the docs have no rulers and use the Pixl layout: boxed sidebar, hard rules, block shadows", async ({ page }) => {
+test("the docs use the Pixl layout: boxed sidebar, hard rules, block shadows", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/docs/start");
-  await expect(page.locator(".docs .rl-top, .docs .rl-side")).toHaveCount(0);
   await expect(page.locator(".docs > canvas.grain")).toHaveCount(1);
   await expect(page.locator(".docs-nav")).toHaveCSS("border-right-width", "4px");
   await expect(page.locator(".doc h1")).toHaveCSS("font-size", "46px");

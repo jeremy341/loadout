@@ -101,6 +101,7 @@ Rules:
 - The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 3% of the text colour. Within 150px of the pointer they light to the glow colour: blue in dark mode at 60%, amber-red `#D9661F` in light mode at 85%, for the deepest marker. Deeper markers light more strongly: `DepthGlow` sets `--depth-light` on each marker from its numeral, from 40% of that strength at the shallowest to 100% at the deepest. The glow runs only on devices with a fine pointer (`hover: hover` and `pointer: fine`); touch screens see the faint marker only. The rules are `DepthGlow` and the `.home .pit` rules in `home.css`.
 - The top ruler is in pixels: a tick every 32px and a number every 160px.
 - The left ruler is in metres: a tick every 10 m, a number every 50 m, and a heavier mark at each depth strip. Markers are pinned to those strips.
+- Homepage depth navigation uses the same metre stops as the ruler. On wide, tall screens it sits in the left gutter; on narrower or short screens it becomes a compact bottom-left section picker beside the Docs tab. The current stop has a visible accent marker and `aria-current="location"`. Links retain native section hashes; the compact list has bounded internal scrolling, keyboard focus and Escape behavior. Absent sections are omitted without renumbering later depths. These controls describe page position, not live program progress (brief: `.ulpi/design/homepage-copy-depth-navigation.md`).
 - The homepage gets darker the deeper you scroll (`app/depth-dark.css`, brief `.ulpi/design/depth-darkness.md`). One fixed, `aria-hidden` layer behind the content follows the scroll position through a CSS scroll-driven animation: nothing at the top, the full shade at the footer. In the dark theme the shade ends near the 404's black (`#0e1112`) with a darker rim; in the light theme the paper stays and only the rim deepens. It darkens the backdrop, never the text or the cards. A browser without scroll-driven animations shows the page as before. The 404, the cave-in page and the Docs do not use it.
 
 ## Grain and paper
@@ -140,7 +141,7 @@ Rules:
 ## ASCII art
 
 - Decorative ASCII fields (`AsciiField`) use JetBrains Mono. Each has a faint base layer and a brighter copy that is revealed around the pointer.
-- The art drifts slowly, over about 11 to 13 seconds per cycle, and stops under reduced motion.
+- The art floats through 36px of vertical travel. Each drawing has its own 8 to 10.7 second period per direction and a negative phase offset; initial directions are mixed so the drawings do not move in sync. Both layers move together, and the animation stops under reduced motion (brief: `.ulpi/design/ascii-float-preview.md`).
 - Fields are `aria-hidden`, do not take pointer input in sections, and are hidden on small screens.
 
 ## Motion

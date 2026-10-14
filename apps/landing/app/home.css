@@ -106,6 +106,8 @@ html:has(.home) { scroll-behavior:smooth }
 .home .br2 .fn { width:auto }
 .home .lnks { margin-top:6px }
 .home .lnks a { color:var(--ac);text-decoration:underline;margin-right:18px;font-size:13px;letter-spacing:.06em }
+.home #progression > .lnks, .home #field-pricing > .lnks { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 24px; text-align: center; }
+.home #progression > .lnks a, .home #field-pricing > .lnks a { margin-right: 0; font-size: 14px; line-height: 1.6; }
 .home .loop { margin-top:14px;font-size:12px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase }
 .home .lgr { display:grid;grid-template-columns:48px 1fr auto;gap:22px;align-items:center;border:1px solid var(--fg);margin-top:-1px;padding:20px 24px;background:var(--bg) }
 .home .lgr.lo { border-style:dashed;opacity:.82 }
@@ -249,10 +251,18 @@ html:has(.home) { scroll-behavior:smooth }
 }
 .home .ar span { pointer-events: none; transition: none; }
 .home .ar span:hover { color: inherit; }
-/* ASCII art drifts gently, a few pixels at a time; both layers share the container, so they move together. */
-@keyframes ar-drift { from { transform: translate3d(-4px, 4px, 0); } to { transform: translate3d(5px, -10px, 0); } }
-.home .ar { will-change: transform; animation: ar-drift 11s ease-in-out infinite alternate; }
-.home .ar-right { animation-duration: 13s; animation-delay: -4s; }
+/* ASCII art shares one drift; independent phases keep the drawings out of sync. */
+@keyframes ar-drift { from { transform: translate3d(-4px, 12px, 0); } to { transform: translate3d(5px, -24px, 0); } }
+.home .ar { will-change: transform; animation: ar-drift var(--ar-period, 8s) ease-in-out infinite alternate; animation-delay: var(--ar-phase, 0s); }
+.home .hero .ar-left { --ar-period: 8s; --ar-phase: -1.3s; }
+.home .hero .ar-right { --ar-period: 9.7s; --ar-phase: -5.2s; }
+.home #tracks .ar { --ar-period: 8.9s; --ar-phase: -3.7s; }
+.home #process .ar { --ar-period: 10.3s; --ar-phase: -7.1s; }
+.home #progression .ar { --ar-period: 9.4s; --ar-phase: -11.4s; }
+.home #field-pricing .ar { --ar-period: 8.4s; --ar-phase: -2.6s; }
+.home #eras .ar { --ar-period: 10.7s; --ar-phase: -9.8s; }
+.home #behind-loadout .ar { --ar-period: 9.1s; --ar-phase: -15.7s; }
+.home .hero .ar-right, .home #tracks .ar { animation-direction: alternate-reverse; }
 @media (prefers-reduced-motion: reduce) { .home .ar { animation: none; } }
 
 /* FAQ accordion: button questions, animated answers (pre-redesign behaviour). */

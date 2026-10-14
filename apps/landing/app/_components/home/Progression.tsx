@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ART } from "./art";
 import { AsciiField } from "./AsciiField";
 
@@ -30,10 +31,10 @@ export function Progression() {
           and levels
         </h2>
         <p className="lead">
-          Track XP cannot be spent; it raises a separate level in each lifetime track, up to LV.15. As your level rises, so does your discount on prizes from that track. Track XP and levels persist through competitive Seasons.
+          Each track has its own lifetime level. Higher levels unlock better prices on that track’s prizes.
         </p>
         <p className="note" style={{ margin: "0 0 34px" }}>
-          Reach a marked level to earn a one-use Field Requisition: an extra discount on an eligible prize from that track.
+          Marked levels award a one-use Field Requisition.
         </p>
         <div className="lad l5" role="group" aria-label="Field Requisition milestones">
           {MILESTONES.map((milestone) => (
@@ -47,6 +48,9 @@ export function Progression() {
               <span className="m dsc">{milestone.award}</span>
             </div>
           ))}
+        </div>
+        <div className="lnks">
+          <Link href="/docs/progress">XP &amp; levels guide →</Link>
         </div>
       </div>
     </>

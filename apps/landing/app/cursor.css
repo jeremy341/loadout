@@ -22,11 +22,11 @@
   }
 
   /* Pullable things (.ulpi/design/pull-tab.md): the open hand over the Docs tab, the fist while it is being pulled. */
-  .home a.docs-tab[href] {
+  .home a.docs-tab[href], .home button.cord-ring {
     cursor: url("/loadout/cursors/grab-dark.png") 17 17, grab;
     cursor: image-set(url("/loadout/cursors/grab-dark.png") 1x, url("/loadout/cursors/grab-dark@2x.png") 2x) 17 17, grab;
   }
-  .home:has(#theme:checked) a.docs-tab[href] {
+  .home:has(#theme:checked) a.docs-tab[href], .home:has(#theme:checked) button.cord-ring {
     cursor: url("/loadout/cursors/grab-light.png") 17 17, grab;
     cursor: image-set(url("/loadout/cursors/grab-light.png") 1x, url("/loadout/cursors/grab-light@2x.png") 2x) 17 17, grab;
   }

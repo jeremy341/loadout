@@ -1,0 +1,102 @@
+/* The pull cord and the hidden level it opens (.ulpi/design/pull-cord.md). The ring sits on the floor of the footer and is
+   pulled up like the Docs tab (the --pull and --waist variables, set by usePull): a band in the tab's colour fills the gap
+   down to the floor and thins as it stretches. A long pull opens the panel below once the ring has snapped back. */
+.home .cord {
+  position: relative;
+  height: 210px;
+  overflow: clip;
+  border-top: 1px dashed var(--mut);
+  background: repeating-linear-gradient(135deg, transparent 0 10px, var(--ln) 10px 11px);
+}
+.home .cord-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0 80px;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--mut);
+  opacity: .55;
+  pointer-events: none;
+}
+
+.home .cord-ring {
+  --pull: 0px;
+  --waist: 50%;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 64px;
+  height: 60px;
+  margin-left: -32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ac);
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transform: translateY(calc(var(--pull) * -1));
+}
+.home:has(#theme:checked) .cord-ring { color: #E3C26B; }
+.home .cord-ring svg { display: block; width: 100%; height: 100%; fill: currentColor; stroke: none; filter: drop-shadow(2px 0 0 var(--fg)) drop-shadow(-2px 0 0 var(--fg)) drop-shadow(0 2px 0 var(--fg)) drop-shadow(0 -2px 0 var(--fg)); }
+.home:has(#theme:checked) .cord-ring svg { filter: drop-shadow(2px 0 0 #1A1714) drop-shadow(-2px 0 0 #1A1714) drop-shadow(0 2px 0 #1A1714) drop-shadow(0 -2px 0 #1A1714); }
+.home .cord-ring:focus-visible { outline: 2px solid var(--fg); outline-offset: 6px; }
+
+/* The band, below the ring down to the floor: an ink outline plus a fill, each a taper from the ring's width to a narrow waist. */
+.home .cord-ring::before,
+.home .cord-ring::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  height: var(--pull);
+  pointer-events: none;
+}
+.home .cord-ring::before {
+  left: -3px;
+  width: calc(100% + 6px);
+  background: var(--fg);
+  clip-path: polygon(0 0, 100% 0, calc(50% + var(--waist) + 3px) 100%, calc(50% - var(--waist) - 3px) 100%);
+}
+.home .cord-ring::after {
+  left: 0;
+  width: 100%;
+  background: var(--ac);
+  clip-path: polygon(0 0, 100% 0, calc(50% + var(--waist)) 100%, calc(50% - var(--waist)) 100%);
+}
+.home:has(#theme:checked) .cord-ring::before { background: #1A1714; }
+.home:has(#theme:checked) .cord-ring::after { background: #E3C26B; }
+
+.home .cord-ring.is-springing { transition: transform 380ms cubic-bezier(.34, 1.56, .64, 1); }
+.home .cord-ring.is-springing::before,
+.home .cord-ring.is-springing::after { transition: height 380ms cubic-bezier(.23, 1, .32, 1); }
+
+/* The hidden level: the 404 page's near black and fonts, in both themes, because it is rock. */
+.home .sohle {
+  position: relative;
+  padding: 72px 24px 88px;
+  text-align: center;
+  color: #e9ebe7;
+  background: #0e1112;
+  border-top: 2px solid var(--fg);
+  animation: sohle-in 520ms cubic-bezier(.23, 1, .32, 1) both;
+}
+.home .sohle[hidden] { display: none; }
+.home .sohle-tag { margin: 0; font-family: var(--font-display), monospace; font-size: 21px; letter-spacing: .06em; line-height: 22px; color: #5E9EF4; }
+.home .sohle-title { margin: 18px 0 0; font-family: var(--font-display), monospace; font-weight: 400; font-size: clamp(48px, 9vw, 96px); line-height: 1; letter-spacing: .01em; }
+.home .sohle-title:focus { outline: none; }
+.home .sohle-text { max-width: 460px; margin: 18px auto 32px; font-size: 16px; line-height: 1.6; color: #a7aeab; }
+.home .sohle-btn { font-family: var(--font-display), monospace; font-weight: 400; font-size: 28px; letter-spacing: .04em; }
+@keyframes sohle-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+
+@media (max-width: 760px) { .home .cord-ground { padding: 0 24px; } }
+@media (prefers-reduced-motion: reduce) {
+  .home .cord-ring.is-springing, .home .cord-ring.is-springing::before, .home .cord-ring.is-springing::after { transition: none; }
+  .home .cord-ring::before, .home .cord-ring::after { display: none; }
+  .home .sohle { animation: none; }
+}

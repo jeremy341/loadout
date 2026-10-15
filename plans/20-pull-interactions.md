@@ -1,6 +1,6 @@
 # Plan 20: Pull interactions (grab cursor, pull tab, pull cord)
 
-**Status:** Approved by the owner on 2026-10-15 (pull up; a long pull opens the Docs; build both phases). Phase 1 is built; see `.ulpi/design/pull-tab.md`. Phase 2 follows. Each phase becomes its own pull request after the owner says go.
+**Status:** Approved by the owner on 2026-10-15 (pull up; a long pull opens the Docs; build both phases). Phase 1 is built (`.ulpi/design/pull-tab.md`), and phase 2 too (`.ulpi/design/pull-cord.md`). The secret says "You found the bottom. The only way back is up." Each phase becomes its own pull request after the owner says go.
 **Owner:** This plan owns the pull interactions. Plan 06 owns the homepage they sit on, and the design system owns the cursor and motion rules.
 
 ## 1. The idea
@@ -57,7 +57,9 @@ Add one playful gesture to the homepage: **things you can grab and pull, which s
 
 **Acceptance.** The tab pulls, springs back and opens the Docs on a long pull. A click and the keyboard work as before. Nothing about page scrolling changes. The full browser suite passes.
 
-## 4. Phase 2 (optional): the pull cord and the secret level
+## 4. Phase 2: the pull cord and the secret level
+
+**As built:** the ring pulls like the Docs tab (the same rubber band, thinning band, snap back, then open). The level opens below the footer in the 404's near black with the title "You found the bottom.", the line "The only way back is up." and a "Back to the surface" button. The ring is a real button, so a click, Enter or Space opens and closes it with no dragging. The original plan follows.
 
 - A short **cord with a ring** hangs below the footer's last line. It is drawn in the sprite style (a small pixel ring), so it reads as a real object.
 - **Pull it up:** the cord stretches with the same resistance. At the threshold a dark panel below the footer opens: **−1404 M, Sohle**, in the 404 page's near black, with one line (for example "You reached rock bottom. The only way back is up.") and a **Back to the surface** button that scrolls to the top. A second link to the 404 is optional.

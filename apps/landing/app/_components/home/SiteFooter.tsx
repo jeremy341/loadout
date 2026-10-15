@@ -2,6 +2,7 @@ import Link from "next/link";
 import { siteConfig } from "../../site-config";
 import { FooterWordmark } from "./FooterWordmark";
 import { Logo } from "./Logo";
+import { PullCord } from "./PullCord";
 
 // Footer laid out like main's SiteFooter: full-width footer, intro, a three-column link
 // grid, then a bottom bar. The redesign's hexagon mark, drawing sheet and stamp are kept
@@ -87,6 +88,7 @@ export function SiteFooter() {
           <a href={siteConfig.githubUrl}>Open an issue on GitHub</a>.
         </span>
       </div>
+      <PullCord />
     </footer>
   );
 }

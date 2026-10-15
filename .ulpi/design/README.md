@@ -25,6 +25,7 @@
 | [`prize-photos.md`](prize-photos.md) | The proposed prizes show one example product photo each, from Pixl, on the existing belt. |
 | [`homepage-voice.md`](homepage-voice.md) | Plainer homepage copy: hero, rewards, progression, Eras and IRL lines, with no new claims. |
 | [`pull-tab.md`](pull-tab.md) | The Docs tab is pulled up like a rubber band: a thinning blue band, with more resistance the further it goes, snaps back, then a long pull opens the Docs. |
+| [`pull-cord.md`](pull-cord.md) | A ring on the floor of the footer, pulled up like the Docs tab, opens a hidden -1404 M level: "You found the bottom." |
 | [`custom-cursor.md`](custom-cursor.md) | The homepage cursor is a pixel arrow with a pointing hand for links, from Kenney's CC0 pack, in LOADOUT's ink, blue and yellow. |
 | [`rock-bottom-404.md`](rock-bottom-404.md) | The 404 page ("rock bottom") and the cave-in error page. |
 | [`pixel-font-open-c.md`](pixel-font-open-c.md) | An open C and c in the pixel font, so a C no longer reads as an O. |

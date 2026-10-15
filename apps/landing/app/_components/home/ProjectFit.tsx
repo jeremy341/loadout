@@ -34,7 +34,7 @@ export function ProjectFit() {
             </div>
           </div>
           <span className="chip">
-            Higher signal
+            Stronger fit
           </span>
         </div>
         <div className="lgr hi">
@@ -50,7 +50,7 @@ export function ProjectFit() {
             </div>
           </div>
           <span className="chip">
-            Higher signal
+            Stronger fit
           </span>
         </div>
         <div className="lgr lo">
@@ -66,7 +66,7 @@ export function ProjectFit() {
             </div>
           </div>
           <span className="chip">
-            Lower signal
+            Weaker fit
           </span>
         </div>
         <div className="lgr lo">
@@ -82,7 +82,7 @@ export function ProjectFit() {
             </div>
           </div>
           <span className="chip">
-            Lower signal
+            Weaker fit
           </span>
         </div>
         <div className="chips">

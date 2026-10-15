@@ -610,7 +610,7 @@ test("Community Eras explain shared progression without leaking Era rules elsewh
   const eras = page.locator("#eras");
   await expect(eras.getByRole("heading", { name: "Build the next Era together." })).toBeVisible();
   await expect(eras).not.toContainText("Planned community concept");
-  await expect(eras).toContainText("A shared technical theme advanced by approved projects across the four tracks.");
+  await expect(eras).toContainText("A technical theme the whole community works toward. Approved projects, in any of the four tracks, move it forward.");
   await expect(eras).toContainText("Approved projects");
   await expect(eras).toContainText("Shared Era Points");
   await expect(eras).toContainText("Next technical theme");

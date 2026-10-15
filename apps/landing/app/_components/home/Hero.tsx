@@ -73,7 +73,7 @@ export function Hero() {
           <span>technical stack.</span>
         </h1>
         <p>
-          Build tools, systems, compute, and hardware. Earn Ore for equipment and Track XP in the fields your work uses.
+          Build something technical and get it reviewed. Earn Ore to spend on equipment, and Track XP that grows in the fields you work in.
         </p>
       </div>
 

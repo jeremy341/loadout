@@ -33,7 +33,9 @@ describe('participant documentation scope', () => {
   });
   test('excludes internal documents and unpublished economy calibration', () => {
     const text = pages.map((page) => page.body).join(' ');
-    expect(text).not.toMatch(/GitHub CLI|CodeScene|branch protection|promotion PR|bootstrap prompt|PLAN\/|40%|\+10%|\b14 days\b/);
+    // The planned 10% Era Ore bonus is public (approved 2026-10-14, Plan 19). Other calibration stays out.
+    expect(text).not.toMatch(/GitHub CLI|CodeScene|branch protection|promotion PR|bootstrap prompt|PLAN\/|40%|\b14 days\b/);
+    expect(pages.find((page) => page.slug === 'eras')?.body).toMatch(/10% extra Ore/);
     for (const slug of ['contributing','architecture','references','operations','library','plans']) expect(pages.some((page) => page.slug === slug)).toBe(false);
     expect(text).toContain('Originality');
     expect(text).toContain('Technical Depth');

@@ -22,7 +22,7 @@ export function Eras() {
           Era together.
         </h2>
         <p className="lead">
-          A shared technical theme advanced by approved projects across the four tracks.
+          A technical theme the whole community works toward. Approved projects, in any of the four tracks, move it forward.
         </p>
         <div className="era">
           <div>

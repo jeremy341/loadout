@@ -1,35 +1,35 @@
 ---
 title: "Eligibility & current status"
-description: "What is confirmed, what is pending, and what RSVP means."
+description: "What is confirmed, what isn't, and what RSVP does."
 group: "START HERE"
 order: 20
 status: draft
 ---
 
-LOADOUT is still being prepared. This page separates the proposed program from participation rules that have not been announced.
+LOADOUT is still being prepared. This page sorts what's settled from what isn't, so you know what to rely on.
 
-## Current status
+## Where things stand
 
-The public website and these Docs explain a draft. They do not establish acceptance as a Hack Club program, confirmed funding, or a launch schedule.
+The website and these Docs explain a draft. They don't mean LOADOUT has been accepted as a Hack Club program, that funding is confirmed, or that there's a launch date.
 
-| Available now | Still pending |
+| You can do this now | Still to come |
 | --- | --- |
-| Read the program draft and share feedback. | Enrollment and a live submission system. |
-| Record interest through RSVP. | Final eligibility and participation requirements. |
-| Explore the proposed tracks and review model. | Dates, catalog, prices, stock, and delivery terms. |
+| Read the draft and tell us what you think. | Signing up, and a live submission system. |
+| Record your interest with RSVP. | The final rules for who can take part. |
+| Look at the tracks and how review works. | Dates, the prize catalog, prices, stock and delivery. |
 
 ## Who can take part?
 
-Final participation requirements will be published before launch. Do not assume that age, location, previous experience, school membership, or attendance at an event makes you eligible.
+The final rules will be published before launch. Until then, don't assume your age, location, experience, school or attendance at an event makes you eligible, or ineligible.
 
-Project fit is a separate question: a technically relevant project does not automatically establish personal eligibility. See [project fit](/docs/projects).
+Whether a project fits is a separate question. A project can be technically relevant and you can still need to meet the participation rules. See [what you can build](/docs/projects).
 
 ## What does RSVP do?
 
-[The RSVP form](https://rsvp.soon.it/loadout) records interest. It is not registration for the program or the future IRL concept. It does not approve a project or promise a reward.
+[The RSVP form](https://rsvp.soon.it/loadout) records your interest. It isn't registration for the program or for the IRL weekend idea, it doesn't approve a project, and it doesn't promise a reward.
 
-## Which rules should I rely on?
+## Which rules can I rely on?
 
-Use the current public Docs for the program explanation. Values marked pending are not promises; examples illustrate a mechanism rather than a guaranteed outcome.
+Use these Docs to understand the program. Anything marked pending isn't a promise, and examples show how a mechanism works, not what you'll get.
 
-Ask in **#loadout-help** if something is unclear. The team should clarify uncertain rules before you rely on them; [help and feedback](/docs/help) explains what to include.
+If something is unclear, ask in **#loadout-help**. The team should clear up an uncertain rule before you build around it. [Help & feedback](/docs/help) says what to include.

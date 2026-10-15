@@ -1,37 +1,37 @@
 ---
 title: "AI & team contributions"
-description: "Make your authorship, assistance, and individual contribution clear."
+description: "Make clear who did what, and what help you had."
 group: "BUILD & REVIEW"
 order: 90
 status: draft
 ---
 
-LOADOUT is intended to support assisted and collaborative work while crediting what each builder actually contributes.
+LOADOUT is meant to work for people using AI and people working in teams, while crediting what each builder actually contributes.
 
-## AI assistance
+## AI help
 
-AI assistance is allowed in the draft model. Declare where you used it and explain the implementation, decisions, and checks that you understand and performed.
+In the draft, AI help is allowed. Say where you used it, and explain the work, the decisions and the checks that you understand and did yourself.
 
-Final AI limits and assessment requirements will be published before launch. Do not treat a number from an old draft or another program as the current public rule.
+The final limits and how they'll be assessed will be published before launch. Don't rely on a number from an old draft or another program.
 
 ## Borrowed work and dependencies
 
-Identify dependencies, reused code, tutorials, designs, and other sources. Explain what you changed or built beyond them. Respect their licenses and attribution requirements.
+List your dependencies, reused code, tutorials, designs and other sources. Say what you changed or built beyond them, and follow their licenses and credit requirements.
 
-Using a library is not the same as writing the library. Review should focus on the technical contribution you can demonstrate.
+Using a library isn't the same as writing it. Review looks at the technical contribution you can show.
 
 ## Team projects
 
-Each member keeps their own tracked work and journal. Describe who did what and which evidence supports each contribution.
+Each member keeps their own tracked work and journal. Describe who did what, and what proof backs each person's part.
 
-| Shared project | Individual credit |
+| On a team | For each person |
 | --- | --- |
-| One repository or device may contain everyone's work. | Each builder is credited for their approved contribution. |
-| Members may tackle different fields. | Their Track XP allocations may differ. |
-| The result is shared. | The team's total hours are not awarded to every member. |
+| One repository or device can hold everyone's work. | Each builder is credited for their own approved part. |
+| Members may work in different fields. | Their Track XP splits can differ. |
+| The result is shared. | The team's total hours aren't awarded to every member. |
 
-## What to explain in a ship
+## What to say in a ship
 
-State your role, the work you implemented, the help you received, and what you verified. Include a clear AI declaration where relevant.
+State your role, the work you did, the help you had and what you checked. Include a clear AI note where it applies.
 
-If responsibilities overlap, explain the collaboration instead of duplicating the same contribution. [Tracking](/docs/tracking) and [review](/docs/review) describe how evidence and authorship fit together.
+If roles overlap, explain how you worked together instead of claiming the same work twice. [Tracking & evidence](/docs/tracking) and [Project review](/docs/review) show how evidence and authorship fit together.

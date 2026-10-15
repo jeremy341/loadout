@@ -1,55 +1,55 @@
 ---
 title: "Quick answers"
-description: "Common questions about the draft, projects, progress, and prizes."
+description: "Short answers to common questions about the draft, projects, progress and prizes."
 group: "COMMUNITY"
 order: 180
 status: draft
 ---
 
-These answers summarize the program draft. Follow the linked guides for the relevant detail and pending rules.
+These are short answers. Follow the links for the full picture and for what's still undecided.
 
 ## Questions {#questions}
 
 ### Has LOADOUT launched?
 
-No. The website explains a program in development. RSVP records interest; it does not enroll you or confirm eligibility. See [current status](/docs/eligibility).
+No. The site describes a program that's still being built. RSVP records your interest. It doesn't sign you up or confirm you're eligible. See [current status](/docs/eligibility).
 
 ### What can I build?
 
-Useful technical work in Tools, Systems, Compute, or Hardware. The capability and your own contribution determine fit, not the product label. See [project fit](/docs/projects).
+Useful technical work in Tools, Systems, Compute or Hardware. The capability and your own part in it decide whether it fits, not the product label. See [what you can build](/docs/projects).
 
 ### Is Research Mode a fifth track?
 
-No. It is a mode for investigation, experiments, benchmarks, or reproductions within the four tracks. See [Research Mode](/docs/research).
+No. It's a way to investigate, experiment, benchmark or reproduce something inside the four tracks. See [Research Mode](/docs/research).
 
 ### Do I need a team?
 
-The draft supports individual and team projects. Each builder is credited for their approved contribution. See [AI and team contributions](/docs/ai-teams).
+No. The draft supports solo and team projects, and each builder is credited for their own approved part. See [AI & team contributions](/docs/ai-teams).
 
 ### Is Ore the same as XP?
 
-No. Ore is spendable currency; Track XP is lifetime field progress. Era Points represent shared community progress. See [progress](/docs/progress).
+No. Ore is the currency you spend. Track XP is your lasting progress in a field. Era Points are the community's shared progress. See [Ore, XP & levels](/docs/progress).
 
 ### Do hours guarantee a prize?
 
-No. Work must fit, be evidenced, and pass review. Prices, stock, and fulfillment are not confirmed. See [review](/docs/review) and [prizes](/docs/prizes).
+No. The work has to fit, come with evidence and pass review. Prices, stock and delivery aren't confirmed. See [Project review](/docs/review) and [Prizes & requests](/docs/prizes).
 
 ### What does a Requisition do?
 
-It extends the allowance for your existing field discount on one eligible order. It does not add Ore or bypass level gates. See [Requisitions](/docs/requisitions).
+It lets more of a discount you've already earned apply to one eligible order. It doesn't add Ore or skip level requirements. See [Field Requisitions](/docs/requisitions).
 
-### Can I request something outside the catalog?
+### Can I ask for something that isn't in the catalog?
 
-Custom Orders are planned, but not open. They require relevant progression, team review, and enough Ore for an accepted final quote. See [Custom Orders](/docs/custom-orders).
+Custom Orders are planned but not open. They need the right progress, a team review and enough Ore for an accepted final quote. See [Custom Orders](/docs/custom-orders).
 
 ### Does an Era reset my levels?
 
-No. Lifetime Track XP and accepted projects persist. Eras are shared themes, while Seasons are competitive periods. See [Eras & Seasons](/docs/eras).
+No. Your lifetime Track XP and your accepted projects stay. Eras are shared themes, and Seasons are competitive periods. See [Community Eras](/docs/eras).
 
-### Can I register for LOADOUT IRL?
+### Can I sign up for LOADOUT IRL?
 
-No event is confirmed and event registration is not open. See the [future IRL concept](/docs/irl).
+Not yet. No event is confirmed, and registration isn't open. See [LOADOUT IRL](/docs/irl).
 
-### Where do I ask another question?
+### Where do I ask something else?
 
-Use **#loadout-help**, with a page link and the specific question. See [help and feedback](/docs/help).
+Use **#loadout-help** with a link to the page and your specific question. See [Help & feedback](/docs/help).

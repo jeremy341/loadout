@@ -1,43 +1,43 @@
 ---
 title: "Field Requisitions"
-description: "Rare one-use allowances that extend eligible savings without bypassing access rules."
+description: "A rare one-use ticket that stretches your savings on one order, without skipping any access rules."
 group: "PROGRESS & PRIZES"
 order: 130
 status: draft
 ---
 
-A Field Requisition lets more of your earned field discount apply to one eligible order. It is not another currency.
+A Field Requisition lets more of the discount you've already earned apply to one order. It isn't another currency.
 
-## Earning a Field Requisition
+## How you earn one
 
-The draft's fixed progression milestones are:
+You earn Requisitions at fixed levels in a track:
 
 | Track level | Field Requisition |
 | --- | --- |
-| LV.3 and LV.6 | Field Requisition I at each milestone. |
-| LV.9 and LV.12 | Field Requisition II at each milestone. |
+| LV.3 and LV.6 | Field Requisition I at each level. |
+| LV.9 and LV.12 | Field Requisition II at each level. |
 | LV.15 | Master Field Requisition. |
 
-They are earned through lifetime progress in that track. Exact savings allowances and minimum eligible item values remain unpublished.
+They come from your lasting progress in that track. How much each one saves, and the minimum item value, aren't published yet.
 
 ## Using one
 
-The intended purchase flow is **check item eligibility → apply field pricing → choose one matching Requisition → review final price → confirm the order**.
+The planned steps are: **check that the item qualifies, apply your field price, pick one matching Requisition, look at the final price, confirm the order**.
 
-The item must meet the field and minimum-value requirements. A Custom Order must explicitly mark the approved quote as Requisition-eligible.
+The item has to be in the right field and above the minimum value. For a Custom Order, the approved quote has to say it's Requisition-eligible.
 
-## Limits that matter
+## The limits
 
-- One use, non-transferable, and no expiry.
-- At most one Requisition on an order.
-- It does not add Ore or create a permanent discount.
-- It does not remove a level requirement.
-- It does not make an unsupported request fulfillable.
+- One use, can't be transferred, never expires.
+- Only one Requisition on an order.
+- It doesn't add Ore and it isn't a permanent discount.
+- It doesn't remove a level requirement.
+- It doesn't make an impossible request possible.
 
-A Field Requisition belongs to its field. Rare General Requisitions are planned for exceptional community contributions and can apply to eligible fields; their award details are not finalized.
+A Field Requisition belongs to its field. We also plan a few rare General Requisitions for exceptional community contributions, which can apply to any eligible field. How they're awarded isn't decided.
 
-## How it differs from a coupon
+## Not a coupon
 
-You do not receive a public discount code to share. The intended model is scarce progression inventory applied to an eligible purchase.
+You don't get a public code to share. A Requisition is a scarce ticket that you earn through progress and spend on one eligible purchase.
 
-Ordering and Requisition redemption are not live. [Pricing](/docs/pricing) explains the savings cap; [Custom Orders](/docs/custom-orders) explains requests.
+Ordering and redeeming Requisitions aren't live yet. [Pricing](/docs/pricing) explains the savings cap, and [Custom Orders](/docs/custom-orders) explains requests.

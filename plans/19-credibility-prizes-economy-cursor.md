@@ -83,6 +83,8 @@ Add: separate software and hardware checklists; a sample submission outline; an 
 
 ## 7. Workstream F: Economy
 
+**Status, 2026-10-15:** the proposals are drafted in [`proposals/economy-calibration.md`](proposals/economy-calibration.md), with generated tables and a sample catalog. Nothing in it is approved. The owner's decisions are listed at the end of that file; approved values then move into Plan 02 and the conflicting older text is removed in workstream G.
+
 Plan 02 is the single authority (1,697 lines, with older proposals mixed in). The first step is a short reconciliation: list every rule in Plan 02 that conflicts with the agreed values below, and mark each as agreed, proposed or open.
 
 **Agreed:**

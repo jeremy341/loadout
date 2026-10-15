@@ -1,36 +1,36 @@
 ---
 title: "What is LOADOUT?"
-description: "Build technical capability, grow your Loadout, and understand the current draft."
+description: "What LOADOUT is, the loop in one paragraph, and where things stand today."
 group: "START HERE"
 order: 10
 status: draft
 ---
 
-LOADOUT is a planned You Ship, We Ship program for technical builders. You make useful technical projects; reviewed work is intended to earn progress and prizes that help you build what comes next.
+LOADOUT is a program we're planning for people who like building technical things. You make a project, get it reviewed, and good work earns you progress and prizes that help you build the next one.
 
-## A program for technical builders {#program}
+## Who it's for {#program}
 
-The focus is **Tools, Systems, Compute, and Hardware**. Build something that helps you or another builder make, run, measure, understand, or improve something technical.
+There are four areas: **Tools, Systems, Compute and Hardware**. Build something that helps you or another builder make, run, measure, understand or improve something technical.
 
-That could be a debugging tool, a synchronization engine, a custom renderer, or an embedded instrument. The important part is the capability you build yourself, not the name of the finished product.
+A debugging tool counts. So does a sync engine, a custom renderer or a small instrument with a sensor. What matters is the technical part you built yourself, not what the finished thing is called.
 
 ## Your two Loadouts {#loadout}
 
-| Your Loadout | What it represents |
+| Your Loadout | What it is |
 | --- | --- |
-| Digital Loadout | Accepted projects and the technical work you can show. |
-| Physical Loadout | Equipment and resources that support your next build. |
+| Digital Loadout | Your accepted projects, the technical work you can show. |
+| Physical Loadout | The equipment and resources that help with your next build. |
 
-The intended loop is: **build → document → ship for review → earn Track XP and Ore → build again**.
+The loop looks like this: **build, write it up, ship it for review, earn Track XP and Ore, build again**.
 
-Track XP records progress in a field. Ore is the spendable balance for eligible prizes. They serve different purposes; [progress explains the difference](/docs/progress).
+Track XP and Ore do different jobs. Track XP is your progress in a field, and you keep it. Ore is what you spend on prizes. [Ore, XP & levels](/docs/progress) explains the difference.
 
-## Joining LOADOUT {#status}
+## Where things stand {#status}
 
-> **In development.** This site describes the program draft. LOADOUT has not launched; dates, participation requirements, and prize availability are not confirmed.
+> **In development.** This site describes a draft. LOADOUT hasn't launched, and the dates, the rules for taking part and the prizes are all still open.
 
-[RSVP](https://rsvp.soon.it/loadout) records interest. It does not enroll you, reserve a prize, or confirm eligibility. Read [current status and eligibility](/docs/eligibility) before treating any proposed feature as available.
+[RSVP](https://rsvp.soon.it/loadout) records that you're interested. It doesn't sign you up, reserve a prize or confirm that you're eligible. Read [current status and eligibility](/docs/eligibility) before you treat any feature here as available.
 
 ## Where to read next
 
-Start with [what you can build](/docs/projects), then [the four tracks](/docs/tracks) and [what a ship should include](/docs/shipping).
+Start with [what you can build](/docs/projects), then [the four tracks](/docs/tracks), then [what to hand in with a ship](/docs/shipping).

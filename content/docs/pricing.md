@@ -1,37 +1,37 @@
 ---
 title: "Pricing"
-description: "How related levels, savings caps, and access requirements fit together."
+description: "How your levels, a savings limit and access requirements add up to a price."
 group: "PROGRESS & PRIZES"
 order: 120
 status: draft
 ---
 
-Field pricing is intended to make relevant track progress useful when buying equipment. It does not change your project's Ore award.
+Field pricing is meant to make your progress in a track useful when you buy equipment. It doesn't change how much Ore a project earns.
 
-## How a price is determined
+## How a price is worked out
 
-1. The item has a configured base Ore price and field relevance.
-2. Your related track progress determines the ordinary field discount.
-3. The item's savings cap limits that discount where applicable.
-4. An eligible Requisition may extend the allowance for one purchase.
-5. You pay the final quoted balance in Ore.
+1. Every item has a base Ore price and a field it relates to.
+2. Your progress in that field gives you a regular field discount.
+3. The item's savings cap limits that discount where it applies.
+4. A matching Requisition can stretch the limit for one purchase.
+5. You pay the final quoted amount in Ore.
 
-The catalog must show a final price before you commit to an order. Rates, prices, and savings allowances remain unpublished.
+The catalog has to show you the final price before you commit to an order. The rates, prices and savings limits aren't published yet.
 
-## A discount and a cap are different
+## A discount and a cap are different things
 
-A discount describes how much your progress could reduce the price. A cap limits how much of that reduction applies to a particular item.
+A discount is how much your progress could take off the price. A cap is the limit on how much of that actually applies to one item.
 
-For an expensive item, the ordinary cap may stop the full discount from applying. A matching Requisition can allow more of that **existing** discount to apply; it does not grant unlimited savings.
+On an expensive item, the normal cap can stop the full discount from applying. A matching Requisition lets more of the discount you **already earned** apply. It doesn't give you unlimited savings.
 
-## Buying across tracks
+## Buying outside your specialty
 
-Most prizes are intended to be available even if you specialize elsewhere. You may receive a less favorable field price than a builder whose approved work is directly relevant.
+Most prizes are meant to be open to everyone, even if you focus on a different track. You may get a less favorable price than a builder whose approved work relates directly to the item.
 
-A discount cannot unlock equipment with a separate level requirement. Requisitions cannot bypass that requirement either.
+A discount can't unlock equipment that has its own level requirement, and a Requisition can't skip that requirement either.
 
-## Quotes and pending values
+## Quotes and values still to come
 
-Treat examples as explanations of the sequence, not as current prices. Exact field affinities, discount calibration, caps, minimum item values, and tax or delivery treatment must be confirmed before launch.
+Treat examples as a way to follow the steps, not as current prices. The fields each item relates to, the discount rates, the caps, the minimum item values, and how tax and delivery are handled all need to be confirmed before launch.
 
-For an item outside the catalog, the [Custom Order process](/docs/custom-orders) uses the approved final quote, not your initial estimate.
+For something outside the catalog, the [Custom Order process](/docs/custom-orders) uses the final approved quote, not your first estimate.

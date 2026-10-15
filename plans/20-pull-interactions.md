@@ -1,6 +1,6 @@
 # Plan 20: Pull interactions (grab cursor, pull tab, pull cord)
 
-**Status:** Idea and plan, 2026-10-15. Not approved and not built. Each phase becomes its own pull request after the owner says go.
+**Status:** Approved by the owner on 2026-10-15 (pull up; a long pull opens the Docs; build both phases). Phase 1 is built; see `.ulpi/design/pull-tab.md`. Phase 2 follows. Each phase becomes its own pull request after the owner says go.
 **Owner:** This plan owns the pull interactions. Plan 06 owns the homepage they sit on, and the design system owns the cursor and motion rules.
 
 ## 1. The idea
@@ -25,6 +25,8 @@ Add one playful gesture to the homepage: **things you can grab and pull, which s
 **Why a cord, not "pull the page up".** The first idea was to pull the page itself beyond its bottom (overscroll). That is risky: it fights native scrolling and the Lenis smooth scroll, behaves differently on iOS, Android and desktop (a mouse wheel can't overscroll), and gives no visible hint that it is possible. A visible handle, a ring on a cord, avoids all of that: the gesture only starts on the handle, scrolling is never touched, and the affordance is obvious.
 
 ## 3. Phase 1: grab cursor and pull tab
+
+**Changed after the owner's review (2026-10-15):** the first version lifted the tab on a thin cord. The owner wanted a **rubber band** instead: a blue band that stretches up from the floor and gets thinner, with much more resistance the further it goes, that **snaps back first and only then opens the Docs**. That is what was built. The description below is the original plan; `.ulpi/design/pull-tab.md` is the current behaviour (maximum stretch 130 px, a pull of 110 px opens the Docs).
 
 **The tab.**
 - Hover: the open hand (`grab`). While dragging: the closed fist (`grabbing`). Everywhere else the cursor is as today.

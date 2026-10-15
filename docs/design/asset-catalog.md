@@ -16,7 +16,7 @@ Official SIL Open Font License notices are included beside the self-hosted files
 
 ### Cursor
 
-`apps/landing/public/loadout/cursors/` holds the homepage cursors: `arrow-*` and `hand-*` PNGs, each in `dark` (blue fill) and `light` (yellow fill), at 32 px and as `@2x` versions at 64 px for screens with a pixel ratio of 2. The arrow's hotspot is CSS pixel 3, 1 and the hand's is 15, 3. They are Kenney's Cursor Pixel Pack tiles 0168 and 0157 (CC0) recoloured to LOADOUT's ink outline and theme fill by `assets/editable/cursors/make-cursors.js`, which reproduces the PNGs exactly from the sources in `assets/editable/cursors/source/`. `app/cursor.css` applies them. The other cursor packs in `assets/inbox/cursors/` were candidates only.
+`apps/landing/public/loadout/cursors/` holds the homepage cursors: `arrow-*`, `hand-*`, `grab-*` and `grabbing-*` PNGs, each in `dark` (blue fill) and `light` (yellow fill), at 32 px and as `@2x` versions at 64 px for screens with a pixel ratio of 2. Hotspots in CSS pixels: arrow 3, 1; hand 15, 3; open hand 17, 17; fist 17, 19. They are Kenney's Cursor Pixel Pack tiles 0168 (arrow), 0157 (hand), 0138 (open hand) and 0139 (fist), CC0, recoloured to LOADOUT's ink outline and theme fill by `assets/editable/cursors/make-cursors.js`, which reproduces the PNGs exactly from the sources in `assets/editable/cursors/source/`. `app/cursor.css` applies them; the open hand and fist show on the pullable Docs tab (see `.ulpi/design/pull-tab.md`). The other cursor packs in `assets/inbox/cursors/` were candidates only.
 
 ### Prize photos
 

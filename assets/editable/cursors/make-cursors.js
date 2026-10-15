@@ -1,5 +1,6 @@
-// Builds the homepage cursors from two tiles of Kenney's Cursor Pixel Pack (CC0, see source/kenney-LICENSE.txt):
-// the classic arrow and the index-finger hand. Kenney draws them white with a black outline; this recolours them to
+// Builds the homepage cursors from four tiles of Kenney's Cursor Pixel Pack (CC0, see source/kenney-LICENSE.txt):
+// the classic arrow, the index-finger hand, and the open hand and fist for pulling things. Kenney draws them white
+// with a black outline; this recolours them to
 // LOADOUT's ink outline and the theme's fill (blue in the dark theme like its icons, yellow in the light theme),
 // and writes 32 px (1x) and 64 px (2x) PNGs, pixel for pixel, no smoothing.
 //   bun assets/editable/cursors/make-cursors.js apps/landing/public/loadout/cursors
@@ -117,11 +118,30 @@ fs.mkdirSync(out, { recursive: true });
 
 const INK = [14, 18, 21];
 const FILLS = { dark: [94, 158, 244], light: [253, 207, 3] };
-const SOURCES = { arrow: "source/kenney-0168-arrow.png", hand: "source/kenney-0157-hand.png" };
+const SOURCES = {
+  arrow: "source/kenney-0168-arrow.png",
+  hand: "source/kenney-0157-hand.png",
+  grab: "source/kenney-0138-open-hand.png",
+  grabbing: "source/kenney-0139-fist.png",
+};
 
-// The click point: the arrow's tip is its top left corner; the hand's is the middle of its top row (the fingertip).
+// The click point: the arrow's tip is its top left corner; the hand's is the middle of its top row (the fingertip);
+// the open hand and the fist are held by the middle of the opaque shape.
 function hotspot(kind, img) {
   const opaque = (x, y) => img.rgba[(y * img.w + x) * 4 + 3] > 0;
+  if (kind === "grab" || kind === "grabbing") {
+    let minX = img.w, maxX = 0, minY = img.h, maxY = 0;
+    for (let y = 0; y < img.h; y++) {
+      for (let x = 0; x < img.w; x++) {
+        if (!opaque(x, y)) continue;
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y);
+      }
+    }
+    return [Math.round((minX + maxX) / 2), Math.round((minY + maxY) / 2)];
+  }
   if (kind === "hand") {
     for (let y = 0; y < img.h; y++) {
       const xs = [...Array(img.w).keys()].filter((x) => opaque(x, y));

@@ -18,6 +18,10 @@ Official SIL Open Font License notices are included beside the self-hosted files
 
 `apps/landing/public/loadout/cursors/` holds the homepage cursors: `arrow-*` and `hand-*` PNGs, each in `dark` (blue fill) and `light` (yellow fill), at 32 px and as `@2x` versions at 64 px for screens with a pixel ratio of 2. The arrow's hotspot is CSS pixel 3, 1 and the hand's is 15, 3. They are Kenney's Cursor Pixel Pack tiles 0168 and 0157 (CC0) recoloured to LOADOUT's ink outline and theme fill by `assets/editable/cursors/make-cursors.js`, which reproduces the PNGs exactly from the sources in `assets/editable/cursors/source/`. `app/cursor.css` applies them. The other cursor packs in `assets/inbox/cursors/` were candidates only.
 
+### Prize photos
+
+`apps/landing/public/loadout/prizes/` holds eight product photos for the proposed-prizes belt: `framework-16`, `esp32`, `rpi`, `soldering-iron`, `samsung-t7-ssd`, `a1-mini`, `domain-grant` and `centauri-carbon`, all `.webp`, about 310 KB together. They come from Pixl's shop and are used under the Pixl owner's permission and MIT licence; each source path is in `docs/source-audit/ATTRIBUTION.md`. They show products made by other companies as examples, not as promises. `PlannedPrizes.tsx` lists them.
+
 ### Logo and share image
 
 The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and the touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are the 1200 by 630 share image (under 300 KB), each with its `.alt.txt`. The editable SVG sources, including the custom pixel wordmark, are in `assets/editable/logo/`. The helmet comes from the one-bit icon pack; the owner confirmed it can be used.

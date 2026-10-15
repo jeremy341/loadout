@@ -20,3 +20,10 @@
   .home .pb-view { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
   .home .pb-half[aria-hidden="true"] { display: none; }
 }
+
+/* Product photo cards (.ulpi/design/prize-photos.md): the photo sits flush on a white plate, the category and one example below. */
+.home .card.pb-card { padding: 0; gap: 0; overflow: hidden; }
+.home .pb-photo { position: relative; height: 150px; background: #fff; border-bottom: 1px solid var(--fg); }
+.home .pb-photo img { position: absolute; inset: 0; width: 100%; height: 100%; padding: 10px; box-sizing: border-box; object-fit: contain; }
+.home .pb-text { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; }
+.home .pb-name { font-size: 18px; line-height: 1.2; }

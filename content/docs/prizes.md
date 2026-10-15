@@ -1,37 +1,37 @@
 ---
 title: "Prizes & requests"
-description: "Understand the proposed catalog and the difference between buying and requesting."
+description: "What the planned catalog could hold, and the difference between buying and requesting."
 group: "PROGRESS & PRIZES"
 order: 110
 status: draft
 ---
 
-Ore is intended to buy eligible prizes that support future technical work. The catalog is planned, not an announcement of stocked items.
+Ore is meant to buy prizes that help with your next technical build. The catalog is a plan, not a list of what's in stock.
 
 ## Planned prizes {#catalog}
 
-Possible categories include developer hardware, embedded boards, compute, tools, storage, fabrication, domains, and custom equipment.
+The categories we're considering are developer hardware, embedded boards, compute, tools, storage, fabrication, domains and custom equipment. The homepage shows an example product for each, to give you the idea.
 
-No price, stock level, brand partnership, or fulfillment promise follows from a category appearing on this site. Confirmed catalog details will be published before ordering opens.
+A category or an example appearing on this site doesn't mean there's a price, stock, a brand partnership or a delivery promise behind it. We'll publish confirmed details before ordering opens.
 
 ## Field discounts {#pricing}
 
-Most prizes are intended to remain available across tracks. Related track progress can improve field pricing; a small set of specialist or Mastery equipment may have a level requirement.
+Most prizes are meant to stay available whichever track you work in. Progress in a related field can bring the price down, and a few specialist or Mastery items may need a certain level.
 
-Read [pricing](/docs/pricing) for the distinction between a discount, its savings cap, and an access requirement.
+[Pricing](/docs/pricing) explains the difference between a discount, its savings cap and an access requirement.
 
 ## Field Requisitions {#requisitions}
 
-A Requisition lets more of a discount you already earned apply to one eligible purchase. It is not extra Ore or a transferable coupon code.
+A Requisition lets more of a discount you've already earned apply to one eligible purchase. It isn't extra Ore, and it isn't a coupon code you can pass on.
 
-[The Requisition guide](/docs/requisitions) explains milestones, matching fields, and the one-per-order rule.
+[The Requisition guide](/docs/requisitions) covers when you earn them, which field they match and the one-per-order rule.
 
 ## Custom Orders {#custom-orders}
 
-A Custom Order is a request for equipment or resources outside the regular catalog. The team reviews the need and, if it can support the request, provides a final Ore quote.
+A Custom Order is a request for equipment or resources that aren't in the regular catalog. The team looks at what you need and, if it can support it, gives you a final Ore quote.
 
-A request is not an order. You need the relevant progression and enough Ore to accept an approved quote. [Custom Orders](/docs/custom-orders) explains the process.
+A request isn't an order. You need the right progress and enough Ore to accept an approved quote. [Custom Orders](/docs/custom-orders) explains the process.
 
-## Before buying anything
+## Before you buy anything
 
-Ordering is not open. Final prices, availability, delivery terms, and support procedures remain pending. Spending time on a project does not reserve a particular prize.
+Ordering isn't open. Final prices, availability, delivery terms and support are all still to be decided. Putting time into a project doesn't reserve a prize.

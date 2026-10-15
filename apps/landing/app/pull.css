@@ -1,0 +1,58 @@
+/* Pullable things (.ulpi/design/pull-tab.md): the Docs tab is pulled up like a rubber band. A band in the tab's own colour
+   stretches up from the floor and thins as it stretches. Let go and it snaps back, and a long pull opens the Docs after that.
+   Only the CSS variables --pull (how far) and --waist (half the band's width at the floor) change while dragging; the script
+   sets them. A press that barely moves is a click. */
+.home .docs-tab {
+  --pull: 0px;
+  --waist: 50%;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transform: translateY(calc(var(--pull) * -1));
+}
+
+/* The band: a taper from the tab's width down to a narrow waist at the floor, drawn as an ink outline plus a fill. */
+.home .docs-tab::before,
+.home .docs-tab::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  height: var(--pull);
+  pointer-events: none;
+}
+.home .docs-tab::before {
+  left: -4px;
+  width: calc(100% + 8px);
+  background: var(--fg);
+  clip-path: polygon(0 0, 100% 0, calc(50% + var(--waist) + 3px) 100%, calc(50% - var(--waist) - 3px) 100%);
+}
+.home .docs-tab::after {
+  left: -2px;
+  width: calc(100% + 4px);
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, calc(50% + var(--waist)) 100%, calc(50% - var(--waist)) 100%);
+}
+.home:has(#theme:checked) .docs-tab::before { background: #1A1714; }
+
+/* While it is held, keep the tab's resting look so the band and the tab stay one colour, and sit flush on the band. */
+.home .docs-tab.is-pulling,
+.home .docs-tab.is-pulling:hover,
+.home .docs-tab.is-pulling:active { background: var(--ac); color: var(--acf); border-bottom-width: 0; }
+.home:has(#theme:checked) .docs-tab.is-pulling,
+.home:has(#theme:checked) .docs-tab.is-pulling:hover,
+.home:has(#theme:checked) .docs-tab.is-pulling:active { background: #E3C26B; color: #1A1714; border-bottom-width: 0; }
+
+/* Let go: the band snaps back with one small overshoot of the tab, then rests. */
+.home .docs-tab.is-springing { transition: transform 380ms cubic-bezier(.34, 1.56, .64, 1); }
+.home .docs-tab.is-springing::before,
+.home .docs-tab.is-springing::after { transition: height 380ms cubic-bezier(.23, 1, .32, 1); }
+
+/* One wiggle, once per visit, to show the tab can be pulled. */
+.home .docs-tab.is-nudging { animation: docs-tab-nudge 700ms cubic-bezier(.34, 1.56, .64, 1) 1; }
+@keyframes docs-tab-nudge { 40% { transform: translateY(-10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .home .docs-tab.is-springing, .home .docs-tab.is-springing::before, .home .docs-tab.is-springing::after { transition: none; }
+  .home .docs-tab.is-nudging { animation: none; }
+  .home .docs-tab::before, .home .docs-tab::after { display: none; }
+}

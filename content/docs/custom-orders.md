@@ -1,43 +1,43 @@
 ---
 title: "Custom Orders"
-description: "From approved track progress to a reviewed request and an optional final quote."
+description: "From your approved progress to a reviewed request and, if it works out, a final quote."
 group: "PROGRESS & PRIZES"
 order: 140
 status: draft
 ---
 
-Custom Orders are planned for equipment or resources outside the regular prize catalog. Describe what you need for your technical work; the team decides whether the request can be supported.
+Custom Orders are planned for equipment or resources that aren't in the regular prize catalog. Tell us what you need for your technical work, and the team decides whether it can support the request.
 
-## What makes you eligible?
+## What you need to ask
 
-You need **approved work, the relevant track level or request tier, and enough Ore for the final quote**.
+You need **approved work, the right track level or request tier, and enough Ore for the final quote**.
 
-Tracked hours alone do not unlock a request. Shipped, reviewed contributions build Track XP, which advances the relevant level. Exact XP thresholds and public request-tier requirements remain pending.
+Tracked hours alone don't open a request. Shipped, reviewed work builds Track XP, and that raises the level in the right track. The XP thresholds and the public request tiers aren't published yet.
 
-A Requisition cannot bypass a level gate.
+A Requisition can't get you past a level requirement.
 
-## Request to quote
+## From request to quote
 
-1. Explain the item, its purpose, and how it relates to your projects.
-2. Provide an item or supplier reference and any important specifications.
-3. The team checks track fit, budget, availability, and delivery feasibility.
-4. If support is possible, the team provides the final Ore quote and requirements.
-5. You accept the quote with sufficient Ore, or decline it.
+1. Explain the item, what it's for and how it relates to your projects.
+2. Add an item or supplier link and any specs that matter.
+3. The team checks that it fits the track, the budget, whether it's available and whether it can be delivered.
+4. If it can support it, the team sends you the final Ore quote and any conditions.
+5. You accept the quote, if you have enough Ore, or you decline it.
 
-The request is not a purchase, and your estimate is not the final price.
+A request isn't a purchase, and your estimate isn't the final price.
 
-## What the review considers
+## What the team looks at
 
-A useful request connects the resource to a real build or demonstrated technical need. The team must also check whether it can source, fund, and deliver the item.
+A good request ties the item to a real build or a technical need you can show. The team also has to check that it can source, pay for and deliver the thing.
 
-Being eligible to ask does not guarantee approval or availability. A level requirement and a budget decision answer different questions.
+Being allowed to ask doesn't mean a yes or that the item can be had. A level requirement and a budget decision answer different questions.
 
 ## Requisitions and changes
 
-A Requisition may apply only if the final approved quote marks it eligible. The normal matching-field, minimum-value, and one-per-order rules still apply.
+A Requisition applies only if the final approved quote says it's eligible. The usual rules still hold: it has to match the field, meet the minimum value, and be the only one on the order.
 
-If specifications or sourcing change, obtain an updated quote before treating the earlier terms as final.
+If the specs or the supplier change, get a new quote before you treat the earlier one as final.
 
 ## Current status
 
-> **Requests are not open.** There is no live order form or fulfillment promise. Public tier rules, prices, delivery terms, and cancellation procedures will be confirmed before ordering begins.
+> **Requests aren't open.** There's no live order form and no promise of delivery. The public tier rules, prices, delivery terms and cancellation steps will be confirmed before ordering starts.

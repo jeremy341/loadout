@@ -1,35 +1,35 @@
 ---
 title: "Research Mode"
-description: "Document technical questions, methods, measurements, and reproducible findings."
+description: "Ask a technical question, test it, measure it and write down what you found."
 group: "START HERE"
 order: 50
 status: draft
 ---
 
-Research Mode is for technical investigation within Tools, Systems, Compute, or Hardware. The result can be a reproducible finding rather than a finished product.
+Research Mode is for investigating something technical inside Tools, Systems, Compute or Hardware. What you ship can be a finding someone else can reproduce, not a finished product.
 
 ## What makes it research?
 
-State a question and investigate it through an experiment, benchmark, reproduction, or measurement. Show what you did, what happened, and what the result supports.
+Start with a question. Then answer it with an experiment, a benchmark, a reproduction or a measurement. Show what you did, what happened and what the result supports.
 
-An investigation into a workload's memory use could fit Compute. Measuring an instrument's behavior could fit Hardware. The technical question and your work determine the track.
+Looking into how a workload uses memory could fit Compute. Measuring how an instrument behaves could fit Hardware. The question and the work decide the track.
 
-## Evidence to include
+## What to include
 
-- The question, hypothesis, or result you tried to reproduce.
-- The method, environment, inputs, and relevant versions.
-- Measurements and checks, including unsuccessful attempts.
-- Code, designs, or instructions needed to repeat the work.
-- A conclusion that states limitations and uncertainty.
+- The question, the hypothesis, or the result you tried to reproduce.
+- The method, the environment, the inputs and the versions that matter.
+- Measurements and checks, including the attempts that failed.
+- The code, designs or steps someone needs to repeat it.
+- A conclusion that says what you couldn't rule out.
 
-A graph without its method is not enough. Distinguish measured findings from explanations you have not tested.
+A graph without its method isn't enough. Keep what you measured separate from explanations you haven't tested.
 
-## Negative results still need a useful explanation
+## Negative results count if you explain them
 
-An experiment that disproves your idea can teach another builder something. Explain why the result is meaningful and provide evidence; an unfinished attempt is not automatically an accepted research ship.
+An experiment that proves your idea wrong can teach someone a lot. Say why the result matters and show the evidence. An unfinished attempt isn't automatically an accepted research ship.
 
 ## Review and progress
 
-Research still follows project-fit, validity, authorship, and quality review. It does not bypass tracking or turn borrowed work into your own contribution.
+Research goes through the same review as any ship: fit, validity, authorship and quality. It doesn't skip tracking, and it doesn't turn borrowed work into yours.
 
-A reproducible report is intended to earn additional Track XP. The exact bonus and final requirements remain pending. Read [shipping](/docs/shipping) and [project review](/docs/review).
+A reproducible report is planned to earn extra Track XP. The exact bonus and final requirements aren't set yet. See [Build & ship](/docs/shipping) and [Project review](/docs/review).

@@ -1,35 +1,35 @@
 ---
 title: "Help & feedback"
-description: "Ask clear questions and report issues without exposing private information."
+description: "How to ask a clear question or report a problem without sharing anything private."
 group: "COMMUNITY"
 order: 170
 status: draft
 ---
 
-Use **#loadout-help** for questions about the program draft, project fit, and unclear explanations.
+Use **#loadout-help** for questions about the draft, whether a project fits, or anything on this site that isn't clear.
 
 ## Asking about a project
 
-Describe the capability you want to build, the relevant track, what you will do yourself, and how you will demonstrate the result. Mention the specific uncertainty.
+Say what you want to build, which track it's in, what you'll do yourself and how you'll show it works. Name the exact thing you're unsure about.
 
-A short technical description is more useful than “does an app count?” A fit discussion is guidance, not a guarantee of a future review result.
+A short technical description helps far more than "does an app count?". An answer about fit is guidance, not a promise about how a future review will go.
 
 ## Asking about a rule
 
-Link the Docs page and say what is unclear. If a value is marked pending, ask for clarification rather than assuming a draft example is a confirmed rule.
+Link the Docs page and say what's unclear. If a value is marked pending, ask what it means instead of treating a draft example as a confirmed rule.
 
-## Reporting a website problem
+## Reporting a problem with the website
 
-Include the page URL, expected behavior, actual behavior, and the browser or screen size if relevant. A screenshot can help explain a layout problem.
+Include the page address, what you expected, what happened, and your browser or screen size if it matters. A screenshot helps with layout problems.
 
-Do not post tokens, passwords, private evidence, or another person's contact details. Public channels are not a private reporting route; avoid including sensitive material.
+Don't post tokens, passwords, private evidence or anyone else's contact details. Public channels aren't a private way to report something, so leave out sensitive material.
 
-## Following documentation updates
+## Keeping up with changes
 
-The **#loadout-docs** feed is for documentation updates and links to the canonical website. Questions remain in **#loadout-help**.
+The **#loadout-docs** feed posts documentation updates with links to the site. Questions still go in **#loadout-help**.
 
-This page and the linked topic should be used together; a copied message or old screenshot may not reflect the latest draft.
+Read this page together with the topic it links to. A copied message or an old screenshot may not match the latest draft.
 
-## Current limits
+## What isn't there yet
 
-There is no published response-time guarantee or live appeal portal. [Project review](/docs/review) describes the intended feedback and appeal model. [Current status](/docs/eligibility) lists what has not launched.
+There's no promised response time and no live appeals portal. [Project review](/docs/review) describes the feedback and appeal model we're planning. [Current status](/docs/eligibility) lists what hasn't launched.

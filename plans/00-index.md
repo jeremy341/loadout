@@ -40,6 +40,7 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 ## Future proposals
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) preserves Plan 03's unapproved dashboard, builder-profile, submission, shop, ordering, and community-surface ideas. The current app remains the public homepage and program-draft Docs; a separate approved scope is required before implementing these services.
+- [`proposals/economy-calibration.md`](proposals/economy-calibration.md) holds the proposed economy numbers (discount curve, savings limits, XP levels, Ore payouts, Custom Orders, a sample catalog) for the owner to accept or edit. It is not approved; Plan 02 stays the authority.
 
 ## Historical consolidation
 

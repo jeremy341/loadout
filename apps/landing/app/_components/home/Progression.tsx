@@ -31,7 +31,7 @@ export function Progression() {
           and levels
         </h2>
         <p className="lead">
-          Each track has its own lifetime level. Higher levels unlock better prices on that track’s prizes.
+          Each track has its own level, and you keep it. A higher level means better prices on that track’s prizes.
         </p>
         <p className="note" style={{ margin: "0 0 34px" }}>
           Marked levels award a one-use Field Requisition.

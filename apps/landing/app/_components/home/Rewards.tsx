@@ -27,7 +27,7 @@ export function Rewards() {
               Ore
             </div>
             <div className="m dsc">
-              Pay the final price in Ore.
+              Spend it on prizes. You see the final price first.
             </div>
           </div>
           <div className="card t">
@@ -43,7 +43,7 @@ export function Rewards() {
               Track levels
             </div>
             <div className="m dsc">
-              Apply the discount earned in that track.
+              A higher level in a track takes money off related prizes.
             </div>
           </div>
           <div className="card t" id="requisitions">
@@ -59,7 +59,7 @@ export function Rewards() {
               Field Requisition
             </div>
             <div className="m dsc">
-              Apply more of your track discount to one eligible prize.
+              Lets more of your discount apply to one prize.
             </div>
           </div>
         </div>

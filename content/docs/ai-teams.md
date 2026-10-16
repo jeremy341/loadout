@@ -10,9 +10,9 @@ LOADOUT is meant to work for people using AI and people working in teams, while 
 
 ## AI help
 
-In the draft, AI help is allowed. Say where you used it, and explain the work, the decisions and the checks that you understand and did yourself.
+AI help is allowed. Say where you used it, and explain the work, the decisions and the checks that you understand and did yourself.
 
-The final limits and how they'll be assessed will be published before launch. Don't rely on a number from an old draft or another program.
+There is no published numerical AI limit. Reviewers need to see your own contribution and the checks you made; a percentage from an older plan or another program isn't a LOADOUT rule.
 
 ## Borrowed work and dependencies
 

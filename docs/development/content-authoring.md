@@ -24,9 +24,11 @@ Use H2/H3 headings, Markdown links/lists, GFM tables and blockquote notes. No ra
 
 Check every factual claim against its owning plan. Plans01/02 own product/economy,11 Eras,15 IRL. A plan's draft number is not permission to publish a price, threshold, formula or schedule.
 
-Already-approved public invariants include the four tracks, Research Mode as a modifier, separate Ore/Track XP, fifteen lifetime levels, the four quality dimensions, and Field Requisition milestones3/6/9/12/15. Exact prices, XP rates, score/multiplier calibration, Custom Order tier values, Era point formulas, thresholds, the Era minimum duration, dates and personal eligibility remain unpublished. The planned 10% Era Ore bonus is public on the Eras page (approved 2026-10-14, Plan 19).
+[Plan 02](../../plans/02-economy-and-rewards.md#rule-status-and-remaining-decisions) owns the current rule-status matrix. Public rules include the four tracks, Research Mode as a modifier, separate Ore/Track XP, fifteen lifetime levels, the four quality dimensions, ages 13 to 18, the Ore rating baseline/floor/ceiling, the 20% level-discount maximum, five identical 20% Requisitions at 3/6/9/12/15 with a 400-Ore minimum, no Ore savings cap, at most 40% combined saving, the LV.15 target, repeat-ship requirements and eight sample prices. Plan 11 owns the approved 10% Era bonus. Intermediate XP thresholds and discount percentages stay in the internal calibration proposal until approved.
 
-These pages describe intended mechanics, not functioning submission/order/registration systems. Keep the status clear. Re-read source claims, not just the current website, when changing wording.
+Unselected XP equations, Research bonus amounts, reviewer counts/duty/deadlines/aggregation, appeal limits, Custom Order tiers and cancellation terms remain internal candidates. A worksheet or old public sentence cannot approve them. A new decision must be recorded with its owner before publication.
+
+Keep the general launch explanation in Start and Eligibility. Other pages describe settled mechanics directly, with a small link to program status rather than a repeated draft warning. An unresolved parameter may be named where it affects the answer. Keep the IRL event status once on its own page. Preserve `status: draft` metadata and do not imply that accounts, submissions, ordering or registration are running. Working catalogs and examples are not stock or fulfillment commitments. Homepage edits are a separate scope.
 
 ## Writing and compatibility
 

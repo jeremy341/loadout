@@ -106,13 +106,10 @@ html:has(.home) { scroll-behavior:smooth }
 .home .br2 .fn { width:auto }
 .home .lnks { margin-top:6px }
 .home .lnks a { color:var(--ac);text-decoration:underline;margin-right:18px;font-size:13px;letter-spacing:.06em }
-.home #progression > .lnks, .home #field-pricing > .lnks { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 24px; text-align: center; }
-.home #progression > .lnks a, .home #field-pricing > .lnks a { margin-right: 0; font-size: 14px; line-height: 1.6; }
+.home #progression > .lnks { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 24px; text-align: center; }
+.home #progression > .lnks a { margin-right: 0; font-size: 14px; line-height: 1.6; }
 .home .loop { margin-top:14px;font-size:12px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase }
-.home .lgr { display:grid;grid-template-columns:48px 1fr auto;gap:22px;align-items:center;border:1px solid var(--fg);margin-top:-1px;padding:20px 24px;background:var(--bg) }
-.home .lgr.lo { border-style:dashed;opacity:.82 }
-.home .lgr.hi { box-shadow:inset 4px 0 0 var(--ac) }
-.home .lgr h4, .home .org h4, .home .asd h4 { margin:2px 0 6px;font:700 22px var(--font-pixel),monospace }
+.home .asd h4 { margin:2px 0 6px;font:700 22px var(--font-pixel),monospace }
 .home .sig { font-size:11px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase }
 .home .l5 { grid-template-columns:repeat(5,1fr) }
 .home .era { display:flex;align-items:stretch;flex-wrap:wrap }
@@ -120,7 +117,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home .era>div+div { margin-left:34px }
 .home .era>div+div:before { content:"→";position:absolute;left:-34px;top:50%;width:34px;margin-top:-14px;text-align:center;color:var(--ac);font-size:24px }
 .home .era small { display:block;margin-bottom:6px;color:var(--ac);font-size:13px }
-.home .r2 { grid-template-columns:repeat(2,1fr) }
 .home .g2 .card { border-bottom:1px solid var(--fg) }
 .home .g2 .card:nth-child(4n) { border-right:0 }
 .home .g2 .card:nth-last-child(-n+4) { border-bottom:0 }
@@ -140,10 +136,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home .led dt { font-weight:700;font-size:14px }
 .home .led dd { margin:0;font-size:14px;line-height:1.6;opacity:.85 }
 .home .callout { margin:14px 0;padding:16px 20px;border-left:4px solid var(--ac);background:var(--ln) }
-.home .ppl { display:grid;grid-template-columns:1.3fr 1fr;gap:28px }
-.home .org { display:grid;grid-template-columns:56px 1fr;gap:18px;padding:22px 0;border-top:1px solid var(--fg) }
-.home .gh, .home .asd a { display:block;color:var(--ac);text-decoration:underline;font-size:14px;padding:4px 0 }
-.home .gh { margin-top:20px }
+.home .asd a { display:block;color:var(--ac);text-decoration:underline;font-size:14px;padding:4px 0 }
 .home .asd { border:1px solid var(--fg);padding:28px 30px;background:var(--bg) }
 .home:has(#d-start:checked) #pn-start { display:block }
 .home:has(#d-start:checked) .dn label[for=d-start] { border-left-color:var(--ac);background:var(--ln);color:var(--ac) }
@@ -164,9 +157,7 @@ html:has(.home) { scroll-behavior:smooth }
 @media(max-width:800px) {
   .home .br2 { grid-template-columns:1fr }
   .home .br2:before, .home .br2:after { display:none }
-  .home .lgr { grid-template-columns:48px 1fr }
-  .home .lgr .chip { grid-column:2;justify-self:start }
-  .home .ppl, .home .docs { grid-template-columns:1fr }
+  .home .docs { grid-template-columns:1fr }
   .home .dn { border-right:0;border-bottom:1px solid var(--fg) }
   .home .dp { padding:24px 20px }
   .home .led>div { grid-template-columns:1fr }
@@ -259,9 +250,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home #tracks .ar { --ar-period: 8.9s; --ar-phase: -3.7s; }
 .home #process .ar { --ar-period: 10.3s; --ar-phase: -7.1s; }
 .home #progression .ar { --ar-period: 9.4s; --ar-phase: -11.4s; }
-.home #field-pricing .ar { --ar-period: 8.4s; --ar-phase: -2.6s; }
 .home #eras .ar { --ar-period: 10.7s; --ar-phase: -9.8s; }
-.home #behind-loadout .ar { --ar-period: 9.1s; --ar-phase: -15.7s; }
 .home .hero .ar-right, .home #tracks .ar { animation-direction: alternate-reverse; }
 @media (prefers-reduced-motion: reduce) { .home .ar { animation: none; } }
 
@@ -416,7 +405,7 @@ html:has(.home) { scroll-behavior:smooth }
   .home .hero .tag { font-size: 13px; padding: 5px 9px; }
   .home .hero .hero-frame { padding: 17px 12px; }
   /* Phones: main's headline is 54px (Jersey, 5.6em wide); scale Pixelify to the same line width, with main's 89px box. */
-  .home .hero .h1 { font-size: min(calc(clamp(54px, 11.6vw, 82px) * .6707), calc((100vw - 64px) / 8.35)); line-height: 1.223; }
+  .home .hero .h1 { font-size: min(calc(clamp(54px, 11.6vw, 82px) * .6707), calc((100vw - 104px) / 8.6)); line-height: 1.223; }
   .home .hero .hero-frame > p { font-size: 14px; line-height: 1.55; margin-top: 16px; }
   .home .hero .hero-actions { gap: 12px; margin-top: 20px; }
   .home .hero .hero-btn { min-width: 0; flex: 1 1 0; width: auto; min-height: 48px; padding: 11px 12px; font-size: 17px; }
@@ -433,7 +422,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home .ft-brand .hex { width: 27px; height: 27px; }
 .home .ft-brand .hex i { width: 13px; height: 13px; }
 .home .ft-intro p { max-width: 720px; margin: 16px 0; font-size: 16px; line-height: 1.6; color: var(--fg); }
-.home .ft-intro .ft-status { margin-top: 16px; color: var(--mut); }
 .home .ft-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 40px; border-top: 2px solid var(--fg); padding-top: 28px; }
 .home .ft-column h3 { margin: 5px 0 14px; font-size: 20px; color: var(--fg); }
 .home .ft-column a { display: block; min-height: 0; margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: var(--fg); text-decoration: none; }
@@ -545,8 +533,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home .pit + .sect { padding-top: 72px; }
 .home #process, .home #progression { padding-block: 88px; }
 .home #eras { padding-block: 104px; }
-.home #behind-loadout { padding-block: 80px; }
-.home #field-pricing, .home #shop, .home #custom-orders { padding-block: 40px; }
+.home #shop, .home #custom-orders { padding-block: 40px; }
 
 /* Section heading block: 12px label, 44px title, 16px lead (main: .section-heading). */
 .home .lab { font-size: 12px; margin-bottom: 10px; }
@@ -588,12 +575,6 @@ html:has(.home) { scroll-behavior:smooth }
 }
 
 /* Project fit (main: .fit-ledger 900px, 18px/20px rows, 22px titles, 14px copy). */
-.home .lgr { max-width: 900px; margin-inline: auto; padding: 18px 20px; gap: 16px; grid-template-columns: 30px minmax(0, 1fr) auto; }
-.home .lgr .ic.l { width: 30px; height: 30px; }
-.home .lgr .dsc { font-size: 14px; line-height: 1.5; }
-.home .lgr .sig { font-size: 10px; letter-spacing: .08em; }
-.home .lgr .chip { min-width: 112px; text-align: center; font-size: 10px; letter-spacing: .06em; }
-.home #project-fit .chips { max-width: 900px; margin-inline: auto; }
 
 /* Track XP and levels (main: .progression-rail, 26px levels, 16px copy, 760px note). */
 .home .lad { gap: 24px; padding-block: 24px 40px; }
@@ -619,9 +600,6 @@ html:has(.home) { scroll-behavior:smooth }
 /* Eras (main: .era-concept-rail and .era-facts, 900px, joined, 22px and 24px titles). */
 .home .era { max-width: 900px; margin-inline: auto; flex-wrap: nowrap; }
 .home .era > div { padding: 22px 16px; font-size: 22px; text-align: center; }
-.home #eras .row.r2 { max-width: 900px; margin: 32px auto 0; gap: 0; }
-.home #eras .row.r2 .card.sm { min-height: 0; padding: 20px 16px; text-align: center; }
-.home #eras .row.r2 .card:first-child { border-right: 0; }
 .home #eras .card .ct { justify-content: center; }
 
 /* FAQ (main: 900px list, boxed 8px apart, 16px questions, 16px answers). */
@@ -630,19 +608,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home .fq2-q { min-height: 56px; padding: 16px 17px; font-size: 16px; letter-spacing: .09em; }
 .home .fq2-a p { margin: 0; max-width: 800px; padding: 5px 42px 18px; font-size: 16px; line-height: 1.65; }
 
-/* Who is behind LOADOUT (main: behind-loadout.css, 1.2fr/1fr, 40px gap, 28px names, 16px copy, 32px box). */
-.home .ppl { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: start; }
-.home .org { grid-template-columns: 64px minmax(0, 1fr); gap: 24px; padding: 24px 0; border-top: 1.5px solid var(--mut); align-items: start; }
-.home .org:last-of-type { border-bottom: 1.5px solid var(--mut); }
-.home .org h4 { font-size: 28px; line-height: 1.15; margin: 0; overflow-wrap: anywhere; }
-.home .org .m { font-size: 16px; line-height: 1.65; text-transform: none; letter-spacing: 0; margin-top: 4px; font-weight: 600; color: var(--fg); }
-.home .org .dsc { margin-top: 8px; font-weight: 400; color: var(--mut); opacity: 1; }
-.home .gh { display: inline-flex; align-items: center; min-height: 44px; margin-top: 24px; padding: 0; font-size: 16px; }
-.home #behind-loadout .asd { padding: 32px; border-width: 2px; }
-.home #behind-loadout .asd .m { font-size: 12px; margin-bottom: 12px; letter-spacing: .04em; }
-.home #behind-loadout .asd h4 { font-size: 32px; line-height: 1.1; margin: 0 0 24px !important; }
-.home #behind-loadout .asd p { margin: 0 0 16px; font-size: 16px; line-height: 1.65; }
-.home #behind-loadout .asd a { display: inline-flex; align-items: center; min-height: 44px; padding: 0; margin-right: 18px; font-size: 16px; }
 
 /* Hero: facts row and scroll cue sized like main (23px icons, 64px cue). */
 .home .hero .hero-facts { min-height: 23px; align-items: center; }
@@ -655,18 +620,17 @@ html:has(.home) { scroll-behavior:smooth }
   .home .sect { padding-block: 56px; }
   .home #process, .home #progression { padding-block: 64px; }
   .home #eras { padding-block: 76px; }
-  .home #behind-loadout { padding-block: 64px; }
-  .home #field-pricing, .home #shop, .home #custom-orders { padding-block: 32px; }
+  .home #hack-club { padding-block: 64px; }
+  .home #shop, .home #custom-orders { padding-block: 32px; }
   .home #tracks .row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
   .home .card.t { min-height: 0; }
-  .home .ppl { grid-template-columns: minmax(0, 1fr); gap: 32px; }
 }
 @media (max-width: 700px) {
   .home .sect { padding-block: 44px; }
   .home #process, .home #progression { padding-block: 44px; }
   .home #eras { padding-block: 56px; }
-  .home #behind-loadout { padding-block: 44px; }
-  .home #field-pricing, .home #shop, .home #custom-orders { padding-block: 28px; }
+  .home #hack-club { padding-block: 44px; }
+  .home #shop, .home #custom-orders { padding-block: 28px; }
   .home .sect > .h2 { font-size: 38px; line-height: 1; }
   .home .sect > .lead { margin-bottom: 28px; }
   .home .sect > .h2 + :not(.lead) { margin-top: 28px; }
@@ -674,20 +638,16 @@ html:has(.home) { scroll-behavior:smooth }
   .home .fn { padding: 24px 20px; }
   .home .br2 { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .home .fc { height: 48px; }
-  .home .org { gap: 16px; }
-  .home #behind-loadout .asd { padding: 24px; }
   .home .fq2-q { padding: 12px 14px; min-height: 48px; }
   .home .hero .hero-cue { font-size: 13px; }
 }
 @media (max-width: 360px) {
-  .home .org { grid-template-columns: minmax(0, 1fr); gap: 12px; }
 }
 
 /* ===== Second final pass: inner block sizes matched to main (measured at 1440 and 390) ===== */
 .home .cn { line-height: 1.15; }
 @media (min-width: 901px) {
   .home #tracks .card.t { min-height: 374px; }
-  .home #field-pricing .card { min-height: 232px; }
   .home #shop .card.sm { min-height: 198px; }
 }
 
@@ -720,8 +680,6 @@ html:has(.home) { scroll-behavior:smooth }
 }
 
 /* Project fit rows and note. */
-.home .lgr h4 { line-height: 1; margin: 4px 0 5px; }
-.home #project-fit .note { max-width: 800px; }
 
 /* Track XP rail: 64px markers, 26px levels with body line height. */
 .home .st { padding-right: 0; text-align: center; }
@@ -731,13 +689,7 @@ html:has(.home) { scroll-behavior:smooth }
 /* Era steps and facts (main: number beside the name, 13px fact copy). */
 .home .era > div { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .home .era small { margin: 0; font-size: 11px; }
-.home #eras .row.r2 .card { gap: 8px; }
-.home #eras .row.r2 .dsc { font-size: 13px; line-height: 1.45; }
 
-/* Community context box: status rule, stacked links (main: .behind-loadout-status, .behind-loadout-links). */
-.home #behind-loadout .asd p:nth-of-type(3) { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--mut); color: var(--ac); }
-.home #behind-loadout .asd a { display: flex; width: fit-content; margin: 0; }
-.home #behind-loadout .asd p + a, .home #behind-loadout .asd p:nth-of-type(3) + a { margin-top: 24px; }
 
 /* Footer wordmark sits inside the footer content and behind it, ending just above the bottom bar. */
 .home .ft-inner { position: relative; z-index: 1; }
@@ -770,7 +722,7 @@ html:has(.home) { scroll-behavior:smooth }
   .home .nav-toggle { height: 44px; }
 }
 @media (max-width: 700px) {
-  .home .hero .h1 { font-size: min(calc(clamp(54px, 11.6vw, 82px) * .6707), calc((100vw - 64px) / 8.35)); }
+  .home .hero .h1 { font-size: min(calc(clamp(54px, 11.6vw, 82px) * .6707), calc((100vw - 104px) / 8.6)); }
 }
 .home .hero .hero-cue { letter-spacing: 0; min-height: 69px; }
 
@@ -857,7 +809,7 @@ html:has(.home) { scroll-behavior:smooth }
   .home .hero { width: 100vw; margin-left: calc(50% - 50vw); margin-right: 0; }
 }
 .home .hero .hero-frame { width: min(1100px, 100%); padding: 28px 30px 12px; }
-.home .hero .h1 { font-size: clamp(48px, 8.5vw, 124px); line-height: .95; letter-spacing: -.01em; }
+.home .hero .h1 { font-size: clamp(48px, 8.5vw, 120px); line-height: .95; letter-spacing: -.01em; }
 .home .hero .hero-frame > p { max-width: 540px; margin-top: 36px; font-size: 17px; line-height: 1.6; }
 .home .hero .hero-badge { margin-bottom: 14px; }
 .home .hero .tag { font-family: var(--font-dot), monospace; font-size: 15px; font-weight: 400; letter-spacing: .06em; padding: 6px 14px; border: 0; box-shadow: none; }
@@ -871,7 +823,7 @@ html:has(.home) { scroll-behavior:smooth }
 }
 @media (max-width: 700px) {
   .home .hero .hero-frame { padding: 17px 12px; }
-  .home .hero .h1 { font-size: min(calc((100vw - 64px) / 8.35), 60px); }
+  .home .hero .h1 { font-size: min(calc((100vw - 104px) / 8.6), 60px); }
   .home .hero .hero-btn { min-width: 0; min-height: 48px; padding: 11px 12px; font-size: 14px; }
   .home .hero .hero-actions { gap: 12px; margin-top: 24px; }
   .home .hero .hero-frame > p { font-size: 14px; margin-top: 16px; }
@@ -924,8 +876,8 @@ html:has(.home) { scroll-behavior:smooth }
 @media (max-width: 1359px) { .home .hero .hero-side { display: none; } }
 
 /* Community context panel and footer sheet: no longer lighter than the darkened page around them. */
-.home #behind-loadout .asd, .home .ft-sheet { background: color-mix(in srgb, var(--bg) 35%, transparent); }
-.home:has(#theme:checked) #behind-loadout .asd, .home:has(#theme:checked) .ft-sheet { background: color-mix(in srgb, var(--bg) 30%, transparent); }
+.home .ft-sheet { background: color-mix(in srgb, var(--bg) 35%, transparent); }
+.home:has(#theme:checked) .ft-sheet { background: color-mix(in srgb, var(--bg) 30%, transparent); }
 
 /* ===== LOADOUT logo: pixel slot-and-bolt mark with a heavy pixel wordmark (Logo.tsx) ===== */
 .home { --logo-bg: var(--ac); --logo-fg: var(--acf); --logo-fill: var(--fg); }
@@ -966,15 +918,8 @@ html:has(.home) { scroll-behavior:smooth }
 
 /* Era steps and facts at main's heights (78px steps, 112px facts). */
 .home .era > div { font-size: 20px; padding: 22px 12px; line-height: 1.45; }
-.home #eras .row.r2 .card { padding: 14px 16px; gap: 4px; }
-.home #eras .row.r2 .card .ct { font-size: 10px; line-height: 1.2; }
-.home #eras .row.r2 .dsc { line-height: 1.35; }
 
 /* Community context box at main's height. */
-.home #behind-loadout .asd .m { margin-bottom: 8px; }
-.home #behind-loadout .asd h4 { margin-bottom: 20px !important; }
-.home #behind-loadout .asd p:nth-of-type(3) { margin-top: 20px; padding-top: 12px; }
-.home #behind-loadout .asd p + a, .home #behind-loadout .asd p:nth-of-type(3) + a { margin-top: 16px; }
 
 @media (min-width: 801px) { .home .era > div { white-space: nowrap; } }
 @media (max-width: 800px) {
@@ -985,29 +930,24 @@ html:has(.home) { scroll-behavior:smooth }
 }
 @media (max-width: 700px) {
   .home .strip { padding: 20px 18px; }
-  .home .lgr { padding: 16px; gap: 12px; }
   .home .st { padding-bottom: 30px; }
   .home #progression .asd { margin-top: 24px !important; }
 }
-.home #eras .row.r2 .card { padding: 12px 16px; gap: 2px; }
-.home #eras .row.r2 .card .cn { line-height: 1; }
 
 /* ===== Dark palette: warm charcoal page, one box colour, soft outlines, no bottom darkening, amber highlights ===== */
 .home:not(:has(#theme:checked)) { --bg: #222627; --mut: #A7AEAB; --pl1: #2C3132; --pl2: #2C3132; --surface: #2C3132; --edge: rgba(233, 235, 231, .22); --hl: #6FC2BB; }
 body:has(.home):not(:has(#theme:checked)) { background: #222627; }
 
 /* One box colour for cards, strips, rows, steps, panels and the nav. */
-.home:not(:has(#theme:checked)) .card, .home:not(:has(#theme:checked)) .strip, .home:not(:has(#theme:checked)) .lgr, .home:not(:has(#theme:checked)) .era > div, .home:not(:has(#theme:checked)) .asd, .home:not(:has(#theme:checked)) .ft-sheet, .home:not(:has(#theme:checked)) .fq2, .home:not(:has(#theme:checked)) .nav, .home:not(:has(#theme:checked)) .nav-sheet,
-.home:not(:has(#theme:checked)) #behind-loadout .asd { background: var(--surface); }
+.home:not(:has(#theme:checked)) .card, .home:not(:has(#theme:checked)) .strip, .home:not(:has(#theme:checked)) .era > div, .home:not(:has(#theme:checked)) .asd, .home:not(:has(#theme:checked)) .ft-sheet, .home:not(:has(#theme:checked)) .fq2, .home:not(:has(#theme:checked)) .nav, .home:not(:has(#theme:checked)) .nav-sheet { background: var(--surface); }
 
 /* Soft outlines on content boxes; controls (nav bar, buttons, toggle, FAQ rows) keep their strong ones. */
 .home:not(:has(#theme:checked)) .card, .home:not(:has(#theme:checked)) .row > .card, .home:not(:has(#theme:checked)) .row > .card:last-child, .home:not(:has(#theme:checked)) .row.g2 > .card:nth-child(n),
-.home:not(:has(#theme:checked)) .strip, .home:not(:has(#theme:checked)) .lgr, .home:not(:has(#theme:checked)) .fn, .home:not(:has(#theme:checked)) .era > div, .home:not(:has(#theme:checked)) .asd, .home:not(:has(#theme:checked)) .ft-sheet, .home:not(:has(#theme:checked)) .chip { border-color: var(--edge); }
+.home:not(:has(#theme:checked)) .strip, .home:not(:has(#theme:checked)) .fn, .home:not(:has(#theme:checked)) .era > div, .home:not(:has(#theme:checked)) .asd, .home:not(:has(#theme:checked)) .ft-sheet, .home:not(:has(#theme:checked)) .chip { border-color: var(--edge); }
 .home:not(:has(#theme:checked)) .card:hover { box-shadow: 4px 4px 0 rgba(233, 235, 231, .4); }
 
 /* Amber for small highlights only. */
-.home:not(:has(#theme:checked)) .lnks a, .home:not(:has(#theme:checked)) .gh, .home:not(:has(#theme:checked)) .asd a, .home:not(:has(#theme:checked)) .card li:before, .home:not(:has(#theme:checked)) .fq2-icon, .home:not(:has(#theme:checked)) .era small, .home:not(:has(#theme:checked)) .sn { color: var(--hl); }
-.home:not(:has(#theme:checked)) #behind-loadout .asd p:nth-of-type(3) { color: var(--hl); }
+.home:not(:has(#theme:checked)) .lnks a, .home:not(:has(#theme:checked)) .asd a, .home:not(:has(#theme:checked)) .card li:before, .home:not(:has(#theme:checked)) .fq2-icon, .home:not(:has(#theme:checked)) .era small, .home:not(:has(#theme:checked)) .sn { color: var(--hl); }
 .home:not(:has(#theme:checked)) .mc-c { border-color: var(--hl); }
 
 /* ===== Muted margin ASCII (AsciiField.tsx): barely visible, lights up faintly near the cursor; wide screens only ===== */
@@ -1123,11 +1063,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 
 /* ===== Animations from main: ore nudge, era connector and IRL status entrances ===== */
 @keyframes ore-nudge { from { transform: translateY(0); } to { transform: translateY(-3px) rotate(-2deg); } }
-@keyframes era-connector-enter { from { border-color: transparent; } }
-@keyframes irl-status-enter { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
 .home .ic.nudge { animation: ore-nudge 2400ms ease-in-out infinite alternate; }
-.home .era > div + div { animation: era-connector-enter 500ms var(--ease) both; }
-.home #loadout-irl .asd { animation: irl-status-enter 500ms var(--ease) 120ms both; }
 @media (prefers-reduced-motion: reduce) { .home .ic.nudge, .home .era > div + div, .home #loadout-irl .asd { animation: none; } }
 .home .st .cn { display: block; }
 .home .st .dsc { display: block; margin-top: 8px; }
@@ -1190,3 +1126,78 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   .home .pit b { font-size: 44px; }
   .home .pit > span { font-size: 16px; }
 }
+.home .we { max-width: 700px; margin: 40px auto 0; padding: 14px 18px; border-left: 3px solid var(--ac); font-size: 15px; line-height: 1.7; color: var(--fg); }
+.home .pb-price { font-size: 13px; }
+.home .hero-credit { margin: 22px 0 0; font-size: 14px; text-align: center; color: var(--mut); }
+.home .hero-credit a { color: var(--ac); text-decoration: underline; }
+.home #hack-club { padding-block: 80px; }
+
+/* FAQ as native details: no marker, the icon is drawn here, and the answer eases open where the browser can animate to auto height. */
+.home .fq2-q { list-style: none; }
+.home .fq2-q::-webkit-details-marker { display: none; }
+.home .fq2-icon::before { content: "+"; }
+.home .fq2[open] .fq2-icon::before { content: "\2212"; }
+.home .fq2-q:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .home { interpolate-size: allow-keywords; }
+  .home .fq2::details-content { block-size: 0; overflow: hidden; transition: block-size 250ms cubic-bezier(0.23, 1, 0.32, 1), content-visibility 250ms allow-discrete; }
+  .home .fq2[open]::details-content { block-size: auto; }
+}
+
+.home .tag-chip { margin-top: auto; align-self: flex-start; }
+
+/* The worked example: hours times rating gives Ore, and the Ore buys a prize. */
+.home .we-calc { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 10px 12px; margin: 0; max-width: 860px; }
+.home .we-cap { margin: 12px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--mut); text-align: center; }
+.home .we-calc span { display: flex; flex-direction: column; gap: 4px; min-width: 112px; padding: 14px 18px; border: 1.5px solid var(--fg); background: var(--bg); text-align: center; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); }
+.home .we-calc b { font-family: var(--font-pixel), monospace; font-size: 24px; letter-spacing: 0; color: var(--fg); font-weight: 700; }
+.home .we-calc span:last-child { border-color: var(--ac); }
+.home .we-calc span:last-child b { color: var(--ac); font-size: 20px; }
+.home .we-calc i { align-self: center; font-style: normal; font-family: var(--font-pixel), monospace; font-size: 22px; color: var(--ac); }
+@media (max-width: 700px) {
+  .home .we-calc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .home .we-calc b { font-size: 18px; }
+  .home .we-calc i { display: none; }
+  .home .we-calc span { min-width: 0; padding: 12px 10px; }
+  .home .we-calc span:last-child { grid-column: 1 / -1; }
+}
+
+/* Savings rules as plain rows: a term on the left, the rule on the right. */
+.home .facts { display: grid; margin: 40px auto 0; max-width: 860px; border-top: 1.5px solid var(--fg); }
+.home .facts > div { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 8px 28px; padding: 18px 4px; border-bottom: 1.5px solid var(--fg); }
+.home .facts dt { font-family: var(--font-pixel), monospace; font-size: 18px; text-transform: uppercase; color: var(--ac); }
+.home .facts dd { margin: 0; font-size: 15px; line-height: 1.6; }
+@media (max-width: 700px) {
+  .home .facts > div { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Custom Orders: three steps in a line, joined by arrows. */
+/* LOADOUT IRL: three days on a line with a square marker for each. */
+.home .days { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 36px; margin: 44px auto 0; padding: 0; max-width: 980px; border-top: 2px dashed var(--mut); }
+.home .days > li { position: relative; display: flex; flex-direction: column; gap: 10px; padding-top: 26px; }
+.home .days > li::before { content: ""; position: absolute; top: -9px; left: 0; width: 16px; height: 16px; background: var(--ac); border: 2px solid var(--fg); }
+.home .days small { color: var(--ac); font-size: 12px; letter-spacing: .14em; }
+.home .days .cn { font-size: 24px; line-height: 1.2; }
+@media (max-width: 700px) {
+  .home .days { border-top: 0; border-left: 2px dashed var(--mut); padding-left: 24px; }
+  .home .days > li { padding-top: 0; }
+  .home .days > li::before { top: 2px; left: -34px; }
+}
+
+/* Jerry's reason for LOADOUT, as a plain pull quote. */
+.home .why { max-width: 760px; margin: 34px auto 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--ac); text-align: left; }
+.home .why blockquote { margin: 0; }
+.home .why p { margin: 0; font-size: 16px; line-height: 1.7; }
+.home .why figcaption { margin-top: 12px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); }
+
+/* Community Eras: one statement, centred, with the bonus as the figure. */
+
+/* Where LOADOUT comes from: two columns, facts on the left and Jerry's reason in a framed card on the right; one column on phones. */
+.home .hc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 40px; align-items: start; max-width: 980px; margin: 36px auto 0; }
+.home .hc-facts p { margin: 0 0 16px; font-size: 16px; line-height: 1.7; }
+.home .hc-links { justify-content: flex-start; margin-top: 8px; }
+.home .hc-quote { margin: 0; padding: 26px 28px; border: 2px solid var(--fg); background: var(--bg); }
+.home .hc-quote blockquote { margin: 0; }
+.home .hc-quote p { margin: 0; font-size: 16px; line-height: 1.7; }
+.home .hc-quote figcaption { margin-top: 16px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); }
+@media (max-width: 760px) { .home .hc { grid-template-columns: minmax(0, 1fr); gap: 28px; } }

@@ -1,5 +1,6 @@
-// Builds the homepage cursors from four tiles of Kenney's Cursor Pixel Pack (CC0, see source/kenney-LICENSE.txt):
-// the classic arrow, the index-finger hand, and the open hand and fist for pulling things. Kenney draws them white
+// Builds the homepage cursors from tiles of Kenney's Cursor Pixel Pack (CC0, see source/kenney-LICENSE.txt):
+// the classic arrow, the index-finger hand, the open hand and fist for pulling things, and for the mole a flat hand for
+// petting (alone and with a small pink heart added here) and a thumb-and-finger hand for pinching. Kenney draws them white
 // with a black outline; this recolours them to
 // LOADOUT's ink outline and the theme's fill (blue in the dark theme like its icons, yellow in the light theme),
 // and writes 32 px (1x) and 64 px (2x) PNGs, pixel for pixel, no smoothing.
@@ -123,13 +124,37 @@ const SOURCES = {
   hand: "source/kenney-0157-hand.png",
   grab: "source/kenney-0138-open-hand.png",
   grabbing: "source/kenney-0139-fist.png",
+  pet: "source/kenney-0175-flat-hand.png",
+  pinch: "source/kenney-0178-thumb-hand.png",
+  // Three of our own, for the mole: the shaking fist is drawn by hand on the 16 by 16 grid, the thumbs up and stop hand are
+  // from an image-model sheet shrunk onto the grid (see assets/editable/mole/PROMPTS.md). Black outline, white fill, like Kenney's.
+  shake: "source/ours-shaking-fist.png",
+  thumbs: "source/ours-thumbs-up.png",
+  stop: "source/ours-stop-hand.png",
 };
+
+// The petting hand with a small heart above its fingers: a 20 by 20 canvas, the hand 4 rows down, the heart top right.
+const HEART_DROP = 4;
+const PINK = [229, 154, 154];
+const HEART = ["..##.##.", ".#oo#oo#", ".#ooooo#", "..#ooo#.", "...#o#..", "....#..."];
+function addHeart(hand, ink) {
+  const w = 20, h = 20;
+  const rgba = Buffer.alloc(w * h * 4);
+  for (let y = 0; y < hand.h; y++) for (let x = 0; x < hand.w; x++) hand.rgba.copy(rgba, ((y + HEART_DROP) * w + x) * 4, (y * hand.w + x) * 4, (y * hand.w + x) * 4 + 4);
+  HEART.forEach((row, y) => [...row].forEach((c, x) => {
+    if (c === ".") return;
+    const color = c === "#" ? ink : PINK;
+    const o = (y * w + x + 12) * 4;
+    rgba[o] = color[0]; rgba[o + 1] = color[1]; rgba[o + 2] = color[2]; rgba[o + 3] = 255;
+  }));
+  return { w, h, rgba };
+}
 
 // The click point: the arrow's tip is its top left corner; the hand's is the middle of its top row (the fingertip);
 // the open hand and the fist are held by the middle of the opaque shape.
 function hotspot(kind, img) {
   const opaque = (x, y) => img.rgba[(y * img.w + x) * 4 + 3] > 0;
-  if (kind === "grab" || kind === "grabbing") {
+  if (kind === "grab" || kind === "grabbing" || kind === "pet" || kind === "pinch" || kind === "shake" || kind === "thumbs" || kind === "stop") {
     let minX = img.w, maxX = 0, minY = img.h, maxY = 0;
     for (let y = 0; y < img.h; y++) {
       for (let x = 0; x < img.w; x++) {
@@ -153,12 +178,14 @@ function hotspot(kind, img) {
   return best;
 }
 
-for (const [kind, file] of Object.entries(SOURCES)) {
+for (const [kind, file] of Object.entries({ ...SOURCES, petHeart: SOURCES.pet })) {
   const source = decode(path.join(here, file));
-  const [hx, hy] = hotspot(kind, source);
+  const [hx, rawY] = hotspot(kind === "petHeart" ? "pet" : kind, source);
+  const hy = kind === "petHeart" ? rawY + HEART_DROP : rawY;
   console.log(kind, source.w + "x" + source.h, "hotspot at 1x (32 px):", hx * 2 + 1, hy * 2 + 1);
   for (const [theme, fill] of Object.entries(FILLS)) {
-    const art = recolour(source, fill, INK);
+    const flat = recolour(source, fill, INK);
+    const art = kind === "petHeart" ? addHeart(flat, INK) : flat;
     for (const [suffix, factor] of [["", 2], ["@2x", 4]]) {
       const big = scale(art, factor);
       fs.writeFileSync(`${out}/${kind}-${theme}${suffix}.png`, encode(big.w, big.h, big.rgba));

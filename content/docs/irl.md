@@ -8,11 +8,11 @@ status: draft
 
 LOADOUT IRL is a planned three-day build weekend in Germany's Ruhr area. The idea is simple: spend a weekend building real projects next to other builders.
 
-> **Not confirmed yet.** The venue, dates, funding and registration are all still open. No registration is open through this site, so please don't book travel or buy equipment because of this page.
+> **Event status:** Dates, venue, funding and registration are not confirmed. The regular RSVP records program interest, not an event booking.
 
 ## The weekend {#weekend}
 
-It runs Friday to Sunday. It is a build weekend with proper rest, not a no-sleep marathon.
+The weekend outline runs Friday to Sunday, with time for building, sharing and proper rest.
 
 | Day | What it could look like |
 | --- | --- |
@@ -32,9 +32,9 @@ Nothing about the event is a separate game.
 - **Same Era:** approved event projects add Era Points to the one shared total that online builders add to. There is no event-only meter, and a good weekend does not force the next Era to start. [Community Eras](/docs/eras) explains how.
 - **Optional:** you will never need to go to an event to progress online.
 
-## What's still open {#status}
+## Event updates {#status}
 
-Where it will be, when it will happen, how it will be funded, and how you'd register. We'll publish those details before anyone is asked to sign up. Until then, the regular RSVP only records interest in the program and does not reserve a place.
+This page will carry the venue, schedule and registration details when they're ready. You can [RSVP](https://rsvp.soon.it/loadout) for program updates.
 
 ## What must happen first
 

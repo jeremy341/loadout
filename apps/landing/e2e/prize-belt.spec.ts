@@ -13,7 +13,7 @@ test("the prizes list once for assistive technology and the belt moves by exactl
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("None are available to order yet");
+  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
   await expect(page.locator(".pb-half")).toHaveCount(2);
   await expect(page.locator(".pb-half").nth(0)).not.toHaveAttribute("aria-hidden", "true");
   await expect(page.locator(".pb-half").nth(1)).toHaveAttribute("aria-hidden", "true");

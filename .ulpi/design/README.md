@@ -15,6 +15,7 @@
 
 | Brief | Scope |
 |---|---|
+| [`community-channel-links.md`](community-channel-links.md) | Verified direct community/help links in the footer, FAQ and public Docs. |
 | [`faq-question-readability.md`](faq-question-readability.md) | Slightly looser FAQ question lettering on desktop and mobile; accordion behavior and layout stay the same. |
 | [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |
 | [`section-corner-brackets.md`](section-corner-brackets.md) | Four corner marks on the section headings, matching the hero frame. |
@@ -24,7 +25,10 @@
 | [`prize-belt.md`](prize-belt.md) | The planned prizes ride a slow, pausable belt, as in Pixl and the YSWS template. |
 | [`prize-photos.md`](prize-photos.md) | The proposed prizes show one example product photo each, from Pixl, on the existing belt. |
 | [`homepage-voice.md`](homepage-voice.md) | Plainer homepage copy: hero, rewards, progression, Eras and IRL lines, with no new claims. |
-| [`pull-tab.md`](pull-tab.md) | The Docs tab is pulled up like a rubber band: a thinning blue band, with more resistance the further it goes, snaps back, then a long pull opens the Docs. |
+| [`real-details.md`](real-details.md) | The homepage and Docs say what is decided: teens 13 to 18, 10 Ore for a solid hour, the 0 to 20 rating, a worked example, prices on the prizes, short FAQ answers, and no invented drawing details. |
+| [`copy-follow-through.md`](copy-follow-through.md) | Owner-approved fixes 1–4: accurate hero, direct launch wording, starter prizes first, shorter repeated copy, and clearer Custom Order and Era Docs. Real-project showcase deferred; existing How it works preserved. |
+| [`mole.md`](mole.md) | A pixel Maulwurf mascot turns up at the bottom of the homepage: it can be petted, picked up, and annoyed, and the footer button hides it. |
+| [`mole-behaviour.md`](mole-behaviour.md) | Proposed rework of Orry's behaviour: 19 ways to interact, what counts as each gesture, two mood meters with minimum times, per-frame animation timing, a run-and-pause rhythm, and rules for effects and the cursor. Not built. |
 | [`custom-cursor.md`](custom-cursor.md) | The homepage cursor is a pixel arrow with a pointing hand for links, from Kenney's CC0 pack, in LOADOUT's ink, blue and yellow. |
 | [`rock-bottom-404.md`](rock-bottom-404.md) | The 404 page ("rock bottom") and the cave-in error page. |
 | [`pixel-font-open-c.md`](pixel-font-open-c.md) | An open C and c in the pixel font, so a C no longer reads as an O. |

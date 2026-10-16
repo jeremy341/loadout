@@ -7,7 +7,7 @@ import "./rock-bottom.css";
 import "./depth-dark.css";
 import "./prize-belt.css";
 import "./cursor.css";
-import "./pull.css";
+import "./mole.css";
 import "./docs.css";
 import { SmoothScroll } from "./_components/SmoothScroll";
 import { siteConfig } from "./site-config";

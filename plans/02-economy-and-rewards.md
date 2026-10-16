@@ -8,6 +8,42 @@ This document owns all rules that affect XP, Ore, reward pricing, specialization
 
 > **Depth gives leverage. Breadth gives flexibility. Mastery gives access.**
 
+## Agreed 2026-10-15 (read this first: it supersedes any conflicting text below)
+
+These decisions were recorded from the owner on 2026-10-15. This table and the corresponding sections below are the current rules. The calibration proposal keeps candidate values and calculations; it does not override this plan. Plan 22 describes candidate review operations, not an implemented platform. The rule reconciliation removes the older 15% ceiling, tiered Field Requisitions and Ore savings caps.
+
+| Topic | Agreed |
+|---|---|
+| Who it is for | High-school students aged 13 to 19. Owner update 2026-10-16: changed from 13 to 18. |
+| Rate | 10 Ore for an approved hour of solid work. Ore = approved hours x the rating. |
+| Rating | Other builders rate a ship from 0 to 20; 10 is solid; a ship the team approves pays at least 5; 20 is possible. A team member checks the ship first. |
+| Hours and projects | No limit on hours or projects. Fraud (fake hours, copied work, fake evidence, collusion) is a permanent ban and takes back everything earned. |
+| Shipping again | A project can be shipped again; each ship covers only the hours since the previous one (at least 5 new approved hours) and is rated on its own. |
+| Levels | Fifteen lifetime levels per track. Level 15 is about 350 hours of solid work in one track (3,500 Track XP); two tracks reach level 15 in both after about 700 hours. |
+| Level discount | Rises with level to 20% at level 15; the better related discount applies, never the sum. |
+| Requisitions | Five identical tickets per track at levels 3, 6, 9, 12 and 15. Each takes 20% of the base price off one prize of 400 Ore or more, on top of the level discount, one per order. |
+| Savings limits | None in Ore. The most anyone saves on one item is 40%. |
+| Prices | The sample catalog in the proposal is the working catalog (a domain 24 Ore up to a Framework 16 laptop at 5,000). The enclosed printer and the Framework 16 are priced at a steeper rate and have no level requirement. |
+| Carry-over | Ore and Track XP carry across seasons. |
+| Public wording | The site shows Ore only, never a money value for one. |
+
+## Rule status and remaining decisions
+
+| Topic | Current rule | Still open | Public owner |
+|---|---|---|---|
+| Ore and quality | Approved hours times the ship rating; 10 is solid, accepted ships pay at least 5, maximum 20 | Category aggregation, rounding and calibration details | `content/docs/review.md`, `progress.md` |
+| Track XP | One award allocated across demonstrated tracks; lifetime levels persist; LV.15 is 3,500 XP / about 350 solid hours | Exact award equation, quality weighting, intermediate thresholds and minimum track shares | `content/docs/progress.md` |
+| Research Mode | A modifier within the four tracks; reproducible work can receive extra Track XP | Bonus amount and qualification details; 25% is a candidate, not approved | `content/docs/research.md` |
+| Requisitions | Five identical 20% tickets at 3/6/9/12/15; minimum base price 400 Ore; one per order; no Ore cap | Redemption rounding and order-correction implementation | `content/docs/requisitions.md`, `pricing.md` |
+| Discounts | Maximum permanent discount 20%; use the best related track, never sum track discounts | Exact intermediate curve and any cross-track markup | `content/docs/pricing.md` |
+| Shipping again | New work only, at least five new approved hours; each ship has its own rating | Tracking-window precision and implementation | `content/docs/shipping.md` |
+| Reviews and appeals | Team validity check, then peer rating using the four quality dimensions | Reviewer count, review duty, deadlines, conflict/weighting mechanics and appeal limits | `content/docs/review.md` |
+| Custom Orders | Relevant level, approved work, sufficient Ore and team fulfillment approval; program cancellation restores the Requisition | Tier levels and limits, quote validity, exact sourcing formula and cancellation/refund terms | `content/docs/custom-orders.md` |
+
+Intermediate milestone estimates remain in the calibration proposal until approved; the public guides show the chosen Requisition milestones and LV.15 endpoint without presenting that candidate curve as a rule. No answer or elapsed time automatically approves a candidate value. The agreed Requisition schedule remains 3/6/9/12/15; the alternative 5/8/10/12/15 is not adopted.
+
+Unselected referral, Signal, leaderboard, sponsor-drop and General Requisition values later in this document are future proposals, not launch rules or public entitlements. The current base award has a maximum rating of 20; no old Signal example silently raises it.
+
 
 ---
 
@@ -79,75 +115,33 @@ Research Mode projects are expected to be especially strong here.
 
 # 10. Multiplier Range
 
-Suggested target:
+The agreed rating range is 0 to 20, with a payout floor of 5 for a ship that passes the team's approval check. A rejected ship pays nothing.
 
-```text
-WEAK / INCOMPLETE SHIP      2×–4×
-OKAY PROJECT                5×–8×
-SOLID PROJECT               9×–12×
-GREAT PROJECT              13×–16×
-EXCEPTIONAL                17×–20×
-```
+| Rating | Anchor |
+|---:|---|
+| 5 | Rough but genuine accepted work |
+| 10 | Solid work |
+| 15 | Great work |
+| 20 | Outstanding work |
 
-A normal good project should often land around **~10×**.
-
-Signal can raise the normal ceiling for exceptional external traction.
+Originality, Technical Depth, Execution and Documentation remain the four quality dimensions. The median-per-category aggregation, reviewer pool, review duty and appeal mechanics in [Plan 22](22-peer-review-and-multipliers.md) are candidates until separately confirmed. Do not use the older 2–4 accepted-ship range or an automatic Signal uplift above 20.
 
 ---
 
 # 11. Ore + XP Formula
 
-LOADOUT has **one global currency** and **four independent XP progressions**.
-
-Recommended Ore model:
+The current base award is:
 
 ```text
-APPROVED HOURS × QUALITY MULTIPLIER + GLOBAL BONUSES = ORE
+base Ore = approved hours × ship rating
+qualifying Era bonus = base Ore × 10%
 ```
 
-Recommended XP model:
+Twenty approved hours at rating 10 earn 200 base Ore. If the project qualifies for the Era bonus, that adds 20 Ore, for 220 total. The Era decision is separate from quality and adds no Track XP. Plan 11 owns qualification; stacking with any future bonuses and rounding still require a decision.
 
-```text
-APPROVED HOURS × XP FACTOR × QUALITY FACTOR = TOTAL TRACK XP
-```
+Ore is global and spendable. A completed purchase reduces the available Ore balance. Spending does not remove XP, accepted projects or levels.
 
-Then reviewers allocate the Track XP across the fields represented by the ship.
-
-Example:
-
-```text
-APPROVED HOURS
-31.3
-
-QUALITY MULTIPLIER
-14.6×
-
-GLOBAL SIGNAL BONUS
-+50 B
-
-TOTAL
-507 ORE
-
-TOTAL TRACK XP
-+820 XP
-
-REVIEWER ALLOCATION
-Compute   70%  → +574 XP
-Systems   30%  → +246 XP
-```
-
-Ore:
-- are global;
-- can be spent;
-- do not belong to one track;
-- are not reduced when a builder buys something.
-
-Track XP:
-- cannot be spent;
-- remains in its field forever;
-- determines level, pricing advantages, unlocks, and Requisition milestones.
-
-This separation means spending currency never makes the Builder Profile weaker and multi-field work does not require separate currencies.
+Track XP is one non-spendable award divided across the fields shown by the work. The split cannot duplicate the award. LV.15 is 3,500 XP, about 350 approved hours at the solid-work baseline. The exact XP award equation is still open. Plan 22's `approved hours × (10 + rating) ÷ 2` and its proposed 25% Research bonus are candidates, not agreed formulas. Do not publish an exact award calculated from them as a current rule.
 
 ---
 
@@ -204,13 +198,13 @@ Example:
 
 ```text
 1 verified builder
-+50 B
++50 Ore
 
 2 verified builders
 exclusive cosmetic / sticker unlock
 
 3 verified builders
-+100 B
++100 Ore
 
 5 verified builders
 special referral unlock
@@ -256,7 +250,7 @@ Examples:
 
 Possible reward:
 - badge
-- `+50 B`
+- `+50 Ore`
 
 ## SIGNAL II — STRONG
 
@@ -269,9 +263,9 @@ Examples:
 Possible reward:
 
 ```text
-+250 B
++250 Ore
 MAX MULTIPLIER
-20× → 25×
+Base rating remains at most 20; a separate Signal bonus needs approval.
 ```
 
 ## SIGNAL III — SATURATED
@@ -287,9 +281,8 @@ Examples:
 Possible reward:
 
 ```text
-+1,000 B
-MAX MULTIPLIER
-30×
++1,000 Ore
+Base rating remains at most 20; a separate Signal bonus needs approval.
 ```
 
 Exact thresholds depend on budget and abuse resistance.
@@ -324,13 +317,13 @@ Example:
 badge
 
 100 real users
-+100 B
++100 Ore
 
 1,000 real users
-+300 B
++300 Ore
 
 10,000 real users
-+750 B
++750 Ore
 ```
 
 Verification may use:
@@ -353,7 +346,7 @@ Example:
 
 ```text
 FIRST EXTERNAL CONTRIBUTOR
-+50 B
++50 Ore
 
 5 EXTERNAL CONTRIBUTORS
 special badge
@@ -443,7 +436,7 @@ Research Mode, benchmarks, profilers, test infrastructure, reproducible technica
 
 Eras are a shared technical-progression layer, separate from competitive seasons. They use non-spendable Era Points, not a new currency. Approved projects that a reviewer marks as qualifying earn a separate **10% of their approved base Ore award**. Era qualification adds no Track XP and does not alter the quality multiplier or the four quality dimensions. The reviewer records a reason. No partial Era-bonus percent is used in the approved design.
 
-Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing multiplier or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
+Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing multiplier or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in [Plan 11](11-eras-and-community-progression.md).
 
 If a future physical weekend is approved, its projects use this same shared Era and this same reviewer-gated bonus. There is no event-specific Ore or XP rule; see [Plan 15](15-loadout-irl-ruhr.md). This is a cross-reference only and does not settle the open stacking/configuration questions above.
 
@@ -457,27 +450,27 @@ Examples:
 
 ## 2X
 Improve a measured workload by 2×.  
-`+50 B`
+`+50 Ore`
 
 ## LOCAL
 Run something normally cloud-hosted on hardware you control.  
-`+40 B`
+`+40 Ore`
 
 ## FIRST PCB
 Design/order your first PCB.  
-`+50 B`
+`+50 Ore`
 
 ## SHIP TO SOMEONE
 Get another person to actually use/install your project.  
-`+30 B`
+`+30 Ore`
 
 ## 100 USERS
 Reach 100 genuine users.  
-`+100 B`
+`+100 Ore`
 
 ## SMALLER
 Reduce a build/model/storage footprint significantly.  
-`+40 B`
+`+40 Ore`
 
 Quests add variety, not the majority of payouts.
 
@@ -544,7 +537,7 @@ SEASON #2–3
 General Requisition II
 
 TRACK WINNER
-Field Requisition II
+Field Requisition
 for that track
 
 TOP REVIEWER
@@ -684,64 +677,13 @@ Normally out of scope:
 
 ## 26.2 Every Item Has Field Affinity
 
-Every shop item is configured individually.
+An item records its base Ore price, related tracks, access requirements, Requisition eligibility, availability and region. The best matching track discount applies; track discounts are never added together.
 
-Recommended fields:
+The agreed sample price for a Raspberry Pi 5 is 200 Ore. Hardware and Systems are relevant fields. Do not retain the older 700-Ore illustration as its current price. A cross-track surcharge is still a candidate, so no automatic +10% markup is implied.
 
-```text
-primary_track
-related_tracks[]
-access_class
-base_ore_price
-cross_track_markup_percent
-minimum_track_level
-normal_discount_cap_ore
-requisition_eligible
-stock
-region
-sponsor
-```
+There is no `normal_discount_cap_ore` field in the current product rule: the owner removed savings caps in Ore. Future platform design can choose its schema after the remaining rules are settled.
 
-Example:
-
-```text
-RASPBERRY PI 5
-
-Primary
-Hardware
-
-Related
-Systems
-
-Access
-Open
-
-Base
-700 B
-
-Cross-track markup
-+10%
-```
-
-If a reward naturally belongs to several areas, use the **best relevant track level** for pricing.
-
-Example:
-
-```text
-MINI PC
-
-Relevant tracks:
-Systems / Compute
-
-User:
-Systems LV.2
-Compute LV.9
-
-PRICING TRACK
-Compute LV.9
-```
-
-Do not force hardware into one arbitrary field when several skills legitimately use it.
+---
 
 ## 26.3 Three Access Classes
 
@@ -825,78 +767,26 @@ But someone who has invested in Hardware should get a better deal.
 
 ## 26.5 Permanent Track Discount
 
-Each relevant track level provides a **small permanent discount**.
+Related track levels give an ongoing discount, reaching 20% at LV.15. The precise intermediate curve remains open. The calibration proposal's exponent-1.2 curve is a candidate; its public milestone figures are working estimates.
 
-Working default curve:
-
-| Track Level | Permanent field discount |
-|---:|---:|
-| 0 | 0% + possible cross-track markup |
-| 1 | 0% |
-| 2 | 2% |
-| 3 | 4% |
-| 4 | 5% |
-| 5 | 6% |
-| 6 | 7% |
-| 7 | 8% |
-| 8 | 9% |
-| 9 | 10% |
-| 10 | 11% |
-| 11 | 12% |
-| 12 | 13% |
-| 13 | 14% |
-| 14 | 15% |
-| 15 | 15% |
-
-This curve is **provisional and config-driven**.
-
-The permanent discount should be noticeable without becoming the primary way builders extract value from the program.
+Use the best related discount for a multi-track item. Never add two track discounts. Discounts change the purchase price, not the Ore earned by a ship.
 
 ## 26.6 Expensive-Item Savings Cap
 
-A percentage discount becomes dangerous on expensive rewards.
+The older Ore cap model is retired. Permanent and Field Requisition discounts each use the base price and apply without a separate Ore savings cap. Their maximum combined reduction is 40%.
 
-Example:
-
-```text
-GPU
-6,000 B
-
-Compute LV.15
-15% raw discount
-= 900 B raw saving
-```
-
-Do not automatically grant the full `900 B`.
-
-Each item has a **normal permanent-discount savings cap**.
-
-Example:
+For a 1,000-Ore eligible prize at LV.15:
 
 ```text
-GPU
-Base                           6,000 B
-Raw LV.15 saving                 900 B
-Normal savings cap               350 B
-
-NORMAL SPECIALIST PRICE        5,650 B
+Base price                 1,000 Ore
+Permanent discount (20%)     200 Ore
+One Requisition (20%)        200 Ore
+Final price                 600 Ore
 ```
 
-The user still benefits from specializing, but high-value items do not destroy the economy.
+The same calculation applies to more expensive eligible items. Control program exposure through approved catalog pricing, inventory and fulfillment decisions, not by silently restoring the removed caps.
 
-Default cap bands may guide admins, but **every expensive item should be balanced individually**.
-
-Illustrative defaults:
-
-| Base Ore price | Suggested normal cap |
-|---:|---:|
-| under 750 B | full normal discount |
-| 750–1,749 B | ~100–150 B |
-| 1,750–3,499 B | ~200–250 B |
-| 3,500–6,999 B | ~300–400 B |
-| 7,000 B+ | ~400–500 B or manual |
-
-Sponsor subsidy, fulfillment cost, scarcity, and stock can justify overrides.
+---
 
 ## 26.7 Why Track Balancing Matters
 
@@ -935,154 +825,30 @@ Many rewards should be multi-track:
 
 ## 26.8 Field Requisitions
 
-Requisitions are rare, one-use progression items that let a builder push beyond the normal expensive-item savings cap.
+Each track awards five identical Field Requisitions at levels 3, 6, 9, 12 and 15. There are no I, II or Master variants in the current field-ticket model.
 
-Each track awards only **five lifetime progression Requisitions**:
-
-```text
-LV.3   → Requisition I
-LV.6   → Requisition I
-LV.9   → Requisition II
-LV.12  → Requisition II
-LV.15  → Master Requisition
-```
-
-Across one track, that is all the level-based Requisitions the builder can ever earn.
-
-Rules:
-- one-use;
-- non-transferable;
-- tied to the track that earned it;
-- never expire;
-- stack in the builder's inventory until used;
-- maximum **one Requisition per order**;
-- cannot bypass a Mastery level requirement;
-- cannot be converted directly to Ore;
-- refunded/reissued only when an order is cancelled for program/fulfillment reasons, not buyer regret.
-
-Working default values:
-
-### FIELD REQUISITION I
-```text
-Minimum eligible item value: 750 B
-Additional discount allowance: +200 B
-```
-
-### FIELD REQUISITION II
-```text
-Minimum eligible item value: 1,750 B
-Additional discount allowance: +500 B
-```
-
-### MASTER FIELD REQUISITION
-```text
-Minimum eligible item value: 3,500 B
-Allows the user's full normal track percentage
-to push past the ordinary cap,
-up to ~1,200 B total track-discount saving.
-```
-
-Exact values are budget-configurable.
-
-Example:
-
-```text
-GPU GRANT
-
-Base                            6,000 B
-Compute LV.10 permanent rate       11%
-Raw permanent saving              660 B
-Normal cap                        350 B
-Normal price                    5,650 B
-
-+ Compute Requisition II
-Additional allowance              500 B
-
-Full raw saving needed             660 B
-Allowed after requisition          660 B
-
-FINAL PRICE                      5,340 B
-```
-
-A Requisition does not create an arbitrary extra sale. It mainly lets the builder **realize more of the track discount they already earned**.
+- Each ticket gives an extra 20% of the item's base Ore price as savings.
+- The base price must be at least 400 Ore and the item's track must match.
+- It adds to the permanent track discount; both use the base price, not a compounded remainder.
+- One use, non-transferable, no expiry, maximum one Requisition per order.
+- No separate Ore savings cap; maximum combined permanent-plus-ticket discount is 40%.
+- It cannot bypass an equipment or Custom Order level requirement.
+- A Custom Order quote must explicitly permit its use.
+- If the program cancels fulfillment, restore the ticket. Broader buyer-cancellation terms remain open.
 
 ## 26.9 Minimum Item Value & Anti-Waste Protection
 
-Rare progression rewards should not be accidentally wasted on tiny purchases.
-
-A Requisition is disabled when the item is below its minimum eligible value.
-
-The interface may also warn when the Requisition would use only a small fraction of its potential benefit.
-
-Example:
-
-```text
-COMPUTE REQUISITION II
-
-Potential additional allowance
-500 B
-
-This purchase would gain only
-40 B of extra savings.
-
-Recommended:
-save it for a larger upgrade.
-```
-
-For extremely poor-value usage, the product may block redemption. A working threshold is that the user should gain at least **20–25% of the Requisition's possible extra value**, unless an admin config explicitly permits otherwise.
+The minimum eligible base price is 400 Ore. The old 750/1,750/3,500 tiers and “percentage of possible allowance” rule do not apply to these identical tickets. A preview must show the actual extra saving and remaining ticket count before the builder confirms.
 
 ## 26.10 Redemption Confirmation Modal
 
-**Always show a confirmation modal before consuming a Requisition.**
+Use one clear confirmation showing the base price, permanent saving, ticket saving, final Ore price, matching field and inventory change. State that using the ticket consumes it. Do not create a new quote or consume a ticket merely because a builder previews it.
 
-Example:
-
-```text
-USE COMPUTE REQUISITION II?
-
-RTX GPU GRANT
-
-Base price                     6,000 B
-Without Requisition            5,650 B
-With Requisition               5,340 B
-
-EXTRA SAVING
-310 B
-
-You own:
-Compute Requisition II ×2
-
-After purchase:
-Compute Requisition II ×1
-
-This Requisition is one-use and does not expire.
-
-[ KEEP REQUISITION ]   [ USE & BUY ]
-```
-
-For a Master Requisition, add:
-
-```text
-RARE PROGRESSION REWARD
-
-You can earn only one Master Compute
-Requisition from reaching Compute LV.15.
-
-This purchase permanently consumes it.
-```
-
-Do not use a second confirmation after this modal. One clear confirmation is enough.
-
-The modal should show:
-- base price;
-- normal price;
-- Requisition price;
-- additional savings;
-- potential maximum value where useful;
-- number owned before/after;
-- whether another progression Requisition can still be earned and at what level.
+---
 
 ## 26.11 General Requisitions
+
+**Future proposal only.** The values below are not the agreed Field Requisition rules, have no published entitlement, and are not part of the initial program unless separately approved.
 
 General Requisitions can be used on any eligible field.
 
@@ -1099,23 +865,23 @@ Working defaults:
 
 ### GENERAL REQUISITION I
 ```text
-Minimum item: 1,000 B
+Minimum item: 1,000 Ore
 10% one-purchase discount
-Maximum saving: 300 B
+Maximum saving: 300 Ore
 ```
 
 ### GENERAL REQUISITION II
 ```text
-Minimum item: 2,000 B
+Minimum item: 2,000 Ore
 15% one-purchase discount
-Maximum saving: 600 B
+Maximum saving: 600 Ore
 ```
 
 ### GENERAL MASTER REQUISITION
 ```text
-Minimum item: 4,000 B
+Minimum item: 4,000 Ore
 15% one-purchase discount
-Maximum saving: 1,000 B
+Maximum saving: 1,000 Ore
 ```
 
 A General Requisition can be used instead of a Field Requisition, **not together with one**.
@@ -1124,48 +890,13 @@ Permanent track pricing still applies first. The General Requisition then adds i
 
 ## 26.12 Requisition Inventory
 
-Under **Loadout → Requisitions**:
-
-```text
-FIELD        TYPE        OWNED
-
-Compute      I             1
-Compute      II            2
-Compute      Master        0
-Systems      I             2
-Hardware     I             1
-General      II            1
-```
-
-Detail view:
-
-```text
-COMPUTE REQUISITION II
-
-Extra discount allowance:
-+500 B
-
-Minimum item:
-1,750 B
-
-Eligible:
-Compute-tagged rewards
-
-Expires:
-Never
-
-Stackable on one order:
-No
-
-Earned from:
-Compute LV.9
-```
-
-This makes Requisitions feel like scarce progression inventory rather than coupon codes typed into checkout.
+Record the track, quantity, milestone provenance and whether a ticket is available, reserved, consumed or restored. Every field ticket has the same 20% benefit. Display matching eligibility and the actual saving rather than a tier or an “additional cap allowance”. Record program cancellations and restorations without deleting the original history.
 
 ---
 
 # 27. High-End Aspirational & Mastery Rewards
+
+**Equipment ideas, not an approved gate table.** These older configurations are illustrative. The current sample catalog below and the agreed exception for the enclosed printer and Framework 16 take precedence. Do not publish these example levels as settled requirements.
 
 Show aspirational rewards from day one even when locked.
 
@@ -1173,26 +904,26 @@ Example:
 
 ```text
 FRAMEWORK LAPTOP
-Base 8,400 B
+Base 8,400 Ore
 Relevant: Tools / Systems / Compute
 Access: Specialist or program-defined Mastery
 Normal discount cap: manual
 
 RTX GPU GRANT
-Base 6,500 B
+Base 6,500 Ore
 Primary: Compute
 Access: Mastery
 Requires Compute LV.8+
 Requisition eligible
 
 BAMBU LAB A1
-Base 4,500 B
+Base 4,500 Ore
 Primary: Hardware
 Access: Mastery
 Requires Hardware level
 
 MINI SERVER
-Base 3,200 B
+Base 3,200 Ore
 Primary: Systems
 Related: Compute
 Access: Specialist
@@ -1206,7 +937,7 @@ For every high-end item show:
 - level requirement if any;
 - cross-track status;
 - normal specialist price;
-- savings cap;
+- final price after applicable discounts;
 - Requisition eligibility;
 - stock/region;
 - levels remaining until unlock.
@@ -1216,6 +947,8 @@ High-end items must be **individually balanced** so one track does not become th
 ---
 
 # 28. Custom Orders
+
+**Status:** The request/review/quote mechanism is agreed. Numerical tiers, limits, quote duration and buyer-cancellation terms below are candidates. Program-caused cancellation restores a Field Requisition. Only confirmed rules belong in public Docs.
 
 Custom Orders are a flagship LOADOUT feature.
 
@@ -1259,7 +992,7 @@ Required
 Hardware LV.8 OR Compute LV.10
 
 Base Ore estimate
-4,200 B
+4,200 Ore
 ```
 
 ## 28.2 Cross-Track Custom Orders
@@ -1327,7 +1060,7 @@ Systems LV.10
 Compute LV.8
 
 ESTIMATED ORE QUOTE
-8,420 B
+8,420 Ore
 
 REQUISITION
 [ none selected ]
@@ -1452,156 +1185,46 @@ Sponsor integration should be relevant to building, not just logo placement.
 
 # 65. Economic Guardrails
 
-Model worst-case liability before launch.
+Model program cost using the actual approved catalog, delivery cost, expected quantities, sponsor support and the maximum 40% purchase reduction. No Ore savings cap or total-hour limit is authorized by this section.
 
-Basic Ore issuance example:
+For example, 200 builders × 30 approved hours × rating 10 issues 60,000 base Ore. Qualifying Era bonuses add separately. This is a scenario, not a participation claim or funded commitment.
 
-```text
-200 builders
-× 30 approved hours
-× 10× average multiplier
-= 60,000 Ore
-```
-
-You need to know what **60,000 Ore** can become in real fulfillment cost.
-
-But v4 also requires modeling **discount liability**.
-
-For every expensive item estimate:
-
-```text
-base fulfillment cost
-- sponsor subsidy
-× expected quantity
-+ shipping/tax
-+ normal track discount exposure
-+ possible Requisition exposure
-= worst-case program liability
-```
-
-Stress-test:
-- many high-level builders buying the same expensive item;
-- everyone saving Master Requisitions for GPUs/laptops;
-- leaderboard + reviewer General Requisitions landing in one season;
-- sponsor inventory disappearing;
-- one track becoming more economically attractive than the others;
-- cross-track markups being too punitive;
-- Requisition values being so weak nobody uses them.
-
-Keep configuration server/admin controlled so prices, caps, and Requisition values can be rebalanced without code changes.
+Check concentration on expensive items, all five tickets in each track, cross-track access, supplier changes, stock and delivery costs. Keep any budgeting conversion internal; no fixed cash value for Ore is promised publicly. Do not count a discount both as a reduced price and as an additional cash purchase cost.
 
 ---
 
 # 66. Ore Pricing Philosophy
 
-Do not permanently promise a fixed public conversion such as:
-
-> `1 Ore = $X`
-
-Ore is program currency.
-
-Pricing can reflect:
-- fulfillment cost;
-- sponsor subsidy;
-- inventory;
-- shipping/tax;
-- region;
-- season budget;
-- field balance;
-- scarcity;
-- desired progression pace.
-
-Each reward has a **base Ore price**. The user's checkout quote is then derived from:
-1. relevant track affinity;
-2. cross-track markup when applicable;
-3. permanent track discount;
-4. normal expensive-item savings cap;
-5. optional single Requisition;
-6. stock/region/program overrides.
-
-Conceptually:
+Each item has a base Ore price. Calculate:
 
 ```text
-BASE ORE PRICE
-        ↓
-RELEVANT TRACK?
-        ├─ no → CROSS-TRACK MARKUP
-        └─ yes
-        ↓
-PERMANENT TRACK %
-        ↓
-NORMAL SAVINGS CAP
-        ↓
-OPTIONAL REQUISITION
-        ↓
-FINAL QUOTE
+permanent saving = base price × best related track discount
+ticket saving = base price × 20%, when one matching ticket is eligible
+final Ore price = base price − permanent saving − ticket saving
 ```
 
-Pricing must be explainable in the UI. Do not make users reverse-engineer why something costs more for them.
+The maximum permanent rate is 20%; the maximum combined reduction is 40%. A ticket needs a base price of at least 400 Ore. The exact intermediate discount curve, any cross-track markup and rounding convention remain open. No hidden cap or surcharge should be inferred from older examples.
 
-Custom Orders should use an approved final Ore quote before any Requisition is reserved or consumed.
+A Custom Order uses its final approved base quote. Show eligibility, each saving and the final balance before acceptance. The team's sourcing and tax/delivery treatment are still being settled. Do not publish a fixed `1 Ore = $X` conversion.
 
 ---
 
 # 67. Example Launch Shop
 
-A launch shop should be small, credible, capability-focused, and balanced across fields.
+These eight sample prices are approved for public planning copy. They describe the intended catalog, not current stock or fulfillment. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
 
-## Open / Early
-- domain / developer hosting
-- VPS credit
-- GPU compute credit
-- object storage / database credit
-- ESP32 / RP2040
-- USB serial/debug adapter
-- sensors
-- small dev board
-- basic soldering accessories
+| Item | Base Ore | Solid-work hours |
+|---|---:|---:|
+| ESP32 starter kit | 50 | 5 |
+| Soldering iron kit | 60 | 6 |
+| Raspberry Pi 5 | 200 | 20 |
+| Samsung T7 SSD | 160 | 16 |
+| Domain | 24 | 2.4 |
+| A1 Mini printer | 500 | 50 |
+| Enclosed printer | 1,000 | 100 |
+| Framework 16 | 5,000 | 500 |
 
-## Mid
-- Raspberry Pi
-- 1TB NVMe
-- logic analyzer
-- Pinecil
-- portable display
-- networking gear
-- PCB/fabrication grant
-- FPGA starter board
-- mini PC / server credit
-
-## High / Specialist
-- larger compute package
-- higher-end mini PC
-- serious networking/server gear
-- better FPGA board
-- larger PCB/fabrication grant
-- 3D-printer grant
-
-## Mastery / Aspirational
-Visible but mostly level-gated:
-- GPU grant
-- high-end accelerator
-- advanced FPGA board
-- 3D printer
-- specialist lab gear
-- Framework/laptop grant
-- workstation/server upgrade
-
-## Custom
-Locked behind the relevant Custom Order tier + enough Ore + program fit.
-
-For each launch item configure:
-- primary/related track;
-- access class;
-- cross-track markup;
-- base Ore price;
-- normal savings cap;
-- Requisition eligibility;
-- stock/region.
-
-Do not pad the launch shop with unrelated lifestyle rewards just to make it look large.
-
----
+The enclosed printer and Framework 16 have no level requirement in this working catalog. Other specialist equipment gates and additional item prices remain undecided. The calibration worksheet keeps additional candidate items for internal comparison.
 
 ---
 
@@ -1611,87 +1234,38 @@ This section exists so implementation does not accidentally revive an older draf
 
 ## Fixed Product Rules
 
-These are product decisions unless intentionally changed later:
+Use the agreed table at the top of this document and the current sections 10, 11 and 26 as the rule owners:
 
-1. Four tracks: **Tools, Systems, Compute, Hardware**.
-2. Research is a mode.
-3. Track max level: **15**.
-4. Ore is global.
-5. Reviewers control final multi-track XP allocation.
-6. Most rewards are cross-track purchasable.
-7. Cross-track purchases can cost more.
-8. Permanent field discounts remain modest.
-9. Expensive items cap ordinary permanent-discount savings.
-10. Hard level gates are mainly for Mastery equipment.
-11. Field Requisitions occur at **3 / 6 / 9 / 12 / 15**.
-12. Milestones award **I / I / II / II / Master**.
-13. Progression Requisitions do not expire.
-14. Maximum one Requisition per order.
-15. Requisitions cannot bypass level gates.
-16. Requisitions have minimum item prices.
-17. Redemption always receives a confirmation modal.
-18. General Requisitions are rare one-use rewards, not permanent global discounts.
-19. Track shop value must be balanced to prevent one obvious reward-maximizing field.
-20. Every final price quote must be explainable and auditable.
+- Four tracks, Research Mode as a modifier, fifteen lifetime levels.
+- Spendable global Ore; a single XP award split across demonstrated fields.
+- Approved hours × rating; accepted-ship floor 5, solid baseline 10, maximum 20.
+- LV.15 at 3,500 XP / about 350 solid-work hours in one track.
+- Permanent track discount reaches 20%; use the best related track.
+- Five identical 20% Field Requisitions at 3/6/9/12/15; 400-Ore minimum base price.
+- One ticket per order, no expiry or transfers, no bypass of equipment levels.
+- No Ore savings caps; at most 40% total reduction.
+- Program cancellation restores a Field Requisition.
+- No total limit on legitimate hours or projects; repeat ships need five new approved hours and new work.
+- Lifetime progress persists across Seasons and Eras.
+
+No older example, fallback default or unpublished candidate silently changes these rules.
+
+---
 
 ## Working Values To Pilot-Test
 
-These are defaults, **not sacred constants**:
+The following are candidates, not automatic defaults: the intermediate discount and XP curves, the XP quality equation, the 25% Research XP bonus, a minimum track-allocation share, any cross-track markup, reviewer counts/duty/deadlines, appeals, Custom Order tier values and buyer-refund terms. Compare them in [the calibration worksheet](proposals/economy-calibration.md) and [Plan 22](22-peer-review-and-multipliers.md). Approval must be explicit and recorded here before they become public rules.
 
-```text
-Permanent discount:
-0% → ~15% over LV.1–15
-
-Field Req I:
-min ~750 B
-+~200 B discount allowance
-
-Field Req II:
-min ~1,750 B
-+~500 B discount allowance
-
-Field Master:
-min ~3,500 B
-full earned field discount past normal cap
-up to ~1,200 B total field-discount saving
-
-General Req I:
-min ~1,000 B
-10% one purchase
-max ~300 B
-
-General Req II:
-min ~2,000 B
-15% one purchase
-max ~600 B
-
-General Master:
-min ~4,000 B
-15% one purchase
-max ~1,000 B
-```
-
-Tune against:
-- sponsor budget;
-- actual fulfillment prices;
-- observed Ore issuance;
-- redemption rates;
-- track popularity;
-- stock;
-- season length;
-- cross-track behavior.
+---
 
 ## Questions To Resolve Before Public Season 00
 
-- Exact XP thresholds for LV.1–15.
-- Exact Ore multiplier calibration.
-- Default cross-track markup by Open/Specialist class.
-- Exact normal savings-cap bands.
-- Which launch rewards are Mastery.
-- Whether every track receives exactly the same Requisition numerical values.
-- Whether sponsor-funded Requisitions can have custom rules.
-- Reviewer-score formula for General Requisition rewards.
-- Season leaderboard General Requisition quantities.
-- Regional pricing/tax treatment for Custom Orders.
+1. Exact XP award formula, intermediate thresholds, quality weighting and track allocation precision.
+2. Research bonus amount and qualification criteria.
+3. Full level-discount curve, rounding and cross-track pricing.
+4. Reviewer count, review duty, aggregation, deadlines and conflict handling.
+5. Appeal limits, timing, score-change policy and error/fraud review.
+6. Custom Order tiers, limits, landed-cost formula, quote validity and cancellation/refund terms.
+7. Confirmed inventory, regional delivery/tax terms and operational launch readiness.
 
-These should live in admin/config rather than being hard-coded throughout the codebase.
+Store eventual configuration in one authority rather than scattering independent constants through implementation or Docs. This document does not implement accounts, review, orders or fulfillment.

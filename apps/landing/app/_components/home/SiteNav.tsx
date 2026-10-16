@@ -11,7 +11,8 @@ import { Logo } from "./Logo";
 const sections = [
   ["TRACKS", "#tracks"],
   ["HOW IT WORKS", "#process"],
-  ["PROGRESS & PRIZES", "#progression"],
+  ["PRIZES", "#shop"],
+  ["LEVELS", "#progression"],
   ["FAQ", "#faq"],
 ] as const;
 const sheetLinks = [...sections, ["DOCS", "/docs"]] as const;
@@ -72,9 +73,8 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
   }, []);
 
   return (
-    <div
+    <header
       className={`nav${hidden && !open && !focused ? " nav-hidden" : ""}`}
-      aria-label="Main navigation"
       onFocusCapture={() => setFocused(true)}
       onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}
     >
@@ -115,6 +115,6 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
           ))}
         </nav>
       )}
-    </div>
+    </header>
   );
 }

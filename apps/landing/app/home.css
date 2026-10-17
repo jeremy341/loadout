@@ -897,7 +897,7 @@ html:has(.home) { scroll-behavior:smooth }
 /* Nav RSVP button is the same height as the colour chooser (30px); both are 44px tall on phones. */
 .home .nav-actions > a.btn { min-height: 30px; padding: 6px 14px; }
 @media (max-width: 700px) {
-  .home .nav-actions > a.btn { min-height: 44px; padding: 8px; }
+  .home .nav-actions > a.btn { min-height: 44px; padding: 8px; white-space: nowrap; }
   .home .nav .tg { min-height: 44px; }
 }
 

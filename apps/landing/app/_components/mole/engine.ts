@@ -144,7 +144,7 @@ export class MoleEngine {
   private exposeForTests() {
     (window as unknown as { loadoutMole: unknown }).loadoutMole = {
       state: () => this.state,
-      box: () => ({ x: this.x, y: this.y, size: this.size, ground: this.ground }),
+      box: () => ({ x: this.x, y: this.y, size: this.size, ground: this.ground, bounces: this.bounces }),
       call: () => this.appear("pop", true),
       burrow: () => this.burrow(),
       sleep: () => { this.dozing = false; this.wakeTaps = 0; this.go("sleepy", "sleepy"); },

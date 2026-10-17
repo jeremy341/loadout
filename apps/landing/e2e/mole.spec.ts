@@ -8,7 +8,8 @@ import { expect, test, type Page } from "@playwright/test";
 type Mood = { affection: number; irritation: number; affectionStage: string; irritationStage: string };
 type Mole = {
   state: () => string;
-  box: () => { x: number; y: number; size: number; ground: number };
+  box: () => { x: number; y: number; size: number; ground: number; bounces: number };
+  runTo: (x: number) => void;
   burrow: () => void;
   anim: () => string;
   mood: () => Mood;
@@ -339,16 +340,26 @@ test("held a long time he struggles and tires out", async ({ page }) => {
 test("shaken hard he gets queasy and dizzy, and after the drop he is mad and sulks", async ({ page }) => {
   await open(page, "?mole=pop&speed=4");
   await waitForIdle(page);
+  await page.evaluate(() => window.loadoutMole!.runTo(720));
+  await waitForIdle(page);
   await record(page);
   const start = await centre(page);
+  const left = Math.max(100, start.x - 200);
+  const right = Math.min(1340, start.x + 200);
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   await page.mouse.move(start.x + 20, start.y - 150, { steps: 6 });
-  for (let i = 0; i < 60; i++) {
-    await page.mouse.move(start.x + (i % 2 ? -180 : 220), start.y - 150, { steps: 2 });
-    await page.waitForTimeout(110);
+  const shaken = page.waitForFunction(
+    () => document.querySelector(".mole")?.classList.contains("is-shaken") === true,
+    undefined,
+    { timeout: 6000 },
+  ).then(() => true, () => false);
+  for (let i = 0; i < 20; i++) {
+    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
+    // The gesture classifier requires 120 ms between reversals; leave a clear timing margin in CI.
+    await page.waitForTimeout(140);
   }
-  await expect(page.locator(".mole")).toHaveClass(/is-shaken/);
+  expect(await shaken).toBe(true);
   expect(await sawAnim(page, "queasy")).toBe(true);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);
@@ -537,24 +548,17 @@ test("a pointer that stares at him makes him suspicious, then squinting, then ha
 
 // ---- shaken, dropped and thrown ------------------------------------------------------------------------------------
 // Counts how many times he touches the ground (a bounce is another touch) and the states he passes through.
-async function watchGround(page: Page) {
+async function watchStates(page: Page) {
   await page.evaluate(() => {
-    const w = window as unknown as { hits: number; states: string[] };
-    w.hits = 0;
+    const w = window as unknown as { states: string[] };
     w.states = [];
-    let air = false;
     window.setInterval(() => {
       const m = window.loadoutMole!;
-      const b = m.box();
-      const up = b.y < b.ground - 2;
-      if (air && !up) w.hits++;
-      air = up;
       const s = m.state();
       if (w.states[w.states.length - 1] !== s) w.states.push(s);
     }, 16);
   });
 }
-const hits = (page: Page) => page.evaluate(() => (window as unknown as { hits: number }).hits);
 const states = (page: Page) => page.evaluate(() => (window as unknown as { states: string[] }).states);
 
 test("shaken in the air he is scared at once, and trembles, without waiting to get queasy", async ({ page }) => {
@@ -586,32 +590,30 @@ test("shaken in the air he is scared at once, and trembles, without waiting to g
 test("a dropped Orry lands without bouncing, and only a thrown one bounces", async ({ page }) => {
   await open(page);
   await waitForIdle(page);
-  await watchGround(page);
   const start = await centre(page);
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   await page.mouse.move(start.x + 5, start.y - 350, { steps: 8 });
   await page.waitForTimeout(250);
   await page.mouse.up();
+  await expect.poll(() => state(page), { timeout: 3000 }).toBe("fall");
   await expect.poll(() => state(page), { timeout: 8000 }).not.toBe("fall");
-  await page.waitForTimeout(600);
-  expect(await hits(page)).toBe(1);
   await waitForIdle(page);
+  expect((await box(page)).bounces).toBe(0);
   const again = await centre(page);
-  await page.evaluate(() => { (window as unknown as { hits: number }).hits = 0; });
   await page.mouse.move(again.x, again.y);
   await page.mouse.down();
   const toward = again.x > 720 ? -1 : 1; // aim at the middle of the window so the throw is never clipped by the edge
   await page.mouse.move(again.x + toward * 8, again.y - 20, { steps: 2 });
   await page.mouse.move(again.x + toward * 500, again.y - 300, { steps: 4 });
   await page.mouse.up();
-  await expect.poll(() => hits(page), { timeout: 6000 }).toBeGreaterThanOrEqual(2);
+  await expect.poll(async () => (await box(page)).bounces, { timeout: 10000 }).toBeGreaterThan(0);
 });
 
 test("after a fall he plays one recovery, and the mood does not make him go mad a second time", async ({ page }) => {
   await open(page, "?mole=pop&speed=4");
   await waitForIdle(page);
-  await watchGround(page);
+  await watchStates(page);
   const start = await centre(page);
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();

@@ -41,9 +41,11 @@ All concrete audit F1–F7 cases resolved without lost content, functionality or
 
 ## Verification record
 
-- Full Playwright suite against the local preview: **299 passed**. This includes homepage, all public Docs routes, 404s, Orry interactions, reduced-motion and explicit-pause controls, forced colors, and the route/theme axe scans.
+- Full local Playwright suite before the owner-requested footer trim: **299 passed**. It included homepage, Docs, 404s, Orry, motion and axe checks.
+- After the footer trim, the six focused footer/reduced-motion/404 checks passed. The first hosted run then exposed timing flakes in two pointer-physics assertions and a 404 test that assumed hydration completed before the 1.8-second depth animation.
+- The shake test now centers Orry and waits concurrently for the actual shake state; it passed three consecutive local runs. The drop/bounce test now checks the engine's test-only bounce counter instead of sampling every frame; it passed three consecutive local runs. The reduced-motion test waits for the depth landing before checking animation; it passed locally.
 - Axe scan matrix: **119 accessibility tests passed**, covering 28 routes in light/dark at 375/1440px plus focused keyboard, text-spacing, 200%-text, motion-persistence, semantics and forced-colors checks.
-- Layout runner: 78 route/state probes. No page-level horizontal scrolling at 320px. Git command samples keep their own keyboard-scrollable code containers. The Tracks comparison table was changed to fixed layout with wrapping; the added enlarged-text regression test passes.
-- `tsc --noEmit` and ESLint passed. Unit suite: 53 passed; Bun printed one non-failing `EPERM` while scanning the user profile.
-- The production build remains unverified in this environment: Turbopack could not start its CSS worker, and the Webpack retry could not fetch Google Fonts because DNS/network access was unavailable.
+- Layout runner: 78 route/state probes. No page-level horizontal scrolling at 320px. Git command samples keep their own keyboard-scrollable code containers. The Tracks comparison table was changed to fixed layout with wrapping; the enlarged-text regression passes.
+- `tsc --noEmit` and ESLint passed before the final regression-test edits; the 53-test unit suite passed. Rerun typecheck, lint and the full browser suite on the final head before merging.
+- The local production build was blocked by Turbopack worker startup and Google Fonts DNS. GitHub's Landing quality build passed on the earlier PR head; check the latest run.
 - This does not certify WCAG 2.2 AA. Real browser zoom, NVDA/VoiceOver, speech control, physical-device checks and a full flash-luminance assessment still need human review.

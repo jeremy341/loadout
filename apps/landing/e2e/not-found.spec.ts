@@ -117,7 +117,6 @@ test("the title glitches when the depth lands, and stays still for reduced motio
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto(lost);
   const lines = page.locator(".h1 > span");
-  await expect(lines.first()).toHaveCSS("animation-name", "none");
   await expect(page.locator(".rb-num")).toHaveAttribute("data-landed", "");
   await expect(lines.first()).toHaveCSS("animation-name", "rb-glitch-a");
   await expect(lines.last()).toHaveCSS("animation-name", "rb-glitch-b");

@@ -1,6 +1,6 @@
 # Prize loop spacing
 
-Status: owner-approved bounded bug fix, 2026-10-16. Preserve the prior uncommitted Era/footer restoration. No Slack messages, commits or publication.
+Status: the two-list loop was removed at the owner's request on 2026-10-17. The 230px card width and 16px inter-card gap remain in the static scroll strip; loop-specific measurements below are historical.
 
 ## Evidence and design read
 

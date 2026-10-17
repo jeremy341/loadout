@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { MotionToggle } from "../MotionToggle";
 
-// Proposed prizes: each of the eight planned categories shows one example product on a slow belt
+// Proposed prizes: each of the eight planned categories shows one example product in a scrollable strip
 // (.ulpi/design/prize-belt.md, .ulpi/design/prize-photos.md). The examples are ideas, not a catalog, and none can be
 // ordered yet. Photos are from Pixl (MIT, permission recorded in docs/source-audit/ATTRIBUTION.md).
 const PRIZES = [
@@ -15,9 +14,9 @@ const PRIZES = [
   { category: "Developer hardware", example: "Framework 16 laptop", ore: "5,000", photo: "framework-16", width: 548, height: 560 },
 ] as const;
 
-function PrizeList({ hidden = false }: { hidden?: boolean }) {
+function PrizeList() {
   return (
-    <ul className="pb-half" aria-hidden={hidden || undefined}>
+    <ul className="pb-half">
       {PRIZES.map(({ category, example, ore, photo, width, height }) => (
         <li key={category}>
           <div className="card sm pb-card">
@@ -57,12 +56,10 @@ export function PlannedPrizes() {
         <p className="lead">
           Examples of what Ore could buy, at the prices we’re planning.
         </p>
-        <div className="pb-motion"><MotionToggle /></div>
         <div className="pb">
           <div className="pb-view" role="region" aria-label="Proposed prize examples" tabIndex={0}>
             <div className="pb-track">
               <PrizeList />
-              <PrizeList hidden />
             </div>
           </div>
         </div>

@@ -1,13 +1,13 @@
-# Prize belt: the planned prizes move past on a slow belt
+# Prize strip: planned prizes stay still and scroll by hand
 
-Status: implemented on the feature/prize-belt branch, awaiting owner check.
+Status: the original animated belt was replaced at the owner's request on 2026-10-17. The eight examples remain a static, manually scrollable strip.
 Binds to: [DESIGN.md](DESIGN.md) and the [design system](../../docs/design/system/design-system.md), sections "Motion", "Cards and rivets" and "Depth markers and rulers".
 
 ## Design read
 
 Reading this as: a landing section for teenage builders, in the locked industrial and signage language, leaning on the pixel sprites already in the page. The owner compared the site with Pixl and the YSWS template. Both show their prizes in a looping carousel on the homepage, with a picture and a name per item. LOADOUT showed eight icon cards in a static grid, which looks like a table of contents rather than a shop window.
 
-Direction: a mine conveyor. The cards are the same riveted cards as the rest of the page and travel left on one slow belt, as ore does through a shaft. Counterfactual test: a generic logo marquee could sit on any site; riveted cards on a belt, with the mine's own sprites, belong to this one.
+Direction: keep the prize examples visible as a horizontal strip of riveted cards. The visitor can scroll it with a pointer or keyboard; it does not move on its own.
 
 ## Scope
 
@@ -16,27 +16,24 @@ Direction: a mine conveyor. The cards are the same riveted cards as the rest of 
 
 ## How it works
 
-- Two copies of the same list sit side by side in one track. The track moves by exactly half its width, so the loop has no jump. Each copy carries its own trailing gap, so half the track is exactly one copy.
-- The second copy is `aria-hidden`: assistive technology reads the eight prizes once, as a list.
-- CSS only: one `transform` animation (70 s a lap), no JavaScript and no React state.
-- The edges fade out with a mask so cards enter and leave softly.
+- One semantic list of eight examples sits inside a horizontally scrollable region.
+- There is no automatic animation and no pause control.
 
 ## Control and states
 
 | State | Behaviour |
 |---|---|
-| Default | The belt moves left slowly. |
-| Pointer over the belt | It pauses. |
-| Belt has keyboard focus | It pauses too, so a visitor on a keyboard can stop it and read. The belt is a labelled region that takes focus. There is no pause button: the owner chose Pixl's hover-to-pause, which keeps the section clean. |
-| Reduced motion | No animation. The belt is a plain row the visitor scrolls by hand, the copy is hidden. |
-| Phone | The same belt with the same card width. |
+| Default | Cards stay still. |
+| Pointer or touch | Visitors scroll horizontally. |
+| Keyboard | The labelled region accepts focus and can be scrolled by keyboard. |
+| Reduced motion | Same static strip; no additional handling needed. |
+| Phone | Visitors swipe the strip horizontally. |
 | Dark and light | The cards use the page's own tokens. |
 
 ## Accessibility
 
-- The visible list is a real `<ul>` with eight items; the moving copy is hidden from assistive technology.
-- Pausing is by pointer hover or by keyboard focus; the focused belt has a visible focus ring. There is no separate pause button (owner decision).
-- The belt is a labelled region that takes keyboard focus, so a visitor can scroll it with the arrow keys when it is a still row (reduced motion).
+- The prize examples are one real `<ul>` with eight items.
+- The labelled scroll region has a visible focus ring and can be moved by keyboard.
 - The section's sentence "These are plans. None are available to order yet." stays above the belt.
 
 ## Skills
@@ -45,9 +42,8 @@ Loaded earlier in this conversation for UI work: `frontend-design-ui-ux` (this b
 
 ## Acceptance
 
-1. The section shows the eight planned prize cards once for assistive technology and twice visually.
-2. The track moves by exactly one copy per lap (half the track width) and the belt animates in the default state.
-3. Hovering the belt, or focusing it with the keyboard, pauses it. There is no pause button.
-4. With reduced motion there is no animation, no copy, and the row scrolls by hand.
-5. "None are available to order yet" is still on the section.
-6. The whole browser suite, typecheck, lint and unit tests pass.
+1. The section shows one list of eight planned prize cards.
+2. The strip is static and manually scrollable.
+3. There is no animation, pause button or duplicate list in any motion-preference state.
+4. "None are available to order yet" is still on the section.
+5. The whole browser suite, typecheck, lint and unit tests pass.

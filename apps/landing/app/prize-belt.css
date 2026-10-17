@@ -1,25 +1,13 @@
-/* The planned prizes ride a slow belt (.ulpi/design/prize-belt.md). Two copies of one list sit in a track that moves by
-   exactly half its width, so the loop never jumps: each copy carries its own trailing gap, which makes half the track
-   exactly one copy. The motion is one transform animation, no script. It pauses under the pointer and while the belt has
-   keyboard focus. With reduced motion the belt is a row to scroll by hand. */
+/* The prize examples stay still and scroll by hand, so no pause control is needed. */
 .home .pb { --pb-gap: 16px; margin-top: 28px; }
 
-.home .pb-view { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
-.home .pb-track { display: flex; width: max-content; animation: pb-scroll 70s linear infinite; will-change: transform; }
+.home .pb-view { overflow-x: auto; }
+.home .pb-track { display: flex; width: max-content; }
 .home .pb-half { display: grid; grid-auto-flow: column; grid-auto-columns: 230px; flex: none; gap: var(--pb-gap); margin: 0; padding: 0 var(--pb-gap) 0 0; list-style: none; }
 .home .pb-half > li { display: flex; min-width: 0; }
 .home .pb-card { width: 100%; border: 1px solid var(--fg); }
 
 .home .pb-view:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
-.home .pb-view:hover .pb-track, .home .pb-view:focus-visible .pb-track { animation-play-state: paused; }
-
-@keyframes pb-scroll { to { transform: translateX(-50%); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .home .pb-track { animation: none; will-change: auto; }
-  .home .pb-view { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
-  .home .pb-half[aria-hidden="true"] { display: none; }
-}
 
 /* Product photo cards (.ulpi/design/prize-photos.md): the photo sits flush on a white plate, the category and one example below. */
 .home .card.pb-card { padding: 0; gap: 0; overflow: hidden; }

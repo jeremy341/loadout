@@ -4,7 +4,6 @@ import { NoiseGrain } from "../NoiseGrain";
 import { DepthGlow } from "./DepthGlow";
 import { DepthNumeral } from "./DepthNumeral";
 import { SiteNav } from "./SiteNav";
-import { MotionToggle } from "../MotionToggle";
 
 type Variant = "lost" | "cave-in";
 
@@ -55,7 +54,7 @@ export function RockBottom({ variant, lead, actions }: { variant: Variant; lead:
             <div className="hero-actions">{actions}</div>
           </div>
         </main>
-        <footer className="rb-foot"><p><span lang="de">Glück auf!</span> <span>LOADOUT, Revier edition</span></p><MotionToggle /></footer>
+        <footer className="rb-foot"><p><span lang="de">Glück auf!</span> <span>LOADOUT, Revier edition</span></p></footer>
       </div>
     </div>
   );

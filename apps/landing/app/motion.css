@@ -1,14 +1,12 @@
-/* Shared visitor motion preference. Reveal content must remain readable while motion is stopped. */
-.motion-toggle, .mole-controls button, .mole-controls summary {
+/* Shared system reduced-motion preference. Reveal content must remain readable when motion is reduced. */
+.mole-controls button, .mole-controls summary {
   min-height: 44px; max-width: 100%; padding: 8px 12px; border: 1px solid currentColor;
   background: var(--bg); color: var(--fg, var(--ink)); font: inherit; font-size: 13px; line-height: 1.4;
   white-space: normal; overflow-wrap: anywhere; cursor: pointer;
 }
-.motion-toggle:focus-visible, .mole-controls button:focus-visible, .mole-controls summary:focus-visible {
+.mole-controls button:focus-visible, .mole-controls summary:focus-visible {
   outline: 2px solid var(--ac); outline-offset: 3px;
 }
-.motion-toggle[aria-disabled=true] { cursor: default; }
-.pb-motion { margin-top: 16px; }
 html[data-motion-paused=true] *, html[data-motion-paused=true] *::before, html[data-motion-paused=true] *::after {
   animation: none !important; transition: none !important; scroll-behavior: auto !important;
 }
@@ -18,16 +16,11 @@ html[data-motion-paused=true] .home .reveal[data-stagger] .row > .card {
 }
 html[data-motion-paused=true] .home .art .f1 { opacity: 1; }
 html[data-motion-paused=true] .home .art .f2, html[data-motion-paused=true] .home .art .f3 { opacity: 0; }
-html[data-motion-paused=true] .home .pb-track { transform: none; will-change: auto; }
-html[data-motion-paused=true] .home .pb-view { overflow-x: auto; mask-image: none; -webkit-mask-image: none; }
-html[data-motion-paused=true] .home .pb-half[aria-hidden=true] { display: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .home .reveal, .home .reveal[data-stagger] .row > .card { opacity: 1 !important; transform: none !important; translate: none !important; }
 }
 @media (forced-colors: active) {
-  .motion-toggle, .mole-controls button, .mole-controls summary { color: ButtonText; background: ButtonFace; border-color: ButtonText; }
-  .motion-toggle:focus-visible, .mole-controls :focus-visible { outline-color: Highlight; }
+  .mole-controls button, .mole-controls summary { color: ButtonText; background: ButtonFace; border-color: ButtonText; }
+  .mole-controls :focus-visible { outline-color: Highlight; }
 }
-
-.ft-motion-controls { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 12px; min-width: 0; max-width: 100%; }

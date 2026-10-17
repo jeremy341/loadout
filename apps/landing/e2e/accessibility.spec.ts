@@ -73,18 +73,26 @@ test("text enlarged to 200 percent does not overflow the hero or Docs branding",
   }
 });
 
-test("animation pause persists after focus moves away and across reload", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" });
+test("there is no visitor pause button and system reduced motion is honored", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const pause = page.locator("#shop").getByRole("button", { name: "Pause animations", exact: true });
-  await pause.click();
+  await expect(page.locator(".motion-toggle")).toHaveCount(0);
   await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
-  await page.keyboard.press("Tab");
-  await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
-  await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
-  await page.locator("#shop").getByRole("button", { name: "Resume animations", exact: true }).click();
-  await expect(page.locator("html")).not.toHaveAttribute("data-motion-paused", "true");
+  await expect(page.locator(".pb-track")).toHaveCSS("animation-name", "none");
+});
+
+test("the theme chooser matches the RSVP control height", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const [theme, rsvp] = await Promise.all([
+      page.locator(".nav .tg").boundingBox(),
+      page.locator(".nav-actions > a.btn").boundingBox(),
+    ]);
+    expect(theme, `${width}px theme control`).not.toBeNull();
+    expect(rsvp, `${width}px RSVP control`).not.toBeNull();
+    expect(Math.abs(theme!.height - rsvp!.height), `${width}px height difference`).toBeLessThanOrEqual(1);
+  }
 });
 
 test("Docs link name contains its visible wording and code examples are explicitly focusable", async ({ page }) => {

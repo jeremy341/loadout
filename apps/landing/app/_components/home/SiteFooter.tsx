@@ -2,7 +2,6 @@ import Link from "next/link";
 import { LOADOUT_HELP_URL, siteConfig } from "../../site-config";
 import { FooterWordmark } from "./FooterWordmark";
 import { Logo } from "./Logo";
-import { MotionToggle } from "../MotionToggle";
 
 // Footer laid out like main's SiteFooter: full-width footer, intro, a three-column link
 // grid, then a bottom bar. The redesign's hexagon mark, drawing sheet and stamp are kept
@@ -84,9 +83,6 @@ export function SiteFooter() {
           Have an idea for the program?{" "}
           <a href={siteConfig.githubUrl}>Open an issue on GitHub</a>.
         </span>
-        <div className="ft-motion-controls">
-          <MotionToggle />
-        </div>
       </div>
     </footer>
   );

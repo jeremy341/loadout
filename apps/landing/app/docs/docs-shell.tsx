@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import type { MouseEvent } from "react";
 import type { DocsGroup } from "./docs-data";
 import { DocsSearch } from "./DocsSearch";
-import { MotionToggle } from "../_components/MotionToggle";
 import { ThemeSwitch } from "../_components/ThemeSwitch";
 import { NoiseGrain } from "../_components/NoiseGrain";
 import { Logo } from "../_components/home/Logo";
@@ -149,7 +148,6 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
         })}
         <p className="docs-nav-note">Every guide is a draft reference while LOADOUT is in development.</p>
         </nav>
-        <div className="docs-motion-toggle"><MotionToggle /></div>
       </div>
       <noscript><style>{".docs .docs-guides{display:block!important;position:static!important;visibility:visible!important;transform:none!important;width:auto!important;height:auto!important;border-right:0!important;box-shadow:none!important}.docs .docs-guides-toggle,.docs .docs-guides-head,.docs .docs-scrim{display:none!important}.docs .docs-back-button{display:flex!important}"}</style></noscript>
     </aside>

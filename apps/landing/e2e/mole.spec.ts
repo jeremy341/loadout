@@ -365,7 +365,7 @@ test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => 
     await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
     await page.waitForTimeout(140);
   }
-  await expect.poll(async () => sawAnim(page, "queasy"), { timeout: 5000 }).toBe(true);
+  await expect.poll(() => anim(page), { timeout: 5000 }).toBe("queasy");
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);
   expect(await sawState(page, "mad")).toBe(true);
@@ -486,9 +486,9 @@ test("he digs down and comes up somewhere else along the bottom", async ({ page 
   expect(Math.abs(after.y - after.ground)).toBeLessThan(2);
 });
 
-test("the footer keeps the global motion toggle without an Orry control section", async ({ page }) => {
+test("the footer has no motion or Orry controls", async ({ page }) => {
   await open(page);
-  await expect(page.locator(".ft-motion-controls .motion-toggle")).toBeVisible();
+  await expect(page.locator(".motion-toggle")).toHaveCount(0);
   await expect(page.locator(".mole-controls")).toHaveCount(0);
   await expect(page.locator(".ft")).not.toContainText(/Play with Orry|Hide Orry|Enable Orry|Bring Orry back/);
 });
@@ -506,18 +506,9 @@ test("reduced motion stops Orry's automatic movement", async ({ page }) => {
   await page.waitForFunction(() => !!window.loadoutMole);
   await page.waitForTimeout(2500);
   expect(await state(page)).toBe("hidden");
-  await expect(page.getByRole("button", { name: "Animations paused (system preference)" }).first()).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
+  await expect(page.locator(".motion-toggle")).toHaveCount(0);
   await expect(page.locator(".mole-controls")).toHaveCount(0);
-});
-
-test("explicit pause suppresses Orry's automatic arrival", async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem("loadout-motion-paused", "true"));
-  await page.goto("/?mole=pop");
-  await page.waitForFunction(() => !!window.loadoutMole);
-  await page.waitForTimeout(1000);
-  expect(await state(page)).toBe("hidden");
-  await expect(page.locator(".mole-controls")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Resume animations" }).first()).toHaveAttribute("aria-pressed", "true");
 });
 
 test("on a phone the mole is half the size and still pops out", async ({ page }) => {

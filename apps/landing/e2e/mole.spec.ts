@@ -363,6 +363,8 @@ test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => 
   expect(await shaken).toBe(true);
   await expect.poll(() => anim(page), { timeout: 2000, intervals: [20, 50, 100] }).toBe("queasy");
   expect(await sawAnim(page, "queasy")).toBe(true);
+  // Let the strong tier clear the post-drop threshold while its eight reversals are still in the rolling window.
+  await page.waitForTimeout(140);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);
   expect(await sawState(page, "mad")).toBe(true);

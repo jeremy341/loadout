@@ -470,19 +470,11 @@ test("he digs down and comes up somewhere else along the bottom", async ({ page 
   expect(Math.abs(after.y - after.ground)).toBeLessThan(2);
 });
 
-test("the footer button hides the mole for good and brings it back", async ({ page }) => {
+test("the footer keeps the global motion toggle without an Orry control section", async ({ page }) => {
   await open(page);
-  await waitForIdle(page);
-  await page.getByRole("button", { name: "Hide Orry" }).click();
-  await expect.poll(() => state(page), { timeout: 5000 }).toBe("hidden");
-  expect(await page.evaluate(() => window.localStorage.getItem("loadout-mole"))).toBe("off");
-  await expect(page.getByRole("button", { name: "Bring Orry back" })).toBeVisible();
-  await page.goto("/?mole=pop");
-  await page.waitForTimeout(2500);
-  expect(await state(page)).toBe("hidden");
-  await page.getByRole("button", { name: "Bring Orry back" }).click();
-  expect(await page.evaluate(() => window.localStorage.getItem("loadout-mole"))).toBeNull();
-  await expect.poll(() => state(page), { timeout: 7000 }).not.toBe("hidden");
+  await expect(page.locator(".ft-motion-controls .motion-toggle")).toBeVisible();
+  await expect(page.locator(".mole-controls")).toHaveCount(0);
+  await expect(page.locator(".ft")).not.toContainText(/Play with Orry|Hide Orry|Enable Orry|Bring Orry back/);
 });
 
 test("?mole=0 keeps the mole away", async ({ page }) => {
@@ -491,7 +483,7 @@ test("?mole=0 keeps the mole away", async ({ page }) => {
   expect(await state(page)).toBe("hidden");
 });
 
-test("reduced motion stops automatic movement but keeps manual Orry poses available", async ({ page }) => {
+test("reduced motion stops Orry's automatic movement", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/?mole=pop");
@@ -499,46 +491,17 @@ test("reduced motion stops automatic movement but keeps manual Orry poses availa
   await page.waitForTimeout(2500);
   expect(await state(page)).toBe("hidden");
   await expect(page.getByRole("button", { name: "Animations paused (system preference)" }).first()).toHaveAttribute("aria-pressed", "true");
-  await page.getByText("Play with Orry", { exact: true }).click();
-  await expect(page.getByRole("button", { name: "Call Orry" })).toBeEnabled();
-  await page.getByRole("button", { name: "Call Orry" }).click();
-  await expect.poll(() => state(page)).toBe("idle");
-  await expect(page.locator(".mole")).toHaveClass(/is-visible/);
-  const frame = () => page.locator(".mole-sprite").evaluate((element) => (element as HTMLElement).style.backgroundPosition);
-  const first = await frame();
-  await page.waitForTimeout(800);
-  expect(await frame()).toBe(first);
-  await page.getByRole("button", { name: "Pet Orry" }).click();
-  await expect.poll(() => state(page)).toBe("look");
-  const beforeMove = (await box(page)).x;
-  for (let step = 0; step < 18; step++) await page.getByRole("button", { name: "Move Orry left" }).click();
-  expect((await box(page)).x).toBe(0);
-  expect((await box(page)).x).toBeLessThanOrEqual(beforeMove);
+  await expect(page.locator(".mole-controls")).toHaveCount(0);
 });
 
-test("explicit pause suppresses automatic arrival but keeps manual Orry poses static", async ({ page }) => {
+test("explicit pause suppresses Orry's automatic arrival", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("loadout-motion-paused", "true"));
   await page.goto("/?mole=pop");
   await page.waitForFunction(() => !!window.loadoutMole);
   await page.waitForTimeout(1000);
   expect(await state(page)).toBe("hidden");
-  const summary = page.getByText("Play with Orry", { exact: true });
-  await summary.focus();
-  await page.keyboard.press("Enter");
-  await expect(page.getByRole("button", { name: "Call Orry" })).toBeEnabled();
-  await page.getByRole("button", { name: "Call Orry" }).click();
-  await expect.poll(() => state(page)).toBe("idle");
-  await expect(page.locator(".mole")).toHaveClass(/is-visible/);
+  await expect(page.locator(".mole-controls")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Resume animations" }).first()).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("status").filter({ hasText: "Automatic animations are paused" })).toBeVisible();
-  const frame = () => page.locator(".mole-sprite").evaluate((element) => (element as HTMLElement).style.backgroundPosition);
-  const first = await frame();
-  await page.waitForTimeout(800);
-  expect(await frame()).toBe(first);
-  await page.getByRole("button", { name: "Pet Orry" }).click();
-  await expect.poll(() => state(page)).toBe("look");
-  await page.getByRole("button", { name: "Move Orry right" }).click();
-  await expect.poll(async () => (await box(page)).x).toBeGreaterThan(0);
 });
 
 test("on a phone the mole is half the size and still pops out", async ({ page }) => {

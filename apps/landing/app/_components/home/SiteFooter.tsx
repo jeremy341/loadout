@@ -3,7 +3,6 @@ import { LOADOUT_HELP_URL, siteConfig } from "../../site-config";
 import { FooterWordmark } from "./FooterWordmark";
 import { Logo } from "./Logo";
 import { MotionToggle } from "../MotionToggle";
-import { MoleToggle } from "../mole/MoleToggle";
 
 // Footer laid out like main's SiteFooter: full-width footer, intro, a three-column link
 // grid, then a bottom bar. The redesign's hexagon mark, drawing sheet and stamp are kept
@@ -87,7 +86,6 @@ export function SiteFooter() {
         </span>
         <div className="ft-motion-controls">
           <MotionToggle />
-          <MoleToggle />
         </div>
       </div>
     </footer>

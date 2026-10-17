@@ -28,7 +28,7 @@ Own new shared motion-preference module, MotionToggle.tsx and motion.css; layout
 - Keep a saved user motion preference in a small shared client store; honor prefers-reduced-motion, storage denial and route changes. Reduced-motion users must not get automatic animation. Do not present a Resume control that falsely promises to override an active system preference.
 - Pause the belt after focus leaves, and pause/hide other automatic decoration including animated grain, ASCII/icon motion and automatic mascot motion. Show all reveal content when paused; do not freeze it invisible. Stop timers/listeners while paused and clean up on navigation. Preserve the 70s belt, 230px card columns, 16px spacing and reduced-motion static accessible list.
 - Temporarily hiding the mascot for a paused page must not overwrite the visitor's saved hide/show choice. Keep resume reliable and controls honest about the paused state.
-- Add compact optional keyboard/single-click mascot controls (native disclosure is appropriate): call, pet, move left/right. Reuse the engine's event seam, clamp placement within the viewport, provide useful status feedback and avoid trapping focus. Preserve existing pointer gestures and moods. Do not add a second animation engine. Review path-dependent gestures as decorative play; no essential document function may require them.
+- Keep Orry as optional decorative pointer play. The owner asked to remove the entire Orry control section from the footer; do not replace it elsewhere. Automatic appearances must still honor reduced motion and the global pause. No essential document function may require interacting with Orry.
 - Keep new controls compatible with forced colors and enlarged text.
 
 ## Parent verification / tests

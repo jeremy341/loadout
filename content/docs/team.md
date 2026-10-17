@@ -26,11 +26,7 @@ Kernel is our community manager. He regularly comes up with community ideas and 
 
 ## Goose-lee, the community bot {#goose}
 
-Say hello to Goose-lee, the duck who lives in the official #loadout Slack channel. Goose-lee is a community bot, not part of the LOADOUT program itself. Its job is to make the channel a friendlier place to hang out.
-
-Goose-lee keeps a little pond of crumbs. You earn them by chatting, by getting duck reactions from people who say thanks, by answering a question that the person who asked marks as helpful, and when an organizer gives you a star. Crumbs add up to pond levels, from 1 up to 12 (Head Duck), and the levels carry on past that.
-
-Once a week Goose-lee shows an organizer a top 10 of the pond. Nothing goes public until an organizer confirms it, and only people who chose to be shown appear in the Pond Report. The top 3 each week get custom rewards, and the top 3 of all time get extra custom rewards. You can check your own page any time with `/goose me`. You can look at someone else's stats only if they chose to share them with `/goose show`.
+Goose-lee is the duck who lives in the official #loadout Slack channel. Goose-lee is a community bot, not part of the LOADOUT program itself.
 
 ### Goose-lee's backstory {#goose-backstory}
 

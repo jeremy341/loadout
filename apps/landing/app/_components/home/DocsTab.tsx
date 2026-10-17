@@ -4,7 +4,7 @@ import Link from "next/link";
 export function DocsTab() {
   return (
     <nav aria-label="Documentation shortcut">
-    <Link className="docs-tab" href="/docs" aria-label="Open LOADOUT documentation">
+    <Link className="docs-tab" href="/docs/start" aria-label="LOADOUT DOCS — open documentation">
       LOADOUT DOCS
     </Link>
     </nav>

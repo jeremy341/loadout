@@ -21,7 +21,11 @@ export function DocsDocument({ page, previous, next }: { page: DocsPage; previou
         </header>
         <DocsInlineToc headings={page.headings} />
         <div className="doc-content">
-          <ReactMarkdown remarkPlugins={[remarkGfm, remarkDocsHeadings]} skipHtml>{page.body}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm, remarkDocsHeadings]}
+            components={{ pre: ({ children }) => <pre tabIndex={0} role="region" aria-label="Code example">{children}</pre> }}
+            skipHtml
+          >{page.body}</ReactMarkdown>
         </div>
         <nav className="doc-foot" aria-label="Documentation navigation">
           {previous ? <Link href={`/docs/${previous.slug}`}><span>PREVIOUS</span><b>{previous.label}</b></Link> : <span />}

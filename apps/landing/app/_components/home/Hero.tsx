@@ -11,7 +11,7 @@ import { MagneticCorners } from "./MagneticCorners";
 export function Hero() {
   return (
     <div className="hero">
-      <div className="stp s1" aria-hidden="true">
+      <div className="stp s1" aria-hidden="true" lang="de">
         Glück auf
         <small>Zeche · Ruhr</small>
       </div>
@@ -38,7 +38,7 @@ export function Hero() {
 
       <div className="hero-badge">
         <span className="sl" />
-        <span className="tag">GLÜCK AUF · FOR TEENS 13 TO 19</span>
+        <span className="tag"><span lang="de">GLÜCK AUF</span> · FOR TEENS 13 TO 19</span>
         <span className="sl sl-flip" />
       </div>
 

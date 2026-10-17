@@ -376,7 +376,7 @@ html:has(.home) { scroll-behavior:smooth }
 /* Main's Jersey headline is 5.6em wide for "technical stack."; Pixelify is 8.35em. Scaling by .6707 gives the same
    line width as main at every size. The line box is 1.163 em, which keeps main's headline height and layout. */
 .home .hero .h1 { margin: 0; font-family: var(--font-pixel), monospace; font-weight: 900; font-size: min(calc(clamp(106px, 8.2vw, 138px) * .6707), calc((min(900px, 100vw - 48px) - 60px) / 8.35)); line-height: 1.163; letter-spacing: -.015em; text-transform: uppercase; }
-.home .hero .h1 > span { display: block; white-space: nowrap; }
+.home .hero .h1 > span { display: block; white-space: normal; overflow-wrap: anywhere; }
 .home .hero .hero-frame > p { max-width: 650px; margin: 20px auto 0; font-size: 17px; line-height: 1.5; text-wrap: balance; }
 .home .hero .hero-side { position: absolute; top: 82px; text-align: left; font-family: var(--font-ui), monospace; font-size: 14px; line-height: 1.5; letter-spacing: 0; color: var(--mut); }
 .home .hero .hero-side-left { left: -146px; }
@@ -422,6 +422,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home .ft-brand .hex { width: 27px; height: 27px; }
 .home .ft-brand .hex i { width: 13px; height: 13px; }
 .home .ft-intro p { max-width: 720px; margin: 16px 0; font-size: 16px; line-height: 1.6; color: var(--fg); }
+@media (min-width: 1101px) { .home .ft-intro { min-height: 160px; } }
 .home .ft-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 40px; border-top: 2px solid var(--fg); padding-top: 28px; }
 .home .ft-column h3 { margin: 5px 0 14px; font-size: 20px; color: var(--fg); }
 .home .ft-column a { display: block; min-height: 0; margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: var(--fg); text-decoration: none; }
@@ -600,6 +601,9 @@ html:has(.home) { scroll-behavior:smooth }
 /* Eras (main: .era-concept-rail and .era-facts, 900px, joined, 22px and 24px titles). */
 .home .era { max-width: 900px; margin-inline: auto; flex-wrap: nowrap; }
 .home .era > div { padding: 22px 16px; font-size: 22px; text-align: center; }
+.home #eras .row.r2 { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 900px; margin: 32px auto 0; gap: 0; }
+.home #eras .row.r2 .card.sm { min-height: 0; padding: 20px 16px; text-align: center; }
+.home #eras .row.r2 .card:first-child { border-right: 0; }
 .home #eras .card .ct { justify-content: center; }
 
 /* FAQ (main: 900px list, boxed 8px apart, 16px questions, 16px answers). */
@@ -689,6 +693,8 @@ html:has(.home) { scroll-behavior:smooth }
 /* Era steps and facts (main: number beside the name, 13px fact copy). */
 .home .era > div { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .home .era small { margin: 0; font-size: 11px; }
+.home #eras .row.r2 .card { gap: 8px; }
+.home #eras .row.r2 .dsc { font-size: 13px; line-height: 1.45; }
 
 
 /* Footer wordmark sits inside the footer content and behind it, ending just above the bottom bar. */
@@ -918,10 +924,13 @@ html:has(.home) { scroll-behavior:smooth }
 
 /* Era steps and facts at main's heights (78px steps, 112px facts). */
 .home .era > div { font-size: 20px; padding: 22px 12px; line-height: 1.45; }
+.home #eras .row.r2 .card { padding: 14px 16px; gap: 4px; }
+.home #eras .row.r2 .card .ct { font-size: 10px; line-height: 1.2; }
+.home #eras .row.r2 .dsc { line-height: 1.35; }
 
 /* Community context box at main's height. */
 
-@media (min-width: 801px) { .home .era > div { white-space: nowrap; } }
+@media (min-width: 801px) { .home .era > div { min-width: 0; white-space: normal; overflow-wrap: anywhere; } }
 @media (max-width: 800px) {
   .home .era { flex-direction: column; }
   .home .era > div { flex: none; }
@@ -929,10 +938,16 @@ html:has(.home) { scroll-behavior:smooth }
   .home .era > div + div:before { display: none; }
 }
 @media (max-width: 700px) {
+  .home #eras .row.r2 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
   .home .strip { padding: 20px 18px; }
   .home .st { padding-bottom: 30px; }
   .home #progression .asd { margin-top: 24px !important; }
 }
+
+.home #eras .row.r2 .card { padding: 12px 16px; gap: 2px; }
+.home #eras .row.r2 .card .cn { line-height: 1; }
 
 /* ===== Dark palette: warm charcoal page, one box colour, soft outlines, no bottom darkening, amber highlights ===== */
 .home:not(:has(#theme:checked)) { --bg: #222627; --mut: #A7AEAB; --pl1: #2C3132; --pl2: #2C3132; --surface: #2C3132; --edge: rgba(233, 235, 231, .22); --hl: #6FC2BB; }
@@ -1063,15 +1078,17 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 
 /* ===== Animations from main: ore nudge, era connector and IRL status entrances ===== */
 @keyframes ore-nudge { from { transform: translateY(0); } to { transform: translateY(-3px) rotate(-2deg); } }
+@keyframes era-connector-enter { from { border-color: transparent; } }
 .home .ic.nudge { animation: ore-nudge 2400ms ease-in-out infinite alternate; }
+.home .era > div + div { animation: era-connector-enter 500ms var(--ease) both; }
 @media (prefers-reduced-motion: reduce) { .home .ic.nudge, .home .era > div + div, .home #loadout-irl .asd { animation: none; } }
 .home .st .cn { display: block; }
 .home .st .dsc { display: block; margin-top: 8px; }
 .home #progression .asd { background: none !important; }
 
 /* Depth markers: a dashed rule above and below, a hatched band, the depth numeral on the left and a label on the right.
-   The hatching, numeral and label are faint, and light to the glow colour within 150px of the pointer (the footer
-   wordmark's values). DepthGlow sets --mx and --my on each one. */
+   The numeral and label stay readable at rest; the hatching and text gain the glow colour within 150px of the pointer.
+   DepthGlow sets --mx and --my on each one. */
 .home { --glow: var(--ac); --glow-strength: 60%; }
 .home:has(#theme:checked) { --glow: #D9661F; --glow-strength: 85%; }
 .home .pit {
@@ -1098,7 +1115,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   color: transparent;
   background-image:
     radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent));
+    linear-gradient(color-mix(in srgb, var(--fg) 70%, var(--bg)), color-mix(in srgb, var(--fg) 70%, var(--bg)));
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -1116,7 +1133,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   color: transparent;
   background-image:
     radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent)),
+    linear-gradient(color-mix(in srgb, var(--fg) 70%, var(--bg)), color-mix(in srgb, var(--fg) 70%, var(--bg))),
     linear-gradient(var(--bg), var(--bg));
   -webkit-background-clip: text, text, border-box;
   background-clip: text, text, border-box;
@@ -1165,7 +1182,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 /* Savings rules as plain rows: a term on the left, the rule on the right. */
 .home .facts { display: grid; margin: 40px auto 0; max-width: 860px; border-top: 1.5px solid var(--fg); }
 .home .facts > div { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 8px 28px; padding: 18px 4px; border-bottom: 1.5px solid var(--fg); }
-.home .facts dt { font-family: var(--font-pixel), monospace; font-size: 18px; text-transform: uppercase; color: var(--ac); }
+.home .facts dt { min-width: 0; overflow-wrap: anywhere; font-family: var(--font-pixel), monospace; font-size: 18px; text-transform: uppercase; color: var(--ac); }
 .home .facts dd { margin: 0; font-size: 15px; line-height: 1.6; }
 @media (max-width: 700px) {
   .home .facts > div { grid-template-columns: minmax(0, 1fr); }
@@ -1201,3 +1218,53 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .hc-quote p { margin: 0; font-size: 16px; line-height: 1.7; }
 .home .hc-quote figcaption { margin-top: 16px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); }
 @media (max-width: 760px) { .home .hc { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+
+/* Accessibility: let controls and reading text reflow without reducing type. */
+.home .nav { flex-wrap: wrap; }
+.home .nav-links, .home .nav-actions { flex-wrap: wrap; min-width: 0; }
+.home .nav > a.logo { max-width: 100%; }
+.home .nav .lg { min-width: 0; }
+.home .nav .lg-text { overflow-wrap: anywhere; }
+.home .nav-actions > a.btn { white-space: normal; text-align: center; line-height: 1.3; }
+.home .nav .tg { flex: none; min-height: 44px; }
+.home .nav-toggle { flex: 0 0 44px; width: 44px; min-width: 44px; height: 44px; }
+.home .nav-sheet { max-height: calc(100dvh - 190px); overflow-y: auto; }
+.home .nav-sheet a { gap: 12px; overflow-wrap: anywhere; }
+.home .hero, .home.rb-page .hero.rb { padding-top: max(108px, var(--nav-clearance, 108px)); }
+.home .hero .hero-frame, .home .hero .hero-badge .tag { min-width: 0; }
+.home .hero .hero-badge .tag { overflow-wrap: anywhere; }
+.home .hero .hero-btn { max-width: 100%; overflow-wrap: anywhere; }
+.home .hero .hero-actions > .mc { max-width: 100%; }
+.home .pit:not(.rb-rock) { min-height: 160px; height: auto; gap: 16px; flex-wrap: wrap; padding-block: 20px; }
+.home .pit:not(.rb-rock) b { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.home .pit:not(.rb-rock) > span { max-width: 100%; overflow-wrap: anywhere; }
+.home:has(#theme:checked) :is(.lnks a, .era small, .hero-credit a) { color: #903516; }
+.home.rb-page .hero.rb { min-height: calc(100svh - 100px); }
+.home.rb-page .rb-foot { position: relative; bottom: auto; padding: 12px 20px 24px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.home.rb-page .rb-foot p { margin: 0; }
+.home.rb-page .rb-foot p > span:first-child { margin-left: 0; opacity: 1; }
+@media (max-width: 700px) {
+  .home .pit:not(.rb-rock) { min-height: 110px; }
+}
+@media (max-width: 420px) {
+  .home .nav { column-gap: 8px; row-gap: 8px; }
+  .home .nav > a.logo { flex: 1 1 calc(100% - 52px); min-width: 0; }
+  .home .nav > a.logo .lg { flex-wrap: wrap; }
+  .home .nav-toggle { order: 1; margin-left: auto; }
+  .home .nav-actions { order: 2; width: 100%; margin-left: 0; justify-content: flex-end; }
+  .home .hero, .home.rb-page .hero.rb { padding-top: max(180px, var(--nav-clearance, 180px)); }
+}
+@media (max-height: 800px), (max-width: 1360px) {
+  .home .hero .stp { display: none; }
+}
+@media (forced-colors: active) {
+  .home .nav-toggle span { background: none; border-top: 2px solid ButtonText; }
+  .home .tg .pxw { display: none; }
+  .home .tg::after { content: "Theme"; color: ButtonText; }
+  .home .tg, .home .nav-toggle { border-color: ButtonText; }
+  .home .pit:not(.rb-rock) :is(b, span) { color: CanvasText; background: Canvas; }
+}
+@media (min-width: 701px) {
+  .home .lad.l5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+.home .st, .home .st .cn, .home .st .dsc { min-width: 0; overflow-wrap: anywhere; }

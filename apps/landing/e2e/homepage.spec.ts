@@ -29,7 +29,7 @@ test("the footer docs link leaves the homepage for the separate docs route", asy
 
 test("the floating docs tab opens the docs route", async ({ page }) => {
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   await expect(tab).toBeVisible();
   await tab.click();
   await expect(page).toHaveURL(/\/docs\/start$/);
@@ -258,13 +258,11 @@ test("the corner brackets stay put for reduced-motion visitors", async ({ page }
   await page.goto("/");
   const corner = page.locator(".hero-actions .mc").first();
   const box = (await corner.boundingBox())!;
-  await expect(async () => {
-    await page.mouse.move(2, 2);
-    await page.mouse.move(box.x - 30, box.y + box.height / 2);
-    await expect(corner).toHaveAttribute("data-active", "");
-  }).toPass();
-  const pull = await corner.evaluate((el) => (el as HTMLElement).style.getPropertyValue("--mc-x"));
-  expect(pull).toBe("0px");
+  await page.mouse.move(2, 2);
+  await page.mouse.move(box.x - 30, box.y + box.height / 2);
+  await expect(corner).not.toHaveAttribute("data-active", "");
+  await expect(corner).toHaveCSS("--mc-x", "0px");
+  await expect(corner).toHaveCSS("--mc-y", "0px");
 });
 
 test("hero facts scramble under the pointer and settle back to their text", async ({ page }) => {
@@ -289,7 +287,7 @@ test("the footer wordmark is decorative and never takes pointer input", async ({
 test("the docs tag is Pixl's bottom tab: pinned to the bottom edge, 2/4/4/2 borders that grow on hover", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   await expect(tab).toHaveCSS("position", "fixed");
   await expect(tab).toHaveCSS("bottom", "0px");
   await expect(tab).toHaveCSS("border-top-width", "2px");
@@ -472,13 +470,12 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
 test("the hero title keeps its width through the entrance and the scramble", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   const title = page.locator(".hero .h1");
+  await expect(page.locator(".hero .h1 .scr-c").first()).toBeAttached();
   // The entrance scales the title in, but its layout width never changes.
   const layoutWidth = () => title.evaluate((el) => (el as HTMLElement).offsetWidth);
   const layoutBefore = await layoutWidth();
-  await expect.poll(() => title.evaluate((el) => el.getAnimations().every((a) => a.playState === "finished"))).toBe(true);
-  expect(await layoutWidth()).toBe(layoutBefore);
   // Each line from its first letter to its last, in layout pixels: the entrance scale is divided out.
   const lineWidths = () => page.locator(".hero .h1").evaluate((el) => {
     const scale = el.getBoundingClientRect().width / (el as HTMLElement).offsetWidth;
@@ -493,9 +490,10 @@ test("the hero title keeps its width through the entrance and the scramble", asy
       return range.getBoundingClientRect().width / scale;
     });
   });
-  // While the scramble runs, the letters take their real places.
-  await expect(page.locator(".hero .h1 .scr-c").first()).toBeAttached();
+  // Sample during the effect before waiting for its entrance to finish.
   const during = await lineWidths();
+  await expect.poll(() => title.evaluate((el) => el.getAnimations().every((a) => a.playState === "finished"))).toBe(true);
+  expect(await layoutWidth()).toBe(layoutBefore);
   await expect(page.locator(".hero .h1 .scr-c")).toHaveCount(0, { timeout: 5000 });
   const after = await lineWidths();
   expect(during).toHaveLength(after.length);
@@ -663,7 +661,7 @@ test("the page has no long dashes and no repeated filler labels", async ({ page 
 
 test("the LOADOUT Docs tab opens the field manual and its section links work", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "Open LOADOUT documentation" }).click();
+  await page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i }).click();
   await expect(page).toHaveURL(/\/docs\/start$/);
   await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
   const docsNav = page.getByRole("navigation", { name: "Documentation sections" });
@@ -686,7 +684,7 @@ test("the LOADOUT Docs page reflows without horizontal scrolling", async ({ page
 
 test("the LOADOUT Docs tab has a direct keyboard and pointer route", async ({ page }) => {
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   await expect(tab).toBeVisible();
   await tab.focus();
   await expect(tab).toBeFocused();
@@ -761,7 +759,9 @@ test("the homepage says it is not open yet once, in the hero, and the FAQ stays 
   }
   await expect(page.locator(".home")).toContainText("Who can join?");
   expect(((await page.locator(".home").textContent()) ?? "").split("Who can join?").length - 1).toBe(1);
-  await expect(page.locator(".ft-sheet")).not.toContainText(/Revier edition|In development/);
+  // The owner restored main's revision panel after the copy pass.
+  await expect(page.locator(".ft-sheet")).toContainText("Revier edition");
+  await expect(page.locator(".ft-sheet")).toContainText("In development");
 });
 
 test("Loadout IRL is described as a proposal, not an announced event", async ({ page }) => {
@@ -877,7 +877,7 @@ test("the page advertises the share image, the touch icon and the favicon", asyn
 test("the Docs tab is a plain link: dragging it does nothing, a click opens the Docs", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   const box = (await tab.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();

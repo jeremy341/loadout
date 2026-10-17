@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MotionToggle } from "../MotionToggle";
 
 // Proposed prizes: each of the eight planned categories shows one example product on a slow belt
 // (.ulpi/design/prize-belt.md, .ulpi/design/prize-photos.md). The examples are ideas, not a catalog, and none can be
@@ -43,7 +44,7 @@ export function PlannedPrizes() {
           −200 M
         </b>
         <span>
-          Füllort
+          <span lang="de">Füllort</span>
           <br />
           Prizes
         </span>
@@ -56,6 +57,7 @@ export function PlannedPrizes() {
         <p className="lead">
           Examples of what Ore could buy, at the prices we’re planning.
         </p>
+        <div className="pb-motion"><MotionToggle /></div>
         <div className="pb">
           <div className="pb-view" role="region" aria-label="Proposed prize examples" tabIndex={0}>
             <div className="pb-track">

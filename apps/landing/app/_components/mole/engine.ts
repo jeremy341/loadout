@@ -15,8 +15,8 @@ export type MoleState =
 export const STORAGE_KEY = "loadout-mole";
 export const COMMAND_EVENT = "loadout:mole-command";
 export const STATE_EVENT = "loadout:mole-state";
-export type MoleCommand = "hide" | "show" | "call" | "status";
-export type MoleStatus = { enabled: boolean; visible: boolean; reduced: boolean };
+export type MoleCommand = "hide" | "show" | "call" | "pet" | "move-left" | "move-right" | "status";
+export type MoleStatus = { enabled: boolean; visible: boolean; reduced: boolean; paused: boolean };
 
 const GRAVITY = 2400; // px/s squared
 // He can start a reaction when he is doing one of these. Everything else is a sequence that plays to its end.
@@ -96,6 +96,7 @@ export class MoleEngine {
     private readonly sprite: HTMLElement,
     private readonly layer: HTMLElement,
     params: URLSearchParams,
+    private readonly paused = false,
   ) {
     this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // ?mole=1 shows him after a second (any kind of arrival); ?mole=pop always pops him out of the ground; ?mole=0 turns him off.
@@ -111,17 +112,18 @@ export class MoleEngine {
     this.applyScale();
     this.bind();
     if (params.has("mole")) this.exposeForTests();
-    if (this.enabled && !this.reduced) this.schedule(this.forced ? 700 : rand(3000, 6000));
+    if (this.enabled && !this.reduced && !this.paused) this.schedule(this.forced ? 700 : rand(3000, 6000));
     this.emit();
   }
 
   // ---- setup and teardown -------------------------------------------------------------------------------------------
   private bind() {
+    window.addEventListener(COMMAND_EVENT, this.onCommand);
+    window.addEventListener("resize", this.onResize);
+    if (this.paused) return;
     this.root.addEventListener("pointerdown", this.onDown);
     this.root.addEventListener("pointerup", this.onUp);
     this.root.addEventListener("pointercancel", this.onCancel);
-    window.addEventListener("resize", this.onResize);
-    window.addEventListener(COMMAND_EVENT, this.onCommand);
     document.addEventListener("visibilitychange", this.onVisibility);
   }
 
@@ -136,6 +138,7 @@ export class MoleEngine {
     this.root.removeEventListener("pointerup", this.onUp);
     this.root.removeEventListener("pointercancel", this.onCancel);
     this.layer.querySelectorAll(".mole-fx").forEach((el) => el.remove());
+    this.root.classList.remove("is-visible", "is-held");
   }
 
   private exposeForTests() {
@@ -154,7 +157,7 @@ export class MoleEngine {
 
   private get size() { return FRAME * this.scale; }
   private get ground() { return window.innerHeight - FEET * this.scale; }
-  private status(): MoleStatus { return { enabled: this.enabled, visible: this.state !== "hidden", reduced: this.reduced }; }
+  private status(): MoleStatus { return { enabled: this.enabled, visible: this.state !== "hidden", reduced: this.reduced, paused: this.paused }; }
   private emit() { window.dispatchEvent(new CustomEvent(STATE_EVENT, { detail: this.status() })); }
 
   // The body box that counts as "on him": the middle of the frame, from under the helmet top down to the feet.
@@ -187,14 +190,15 @@ export class MoleEngine {
   // ---- when he turns up -------------------------------------------------------------------------------------------
   private schedule(ms: number) {
     this.later(() => {
-      if (!this.enabled || this.state !== "hidden") return;
+      if (!this.enabled || this.paused || this.state !== "hidden") return;
       if (document.hidden || Date.now() < this.cooldownUntil) return this.schedule(8000);
       this.appear(this.onlyPop ? "pop" : pick(["pop", "pop", "runin", "runin", "peek"] as const), false);
     }, ms);
   }
 
   private appear(kind: "pop" | "runin" | "peek", called: boolean) {
-    if (this.state !== "hidden" || (this.reduced && !called)) return;
+    if (this.state !== "hidden" || (this.reduced && !called) || (this.paused && !called)) return;
+    if (this.paused) return this.appearStatic();
     this.lifeLeft = rand(40, 90);
     this.scurrying = false;
     this.dozing = false;
@@ -224,6 +228,17 @@ export class MoleEngine {
     this.emit();
   }
 
+  private appearStatic() {
+    if (this.state !== "hidden") return;
+    this.idleTotal = 0;
+    this.x = rand(this.size, Math.max(this.size + 1, window.innerWidth - this.size * 2));
+    this.y = this.ground;
+    this.go("idle", "idle");
+    this.root.classList.add("is-visible");
+    this.place();
+    this.emit();
+  }
+
   private show() {
     this.root.classList.add("is-visible");
     this.last = 0;
@@ -240,8 +255,9 @@ export class MoleEngine {
     this.cursorShown = "";
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener("pointermove", this.onPointer);
+    this.layer.querySelectorAll(".mole-fx").forEach((el) => el.remove());
     this.emit();
-    if (this.enabled && !this.reduced) this.schedule(Math.max(delay, this.cooldownUntil - Date.now()));
+    if (this.enabled && !this.reduced && !this.paused) this.schedule(Math.max(delay, this.cooldownUntil - Date.now()));
   }
 
   // ---- the loop -------------------------------------------------------------------------------------------------
@@ -998,7 +1014,7 @@ export class MoleEngine {
   private onResize = () => {
     this.applyScale();
     if (!["held", "fall", "hidden"].includes(this.state)) this.y = this.ground;
-    this.x = Math.min(this.x, window.innerWidth - this.size * 0.5);
+    this.x = Math.max(0, Math.min(this.x, window.innerWidth - this.size));
     if (this.state !== "hidden") this.place();
   };
 
@@ -1015,19 +1031,53 @@ export class MoleEngine {
       this.timers = [];
       this.burrowing = false;
       if (this.state === "under") this.hide();
-      else if (this.state !== "hidden") { this.pressId = null; this.gestures.cancel(performance.now()); this.root.classList.remove("is-held"); this.go("sink", "sink"); if (this.reduced) this.hide(); }
+      else if (this.state !== "hidden") {
+        this.pressId = null;
+        this.gestures.cancel(performance.now());
+        this.root.classList.remove("is-held");
+        if (this.paused || this.reduced) this.hide();
+        else this.go("sink", "sink");
+      }
       this.emit();
     } else if (command === "show") {
       this.enabled = true;
       this.store(null);
-      if (this.state === "hidden" && !this.reduced) this.schedule(2500);
+      if (this.state === "hidden") {
+        if (this.paused) this.appearStatic();
+        else if (!this.reduced) this.schedule(2500);
+      }
       this.emit();
     } else if (command === "status") {
       this.emit();
     } else if (command === "call") {
       this.enabled = true;
       this.store(null);
-      this.appear("pop", true);
+      if (this.paused) {
+        if (this.state === "hidden") this.appearStatic();
+        else {
+          this.go("idle", "idle");
+          this.place();
+          this.emit();
+        }
+      } else this.appear("pop", true);
+    } else if (command === "pet" || command === "move-left" || command === "move-right") {
+      if (!this.enabled || this.state === "hidden") return;
+      this.pressId = null;
+      this.gestures.cancel(performance.now());
+      this.root.classList.remove("is-held");
+      if (command === "pet") {
+        this.mood.pet(2);
+        this.lookAnim = "excited";
+        this.go("look", "excited");
+      } else {
+        const direction = command === "move-left" ? -1 : 1;
+        this.x = Math.max(0, Math.min(window.innerWidth - this.size, this.x + direction * 80));
+        this.y = this.ground;
+        this.facing = direction;
+        this.settle();
+      }
+      this.place();
+      this.emit();
     }
   };
 

@@ -37,3 +37,10 @@
 .home .mole-toggle { padding: 0; border: 0; background: none; font: inherit; color: var(--ac); text-decoration: underline; cursor: pointer; }
 .home .mole-toggle:hover { color: var(--fg); }
 .home .mole-toggle:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; }
+
+.mole-controls { display: flex; align-items: flex-start; flex-wrap: wrap; gap: 12px; min-width: 0; }
+.mole-controls details { max-width: 100%; }
+.mole-controls summary { list-style-position: inside; }
+.mole-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.mole-controls p { max-width: 38ch; margin: 8px 0; font-size: 13px; line-height: 1.5; }
+.mole-controls button:disabled { opacity: .65; cursor: default; }

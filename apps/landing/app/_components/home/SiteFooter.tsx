@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LOADOUT_HELP_URL, siteConfig } from "../../site-config";
 import { FooterWordmark } from "./FooterWordmark";
 import { Logo } from "./Logo";
+import { MotionToggle } from "../MotionToggle";
 import { MoleToggle } from "../mole/MoleToggle";
 
 // Footer laid out like main's SiteFooter: full-width footer, intro, a three-column link
@@ -48,6 +49,10 @@ export function SiteFooter() {
           </div>
         </div>
         <dl className="ft-sheet">
+          <div className="ft-sheet-wide">
+            <dt>Project</dt>
+            <dd>LOADOUT, Revier edition</dd>
+          </div>
           <div>
             <dt>Sheet</dt>
             <dd>001 / 001</dd>
@@ -59,6 +64,10 @@ export function SiteFooter() {
           <div>
             <dt>Year</dt>
             <dd>{new Date().getFullYear()}</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>In development</dd>
           </div>
         </dl>
         <FooterWordmark />
@@ -76,9 +85,10 @@ export function SiteFooter() {
           Have an idea for the program?{" "}
           <a href={siteConfig.githubUrl}>Open an issue on GitHub</a>.
         </span>
-        <span>
+        <div className="ft-motion-controls">
+          <MotionToggle />
           <MoleToggle />
-        </span>
+        </div>
       </div>
     </footer>
   );

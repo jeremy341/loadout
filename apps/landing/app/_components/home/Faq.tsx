@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { LOADOUT_HELP_URL } from "../../site-config";
 import { FaqAccordion } from "./FaqAccordion";
 import { faqItems } from "./faq-items";

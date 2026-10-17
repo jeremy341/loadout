@@ -491,22 +491,54 @@ test("?mole=0 keeps the mole away", async ({ page }) => {
   expect(await state(page)).toBe("hidden");
 });
 
-test("with reduced motion the mole never turns up by itself, and the button calls it, still", async ({ page }) => {
+test("reduced motion stops automatic movement but keeps manual Orry poses available", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/?mole=pop");
   await page.waitForFunction(() => !!window.loadoutMole);
   await page.waitForTimeout(2500);
   expect(await state(page)).toBe("hidden");
+  await expect(page.getByRole("button", { name: "Animations paused (system preference)" }).first()).toHaveAttribute("aria-pressed", "true");
+  await page.getByText("Play with Orry", { exact: true }).click();
+  await expect(page.getByRole("button", { name: "Call Orry" })).toBeEnabled();
   await page.getByRole("button", { name: "Call Orry" }).click();
   await expect.poll(() => state(page)).toBe("idle");
+  await expect(page.locator(".mole")).toHaveClass(/is-visible/);
   const frame = () => page.locator(".mole-sprite").evaluate((element) => (element as HTMLElement).style.backgroundPosition);
   const first = await frame();
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(800);
   expect(await frame()).toBe(first);
-  const { x, y } = await centre(page);
-  await page.mouse.click(x, y);
-  await expect.poll(() => state(page)).toBe("poke");
+  await page.getByRole("button", { name: "Pet Orry" }).click();
+  await expect.poll(() => state(page)).toBe("look");
+  const beforeMove = (await box(page)).x;
+  for (let step = 0; step < 18; step++) await page.getByRole("button", { name: "Move Orry left" }).click();
+  expect((await box(page)).x).toBe(0);
+  expect((await box(page)).x).toBeLessThanOrEqual(beforeMove);
+});
+
+test("explicit pause suppresses automatic arrival but keeps manual Orry poses static", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("loadout-motion-paused", "true"));
+  await page.goto("/?mole=pop");
+  await page.waitForFunction(() => !!window.loadoutMole);
+  await page.waitForTimeout(1000);
+  expect(await state(page)).toBe("hidden");
+  const summary = page.getByText("Play with Orry", { exact: true });
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: "Call Orry" })).toBeEnabled();
+  await page.getByRole("button", { name: "Call Orry" }).click();
+  await expect.poll(() => state(page)).toBe("idle");
+  await expect(page.locator(".mole")).toHaveClass(/is-visible/);
+  await expect(page.getByRole("button", { name: "Resume animations" }).first()).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("status").filter({ hasText: "Automatic animations are paused" })).toBeVisible();
+  const frame = () => page.locator(".mole-sprite").evaluate((element) => (element as HTMLElement).style.backgroundPosition);
+  const first = await frame();
+  await page.waitForTimeout(800);
+  expect(await frame()).toBe(first);
+  await page.getByRole("button", { name: "Pet Orry" }).click();
+  await expect.poll(() => state(page)).toBe("look");
+  await page.getByRole("button", { name: "Move Orry right" }).click();
+  await expect.poll(async () => (await box(page)).x).toBeGreaterThan(0);
 });
 
 test("on a phone the mole is half the size and still pops out", async ({ page }) => {

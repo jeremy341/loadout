@@ -337,7 +337,7 @@ test("held a long time he struggles and tires out", async ({ page }) => {
   await page.mouse.up();
 });
 
-test("shaken hard he gets queasy and dizzy, and after the drop he is mad and sulks", async ({ page }) => {
+test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => {
   await open(page, "?mole=pop&speed=4");
   await waitForIdle(page);
   await page.evaluate(() => window.loadoutMole!.runTo(720));
@@ -360,7 +360,12 @@ test("shaken hard he gets queasy and dizzy, and after the drop he is mad and sul
     await page.waitForTimeout(140);
   }
   expect(await shaken).toBe(true);
-  expect(await sawAnim(page, "queasy")).toBe(true);
+  // Keep the reversals going long enough for the stronger shake to trigger his queasy beat.
+  for (let i = 0; i < 10; i++) {
+    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
+    await page.waitForTimeout(140);
+  }
+  await expect.poll(async () => sawAnim(page, "queasy"), { timeout: 5000 }).toBe(true);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);
   expect(await sawState(page, "mad")).toBe(true);

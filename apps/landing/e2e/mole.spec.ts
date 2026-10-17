@@ -356,7 +356,7 @@ test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => 
   ).then(() => true, () => false);
   // Eight reversals in the rolling window reach the strong tier; nine would be violent and skip queasy.
   for (let i = 0; i < 9; i++) {
-    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
+    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 1 });
     // The gesture classifier needs >120 ms between reversals, so keep a small margin.
     await page.waitForTimeout(125);
   }

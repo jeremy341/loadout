@@ -338,7 +338,7 @@ test("held a long time he struggles and tires out", async ({ page }) => {
 });
 
 test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => {
-  await open(page, "?mole=pop&speed=4");
+  await open(page, "?mole=pop&speed=5");
   await waitForIdle(page);
   await page.evaluate(() => window.loadoutMole!.runTo(720));
   await waitForIdle(page);
@@ -354,27 +354,14 @@ test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => 
     undefined,
     { timeout: 6000 },
   ).then(() => true, () => false);
-  for (let i = 0; i < 20; i++) {
+  // Eight reversals in the rolling window reach the strong tier; nine would be violent and skip queasy.
+  for (let i = 0; i < 9; i++) {
     await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
-    // The gesture classifier requires 120 ms between reversals; leave a clear timing margin in CI.
-    await page.waitForTimeout(140);
+    // The gesture classifier needs >120 ms between reversals, so keep a small margin.
+    await page.waitForTimeout(125);
   }
   expect(await shaken).toBe(true);
-  if (!(await sawAnim(page, "queasy"))) {
-    let sawQueasyWhileShaking = false;
-    const queasy = page.waitForFunction(
-      () => window.loadoutMole!.anim() === "queasy",
-      undefined,
-      { timeout: 4000, polling: 20 },
-    ).then(() => { sawQueasyWhileShaking = true; }, () => undefined);
-    // Keep the reversals going until queasy appears, then release before the later give-up pose.
-    for (let i = 0; i < 20 && !sawQueasyWhileShaking; i++) {
-      await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
-      await page.waitForTimeout(140);
-    }
-    await queasy;
-    expect(sawQueasyWhileShaking).toBe(true);
-  }
+  await expect.poll(() => anim(page), { timeout: 2000, intervals: [20, 50, 100] }).toBe("queasy");
   expect(await sawAnim(page, "queasy")).toBe(true);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);

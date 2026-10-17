@@ -1180,7 +1180,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   color: transparent;
   background-image:
     radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent)),
+    linear-gradient(var(--mut), var(--mut)),
     linear-gradient(var(--bg), var(--bg));
   -webkit-background-clip: text, text, border-box;
   background-clip: text, text, border-box;

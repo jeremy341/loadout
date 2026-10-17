@@ -897,8 +897,7 @@ html:has(.home) { scroll-behavior:smooth }
 /* Nav RSVP button is the same height as the colour chooser (30px); both are 44px tall on phones. */
 .home .nav-actions > a.btn { min-height: 30px; padding: 6px 14px; }
 @media (max-width: 700px) {
-  .home .nav-actions > a.btn { min-height: 44px; padding: 8px; white-space: nowrap; }
-  .home .nav .tg { min-height: 44px; }
+  .home .nav-actions > a.btn { min-height: 44px; padding: 8px; }
 }
 
 .home .nav-actions > a.btn { white-space: nowrap; }
@@ -1227,6 +1226,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .nav .lg-text { overflow-wrap: anywhere; }
 .home .nav-actions > a.btn { white-space: normal; text-align: center; line-height: 1.3; }
 .home .nav .tg { flex: none; min-height: 30px; }
+@media (max-width: 700px) { .home .nav .tg { min-height: 44px; } }
 .home .nav-toggle { flex: 0 0 44px; width: 44px; min-width: 44px; height: 44px; }
 .home .nav-sheet { max-height: calc(100dvh - 190px); overflow-y: auto; }
 .home .nav-sheet a { gap: 12px; overflow-wrap: anywhere; }

@@ -56,6 +56,7 @@ export class MoleEngine {
   private fallFrom = 0;
   private bigFall = false;
   private bounces = 0;
+  private testShakeUntil = 0; // Used only by the query-gated E2E API.
   private thrownFall = false;
   private scared = false;
   private scaredFor = 0;
@@ -149,6 +150,7 @@ export class MoleEngine {
       burrow: () => this.burrow(),
       sleep: () => { this.dozing = false; this.wakeTaps = 0; this.go("sleepy", "sleepy"); },
       runTo: (x: number) => { this.target = x; this.facing = x < this.x ? -1 : 1; this.go("run", "run"); },
+      shakeForTest: (durationMs: number) => { this.testShakeUntil = performance.now() + Math.min(1000, Math.max(0, durationMs)); },
       anim: () => this.anim,
       mood: () => ({ affection: this.mood.affection, irritation: this.mood.irritation, affectionStage: this.mood.affectionStage, irritationStage: this.mood.irritationStage }),
       gesture: () => this.frameState,
@@ -347,7 +349,9 @@ export class MoleEngine {
     this.stateT += dt;
     const sdt = dt * this.timeScale; // the mood clock
     this.mood.update(sdt);
-    this.frameState = this.gestures.frame(performance.now());
+    const now = performance.now();
+    this.frameState = this.gestures.frame(now);
+    if (this.state === "held" && now < this.testShakeUntil) this.frameState.shake = 2;
     this.reactToGestures(sdt);
     this.reactToMood();
     switch (this.state) {

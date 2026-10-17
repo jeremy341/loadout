@@ -10,6 +10,7 @@ type Mole = {
   state: () => string;
   box: () => { x: number; y: number; size: number; ground: number; bounces: number };
   runTo: (x: number) => void;
+  shakeForTest: (durationMs: number) => void;
   burrow: () => void;
   anim: () => string;
   mood: () => Mood;
@@ -338,34 +339,21 @@ test("held a long time he struggles and tires out", async ({ page }) => {
 });
 
 test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => {
-  await open(page, "?mole=pop&speed=4");
+  await open(page, "?mole=pop&speed=5");
   await waitForIdle(page);
   await page.evaluate(() => window.loadoutMole!.runTo(720));
   await waitForIdle(page);
   await record(page);
   const start = await centre(page);
-  const left = Math.max(100, start.x - 200);
-  const right = Math.min(1340, start.x + 200);
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   await page.mouse.move(start.x + 20, start.y - 150, { steps: 6 });
-  const shaken = page.waitForFunction(
-    () => document.querySelector(".mole")?.classList.contains("is-shaken") === true,
-    undefined,
-    { timeout: 6000 },
-  ).then(() => true, () => false);
-  for (let i = 0; i < 20; i++) {
-    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
-    // The gesture classifier requires 120 ms between reversals; leave a clear timing margin in CI.
-    await page.waitForTimeout(140);
-  }
-  expect(await shaken).toBe(true);
-  // Keep the reversals going long enough for the stronger shake to trigger his queasy beat.
-  for (let i = 0; i < 10; i++) {
-    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
-    await page.waitForTimeout(140);
-  }
-  await expect.poll(() => anim(page), { timeout: 5000 }).toBe("queasy");
+  await expect.poll(() => state(page)).toBe("held");
+  await page.evaluate(() => window.loadoutMole!.shakeForTest(700));
+  await expect.poll(() => anim(page), { timeout: 2000 }).toBe("queasy");
+  expect(await sawAnim(page, "queasy")).toBe(true);
+  // Let the strong tier clear the post-drop threshold before releasing.
+  await page.waitForTimeout(140);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);
   expect(await sawState(page, "mad")).toBe(true);

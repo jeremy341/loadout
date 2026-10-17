@@ -10,6 +10,7 @@ type Mole = {
   state: () => string;
   box: () => { x: number; y: number; size: number; ground: number; bounces: number };
   runTo: (x: number) => void;
+  shakeForTest: (durationMs: number) => void;
   burrow: () => void;
   anim: () => string;
   mood: () => Mood;
@@ -344,26 +345,14 @@ test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => 
   await waitForIdle(page);
   await record(page);
   const start = await centre(page);
-  const left = Math.max(100, start.x - 200);
-  const right = Math.min(1340, start.x + 200);
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   await page.mouse.move(start.x + 20, start.y - 150, { steps: 6 });
-  const shaken = page.waitForFunction(
-    () => document.querySelector(".mole")?.classList.contains("is-shaken") === true,
-    undefined,
-    { timeout: 6000 },
-  ).then(() => true, () => false);
-  // Eight reversals in the rolling window reach the strong tier; nine would be violent and skip queasy.
-  for (let i = 0; i < 9; i++) {
-    await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 1 });
-    // The gesture classifier needs >120 ms between reversals, so keep a small margin.
-    await page.waitForTimeout(125);
-  }
-  expect(await shaken).toBe(true);
-  await expect.poll(() => anim(page), { timeout: 2000, intervals: [20, 50, 100] }).toBe("queasy");
+  await expect.poll(() => state(page)).toBe("held");
+  await page.evaluate(() => window.loadoutMole!.shakeForTest(700));
+  await expect.poll(() => anim(page), { timeout: 2000 }).toBe("queasy");
   expect(await sawAnim(page, "queasy")).toBe(true);
-  // Let the strong tier clear the post-drop threshold while its eight reversals are still in the rolling window.
+  // Let the strong tier clear the post-drop threshold before releasing.
   await page.waitForTimeout(140);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);

@@ -354,21 +354,27 @@ test("shaken hard he gets queasy and sulks after the drop", async ({ page }) => 
     undefined,
     { timeout: 6000 },
   ).then(() => true, () => false);
-  let sawQueasyWhileShaking = false;
-  const queasy = page.waitForFunction(
-    () => window.loadoutMole!.anim() === "queasy",
-    undefined,
-    { timeout: 7000, polling: 20 },
-  ).then(() => { sawQueasyWhileShaking = true; }, () => undefined);
-  // Keep shaking until the watcher sees the queasy beat, then release before the later give-up pose.
-  for (let i = 0; i < 50 && !sawQueasyWhileShaking; i++) {
+  for (let i = 0; i < 20; i++) {
     await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
     // The gesture classifier requires 120 ms between reversals; leave a clear timing margin in CI.
     await page.waitForTimeout(140);
   }
-  await queasy;
   expect(await shaken).toBe(true);
-  expect(sawQueasyWhileShaking).toBe(true);
+  if (!(await sawAnim(page, "queasy"))) {
+    let sawQueasyWhileShaking = false;
+    const queasy = page.waitForFunction(
+      () => window.loadoutMole!.anim() === "queasy",
+      undefined,
+      { timeout: 4000, polling: 20 },
+    ).then(() => { sawQueasyWhileShaking = true; }, () => undefined);
+    // Keep the reversals going until queasy appears, then release before the later give-up pose.
+    for (let i = 0; i < 20 && !sawQueasyWhileShaking; i++) {
+      await page.mouse.move(i % 2 ? left : right, start.y - 150, { steps: 2 });
+      await page.waitForTimeout(140);
+    }
+    await queasy;
+    expect(sawQueasyWhileShaking).toBe(true);
+  }
   expect(await sawAnim(page, "queasy")).toBe(true);
   await page.mouse.up();
   await expect.poll(async () => sawState(page, "sulk"), { timeout: 20000 }).toBe(true);

@@ -1,37 +1,43 @@
 ---
 title: "Pricing"
-description: "How related levels, savings caps, and access requirements fit together."
+description: "How your levels and a Requisition reduce a prize's Ore price, with a worked example."
 group: "PROGRESS & PRIZES"
 order: 120
 status: draft
 ---
 
-Field pricing is intended to make relevant track progress useful when buying equipment. It does not change your project's Ore award.
+Every prize has a price in Ore. Your progress in its track reduces that price. That doesn't change how much Ore a project earns.
 
-## How a price is determined
+## How a price is worked out
 
-1. The item has a configured base Ore price and field relevance.
-2. Your related track progress determines the ordinary field discount.
-3. The item's savings cap limits that discount where applicable.
-4. An eligible Requisition may extend the allowance for one purchase.
-5. You pay the final quoted balance in Ore.
+1. Every item has a **base price** in Ore and a track it relates to.
+2. Your **level** in that track takes a percentage off the base price: up to 20% at level 15.
+3. A matching [Requisition](/docs/requisitions) takes **another 20%** of the base price off one item.
+4. You see the final price in Ore before you order, and you pay that.
 
-The catalog must show a final price before you commit to an order. Rates, prices, and savings allowances remain unpublished.
+Both discounts are a share of the **base price**, so they add up, and there's no cap in Ore. The most anyone can save on one item is 40%.
 
-## A discount and a cap are different
+## An example
 
-A discount describes how much your progress could reduce the price. A cap limits how much of that reduction applies to a particular item.
+A prize with a base price of 1,000 Ore, bought at level 15 with a Requisition:
 
-For an expensive item, the ordinary cap may stop the full discount from applying. A matching Requisition can allow more of that **existing** discount to apply; it does not grant unlimited savings.
+| Line | Ore |
+| --- | --- |
+| Base price | 1,000 |
+| Level 15 discount (20%) | −200 |
+| Requisition (20%) | −200 |
+| **You pay** | **600** |
 
-## Buying across tracks
+A Requisition only works on prizes of 400 Ore or more, so small prizes just get your level discount.
 
-Most prizes are intended to be available even if you specialize elsewhere. You may receive a less favorable field price than a builder whose approved work is directly relevant.
+## When an item relates to two tracks
 
-A discount cannot unlock equipment with a separate level requirement. Requisitions cannot bypass that requirement either.
+You get the better of your two discounts, not both added together. That's how focusing on one track pays off: it takes about 350 hours to reach 20% in one track, and about twice that to reach it in two.
 
-## Quotes and pending values
+## Buying outside your specialty
 
-Treat examples as explanations of the sequence, not as current prices. Exact field affinities, discount calibration, caps, minimum item values, and tax or delivery treatment must be confirmed before launch.
+Most prizes are open to everyone, whichever track you work in. A discount can't unlock equipment that has its own level requirement, and a Requisition can't skip that requirement either.
 
-For an item outside the catalog, the [Custom Order process](/docs/custom-orders) uses the approved final quote, not your initial estimate.
+## Still to be confirmed
+
+The prices on the [prize list](/docs/prizes) are the ones we're planning, not final. How tax and delivery are handled isn't decided. For something outside the catalog, the [Custom Order process](/docs/custom-orders) uses the final approved quote, not your first estimate.

@@ -39,6 +39,7 @@ LOADOUT looks like an industrial field manual for builders: an engineering-paper
 
 - In light mode the yellow button is the primary action, and rust marks links and small accents. Keep rust to small details.
 - In dark mode the icons are turned blue (see Icons). In light mode they show as drawn.
+- The homepage cursor is a pixel arrow with a pointing hand for links, in the same two colours (`app/cursor.css`): blue fill in dark mode, yellow in light mode, fine pointers only. The Docs and the 404 page keep the system cursor. A pixel Maulwurf mascot in a miner's helmet (`app/_components/mole/`, `.ulpi/design/mole.md`) turns up at the bottom of the homepage now and then; it can be petted, picked up and annoyed, and the footer button hides it for good. It is the same in both themes and is decoration only.
 - No blue or purple glow, gradients or glass as decoration.
 
 ### Docs

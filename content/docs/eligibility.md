@@ -1,35 +1,40 @@
 ---
 title: "Eligibility & current status"
-description: "What is confirmed, what is pending, and what RSVP means."
+description: "Who can take part, what's settled, what isn't, and what RSVP does."
 group: "START HERE"
 order: 20
 status: draft
 ---
 
-LOADOUT is still being prepared. This page separates the proposed program from participation rules that have not been announced.
+LOADOUT is for high-school students aged 13 to 19. This page holds the program's current status and the decisions still being finished. The other guides explain how the rules work.
 
-## Current status
+## Who can take part {#who}
 
-The public website and these Docs explain a draft. They do not establish acceptance as a Hack Club program, confirmed funding, or a launch schedule.
+**Teens aged 13 to 19.** If you're in high school, this is for you. You don't need to know anyone, be in a club, or have shipped anything before.
 
-| Available now | Still pending |
+How we check age, and which countries prizes can ship to, aren't decided yet. We'll publish both before launch.
+
+## Where things stand
+
+**LOADOUT is in development and hasn't opened.** Hack Club acceptance, funding and a start date haven't been confirmed. Accounts, submissions, reviews and ordering aren't available through this site yet. RSVP records interest and lets you receive launch updates.
+
+| Rules already chosen | Still to finish |
 | --- | --- |
-| Read the program draft and share feedback. | Enrollment and a live submission system. |
-| Record interest through RSVP. | Final eligibility and participation requirements. |
-| Explore the proposed tracks and review model. | Dates, catalog, prices, stock, and delivery terms. |
+| High-school students aged 13 to 19. | Age verification and prize-delivery countries. |
+| Four lifetime tracks; LV.15 is about 350 solid-work hours in one field. | The full XP equation, intermediate level thresholds and Research bonus amount. |
+| Up to 20% track discount, plus one 20% Requisition; five tickets per track at 3/6/9/12/15, for prizes of at least 400 Ore. | The complete intermediate discount curve and Custom Order tier values. |
+| No total limit on legitimate hours or projects. Repeat ships need new work and at least five new approved hours. | Account, tracking, submission and order integrations. |
+| Eight prize examples with working Ore prices, and a 10% bonus for qualifying Era projects. | Stock, final catalog, delivery/tax terms and the Era Points configuration. |
+| Fraud leads to a permanent ban and recovery of the rewards earned through it. | Launch funding, acceptance and dates; the IRL event's venue and registration. |
 
-## Who can take part?
-
-Final participation requirements will be published before launch. Do not assume that age, location, previous experience, school membership, or attendance at an event makes you eligible.
-
-Project fit is a separate question: a technically relevant project does not automatically establish personal eligibility. See [project fit](/docs/projects).
+The guides describe the program we're building. Working price and milestone tables can be tuned before launch; examples explain a calculation or a submission rather than reserve an item. A program rule being chosen does not mean its online service is running.
 
 ## What does RSVP do?
 
-[The RSVP form](https://rsvp.soon.it/loadout) records interest. It is not registration for the program or the future IRL concept. It does not approve a project or promise a reward.
+[The RSVP form](https://rsvp.soon.it/loadout) records that you're interested. It isn't registration, it doesn't approve a project, and it doesn't promise a reward. It's how we'll let you know when something opens.
 
-## Which rules should I rely on?
+## Which rules can I rely on?
 
-Use the current public Docs for the program explanation. Values marked pending are not promises; examples illustrate a mechanism rather than a guaranteed outcome.
+Use the topic guides for the current rules and this page for availability. The [IRL page](/docs/irl#status) carries the separate event updates.
 
-Ask in **#loadout-help** if something is unclear. The team should clarify uncertain rules before you rely on them; [help and feedback](/docs/help) explains what to include.
+If something is unclear, open an issue on [our GitHub](https://github.com/jeremy341/loadout) or ask in **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)**. We'd rather clear up a rule before you build around it. [Help & feedback](/docs/help) says what to include.

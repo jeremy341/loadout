@@ -865,6 +865,8 @@ Recommended maximum:
 
 # **40% AI-generated implementation**
 
+**Unselected earlier candidate.** The public rule permits declared AI help and reviews the builder's own contribution. A numerical AI limit and its assessment method remain open; do not publish 40% as a current requirement.
+
 The exact number can be tuned before launch.
 
 ## Allowed AI Use
@@ -1259,7 +1261,7 @@ Main catchphrase:
 
 # 71. Final One-Paragraph Pitch
 
-> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Expensive-item discounts are capped, while five rare Requisitions across each LV.1–15 track let long-term specialists unlock much larger one-time savings. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
+> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 20% permanent discount, and five identical Field Requisitions per track each add 20% off one eligible purchase. There is no Ore savings cap; combined savings reach at most 40%. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
 
 ---
 
@@ -1275,7 +1277,7 @@ Main catchphrase:
 >
 > Your track levels give better pricing and specialist unlocks. Most cross-track gear is still buyable, while mastery gear rewards real specialization.
 >
-> Rare **Requisitions** at major level milestones let you push past normal discount caps on the upgrades you really want.
+> **Field Requisitions** at levels 3, 6, 9, 12 and 15 each add 20% off one eligible purchase, alongside your track discount.
 >
 > **Build projects. Level up your profile. Upgrade your loadout. Build harder stuff.**
 

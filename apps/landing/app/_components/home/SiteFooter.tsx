@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { siteConfig } from "../../site-config";
+import { LOADOUT_HELP_URL, siteConfig } from "../../site-config";
 import { FooterWordmark } from "./FooterWordmark";
 import { Logo } from "./Logo";
 
@@ -16,10 +16,7 @@ export function SiteFooter() {
             <Logo />
           </a>
           <p>
-            Build a useful tool, improve a system, or make a device. Ship the work, document what you learned, and use rewards to support the next build.
-          </p>
-          <p className="ft-status">
-            A technical builder program in development, shaped by Hack Club’s You Ship, We Ship model.
+            A technical builder program shaped by Hack Club’s You Ship, We Ship model.
           </p>
         </div>
         <div className="ft-links">
@@ -27,21 +24,21 @@ export function SiteFooter() {
             <h3>LOADOUT</h3>
             <a href="#tracks">Tracks</a>
             <a href="#process">How it works</a>
-            <a href="#progression">Progress &amp; Prizes</a>
+            <a href="#shop">Prizes</a>
+            <a href="#progression">Levels &amp; rewards</a>
             <a href="#faq">FAQ</a>
           </div>
           <div className="ft-column">
             <h3>Community</h3>
             <a href="#eras">Community Eras</a>
-            <a href="#behind-loadout">Who’s behind LOADOUT?</a>
-            <a href={siteConfig.githubUrl}>LOADOUT on GitHub</a>
-            {siteConfig.communityUrl && <a href={siteConfig.communityUrl}>LOADOUT community</a>}
-            <a href="https://hackclub.com/slack/">Hack Club Slack</a>
+            <Link href="/docs/team">Who’s behind LOADOUT?</Link>
+            {siteConfig.communityUrl && <a href={siteConfig.communityUrl}>Join #loadout</a>}
+            <a href={LOADOUT_HELP_URL}>#loadout-help</a>
           </div>
           <div className="ft-column">
             <h3>Resources</h3>
             <Link href="/docs">LOADOUT docs</Link>
-            <a href="#project-fit">Project fit</a>
+            <Link href="/docs/projects">Project fit</Link>
             <a href="#research">Research Mode</a>
             <a href="#requisitions">Field Requisitions</a>
             <a href="#custom-orders">Custom Orders</a>

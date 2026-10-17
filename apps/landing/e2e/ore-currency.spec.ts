@@ -27,7 +27,7 @@ test("visitors read Ore, never the old currency name, on the homepage and in the
 
 test("the currency icon is the ore gem, a 32 by 32 sprite, and the bolt sprite is gone", async ({ page, request }) => {
   await page.goto("/");
-  await expect(page.locator('use[href="#i-ore"]')).toHaveCount(2);
+  await expect(page.locator('use[href="#i-ore"]')).toHaveCount(1);
   await expect(page.locator('use[href="#i-bolt"]')).toHaveCount(0);
   const sprite = await request.get("/loadout/sprites/ore.png");
   expect(sprite.status()).toBe(200);

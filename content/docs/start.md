@@ -1,36 +1,44 @@
 ---
 title: "What is LOADOUT?"
-description: "Build technical capability, grow your Loadout, and understand the current draft."
+description: "What LOADOUT is, how an hour of work turns into gear, and where things stand today."
 group: "START HERE"
 order: 10
 status: draft
 ---
 
-LOADOUT is a planned You Ship, We Ship program for technical builders. You make useful technical projects; reviewed work is intended to earn progress and prizes that help you build what comes next.
+LOADOUT is for teens aged 13 to 19 who want to build tools, servers, GPU projects or hardware. Ship your work for review and earn Ore for every approved hour. Spend it on equipment for your next build.
 
-## A program for technical builders {#program}
+## Who it's for {#program}
 
-The focus is **Tools, Systems, Compute, and Hardware**. Build something that helps you or another builder make, run, measure, understand, or improve something technical.
+You, if you're 13 to 19 and you like making things work. You don't need experience, only a project you want to build or fix.
 
-That could be a debugging tool, a synchronization engine, a custom renderer, or an embedded instrument. The important part is the capability you build yourself, not the name of the finished product.
+There are four areas, which we call tracks: **Tools, Systems, Compute and Hardware**. A debugging tool counts. So does a sync engine, a custom renderer or a small instrument with a sensor. What matters is the technical part you built yourself, not what the finished thing is called.
 
 ## Your two Loadouts {#loadout}
 
-| Your Loadout | What it represents |
+| Your Loadout | What it is |
 | --- | --- |
-| Digital Loadout | Accepted projects and the technical work you can show. |
-| Physical Loadout | Equipment and resources that support your next build. |
+| Digital Loadout | Your accepted projects: the work you can show. |
+| Physical Loadout | The gear you've bought with Ore for your next build. |
 
-The intended loop is: **build → document → ship for review → earn Track XP and Ore → build again**.
+The loop is **build, write it up, ship it, get rated, earn Ore and XP, build again**. You can ship the same project more than once, and each ship pays for the new hours since the last one.
 
-Track XP records progress in a field. Ore is the spendable balance for eligible prizes. They serve different purposes; [progress explains the difference](/docs/progress).
+## What an hour is worth {#hours}
 
-## Joining LOADOUT {#status}
+A solid project earns **10 Ore for every approved hour**. Other builders rate your project from 0 to 20, and that rating is your rate: a rough but honest project pays about 5 an hour, a solid one 10, and an outstanding one can pay up to 20. Ten hours at a rating of 10 is 100 Ore.
 
-> **In development.** This site describes the program draft. LOADOUT has not launched; dates, participation requirements, and prize availability are not confirmed.
+Spend Ore on prizes and keep your Track XP as lasting progress. [Ore, XP & levels](/docs/progress) explains the awards and levels; [Prizes & requests](/docs/prizes) shows planned prices.
 
-[RSVP](https://rsvp.soon.it/loadout) records interest. It does not enroll you, reserve a prize, or confirm eligibility. Read [current status and eligibility](/docs/eligibility) before treating any proposed feature as available.
+## How you join {#join}
+
+You can start whenever you join. Ore and Track XP carry across seasons, so a builder who joins late keeps everything they earn from the day they start.
+
+## Where things stand {#status}
+
+LOADOUT is in development. [Current status and eligibility](/docs/eligibility#where-things-stand) has the launch status and the remaining decisions.
+
+[RSVP](https://rsvp.soon.it/loadout) to receive launch updates. It records interest rather than enrolling you.
 
 ## Where to read next
 
-Start with [what you can build](/docs/projects), then [the four tracks](/docs/tracks) and [what a ship should include](/docs/shipping).
+Start with [what you can build](/docs/projects), then [the four tracks](/docs/tracks), then [what to hand in with a ship](/docs/shipping).

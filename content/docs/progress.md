@@ -1,41 +1,56 @@
 ---
 title: "Ore, XP & levels"
-description: "Separate the spendable balance from lifetime progress in each technical field."
+description: "Ore is what you spend. Track XP is progress you keep. Here's how an hour turns into both."
 group: "PROGRESS & PRIZES"
 order: 100
 status: draft
 ---
 
-Approved work is intended to earn Ore and Track XP. You spend one; you keep the other as a record of progress.
+Approved work earns two things: Ore, which you spend, and Track XP, which you keep.
 
 ## Two kinds of progress {#balances}
 
-| Record | What it does | Can you spend it? |
+| What | What it does | Can you spend it? |
 | --- | --- | --- |
-| Ore | Global currency for eligible prizes. | Yes, when ordering is available. |
-| Track XP | Lifetime progress in Tools, Systems, Compute, or Hardware. | No. |
-| Era Points | Shared community progress during an Era. | No. |
+| Ore | The currency for prizes. | Yes, once ordering opens. |
+| Track XP | Your lasting level in Tools, Systems, Compute or Hardware. | No. |
+| Era Points | The community's shared progress during an Era. | No. |
 
-An increase in one is not an automatic increase in the others.
+Getting more of one doesn't automatically give you more of the others.
+
+## How an hour becomes Ore {#work}
+
+**Ore = approved hours × your rating.** Other builders rate your project from 0 to 20, and the rating is how many Ore each hour pays.
+
+| Rating | What it means | Ten hours pays |
+| --- | --- | --- |
+| 5 | Rough but honest: it exists, but it's unfinished or unclear. | 50 Ore |
+| 10 | Solid: it works, it took real effort, and it's explained. | 100 Ore |
+| 15 | Great: clearly above what most builders ship. | 150 Ore |
+| 20 | Outstanding: the kind of thing you'd show an expert. | 200 Ore |
+
+Twenty is the top of the scale. [Project review](/docs/review) explains what reviewers look at.
+
+A project that wins the Era bonus (+10% on the approved Ore) adds it on top. There's no limit on how many hours or projects you can ship, as long as the hours are real.
+
+## How an hour becomes Track XP
+
+Reviewers assign Track XP to the fields your approved work demonstrates. Each project has one XP award, divided across those fields, so the same work doesn't receive a full award in several tracks. The exact equation and its quality weighting are among the [remaining decisions](/docs/eligibility#where-things-stand).
 
 ## Your field levels {#levels}
 
-Each track has fifteen lifetime levels. Reviewers allocate Track XP to the fields demonstrated by approved work; the final split for a multi-track ship follows the contribution.
+Each track has fifteen levels, and you keep them for good. Level 15 takes about **350 approved hours of solid work in one track**. If you work in two areas, you reach level 15 in both after about 700 hours, so spreading out is fine. It just takes longer.
 
-Levels can improve related field pricing and unlock some specialist equipment or Custom Order tiers. They do not multiply the Ore awarded for a project.
+Levels **3, 6, 9, 12 and 15** each give you one [Requisition](/docs/requisitions). At LV.15, you have **3,500 Track XP and a 20% discount**. The thresholds and discounts between those milestones are still being set.
 
-## What informs an award {#work}
-
-Eligible approved work and its quality assessment inform Ore. Relevant technical work informs Track XP. Exact rates, level thresholds, multiplier calibration, and bonus values are not published here.
-
-More recorded hours do not automatically mean more approved work. Evidence and the review result matter.
+Levels don't multiply the Ore a project earns.
 
 ## What stays with you
 
-Lifetime Track XP, accepted project history, and your Digital Loadout persist across Seasons and Era changes. Competitive ranks belong to their own period.
+Your lifetime Track XP, your accepted projects and your Digital Loadout carry over through Seasons and Era changes. Competitive ranks belong to their own period.
 
-The point is to develop capability over several builds, not to spend XP or restart your field progress each season.
+The idea is to build up real skill over many projects, not to spend your XP or start over each season.
 
-## Where progress becomes useful
+## Where progress pays off
 
-[Pricing](/docs/pricing) explains field discounts. [Requisitions](/docs/requisitions) can extend a discount's savings allowance for one eligible order. [Custom Orders](/docs/custom-orders) cover requests outside the regular catalog.
+[Pricing](/docs/pricing) explains discounts. [Requisitions](/docs/requisitions) take another 20% off one prize. [Custom Orders](/docs/custom-orders) cover requests outside the regular catalog.

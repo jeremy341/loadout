@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { useMotionPreference } from "../motion-preference";
 
 const ACTIVATE = 40; // px from the button where the corners wake up
 const RELEASE = 48; // px where they let go again, a little wider so they do not flicker
@@ -12,11 +13,16 @@ const lean = (offset: number) => Math.max(-MAX_LEAN, Math.min(MAX_LEAN, offset *
 // and lean toward the pointer. The pointer position goes into CSS variables, so moving the
 // mouse never re-renders React. Touch input and reduced motion get the static brackets only.
 export function MagneticCorners({ children }: { children: ReactNode }) {
+  const { paused } = useMotionPreference();
   const box = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const element = box.current;
     if (!element) return;
+    element.removeAttribute("data-active");
+    element.style.setProperty("--mc-x", "0px");
+    element.style.setProperty("--mc-y", "0px");
+    if (paused) return;
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (!finePointer.matches) return;
@@ -60,7 +66,7 @@ export function MagneticCorners({ children }: { children: ReactNode }) {
       document.documentElement.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [paused]);
 
   return (
     <span ref={box} className="mc">

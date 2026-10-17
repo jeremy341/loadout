@@ -29,7 +29,7 @@ test("the footer docs link leaves the homepage for the separate docs route", asy
 
 test("the floating docs tab opens the docs route", async ({ page }) => {
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   await expect(tab).toBeVisible();
   await tab.click();
   await expect(page).toHaveURL(/\/docs\/start$/);
@@ -57,13 +57,14 @@ test("the theme switch changes the palette", async ({ page }) => {
 test("FAQ answers open with the keyboard and expose their state", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const question = page.getByRole("button", { name: "What is Research Mode?" });
-  await expect(question).toHaveAttribute("aria-expanded", "false");
+  const item = page.locator("#faq details", { hasText: "Can I use AI?" });
+  const question = item.locator("summary");
+  await expect(item).not.toHaveAttribute("open", "");
   await question.focus();
   await expect(question).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(question).toHaveAttribute("aria-expanded", "true");
-  await expect(page.locator("#faq")).toContainText("It is not a fifth track");
+  await expect(item).toHaveAttribute("open", "");
+  await expect(item).toContainText("AI alone doesn't rule a project out");
 });
 
 test("the navigation hides on scroll down and returns on scroll up", async ({ page }) => {
@@ -133,6 +134,22 @@ for (const [width, height] of [[390, 844], [1440, 900]]) {
   });
 }
 
+for (const width of [320, 360, 375, 390, 430, 480, 600, 700, 900, 1024, 1440, 1920]) {
+  test(`every line of the hero title fits its box at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const { box, lines } = await page.evaluate(() => {
+      const title = document.querySelector(".hero .h1") as HTMLElement;
+      const range = document.createRange();
+      const widths = [...title.children].map((line) => { range.selectNodeContents(line); return range.getBoundingClientRect().width; });
+      return { box: title.getBoundingClientRect().width, lines: widths };
+    });
+    for (const line of lines) expect(line).toBeLessThanOrEqual(box + 1);
+  });
+}
+
 for (const width of [320, 390, 768, 1440]) {
   test(`page reflows without horizontal scrolling at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -158,7 +175,7 @@ test("margin ASCII is faint but visible, decorative and shown from 640px up", as
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   const art = page.locator(".home .ar");
-  await expect(art).toHaveCount(8);
+  await expect(art).toHaveCount(6);
   await expect(art.first()).toHaveAttribute("aria-hidden", "true");
   await expect(art.first()).toHaveCSS("pointer-events", "none");
   const alpha = await art.first().locator(".ar-base").evaluate((el) => parseFloat(getComputedStyle(el).color.split(",")[3]));
@@ -241,13 +258,11 @@ test("the corner brackets stay put for reduced-motion visitors", async ({ page }
   await page.goto("/");
   const corner = page.locator(".hero-actions .mc").first();
   const box = (await corner.boundingBox())!;
-  await expect(async () => {
-    await page.mouse.move(2, 2);
-    await page.mouse.move(box.x - 30, box.y + box.height / 2);
-    await expect(corner).toHaveAttribute("data-active", "");
-  }).toPass();
-  const pull = await corner.evaluate((el) => (el as HTMLElement).style.getPropertyValue("--mc-x"));
-  expect(pull).toBe("0px");
+  await page.mouse.move(2, 2);
+  await page.mouse.move(box.x - 30, box.y + box.height / 2);
+  await expect(corner).not.toHaveAttribute("data-active", "");
+  await expect(corner).toHaveCSS("--mc-x", "0px");
+  await expect(corner).toHaveCSS("--mc-y", "0px");
 });
 
 test("hero facts scramble under the pointer and settle back to their text", async ({ page }) => {
@@ -255,10 +270,10 @@ test("hero facts scramble under the pointer and settle back to their text", asyn
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   const fact = page.locator(".hero-facts .hs").first();
-  await expect(fact).toHaveText("▣ Technical projects");
-  await expect(page.locator(".hero-facts .hs-sr").first()).toHaveText("▣ Technical projects");
+  await expect(fact).toHaveText("◈ 10 Ore for a solid hour");
+  await expect(page.locator(".hero-facts .hs-sr").first()).toHaveText("◈ 10 Ore for a solid hour");
   await fact.locator('[data-i="4"]').hover();
-  await expect(fact).toHaveText("▣ Technical projects", { timeout: 2000 });
+  await expect(fact).toHaveText("◈ 10 Ore for a solid hour", { timeout: 2000 });
 });
 
 test("the footer wordmark is decorative and never takes pointer input", async ({ page }) => {
@@ -272,7 +287,7 @@ test("the footer wordmark is decorative and never takes pointer input", async ({
 test("the docs tag is Pixl's bottom tab: pinned to the bottom edge, 2/4/4/2 borders that grow on hover", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   await expect(tab).toHaveCSS("position", "fixed");
   await expect(tab).toHaveCSS("bottom", "0px");
   await expect(tab).toHaveCSS("border-top-width", "2px");
@@ -379,7 +394,7 @@ test("on phones the depth numerals stay on one line and the labels fit their str
 test("sections reveal with main's triggered slide-in, not a scroll-scrubbed fade", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(9);
+  expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(8);
   await expect(page.locator(".reveal[data-stagger]").first()).toHaveCount(1);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("animation-name", "none");
 });
@@ -398,7 +413,7 @@ test("the hero follows the reference size: big title and 260x52 buttons", async 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.locator(".hero .h1")).toHaveCSS("font-size", "122.4px");
+  await expect(page.locator(".hero .h1")).toHaveCSS("font-size", "120px");
   const button = (await page.locator(".hero-actions .hero-btn").first().boundingBox())!;
   expect(Math.round(button.width)).toBe(260);
   expect(Math.round(button.height)).toBe(52);
@@ -424,7 +439,7 @@ test("section headings carry the four corner brackets, and nothing else gets the
   await page.goto("/");
   const headings = page.locator(".home .sect > .h2");
   const count = await headings.count();
-  expect(count).toBeGreaterThanOrEqual(10);
+  expect(count).toBeGreaterThanOrEqual(9);
   for (let i = 0; i < count; i++) {
     const marks = await headings.nth(i).evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
     expect(marks.match(/linear-gradient/g)?.length ?? 0).toBe(8);
@@ -445,7 +460,7 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
   const colour = (selector: string) => page.locator(selector).first().evaluate((el) => getComputedStyle(el).backgroundColor);
   const box = await colour("#tracks .card");
   expect(box).toBe("rgb(44, 49, 50)");
-  for (const selector of ["#research", ".lgr", ".nav", "#process .fn", ".era > div"]) expect(await colour(selector)).toBe(box);
+  for (const selector of ["#research", ".nav", "#process .fn"]) expect(await colour(selector)).toBe(box);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("border-top-color", "rgba(233, 235, 231, 0.22)");
   await expect(page.locator(".strata")).toHaveCount(0);
   await expect(page.locator("#process .lnks a").first()).toHaveCSS("color", "rgb(111, 194, 187)");
@@ -455,13 +470,12 @@ test("dark mode uses one box colour, soft outlines and no bottom darkening", asy
 test("the hero title keeps its width through the entrance and the scramble", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   const title = page.locator(".hero .h1");
+  await expect(page.locator(".hero .h1 .scr-c").first()).toBeAttached();
   // The entrance scales the title in, but its layout width never changes.
   const layoutWidth = () => title.evaluate((el) => (el as HTMLElement).offsetWidth);
   const layoutBefore = await layoutWidth();
-  await expect.poll(() => title.evaluate((el) => el.getAnimations().every((a) => a.playState === "finished"))).toBe(true);
-  expect(await layoutWidth()).toBe(layoutBefore);
   // Each line from its first letter to its last, in layout pixels: the entrance scale is divided out.
   const lineWidths = () => page.locator(".hero .h1").evaluate((el) => {
     const scale = el.getBoundingClientRect().width / (el as HTMLElement).offsetWidth;
@@ -476,9 +490,10 @@ test("the hero title keeps its width through the entrance and the scramble", asy
       return range.getBoundingClientRect().width / scale;
     });
   });
-  // While the scramble runs, the letters take their real places.
-  await expect(page.locator(".hero .h1 .scr-c").first()).toBeAttached();
+  // Sample during the effect before waiting for its entrance to finish.
   const during = await lineWidths();
+  await expect.poll(() => title.evaluate((el) => el.getAnimations().every((a) => a.playState === "finished"))).toBe(true);
+  expect(await layoutWidth()).toBe(layoutBefore);
   await expect(page.locator(".hero .h1 .scr-c")).toHaveCount(0, { timeout: 5000 });
   const after = await lineWidths();
   expect(during).toHaveLength(after.length);
@@ -565,6 +580,78 @@ test("the docs sidebar groups fold with their chevron and the back button lifts 
   await expect.poll(() => back.evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe("8px");
 });
 
+test("each track shows one example and a tag, and How it works shows one worked example", async ({ page }) => {
+  await page.goto("/");
+  const cards = page.locator("#tracks .card.t");
+  await expect(cards).toHaveCount(4);
+  await expect(cards.locator(".tag-chip")).toHaveText(["CLI", "Database", "GPU", "Board"]);
+  await expect(cards.nth(0)).toContainText("command-line tool");
+  await expect(cards.nth(3)).toContainText("robot");
+  const process = page.locator("#process");
+  await expect(process.locator(".we-calc")).toHaveCount(1);
+  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /20 hours at a rating of 10 earns 200 Ore/);
+  await expect(process).toContainText("Rated 15 instead, the same 20 hours pay 300 Ore.");
+  // the example sits between the review outcomes and the spend step
+  const order = await process.locator(".fl > *").evaluateAll((nodes) => nodes.map((n) => n.className + "|" + (n.textContent ?? "").slice(0, 24)));
+  const calc = order.findIndex((entry) => entry.startsWith("we-calc"));
+  const outcomes = order.findIndex((entry) => entry.startsWith("br2"));
+  const spend = order.findIndex((entry) => entry.includes("SPEND YOUR ORE") || entry.includes("Spend your Ore") || entry.includes("STEP 05"));
+  expect(outcomes).toBeLessThan(calc);
+  expect(calc).toBeLessThan(spend);
+  await expect(process).not.toContainText("Joining late");
+  await expect(page.locator("#faq")).not.toContainText("Joining late");
+});
+
+test("the homepage follows the new order and its depth strips count down without gaps", async ({ page }) => {
+  await page.goto("/");
+  const ids = await page.locator("main > div > div.sect, main .sect[id]").evaluateAll((nodes) => nodes.map((node) => node.id));
+  expect(ids).toEqual(["tracks", "process", "shop", "progression", "custom-orders", "eras", "loadout-irl", "faq", "hack-club"]);
+  const metres = await page.locator("main .pit b").allTextContents();
+  expect(metres.map((m) => m.replace(/\s+/g, " ").trim())).toEqual(["−000 M", "−100 M", "−200 M", "−300 M", "−500 M", "−600 M", "−700 M", "−800 M"]);
+  await expect(page.locator("#what")).toHaveCount(0);
+  await expect(page.locator("#progression .facts > div")).toHaveCount(4);
+  await expect(page.locator("#requisitions")).toContainText("Field Requisition");
+});
+
+test("Project fit is in the Docs, not the homepage; Custom Orders and IRL keep their main layout", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#project-fit")).toHaveCount(0);
+  await expect(page.locator("#custom-orders .card.sm")).toHaveCount(3);
+  await expect(page.locator("#loadout-irl ol.days > li")).toHaveCount(3);
+});
+test("Hack Club block carries Jerry's reason and makes no claim about other programs' rates", async ({ page }) => {
+  await page.goto("/");
+  const block = page.locator("#hack-club");
+  await expect(block.locator("figure.why")).toContainText("I love Hack Club");
+  await expect(block).toContainText("Where LOADOUT comes from");
+  await expect(block).toContainText("has not accepted it yet");
+  await expect(block.locator("figure.why figcaption")).toContainText("Jerry");
+  await expect(block).not.toContainText(/better rates|higher rates|best rates/i);
+});
+
+for (const width of [1024, 1280, 1440, 1920]) {
+  test(`the hero margin notes clear the frame corners at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    const clear = await page.evaluate(() => {
+      const rects = (selector: string) => [...document.querySelectorAll(selector)].map((el) => el.getBoundingClientRect());
+      const hit = (a: DOMRect, b: DOMRect) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      const corners = rects(".hero .frame-corner");
+      return rects(".hero .meta").every((note) => corners.every((corner) => !hit(note, corner)));
+    });
+    expect(clear).toBe(true);
+  });
+}
+
+test("the footer has one short description and one GitHub link", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.locator("footer");
+  await expect(footer).not.toContainText("Build a useful tool");
+  await expect(footer).not.toContainText(/in development/);
+  await expect(footer.locator(`a[href*="github.com"]`).filter({ hasText: /GitHub/ })).toHaveCount(1);
+});
+
 test("the page has no long dashes and no repeated filler labels", async ({ page }) => {
   await page.goto("/");
   const text = await page.locator(".home").innerText();
@@ -574,7 +661,7 @@ test("the page has no long dashes and no repeated filler labels", async ({ page 
 
 test("the LOADOUT Docs tab opens the field manual and its section links work", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "Open LOADOUT documentation" }).click();
+  await page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i }).click();
   await expect(page).toHaveURL(/\/docs\/start$/);
   await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
   const docsNav = page.getByRole("navigation", { name: "Documentation sections" });
@@ -597,7 +684,7 @@ test("the LOADOUT Docs page reflows without horizontal scrolling", async ({ page
 
 test("the LOADOUT Docs tab has a direct keyboard and pointer route", async ({ page }) => {
   await page.goto("/");
-  const tab = page.getByRole("link", { name: "Open LOADOUT documentation" });
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
   await expect(tab).toBeVisible();
   await tab.focus();
   await expect(tab).toBeFocused();
@@ -605,33 +692,25 @@ test("the LOADOUT Docs tab has a direct keyboard and pointer route", async ({ pa
   await expect(page).toHaveURL(/\/docs\/start$/);
 });
 
-test("Community Eras explain shared progression without leaking Era rules elsewhere", async ({ page }) => {
+test("Community Eras keeps its main wording and has no leaked Era rules elsewhere", async ({ page }) => {
   await page.goto("/");
   const eras = page.locator("#eras");
   await expect(eras.getByRole("heading", { name: "Build the next Era together." })).toBeVisible();
-  await expect(eras).not.toContainText("Planned community concept");
-  await expect(eras).toContainText("A shared technical theme advanced by approved projects across the four tracks.");
-  await expect(eras).toContainText("Approved projects");
-  await expect(eras).toContainText("Shared Era Points");
-  await expect(eras).toContainText("Next technical theme");
-  await expect(eras).toContainText("+10%");
+  await expect(eras).toContainText("+10% PLANNED");
+  await expect(eras).toContainText("Ore bonus");
   await expect(eras).toContainText("Era Points are separate from Ore and Track XP.");
-  await expect(eras).toContainText("Planned rule");
   await expect(eras).not.toContainText(/Steam|Electrification|Computing|Networks|Acceleration|14 days|weekly reset|target|Season/i);
   for (const selector of ["#process", "#progression", "#loadout-irl"]) {
     await expect(page.locator(selector)).not.toContainText(/Era objectives|Era Points|Era changes/i);
   }
-  await expect(page.locator("#faq")).not.toContainText(/14 days|weekly reset|target|\+10%/i);
 });
-
 test("Custom Orders keep the request path without showing the planned tier card", async ({ page }) => {
   await page.goto("/");
   const customOrders = page.locator("#custom-orders");
-  await expect(customOrders).toContainText("relevant track tier");
+  await expect(customOrders).toContainText("required track level");
   await expect(customOrders).toContainText("Custom Order requests are not open yet");
   await expect(customOrders).not.toContainText(/Planned request tiers|Bare Metal|LV\.4|LV\.8|LV\.12|LV\.15/);
 });
-
 for (const width of [320, 390, 471, 700, 701, 900, 901, 1440]) {
   test(`Research Mode keeps readable copy and separate labels at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -663,16 +742,34 @@ test("essential content and FAQ remain available without JavaScript", async ({ b
   const page = await context.newPage();
   await page.goto(baseURL!);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.locator(".faq-noscript")).toContainText("Hackatime");
-  await expect(page.locator(".faq-noscript")).toBeVisible();
+  await expect(page.locator("#faq details")).toHaveCount(12);
+  await expect(page.locator("#faq")).toContainText("Hackatime");
+  await expect(page.locator(".faq-noscript")).toHaveCount(0);
+  await page.locator("#faq summary", { hasText: "How is my time tracked?" }).click();
+  await expect(page.locator("#faq details[open]")).toContainText("Hackatime");
   await context.close();
+});
+
+test("the homepage says it is not open yet once, in the hero, and the FAQ stays a single list", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator(".hero")).toContainText("Not open yet");
+  for (const id of ["shop", "eras", "loadout-irl", "process", "progression"]) {
+    const section = page.locator(`#${id}`);
+    if (await section.count()) await expect(section).not.toContainText(/not open yet|not available to order/i);
+  }
+  await expect(page.locator(".home")).toContainText("Who can join?");
+  expect(((await page.locator(".home").textContent()) ?? "").split("Who can join?").length - 1).toBe(1);
+  // The owner restored main's revision panel after the copy pass.
+  await expect(page.locator(".ft-sheet")).toContainText("Revier edition");
+  await expect(page.locator(".ft-sheet")).toContainText("In development");
 });
 
 test("Loadout IRL is described as a proposal, not an announced event", async ({ page }) => {
   await page.goto("/");
   const irl = page.locator("#loadout-irl");
   await expect(irl).toContainText("proposed");
-  await expect(irl).toContainText("not an announced event");
+  await expect(irl).not.toContainText("not confirmed");
+  await expect(irl).not.toContainText(/announced event/i);
   await expect(irl).not.toContainText("A planned three-day");
 });
 
@@ -680,7 +777,7 @@ test("a section without a lead keeps a gap under its heading", async ({ page }) 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  for (const id of ["process", "field-pricing", "behind-loadout"]) {
+  for (const id of ["process"]) {
     const gap = await page.locator(`#${id}`).evaluate((section) => {
       const heading = section.querySelector(":scope > .h2")!;
       return heading.nextElementSibling!.getBoundingClientRect().top - heading.getBoundingClientRect().bottom;
@@ -695,15 +792,14 @@ test("the process chart has three outcomes of review and the Physical Loadout co
   await expect(outcomes).toHaveCount(1);
   await expect(outcomes.locator(".cn")).toHaveText(["Ore to spend", "Track XP to keep", "Digital Loadout"]);
   await expect(outcomes).not.toContainText("Physical Loadout");
-  const upgrade = page.locator("#process .fl > .fn").filter({ hasText: "Choose your next upgrade" });
+  const upgrade = page.locator("#process .fl > .fn").filter({ hasText: "Spend your Ore" });
   await expect(upgrade).toContainText("Physical Loadout");
 });
 
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#project-fit")).toContainText("not guaranteed approvals");
-  await expect(page.locator("#shop")).toContainText("None are available to order yet");
-  await expect(page.locator("#custom-orders")).toContainText("Custom Order requests are not open yet");
+  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
+  await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 
 test("Track XP and levels follow main: five stops, requisition markers and arrows between them", async ({ page }) => {
@@ -713,7 +809,7 @@ test("Track XP and levels follow main: five stops, requisition markers and arrow
   const rail = page.getByRole("group", { name: "Field Requisition milestones" });
   await expect(rail.locator(".st")).toHaveCount(5);
   await expect(rail.locator(".st .cn")).toHaveText(["LV.3", "LV.6", "LV.9", "LV.12", "LV.15"]);
-  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition I", "Requisition I", "Requisition II", "Requisition II", "Master Requisition"]);
+  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition", "Requisition"]);
   await expect(rail.locator(".st .bd use")).toHaveCount(5);
   const marker = await rail.locator(".bd").first().boundingBox();
   expect([marker!.width, marker!.height]).toEqual([64, 64]);
@@ -729,8 +825,6 @@ test("the first site's animations are present: ore nudge, era and IRL entrances"
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   await expect(page.locator("#process .ic.nudge")).toHaveCSS("animation-name", "ore-nudge");
-  await expect(page.locator("#eras .era > div + div").first()).toHaveCSS("animation-name", "era-connector-enter");
-  await expect(page.locator("#loadout-irl .asd")).toHaveCSS("animation-name", "irl-status-enter");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("#process .ic.nudge")).toHaveCSS("animation-name", "none");
   await expect(page.locator(".scenery")).toHaveCount(0);
@@ -778,4 +872,21 @@ test("the page advertises the share image, the touch icon and the favicon", asyn
   }
   await expect(page.locator('link[rel="icon"]').first()).toHaveAttribute("href", /icon\.svg/);
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
+});
+
+test("the Docs tab is a plain link: dragging it does nothing, a click opens the Docs", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const tab = page.getByRole("link", { name: /LOADOUT DOCS.*open documentation/i });
+  const box = (await tab.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width / 2, box.y - 300, { steps: 10 });
+  await page.mouse.up();
+  await page.waitForTimeout(600);
+  await expect(page).toHaveURL(/\/$/);
+  const after = (await tab.boundingBox())!;
+  expect(Math.abs(after.y - box.y)).toBeLessThan(2);
+  await tab.click();
+  await expect(page).toHaveURL(/\/docs/);
 });

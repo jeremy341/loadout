@@ -5,7 +5,12 @@ import "./loadout.css";
 import "./home.css";
 import "./rock-bottom.css";
 import "./depth-dark.css";
+import "./prize-belt.css";
+import "./cursor.css";
+import "./mole.css";
 import "./docs.css";
+import "./motion.css";
+import { MotionPreference } from "./_components/motion-preference";
 import { SmoothScroll } from "./_components/SmoothScroll";
 import { siteConfig } from "./site-config";
 
@@ -28,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en" className={`${display.variable} ${pixel.variable} ${mono.variable} ${dot.variable} ${artMono.variable}`}>
-    <body><SmoothScroll>{children}</SmoothScroll></body>
+  return <html lang="en" data-motion-paused="true" suppressHydrationWarning className={`${display.variable} ${pixel.variable} ${mono.variable} ${dot.variable} ${artMono.variable}`}>
+    <body><MotionPreference /><SmoothScroll>{children}</SmoothScroll></body>
   </html>;
 }

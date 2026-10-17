@@ -1,6 +1,8 @@
 import { heroCopy } from "./site-content";
 
 export const DEFAULT_RSVP_URL = "https://rsvp.soon.it/loadout";
+export const DEFAULT_COMMUNITY_URL = "https://app.slack.com/client/E09V59WQY1E/C0C5XUDMRH9";
+export const LOADOUT_HELP_URL = "https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7";
 
 type PublicSiteInputs = {
   siteUrl?: string;
@@ -30,7 +32,7 @@ export function createSiteConfig(inputs: PublicSiteInputs = {}) {
     origin: siteUrl ? new URL(siteUrl).origin : undefined,
     joinUrl: inputs.joinUrl === undefined ? DEFAULT_RSVP_URL : httpsUrl(inputs.joinUrl),
     loginUrl: httpsUrl(inputs.loginUrl),
-    communityUrl: httpsUrl(inputs.communityUrl),
+    communityUrl: inputs.communityUrl === undefined ? DEFAULT_COMMUNITY_URL : httpsUrl(inputs.communityUrl),
     showIrlConcept: inputs.showIrlConcept ?? true,
     githubUrl: "https://github.com/jeremy341/loadout",
     allowIndexing: Boolean(siteUrl && inputs.allowIndexing),

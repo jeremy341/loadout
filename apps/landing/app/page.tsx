@@ -10,22 +10,20 @@ import { Hero } from "./_components/home/Hero";
 import Reveal from "./_components/home/Reveal";
 import { Tracks } from "./_components/home/Tracks";
 import { HowItWorks } from "./_components/home/HowItWorks";
-import { ProjectFit } from "./_components/home/ProjectFit";
-import { Progression } from "./_components/home/Progression";
-import { Rewards } from "./_components/home/Rewards";
+import { LevelsAndRewards } from "./_components/home/LevelsAndRewards";
 import { PlannedPrizes } from "./_components/home/PlannedPrizes";
 import { CustomOrders } from "./_components/home/CustomOrders";
 import { Eras } from "./_components/home/Eras";
 import { LoadoutIrl } from "./_components/home/LoadoutIrl";
 import { Faq } from "./_components/home/Faq";
-import { BehindLoadout } from "./_components/home/BehindLoadout";
+import { HackClub } from "./_components/home/HackClub";
 import { SiteFooter } from "./_components/home/SiteFooter";
+import { Mole } from "./_components/mole/Mole";
 
 export default function Home() {
   return (
     <div className="home" id="top">
       <a className="skip-link" href="#main">Skip to content</a>
-      <ThemeSwitch />
       <ScrambleHeadings selector=".home .h1" duration={1800} />
       <DepthGlow />
       <div style={{ display: "contents" }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICON_SPRITE }} />
@@ -34,22 +32,22 @@ export default function Home() {
       <div className="in">
         <SiteNav />
         <main id="main">
+          <ThemeSwitch />
           <Hero />
           <Reveal stagger><Tracks /></Reveal>
           <Reveal><HowItWorks /></Reveal>
-          <Reveal><ProjectFit /></Reveal>
-          <Reveal><Progression /></Reveal>
-          <Reveal stagger><Rewards /></Reveal>
           <Reveal stagger><PlannedPrizes /></Reveal>
+          <Reveal><LevelsAndRewards /></Reveal>
           <Reveal stagger><CustomOrders /></Reveal>
           <Reveal stagger><Eras /></Reveal>
           {siteConfig.showIrlConcept && <Reveal><LoadoutIrl /></Reveal>}
           <Reveal><Faq /></Reveal>
-          <BehindLoadout />
+          <HackClub />
         </main>
       </div>
       <SiteFooter />
       <DocsTab />
+      <Mole />
     </div>
   );
 }

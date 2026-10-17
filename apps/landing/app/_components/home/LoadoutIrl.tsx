@@ -1,5 +1,11 @@
 
-// Loadout IRL section ported from the LOADOUT redesign reference.
+const DAYS = [
+  { label: "TAG 01 · FRÜHSCHICHT", title: "Meet & choose", text: "Meet in person and choose a technical project." },
+  { label: "TAG 02 · SPÄTSCHICHT", title: "Build together", text: "Build side by side with other builders." },
+  { label: "TAG 03 · NACHTSCHICHT", title: "Share your work", text: "Share what you made using LOADOUT’s four tracks." },
+] as const;
+
+// Loadout IRL: the three days on a line.
 export function LoadoutIrl() {
   return (
     <>
@@ -16,66 +22,20 @@ export function LoadoutIrl() {
       <div className="sect" id="loadout-irl">
         <h2 className="h2">
           Loadout IRL
-          {"// Ruhr"}
+          {" // Ruhr"}
         </h2>
         <p className="lead">
-          A proposed three-day hackathon in Germany’s Ruhr area, not an announced event.
+          A proposed three-day build weekend in Germany’s Ruhr area, Friday to Sunday.
         </p>
-        <div className="row r3">
-          <div className="card t">
-            <div className="ct">
-              <span>
-                TAG 01 · FRÜHSCHICHT
-              </span>
-              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#i-list"></use>
-              </svg>
-            </div>
-            <div className="cn">
-              Meet &amp; choose
-            </div>
-            <div className="m dsc">
-              Meet in person and choose a technical project.
-            </div>
-          </div>
-          <div className="card t">
-            <div className="ct">
-              <span>
-                TAG 02 · SPÄTSCHICHT
-              </span>
-              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#i-wrench"></use>
-              </svg>
-            </div>
-            <div className="cn">
-              Build together
-            </div>
-            <div className="m dsc">
-              Build side by side with other builders.
-            </div>
-          </div>
-          <div className="card t">
-            <div className="ct">
-              <span>
-                TAG 03 · NACHTSCHICHT
-              </span>
-              <svg className="ic" viewBox="0 0 32 32" aria-hidden="true">
-                <use href="#i-document"></use>
-              </svg>
-            </div>
-            <div className="cn">
-              Share your work
-            </div>
-            <div className="m dsc">
-              Share what you made using LOADOUT’s four tracks.
-            </div>
-          </div>
-        </div>
-        <div className="asd" style={{ marginTop: "34px" }}>
-          <div className="m dsc">
-            Dates, venue, funding, and registration are not confirmed yet.
-          </div>
-        </div>
+        <ol className="days">
+          {DAYS.map((day) => (
+            <li key={day.title}>
+              <small className="m">{day.label}</small>
+              <div className="cn">{day.title}</div>
+              <div className="m dsc">{day.text}</div>
+            </li>
+          ))}
+        </ol>
       </div>
     </>
   );

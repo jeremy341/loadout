@@ -1,43 +1,43 @@
 ---
 title: "Tracking & evidence"
-description: "Connect recorded work, journals, and artifacts without counting work twice."
+description: "How recorded time, your journal and your files fit together, without counting work twice."
 group: "BUILD & REVIEW"
 order: 70
 status: draft
 ---
 
-Recorded time is one piece of evidence. Journals and artifacts explain what that time produced and which work belongs to you.
+Recorded time is one piece of evidence. Your journal and your files explain what that time produced and which part is yours.
 
-## Tracked, journaled, and approved work
+## Tracked, journaled and approved work
 
-| Record | Its purpose |
+| Record | What it's for |
 | --- | --- |
-| Tracked work | Records when you worked. |
-| Journal | Explains the work, decisions, experiments, and progress. |
-| Approved work | The eligible contribution a reviewer can verify. |
+| Tracked work | Shows when you worked. |
+| Journal | Explains the work, the decisions, the experiments and the progress. |
+| Approved work | The part a reviewer can verify and accept. |
 
-These records may differ. A reviewer may need clarification or may approve only the supported part of a submission.
+These can differ. A reviewer may need to ask you something, or may approve only the part of a submission that the evidence supports.
 
-Hackatime is planned for coding; Lapse is planned for eligible hardware and other non-code work. Final tracking requirements will be published before launch. This page does not provide a setup tutorial or promise that either integration is live.
+Use Hackatime to record coding and Lapse for eligible hardware and other non-code work. Your journal connects the recording to what you built. The LOADOUT account integrations are listed under [program status](/docs/eligibility#where-things-stand); that is separate from the availability of the tracking tools themselves.
 
-## What a useful journal explains
+## What a useful journal says
 
-Say what changed, why you chose an approach, what failed, and how you checked the result. Link the relevant commits, measurements, photos, or demonstrations.
+Say what changed, why you chose that approach, what failed and how you checked the result. Link the commits, measurements, photos or demos.
 
-“Worked on the project” gives little context. “Compared two buffer layouts and measured their memory use under the same workload” explains a decision that evidence can support.
+"Worked on the project" tells a reviewer nothing. "Compared two buffer layouts and measured their memory use under the same workload" explains a decision that evidence can back up.
 
 ### Useful evidence
 
-Different projects need different evidence: source changes, terminal output, benchmark graphs, CAD images, device photos, or test demonstrations.
+Different projects need different proof: source changes, terminal output, benchmark graphs, CAD images, photos of the device or a recorded test.
 
-Keep secrets, access tokens, and other people's personal information out of public evidence.
+Keep secrets, access tokens and other people's personal details out of public evidence.
 
 ## No double counting
 
-Assign the same tracked work only once. If a session supports several journal entries, divide it rather than claiming the whole session in each entry.
+Use each stretch of tracked work once. If one session supports several journal entries, split it. Don't claim the whole session in each.
 
-Team members record their own contributions. A later version includes only new work, not hours already approved for an earlier ship.
+Team members record their own contributions. A later version covers only new work, not hours already approved for an earlier ship.
 
-## When evidence is incomplete
+## When evidence has gaps
 
-Explain gaps honestly. More recorded time does not resolve missing artifacts or unclear authorship. A reviewer should identify the evidence needed; see [review feedback](/docs/review#feedback).
+Say so honestly. More recorded hours don't fix missing files or unclear authorship. A reviewer should tell you what evidence is needed; see [review feedback](/docs/review#feedback).

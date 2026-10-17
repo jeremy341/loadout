@@ -2,6 +2,7 @@ import { RSVP_ENABLED, RSVP_URL } from "./rsvp-url";
 import { ART } from "./art";
 import { AsciiField } from "./AsciiField";
 import { HoverScramble } from "./HoverScramble";
+import Link from "next/link";
 import { MagneticCorners } from "./MagneticCorners";
 
 // Hero laid out like main's LoadoutHero: badge row, framed headline and copy,
@@ -10,9 +11,9 @@ import { MagneticCorners } from "./MagneticCorners";
 export function Hero() {
   return (
     <div className="hero">
-      <div className="stp s1" aria-hidden="true">
+      <div className="stp s1" aria-hidden="true" lang="de">
         Glück auf
-        <small>Zeche · Anno 1900</small>
+        <small>Zeche · Ruhr</small>
       </div>
 
       <span className="x x-top" aria-hidden="true">+</span>
@@ -30,16 +31,14 @@ export function Hero() {
         Zeche Revier
       </div>
       <div className="m meta meta-right" aria-hidden="true">
-        Blatt 001
+        4 tracks
         <br />
-        Rev A
-        <br />
-        Anno 1900
+        Tools to Hardware
       </div>
 
       <div className="hero-badge">
         <span className="sl" />
-        <span className="tag">GLÜCK AUF · TECHNICAL BUILDERS</span>
+        <span className="tag"><span lang="de">GLÜCK AUF</span> · FOR TEENS 13 TO 19</span>
         <span className="sl sl-flip" />
       </div>
 
@@ -73,7 +72,7 @@ export function Hero() {
           <span>technical stack.</span>
         </h1>
         <p>
-          Build tools, systems, compute, and hardware. Earn Ore for equipment and Track XP in the fields your work uses.
+          Build something technical, ship it, and earn Ore for it. Spend the Ore on gear for your next build.
         </p>
       </div>
 
@@ -90,12 +89,14 @@ export function Hero() {
         </MagneticCorners>
       </div>
 
+      <p className="hero-credit">
+        Organized by <Link href="/docs/team#jerry">Jerry</Link>, <Link href="/docs/team#fazin">Fazin</Link> &amp; <Link href="/docs/team#netic">Netic</Link>. Community by <Link href="/docs/team#kernel">Kernel</Link>
+      </p>
+
       <div className="m hero-facts">
-        <span><HoverScramble text="▣ Technical projects" /></span>
+        <span><HoverScramble text="◈ 10 Ore for a solid hour" /></span>
         <span className="hero-sep">|</span>
-        <span><HoverScramble text="◈ Four tracks" /></span>
-        <span className="hero-sep">|</span>
-        <span><HoverScramble text="ϟ Build your loadout" /></span>
+        <span><HoverScramble text="ϟ Not open yet" /></span>
       </div>
 
       <div className="m hero-cue">

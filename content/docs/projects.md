@@ -1,49 +1,49 @@
 ---
 title: "What can I build?"
-description: "Judge project fit by the technical capability and your own contribution."
+description: "How to tell whether a project fits: the technical work and your own part in it."
 group: "START HERE"
 order: 30
 status: draft
 ---
 
-Build something that adds useful technical capability. A product label alone cannot tell you whether its work fits LOADOUT.
+Build something that adds a useful technical capability. The product label doesn't decide whether it fits. The work inside it does.
 
 ## What makes a project fit? {#fit}
 
-Your submission should explain:
+Your submission should say:
 
 - What technical capability you built or improved.
-- What substantial work you personally did.
-- How another person can inspect or verify the result.
-- Which track or tracks that work belongs to.
+- What substantial work you did yourself.
+- How someone else can inspect or check the result.
+- Which track or tracks the work belongs to.
 
-A larger app may contain both relevant engineering and ordinary product work. Identify the eligible technical core instead of claiming that every part belongs in LOADOUT.
+A bigger app can hold both real engineering and ordinary product work. Point to the technical core instead of claiming all of it.
 
 ## The four tracks {#tracks}
 
 | Track | Typical technical core |
 | --- | --- |
-| Tools | Developer workflows, debugging, testing, and automation. |
-| Systems | Runtimes, protocols, storage, and infrastructure. |
-| Compute | Graphics, inference, numerical work, and performance. |
-| Hardware | Electronics, embedded systems, robotics, and instruments. |
+| Tools | Developer workflows, debugging, testing and automation. |
+| Systems | Runtimes, protocols, storage and infrastructure. |
+| Compute | Graphics, inference, numerical work and performance. |
+| Hardware | Electronics, embedded systems, robotics and instruments. |
 
-[Track descriptions](/docs/tracks) explain how to choose a field, including projects spanning several tracks.
+[The tracks page](/docs/tracks) helps you choose a field, including for projects that span several.
 
 ## Look for the technical core {#examples}
 
-| Less evidence of fit on its own | A stronger technical core to explain |
+| Shows little on its own | A stronger core to explain |
 | --- | --- |
-| A copied tutorial website. | An original tool that solves a real workflow problem. |
-| A basic screen around an existing AI API. | A runtime or evaluation tool you designed and measured. |
-| A standard product interface. | An original synchronization or rendering engine inside it. |
+| A website copied from a tutorial. | An original tool that solves a real workflow problem. |
+| A simple screen around an existing AI API. | A runtime or evaluation tool you designed and measured. |
+| A standard product interface. | An original sync or rendering engine inside it. |
 
-These are comparisons, not automatic approval or rejection. Original work, depth, usefulness, and evidence still need review.
+These are comparisons, not automatic yes or no answers. Reviewers still look at what's original, how deep it goes, how useful it is and what evidence you give.
 
 ## Research Mode {#research}
 
-An experiment, benchmark, reproduction, or investigation can fit without becoming a complete product. [Research Mode](/docs/research) explains the expected question, method, and reproducible result.
+An experiment, benchmark, reproduction or investigation can fit even if it isn't a finished product. [Research Mode](/docs/research) explains the question, the method and the reproducible result it expects.
 
-## Before you invest in a borderline idea
+## Not sure your idea fits?
 
-Describe the capability, what is original, and how you will demonstrate it. Ask **#loadout-help** about fit rather than relying on a broad category name.
+Say what capability you're building, what's original about it and how you'll show it works. Ask in **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)** about fit, instead of guessing from a category name.

@@ -4,13 +4,13 @@
 
 ## Platform and audience
 
-LOADOUT is a web-based technical-builder YSWS concept for prospective builders exploring whether their work fits. Exact age, region, and eligibility policy is not confirmed for public copy.
+LOADOUT is a technical-builder YSWS for high-school students aged 13 to 18. It is in development. Age verification, prize-delivery regions and operating dates remain open; the age range is approved for public copy.
 
 ## Purpose and positioning
 
 LOADOUT focuses on technical work that expands capability for the builder or other builders. Its four tracks are Tools, Systems, Compute, and Hardware. Research Mode is a project modifier, not a fifth track. The intended progression connects shipped work to a Digital Loadout and planned rewards to a Physical Loadout.
 
-The four quality dimensions are Originality, Technical Depth, Execution, and Documentation. Ore is planned global spendable currency; Track XP records non-spendable progress by track. Exact payout formulas and prices are not approved for publication.
+The four quality dimensions are Originality, Technical Depth, Execution, and Documentation. Ore is global spendable currency; Track XP records non-spendable progress by track. Plan 02's agreed table and rule-status matrix identify public rates, milestones, discounts, Requisitions and sample prices. Unselected XP equations, intermediate curves, reviewer operations and Custom Order values remain internal candidates.
 
 ## Current product boundary
 

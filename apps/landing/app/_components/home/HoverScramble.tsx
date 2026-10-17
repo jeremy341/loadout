@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, type PointerEvent } from "react";
 
+import { useMotionPreference } from "../motion-preference";
+
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*";
 const ITERATIONS = 7;
 const SPEED = 16; // ms, grows by 20% each redraw
@@ -14,6 +16,7 @@ const randomChar = () => CHARSET[Math.floor(Math.random() * CHARSET.length)];
 // neighbours. The real text is always in the page for screen readers; the lettered copy is
 // decorative. Reduced motion leaves the text still. Redraws touch the DOM directly, not React.
 export function HoverScramble({ text }: { text: string }) {
+  const { paused } = useMotionPreference();
   const line = useRef<HTMLSpanElement>(null);
   const busy = useRef(new Set<number>());
   const hovered = useRef(-1);
@@ -21,8 +24,17 @@ export function HoverScramble({ text }: { text: string }) {
 
   useEffect(() => {
     const pending = timers.current;
-    return () => pending.forEach((id) => window.clearTimeout(id));
-  }, []);
+    const active = busy.current;
+    const element = line.current;
+    const restore = () => {
+      pending.forEach((id) => window.clearTimeout(id));
+      pending.clear();
+      active.clear();
+      Array.from(element?.children ?? []).forEach((box, index) => { box.textContent = text[index]; });
+    };
+    if (paused) restore();
+    return restore;
+  }, [paused, text]);
 
   // The letter's box, or nothing when it is a space, a symbol or past the end of the line.
   function letterBox(index: number) {
@@ -58,7 +70,7 @@ export function HoverScramble({ text }: { text: string }) {
   }
 
   function onPointerOver(event: PointerEvent<HTMLSpanElement>) {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused) return;
     const target = (event.target as HTMLElement).closest<HTMLElement>("[data-i]");
     if (!target) return;
     const index = Number(target.dataset.i);

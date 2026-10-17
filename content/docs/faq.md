@@ -1,55 +1,79 @@
 ---
 title: "Quick answers"
-description: "Common questions about the draft, projects, progress, and prizes."
+description: "Short answers to the questions people ask first."
 group: "COMMUNITY"
 order: 180
 status: draft
 ---
 
-These answers summarize the program draft. Follow the linked guides for the relevant detail and pending rules.
+Short answers. Follow the links for the full picture and for what's still undecided.
 
 ## Questions {#questions}
 
+### Who can join?
+
+Teens aged 13 to 19. If you're in high school, it's for you. See [eligibility](/docs/eligibility).
+
 ### Has LOADOUT launched?
 
-No. The website explains a program in development. RSVP records interest; it does not enroll you or confirm eligibility. See [current status](/docs/eligibility).
+Not yet. A start date hasn't been announced. [RSVP](https://rsvp.soon.it/loadout) for launch updates; it records interest rather than enrolling you. See [current status](/docs/eligibility).
 
 ### What can I build?
 
-Useful technical work in Tools, Systems, Compute, or Hardware. The capability and your own contribution determine fit, not the product label. See [project fit](/docs/projects).
+Useful technical work in Tools, Systems, Compute or Hardware. The part you built yourself decides whether it fits, not what the product is called. See [what you can build](/docs/projects).
 
-### Is Research Mode a fifth track?
+### How many projects can I ship?
 
-No. It is a mode for investigation, experiments, benchmarks, or reproductions within the four tracks. See [Research Mode](/docs/research).
+As many as you like, and you can ship the same project again. Each ship pays for the hours since the last one. See [shipping](/docs/shipping).
 
-### Do I need a team?
+### How do I earn Ore?
 
-The draft supports individual and team projects. Each builder is credited for their approved contribution. See [AI and team contributions](/docs/ai-teams).
+Your approved hours are multiplied by your project's rating. [Ore, XP & levels](/docs/progress#work) explains the rating scale and shows what a ship earns.
 
 ### Is Ore the same as XP?
 
-No. Ore is spendable currency; Track XP is lifetime field progress. Era Points represent shared community progress. See [progress](/docs/progress).
+No. Spend Ore on prizes; keep Track XP to level up in a field. Era Points count toward shared community progress. See [Ore, XP & levels](/docs/progress).
 
-### Do hours guarantee a prize?
+### What can I buy, and what does it cost?
 
-No. Work must fit, be evidenced, and pass review. Prices, stock, and fulfillment are not confirmed. See [review](/docs/review) and [prizes](/docs/prizes).
+Gear for your next build, from a domain at 24 Ore to a Framework 16 laptop at 5,000. See the [prize examples and prices](/docs/prizes).
 
 ### What does a Requisition do?
 
-It extends the allowance for your existing field discount on one eligible order. It does not add Ore or bypass level gates. See [Requisitions](/docs/requisitions).
+It adds a one-use 20% discount to an eligible prize. [Field Requisitions](/docs/requisitions) explains how you earn one and which purchases qualify.
 
-### Can I request something outside the catalog?
+### Do I need a team?
 
-Custom Orders are planned, but not open. They require relevant progression, team review, and enough Ore for an accepted final quote. See [Custom Orders](/docs/custom-orders).
+No. You can work alone or with others, and each person is credited for their own approved part. See [AI & team contributions](/docs/ai-teams).
+
+### Can I use AI?
+
+Yes, if you say where, and show what you built and understand yourself. AI alone doesn't rule a project out. See [AI & team contributions](/docs/ai-teams).
+
+### What happens to someone who cheats?
+
+A permanent ban, and everything they earned is taken back. See [Project review](/docs/review#fraud).
+
+### Is Research Mode a fifth track?
+
+No. It's a way to investigate, experiment, benchmark or reproduce something inside the four tracks. See [Research Mode](/docs/research).
+
+### Can I ask for something that isn't in the catalog?
+
+Yes, through a Custom Order. It needs the right progress, team approval and enough Ore for the quote. See [Custom Orders](/docs/custom-orders).
 
 ### Does an Era reset my levels?
 
-No. Lifetime Track XP and accepted projects persist. Eras are shared themes, while Seasons are competitive periods. See [Eras & Seasons](/docs/eras).
+No. Your lifetime Track XP and your accepted projects stay. Eras are shared themes, and Seasons are competitive periods. See [Community Eras](/docs/eras).
 
-### Can I register for LOADOUT IRL?
+### Is this a real Hack Club program?
 
-No event is confirmed and event registration is not open. See the [future IRL concept](/docs/irl).
+LOADOUT is a proposal. Hack Club acceptance hasn't been confirmed. See [current status](/docs/eligibility).
 
-### Where do I ask another question?
+### Can I sign up for LOADOUT IRL?
 
-Use **#loadout-help**, with a page link and the specific question. See [help and feedback](/docs/help).
+Not yet. No event is confirmed, and registration isn't open. See [LOADOUT IRL](/docs/irl).
+
+### Where do I ask something else?
+
+Open an issue on [our GitHub](https://github.com/jeremy341/loadout) or use **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)**, with a link to the page and your specific question. See [Help & feedback](/docs/help).

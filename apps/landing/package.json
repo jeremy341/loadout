@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "bun test app/site-config.test.ts app/docs app/rock-bottom.test.ts",
+    "test": "bun test app/site-config.test.ts app/docs app/rock-bottom.test.ts app/_components/mole",
     "capture": "node scripts/capture-homepage.mjs",
     "test:e2e": "playwright test"
   },

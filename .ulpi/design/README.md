@@ -15,12 +15,24 @@
 
 | Brief | Scope |
 |---|---|
+| [`restore-main-era-footer.md`](restore-main-era-footer.md) | Restore main's Era facts layout and footer revision panel only. |
+| [`prize-loop-spacing.md`](prize-loop-spacing.md) | Fixed card-column sizing for uniform spacing through the prize loop. |
+| [`accessibility-remediation.md`](accessibility-remediation.md) | Owner-approved fixes for the WCAG audit, with full public-page regression coverage. |
+| [`community-channel-links.md`](community-channel-links.md) | Verified direct community/help links in the footer, FAQ and public Docs. |
 | [`faq-question-readability.md`](faq-question-readability.md) | Slightly looser FAQ question lettering on desktop and mobile; accordion behavior and layout stay the same. |
 | [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |
 | [`section-corner-brackets.md`](section-corner-brackets.md) | Four corner marks on the section headings, matching the hero frame. |
 | [`logo-helmet-mark.md`](logo-helmet-mark.md) | The miner's helmet logo, favicon, share image and the lamp blink. |
 | [`ore-currency.md`](ore-currency.md) | The global currency is called Ore, with the ore gem icon, replacing Bolts. |
 | [`depth-darkness.md`](depth-darkness.md) | The homepage gets darker the deeper you scroll, down to the 404's near black. |
+| [`prize-belt.md`](prize-belt.md) | The planned prizes ride a slow, pausable belt, as in Pixl and the YSWS template. |
+| [`prize-photos.md`](prize-photos.md) | The proposed prizes show one example product photo each, from Pixl, on the existing belt. |
+| [`homepage-voice.md`](homepage-voice.md) | Plainer homepage copy: hero, rewards, progression, Eras and IRL lines, with no new claims. |
+| [`real-details.md`](real-details.md) | The homepage and Docs say what is decided: teens 13 to 18, 10 Ore for a solid hour, the 0 to 20 rating, a worked example, prices on the prizes, short FAQ answers, and no invented drawing details. |
+| [`copy-follow-through.md`](copy-follow-through.md) | Owner-approved fixes 1–4: accurate hero, direct launch wording, starter prizes first, shorter repeated copy, and clearer Custom Order and Era Docs. Real-project showcase deferred; existing How it works preserved. |
+| [`mole.md`](mole.md) | A pixel Maulwurf mascot turns up at the bottom of the homepage: it can be petted, picked up, and annoyed, and the footer button hides it. |
+| [`mole-behaviour.md`](mole-behaviour.md) | Proposed rework of Orry's behaviour: 19 ways to interact, what counts as each gesture, two mood meters with minimum times, per-frame animation timing, a run-and-pause rhythm, and rules for effects and the cursor. Not built. |
+| [`custom-cursor.md`](custom-cursor.md) | The homepage cursor is a pixel arrow with a pointing hand for links, from Kenney's CC0 pack, in LOADOUT's ink, blue and yellow. |
 | [`rock-bottom-404.md`](rock-bottom-404.md) | The 404 page ("rock bottom") and the cave-in error page. |
 | [`pixel-font-open-c.md`](pixel-font-open-c.md) | An open C and c in the pixel font, so a C no longer reads as an O. |
 | [`docs-phone-guides-drawer.md`](docs-phone-guides-drawer.md) | Docs on phones: the Guides drawer. The icons await licence confirmation. |

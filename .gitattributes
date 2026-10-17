@@ -1,3 +1,7 @@
 # Markdown hard line breaks and upstream license bytes are intentional.
 *.md whitespace=-blank-at-eol
 apps/landing/public/fonts/*-OFL.txt -text whitespace=-blank-at-eol
+# Cursor pack licence and readme text is upstream and kept byte for byte.
+assets/inbox/cursors/**/*.txt -text whitespace=-blank-at-eol,-blank-at-eof
+assets/inbox/cursors/**/*.inf -text whitespace=-blank-at-eol,-blank-at-eof
+assets/editable/cursors/source/*.txt -text whitespace=-blank-at-eol,-blank-at-eof

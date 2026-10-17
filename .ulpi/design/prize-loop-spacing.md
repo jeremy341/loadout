@@ -1,6 +1,6 @@
 # Prize loop spacing
 
-Status: the two-list loop was removed at the owner's request on 2026-10-17. The 230px card width and 16px inter-card gap remain in the static scroll strip; loop-specific measurements below are historical.
+Status: the two-list loop was restored at the owner's request on 2026-10-17. The earlier 230px card width, 16px inter-card gap, and half-track spacing measurements apply again.
 
 ## Evidence and design read
 

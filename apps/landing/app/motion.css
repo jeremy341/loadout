@@ -16,6 +16,9 @@ html[data-motion-paused=true] .home .reveal[data-stagger] .row > .card {
 }
 html[data-motion-paused=true] .home .art .f1 { opacity: 1; }
 html[data-motion-paused=true] .home .art .f2, html[data-motion-paused=true] .home .art .f3 { opacity: 0; }
+html[data-motion-paused=true] .home .pb-track { transform: none; will-change: auto; }
+html[data-motion-paused=true] .home .pb-view { overflow-x: auto; mask-image: none; -webkit-mask-image: none; }
+html[data-motion-paused=true] .home .pb-half[aria-hidden=true] { display: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .home .reveal, .home .reveal[data-stagger] .row > .card { opacity: 1 !important; transform: none !important; translate: none !important; }

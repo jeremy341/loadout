@@ -25,7 +25,7 @@ Own home.css, docs.css, DocsDocument.tsx, DocsTab.tsx, RockBottom.tsx, SiteNav.t
 Own the shared system reduced-motion preference and motion.css; layout.tsx; NoiseGrain.tsx; PlannedPrizes.tsx and prize-belt.css; DocsShell (docs-shell.tsx); mascot files/engine/mole.css; ScrambleHeadings/HoverScramble as needed. SiteFooter.tsx is yours: preserve the already-restored metadata and direct channel links.
 
 - Honor `prefers-reduced-motion` in shared effects and the mascot, including live preference changes. No saved visitor pause state or pause button is used.
-- Keep the prize strip static and keyboard/pointer scrollable at all times. Do not duplicate the list visually or for assistive technology.
+- Keep the prize belt moving slowly in the default state. It pauses on pointer hover and keyboard focus; reduced-motion users get one static, manually scrollable list. Do not add a global pause button or an assistive-technology duplicate.
 - Show reveal content when motion is reduced; do not freeze it invisible. Clean up timers/listeners on navigation.
 - Keep Orry as optional decorative pointer play. The owner asked to remove the entire Orry control section from the footer; do not replace it elsewhere. Automatic appearances must still honor reduced motion. No essential document function may require interacting with Orry.
 - Keep existing controls compatible with forced colors and enlarged text.

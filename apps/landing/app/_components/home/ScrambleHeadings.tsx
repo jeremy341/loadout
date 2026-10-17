@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useMotionPreference } from "../motion-preference";
 
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+";
 const STEP = 60; // ms between random redraws
@@ -122,7 +123,9 @@ function scramble(heading: HTMLElement, duration: number, onDone: () => void): (
 // visitors who prefer reduced motion see it untouched. `duration` is the time until the last
 // letter settles. The homepage uses it on the hero title only.
 export function ScrambleHeadings({ selector, duration = 1600 }: { selector: string; duration?: number }) {
+  const { paused } = useMotionPreference();
   useEffect(() => {
+    if (paused) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const running = new Set<() => void>();
     let disposed = false;
@@ -152,7 +155,7 @@ export function ScrambleHeadings({ selector, duration = 1600 }: { selector: stri
       observer.disconnect();
       running.forEach((stop) => stop());
     };
-  }, [selector, duration]);
+  }, [selector, duration, paused]);
 
   return null;
 }

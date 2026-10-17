@@ -46,4 +46,4 @@ An experiment, benchmark, reproduction or investigation can fit even if it isn't
 
 ## Not sure your idea fits?
 
-Say what capability you're building, what's original about it and how you'll show it works. Ask in **#loadout-help** about fit, instead of guessing from a category name.
+Say what capability you're building, what's original about it and how you'll show it works. Ask in **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)** about fit, instead of guessing from a category name.

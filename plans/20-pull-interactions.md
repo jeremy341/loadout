@@ -1,6 +1,6 @@
 # Plan 20: Pull interactions (grab cursor, pull tab, pull cord)
 
-**Status:** Approved by the owner on 2026-10-15 (pull up; a long pull opens the Docs; build both phases). Phase 1 is built; see `.ulpi/design/pull-tab.md`. Phase 2 follows. Each phase becomes its own pull request after the owner says go.
+**Status:** Dropped by the owner on 2026-10-15. The grab cursors, the pull tab (first on a rope, then a rubber band, then a rope again) and the pull cord were all tried, and the owner removed the pull interaction from the Docs tab completely: it is a plain link again, and nothing of the gesture remains in the code. The open hand and the fist are still used, for the mole. This file keeps the idea and the reasons for the record.
 **Owner:** This plan owns the pull interactions. Plan 06 owns the homepage they sit on, and the design system owns the cursor and motion rules.
 
 ## 1. The idea
@@ -26,7 +26,7 @@ Add one playful gesture to the homepage: **things you can grab and pull, which s
 
 ## 3. Phase 1: grab cursor and pull tab
 
-**Changed after the owner's review (2026-10-15):** the first version lifted the tab on a thin cord. The owner wanted a **rubber band** instead: a blue band that stretches up from the floor and gets thinner, with much more resistance the further it goes, that **snaps back first and only then opens the Docs**. That is what was built. The description below is the original plan; `.ulpi/design/pull-tab.md` is the current behaviour (maximum stretch 130 px, a pull of 110 px opens the Docs).
+**Changed after the owner's review (2026-10-15):** the first version lifted the tab on a dashed rope. A second version turned it into a blue rubber band that thinned as it stretched; the owner preferred the rope, so the rope is back. The extra resistance and the order the owner asked for, **snap back first and only then open the Docs**, are kept. `.ulpi/design/pull-tab.md` is the current behaviour (maximum lift 130 px, a pull of 110 px opens the Docs).
 
 **The tab.**
 - Hover: the open hand (`grab`). While dragging: the closed fist (`grabbing`). Everywhere else the cursor is as today.
@@ -58,6 +58,8 @@ Add one playful gesture to the homepage: **things you can grab and pull, which s
 **Acceptance.** The tab pulls, springs back and opens the Docs on a long pull. A click and the keyboard work as before. Nothing about page scrolling changes. The full browser suite passes.
 
 ## 4. Phase 2 (optional): the pull cord and the secret level
+
+**Dropped.** A ring on the floor and then a hidden door handle (visible only on hover) opened a hidden -1404 M level. The owner removed it on 2026-10-15. The text below is the original idea.
 
 - A short **cord with a ring** hangs below the footer's last line. It is drawn in the sprite style (a small pixel ring), so it reads as a real object.
 - **Pull it up:** the cord stretches with the same resistance. At the threshold a dark panel below the footer opens: **−1404 M, Sohle**, in the 404 page's near black, with one line (for example "You reached rock bottom. The only way back is up.") and a **Back to the surface** button that scrolls to the top. A second link to the 404 is optional.

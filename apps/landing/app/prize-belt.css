@@ -1,13 +1,10 @@
-/* The planned prizes ride a slow belt (.ulpi/design/prize-belt.md). Two copies of one list sit in a track that moves by
-   exactly half its width, so the loop never jumps: each copy carries its own trailing gap, which makes half the track
-   exactly one copy. The motion is one transform animation, no script. It pauses under the pointer and while the belt has
-   keyboard focus. With reduced motion the belt is a row to scroll by hand. */
+/* The prize cards ride a slow CSS belt. The loop is quiet by default and pauses on hover or keyboard focus. */
 .home .pb { --pb-gap: 16px; margin-top: 28px; }
 
 .home .pb-view { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
 .home .pb-track { display: flex; width: max-content; animation: pb-scroll 70s linear infinite; will-change: transform; }
-.home .pb-half { display: flex; gap: var(--pb-gap); margin: 0; padding: 0 var(--pb-gap) 0 0; list-style: none; }
-.home .pb-half > li { display: flex; flex: 0 0 230px; }
+.home .pb-half { display: grid; grid-auto-flow: column; grid-auto-columns: 230px; flex: none; gap: var(--pb-gap); margin: 0; padding: 0 var(--pb-gap) 0 0; list-style: none; }
+.home .pb-half > li { display: flex; min-width: 0; }
 .home .pb-card { width: 100%; border: 1px solid var(--fg); }
 
 .home .pb-view:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }

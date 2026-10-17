@@ -32,4 +32,4 @@ An experiment that proves your idea wrong can teach someone a lot. Say why the r
 
 Research goes through the same review as any ship: fit, validity, authorship and quality. It doesn't skip tracking, and it doesn't turn borrowed work into yours.
 
-A reproducible report is planned to earn extra Track XP. The exact bonus and final requirements aren't set yet. See [Build & ship](/docs/shipping) and [Project review](/docs/review).
+A reproducible report can earn extra Track XP. The bonus amount and its qualification details are still being settled; no numerical Research bonus is published. See [Build & ship](/docs/shipping) for evidence and [Project review](/docs/review) for the review stages.

@@ -1,3 +1,4 @@
+import { LOADOUT_HELP_URL } from "../../site-config";
 import { FaqAccordion } from "./FaqAccordion";
 import { faqItems } from "./faq-items";
 
@@ -24,14 +25,7 @@ export function Faq() {
         <p className="lead">
           Answers about projects, progress, equipment, and what is available today.
         </p>
-        <FaqAccordion items={faqItems} />
-        <noscript>
-          <style>{".home .fq2-list{display:none}"}</style>
-          <div className="faq-noscript">
-            <p>FAQ answers are also available here when scripts are disabled.</p>
-            <dl>{faqItems.map((item) => <div key={item.question}><dt>{item.question}</dt><dd>{item.answer}</dd></div>)}</dl>
-          </div>
-        </noscript>
+        <FaqAccordion items={faqItems} helpUrl={LOADOUT_HELP_URL} />
       </div>
     </>
   );

@@ -11,7 +11,8 @@ import { Logo } from "./Logo";
 const sections = [
   ["TRACKS", "#tracks"],
   ["HOW IT WORKS", "#process"],
-  ["PROGRESS & PRIZES", "#progression"],
+  ["PRIZES", "#shop"],
+  ["LEVELS", "#progression"],
   ["FAQ", "#faq"],
 ] as const;
 const sheetLinks = [...sections, ["DOCS", "/docs"]] as const;
@@ -32,6 +33,21 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const nav = header.current;
+    const home = nav?.closest<HTMLElement>(".home");
+    if (!nav || !home) return;
+    const reserveSpace = () => home.style.setProperty("--nav-clearance", `${nav.offsetHeight + 48}px`);
+    reserveSpace();
+    const observer = new ResizeObserver(reserveSpace);
+    observer.observe(nav);
+    return () => {
+      observer.disconnect();
+      home.style.removeProperty("--nav-clearance");
+    };
+  }, []);
 
   function selectDestination(href: string) {
     setOpen(false);
@@ -72,9 +88,9 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
   }, []);
 
   return (
-    <div
+    <header
+      ref={header}
       className={`nav${hidden && !open && !focused ? " nav-hidden" : ""}`}
-      aria-label="Main navigation"
       onFocusCapture={() => setFocused(true)}
       onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}
     >
@@ -86,15 +102,6 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
           <NavLink key={href} href={anchorBase + href}>{label}</NavLink>
         ))}
       </div>
-      <div className="nav-actions">
-        <span className="lang" aria-hidden="true">◍ EN</span>
-        <label className="tg" htmlFor="theme">
-          <span className="pxw mo"><i className="b" /></span>
-          <span className="pxw su"><i className="a" /></span>
-        </label>
-        {siteConfig.loginUrl && <a href={siteConfig.loginUrl}>LOGIN</a>}
-        <a className="btn pri" href={RSVP_URL}>{RSVP_ENABLED ? "RSVP NOW" : "EXPLORE TRACKS"}</a>
-      </div>
       <button
         ref={toggle}
         type="button"
@@ -104,8 +111,17 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
         aria-controls={open ? "mobile-navigation" : undefined}
         onClick={() => setOpen(!open)}
       >
-        <span /><span /><span />
+        <span aria-hidden="true" /><span aria-hidden="true" /><span aria-hidden="true" />
       </button>
+      <div className="nav-actions">
+        <span className="lang" aria-hidden="true">◍ EN</span>
+        <label className="tg" htmlFor="theme">
+          <span className="pxw mo" aria-hidden="true"><i className="b" /></span>
+          <span className="pxw su" aria-hidden="true"><i className="a" /></span>
+        </label>
+        {siteConfig.loginUrl && <a href={siteConfig.loginUrl}>LOGIN</a>}
+        <a className="btn pri" href={RSVP_URL}>{RSVP_ENABLED ? "RSVP NOW" : "EXPLORE TRACKS"}</a>
+      </div>
       {open && (
         <nav className="nav-sheet" id="mobile-navigation" aria-label="Mobile navigation">
           {sheetLinks.map(([label, href]) => (
@@ -115,6 +131,6 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
           ))}
         </nav>
       )}
-    </div>
+    </header>
   );
 }

@@ -1,62 +1,43 @@
 ---
 title: "Build & ship"
-description: "What to hand in with a project version: checklists for software and hardware, a sample submission and a sample journal entry."
+description: "A short checklist for a ship, then real examples to compare yours against."
 group: "BUILD & REVIEW"
 order: 60
 status: draft
 ---
 
-A ship is a version of your project that you hand in for review. It is not a time total. Someone who has never seen your project should be able to tell what changed and check the result themselves.
+A ship is a version of your project that you hand in for review. Someone who has never seen your project should be able to tell what changed and check the result themselves.
 
-> **Submissions are not open yet.** This page says what we expect to ask for. It is not a guide to a portal that exists today.
+## The shipping checklist {#checklist}
 
-## From an idea to a ship {#steps}
+1. **It runs.** It starts without crashing, and the repository has a README that says how to run it.
+2. **Someone can see it.** A demo or proof anyone can open: a hosted link, a video, or clear photos for hardware.
+3. **The hours match.** Your tracked time is for this project and this version.
+4. **Your journal is up to date.** A few sentences for each work session: what you did and why.
+5. **You reflect.** Say what you built yourself, where AI helped, and what is still rough.
 
-1. Pick a technical capability and the track or tracks it belongs to.
-2. Build it. Keep a journal as you go.
-3. Package a result someone else can run or look at, with the files behind it.
-4. Say what this version adds, what you did yourself, what is still rough, and what help you had (AI included).
-5. Submit it for review once submissions open.
+Then send it in with the [submission steps](/docs/submitting). Not sure where to start? The [first project guide](/docs/first-project) walks through it.
 
-## Software checklist {#software}
+## Examples {#examples}
 
-Before you ship software, check that you can answer yes to each of these.
+Two examples and one journal entry show what a good ship looks like. Read the real one first.
 
-- **Source:** Is the code in a repository someone can open, with a clear license?
-- **Run it:** Can a stranger run it from a clean checkout using only your README? List the versions that matter (language, runtime, OS).
-- **Show it:** Is there a short demo, a recording, a terminal session or a screenshot of real output?
-- **Prove it:** Do tests, benchmarks or measurements back up the claim you are making? A nice screenshot alone does not show that a runtime, a tool or an algorithm works.
-- **Limits:** Does the README say what does not work yet?
-- **Your part:** Is it clear which code is yours, which came from a library and which came from a tutorial or an AI tool?
+### A real project: Poorup {#poorup}
 
-## Hardware checklist {#hardware}
+This one is real. [Poorup](https://poorup.tech) is a browser-based, real-time multiplayer property-trading game that Jerry built. Its server decides every move instead of trusting the player's browser. It also recovers a player who drops and reconnects, and it has automated tests that run on every change. The code is public: [see its code](https://github.com/jeremy341/Poorup).
 
-For hardware, check these.
+| Part | Detail |
+| --- | --- |
+| Time | About 100 hours |
+| Rating | 18.8 out of 20 (Jerry's own, as an illustration: no LOADOUT review has happened yet) |
+| Ore | 100 hours × 18.8 = 1,880 Ore |
+| What that buys | For example the enclosed 3D printer (1,000 Ore) and a Bambu Lab A1 Mini (500 Ore) |
 
-- **Design files:** Schematic, board layout, CAD or enclosure files, in their source format and as a viewable export.
-- **Firmware:** The code that runs on the device, with how to build and flash it.
-- **Parts list:** Every part, with the quantity and where you got it. Mark anything you designed yourself and anything you bought ready-made.
-- **Photos:** The real device, not only a render. Show it powered and doing something.
-- **Demo:** A short video or log of it working, ideally with the numbers it measures or the thing it controls.
-- **Tests:** What you checked and how. A bench measurement against a known reference counts. So does an honest "it failed here".
-- **Limits:** Say what is simulated, what is unfinished and what you haven't tested. Do not present those as a working physical result.
+A project rated this high is rare, and the prices are still planned, not final. The point is the shape of the reward: it comes from real hours and from what other builders think of the result.
 
-## A sample submission outline {#outline}
+### An invented example: a sensor board {#example}
 
-Use something like this as a starting point. Short is fine. Specific is better.
-
-1. **Title and one line.** What it is, in plain words.
-2. **Track or tracks.** Which fields the work belongs to, and why.
-3. **What this version adds.** For a first ship, the whole project. For a later one, only the new work.
-4. **How it works.** A paragraph or a diagram. Name the one or two hard problems you solved.
-5. **Evidence.** Links to the source or design files, the demo, the tests and the measurements.
-6. **My contribution.** What you built, what you reused, what teammates did.
-7. **AI and sources.** Where you used AI, what you checked yourself, and what you borrowed.
-8. **Known limits.** What is rough, missing or untested.
-
-## Example: a sensor board with firmware {#example}
-
-This is an invented sample, here to show the shape of a good ship. It is not an approved project and the numbers are made up.
+This is an invented sample, here to show the shape of a good ship. Read the real project above first. It is not an approved project and the numbers are made up.
 
 **Tunnel monitor: a USB temperature and humidity logger.** *Tracks: Hardware, plus a little Systems for the log format.*
 
@@ -83,7 +64,7 @@ This is an invented sample, here to show the shape of a good ship. It is not an 
 
 **Known limits.** No enclosure yet. Flash wear-leveling is tested for a day, not months.
 
-## A sample journal entry {#sample-journal}
+### A sample journal entry {#sample-journal}
 
 This invented entry shows the kind of detail that helps. See [Tracking & evidence](/docs/tracking) for how journals connect to recorded work.
 
@@ -92,25 +73,12 @@ This invented entry shows the kind of detail that helps. See [Tracking & evidenc
 
 It says what went wrong, what failed, what fixed it and how it was checked. It points to evidence. Compare it with "worked on firmware", which tells a reviewer nothing.
 
-## Credit and AI disclosure {#disclosure}
+## Shipping again {#versions}
 
-- Name every library, driver, tutorial, design and AI tool that shaped the project, and respect their licenses.
-- Say what you did beyond them. Using a library is not the same as writing it.
-- If AI helped, say where, and show what you understood and checked yourself. AI use alone does not rule a project out. [AI & team contributions](/docs/ai-teams) has the full expectations.
-- On a team, each person describes their own part. The team's hours are not awarded to everyone.
+You can ship the same project as many times as you like. Each ship covers only the hours since the previous one, and it's rated on its own. Hours that were already paid are never paid again, and nothing earlier changes.
 
-## What reviewers look at {#reviewers}
+A new ship needs journal entries for its new hours and a short note saying what changed. A ship with nothing new to show isn't reviewed. If a ship is rejected, fix it and send it again: the hours stay in the same window and aren't lost.
 
-Reviewers try to open your files and run or inspect your result. They ask whether the project fits LOADOUT, whether the evidence backs the claims, and then how strong the work is across Originality, Technical Depth, Execution and Documentation. [Project review](/docs/review) explains the stages.
+For example, a first ship of 20 hours rated 9 pays 180 Ore. Three weeks later, a second ship of 12 new hours rated 13 pays 156 Ore. The second one doesn't touch the first.
 
-They look for the hard part you solved and the proof that it works. A short, honest submission with solid evidence beats a long one that only describes a result.
-
-## Tracking and journals {#journal}
-
-Connect tracked work to decisions, experiments, failures and fixes. Recording time does not guarantee approval. [Tracking & evidence](/docs/tracking) explains how the pieces fit.
-
-## Shipping another version {#versions}
-
-A later ship should contain genuinely new work. Explain how it differs from the version already accepted, and submit only the new part.
-
-The same implementation or hours cannot be rewarded twice. [Project review](/docs/review) covers the review stages.
+The same implementation or hours can't be rewarded twice. [Project review](/docs/review) covers how a ship is rated.

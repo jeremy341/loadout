@@ -1,37 +1,48 @@
 ---
 title: "Prizes & requests"
-description: "What the planned catalog could hold, and the difference between buying and requesting."
+description: "Prize examples, base Ore prices, and how buying differs from requesting equipment."
 group: "PROGRESS & PRIZES"
 order: 110
 status: draft
 ---
 
-Ore is meant to buy prizes that help with your next technical build. The catalog is a plan, not a list of what's in stock.
+Spend Ore on equipment for your next technical build. These prize examples show the current working prices before track discounts and Requisitions.
 
-## Planned prizes {#catalog}
+## Prize examples {#catalog}
 
-The categories we're considering are developer hardware, embedded boards, compute, tools, storage, fabrication, domains and custom equipment. The homepage shows an example product for each, to give you the idea.
+The homepage shows one example per category. The hours below use the solid-work rate of 10 Ore per approved hour, before purchase discounts.
 
-A category or an example appearing on this site doesn't mean there's a price, stock, a brand partnership or a delivery promise behind it. We'll publish confirmed details before ordering opens.
+| Prize | Base Ore price | About how many hours |
+| --- | --- | --- |
+| ESP32 starter kit | 50 Ore | 5 |
+| Soldering iron kit | 60 Ore | 6 |
+| Raspberry Pi 5 | 200 Ore | 20 |
+| Samsung T7 SSD | 160 Ore | 16 |
+| A domain for your project | 24 Ore | 2.4 |
+| Bambu Lab A1 Mini 3D printer | 500 Ore | 50 |
+| Enclosed 3D printer | 1,000 Ore | 100 |
+| Framework 16 laptop | 5,000 Ore | 500 |
+
+The last two are priced steeply on purpose. They're a long-term goal, not something a first project buys, and they don't need a level.
 
 ## Field discounts {#pricing}
 
-Most prizes are meant to stay available whichever track you work in. Progress in a related field can bring the price down, and a few specialist or Mastery items may need a certain level.
+Most prizes are open to everyone, whichever track you work in. Your level in a related track takes up to 20% off, and a few specialist items may need a certain level.
 
-[Pricing](/docs/pricing) explains the difference between a discount, its savings cap and an access requirement.
+[Pricing](/docs/pricing) shows how a price is worked out, with an example.
 
 ## Field Requisitions {#requisitions}
 
-A Requisition lets more of a discount you've already earned apply to one eligible purchase. It isn't extra Ore, and it isn't a coupon code you can pass on.
+A Requisition takes another 20% off one prize of 400 Ore or more. It isn't extra Ore and it isn't a coupon code you can pass on.
 
-[The Requisition guide](/docs/requisitions) covers when you earn them, which field they match and the one-per-order rule.
+[The Requisition guide](/docs/requisitions) covers when you earn them, which track they match and the one-per-order rule.
 
 ## Custom Orders {#custom-orders}
 
-A Custom Order is a request for equipment or resources that aren't in the regular catalog. The team looks at what you need and, if it can support it, gives you a final Ore quote.
+A Custom Order is a request for equipment that isn't in the regular catalog. The team looks at what you need and, if it can support it, gives you a final Ore quote.
 
 A request isn't an order. You need the right progress and enough Ore to accept an approved quote. [Custom Orders](/docs/custom-orders) explains the process.
 
-## Before you buy anything
+## Availability
 
-Ordering isn't open. Final prices, availability, delivery terms and support are all still to be decided. Putting time into a project doesn't reserve a prize.
+See [program status](/docs/eligibility#where-things-stand) for availability. The final quote must show the price and delivery conditions before you accept an order.

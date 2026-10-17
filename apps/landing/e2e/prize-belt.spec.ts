@@ -1,19 +1,16 @@
 import { expect, test } from "@playwright/test";
 
-// The planned prizes ride a slow belt (.ulpi/design/prize-belt.md): two copies of one list in a track that moves by half
-// its width, hidden from assistive technology in the second copy, paused by hover or keyboard focus, and still with
-// reduced motion.
 const animationState = (page: import("@playwright/test").Page) =>
   page.locator(".pb-track").evaluate((track) => {
     const style = getComputedStyle(track);
     return { name: style.animationName, play: style.animationPlayState };
   });
 
-test("the prizes list once for assistive technology and the belt moves by exactly one copy", async ({ page }) => {
+test("the prize belt loops one list while assistive technology reads it once", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("None are available to order yet");
+  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
   await expect(page.locator(".pb-half")).toHaveCount(2);
   await expect(page.locator(".pb-half").nth(0)).not.toHaveAttribute("aria-hidden", "true");
   await expect(page.locator(".pb-half").nth(1)).toHaveAttribute("aria-hidden", "true");
@@ -28,24 +25,25 @@ test("the prizes list once for assistive technology and the belt moves by exactl
   expect(await animationState(page)).toEqual({ name: "pb-scroll", play: "running" });
 });
 
-test("hovering the belt or focusing it with the keyboard stops it", async ({ page }) => {
+test("hover and keyboard focus pause the prize belt without a global pause button", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await expect(page.locator("label.pb-toggle, .pb-pause")).toHaveCount(0);
+  await expect(page.locator(".motion-toggle")).toHaveCount(0);
   await page.locator(".pb").scrollIntoViewIfNeeded();
-  await page.locator(".pb-view").hover();
+  const view = page.locator(".pb-view");
+  await view.hover();
   await expect.poll(async () => (await animationState(page)).play).toBe("paused");
   await page.mouse.move(0, 0);
   await expect.poll(async () => (await animationState(page)).play).toBe("running");
-  await page.locator(".pb-view").focus();
-  await page.keyboard.press("Shift+Tab");
+  await view.focus();
   await page.keyboard.press("Tab");
-  await expect(page.locator(".pb-view")).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(view).toBeFocused();
   await expect.poll(async () => (await animationState(page)).play).toBe("paused");
 });
 
-test("with reduced motion the belt is a still row with no copy", async ({ page }) => {
+test("reduced motion shows a still, manually scrollable single list", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");

@@ -262,7 +262,7 @@ Still unused, on purpose: the old walk cycles (A1 to A12, J1 to J8, H1 to H8, H1
 
 ## Shaking, bouncing and double reactions (2026-10-16)
 
-Found by recording every state through a matrix of drops, throws and shakes (see `e2e/mole.spec.ts`, the last three tests):
+Found by recording every state through a matrix of drops, throws and shakes (see `e2e/mole-body.spec.ts`, the last three tests):
 
 | Problem | Cause | Fix |
 |---|---|---|

@@ -12,6 +12,8 @@ on:
 
 permissions:
   contents: read
+  # verified-tree.sh asks the API whether a commit already has a successful browser check run.
+  checks: read
 
 concurrency:
   group: repo-integrity-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -131,10 +133,16 @@ jobs:
           stasis|https://github.com/hackclub/stasis.git|7a230ced9ad793f0ad4cda30a7d71c02a58da6b6
           REFERENCES
 
-  # The two landing jobs always run and always report, so a required check is never
-  # "skipped" by accident. A documentation-only change finishes after the first step.
-  # Every code change gets the full set (lint, typecheck, unit tests, production build,
-  # browser suite), so one green commit is good enough for every lane.
+  # The landing jobs always run and always report, so a required check is never "skipped" by
+  # accident. A documentation-only change finishes after the first step. Every code change gets the
+  # full set (lint, typecheck, unit tests, production build, browser suite), so one green commit is
+  # good enough for every lane.
+  #
+  # The browser suite is the long pole, so it is spread across five runners that run at the same
+  # time as the quality job. Shards are separate runners rather than more Playwright workers on one
+  # runner on purpose: Orry's tests read a real pointer in real time, so piling workers onto one
+  # machine makes them flaky. A single aggregator job keeps the required check name
+  # "Landing browser" stable, which is what branch protection and scripts/ship.ps1 look for.
   landing-quality:
     name: Landing quality
     runs-on: ubuntu-latest
@@ -153,14 +161,12 @@ jobs:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BEFORE_SHA: ${{ github.event.before }}
         run: bash .github/scripts/app-changed.sh
-      - name: Set up Bun
+      - name: Install Bun and the locked dependencies
         if: steps.changed.outputs.app == 'true'
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: 1.3.14
-      - name: Install locked dependencies
+        uses: ./.github/actions/install-landing
+      - name: Check the already-verified rule
         if: steps.changed.outputs.app == 'true'
-        run: bun install --frozen-lockfile
+        run: bash .github/scripts/verified-tree.test.sh
       - name: Lint
         if: steps.changed.outputs.app == 'true'
         run: bun run lint
@@ -174,11 +180,47 @@ jobs:
         if: steps.changed.outputs.app == 'true'
         run: bun run build
 
-  landing-browser:
-    name: Landing browser
-    needs: landing-quality
+  browser-shard:
+    name: Browser ${{ matrix.name }}
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 6
+    # The browser jobs read these to pick their slice of the suite: the two Orry files get their
+    # own runners, and everything else is sharded three ways. An empty value falls back to the
+    # config default, so one spec can never be dropped from every job.
+    env:
+      LOADOUT_E2E_MATCH: ${{ matrix.match }}
+      LOADOUT_E2E_IGNORE: ${{ matrix.ignore }}
+    # The pinned Playwright image already carries Chromium and its system libraries, so a shard
+    # skips the download and the apt install that used to cost about twenty seconds each. The
+    # image tag must match the locked @playwright/test version in bun.lock.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --user root
+    strategy:
+      fail-fast: false
+      # Five jobs cover the suite exactly once: one per Orry file, plus three shards of the rest.
+      matrix:
+        include:
+          - name: Orry mood
+            match: mole-mood.spec.ts
+            ignore: ""
+            shard: "1/1"
+          - name: Orry body
+            match: mole-body.spec.ts
+            ignore: ""
+            shard: "1/1"
+          - name: checks 1/3
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "1/3"
+          - name: checks 2/3
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "2/3"
+          - name: checks 3/3
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "3/3"
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -193,18 +235,85 @@ jobs:
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           BEFORE_SHA: ${{ github.event.before }}
         run: bash .github/scripts/app-changed.sh
-      - name: Set up Bun
-        if: steps.changed.outputs.app == 'true'
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: 1.3.14
-      - name: Install locked dependencies
-        if: steps.changed.outputs.app == 'true'
-        run: bun install --frozen-lockfile
-      - name: Install Chromium
-        if: steps.changed.outputs.app == 'true'
-        run: bunx playwright install --with-deps chromium
+      - name: Find out whether this tree is already verified
+        id: verified
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: bash .github/scripts/verified-tree.sh
+      - name: Add the one tool the Bun setup needs
+        if: steps.changed.outputs.app == 'true' && steps.verified.outputs.verified != 'true'
+        # The Playwright image carries Chromium and its libraries but not unzip, which setup-bun uses.
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends unzip
+      - name: Install Bun and the locked dependencies
+        if: steps.changed.outputs.app == 'true' && steps.verified.outputs.verified != 'true'
+        uses: ./.github/actions/install-landing
+      - name: Confirm Chromium is present
+        if: steps.changed.outputs.app == 'true' && steps.verified.outputs.verified != 'true'
         working-directory: apps/landing
+        # A no-op when the image already matches the locked version, and a repair when it does not.
+        run: bunx playwright install chromium
+      - name: Confirm this job has tests to run
+        if: steps.changed.outputs.app == 'true' && steps.verified.outputs.verified != 'true'
+        working-directory: apps/landing
+        # The container's default shell is sh, which has no pipefail.
+        shell: bash
+        # `playwright test` exits 0 when a filter matches nothing, so a mistyped or stale matrix
+        # entry could pass a required check without running its slice. Fail instead.
+        run: |
+          set -euo pipefail
+          count="$(bunx playwright test --list --shard=${{ matrix.shard }} | grep -cE 'spec\.ts:[0-9]+:[0-9]+' || true)"
+          if [ "$count" -eq 0 ]; then
+            printf '::error::This browser job would run no tests; its filter or shard is wrong.\n'
+            exit 1
+          fi
+          printf 'This job will run %s tests.\n' "$count"
       - name: Browser and accessibility checks
-        if: steps.changed.outputs.app == 'true'
-        run: bun run test:e2e
+        if: steps.changed.outputs.app == 'true' && steps.verified.outputs.verified != 'true'
+        working-directory: apps/landing
+        run: bunx playwright test --shard=${{ matrix.shard }}
+      - name: Upload the failure evidence
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: browser-shard-${{ strategy.job-index }}
+          path: |
+            apps/landing/test-results
+            apps/landing/playwright-report
+          if-no-files-found: ignore
+          retention-days: 7
+
+  landing-browser:
+    # The one required check for the browser suite. It reports all five shards as a single name, so
+    # branch protection and ship.ps1 need no change, and it pads nothing: it fails unless every
+    # shard that ran passed.
+    name: Landing browser
+    needs: browser-shard
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Aggregate the browser shards
+        env:
+          SHARDS: ${{ needs.browser-shard.result }}
+        run: |
+          set -euo pipefail
+
+          case "$SHARDS" in
+            success)
+              # A shard whose steps were all skipped because no browser run was needed also
+              # reports success, so say what actually happened rather than claiming a run.
+              printf 'The browser jobs finished successfully; any shard that had tests to run passed them.\n'
+              ;;
+            skipped)
+              # Either a documentation-only change or a tree that already passed on its lane.
+              printf 'Browser shards were not needed for this change.\n'
+              ;;
+            *)
+              printf '::error::The browser shards did not pass (%s). Nothing was bypassed.\n' "$SHARDS"
+              exit 1
+              ;;
+          esac

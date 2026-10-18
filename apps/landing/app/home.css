@@ -203,6 +203,8 @@ html:has(.home) { scroll-behavior:smooth }
 .home .nav-sheet { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 9; display: grid; border: 1px solid var(--fg); background: var(--bg); }
 .home .nav-sheet a { display: flex; justify-content: space-between; align-items: center; min-height: 52px; padding: 0 20px; border-bottom: 1px dashed var(--mut); color: var(--fg); text-decoration: none; font-size: 14px; letter-spacing: .1em; }
 .home .nav-sheet a:last-child { border-bottom: 0; }
+.home .nav-sheet .nav-accessibility-link { display: flex; justify-content: space-between; align-items: center; min-height: 52px; padding: 0 20px; border-bottom: 0; color: var(--fg); text-decoration: none; font-size: 14px; letter-spacing: .1em; }
+.home .nav-sheet .nav-accessibility-link:hover { color: var(--hl); }
 
 .home a:focus-visible, .home button:focus-visible, .home summary:focus-visible, .home label:focus-visible {
   outline: 2px solid var(--ac); outline-offset: 3px;

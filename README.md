@@ -10,7 +10,7 @@ The site has no live participant accounts, project-submission, review, reward, o
 
 ## Working on the repository
 
-Start with [`AGENTS.md`](AGENTS.md) and the [documentation index](docs/README.md). [Local setup](docs/development/setup.md) covers installation and environment names. [The development workflow](docs/development/WORKFLOW.md) owns task kickoff, branches, checks, promotion, and release. Plans and their status are indexed in [`plans/00-index.md`](plans/00-index.md); the visual system is in [`docs/design/system/design-system.md`](docs/design/system/design-system.md).
+Start with [`AGENTS.md`](AGENTS.md) and the [documentation index](docs/README.md). [Local setup](docs/development/SETUP.md) covers installation and environment names. [The development workflow](docs/development/WORKFLOW.md) owns task kickoff, branches, checks, promotion, and release. Plans and their status are indexed in [`plans/00-index.md`](plans/00-index.md); the visual system is in [`docs/design/system/design-system.md`](docs/design/system/design-system.md).
 
 Use Bun 1.3.14. From the repository root, run `bun install --frozen-lockfile` and then `bun run dev`. The standard check commands are documented in WORKFLOW.md. Do not commit secrets, local settings, caches, dependencies, or generated review captures.
 

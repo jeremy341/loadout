@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useId, useRef, useState, useSyncExternalStore, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { LOADOUT_HELP_URL, siteConfig } from "../site-config";
-import { useDisplayPreferences } from "./display-preferences";
+import { useDisplayPreferences, type ColorVisionProfile } from "./display-preferences";
 import { useMotionPreference } from "./motion-preference";
 
 type AccessibilityContextValue = {
@@ -28,6 +28,8 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     openerRef.current = opener;
     dialog.showModal();
     dialog.scrollTop = 0;
+    const body = dialog.querySelector<HTMLElement>(".a11y-dialog-body");
+    if (body) body.scrollTop = 0;
     dialog.querySelector<HTMLElement>("[data-dialog-title]")?.focus({ preventScroll: true });
   }
 
@@ -78,7 +80,7 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
         <div className="a11y-dialog-header">
           <p className="a11y-kicker">LOADOUT / FIELD SETTINGS</p>
           <div className="a11y-dialog-head">
-            <h2 id="a11y-dialog-title" data-dialog-title tabIndex={-1} aria-label="Accessibility settings">Accessibility<span className="a11y-title-extra"> settings</span></h2>
+            <h2 id="a11y-dialog-title" data-dialog-title tabIndex={-1} aria-label="Accessibility settings">Accessibility</h2>
             <button className="a11y-close" type="button" onClick={() => dialogRef.current?.close()}>Close</button>
           </div>
         </div>
@@ -114,6 +116,7 @@ export function AccessibilityLink({ className, children = "Accessibility", label
 export function AccessibilityTab() {
   const tabRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const [retracted, setRetracted] = useState(false);
 
   useEffect(() => {
     const tab = tabRef.current;
@@ -128,8 +131,45 @@ export function AccessibilityTab() {
     return () => observer.disconnect();
   }, [pathname]);
 
+  useEffect(() => {
+    const phone = window.matchMedia("(max-width: 560px)");
+    const docsMain = document.querySelector<HTMLElement>(".docs-main");
+    const scrollTarget: HTMLElement | Window = docsMain ?? window;
+    const scrollPosition = () => scrollTarget === window ? window.scrollY : (scrollTarget as HTMLElement).scrollTop;
+    let last = scrollPosition();
+    let frame = 0;
+    const updateForViewport = () => {
+      last = scrollPosition();
+      const tab = tabRef.current;
+      const heldOpen = tab?.contains(document.activeElement) || document.querySelector(".a11y-dialog[open]");
+      setRetracted(phone.matches && last > 120 && !heldOpen);
+    };
+    const onScroll = () => {
+      if (!phone.matches || frame) return;
+      frame = requestAnimationFrame(() => {
+        const y = scrollPosition();
+        const tab = tabRef.current;
+        const heldOpen = Boolean(tab?.contains(document.activeElement) || document.querySelector(".a11y-dialog[open]"));
+        if (heldOpen || y <= 120 || y < last - 4) setRetracted(false);
+        else if (y > last + 4) setRetracted(true);
+        last = y;
+        frame = 0;
+      });
+    };
+    phone.addEventListener("change", updateForViewport);
+    window.addEventListener("resize", updateForViewport);
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
+    updateForViewport();
+    return () => {
+      phone.removeEventListener("change", updateForViewport);
+      window.removeEventListener("resize", updateForViewport);
+      scrollTarget.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
-    <div className="a11y-shortcut" ref={tabRef}>
+    <div className="a11y-shortcut" data-retracted={retracted} ref={tabRef} onFocusCapture={() => setRetracted(false)}>
       <AccessibilityLink className="a11y-tab" label="Open accessibility settings">ACCESSIBILITY</AccessibilityLink>
     </div>
   );
@@ -159,36 +199,103 @@ function ChoiceSetting({ title, description, value, choices, change }: {
     </label>)}</div>
   </fieldset>;
 }
-export function AccessibilitySettings() {
+
+const colorProfiles: { value: ColorVisionProfile; label: string; description: string }[] = [
+  { value: "standard", label: "Standard", description: "LOADOUT's usual colors." },
+  { value: "protanopia", label: "Protanopia", description: "For protanopia or protanomaly. Blue and amber accents." },
+  { value: "deuteranopia", label: "Deuteranopia", description: "For deuteranopia or deuteranomaly. Blue and orange accents." },
+  { value: "tritanopia", label: "Tritanopia", description: "For tritanopia or tritanomaly. Distinct brightness and underlined links." },
+  { value: "achromatopsia", label: "Achromatopsia", description: "For achromatopsia or monochromacy. Grayscale accents and underlined links." },
+];
+
+function ColorVisionSetting({ value, change }: { value: ColorVisionProfile; change: (value: ColorVisionProfile) => void }) {
+  const hint = useId();
+  const profile = colorProfiles.find((entry) => entry.value === value) ?? colorProfiles[0];
+  return <label className="a11y-option a11y-palette-option">
+    <span className="a11y-option-copy"><strong>Color vision</strong><small id={hint}>{profile.description}</small></span>
+    <span className="a11y-select-wrap">
+      <select aria-label="Color vision palette" aria-describedby={hint} value={value} onChange={(event) => change(event.currentTarget.value as ColorVisionProfile)}>
+        {colorProfiles.map((entry) => <option key={entry.value} value={entry.value}>{entry.label}</option>)}
+      </select>
+    </span>
+  </label>;
+}
+
+function subscribeSettingsViewport(listener: () => void) {
+  const viewport = window.matchMedia("(min-width: 821px)");
+  viewport.addEventListener("change", listener);
+  return () => viewport.removeEventListener("change", listener);
+}
+
+function hasSettingsRail() {
+  return window.matchMedia("(min-width: 821px)").matches;
+}
+
+export function AccessibilitySettings({ layout = "compact" }: { layout?: "compact" | "page" }) {
   const preferences = useDisplayPreferences();
   const { reduced: deviceReducedMotion } = useMotionPreference();
   const [status, setStatus] = useState("");
+  const groupName = useId();
+  const [activeCategory, setActiveCategory] = useState(0);
+  const wideViewport = useSyncExternalStore(subscribeSettingsViewport, hasSettingsRail, () => false);
+  const showRail = layout === "page" && wideViewport;
   const { setPreference } = preferences;
-  return <section className="a11y-settings" aria-label="Display preferences" onChangeCapture={() => setStatus("")}>
-    <p>Changes apply immediately across LOADOUT and are saved in this browser when storage is available.</p>
-    <fieldset className="a11y-settings-group">
-      <legend>Appearance</legend>
+  const categories = [
+    { title: "Appearance", content: <>
       <ToggleSetting title="Light mode" description="Switch from graphite to stone paper." checked={preferences.theme === "light"} change={(value) => preferences.setTheme(value ? "light" : "dark")} />
-      <ToggleSetting title="Color-safe palette" description="Use blue and orange accents." checked={preferences.colorSafe} change={preferences.setColorSafe} />
-      <ToggleSetting title="Stronger contrast" description="Strengthen text, borders and focus indicators in both themes." checked={preferences.strongContrast} change={(value) => setPreference("strongContrast", value)} />
+      <ColorVisionSetting value={preferences.colorVision} change={preferences.setColorVision} />
+      <ToggleSetting title="Stronger contrast" description="Add contrast to text, borders and focus indicators. Your device's higher-contrast setting is also respected." checked={preferences.strongContrast} change={(value) => setPreference("strongContrast", value)} />
+      <ToggleSetting title="Larger controls" description="Give compact navigation, buttons and footer links a larger 44px target." checked={preferences.largerControls} change={(value) => setPreference("largerControls", value)} />
       <ToggleSetting title="Use system cursor" description="Use your device's normal pointer instead of LOADOUT's pixel cursor." checked={preferences.systemCursor} change={(value) => setPreference("systemCursor", value)} />
-    </fieldset>
-    <fieldset className="a11y-settings-group">
-      <legend>Reading</legend>
-      <ToggleSetting title="Plain typography" description="Use a standard font for headings and controls instead of pixel lettering." checked={preferences.plainTypography} change={(value) => setPreference("plainTypography", value)} />
-      <ChoiceSetting title="Reading text size" description="Enlarge article text, descriptions and settings. Browser zoom still works for the whole page." value={String(preferences.readingSize)} choices={[{ value: "100", label: "Default" }, { value: "125", label: "125%" }, { value: "150", label: "150%" }]} change={(value) => setPreference("readingSize", Number(value) as 100 | 125 | 150)} />
+    </> },
+    { title: "Reading", content: <>
+      <ToggleSetting title="Phantom Sans" description="Switch the page to Pixl's Phantom Sans font. Turn it off to return to LOADOUT's usual fonts." checked={preferences.phantomSans} change={(value) => setPreference("phantomSans", value)} />
+      <ChoiceSetting title="Reading text size" description="Enlarge article text, descriptions and settings up to 200%. Browser zoom still works for the whole page." value={String(preferences.readingSize)} choices={[{ value: "100", label: "Default" }, { value: "125", label: "125%" }, { value: "150", label: "150%" }, { value: "200", label: "200%" }]} change={(value) => setPreference("readingSize", Number(value) as 100 | 125 | 150 | 200)} />
       <ToggleSetting title="More text spacing" description="Add space between lines, paragraphs and letters." checked={preferences.moreSpacing} change={(value) => setPreference("moreSpacing", value)} />
       <ToggleSetting title="Underline links" description="Keep text links underlined so they're easier to spot." checked={preferences.underlineLinks} change={preferences.setUnderlineLinks} />
-    </fieldset>
-    <fieldset className="a11y-settings-group">
-      <legend>Effects</legend>
+    </> },
+    { title: "Effects", content: <>
       <ToggleSetting title="Reduce motion" description="Stop animations. Your device's reduced-motion preference always takes priority." checked={preferences.reduceMotion} change={preferences.setReduceMotion} />
       {deviceReducedMotion && <p className="a11y-device-note">Your device currently requests reduced motion, so animations stay off even when the switch is off.</p>}
       <ChoiceSetting title="Grain texture" description="Reduced motion makes animated grain still. Simplify decoration removes it altogether." value={preferences.grain} choices={[{ value: "animated", label: "Animated" }, { value: "still", label: "Still" }, { value: "off", label: "Off" }]} change={(value) => setPreference("grain", value as "animated" | "still" | "off")} />
       <ToggleSetting title="Simplify decoration" description="Hide grain, the background grid, decorative ASCII and wandering mascots. Useful diagrams and prize images stay." checked={preferences.simplifyDecoration} change={(value) => setPreference("simplifyDecoration", value)} />
       <ToggleSetting title="Native scrolling" description="Use normal browser scrolling without the smooth-scroll effect." checked={preferences.nativeScroll} change={(value) => setPreference("nativeScroll", value)} />
-    </fieldset>
-    <button type="button" className="a11y-reset" onClick={() => { preferences.reset(); setStatus("Display settings reset. Your device's reduced-motion preference still applies."); }}>Reset display settings</button>
+    </> },
+  ];
+
+  function navigateCategory(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let next = index;
+    if (event.key === "ArrowDown") next = (index + 1) % categories.length;
+    else if (event.key === "ArrowUp") next = (index + categories.length - 1) % categories.length;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = categories.length - 1;
+    else return;
+    event.preventDefault();
+    setActiveCategory(next);
+    event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+  }
+
+  return <section className={`a11y-settings${layout === "page" ? " a11y-page-settings" : ""}`} aria-label="Display preferences" onChangeCapture={() => setStatus("")}>
+    <p className="a11y-save-note">Changes apply immediately and save in this browser.</p>
+    <div className={showRail ? "a11y-settings-layout" : undefined}>
+      {showRail && <div className="a11y-category-rail" role="tablist" aria-label="Settings categories" aria-orientation="vertical">
+        {categories.map((category, index) => <button key={category.title} type="button" role="tab" id={`${groupName}-tab-${index}`} aria-controls={`${groupName}-panel-${index}`} aria-selected={activeCategory === index} tabIndex={activeCategory === index ? 0 : -1} onClick={() => setActiveCategory(index)} onKeyDown={(event) => navigateCategory(event, index)}>
+          <span aria-hidden="true">0{index + 1}</span>{category.title}
+        </button>)}
+      </div>}
+      <div className="a11y-category-content">
+        {categories.map((category, index) => showRail
+          ? <section key={category.title} className="a11y-category-panel" role="tabpanel" id={`${groupName}-panel-${index}`} aria-labelledby={`${groupName}-tab-${index}`} hidden={activeCategory !== index} tabIndex={0}>
+              <h2>{category.title}</h2>
+              <div className="a11y-group-body">{category.content}</div>
+            </section>
+          : <details key={category.title} className="a11y-settings-group" name={groupName} open={index === (layout === "page" ? activeCategory : 0)} onToggle={(event) => { if (layout === "page" && event.currentTarget.open) setActiveCategory(index); }}>
+              <summary>{category.title}<span className="a11y-group-mark" aria-hidden="true" /></summary>
+              <div className="a11y-group-body">{category.content}</div>
+            </details>)}
+      </div>
+    </div>
+    <button type="button" className="a11y-reset" onClick={() => { preferences.reset(); setStatus("Display settings reset. Your device's reduced-motion and contrast preferences still apply."); }}>Reset display settings</button>
     <p className="a11y-reset-status" role="status">{status}</p>
   </section>;
 }

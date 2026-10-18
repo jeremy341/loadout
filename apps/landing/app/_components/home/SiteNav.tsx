@@ -6,6 +6,7 @@ import { siteConfig } from "../../site-config";
 import { RSVP_ENABLED, RSVP_URL } from "./rsvp-url";
 import { Logo } from "./Logo";
 import { ThemeSwitch } from "../ThemeSwitch";
+import { AccessibilityLink } from "../Accessibility";
 
 // The bar carries the four in-page sections, as main does. DOCS is reached from the mobile
 // menu and the floating docs tab, so it is not a bar link.
@@ -74,6 +75,7 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
       });
     };
     const onKey = (event: KeyboardEvent) => {
+      if (document.querySelector(".a11y-dialog[open]")) return;
       if (event.key === "Escape" && document.getElementById("mobile-navigation")) {
         setOpen(false);
         toggle.current?.focus();
@@ -131,6 +133,9 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
               {label}<span aria-hidden="true">→</span>
             </NavLink>
           ))}
+          <AccessibilityLink className="nav-accessibility-link">
+            ACCESSIBILITY<span aria-hidden="true">→</span>
+          </AccessibilityLink>
         </nav>
       )}
     </header>

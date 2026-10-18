@@ -12,7 +12,7 @@ Expand the fictional sensor-board journal into a connected session account with 
 
 ## Facts and compatibility
 
-Plan 02 owns the public economy and current eligibility (owner update: ages 13–19). Retain approved amounts, unsettled decisions, sources, route slugs, metadata and existing heading IDs. Keep launch status primarily in Start and Eligibility and event status on IRL. Preserve characters' established events and motives while improving transitions.
+Plan 02 owns the public economy and current eligibility. Internal age policy is 13–18; the current public site and Docs still say 13–19, and correction is pending in a later public-copy pass. Retain approved amounts, unsettled decisions, sources, route slugs, metadata and existing heading IDs. Keep launch status primarily in Start and Eligibility and event status on IRL. Preserve characters' established events and motives while improving transitions.
 
 Display review-derived payout factors as 5×, 10×, 15× and 20×. Explain once that 10× pays 10 Ore per approved hour. Preserve the rating concept where referring to the review process, but label payout calculations as multipliers. Homepage scope: HowItWorks and its FAQ only.
 

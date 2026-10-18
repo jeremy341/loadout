@@ -8,22 +8,22 @@ This document owns all rules that affect XP, Ore, reward pricing, specialization
 
 > **Depth gives leverage. Breadth gives flexibility. Mastery gives access.**
 
-## Agreed 2026-10-15 (read this first: it supersedes any conflicting text below)
+## Decisions recorded 2026-10-15, with owner updates through 2026-10-18 (read first: they supersede conflicting text below)
 
-These decisions were recorded from the owner on 2026-10-15. This table and the corresponding sections below are the current rules. The calibration proposal keeps candidate values and calculations; it does not override this plan. Plan 22 describes candidate review operations, not an implemented platform. The rule reconciliation removes the older 15% ceiling, tiered Field Requisitions and Ore savings caps.
+This table was first recorded on 2026-10-15 and reflects owner updates through 2026-10-18. It and the corresponding sections below are the current rules. The calibration proposal keeps candidate values and calculations; it does not override this plan. Plan 22 describes candidate review operations, not an implemented platform. The rule reconciliation removes the older 15% ceiling, tiered Field Requisitions and Ore savings caps.
 
 | Topic | Agreed |
 |---|---|
-| Who it is for | High-school students aged 13 to 19. Owner update 2026-10-16: changed from 13 to 18. |
-| Rate | 10 Ore for an approved hour of solid work. Ore = approved hours x the rating. |
-| Rating | Other builders rate a ship from 0 to 20; 10 is solid; a ship the team approves pays at least 5; 20 is possible. A team member checks the ship first. |
+| Who it is for | High-school students aged 13 to 18, per the owner update on 2026-10-18. Signup age-verification details and launch/operating conditions remain open. The current public site still says 13–19; correction is pending. |
+| Rate | A reviewed ship's payout multiplier is 5×–20×; 10× is the solid-work baseline of 10 Ore per approved hour. Base Ore = approved hours × the multiplier. |
+| Rating | The team first checks LOADOUT fit and peer-review eligibility. Peer builders set the 0–20 quality rating used as the multiplier; the team does not set it. An accepted ship pays at least 5× and at most 20×. |
 | Hours and projects | No limit on hours or projects. Fraud (fake hours, copied work, fake evidence, collusion) is a permanent ban and takes back everything earned. |
 | Shipping again | A project can be shipped again; each ship covers only the hours since the previous one (at least 5 new approved hours) and is rated on its own. |
-| Levels | Fifteen lifetime levels per track. Level 15 is about 350 hours of solid work in one track (3,500 Track XP); two tracks reach level 15 in both after about 700 hours. |
+| Levels | Fifteen lifetime levels per track. LV.15 is 3,500 Track XP, about 350 hours of solid work in one track. |
 | Level discount | Rises with level to 20% at level 15; the better related discount applies, never the sum. |
-| Requisitions | Five identical tickets per track at levels 3, 6, 9, 12 and 15. Each takes 20% of the base price off one prize of 400 Ore or more, on top of the level discount, one per order. |
+| Requisitions | At LV.3/6/9/12/15, each track grants one use of 20% off a matching prize's base price, for prizes from 400 Ore, on top of the level discount; one per order. |
 | Savings limits | None in Ore. The most anyone saves on one item is 40%. |
-| Prices | The sample catalog in the proposal is the working catalog (a domain 24 Ore up to a Framework 16 laptop at 5,000). The enclosed printer and the Framework 16 are priced at a steeper rate and have no level requirement. |
+| Prices | Listed prize prices are working examples, not final promises of price, stock or fulfillment. The enclosed printer and Framework 16 remain working-catalog examples with no level requirement in that catalog. |
 | Carry-over | Ore and Track XP carry across seasons. |
 | Public wording | The site shows Ore only, never a money value for one. |
 
@@ -31,13 +31,13 @@ These decisions were recorded from the owner on 2026-10-15. This table and the c
 
 | Topic | Current rule | Still open | Public owner |
 |---|---|---|---|
-| Ore and quality | Approved hours times the ship rating; 10 is solid, accepted ships pay at least 5, maximum 20 | Category aggregation, rounding and calibration details | `content/docs/review.md`, `progress.md` |
+| Ore and quality | Team checks LOADOUT fit and peer-review eligibility; peer builders set a 0–20 quality rating used as the Ore multiplier. Accepted ships pay 5×–20×, with 10× as the solid baseline and 10 Ore per approved hour. | Reviewer count/duty, category aggregation, rounding, timing, and calibration details | `content/docs/review.md`, `progress.md` |
 | Track XP | One award allocated across demonstrated tracks; lifetime levels persist; LV.15 is 3,500 XP / about 350 solid hours | Exact award equation, quality weighting, intermediate thresholds and minimum track shares | `content/docs/progress.md` |
 | Research Mode | A modifier within the four tracks; reproducible work can receive extra Track XP | Bonus amount and qualification details; 25% is a candidate, not approved | `content/docs/research.md` |
 | Requisitions | Five identical 20% tickets at 3/6/9/12/15; minimum base price 400 Ore; one per order; no Ore cap | Redemption rounding and order-correction implementation | `content/docs/requisitions.md`, `pricing.md` |
 | Discounts | Maximum permanent discount 20%; use the best related track, never sum track discounts | Exact intermediate curve and any cross-track markup | `content/docs/pricing.md` |
 | Shipping again | New work only, at least five new approved hours; each ship has its own rating | Tracking-window precision and implementation | `content/docs/shipping.md` |
-| Reviews and appeals | Team validity check, then peer rating using the four quality dimensions | Reviewer count, review duty, deadlines, conflict/weighting mechanics and appeal limits | `content/docs/review.md` |
+| Reviews and appeals | Team checks LOADOUT fit and peer-review eligibility; peer builders rate the four quality dimensions and set the multiplier. | Reviewer count, review duty, deadlines, conflict/weighting mechanics, aggregation/rounding and appeal limits | `content/docs/review.md` |
 | Custom Orders | Relevant level, approved work, sufficient Ore and team fulfillment approval; program cancellation restores the Requisition | Tier levels and limits, quote validity, exact sourcing formula and cancellation/refund terms | `content/docs/custom-orders.md` |
 
 Intermediate milestone estimates remain in the calibration proposal until approved; the public guides show the chosen Requisition milestones and LV.15 endpoint without presenting that candidate curve as a rule. No answer or elapsed time automatically approves a candidate value. The agreed Requisition schedule remains 3/6/9/12/15; the alternative 5/8/10/12/15 is not adopted.
@@ -1211,7 +1211,7 @@ A Custom Order uses its final approved base quote. Show eligibility, each saving
 
 # 67. Example Launch Shop
 
-These eight sample prices are approved for public planning copy. They describe the intended catalog, not current stock or fulfillment. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
+These eight sample prices are working examples for planning copy, not final price promises, current stock or fulfillment commitments. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
 
 | Item | Base Ore | Solid-work hours |
 |---|---:|---:|

@@ -227,6 +227,12 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Trust the checked-out workspace
+        # This job runs inside a container as root while the checkout is owned by another user, so
+        # git refuses to read the repository until the path is marked safe. Without this, both
+        # app-changed.sh and verified-tree.sh fail their git calls and silently fall back to
+        # "run everything", which is safe but hides why the browser suite never skips.
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Find out whether the app is affected
         id: changed
         env:

@@ -19,6 +19,7 @@
 - For the Era-only approved slice, remove only the redundant Era-objectives note from HowItWorks.tsx; preserve every other process step and its styling.
 - Do not change existing .process-* or .flow-* rules.
 - Keep all four tracks, current project-fit judgments, quality dimensions, Track XP/Ore distinctions, Requisition rules, Custom Order gates, and event status. Era product rules remain unchanged internally; the public summary follows the brief scope in Task 6.
+- Use Plan 02 as the authority for current economy facts. The approved Requisition is a one-use 20% discount on the matching prize's base Ore price from 400 Ore, applied alongside the permanent track discount; there is no separate Ore savings cap. Use its status matrix for any displayed figures and keep this proposal's approval boundary intact.
 - Hidden track examples are supplemental only. Names and essential purpose remain visible; hidden details use explicit controls.
 - Use existing sprite art and CSS/SVG connectors. Do not add a graph library, image assets, dependencies, live data, or user-authored project examples.
 - Keep unconfirmed prices, hours gates, inventory, dates, venue, and live status absent.
@@ -92,11 +93,11 @@ Front face: existing sprite, track title, short purpose, and labeled See example
 
 Use an ordered flow:
 
-    Related Track level → earned field discount → normal savings cap → one eligible Requisition raises that cap once
+    Related Track level → permanent track discount → eligible matching Requisition adds one use of 20% off base price → remaining Ore price
 
 - [ ] Keep the five milestone rail as the only location listing when Requisitions are earned.
 - [ ] Keep global Ore, personal Track XP, and remaining Ore cost labeled.
-- [ ] Use an example without invented prices or percentages.
+- [ ] If an example is shown, use Plan 02's current approved figures and label it illustrative; do not invent prices or percentages.
 - [ ] Put secondary usage rules in a titled native disclosure or accessible accordion.
 - [ ] Keep the planned prize categories and no-order status visible.
 

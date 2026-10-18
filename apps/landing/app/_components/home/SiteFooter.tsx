@@ -8,12 +8,12 @@ import { Logo } from "./Logo";
 // grid, then a bottom bar. The redesign's hexagon mark, drawing sheet and stamp are kept
 // inside the footer, placed in the empty top-right corner so the footer's height is unchanged.
 // Sizes and spacing live in home.css.
-export function SiteFooter() {
+export function SiteFooter({ anchorBase = "" }: { anchorBase?: string }) {
   return (
     <footer className="ft" id="community">
       <div className="ft-inner">
         <div className="ft-intro">
-          <a className="ft-brand" href="#top">
+          <a className="ft-brand" href={`${anchorBase}#top`}>
             <Logo />
           </a>
           <p>
@@ -23,15 +23,15 @@ export function SiteFooter() {
         <div className="ft-links">
           <div className="ft-column">
             <h3>LOADOUT</h3>
-            <a href="#tracks">Tracks</a>
-            <a href="#process">How it works</a>
-            <a href="#shop">Prizes</a>
-            <a href="#progression">Levels &amp; rewards</a>
-            <a href="#faq">FAQ</a>
+            <a href={`${anchorBase}#tracks`}>Tracks</a>
+            <a href={`${anchorBase}#process`}>How it works</a>
+            <a href={`${anchorBase}#shop`}>Prizes</a>
+            <a href={`${anchorBase}#progression`}>Levels &amp; rewards</a>
+            <a href={`${anchorBase}#faq`}>FAQ</a>
           </div>
           <div className="ft-column">
             <h3>Community</h3>
-            <a href="#eras">Community Eras</a>
+            <a href={`${anchorBase}#eras`}>Community Eras</a>
             <Link href="/docs/team">Who’s behind LOADOUT?</Link>
             {siteConfig.communityUrl && <a href={siteConfig.communityUrl}>Join #loadout</a>}
             <a href={LOADOUT_HELP_URL}>#loadout-help</a>
@@ -40,9 +40,9 @@ export function SiteFooter() {
             <h3>Resources</h3>
             <Link href="/docs">LOADOUT docs</Link>
             <Link href="/docs/projects">Project fit</Link>
-            <a href="#research">Research Mode</a>
-            <a href="#requisitions">Field Requisitions</a>
-            <a href="#custom-orders">Custom Orders</a>
+            <a href={`${anchorBase}#research`}>Research Mode</a>
+            <a href={`${anchorBase}#requisitions`}>Field Requisitions</a>
+            <a href={`${anchorBase}#custom-orders`}>Custom Orders</a>
             <a href="https://hackclub.com/conduct/">Code of Conduct</a>
             <a href="https://hackclub.com/philosophy/">Hack Club philosophy</a>
           </div>

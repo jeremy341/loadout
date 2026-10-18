@@ -4,34 +4,37 @@ import { useEffect, useSyncExternalStore } from "react";
 
 export type DisplayTheme = "dark" | "light";
 export type GrainPreference = "animated" | "still" | "off";
-export type ReadingSize = 100 | 125 | 150;
+export type ReadingSize = 100 | 125 | 150 | 200;
+export type ColorVisionProfile = "standard" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
 export type DisplayPreferences = {
   theme: DisplayTheme;
-  colorSafe: boolean;
+  colorVision: ColorVisionProfile;
   reduceMotion: boolean;
   grain: GrainPreference;
   underlineLinks: boolean;
-  plainTypography: boolean;
+  phantomSans: boolean;
   readingSize: ReadingSize;
   moreSpacing: boolean;
   strongContrast: boolean;
   systemCursor: boolean;
+  largerControls: boolean;
   simplifyDecoration: boolean;
   nativeScroll: boolean;
 };
 
 type StoragePort = Pick<Storage, "getItem" | "setItem">;
 export const DEFAULT_PREFERENCES: DisplayPreferences = {
-  theme: "dark", colorSafe: false, reduceMotion: false, grain: "animated",
-  underlineLinks: false, plainTypography: false, readingSize: 100, moreSpacing: false,
-  strongContrast: false, systemCursor: false, simplifyDecoration: false, nativeScroll: false,
+  theme: "dark", colorVision: "standard", reduceMotion: false, grain: "animated",
+  underlineLinks: false, phantomSans: false, readingSize: 100, moreSpacing: false,
+  strongContrast: false, systemCursor: false, largerControls: false, simplifyDecoration: false, nativeScroll: false,
 };
 const preferenceKeys: Record<keyof DisplayPreferences, string> = {
-  theme: "loadout-theme", colorSafe: "loadout-color-safe", reduceMotion: "loadout-reduce-motion",
+  theme: "loadout-theme", colorVision: "loadout-color-vision", reduceMotion: "loadout-reduce-motion",
   grain: "loadout-grain", underlineLinks: "loadout-underline-links",
-  plainTypography: "loadout-plain-typography", readingSize: "loadout-reading-size",
+  phantomSans: "loadout-phantom-sans", readingSize: "loadout-reading-size",
   moreSpacing: "loadout-more-spacing", strongContrast: "loadout-strong-contrast",
-  systemCursor: "loadout-system-cursor", simplifyDecoration: "loadout-simplify-decoration",
+  systemCursor: "loadout-system-cursor", largerControls: "loadout-larger-controls",
+  simplifyDecoration: "loadout-simplify-decoration",
   nativeScroll: "loadout-native-scroll",
 };
 const names = Object.keys(preferenceKeys) as (keyof DisplayPreferences)[];
@@ -39,8 +42,9 @@ const names = Object.keys(preferenceKeys) as (keyof DisplayPreferences)[];
 function decode<K extends keyof DisplayPreferences>(key: K, raw: string | null): DisplayPreferences[K] {
   const fallback = DEFAULT_PREFERENCES[key];
   if (key === "theme") return (raw === "light" ? "light" : "dark") as DisplayPreferences[K];
+  if (key === "colorVision") return (["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"].includes(raw ?? "") ? raw : fallback) as DisplayPreferences[K];
   if (key === "grain") return (["animated", "still", "off"].includes(raw ?? "") ? raw : fallback) as DisplayPreferences[K];
-  if (key === "readingSize") return (["100", "125", "150"].includes(raw ?? "") ? Number(raw) : fallback) as DisplayPreferences[K];
+  if (key === "readingSize") return (["100", "125", "150", "200"].includes(raw ?? "") ? Number(raw) : fallback) as DisplayPreferences[K];
   return (raw === "true") as DisplayPreferences[K];
 }
 
@@ -57,6 +61,13 @@ export function createDisplayPreferencesStore(getStorage: () => StoragePort | nu
     if (read("loadout-hide-grain") !== "true") return raw;
     return "off";
   }
+  function migrateColorVision(raw: string | null) {
+    if (raw !== null) return raw;
+    return read("loadout-color-safe") === "true" ? "deuteranopia" : raw;
+  }
+  function migratePhantomSans(raw: string | null) {
+    return raw ?? read("loadout-plain-typography");
+  }
   function notify() { listeners.forEach((listener) => listener()); }
   function hydrate() {
     if (hydrated) return;
@@ -65,7 +76,9 @@ export function createDisplayPreferencesStore(getStorage: () => StoragePort | nu
     for (const name of names) {
       if (dirty.has(name)) continue;
       let raw = read(preferenceKeys[name]);
+      if (name === "colorVision") raw = migrateColorVision(raw);
       if (name === "grain") raw = migrateGrain(raw);
+      if (name === "phantomSans") raw = migratePhantomSans(raw);
       next = { ...next, [name]: decode(name, raw) };
     }
     snapshot = next;
@@ -111,7 +124,7 @@ export function createDisplayPreferencesStore(getStorage: () => StoragePort | nu
   return {
     getSnapshot: () => snapshot, subscribe, setPreference: update, reset, syncStorage,
     setTheme: (value: DisplayTheme) => update("theme", value),
-    setColorSafe: (value: boolean) => update("colorSafe", value),
+    setColorVision: (value: ColorVisionProfile) => update("colorVision", value),
     setReduceMotion: (value: boolean) => update("reduceMotion", value),
     setUnderlineLinks: (value: boolean) => update("underlineLinks", value),
   };
@@ -121,28 +134,45 @@ export function useDisplayPreferences() {
   const preferences = useSyncExternalStore(store.subscribe, store.getSnapshot, () => DEFAULT_PREFERENCES);
   return {
     ...preferences, setPreference: store.setPreference, reset: store.reset,
-    setTheme: store.setTheme, setColorSafe: store.setColorSafe,
+    setTheme: store.setTheme, setColorVision: store.setColorVision,
     setReduceMotion: store.setReduceMotion, setUnderlineLinks: store.setUnderlineLinks,
   };
 }
 /** Keep optional presentation attributes in sync without adding a layout wrapper. */
 export function DisplayPreferencesEffects() {
   const preferences = useDisplayPreferences();
+  const systemContrast = useSyncExternalStore(subscribeToMoreContrast, prefersMoreContrast, () => false);
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.displayTheme = preferences.theme;
-    root.dataset.colorSafe = String(preferences.colorSafe);
+    root.dataset.colorVision = preferences.colorVision;
     root.dataset.grain = preferences.grain;
     root.dataset.underlineLinks = String(preferences.underlineLinks);
-    root.dataset.plainTypography = String(preferences.plainTypography);
+    root.dataset.phantomSans = String(preferences.phantomSans);
     root.dataset.readingSize = String(preferences.readingSize);
     root.dataset.moreSpacing = String(preferences.moreSpacing);
     root.dataset.strongContrast = String(preferences.strongContrast);
     root.dataset.systemCursor = String(preferences.systemCursor);
+    root.dataset.largerControls = String(preferences.largerControls);
     root.dataset.simplifyDecoration = String(preferences.simplifyDecoration);
     root.dataset.nativeScroll = String(preferences.nativeScroll);
-  }, [preferences.theme, preferences.colorSafe, preferences.underlineLinks, preferences.plainTypography,
-    preferences.grain, preferences.readingSize, preferences.moreSpacing, preferences.strongContrast, preferences.systemCursor,
+  }, [preferences.theme, preferences.colorVision, preferences.underlineLinks, preferences.phantomSans,
+    preferences.grain, preferences.readingSize, preferences.moreSpacing, preferences.strongContrast, preferences.systemCursor, preferences.largerControls,
     preferences.simplifyDecoration, preferences.nativeScroll]);
+  useEffect(() => {
+    const root = document.documentElement;
+    if (systemContrast) root.dataset.systemContrast = "true";
+    else delete root.dataset.systemContrast;
+  }, [systemContrast]);
   return null;
+}
+
+function prefersMoreContrast() {
+  return window.matchMedia("(prefers-contrast: more)").matches;
+}
+
+function subscribeToMoreContrast(listener: () => void) {
+  const preference = window.matchMedia("(prefers-contrast: more)");
+  preference.addEventListener("change", listener);
+  return () => preference.removeEventListener("change", listener);
 }

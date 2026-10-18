@@ -1,6 +1,8 @@
 # Plan 23: Less vibed, pass two
 
-**Status:** Built 2026-10-16 on `feature/all-changes` (local, not pushed), with the changes recorded in section 7. The design brief is [`.ulpi/design/less-vibed-pass-two.md`](../.ulpi/design/less-vibed-pass-two.md). Nothing here changes a price, threshold or formula; those stay with Plan 02. It follows [Plan 21](21-credibility-follow-through.md) and compares the homepage with Pixl (`references/pixl/apps/pixl-dashboard/app/_landing`) and Stardance (`references/stardance/app/views/landing`).
+**Status:** Built 2026-10-16 on `feature/all-changes` and pushed to `origin/feature/all-changes` at `b17aa91` (last checked 2026-10-18). Promotion and deployment remain separate. The changes are recorded in section 7. The design brief is [`.ulpi/design/less-vibed-pass-two.md`](../.ulpi/design/less-vibed-pass-two.md). Nothing here changes a price, threshold or formula; those stay with Plan 02. It follows [Plan 21](21-credibility-follow-through.md) and compares the homepage with Pixl (`references/pixl/apps/pixl-dashboard/app/_landing`) and Stardance (`references/stardance/app/views/landing`).
+
+**Policy follow-up:** Internal age policy is 13–18; the current public site's 13–19 copy still needs correction in a later public-copy pass. Any prize prices cited here are working examples, not final promises of price, stock or fulfillment. Reviewer operating details and XP calculations remain open under Plans 02 and 22.
 **Owner:** Plan 06 for the homepage structure. Commit, promotion and deployment stay separate actions.
 
 ## 1. What the comparison showed

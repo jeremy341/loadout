@@ -1,6 +1,6 @@
 # LOADOUT Eras and Community Progression
 
-**Status:** Approved product design, recorded 2026-10-05. This plan documents the mechanic; implementation is not part of this change.
+**Status:** Approved product direction, recorded 2026-10-05. The planned qualifying-project bonus is +10% of base Ore; stacking, operations and implementation remain open and are not part of this change.
 
 **Canonical owner:** This plan owns Era cadence, advancement, Era Points, the Era Ore bonus, and Era objectives. Plan 01 owns product meaning, Plan 02 owns the economy formula, Plan 03 owns UI states, Plan 05 owns launch operations, and Plan 06 owns the compact public explanation. If copies disagree, this plan governs Era-specific behavior.
 
@@ -63,7 +63,7 @@ The authoritative reset timezone, reset-hour behavior, downtime/retry policy, an
 - A project may receive the Era bonus only when it meaningfully matches the active Era objectives.
 - The builder may request Era-bonus review when submitting a project; this request does not affect normal eligibility or the base review.
 - A reviewer makes a separate **binary** decision: qualifies or does not qualify. Do not implement partial percentages in the initial design.
-- A qualifying project receives **+10% of its approved base Ore award**. Example: 720 approved base Ore → 72 Era bonus → 792 total Ore.
+- The planned qualifying-project bonus is **+10% of its approved base Ore award**. Example: 720 approved base Ore → 72 Era bonus → 792 total Ore.
 - There is **no Era bonus to Track XP**. Era relevance is not a fifth quality dimension and must not alter LOADOUT's four quality dimensions: Originality, Technical Depth, Execution, and Documentation.
 - Non-qualifying Era relevance never makes an otherwise valid LOADOUT project invalid and never reduces its normal approved award.
 - Store the reviewer decision and a short reason in the audit record. The review UI should distinguish the Era decision from the quality score and any other multiplier.

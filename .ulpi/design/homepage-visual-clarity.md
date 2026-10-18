@@ -17,8 +17,8 @@ On a quick scan, a visitor can explain:
 
 1. LOADOUT is for technical projects across Tools, Systems, Compute, and Hardware.
 2. Reviewers consider original technical work, evidence, and four quality dimensions.
-3. Approved work can earn personal Track XP and global spendable Bolts.
-4. Track XP and Bolts are separate and support different outcomes.
+3. Approved work can earn personal Track XP and global spendable Ore.
+4. Track XP and Ore are separate and support different outcomes.
 5. A Community Era is a shared technical theme that approved projects help move forward.
 
 Detailed examples and mechanics remain available when requested. The visual pass reduces repeated explanation. Era timing, objectives, and bonuses remain in the internal policy plans rather than the public homepage.
@@ -36,7 +36,7 @@ Detailed examples and mechanics remain available when requested. The visual pass
 
 Use one ordered, semantic flow:
 
-    What is LOADOUT? → choose project and track(s) → build/document → ship → review → XP + Bolts → upgrade → build again
+    What is LOADOUT? → choose project and track(s) → build/document → ship → review → XP + Ore → upgrade → build again
 
 The opening definition is one sentence. Explain Digital Loadout as the accepted-work portfolio and Physical Loadout as equipment for future builds in short labels, not a separate explanatory block.
 
@@ -44,23 +44,23 @@ The project-choice stage branches to four compact track labels with an existing 
 
 Keep a visible fit rule near project choice/review: product label alone does not determine fit; assess original technical work. Show two short contrasting examples and put the other approved examples and longer reasons in a native See more examples disclosure. Do not imply approval is guaranteed.
 
-The review stage keeps the canonical dimensions by name: Originality, Technical Depth, Execution, Documentation. State that the quality assessment informs the Bolt multiplier without inventing a score or percentage. Reviewers assign Track XP according to the technical fields used. The outcomes then distinguish personal, non-spendable Track XP from global, spendable Bolts.
+The review stage keeps the canonical dimensions by name: Originality, Technical Depth, Execution, Documentation. State that the quality assessment informs the Ore multiplier without inventing a score or percentage. Reviewers assign Track XP according to the technical fields used. The outcomes then distinguish personal, non-spendable Track XP from global, spendable Ore.
 
-Accepted projects add to the Digital Loadout. Bolts and related field levels support prizes and the builder’s Physical Loadout. Link to detailed prize mechanics rather than repeating them here.
+Accepted projects add to the Digital Loadout. Ore and related field levels support prizes and the builder’s Physical Loadout. Link to detailed prize mechanics rather than repeating them here.
 
 ## Progress & Prizes
 
 Compact Requisition path:
 
-    related level → earned discount → normal savings cap → eligible matching Requisition raises cap once → remaining Bolt price
+    related level → permanent track discount → eligible matching Requisition adds a one-use discount → remaining Ore price
 
-Keep the five level milestones once. A small disclosure carries one-use, non-transferable, non-expiring, one-per-order, minimum-value, and level-gate rules. The quote preview and Bolt balance remain understandable. No invented prices or percentages.
+Keep the five level milestones once. A small disclosure carries one-use, non-transferable, non-expiring, one-per-order, minimum-value, and level-gate rules. The quote preview and Ore balance remain understandable. Plan 02 owns the current figures and terms; this proposal does not authorize unapproved pricing UI.
 
 Compact Custom Order path:
 
-    reviewed ship → relevant Track tier → request equipment → final Bolt quote → accept/decline
+    reviewed ship → relevant Track tier → request equipment → final Ore quote → accept/decline
 
-Keep the relevant-tier requirement, enough Bolts to accept, and the closed status visible. Omit the numbered tier ladder from the homepage. Tracked hours alone are not a separate gate; the tier values remain internal. Fit, budget, location, safety/legal delivery, availability, shipping/tax, fulfillment, and quote-specific Requisition rules can be disclosed as secondary review detail.
+Keep the relevant-tier requirement, enough Ore to accept, and the closed status visible. Omit the numbered tier ladder from the homepage. Tracked hours alone are not a separate gate; the tier values remain internal. Fit, budget, location, safety/legal delivery, availability, shipping/tax, fulfillment, and quote-specific Requisition rules can be disclosed as secondary review detail.
 
 Keep the eight current planned prize categories as a static icon list or mosaic, with one planned/not-open status. Do not carousel category labels: there are no approved item listings, imagery, prices, or stock to browse.
 
@@ -75,14 +75,14 @@ A compact future-concept plate says an optional Ruhr build weekend would use the
 
 ## FAQ and progressive disclosure
 
-Short FAQ answers point back to primary sections. Preserve unique facts: per-person team contributions, planned Hackatime/Lapse split, AI use, levels not multiplying Bolts, Requisition limits, closed Custom Orders, and RSVP not enrolling anyone. Essential facts remain visible or reachable with keyboard and no JavaScript.
+Short FAQ answers point back to primary sections. Preserve unique facts: per-person team contributions, planned Hackatime/Lapse split, AI use, levels not multiplying Ore, Requisition limits, closed Custom Orders, and RSVP not enrolling anyone. Essential facts remain visible or reachable with keyboard and no JavaScript.
 
 ## Responsive and accessibility behavior
 
 - Use semantic ordered lists and groups; connectors and decorative sprites are aria-hidden.
 - Preserve current anchors: about, tracks, research, project-fit, process, progression, field-pricing, requisitions, shop, custom-orders, eras, loadout-irl, faq, behind-loadout.
 - Use the straight existing connector style. Flow columns stack in reading order when width or zoom requires it; no horizontal overflow.
-- Native details/summary disclosures provide keyboard focus and expanded state. Do not hide the definition, track labels, fit rule, four score dimensions, XP/Bolt distinction, or planned/closed state.
+- Native details/summary disclosures provide keyboard focus and expanded state. Do not hide the definition, track labels, fit rule, four score dimensions, XP/Ore distinction, or planned/closed state.
 - Honor existing 44px targets, 16px body text, reduced motion, scroll behavior, and Reveal fail-open handling.
 - No-JavaScript fallback retains essential copy and reveals full disclosure content.
 
@@ -100,7 +100,7 @@ Pins and rights are recorded in docs/source-audit/source-bases.md. Pixl is MIT; 
 ## Review criteria
 
 - One integrated build story replaces repeated About/Tracks/Fit/process descriptions.
-- Track names, fit rule, four dimensions, XP/Bolt distinction, and planned states are clear on a first scan.
+- Track names, fit rule, four dimensions, XP/Ore distinction, and planned states are clear on a first scan.
 - All approved examples and detailed rules remain accessible.
 - Requisition, Custom Order, Era, and IRL diagrams do not imply live values or events.
 - Section anchors, keyboard access, no-JavaScript behavior, responsive reflow, and reduced motion remain usable.

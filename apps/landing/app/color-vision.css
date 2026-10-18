@@ -1,0 +1,128 @@
+/* Optional LOADOUT color-vision palettes. Standard intentionally gets no overrides. */
+html[data-color-vision="protanopia"] .home:not(:has(#theme:checked)),
+html[data-color-vision="protanopia"] .docs:not(:has(#theme:checked)) {
+  --ac: #56B4E9;
+  --hl: #F0D75E;
+  --acf: #16191A;
+  --glow: #E69F00;
+}
+html[data-color-vision="deuteranopia"] .home:not(:has(#theme:checked)),
+html[data-color-vision="deuteranopia"] .docs:not(:has(#theme:checked)) {
+  --ac: #56B4E9;
+  --hl: #E69F00;
+  --acf: #16191A;
+  --glow: #E69F00;
+}
+html[data-color-vision="tritanopia"] .home:not(:has(#theme:checked)),
+html[data-color-vision="tritanopia"] .docs:not(:has(#theme:checked)) {
+  --ac: #E69F00;
+  --hl: #E9EBE7;
+  --acf: #16191A;
+  --glow: #E69F00;
+}
+html[data-color-vision="achromatopsia"] .home:not(:has(#theme:checked)),
+html[data-color-vision="achromatopsia"] .docs:not(:has(#theme:checked)) {
+  --ac: #E9EBE7;
+  --hl: #B4BBB8;
+  --acf: #16191A;
+  --glow: #E9EBE7;
+}
+
+/* Include the theme switch's :has() specificity so these values win over theme tokens. */
+html[data-color-vision="protanopia"] .home:has(#theme:checked),
+html[data-color-vision="protanopia"] .docs:has(#theme:checked) {
+  --ac: #005A8D;
+  --hl: #6B4700;
+  --acf: #FBF3E4;
+  --glow: #6B4700;
+}
+html[data-color-vision="deuteranopia"] .home:has(#theme:checked),
+html[data-color-vision="deuteranopia"] .docs:has(#theme:checked) {
+  --ac: #005A8D;
+  --hl: #7A4600;
+  --acf: #FBF3E4;
+  --glow: #7A4600;
+}
+html[data-color-vision="protanopia"] .home:has(#theme:checked),
+html[data-color-vision="deuteranopia"] .home:has(#theme:checked) {
+  --logo-bg: #005A8D;
+  --logo-fg: #1A1714;
+  --logo-fill: #FBF3E4;
+}
+html[data-color-vision="tritanopia"] .home:has(#theme:checked),
+html[data-color-vision="tritanopia"] .docs:has(#theme:checked) {
+  --ac: #7A4600;
+  --hl: #1A1714;
+  --acf: #FBF3E4;
+  --glow: #7A4600;
+}
+html[data-color-vision="achromatopsia"] .home:has(#theme:checked),
+html[data-color-vision="achromatopsia"] .docs:has(#theme:checked) {
+  --ac: #1A1714;
+  --hl: #4F4739;
+  --acf: #FBF3E4;
+  --glow: #1A1714;
+}
+html[data-color-vision="tritanopia"] .home:has(#theme:checked),
+html[data-color-vision="achromatopsia"] .home:has(#theme:checked) {
+  --logo-bg: var(--ac);
+  --logo-fg: #1A1714;
+  --logo-fill: #FBF3E4;
+}
+
+/* The light homepage has legacy literal-yellow controls; selected profiles use their ink tokens. */
+html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) :is(.pri, .tag, .docs-tab),
+html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) .docs-tab:hover,
+html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) .nav .btn {
+  color: var(--acf) !important;
+  background: var(--ac) !important;
+  border-color: var(--fg) !important;
+}
+html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) .ft-mark-lit { color: var(--ac); }
+html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) :is(.lnks a, .era small, .hero-credit a, .art:hover .asc) { color: var(--hl); }
+html[data-color-vision]:not([data-color-vision="standard"]) .home:not(:has(#theme:checked)) .art:hover .asc { color: var(--hl); }
+
+/* Form controls use each page's active accent, including in the shared dialog. */
+html[data-color-vision]:not([data-color-vision="standard"]) .a11y-dialog .a11y-option input { accent-color: var(--a11y-accent); }
+html[data-color-vision]:not([data-color-vision="standard"]) .a11y-page .a11y-option input { accent-color: var(--ac); }
+
+html[data-color-vision="protanopia"] .a11y-page { --a11y-link: #56B4E9; }
+html[data-color-vision="deuteranopia"] .a11y-page { --a11y-link: #56B4E9; }
+html[data-color-vision="tritanopia"] .a11y-page { --a11y-link: #E9EBE7; }
+html[data-color-vision="achromatopsia"] .a11y-page { --a11y-link: #E9EBE7; }
+html[data-display-theme="light"][data-color-vision="protanopia"] .a11y-page,
+html[data-display-theme="light"][data-color-vision="deuteranopia"] .a11y-page { --a11y-link: #005A8D; }
+html[data-display-theme="light"][data-color-vision="tritanopia"] .a11y-page { --a11y-link: #7A4600; }
+html[data-display-theme="light"][data-color-vision="achromatopsia"] .a11y-page { --a11y-link: #1A1714; }
+
+html[data-color-vision="protanopia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #56B4E9; --a11y-button-ink: #16191A; }
+html[data-color-vision="deuteranopia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #56B4E9; --a11y-button-ink: #16191A; }
+html[data-color-vision="tritanopia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #E69F00; --a11y-button-ink: #16191A; }
+html[data-color-vision="achromatopsia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #E9EBE7; --a11y-button-ink: #16191A; }
+html[data-display-theme="light"][data-color-vision="protanopia"] :is(.a11y-dialog, .a11y-shortcut),
+html[data-display-theme="light"][data-color-vision="deuteranopia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #005A8D; --a11y-button-ink: #FBF3E4; }
+html[data-display-theme="light"][data-color-vision="tritanopia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #7A4600; --a11y-button-ink: #FBF3E4; }
+html[data-display-theme="light"][data-color-vision="achromatopsia"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-accent: #1A1714; --a11y-button-ink: #FBF3E4; }
+
+/* Hue alone never distinguishes prose links in the tritanopia and monochrome profiles. */
+html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) :is(.doc-content a, .home main a:not(.btn), .home footer a, .a11y-page a) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: .2em;
+}
+
+/* Keep stronger contrast additive and let forced-colors use the visitor's system palette. */
+html:is([data-strong-contrast="true"], [data-system-contrast="true"])[data-color-vision] .a11y-page { --a11y-link: #FFFFFF; }
+html:is([data-strong-contrast="true"], [data-system-contrast="true"])[data-display-theme="light"][data-color-vision] .a11y-page { --a11y-link: #6F2516; }
+@media (forced-colors: active) {
+  html[data-color-vision] :is(.a11y-dialog, .a11y-shortcut) {
+    --a11y-ink: CanvasText;
+    --a11y-paper: Canvas;
+    --a11y-muted: CanvasText;
+    --a11y-rule: CanvasText;
+    --a11y-accent: ButtonFace;
+    --a11y-button-ink: ButtonText;
+    --a11y-edge: ButtonText;
+  }
+  html[data-color-vision] .a11y-page { --a11y-link: LinkText; }
+}

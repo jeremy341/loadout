@@ -5,6 +5,8 @@
 **Homepage wording decision, 2026-10-06:** The user approved displaying this as a clearly labelled future concept with no dates, venue promises, or registration. That passes the public-content gate for concept copy only; the event readiness gates remain unresolved.
 
 **Working identity:** **LOADOUT IRL // RUHR**
+
+**Current concept:** a proposed three-day Friday–Sunday build weekend in Germany's Ruhr area. The event date, selected city and venue, and all launch, safety, funding and fulfillment details remain open.
 **Line:** **Build the next Era.**
 
 **Owner:** This plan owns the physical-event concept and its operations/readiness gates. Plan 05 owns the concise launch roadmap; Plan 11 owns Era mechanics; Plans 01 and 02 own program and economy rules; Plan 06 owns any eventual public-homepage treatment.

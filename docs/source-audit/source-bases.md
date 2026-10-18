@@ -30,4 +30,6 @@ To populate the top-level reference folders in a fresh clone, run `git submodule
 
 Pixl remains the primary engineering reference. A temporary landing subset was ported for Stage A verification, then replaced with the LOADOUT public homepage in the same Next.js app. Final source reuse is limited to the landing composition and adapted scrolling/navigation/motion patterns recorded in `landing-port-and-assets.md`. The temporary Pixl media and source-only pages were removed. YSWS Template, Stardance, and Stasis remain reference-only until a reuse basis exists; Stasis has not received a comparative architecture audit.
 
-The Stardance review audit does not adopt Rails or Stardance's rubric, aggregation, percentile, or payout formula. LOADOUT's canonical quality dimensions remain Originality, Technical Depth, Execution, and Documentation; the resulting LOADOUT quality assessment informs its Bolts multiplier according to `plans/02`.
+The Stardance review audit does not adopt Rails or Stardance's rubric, aggregation, percentile, or payout formula. LOADOUT's canonical quality dimensions remain Originality, Technical Depth, Execution, and Documentation; the resulting LOADOUT quality assessment informs its Ore multiplier according to `plans/02`.
+
+The optional Phantom Sans WOFF2 files are recorded as coming from Pixl's live site, not from the pinned checkout. The MIT entry above describes the pinned repository license and does not establish license coverage for these live font assets. No separate permission for them is recorded here.

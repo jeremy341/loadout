@@ -9,35 +9,42 @@
 #
 # Tree equality alone is not evidence: a lane can receive a tree whose browser run failed or never
 # ran, and skipping then would report a required check green without testing anything. The commit
-# check is asked of the GitHub API, which is why this needs the `checks: read` permission.
+# check asks the GitHub API (see browser-check-passed.mjs), which is why this needs `checks: read`.
+#
+# The lane commit comes from a SHA, never from `origin/<branch>`: a pull request checks out the
+# merge ref and does not fetch the other branches, and lane-lineage shows those refs only appear
+# on push events. The script prints what it resolved, so a silent non-skip is diagnosable.
 set -euo pipefail
 
 verified=false
 why=""
+candidate=""
+lanetree=""
 sha=""
 
 tree_of() { git rev-parse "$1^{tree}" 2>/dev/null || echo "missing"; }
 
-# Is there a recorded successful browser check on this exact commit? Strict: every reported
-# `Landing browser` conclusion for the commit must be success, and there must be at least one.
+# Strict: every reported `Landing browser` conclusion on the commit must be success, and there must
+# be at least one. Anything the helper cannot establish counts as not passed.
 browser_passed() {
-  local sha="$1"
-  [[ -n "${GITHUB_REPOSITORY:-}" ]] || return 1
-  command -v gh >/dev/null 2>&1 || return 1
-  gh api "repos/${GITHUB_REPOSITORY}/commits/${sha}/check-runs?per_page=100" \
-    --jq '[.check_runs[] | select(.name == "Landing browser") | .conclusion] | (length > 0 and all(. == "success"))' 2>/dev/null \
-    | grep -qx 'true'
+  local commit="$1"
+  local answer=""
+  [[ -n "${GITHUB_REPOSITORY:-}" && -n "$commit" ]] || return 1
+  if command -v node >/dev/null 2>&1; then
+    answer="$(node "$(dirname "$0")/browser-check-passed.mjs" "$GITHUB_REPOSITORY" "$commit" "${GH_TOKEN:-}" 2>/dev/null || true)"
+  elif command -v gh >/dev/null 2>&1; then
+    answer="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${commit}/check-runs?per_page=100" \
+      --jq '[.check_runs[] | select(.name == "Landing browser") | .conclusion] | (length > 0 and all(. == "success"))' 2>/dev/null || true)"
+  fi
+  [[ "$answer" == "true" ]]
 }
 
-candidate=""
-lanetree=""
 if [[ "${EVENT_NAME:-}" == "pull_request" && ( "${BASE_REF:-}" == "testing" || "${BASE_REF:-}" == "main" ) ]]; then
-  # actions/checkout checks out the merge candidate for a pull request, so HEAD is the tree the
-  # promotion would produce. Equal to the head commit's tree means the promotion adds nothing:
-  # that very commit is the one whose browser run must already have succeeded.
+  # HEAD is the merge candidate the promotion would produce. Equal to the pull request's own head
+  # tree means the promotion adds nothing, and that head commit is the one with the browser run.
   candidate="$(tree_of HEAD)"
-  lanetree="$(tree_of "origin/${HEAD_REF:-}")"
-  sha="$(git rev-parse "origin/${HEAD_REF:-}" 2>/dev/null || true)"
+  sha="${PR_HEAD_SHA:-}"
+  lanetree="$(tree_of "$sha")"
   why="the promotion adds nothing over ${HEAD_REF:-}"
 elif [[ "${EVENT_NAME:-}" == "push" ]]; then
   source=""
@@ -48,18 +55,22 @@ elif [[ "${EVENT_NAME:-}" == "push" ]]; then
   esac
   if [[ -n "$source" ]]; then
     candidate="$(tree_of HEAD)"
-    lanetree="$(tree_of "origin/$source")"
     sha="$(git rev-parse "origin/$source" 2>/dev/null || true)"
+    lanetree="$(tree_of "$sha")"
     why="the pushed tree equals origin/$source"
   fi
 fi
+
+echo "tree under test:   ${candidate}"
+echo "lane commit:       ${sha:-none}"
+echo "lane commit tree:  ${lanetree}"
 
 if [[ -n "$sha" && "$candidate" != "missing" && "$candidate" == "$lanetree" ]]; then
   if browser_passed "$sha"; then
     verified=true
     echo "Browser suite skipped: $why and $sha has a successful Landing browser check."
   else
-    echo "The tree matches, but $sha has no successful Landing browser check on record; the suite runs."
+    echo "The tree matches, but $sha has no successful Landing browser check on record."
   fi
 fi
 

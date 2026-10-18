@@ -1,0 +1,49 @@
+name: Flake rate
+
+# The browser suite describes Orry's reactions to a real pointer, so a few of its tests are
+# timing sensitive under load. This measures that instead of guessing: the same suite, repeated,
+# with the flaky tests reported. It never gates a merge.
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flake-rate
+  cancel-in-progress: false
+
+jobs:
+  orry-repeat:
+    name: Repeated Orry run
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --user root
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Add the one tool the Bun setup needs
+        # The Playwright image carries Chromium and its libraries but not unzip, which setup-bun uses.
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends unzip
+      - name: Install Bun and the locked dependencies
+        uses: ./.github/actions/install-landing
+      - name: Repeat the Orry suite
+        working-directory: apps/landing
+        # No retries here on purpose: this run exists to make a flaky test fail so the trace is
+        # kept, and a retry would hide exactly the instability it is measuring.
+        run: bunx playwright test mole-mood.spec.ts mole-body.spec.ts --repeat-each=2 --retries=0 --reporter=list
+      - name: Upload the failure evidence
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: flake-rate
+          path: apps/landing/test-results
+          if-no-files-found: ignore
+          retention-days: 14

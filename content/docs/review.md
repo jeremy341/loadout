@@ -1,58 +1,62 @@
 ---
 title: "Project review"
-description: "A team member checks your ship is real, then other builders rate it from 0 to 20. That rating is how many Ore each hour pays."
+description: "We check the ship, other builders rate it, and that rating sets your Ore per hour."
 group: "BUILD & REVIEW"
 order: 80
 status: draft
 ---
 
-Review answers three questions: does the project fit LOADOUT, is what you submitted real, and how good is the technical work you can show? The answer to the last one is a number from 0 to 20, and it decides what your hours are worth.
+When you send in your project, someone on the team first checks that it fits LOADOUT and that we can verify the work and hours you're claiming. Once it passes that check, other builders review its quality. That's where your **Ore multiplier** comes from, so help them understand both what you've built and the work it took to get there.
 
-## What happens to a ship {#stages}
+## Who reviews my project? {#stages}
 
-| Step | Who | The question |
+| Stage | Who | What they're doing |
 | --- | --- | --- |
-| Check | A team member | Does the technical core belong here, and do the files, journal and hours back up what you submitted? |
-| Rating | Other builders | How strong is the work you showed? |
-| Payout | The system | Ore and Track XP are added. The team can stop a payout if something looks wrong. |
+| Check | A team member | Opens your files and demo, checks authorship and verifies the eligible hours. |
+| Rating | Other builders | Considers the project's quality using the four dimensions below. |
+| Payout | The system | Adds Ore and Track XP from the accepted ship. We can hold a payout if something needs investigating. |
 
-A project can be useful and still sit outside LOADOUT's focus. A project that fits can also need more evidence before it moves on. If the check says no, you get a reason and a way to fix it, and you can ship again.
+Why have a team check before the builder review? If your demo doesn't open or the board files are missing, other builders won't have enough to assess. We'll ask you to sort that out first, so they can spend their time looking at the project itself.
+
+So if we send the ship back, read what we're asking for before rebuilding everything. It might just be a dead demo link or a missing file. Fixing that gives us what we need to carry on with the review.
 
 ## How other builders rate it {#quality}
 
-Reviewers look at four things:
+We ask reviewers to consider four things. Each tells us something different about your build, so a project with a polished demo still needs to show the engineering behind it:
 
-| Thing | The question |
+| Dimension | What the reviewer is looking for |
 | --- | --- |
-| Originality | What's new in how you built it, or in the limits you worked within? |
-| Technical Depth | What hard problem did you solve, and how well do you understand it? |
-| Execution | Does it work for what it's meant to do? |
-| Documentation | Could another builder understand it, check it or reproduce it? |
+| Originality | The idea or approach you contributed, including how you worked around unusual constraints. |
+| Technical Depth | The difficult problems you tackled and your understanding of the solution. |
+| Execution | Whether the project does the job you claim, including the behavior you've tested. |
+| Documentation | Whether somebody can understand, inspect or reproduce the work. |
 
-The rating scale uses written descriptions: **0** means nothing there or not your own work, **5** is rough but honest, **10** is solid, **15** is great, and **20** is outstanding. Your final rating is how many Ore each approved hour pays. The four questions above give reviewers a basis for that decision.
+Take the [sensor-board example](/docs/shipping#example). The circuit and firmware show what the builder implemented. The comparison with a reference thermometer backs up the temperature claim, while the stated limits stop a room-temperature test from becoming a claim about every environment. Together, those details give reviewers a much better picture than a polished product photo alone.
 
-Twenty is the top of the scale for outstanding work. [Ore, XP & levels](/docs/progress) shows what the rating pays.
+Review produces a payout multiplier on the **0×–20×** scale. **10× is solid work**, **15× is great**, and **20× is outstanding**. Genuine work that passes the team's check pays at least **5×**. Rejected work earns nothing; 0× isn't a payable ship.
 
-Peer review depends on builders reviewing each other's work. The required review count and deadlines are listed among the [remaining decisions](/docs/eligibility#where-things-stand), so this guide doesn't assign a review quota yet.
+**10× means 10 Ore per approved hour.** Twenty approved hours at 10× earn 200 base Ore. A higher multiplier raises that ship's payout; it doesn't change how many hours you recorded. [Ore, XP & levels](/docs/progress#work) has the full comparison.
+
+Reviewer counts, rating aggregation and review deadlines still need decisions. We haven't published a formula that turns the four dimensions into the final multiplier.
 
 ## Cheating {#fraud}
 
-Fake or inflated hours, copied work, fake evidence, and swapping scores with friends are fraud. Fraud is a permanent ban, and everything you earned or bought with it is taken back. There's no second chance, and it's the reason the rest can be generous: there's no limit on hours or projects, because we trust real hours.
+Fake or padded hours, copied work presented as your own, invented evidence and trading ratings with friends are fraud. The consequence is a **permanent ban, with everything earned or bought taken back**. There is no second chance.
+
+There's no cap on genuine hours or projects. If something took longer than expected, explain the problem and keep the record of the attempts. An honest failed experiment is something we can discuss; invented progress isn't.
 
 ## AI use and team projects {#authorship}
 
-Reviewers need to see what you built yourself. Declare AI help, borrowed code, dependencies and each person's part.
-
-[AI & team contributions](/docs/ai-teams) covers what's expected.
+Give credit where the work appears. A teammate's firmware, a vendor driver and an AI-assisted parser have different authors, and a reviewer should be able to tell them apart. [AI & team contributions](/docs/ai-teams) shows what to disclose without turning your submission into a list of every conversation you had.
 
 ## Feedback and revisions {#feedback}
 
-Good feedback names the decision, the work it covers, and anything missing or worth improving. A request for changes isn't a final no.
+What if the feedback asks you to change something? It should explain the problem and what we'd need to see to check it again. You can then fix the issue and send the unpaid work back. Your hours stay in your records while you do that; we're asking for the correction so we can verify them.
 
-If you ship again, say what's new and add the evidence you were asked for. A new ship is rated on its own, for the hours since your last one. Submitting the same work twice won't get a different award, because the same hours are never paid twice.
+When you ship a new version instead, describe the changes and include the new journal entries. That version gets its own review and multiplier; we don't recalculate the old payout or pay for its hours twice. See [Shipping again](/docs/shipping#versions) for the minimum new work.
 
 ## Questions about a decision
 
-Ask the team for a second look if you think a rating missed something. Explain which decision you question and point to the evidence. The formal appeal limits, timing and score-change policy are still being settled.
+If you think we missed something, send the review reference, the part you disagree with and the evidence behind your question to [#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7). That gives us a specific decision to look at.
 
-Keep the review reference and say which decision you mean. **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)** can clear things up, but it can't promise an outcome.
+Formal appeal limits, timing and score-change rules aren't settled yet. We'll publish them once decided; asking about a review doesn't guarantee that its outcome changes.

@@ -10,6 +10,7 @@
 | [`ascii-float-preview.md`](ascii-float-preview.md) | Owner-approved local ASCII floating motion with independent timing and mixed directions. |
 | [`homepage-visual-clarity.md`](homepage-visual-clarity.md) | Open proposal, linked to Plan 17. It does not authorize homepage changes until the owner approves that scope. |
 | [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md) | Product proposal only. Plans 01/02 must settle any bonus before it is implemented or published. |
+| [`color-safe-docs-followup.md`](color-safe-docs-followup.md) | Owner-requested color-safe palette and participant Docs updates; implementation follows the 2026-10-17 production release. |
 
 ## Implemented locally
 
@@ -42,6 +43,10 @@
 
 | Brief | Current owner |
 |---|---|
+| [`accessibility-preferences-preserve-ui.md`](accessibility-preferences-preserve-ui.md) | Shared display preferences, footer Accessibility dialog/page, color-safe accents, optional reduced motion and visually unchanged semantic headings. |
+| [`mobile-nav-single-row.md`](mobile-nav-single-row.md) | Homepage mobile navigation: one row at normal phone text sizes, with accessible reflow when text is enlarged. |
+| [`docs-connected-prose.md`](docs-connected-prose.md) | Public Markdown guides and homepage payout labels: connected explanations, original worked examples, a longer fictional journal and explicit Ore multipliers. |
+| [`depth-label-transparency.md`](depth-label-transparency.md) | `home.css` and the design system: depth labels have text-clipped backgrounds so the band hatching remains visible behind them. |
 | [`community-era-overview.md`](community-era-overview.md) | Plan 11 for policy; Plan 06 for homepage copy. |
 | [`docs-refresh.md`](docs-refresh.md) | `docs/development/architecture.md` and `content-authoring.md`; production promotion recorded in PR #28. |
 | [`homepage-copy-clarity.md`](homepage-copy-clarity.md), [`homepage-information-architecture.md`](homepage-information-architecture.md) | Plan 06. |
@@ -60,3 +65,5 @@
 | [`pixel-sprite-svg-integration.md`](pixel-sprite-svg-integration.md), [`pre-sprite-icon-restoration.md`](pre-sprite-icon-restoration.md) | The final PNG icon set and asset catalog. Keep the owner-supplied Bolt SVG as a separate source asset. |
 
 Completed and superseded briefs are retained as historical decisions. Use current owners and implementation code for present behavior.
+
+- [Accessibility field panel](accessibility-field-panel.md): branded settings and a visible shortcut; supersedes the footer-only entry point.

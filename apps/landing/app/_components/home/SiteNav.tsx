@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "../../site-config";
 import { RSVP_ENABLED, RSVP_URL } from "./rsvp-url";
 import { Logo } from "./Logo";
+import { ThemeSwitch } from "../ThemeSwitch";
 
 // The bar carries the four in-page sections, as main does. DOCS is reached from the mobile
 // menu and the floating docs tab, so it is not a bar link.
@@ -115,6 +116,7 @@ export function SiteNav({ anchorBase = "" }: { anchorBase?: string }) {
       </button>
       <div className="nav-actions">
         <span className="lang" aria-hidden="true">◍ EN</span>
+        <ThemeSwitch />
         <label className="tg" htmlFor="theme">
           <span className="pxw mo" aria-hidden="true"><i className="b" /></span>
           <span className="pxw su" aria-hidden="true"><i className="a" /></span>

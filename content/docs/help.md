@@ -1,35 +1,39 @@
 ---
 title: "Help & feedback"
-description: "How to ask a clear question or report a problem without sharing anything private."
+description: "Where to ask, what to include, and how to report a website problem."
 group: "COMMUNITY"
 order: 170
 status: draft
 ---
 
-Use **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)** for questions about LOADOUT, whether a project fits, or anything on this site that isn't clear.
+Stuck on a build, unsure whether your idea fits, or confused by a rule? Ask in [#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7). You don't need to wait until a project is finished, and a question with a little context gives people a much better chance of helping.
 
 ## Asking about a project
 
-Say what you want to build, which track it's in, what you'll do yourself and how you'll show it works. Name the exact thing you're unsure about.
+Start by telling us what you're making and where you need a hand. What will you build yourself, and which part are you unsure about? If you've already started, a sketch, small example or demo can make it much easier for someone to understand the question.
 
-A short technical description helps far more than "does an app count?". An answer about fit is guidance, not a promise about how a future review will go.
+For a technical problem, include what you expected, what actually happened and what you've tried. For a fit question, explain the engineering: “Does a notes app count?” leaves out the interesting part, while a description of its offline sync engine gives us something specific to discuss.
+
+A conversation about an idea can help you choose a direction. The finished work will still need its own review.
 
 ## Asking about a rule
 
-Link the Docs page and say what's unclear. If a value is marked pending, ask what it means instead of treating a draft example as a confirmed rule.
+Send the page link and the sentence that confused you. Explain what you were trying to work out, such as whether a Requisition applies to an item. If two guides disagree, include both links so we can correct the source of the confusion.
+
+And if we haven't decided the rule yet, we'll tell you. An example in the Docs shouldn't leave you trying to guess a requirement that we still need to work out.
 
 ## Reporting a problem with the website
 
-Include the page address, what you expected, what happened, and your browser or screen size if it matters. A screenshot helps with layout problems.
+Found something broken on the site? Send the URL and tell us what happened compared with what you expected. If it looks wrong, include your browser, screen size and a screenshot so we can try the same setup. For a problem that happens after several clicks, list those steps too; we need to be able to reach the same problem before we can fix it.
 
-Don't post tokens, passwords, private evidence or anyone else's contact details. Public channels aren't a private way to report something, so leave out sensitive material.
+Check any images or logs before sharing them. The channel is public, so remove passwords, tokens and private contact details.
 
 ## Keeping up with changes
 
-The **#loadout-docs** feed posts documentation updates with links to the site. Questions still go in **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)**.
+**#loadout-docs** shares guide updates with links to the current pages. Keep questions in [#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7) so they can be discussed there.
 
-Read this page together with the topic it links to. A copied message or an old screenshot may not match the current guide.
+If you're reading an old screenshot or a copied message, open its linked guide as well. That is where a correction or changed rule should appear.
 
 ## What isn't there yet
 
-There's no promised response time and no live appeals portal. [Project review](/docs/review) describes the feedback and appeal model we're planning. [Current status](/docs/eligibility) lists what hasn't launched.
+We haven't promised a response time, and there isn't a live appeals portal. For a review question, include the decision reference and the evidence you want us to consider. [Project review](/docs/review) explains the current process; [Program status](/docs/eligibility) lists what hasn't opened.

@@ -9,7 +9,7 @@ export const faqItems = [
   { question: "How is my time tracked?",
     answer: "Hackatime is planned for coding and Lapse for hardware and other non-code work. Your journal ties the tracked time to what you did." },
   { question: "How do I earn Ore?",
-    answer: "Other builders rate each ship from 0 to 20. A 10 pays 10 Ore per approved hour, a 5 pays 5 and a 20 pays 20." },
+    answer: "After the team checks your ship, other builders review it. Accepted work earns a multiplier from 5× to 20×. At 10×, each approved hour earns 10 Ore, so ten hours earn 100 Ore." },
   { question: "What is Track XP for?",
     answer: "It builds your level in Tools, Systems, Compute or Hardware, and your level gets you discounts. LV.15 takes about 350 approved hours of solid work in one track." },
   { question: "What can I buy?",

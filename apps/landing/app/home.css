@@ -829,7 +829,7 @@ html:has(.home) { scroll-behavior:smooth }
 }
 @media (max-width: 700px) {
   .home .hero .hero-frame { padding: 17px 12px; }
-  .home .hero .h1 { font-size: min(calc((100vw - 104px) / 8.6), 60px); }
+  .home .hero .h1 { font-size: clamp(24px, calc((100vw - 136px) / 8.6), 60px); }
   .home .hero .hero-btn { min-width: 0; min-height: 48px; padding: 11px 12px; font-size: 14px; }
   .home .hero .hero-actions { gap: 12px; margin-top: 24px; }
   .home .hero .hero-frame > p { font-size: 14px; margin-top: 16px; }
@@ -1118,13 +1118,12 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   -webkit-background-clip: text;
   background-clip: text;
 }
-/* The label is Jersey 10, the wordmark face. It sits on a plate in the page colour, so the hatching does not run
-   through the letters. The plate is the last background layer and is clipped to the whole box; the glow layers are
-   clipped to the letters. */
+/* The label is Jersey 10, the wordmark face. Like the numeral, both background layers are clipped to the text
+   so the hatching continues behind the label without a solid plate. */
 .home .pit > span {
   padding: 4px 10px;
   font-family: var(--font-display), monospace;
-  font-size: clamp(20px, 2.2vw, 32px);
+  font-size: clamp(28px, 3vw, 44px);
   letter-spacing: .04em;
   line-height: 1.2;
   text-align: right;
@@ -1132,15 +1131,14 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   color: transparent;
   background-image:
     radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--glow) calc(var(--glow-strength) * var(--depth-light, 1)), transparent) 0%, transparent 100%),
-    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent)),
-    linear-gradient(var(--bg), var(--bg));
-  -webkit-background-clip: text, text, border-box;
-  background-clip: text, text, border-box;
+    linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 @media (max-width: 700px) {
   .home .pit { height: 110px; padding: 0 16px; }
   .home .pit b { font-size: 44px; }
-  .home .pit > span { font-size: 16px; }
+  .home .pit > span { font-size: 20px; }
 }
 .home .we { max-width: 700px; margin: 40px auto 0; padding: 14px 18px; border-left: 3px solid var(--ac); font-size: 15px; line-height: 1.7; color: var(--fg); }
 .home .pb-price { font-size: 13px; }
@@ -1246,13 +1244,15 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 @media (max-width: 700px) {
   .home .pit:not(.rb-rock) { min-height: 110px; }
 }
-@media (max-width: 420px) {
-  .home .nav { column-gap: 8px; row-gap: 8px; }
-  .home .nav > a.logo { flex: 1 1 calc(100% - 52px); min-width: 0; }
-  .home .nav > a.logo .lg { flex-wrap: wrap; }
-  .home .nav-toggle { order: 1; margin-left: auto; }
-  .home .nav-actions { order: 2; width: 100%; margin-left: 0; justify-content: flex-end; }
-  .home .hero, .home.rb-page .hero.rb { padding-top: max(180px, var(--nav-clearance, 180px)); }
+@media (max-width: 430px) {
+  /* Intrinsic widths keep the usual controls together; larger text can still reflow. */
+  .home .nav { width: calc(100% - 16px); padding-inline: 6px; gap: 6px; }
+  .home .nav > a.logo { flex: 0 1 auto; min-width: 0; }
+  .home .nav > a.logo .lg { gap: 4px; flex-wrap: wrap; }
+  .home .nav > a.logo .lg-text { font-size: clamp(26px, calc(8vw + .4px), 31px); }
+  .home .nav-actions { gap: 6px; }
+  .home .nav .tg { padding-inline: 6px; gap: 4px; }
+  .home .nav-actions > a.btn { padding-inline: 6px; }
 }
 @media (max-height: 800px), (max-width: 1360px) {
   .home .hero .stp { display: none; }

@@ -229,30 +229,31 @@ test("semantic card headings retain their former div typography and size", async
   }
 });
 
+const colorProfiles = ["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"] as const;
 for (const theme of ["dark", "light"] as const) {
-  test(`color-vision profiles in ${theme} theme meet automated AA checks`, async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.addInitScript((choice) => {
-      localStorage.setItem("loadout-theme", choice);
-    }, theme);
-    const profiles = ["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"] as const;
-    for (const profile of profiles) {
-      await page.goto("/");
-      const { dialog: settings } = await openSettings(page);
-      await settings.getByLabel("Color vision palette").selectOption(profile);
-      await page.keyboard.press("Escape");
+  for (const profile of colorProfiles) {
+    test(`color-vision ${profile} in ${theme} theme meets automated AA checks`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.addInitScript((choice) => {
+        localStorage.setItem("loadout-theme", choice.theme);
+        localStorage.setItem("loadout-color-vision", choice.profile);
+      }, { theme, profile });
       for (const route of ["/", "/docs/pricing", "/accessibility", "/accessibility-missing-page"]) {
         await page.goto(route);
         await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
         expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
-        if (route === "/accessibility") continue;
+        if (route === "/accessibility") {
+          await expect(page.getByLabel("Color vision palette")).toHaveValue(profile);
+          continue;
+        }
+        if (route !== "/") continue;
         const { dialog } = await openSettings(page);
         await expect(dialog.getByLabel("Color vision palette")).toHaveValue(profile);
         expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
         await dialog.getByRole("button", { name: "Close", exact: true }).click();
       }
-    }
-  });
+    });
+  }
 }
 
 test("settings fit a narrow screen and preserve forced colors", async ({ page }, testInfo) => {

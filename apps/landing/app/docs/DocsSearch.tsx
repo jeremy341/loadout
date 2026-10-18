@@ -136,7 +136,7 @@ export function DocsSearch() {
     {focused && hits.length > 0 && <ul className="docs-search-results" id="docs-search-results" aria-label="Search results">
       {hits.map((hit, index) => <li key={`${hit.url}:${hit.heading}`}>
         <Link id={`docs-search-result-${index}`} href={hit.url} onKeyDown={onResultKeyDown} onClick={onResultClick}>
-          <strong>{hit.title}</strong><span>{hit.heading}</span><small>{hit.snippet}</small>
+          <strong>{hit.title}</strong>
         </Link>
       </li>)}
     </ul>}

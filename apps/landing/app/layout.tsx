@@ -10,7 +10,11 @@ import "./cursor.css";
 import "./mole.css";
 import "./docs.css";
 import "./motion.css";
+import "./semantics.css";
+import "./accessibility.css";
 import { MotionPreference } from "./_components/motion-preference";
+import { DisplayPreferencesEffects } from "./_components/display-preferences";
+import { AccessibilityProvider } from "./_components/Accessibility";
 import { SmoothScroll } from "./_components/SmoothScroll";
 import { siteConfig } from "./site-config";
 
@@ -34,6 +38,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return <html lang="en" data-motion-paused="true" suppressHydrationWarning className={`${display.variable} ${pixel.variable} ${mono.variable} ${dot.variable} ${artMono.variable}`}>
-    <body><MotionPreference /><SmoothScroll>{children}</SmoothScroll></body>
+    <body><AccessibilityProvider><DisplayPreferencesEffects /><MotionPreference /><SmoothScroll>{children}</SmoothScroll></AccessibilityProvider></body>
   </html>;
 }

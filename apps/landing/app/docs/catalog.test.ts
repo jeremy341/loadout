@@ -9,8 +9,8 @@ describe('participant documentation scope', () => {
   const pages = getDocs();
   test('all public draft topics have a unique source and ordered directory', () => {
     expect(getDocsGroups().map((group) => group.label)).toEqual([...docsGroupLabels]);
-    expect(pages).toHaveLength(24);
-    expect(new Set(pages.map((page) => page.slug)).size).toBe(24);
+    expect(pages).toHaveLength(25);
+    expect(new Set(pages.map((page) => page.slug)).size).toBe(25);
     for (const slug of ['start','projects','shipping','review','progress','prizes','eras','irl','faq']) expect(pages.some((page) => page.slug === slug)).toBe(true);
     expect(pages.every((page) => page.status === 'draft')).toBe(true);
   });

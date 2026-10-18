@@ -1,48 +1,46 @@
 ---
 title: "Field Requisitions"
-description: "A one-use ticket that takes another 20% off one prize, without skipping any access rules."
+description: "An extra 20% off one larger purchase, earned at track milestones."
 group: "PROGRESS & PRIZES"
 order: 130
 status: draft
 ---
 
-A Field Requisition is a ticket that takes another 20% off one prize. It isn't another currency.
+As you level up a track, you'll earn **Field Requisitions**: one-use tickets that take an extra 20% off a matching item's base price. They work on top of your normal level discount, and you can hold onto one while you save for the equipment you want.
 
-## How you earn one
+## How do I get one? {#how-you-earn-one}
 
-You earn one Requisition each time you reach levels **3, 6, 9, 12 and 15** in a track. That's five per track, and they're all the same. [Ore, XP & levels](/docs/progress) explains how your work builds track progress.
+Each track awards a Requisition at **LV.3, LV.6, LV.9, LV.12 and LV.15**. That's five per track. They all give the same **extra 20% discount**; later tickets aren't more powerful versions of the early ones.
+
+You get there by earning [Track XP](/docs/progress#levels) from your projects. When your level reaches one of those milestones, you earn the ticket. It doesn't cost Ore, and we don't subtract XP from your track to give it to you.
 
 ## What one does
 
-It takes **20% of the base price** off one prize. That comes on top of your level discount, which is also a share of the base price, so the two add up to at most 40%.
+Let's see what that ticket actually saves. It takes **20% of the item's base Ore price** off, in addition to your permanent discount in the matching track. Suppose you're at LV.15 and want an item that costs 1,000 Ore:
 
-| Line | A 1,000 Ore prize |
+| Line | Ore |
 | --- | --- |
-| Level 15 discount (20%) | −200 |
+| Base price | 1,000 |
+| Level discount (20%) | −200 |
 | Requisition (20%) | −200 |
-| **You pay** | **600 Ore** |
+| **You pay** | **600** |
 
-There's no limit in Ore on how much a Requisition saves. It only works on prizes of **400 Ore or more**, so you can't spend one on something small.
+Both savings use the base price, so together they can save up to **40%**. There's no Ore savings cap, but the item's base price must be **400 Ore or more**. A more expensive eligible item therefore gives the same percentage saving on a larger amount.
 
 ## Using one
 
-The steps are: **pick a prize, check that you have a Requisition for its track, look at the final price, confirm the order.**
+When you're ready to buy, check that the item's track matches your ticket, then look at the saving before confirming. For something outside the shop, check your Custom Order quote too. The quote needs to say that you can use a Requisition on that item.
 
-The prize has to relate to the Requisition's track. For a Custom Order, the approved quote has to say it's Requisition-eligible.
+Once you use it, that ticket is gone. Your level discount stays, though, so future purchases still benefit from the level you've reached. And there's no rush to spend a new ticket: it doesn't expire, giving you time to save enough Ore for the purchase you have in mind.
 
 ## The limits
 
-- One use. It can't be transferred, and it never expires.
-- Only one Requisition on an order.
-- It doesn't add Ore, and it isn't a permanent discount.
-- It doesn't remove a level requirement.
-- It doesn't make an impossible request possible.
-- If the program cancels an order, you get the Requisition back.
+- Only **one Requisition per order**. You can't stack several tickets for a bigger reduction.
+- The ticket belongs to you and can't be transferred. There's no coupon code to share.
+- It reduces a purchase price; it doesn't add Ore to your balance.
+- You still need the item's track and level requirements, and we must be able to buy and deliver it.
+- If we cancel the order, the Requisition is returned to you.
 
-We may add a few rare General Requisitions later for exceptional contributions to the community. Whether we will, and how they'd be awarded, isn't decided.
+Rare General Requisitions for exceptional community contributions are still being considered. They aren't an announced way to earn extra tickets.
 
-## Not a coupon
-
-You don't get a public code to share. A Requisition is a ticket you earn by building, and you spend it on one prize.
-
-[Pricing](/docs/pricing) shows a full example, and [Custom Orders](/docs/custom-orders) explains requests.
+[Pricing](/docs/pricing) covers the calculation; [Custom Orders](/docs/custom-orders) covers requests that need an individual quote.

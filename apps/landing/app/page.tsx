@@ -1,5 +1,5 @@
 import { siteConfig } from "./site-config";
-import { ThemeSwitch } from "./_components/ThemeSwitch";
+import { AccessibilityTab } from "./_components/Accessibility";
 import { NoiseGrain } from "./_components/NoiseGrain";
 import { DocsTab } from "./_components/home/DocsTab";
 import { ICON_SPRITE } from "./_components/home/art";
@@ -24,6 +24,7 @@ export default function Home() {
   return (
     <div className="home" id="top">
       <a className="skip-link" href="#main">Skip to content</a>
+      <AccessibilityTab />
       <ScrambleHeadings selector=".home .h1" duration={1800} />
       <DepthGlow />
       <div style={{ display: "contents" }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICON_SPRITE }} />
@@ -32,7 +33,6 @@ export default function Home() {
       <div className="in">
         <SiteNav />
         <main id="main">
-          <ThemeSwitch />
           <Hero />
           <Reveal stagger><Tracks /></Reveal>
           <Reveal><HowItWorks /></Reveal>

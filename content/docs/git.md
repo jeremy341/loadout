@@ -1,35 +1,51 @@
 ---
 title: "Git and GitHub setup"
-description: "Set up version control for a project, once, then save your work every day."
+description: "Save your work with Git and put it somewhere other people can open it."
 group: "BUILD & REVIEW"
 order: 62
 status: draft
 ---
 
-Git saves every version of your project, so you can show what changed and go back when something breaks. GitHub keeps a copy online, so a reviewer can open it.
+Ever changed something that worked, broken it and forgotten what you touched? Git helps with that. It saves checkpoints of your project, called commits, so you can compare a broken version with one that worked. Once you put those commits on GitHub, other people can open the source too. That gives your reviewer both the current project and a history of how you got there.
 
-## 1. Install and introduce yourself {#install}
+## 1. Tell Git who you are {#install}
 
-Install Git from the official site for your system. Then tell Git your name and an email address. Use the email you use for your GitHub account:
+Install Git for your system, then set the name and email it will attach to your commits. Use the email associated with your GitHub account:
 
 ```bash
 git config --global user.name "Your name"
 git config --global user.email "you@example.com"
 ```
 
-## 2. Start a repository {#start}
+This tells Git whose name to put on your commits. You haven't signed into GitHub yet; that happens when you upload the work later in this guide.
 
-In your project folder, start the repository and save the first version:
+## 2. Leave out generated files and secrets {#gitignore}
+
+Before saving the first checkpoint, create a `.gitignore` in the project folder. It tells Git to leave out things like installed packages, build output and local configuration containing secrets. The exact names depend on your tools, so check what your project generates.
+
+This is worth doing before the first commit. Deleting a password from the latest file doesn't remove it from older commits. Keep API keys and passwords out of the repository from the start.
+
+## 3. Save the first version {#start}
+
+Open a terminal in the project folder and initialize Git:
 
 ```bash
 git init
+git status
+```
+
+Read the files listed by `git status`. If anything shouldn't be public, fix the ignore file before adding it. Once the list looks right, save the first version:
+
+```bash
 git add .
 git commit -m "Start the project"
 ```
 
-## 3. Make a daily habit {#daily}
+That's your first checkpoint saved. If something goes wrong later, you'll have this version to look back at. The next step is to keep making those checkpoints as the project grows.
 
-After each work session, check what changed, then save it with a short message that says what you did:
+## 4. Keep saving as you build {#daily}
+
+Make another commit when you finish a useful piece of work, such as getting a sensor read or adding a test. Check the files before each commit, then give it a message that describes the change:
 
 ```bash
 git status
@@ -37,17 +53,16 @@ git add .
 git commit -m "Add the temperature log"
 ```
 
-## 4. Keep build files out of Git {#gitignore}
-
-Some files should never be saved: installed packages, build output and secrets such as passwords or keys. Put their names in a `.gitignore` file in the project folder. Never put a key or password in a repository, even for a moment.
+Why bother with a useful message? A few months from now, “Add the temperature log” will help you find that change. “Stuff” probably won't. When a commit helps explain something in your journal, link it there too, so the reader can go straight from the decision to the code.
 
 ## 5. Put it on GitHub {#github}
 
-Create an empty repository on GitHub, then connect your folder to it and send your saved versions up:
+Create an empty repository on GitHub. Then connect your local folder and upload its commits, replacing the example URL with your repository's URL:
 
 ```bash
+git branch -M main
 git remote add origin https://github.com/your-name/your-project.git
 git push -u origin main
 ```
 
-Your repository is then public or private, as you choose. A reviewer needs to be able to open the code, so make sure it is public when you submit.
+After that, `git push` uploads new commits. Before shipping, make the repository public and open the link while signed out. If someone else can see the source, README and files they need, you're ready to use it in your [submission](/docs/submitting).

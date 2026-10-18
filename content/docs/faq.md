@@ -1,79 +1,79 @@
 ---
 title: "Quick answers"
-description: "Short answers to the questions people ask first."
+description: "The short answers, with links if you want the details."
 group: "COMMUNITY"
 order: 180
 status: draft
 ---
 
-Short answers. Follow the links for the full picture and for what's still undecided.
+Looking for one answer without reading the whole guide? Start here. Each answer links to the page that explains the rule and its examples.
 
 ## Questions {#questions}
 
 ### Who can join?
 
-Teens aged 13 to 19. If you're in high school, it's for you. See [eligibility](/docs/eligibility).
+High-school students aged **13 to 19**, including people who haven't shipped a project before. [Eligibility](/docs/eligibility) covers the age-check and delivery decisions still to be confirmed.
 
 ### Has LOADOUT launched?
 
-Not yet. A start date hasn't been announced. [RSVP](https://rsvp.soon.it/loadout) for launch updates; it records interest rather than enrolling you. See [current status](/docs/eligibility).
+Not yet. You can [RSVP](https://rsvp.soon.it/loadout) for updates, then register when we open. The [status page](/docs/eligibility#where-things-stand) keeps the remaining launch decisions together.
 
 ### What can I build?
 
-Useful technical work in Tools, Systems, Compute or Hardware. The part you built yourself decides whether it fits, not what the product is called. See [what you can build](/docs/projects).
+Build in Tools, Systems, Compute or Hardware and show the technical work you did yourself. An experiment can fit too. [What can I build?](/docs/projects) has examples of how to explain an idea.
 
 ### How many projects can I ship?
 
-As many as you like, and you can ship the same project again. Each ship pays for the hours since the last one. See [shipping](/docs/shipping).
+As many as you like. You can also [ship an updated version](/docs/shipping#versions) with new work and at least five new approved hours. Hours already paid for an earlier version won't earn again.
 
 ### How do I earn Ore?
 
-Your approved hours are multiplied by your project's rating. [Ore, XP & levels](/docs/progress#work) explains the rating scale and shows what a ship earns.
+Multiply your approved hours by the **Ore multiplier** from review. At **10×**, each approved hour earns 10 Ore, so ten hours earn 100 base Ore. [Ore, XP & levels](/docs/progress#work) shows the 5×–20× scale and the separate Era bonus.
 
 ### Is Ore the same as XP?
 
-No. Spend Ore on prizes; keep Track XP to level up in a field. Era Points count toward shared community progress. See [Ore, XP & levels](/docs/progress).
+No, you spend Ore on gear and Track XP stays in the fields you worked in and builds your levels, even after you buy something. [The progress guide](/docs/progress) explains both and the separate community Era Points.
 
 ### What can I buy, and what does it cost?
 
-Gear for your next build, from a domain at 24 Ore to a Framework 16 laptop at 5,000. See the [prize examples and prices](/docs/prizes).
+The [working prize list](/docs/prizes) includes boards, tools, storage, printers and laptops, from a 24-Ore domain to a 5,000-Ore Framework 16. Those are prices before discounts, with final stock and delivery arrangements still to come and none of the prices are confirmed but prepare for something like this.
 
 ### What does a Requisition do?
 
-It adds a one-use 20% discount to an eligible prize. [Field Requisitions](/docs/requisitions) explains how you earn one and which purchases qualify.
+It saves another **20% of the base price** on one matching prize worth at least **400 Ore**. You earn five tickets per track at levels 3/6/9/12/15 and can use one per order. [Field Requisitions](/docs/requisitions) shows how that combines with your level discount.
 
 ### Do I need a team?
 
-No. You can work alone or with others, and each person is credited for their own approved part. See [AI & team contributions](/docs/ai-teams).
+No. Build solo or with friends. If you work together, each person records and gets credit for [their own contribution](/docs/ai-teams#can-i-build-with-a-teammate).
 
 ### Can I use AI?
 
-Yes, if you say where, and show what you built and understand yourself. AI alone doesn't rule a project out. See [AI & team contributions](/docs/ai-teams).
+Yes. Explain where it helped, what you changed and what you checked yourself. Reviewers still need to see your contribution and understanding. [AI & team contributions](/docs/ai-teams) gives an example disclosure.
 
 ### What happens to someone who cheats?
 
-A permanent ban, and everything they earned is taken back. See [Project review](/docs/review#fraud).
+Fraud means a permanent ban from this event, with everything earned or bought taken back. [Project review](/docs/review#fraud) describes fake hours, copied work, invented evidence and traded ratings.
 
 ### Is Research Mode a fifth track?
 
-No. It's a way to investigate, experiment, benchmark or reproduce something inside the four tracks. See [Research Mode](/docs/research).
+No. Your research belongs in one or more of the four tracks. [Research Mode](/docs/research) explains how to submit an experiment, benchmark or finding other people can reproduce.
 
 ### Can I ask for something that isn't in the catalog?
 
-Yes, through a Custom Order. It needs the right progress, team approval and enough Ore for the quote. See [Custom Orders](/docs/custom-orders).
+Yes, you can. Use a [Custom Order](/docs/custom-orders) to explain what you want and what you'll build with it. You'll need the required progress, our approval and enough Ore for the quote.
 
 ### Does an Era reset my levels?
 
-No. Your lifetime Track XP and your accepted projects stay. Eras are shared themes, and Seasons are competitive periods. See [Community Eras](/docs/eras).
+No. You keep your Ore, Track XP, levels and accepted work when a theme changes. [Eras](/docs/eras) are shared themes; Seasons define periods for competitive rankings.
 
 ### Is this a real Hack Club program?
 
-LOADOUT is a proposal. Hack Club acceptance hasn't been confirmed. See [current status](/docs/eligibility).
+LOADOUT is a proposal for a Hack Club program. Acceptance hasn't been confirmed. [Current status](/docs/eligibility) explains where things stand.
 
 ### Can I sign up for LOADOUT IRL?
 
-Not yet. No event is confirmed, and registration isn't open. See [LOADOUT IRL](/docs/irl).
+Event registration isn't open. The [IRL page](/docs/irl#status) will have confirmed details for the three-day Ruhr-area hackathon when dates, venue and funding are ready.
 
 ### Where do I ask something else?
 
-Open an issue on [our GitHub](https://github.com/jeremy341/loadout) or use **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)**, with a link to the page and your specific question. See [Help & feedback](/docs/help).
+Ask in [#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7) or open a [GitHub issue](https://github.com/jeremy341/loadout). Include the page and what you want to work out; [Help & feedback](/docs/help) explains what to send for a build question or website problem.

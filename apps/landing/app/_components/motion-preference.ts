@@ -1,15 +1,15 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
+import { useDisplayPreferences } from "./display-preferences";
 
 const listeners = new Set<() => void>();
-let reduced = false;
+let systemReduced = false;
 let stopListening: (() => void) | undefined;
-const snapshot = () => String(reduced);
+const snapshot = () => String(systemReduced);
 const serverSnapshot = () => "true";
 
 function publish() {
-  document.documentElement.dataset.motionPaused = String(reduced);
   listeners.forEach((listener) => listener());
 }
 
@@ -17,8 +17,8 @@ function subscribe(listener: () => void) {
   listeners.add(listener);
   if (!stopListening) {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    reduced = media.matches;
-    const onMedia = () => { reduced = media.matches; publish(); };
+    systemReduced = media.matches;
+    const onMedia = () => { systemReduced = media.matches; publish(); };
     media.addEventListener("change", onMedia);
     stopListening = () => {
       media.removeEventListener("change", onMedia);
@@ -34,10 +34,18 @@ function subscribe(listener: () => void) {
 export function useMotionPreference() {
   const state = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   const reduced = state === "true";
-  return { userPaused: false, reduced, paused: reduced };
+  const { reduceMotion } = useDisplayPreferences();
+  const paused = reduced || reduceMotion;
+
+  return { userPaused: reduceMotion, reduced, paused };
 }
 
 export function MotionPreference() {
-  useMotionPreference();
+  const { paused } = useMotionPreference();
+
+  useEffect(() => {
+    document.documentElement.dataset.motionPaused = String(paused);
+  }, [paused]);
+
   return null;
 }

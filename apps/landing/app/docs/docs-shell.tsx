@@ -1,5 +1,6 @@
 "use client";
 
+import { AccessibilityTab } from "../_components/Accessibility";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
@@ -54,7 +55,7 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    root.querySelectorAll<HTMLElement>(":scope > .docs-main, :scope > .docs-toc, :scope > .docs-skip, .docs-nav-head").forEach((node) => { node.inert = mobileOpen; });
+    root.querySelectorAll<HTMLElement>(":scope > .docs-main, :scope > .docs-toc, :scope > .docs-skip, :scope > .a11y-shortcut, .docs-nav-head").forEach((node) => { node.inert = mobileOpen; });
   }, [mobileOpen]);
   // Focus moves into the drawer when it opens and returns to the Guides button when it closes.
   useEffect(() => {
@@ -126,10 +127,11 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
   return <div className="docs" ref={rootRef}>
     <NoiseGrain />
     <a className="docs-skip" href="#docs-main">Skip to documentation</a>
+      <AccessibilityTab />
     <aside className="docs-nav" aria-label="Documentation directory">
-      <ThemeSwitch />
       <div className="docs-nav-head"><Link className="docs-brand" href="/"><Logo /><span>DOCS</span></Link>
         <div className="docs-nav-actions">
+          <ThemeSwitch />
           <label className="tg docs-theme" htmlFor="theme"><span className="pxw mo"><i className="b" /></span><span className="pxw su"><i className="a" /></span></label>
           <button ref={toggleRef} className="docs-guides-toggle" type="button" aria-expanded={mobileOpen} aria-controls="docs-guides" aria-label="Guides" onClick={() => setMobileOpen(!mobileOpen)}><span className="docs-icon docs-icon-guides" aria-hidden="true" /></button>
         </div></div>

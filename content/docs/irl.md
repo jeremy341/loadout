@@ -1,41 +1,37 @@
 ---
 title: "LOADOUT IRL"
-description: "The planned three-day build weekend in Germany's Ruhr region, what a day could look like, and how it connects to online LOADOUT."
+description: "A three-day hackathon we're planning in Germany's Ruhr area."
 group: "COMMUNITY"
 order: 160
 status: draft
 ---
 
-LOADOUT IRL is a planned three-day build weekend in Germany's Ruhr area. The idea is simple: spend a weekend building real projects next to other builders.
+We're planning **three days in Germany's Ruhr area** where you can meet the people you've been sharing projects with online. You'd spend the weekend building alongside other LOADOUT builders, getting help and trying each other's work, then show what you managed to make by Sunday.
 
-> **Event status:** Dates, venue, funding and registration are not confirmed. The regular RSVP records program interest, not an event booking.
+> **Event status:** The weekend is a future concept. Dates, venue, funding and registration aren't confirmed. A program RSVP doesn't reserve an event place.
 
 ## The weekend {#weekend}
 
-The weekend outline runs Friday to Sunday, with time for building, sharing and proper rest.
+Here's the weekend we have in mind. It runs from Friday to Sunday, with time to meet people, work on a build and get some sleep too:
 
-| Day | What it could look like |
+| Day | What we're planning |
 | --- | --- |
-| Friday | Check in, hear how the weekend works, look at the tracks, find a team or go solo, and start building. |
-| Saturday | The main build day. Workshops, mentors, checkpoints, optional side challenges, time to rest. |
-| Sunday | Finish, write up and measure your work, show it on a demo floor, and close the weekend. Optional awards are still being considered. |
+| Friday | Arrive, meet people, find a team or choose a solo project, then start building. |
+| Saturday | The main build day, with workshops, mentors, checkpoints and optional side challenges. |
+| Sunday | Finish the version, record the results and show it on the demo floor. Optional awards are still being considered. |
 
-This is the outline we're working from. Times, quiet hours and overnight arrangements aren't decided.
+The detailed timetable, quiet hours and overnight arrangements still need work. Those details matter as much as the build time and will be part of the event information before registration.
 
-## Same LOADOUT, on a weekend {#online}
+## How would it work with online LOADOUT? {#online}
 
-Nothing about the event is a separate game.
+You'd still build in the same four tracks, with Research Mode available too. As you work, keep your files and journal in order, just as you would at home. You can then put the version through a normal [ship](/docs/shipping) afterward.
 
-- **Same tracks:** Tools, Systems, Compute and Hardware, plus Research Mode as a modifier.
-- **Same review:** event projects follow the normal rules for fit, evidence, authorship and quality. [Build & ship](/docs/shipping) describes what to bring.
-- **Same rewards:** Ore and Track XP work as they do online. Being there gives you no extra Ore, XP or level.
-- **Same Era:** approved event projects add Era Points to the one shared total that online builders add to. There is no event-only meter, and a good weekend does not force the next Era to start. [Community Eras](/docs/eras) explains how.
-- **Optional:** you will never need to go to an event to progress online.
+Review and rewards would follow the same rules. Attendance doesn't give extra Ore or XP, and you won't need to attend to keep progressing online. Approved event projects would contribute to the shared [community Era](/docs/eras), rather than a separate event meter or an automatic Era change.
 
 ## Event updates {#status}
 
-This page will carry the venue, schedule and registration details when they're ready. You can [RSVP](https://rsvp.soon.it/loadout) for program updates.
+Want to hear when the plans are ready? You can [RSVP for program updates](https://rsvp.soon.it/loadout). We'll put the confirmed venue, schedule and registration details here once they're settled.
 
 ## What must happen first
 
-The team has to confirm that the event is realistic, safe and affordable before it invites anyone. Questions and ideas are welcome in [help and feedback](/docs/help). [Current status](/docs/eligibility) explains the wider program draft.
+Before inviting anyone, we need to confirm funding and that we can run the event safely. If you have a question or an idea for the weekend, send it through [Help & feedback](/docs/help). [Program status](/docs/eligibility) covers the wider LOADOUT launch.

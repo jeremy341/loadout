@@ -1,48 +1,41 @@
 ---
 title: "Submitting and reviewers"
-description: "How to send a ship in, what the submission needs, and what reviewers check before they rate it."
+description: "What to send with a ship, and what we'll check when we open it."
 group: "BUILD & REVIEW"
 order: 65
 status: draft
 ---
 
-Submitting is the step where your ship leaves your hands. Reviewers then check it, and rate it. The rules for the rating are on [project review](/docs/review). This page is about what you send and what they look at first.
+Before you send your project in, bring the source, demo and journal together and explain the version you're shipping. Imagine a reviewer opening it without you there: they should know what to try, where to find the files and which parts you want them to look at. If they'd need you to walk them through everything over Slack, add that explanation to the submission.
 
-## What to send in {#send}
+## Where should I start? {#send}
 
-Send the version and its evidence. A good submission has:
+If it's your first ship, introduce what you've built so far. If you're sending an update, start with what's new since the last version and include the records for those new hours. The reviewer can then focus on those changes instead of trying to work out what was already paid for.
 
-- a title and one line on what it is,
-- the track or tracks it belongs to, and why,
-- what this version adds (for a first ship, the whole project; for a later one, only the new work),
-- how it works, with the one or two hard problems you solved,
-- the evidence: links to the source, the demo, the tests and any measurements,
-- your own part, and what teammates did,
-- where you used AI, and what you checked yourself,
-- what is still rough or untested.
+Check the links from a signed-out browser or ask a friend to open them. A demo that depends on your own account may look fine to you and be completely inaccessible to everyone else.
 
 ## A submission outline {#outline}
 
-Use something like this as a starting point. Short is fine. Specific is better.
+Not sure how to put the description together? These headings give you somewhere to start. Adapt them to your project; a circuit and a command-line tool won't need exactly the same explanation:
 
-1. **Title and one line.** What it is, in plain words.
-2. **Track or tracks.** Which fields the work belongs to, and why.
-3. **What this version adds.** For a first ship, the whole project. For a later one, only the new work.
-4. **How it works.** A paragraph or a diagram. Name the one or two hard problems you solved.
-5. **Evidence.** Links to the source or design files, the demo, the tests and the measurements.
-6. **My contribution.** What you built, what you reused, what teammates did.
-7. **AI and sources.** Where you used AI, what you checked yourself, and what you borrowed.
-8. **Known limits.** What is rough, missing or untested.
+1. **Project and version.** What somebody can do with it, and what this ship adds.
+2. **Tracks.** Where the substantial work belongs and why.
+3. **How it works.** The important design decisions, difficult parts and tradeoffs. A diagram can save a lot of explanation here.
+4. **Evidence.** Source or design files, demo, journal and the tests or measurements behind your claims.
+5. **Your part.** What you made yourself, what teammates did and what you reused.
+6. **AI and sources.** Where you got help, what you changed and how you checked it.
+7. **Known limits.** What remains missing, unreliable or untested.
+
+For the [sensor board](/docs/shipping#example), “evidence” means more than a photo. It includes the board files and firmware, a working demonstration and measurements that support the claimed behavior. The journal then explains the decisions that connect those files to the finished version.
 
 ## What reviewers check first {#reviewers}
 
-Reviewers try to open your files and run or inspect your result. They ask whether the project fits LOADOUT, whether the evidence backs the claims, and then how strong the work is across Originality, Technical Depth, Execution and Documentation. [Project review](/docs/review) explains the stages.
+We open the files and demo, check that the project fits LOADOUT, and look for evidence that the claimed work and hours are yours. If something is missing, the feedback should tell you what to fix or provide.
 
-They look for the hard part you solved and the proof that it works. A short, honest submission with solid evidence beats a long one that only describes a result.
+Once those checks pass, other builders assess Originality, Technical Depth, Execution and Documentation. Their ratings set the Ore multiplier. [Project review](/docs/review) explains the difference between getting a ship accepted and determining its payout.
 
 ## Credit and AI disclosure {#disclosure}
 
-- Name every library, driver, tutorial, design and AI tool that shaped the project, and respect their licenses.
-- Say what you did beyond them. Using a library is not the same as writing it.
-- If AI helped, say where, and show what you understood and checked yourself. AI use alone does not rule a project out. [AI & team contributions](/docs/ai-teams) has the full expectations.
-- On a team, each person describes their own part. The team's hours are not awarded to everyone.
+As you explain the project, say where you had help. For example, you might have used a vendor driver unchanged but written the storage layer yourself. Mentioning that alongside the storage explanation helps the reviewer understand your part much more than “used some libraries” at the bottom of the page.
+
+Name the designs, tutorials and AI tools you used, follow the relevant licenses and explain what you added. For a team build, each person describes their own contribution and records their own hours. [AI & team contributions](/docs/ai-teams) includes examples.

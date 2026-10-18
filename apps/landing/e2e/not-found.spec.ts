@@ -68,7 +68,7 @@ for (const [width, height] of [[1440, 900], [1366, 768], [1280, 720], [390, 844]
 }
 
 test("the lamp starts in the middle of the page and follows the pointer", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(lost);
   const rock = page.locator(".rb-rock");

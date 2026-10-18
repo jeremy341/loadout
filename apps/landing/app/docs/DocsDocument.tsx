@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import type { DocsItem, DocsPage } from "./docs-data";
 import { remarkDocsHeadings } from "./docs-markdown";
 import { DocsInlineToc, DocsToc } from "./DocsToc";
+import { AccessibilityLink } from "../_components/Accessibility";
 
 export function DocsDocument({ page, previous, next }: { page: DocsPage; previous?: DocsItem; next?: DocsItem }) {
   return <>
@@ -27,11 +28,11 @@ export function DocsDocument({ page, previous, next }: { page: DocsPage; previou
             skipHtml
           >{page.body}</ReactMarkdown>
         </div>
+        <p className="doc-sign">Built with Love by the LOADOUT team <span aria-hidden="true">·</span> <AccessibilityLink className="doc-accessibility-link" /></p>
         <nav className="doc-foot" aria-label="Documentation navigation">
           {previous ? <Link href={`/docs/${previous.slug}`}><span>PREVIOUS</span><b>{previous.label}</b></Link> : <span />}
           {next ? <Link className="next" href={`/docs/${next.slug}`}><span>NEXT</span><b>{next.label}</b></Link> : <Link className="next" href="/"><span>FINISH</span><b>Return to LOADOUT</b></Link>}
         </nav>
-        <div className="doc-sign">Built by the LOADOUT team</div>
       </article>
     </main>
     <DocsToc headings={page.headings} />

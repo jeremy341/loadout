@@ -1,23 +1,29 @@
 ---
 title: "Time tracking setup"
-description: "How tracked time will be set up for coding and for hardware. The tools are planned, not confirmed."
+description: "The tracking plan for code and hardware, with the program connections still to come."
 group: "BUILD & REVIEW"
 order: 64
 status: draft
 ---
 
-Your tracked hours decide what your ship is worth, so each project needs a tracker from the first day. Two tools are planned for LOADOUT. Neither is confirmed yet, so treat the steps below as the plan, not as instructions that will work today.
+When should you start tracking? From your first build session. It's easy to think you'll sort it out when you're ready to ship, but a journal written then can't recreate a missing time record. Set up your records early and check them while you still remember the session.
 
-## Planned: Hackatime for code {#hackatime}
+We're planning to use Hackatime for code and Lapse for eligible hardware and other non-code work. The LOADOUT connections aren't confirmed yet, so the explanation below is how we intend it to work. Recording time now doesn't guarantee it will qualify for a payout; we'll still need to confirm when eligible work can begin.
 
-Hackatime is planned for coding work. The plan is to install it in your editor, then check that your hours show against the right project before you write any code.
+## Hackatime for code {#hackatime}
 
-## Planned: Lapse for hardware {#lapse}
+For code, Hackatime records time from your editor. Once the LOADOUT connection is available, check that a session appears under the right project before relying on the total. Finding out straight away that the tracker used the wrong name is much easier to fix than discovering it after weeks of work.
 
-Lapse is planned for hardware and other work that is not code: soldering, assembling, printing and testing. The plan is to record a session when you start it and stop it when you finish.
+Keep using that project name as you build. Moving a folder or changing editor settings can leave your time split across different names, so make a note if that happens. Then, when you submit, you can explain which records belong to the same project.
+
+## Lapse for hardware {#lapse}
+
+For soldering, assembly, printing, testing and other eligible non-code work, the plan is to record sessions with Lapse. Begin and end the record with the work you're claiming, and keep the project name consistent with your journal.
+
+The footage and entry should explain the same session. For example, photos of an assembled board can accompany the entry about soldering and testing it; they won't explain unrelated coding hours.
 
 ## Either way {#either}
 
-- Name the project the same way every time, so the hours land in one place.
-- Check the hours each week against your journal. If they don't match, fix them before you ship.
-- Hours that cannot be explained are not counted. See [what reviewers check](/docs/submitting#reviewers).
+Whichever tracker you use, check it after a session. Does the project name look right, and does the record match what you were doing? If something is missing, make a note of the gap. We can look at what happened with you, but we need an honest record to do that.
+
+[Tracking & evidence](/docs/tracking) explains what your journal adds to those records. Final setup and account-linking instructions will follow once the integrations and eligible-time rules are ready.

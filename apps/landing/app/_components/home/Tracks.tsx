@@ -18,7 +18,7 @@ export function Tracks() {
           −000 M
         </b>
         <span>
-          Übertage
+          <span lang="de">Übertage</span>
           <br />
           Tracks
         </span>
@@ -43,9 +43,9 @@ export function Tracks() {
                   <use href={"#i-" + track.icon}></use>
                 </svg>
               </div>
-              <div className="cn">
+              <h3 className="cn">
                 {track.name}
-              </div>
+              </h3>
               <div className="m dsc">
                 {track.text}
               </div>

@@ -1,43 +1,45 @@
 ---
 title: "Tracking & evidence"
-description: "How recorded time, your journal and your files fit together, without counting work twice."
+description: "Track the time, write down what happened, and keep the files that show it."
 group: "BUILD & REVIEW"
 order: 70
 status: draft
 ---
 
-Recorded time is one piece of evidence. Your journal and your files explain what that time produced and which part is yours.
+The timer says you've worked for three hours. What happened in them? That's what your journal helps us understand. Tell us what you tried and changed, then link the files, photos or measurements that show the result. Together, those records let a reviewer follow the work behind the time you're claiming.
+
+Keep those records as you build. If you leave them until shipping day, you'll have to remember which experiment failed on Tuesday and why the board in Wednesday's photo has an extra wire.
 
 ## Tracked, journaled and approved work
 
-| Record | What it's for |
+| Record | What it tells us |
 | --- | --- |
-| Tracked work | Shows when you worked. |
-| Journal | Explains the work, the decisions, the experiments and the progress. |
-| Approved work | The part a reviewer can verify and accept. |
+| Tracked work | How much time you recorded for this project. |
+| Journal | What you tried, changed and decided during that time. |
+| Approved work | The eligible contribution the evidence supports. |
 
-These can differ. A reviewer may need to ask you something, or may approve only the part of a submission that the evidence supports.
-
-Use Hackatime to record coding and Lapse for eligible hardware and other non-code work. Your journal connects the recording to what you built. The LOADOUT account integrations are listed under [program status](/docs/eligibility#where-things-stand); that is separate from the availability of the tracking tools themselves.
+These figures can differ. If a session is unclear, we may ask about it or approve only the part we can verify. Hackatime and Lapse are the planned tracking tools; [Time tracking setup](/docs/time-setup) explains the connections still to come.
 
 ## What a useful journal says
 
-Say what changed, why you chose that approach, what failed and how you checked the result. Link the commits, measurements, photos or demos.
+Start with what's changed since your last entry, then tell us how you got there. Maybe you tried two approaches before one worked. Why did you drop the first? Or perhaps neither worked yet. In that case, explain what you've ruled out and what you want to try next. That still gives the reader something useful to follow.
 
-"Worked on the project" tells a reviewer nothing. "Compared two buffer layouts and measured their memory use under the same workload" explains a decision that evidence can back up.
+“Worked on memory usage” leaves the whole story out. Explaining that you compared two buffer layouts, found one used less memory and checked that it produced the same output gives the reader a decision to follow. Include the measurements so they can check your conclusion too.
+
+If you'd like to see what that looks like, read the [sensor-board journal](/docs/shipping#sample-journal). It follows a longer session, so there's quite a bit to explain. You don't have to match its length or copy its structure every day. A small change might need a short entry; an investigation with several failed attempts will usually take more space.
 
 ### Useful evidence
 
-Different projects need different proof: source changes, terminal output, benchmark graphs, CAD images, photos of the device or a recorded test.
+Take screenshots, photos or short clips while you work, when there's something worth showing. A half-assembled device and a note about the connector that didn't fit can explain more than a photo of the finished enclosure.
 
-Keep secrets, access tokens and other people's personal details out of public evidence.
+Match the evidence to the claim. For a benchmark, include inputs and conditions; for a mechanism, show it moving under the load you tested. Link commits and measurements near the part of the entry they support, and check logs and images for passwords, tokens or private information before sharing them.
 
 ## No double counting
 
-Use each stretch of tracked work once. If one session supports several journal entries, split it. Don't claim the whole session in each.
+Count each stretch of work once. If a session covered two tasks, split its time between them instead of assigning the full session to both.
 
-Team members record their own contributions. A later version covers only new work, not hours already approved for an earlier ship.
+Team members record their own contributions. When you ship an update, include the new hours since the earlier ship; work already approved and paid doesn't earn again.
 
-## When evidence has gaps
+## What if I'm missing a record? {#when-evidence-has-gaps}
 
-Say so honestly. More recorded hours don't fix missing files or unclear authorship. A reviewer should tell you what evidence is needed; see [review feedback](/docs/review#feedback).
+Tell us what happened and send what you still have. Losing a recording is a different problem from being unsure who wrote a piece of code, so we need that context to work out what we can check. If we send the ship back, the [review feedback](/docs/review#feedback) should explain what we'd need from you next.

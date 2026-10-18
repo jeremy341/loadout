@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { ThemeSwitch } from "../ThemeSwitch";
+import { AccessibilityLink, AccessibilityTab } from "../Accessibility";
 import { NoiseGrain } from "../NoiseGrain";
 import { DepthGlow } from "./DepthGlow";
 import { DepthNumeral } from "./DepthNumeral";
@@ -25,6 +25,7 @@ export function RockBottom({ variant, lead, actions }: { variant: Variant; lead:
   return (
     <div className={`home rb-page rb-${variant}`} id="top">
       <a className="skip-link" href="#main">Skip to content</a>
+      <AccessibilityTab />
       <DepthGlow />
       <NoiseGrain />
       <div className="pit rb-rock" aria-hidden="true">
@@ -38,7 +39,6 @@ export function RockBottom({ variant, lead, actions }: { variant: Variant; lead:
       <div className="in">
         <SiteNav anchorBase="/" />
         <main id="main">
-          <ThemeSwitch />
           <div className="hero rb">
             <div className="hero-badge">
               <span className="sl" aria-hidden="true" />
@@ -54,7 +54,7 @@ export function RockBottom({ variant, lead, actions }: { variant: Variant; lead:
             <div className="hero-actions">{actions}</div>
           </div>
         </main>
-        <footer className="rb-foot"><p><span lang="de">Glück auf!</span> <span>LOADOUT, Revier edition</span></p></footer>
+        <footer className="rb-foot"><p><span lang="de">Glück auf!</span> <span>LOADOUT, Revier edition</span> <span aria-hidden="true">·</span> <AccessibilityLink /></p></footer>
       </div>
     </div>
   );

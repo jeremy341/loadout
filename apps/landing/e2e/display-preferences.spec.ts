@@ -34,24 +34,49 @@ test("the modal closes on outside click and restores focus to its opener", async
   await expect(opener).toBeFocused();
 });
 
+test("the phone Accessibility tab retracts without shifting content and returns on focus", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const shortcut = page.locator(".a11y-shortcut");
+  const hero = page.locator(".home main");
+  const initial = await hero.boundingBox();
+  expect(initial).not.toBeNull();
+
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await expect(shortcut).toHaveAttribute("data-retracted", "true");
+  const scrolled = await hero.boundingBox();
+  expect(scrolled?.x).toBe(initial?.x);
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(shortcut).toHaveAttribute("data-retracted", "false");
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await expect(shortcut).toHaveAttribute("data-retracted", "true");
+  const tab = page.getByRole("link", { name: "Open accessibility settings" });
+  await tab.focus();
+  await expect(shortcut).toHaveAttribute("data-retracted", "false");
+  await tab.click();
+  await expect(page.getByRole("dialog", { name: "Accessibility settings" })).toBeVisible();
+});
+
 test("display choices persist across reloads, Docs and error routes", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   const { dialog } = await openSettings(page);
   await dialog.getByRole("checkbox", { name: /^Light mode/ }).check();
-  await dialog.getByRole("checkbox", { name: /^Color-safe palette/ }).check();
+  await dialog.getByLabel("Color vision palette").selectOption("deuteranopia");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await page.keyboard.press("Escape");
 
   for (const route of ["/", "/docs/pricing", "/accessibility-missing-page"]) {
     await page.goto(route);
     await expect(page.locator("#theme")).toBeChecked();
-    await expect(page.locator("html")).toHaveAttribute("data-color-safe", "true");
+    await expect(page.locator("html")).toHaveAttribute("data-color-vision", "deuteranopia");
     await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
     const settings = (await openSettings(page)).dialog;
-    for (const label of [/^Light mode/, /^Color-safe palette/, /^Reduce motion/]) {
-      await expect(settings.getByRole("checkbox", { name: label })).toBeChecked();
-    }
+    await expect(settings.getByRole("checkbox", { name: /^Light mode/ })).toBeChecked();
+    await expect(settings.getByLabel("Color vision palette")).toHaveValue("deuteranopia");
+    await expect(settings.getByRole("checkbox", { name: /^Reduce motion/ })).toBeChecked();
     await settings.getByRole("button", { name: "Close", exact: true }).click();
   }
 });
@@ -69,40 +94,44 @@ test("all preferences work when browser storage is blocked", async ({ page }) =>
   await expect(page.locator("#theme")).toBeChecked();
   const { dialog } = await openSettings(page);
   await expect(dialog.getByRole("checkbox", { name: /^Light mode/ })).toBeChecked();
-  await dialog.getByRole("checkbox", { name: /^Color-safe palette/ }).check();
+  await dialog.getByLabel("Color vision palette").selectOption("protanopia");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await page.keyboard.press("Escape");
-  await expect(page.locator("html")).toHaveAttribute("data-color-safe", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-color-vision", "protanopia");
   await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
   await openSettings(page);
-  await expect(dialog.getByRole("checkbox", { name: /^Color-safe palette/ })).toBeChecked();
+  await expect(dialog.getByLabel("Color vision palette")).toHaveValue("protanopia");
 });
 
 test("expanded reading and display preferences persist, and reset returns them to defaults", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   const { dialog } = await openSettings(page);
-  await dialog.getByRole("checkbox", { name: "Plain typography" }).check();
-  await dialog.getByRole("radio", { name: "150%" }).check();
+  await dialog.getByRole("checkbox", { name: "Phantom Sans" }).check();
+  await dialog.getByRole("radio", { name: "200%" }).check();
   await dialog.getByRole("checkbox", { name: "More text spacing" }).check();
   await dialog.getByRole("checkbox", { name: "Stronger contrast" }).check();
   await dialog.getByRole("checkbox", { name: "Use system cursor" }).check();
+  await dialog.getByRole("checkbox", { name: "Larger controls" }).check();
   await dialog.getByRole("checkbox", { name: "Underline links" }).check();
   await dialog.getByRole("checkbox", { name: "Native scrolling" }).check();
   await dialog.getByRole("checkbox", { name: "Simplify decoration" }).check();
   await dialog.getByRole("radio", { name: "Off" }).check();
-  await expect(page.locator("html")).toHaveAttribute("data-reading-size", "150");
-  await expect(page.locator("html")).toHaveAttribute("data-plain-typography", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-reading-size", "200");
+  await expect(page.locator("html")).toHaveAttribute("data-phantom-sans", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-larger-controls", "true");
   await expect(page.locator("html")).toHaveAttribute("data-grain", "off");
   await expect(page.locator("canvas.grain")).toHaveCount(0);
   await page.goto("/docs/start");
-  await expect(page.locator("html")).toHaveAttribute("data-reading-size", "150");
+  await expect(page.locator("html")).toHaveAttribute("data-reading-size", "200");
   const { dialog: docsDialog } = await openSettings(page);
   await docsDialog.getByRole("button", { name: "Reset display settings" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-reading-size", "100");
   await expect(page.locator("html")).toHaveAttribute("data-grain", "animated");
   await expect(page.locator("canvas.grain")).toHaveCount(1);
-  await expect(page.locator("html")).toHaveAttribute("data-plain-typography", "false");
+  await expect(page.locator("html")).toHaveAttribute("data-phantom-sans", "false");
+  await expect(page.locator("html")).toHaveAttribute("data-larger-controls", "false");
+  await expect(page.locator("html")).toHaveAttribute("data-color-vision", "standard");
 });
 
 test("changes synchronize to another open tab", async ({ page, context }) => {
@@ -113,10 +142,10 @@ test("changes synchronize to another open tab", async ({ page, context }) => {
   await other.goto("/docs/start");
   const { dialog } = await openSettings(page);
   await dialog.getByRole("checkbox", { name: /^Light mode/ }).check();
-  await dialog.getByRole("checkbox", { name: /^Color-safe palette/ }).check();
+  await dialog.getByLabel("Color vision palette").selectOption("deuteranopia");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await expect(other.locator("#theme")).toBeChecked();
-  await expect(other.locator("html")).toHaveAttribute("data-color-safe", "true");
+  await expect(other.locator("html")).toHaveAttribute("data-color-vision", "deuteranopia");
   await expect(other.locator("html")).toHaveAttribute("data-motion-paused", "true");
   await other.close();
 });
@@ -125,7 +154,8 @@ test("motion stays enabled by default and an explicit stop persists outside sett
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "false");
-  for (const preference of ["color-safe", "plain-typography", "more-spacing", "strong-contrast", "system-cursor", "simplify-decoration", "native-scroll", "underline-links"]) {
+  await expect(page.locator("html")).toHaveAttribute("data-color-vision", "standard");
+  for (const preference of ["phantom-sans", "more-spacing", "strong-contrast", "system-cursor", "larger-controls", "simplify-decoration", "native-scroll", "underline-links"]) {
     await expect(page.locator("html")).toHaveAttribute(`data-${preference}`, "false");
   }
   await expect(page.locator("html")).toHaveAttribute("data-reading-size", "100");
@@ -185,20 +215,27 @@ test("semantic card headings retain their former div typography and size", async
 });
 
 for (const theme of ["dark", "light"] as const) {
-  test(`color-safe ${theme} preferences and dialog meet automated AA checks`, async ({ page }) => {
+  test(`color-vision profiles in ${theme} theme meet automated AA checks`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.addInitScript((choice) => {
       localStorage.setItem("loadout-theme", choice);
-      localStorage.setItem("loadout-color-safe", "true");
     }, theme);
-    for (const route of ["/", "/docs/pricing", "/accessibility", "/accessibility-missing-page"]) {
-      await page.goto(route);
-      await expect(page.locator("html")).toHaveAttribute("data-color-safe", "true");
-      expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
-      if (route === "/accessibility") continue;
-      const { dialog } = await openSettings(page);
-      expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
-      await dialog.getByRole("button", { name: "Close", exact: true }).click();
+    const profiles = ["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"] as const;
+    for (const profile of profiles) {
+      await page.goto("/");
+      const { dialog: settings } = await openSettings(page);
+      await settings.getByLabel("Color vision palette").selectOption(profile);
+      await page.keyboard.press("Escape");
+      for (const route of ["/", "/docs/pricing", "/accessibility", "/accessibility-missing-page"]) {
+        await page.goto(route);
+        await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
+        expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
+        if (route === "/accessibility") continue;
+        const { dialog } = await openSettings(page);
+        await expect(dialog.getByLabel("Color vision palette")).toHaveValue(profile);
+        expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
+        await dialog.getByRole("button", { name: "Close", exact: true }).click();
+      }
     }
   });
 }
@@ -229,7 +266,10 @@ test("Accessibility links provide a real page when JavaScript is unavailable", a
   await page.goto(baseURL!);
   await page.getByRole("link", { name: "Accessibility", exact: true }).click();
   await expect(page).toHaveURL(/\/accessibility$/);
-  await expect(page.getByRole("heading", { name: "Accessibility statement" })).toBeVisible();
+  const statement = page.getByRole("button", { name: "Accessibility statement" });
+  await expect(statement).toBeVisible();
+  await statement.click();
+  await expect(page.getByText("We aim to make LOADOUT usable with keyboard navigation", { exact: false })).toBeVisible();
   await context.close();
 });
 

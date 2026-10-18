@@ -1,6 +1,6 @@
 # Plan 21: Credibility follow-through
 
-**Status:** Public details and voice changes implemented locally on `feature/real-details`; rule reconciliation updated 2026-10-15. The participant platform is not built. Further decoration changes and personal organizer copy are not authorized by this record. It follows [Plan 19](19-credibility-prizes-economy-cursor.md). Commit, promotion and deployment remain separate actions.
+**Status:** Public details and voice changes implemented locally on `feature/real-details`; rule reconciliation updated through 2026-10-18. The participant platform is not built. Further decoration changes and personal organizer copy are not authorized by this record. It follows [Plan 19](19-credibility-prizes-economy-cursor.md). Commit, promotion and deployment remain separate actions.
 **Owner:** Plan 02 stays the single authority for the economy, Plan 06 for the homepage. This plan sequences the work.
 
 ## 1. Where we are
@@ -11,7 +11,7 @@ The reviewer's complaint was that the site feels vibed and has few real details.
 
 | Topic | Decision |
 |---|---|
-| Who it is for | High-school students aged 13 to 19. Owner update 2026-10-16: changed from 13 to 18. |
+| Who it is for | High-school students aged 13 to 18 (owner update 2026-10-18). The public site and Docs still say 13 to 19; correcting that public wording is pending. |
 | Rate | 10 Ore per approved hour at solid quality, worth about $5 of prizes (1 Ore is about $0.50, internal only). |
 | Savings | 20% permanent discount at level 15, plus a 20% Requisition. No limits in Ore. A Requisition needs an item of at least 400 Ore. |
 | Special prizes | The enclosed printer (1,000 Ore) and the Framework 16 (5,000 Ore) are priced at $3 an hour, with no level requirement. |
@@ -20,7 +20,7 @@ The reviewer's complaint was that the site feels vibed and has few real details.
 | Specialization | Focus pays a little. Level 15 is about 350 hours in one track, and a builder in two areas reaches level 15 in both after about 700 hours. |
 | Hours | No limit per season, week or project. Legitimate hours are all rewarded. |
 | Fraud | A full, permanent ban, and the Ore, XP and Requisitions are taken back. |
-| Quality | Peers decide the multiplier, 0 to 20 with 10 as the default. Ore is hours times the multiplier, so 10 hours at 9× is 90 Ore and at 20× is 200. |
+| Quality | Peers decide a 0 to 20 quality rating used as the multiplier. Accepted ships pay from 5× to 20×, with 10× as the solid baseline. Ore is approved hours times the multiplier, so 10 hours at 9× is 90 Ore and at 20× is 200. |
 | Shipping again | A project can be shipped again and again, each ship paying only for the new hours since the last one. |
 | Money | Treated as not limiting for now; the rules are about fairness and abuse, and the budget is settled later. |
 

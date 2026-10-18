@@ -11,16 +11,18 @@ function memoryStorage(initial: Record<string, string> = {}) {
 }
 
 describe("display preferences store", () => {
-  test("hydrates the existing theme key and persists updates to stable keys", () => {
+  test("migrates the old color-safe choice and persists the selected profile", () => {
     const storage = memoryStorage({ "loadout-theme": "light", "loadout-color-safe": "true" });
     const store = createDisplayPreferencesStore(() => storage);
     expect(store.getSnapshot()).toEqual(DEFAULT_PREFERENCES);
 
     const unsubscribe = store.subscribe(() => {});
-    expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", colorSafe: true });
+    expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", colorVision: "deuteranopia" });
+    store.setColorVision("tritanopia");
     store.setReduceMotion(true);
     expect(storage.values.get("loadout-theme")).toBe("light");
     expect(storage.values.get("loadout-color-safe")).toBe("true");
+    expect(storage.values.get("loadout-color-vision")).toBe("tritanopia");
     expect(storage.values.get("loadout-reduce-motion")).toBe("true");
     unsubscribe();
   });
@@ -45,10 +47,10 @@ describe("display preferences store", () => {
     let notifications = 0;
     const unsubscribe = store.subscribe(() => { notifications += 1; });
 
-    store.setColorSafe(true);
+    store.setColorVision("protanopia");
     store.setTheme("light");
 
-    expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", colorSafe: true });
+    expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", colorVision: "protanopia" });
     expect(notifications).toBe(2);
     unsubscribe();
   });
@@ -60,12 +62,12 @@ describe("display preferences store", () => {
     const unsubscribe = store.subscribe(() => { notifications += 1; });
 
     store.syncStorage("loadout-theme", "light");
-    store.syncStorage("loadout-color-safe", "true");
+    store.syncStorage("loadout-color-vision", "achromatopsia");
     store.syncStorage("loadout-reduce-motion", "true");
-    expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", colorSafe: true, reduceMotion: true });
+    expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", colorVision: "achromatopsia", reduceMotion: true });
     expect(storage.values.size).toBe(0);
 
-    store.syncStorage("loadout-color-safe", null);
+    store.syncStorage("loadout-color-vision", null);
     expect(store.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, theme: "light", reduceMotion: true });
     expect(notifications).toBe(4);
     unsubscribe();

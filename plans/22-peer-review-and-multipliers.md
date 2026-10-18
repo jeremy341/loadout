@@ -1,6 +1,6 @@
 # Plan 22: Peer review and ship multipliers
 
-**Status:** Agreed rating inputs with candidate operational details, reconciled 2026-10-15. Plan 02 records the 0–20 peer scale, accepted-ship payout floor of 5, baseline 10, maximum 20, team check and separate repeat ships. Reviewer count, review duty, scoring aggregation/rounding, deadlines, appeals, the XP equation and a 25% Research XP bonus remain candidates. No review platform is built. [Plan 02](02-economy-and-rewards.md#rule-status-and-remaining-decisions) is the rule-status authority.
+**Status:** Agreed rating inputs with candidate operational details, reconciled 2026-10-18. The team checks LOADOUT fit and peer-review eligibility; peer builders set a 0–20 quality rating used as the Ore multiplier. Accepted ships pay at least 5×, 10× is the solid baseline, and the maximum is 20×. Reviewer count/duty, aggregation/rounding, deadlines, appeals, the XP equation and a 25% Research XP bonus remain candidates. No review platform is built. [Plan 02](02-economy-and-rewards.md#rule-status-and-remaining-decisions) is the rule-status authority.
 **Owner:** Plan 02 owns the economy. This plan owns how a ship gets its multiplier, and how that multiplier feeds Ore and XP.
 
 ## 1. What it has to do
@@ -13,7 +13,7 @@
 
 ## 2. The scale
 
-Peers score four categories from 0 to 20: Originality, Technical Depth, Execution, Documentation. The multiplier is the mean of the four category medians.
+Peer builders rate four dimensions from 0 to 20: Originality, Technical Depth, Execution and Documentation. The accepted payout multiplier is 5×–20×, with a 10× solid-work baseline. The exact category aggregation method remains open; the mean of category medians is a candidate, not an agreed rule.
 
 | Multiplier | Who gets it | Share of ships we expect |
 |---:|---|---:|
@@ -29,13 +29,13 @@ The shares are a **target, not a quota**. They are how the team checks that the 
 
 ## 3. The flow
 
-The counts, deadlines, aggregation and allocation thresholds in this flow are a candidate design. Do not publish them as settled requirements until the owner selects them.
+The team first checks that the project fits LOADOUT and is eligible for peer review; it does not set the quality multiplier. The counts, deadlines, aggregation and allocation thresholds in this flow are candidate design details. Do not publish them as settled requirements until the owner selects them.
 
 1. **Ship.** The builder submits a project, evidence, the journal and the hours since the last ship.
 2. **Team check (day 1 to 3).** A team member confirms it is real, runnable or shown, the evidence matches the journal and the hours are plausible. Rejected ships get a reason and a way to fix them. This is the first gate and the main fraud check.
 3. **Peer round.** Seven reviewers are drawn at random, never the builder, a teammate or someone from the same household or classroom the builder named, and preferring people with some level in a track the project uses. Each has 7 days.
 4. **Scores.** Each reviewer gives four scores from 0 to 20 against the written anchors, a one-line reason for any score of 4 or lower or 16 or higher, and a proposed split across tracks.
-5. **Result.** For each category, the median. The multiplier is the mean of the four medians, rounded to one decimal, never below 5. The track split is the median share per track with the 10% minimum.
+5. **Candidate result.** For each category, the median. The multiplier is the mean of the four medians, rounded to one decimal, never below 5. The track split is the median share per track with the 10% minimum. Aggregation, rounding and allocation thresholds remain open.
 6. **Fraud window (24 hours).** The team can stop a payout over flags (collusion, copied work, fake evidence). Otherwise Ore and XP are issued.
 7. **The builder sees:** their four medians, the multiplier, the Ore and XP it paid, and the reviewers' reasons, without reviewer names.
 
@@ -86,7 +86,7 @@ Tuned with data from the first Season, by the owner. None is secret, but changes
 ## 8. Phases
 
 1. **Agree the numbers** (Plan 21 step 1 and 2): the owner answers the questions in section 9 and the proposal moves into Plan 02.
-2. **Publish the simple version** (Plan 21 steps 3 and 4): the rate, the 0 to 20 scale with 10 as the default, "peers decide, the team checks", and shipping again. Reviewer weights, fraud windows and knobs stay in the Docs or internal.
+2. **Publish the simple version** (Plan 21 steps 3 and 4): the rate, the 0 to 20 quality-rating scale, the accepted-ship payout range of 5×–20× with 10× as the solid baseline, "peers decide, the team checks", and shipping again. Reviewer weights, fraud windows and knobs stay in the Docs or internal.
 3. **Write the anchors:** the five anchor descriptions and the first example projects, after the first ships exist.
 4. **Platform:** the review queue, the scoring form, the median calculation, the fraud window and the ledger. Platform design is Plan 04's job. This plan only says what it must do.
 

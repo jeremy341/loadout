@@ -4,7 +4,8 @@ on:
   push:
     # Pushes are checked only on the three lanes. A feature branch is checked by its
     # pull request, so pushing it does not run the same checks a second time. The commit
-    # that passes on development is the one promoted to testing and main.
+    # that passes on development is included in the testing and main promotion PRs;
+    # those lanes add merge commits which must contain the checked source tree.
     branches: [development, testing, main]
   pull_request:
     branches: [development, testing, main]
@@ -47,9 +48,9 @@ jobs:
           esac
 
   lane-lineage:
-    # Testing and main may be moved by a direct push of an already checked commit.
-    # GitHub cannot test ancestry before a push lands, so this reports it afterwards:
-    # the lane must only move forward, and only to or past a commit of its source lane.
+    # Promotion PRs normally create merge commits containing the source-lane tip.
+    # This validates the merge result after it reaches the lane. Direct pushes are also
+    # checked after landing if repository settings allow them; this is not a pre-push gate.
     name: Lane lineage
     if: github.event_name == 'push' && (github.ref == 'refs/heads/testing' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
@@ -84,7 +85,7 @@ jobs:
           if git merge-base --is-ancestor "$AFTER_SHA" "$source" || git merge-base --is-ancestor "$source" "$AFTER_SHA"; then
             printf '%s is on the %s line.\n' "$AFTER_SHA" "$source"
           else
-            printf '::error::%s is not on the %s line. Only commits that reached the source lane belong here.\n' "$AFTER_SHA" "$source"
+            printf '::error::%s is not on the %s line. The destination commit must contain the source-lane tip in its ancestry.\n' "$AFTER_SHA" "$source"
             exit 1
           fi
 

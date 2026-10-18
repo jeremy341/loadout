@@ -16,6 +16,9 @@
 
 **Owner:** Public-facing `apps/landing` experience  
 **Status:** Canonical plan for the first public LOADOUT page  
+
+**Policy follow-up:** Internal age policy is 13–18. The current public site still says 13–19; correcting the public copy remains pending and must be handled in a separately scoped public-copy pass. This internal plan update does not edit `content/docs/`.
+
 **Depends on:** `00`, `01`, `02`, `03`, `04`  
 **Primary source implementation:** Pixl `apps/landing`, redesigned for LOADOUT
 
@@ -507,7 +510,7 @@ Example aspirational items may include:
 - 3D printer
 - laptop / workstation upgrade where program-defined
 
-The homepage must not promise a specific item, stock state, price, or country availability unless that data comes from the actual reward configuration.
+Owner-approved draft prices and thresholds may appear only when clearly labelled provisional; unresolved values cannot be presented as final. Specific current items, stock state, country availability, ordering and fulfillment require confirmed reward configuration.
 
 CTA:
 
@@ -529,16 +532,16 @@ SAVE YOUR REQUISITIONS FOR THE GEAR THAT MATTERS.
 Show the canonical lifetime milestones:
 
 ```text
-LV.03   REQUISITION I
-LV.06   REQUISITION I
-LV.09   REQUISITION II
-LV.12   REQUISITION II
-LV.15   MASTER REQUISITION
+LV.03   FIELD REQUISITION
+LV.06   FIELD REQUISITION
+LV.09   FIELD REQUISITION
+LV.12   FIELD REQUISITION
+LV.15   FIELD REQUISITION
 ```
 
 Explain only the concept:
 
-> Requisitions are rare one-use progression rewards that let specialists push beyond normal discount limits on an eligible purchase.
+> Each Requisition is a one-use 20% discount on the base price of a matching prize priced at 400 Ore or more. It applies on top of the permanent track discount.
 
 Rules worth showing:
 
@@ -817,7 +820,7 @@ The public homepage is ready for the first release when:
 - global Ore is explained correctly
 - Requisitions are presented as scarce specialization rewards
 - Custom Orders are presented without promising unavailable fulfillment
-- no fake dates, prices, inventory, sponsors, testimonials, or RSVP URLs appear
+- no unconfirmed dates, live inventory, sponsors, testimonials, or RSVP URLs appear; draft prices or thresholds are clearly labelled provisional
 - Pixl engineering may remain underneath, but the public page does not visually read as Pixl
 - the industrial identity comes from color, typography, geometry, labels, and restrained pixel art
 - the page can be implemented with ordinary web components and CSS
@@ -831,6 +834,6 @@ The Era mechanic may be explained in one compact community-progression section; 
 
 ## 23. Mechanics clarity and future LOADOUT IRL section
 
-The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use way to realize more of an already-earned track discount past the normal cap; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
+The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use additional 20% discount on the base Ore price of a matching prize from 400 Ore, applied alongside the permanent track discount, with one Requisition per order and no separate Ore savings cap; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
 
 The user approved a separate **LOADOUT IRL // RUHR — Build the next Era** block after Community Eras and before the FAQ, clearly labelled as a future concept. Show no unconfirmed date, venue, registration, capacity, price, partner, sponsor, or event-specific progression claim. Keep visibility configurable. Plan 15 owns event facts and readiness; Plan 11 owns Era rules. The UI authorization covers concept copy, not event launch or backend mechanics.

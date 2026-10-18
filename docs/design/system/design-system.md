@@ -1,6 +1,6 @@
 # LOADOUT design system
 
-**Status:** Current visual authority for the homepage and the Docs. Verified against `apps/landing` on 2026-10-11. Product facts stay in the canonical plans; this file defines presentation only.
+**Status:** Current visual authority for the homepage and the Docs. Updated against `apps/landing` on 2026-10-18. Product facts stay in the canonical plans; this file defines presentation only.
 
 **Source of truth.** When this file and the code disagree, fix both in the same change:
 
@@ -20,7 +20,7 @@ LOADOUT looks like an industrial field manual for builders: an engineering-paper
 - Two themes from one switch. Dark graphite is the default; light is stone paper.
 - On the homepage the switch is the hidden checkbox `#theme`. On the Docs it is the shared `ThemeSwitch`. Both store the choice in `localStorage`.
 - Both themes must pass the same checks: contrast, focus and reduced motion.
-- Shared display preferences live in `app/_components/display-preferences.ts`. The normal appearance remains the default. A persistent Accessibility tab and footer links open a native settings dialog. The tab sits below the homepage navbar on the left, or at the lower left of Docs to keep navigation clear; `/accessibility` supplies a full-page fallback and support statement. Color-safe accents, plain typography, reading size, wider spacing, stronger contrast, system cursor, text-link underlines, Reduce motion, simplified decoration and native scrolling are optional and persist when storage is available. Grain offers Animated, Still and Off, migrating the former Hide grain choice. Reduced motion always respects the device; simplified decoration removes the grain canvas and mascot engine. Appearance, Reading and Effects share native switches and radio groups between the sticky-header dialog and the full accessibility page. Reset changes only display preferences. The shortcut follows the skip link in keyboard order, and the dialog closes with Escape, Close or a complete outside click, returning focus to its opener. The theme checkbox remains beside its visible navbar/sidebar label in keyboard order.
+- Shared display preferences live in `app/_components/display-preferences.ts`. The normal appearance remains the default. A persistent Accessibility tab and footer links open a native settings dialog. On desktop, the tab sits below the homepage navbar on the left or at the lower left of Docs. On phones, it retracts while scrolling down and returns at the top, on scroll-up or keyboard focus; the page does not reserve a left gutter for it. The homepage mobile menu and Docs Guides drawer also link to Accessibility. `/accessibility` supplies a full-page fallback and support statement. Color-vision palettes (Standard by default, Protanopia, Deuteranopia, Tritanopia and Achromatopsia), Phantom Sans typography (off by default), reading size up to 200%, wider spacing, larger controls, stronger contrast, system cursor, text-link underlines, Reduce motion, simplified decoration and native scrolling are optional and persist when storage is available. Grain offers Animated, Still and Off, migrating the former Hide grain choice. Reduced motion and the OS `prefers-contrast: more` setting are honored automatically; simplified decoration removes the grain canvas and mascot engine. Appearance, Reading and Effects use ruled native disclosures in the modal and on narrow screens. Above 820px the full accessibility page uses a vertical category rail and one labelled settings panel, with arrow-key, Home and End navigation. Its compact header aligns the title with Back; a help row and expandable accessibility statement sit below the settings. The color-vision selector and squared switches and radio controls are shared by the dialog and fallback page. Close stays in the fixed dialog header while the controls scroll. Reset changes only display preferences. The shortcut follows the skip link in keyboard order, and the dialog closes with Escape, Close or a complete outside click, returning focus to its opener. The theme checkbox remains beside its visible navbar/sidebar label in keyboard order.
 
 ## Colour
 
@@ -73,10 +73,12 @@ Track and process-card titles are semantic h3 headings with the existing `.cn` t
 | Rulers | DotGothic16 (`--font-dot`) | Ruler numbers (11px) |
 | ASCII art | JetBrains Mono (`--font-mono-art`) | ASCII fields, loaded through `next/font/google` |
 | Docs body | Poppins 400, 500 and 600 (`--font-poppins`) | The Docs only, loaded in `docs/layout.tsx` |
+| Optional readable mode | Phantom Sans | Loaded locally only when the visitor enables the font preference |
 
 Rules:
 
 - Pixel fonts are for signage: headings, buttons and the wordmark. IBM Plex Mono is for reading. Do not set two pixel fonts in one heading.
+- The optional Phantom Sans setting applies the readable and display font stacks to all site text and controls. The default font setting remains unchanged and ASCII illustration stays monospaced.
 - Homepage section headings are pixel, uppercase, 44px on desktop. Leads are 16px with a 1.65 line height, centred under the heading and no wider than 720px.
 - Essential body copy is 16px. Do not shrink it to fit.
 - Fonts are self-hosted, except JetBrains Mono and Poppins, which load through the framework, with `display: swap`.
@@ -163,6 +165,7 @@ Rules:
 
 - The browser suites run axe checks on the homepage and the Docs (`e2e/homepage.spec.ts` and `e2e/docs.spec.ts`). A new colour must pass them in both themes.
 - The real text is always in the page. Scrambled letters are decorative, and the heading keeps its real text as its accessible name while it runs.
+
 - Rulers, grain, ASCII art and decorative icons are `aria-hidden`.
 - Every control is reachable by keyboard and shows a visible focus state.
 

@@ -4,19 +4,19 @@
 
 ## Platform and audience
 
-LOADOUT is a technical-builder YSWS for high-school students aged 13 to 18. It is in development. Age verification, prize-delivery regions and operating dates remain open; the age range is approved for public copy.
+LOADOUT is a technical-builder YSWS for high-school students aged 13 to 18. This is the internal age policy. The current public site still says 13–19; correcting that copy remains pending and is outside this pass. LOADOUT is in development. Age verification, prize-delivery regions and operating dates remain open.
 
 ## Purpose and positioning
 
 LOADOUT focuses on technical work that expands capability for the builder or other builders. Its four tracks are Tools, Systems, Compute, and Hardware. Research Mode is a project modifier, not a fifth track. The intended progression connects shipped work to a Digital Loadout and planned rewards to a Physical Loadout.
 
-The four quality dimensions are Originality, Technical Depth, Execution, and Documentation. Ore is global spendable currency; Track XP records non-spendable progress by track. Plan 02's agreed table and rule-status matrix identify public rates, milestones, discounts, Requisitions and sample prices. Unselected XP equations, intermediate curves, reviewer operations and Custom Order values remain internal candidates.
+The four quality dimensions are Originality, Technical Depth, Execution, and Documentation. Ore is global spendable currency; Track XP records non-spendable progress by track. The current draft uses a 5×–20× peer-set multiplier; a 10× rating pays 10 Ore per approved hour before any planned Era bonus. Fifteen lifetime levels end at LV.15 with 3,500 XP, or about 350 solid-work hours in one track. Permanent track discounts reach 20%. Requisitions at LV.3/6/9/12/15 each provide one use of 20% off a matching prize's base price, for prizes from 400 Ore, on top of the level discount. Plan 02 owns the full status matrix. Exact XP equations, intermediate curves, reviewer operations, Era bonus stacking and Custom Order values remain open or candidate details.
 
 ## Current product boundary
 
 `apps/landing` is a public explanation of a program draft. It does not implement participant accounts, submissions, review, a live economy, orders, fulfillment, or events. The external RSVP destination expresses interest and does not establish enrollment or program acceptance.
 
-Do not claim program acceptance, dates, eligibility, sponsors, participation counts, reward stock, exact prices/discounts, or join/login destinations without confirmed evidence.
+Owner-approved draft prices and discounts may be shown only when clearly labelled provisional; unresolved values cannot be presented as final. Program acceptance, live eligibility, dates, sponsors, participation counts, stock, ordering, fulfillment, service availability and join/login destinations require confirmed evidence.
 
 ## Canonical sources
 

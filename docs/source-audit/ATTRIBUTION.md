@@ -24,6 +24,10 @@ Hack Club Stasis at `7a230ced9ad793f0ad4cda30a7d71c02a58da6b6` on `main` is a ha
 
 Before copying code, text, or assets from any reference without an identified license, establish a compatible license or explicit permission, preserve required notices, record the exact source SHA and paths, and update `source-bases.md` and `decisions.md`.
 
+## Phantom Sans WOFF2 provenance — 2026-10-18
+
+The accessibility follow-up includes `Regular.woff2`, `Bold.woff2` and `Italic.woff2`, copied from Pixl's live site at `https://pixl.hackclub.com/fonts/phantom-sans/`; the live Pixl page at `https://pixl.hackclub.com/` exposes a Phantom Sans font control. The files are served locally only when the optional preference is enabled. The pinned Pixl repository's MIT license is recorded above, but this record does not establish that the license covers these live WOFF2 assets. No separate permission for these font files is recorded in this repository. Preserve this distinction when attributing or reusing the font.
+
 ## Public Docs navigation audit — 2026-10-07
 
 Pixl at the recorded `8141b992e92e05583246fd914c63a101100f6fe4` MIT pin supplies navigation references in `apps/web-shell/app/docs/docs-shell.tsx`, `apps/web-shell/app/docs/docs.css`, `apps/web-shell/app/docs/[slug]/doc-toc.tsx`, `apps/web-shell/lib/docs.ts`, and `packages/docs-engine/src/markdown.ts`.

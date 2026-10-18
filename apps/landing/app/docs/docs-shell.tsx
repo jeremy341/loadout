@@ -1,6 +1,6 @@
 "use client";
 
-import { AccessibilityTab } from "../_components/Accessibility";
+import { AccessibilityLink, AccessibilityTab } from "../_components/Accessibility";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
@@ -73,6 +73,7 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
   useEffect(() => {
     if (!mobileOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
+      if (document.querySelector(".a11y-dialog[open]")) return;
       if (event.key === "Escape") {
         if (!event.defaultPrevented) setMobileOpen(false);
         return;
@@ -148,6 +149,7 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
             <div className="docs-group-items">{group.items.map((item) => <Link className={active === item.slug ? "section-link active" : "section-link"} href={`/docs/${item.slug}`} aria-current={active === item.slug ? "page" : undefined} key={item.slug} onClick={navigate}>{item.label}</Link>)}</div>
           </details>;
         })}
+        <AccessibilityLink className="section-link docs-accessibility-link" />
         <p className="docs-nav-note">Every guide is a draft reference while LOADOUT is in development.</p>
         </nav>
       </div>

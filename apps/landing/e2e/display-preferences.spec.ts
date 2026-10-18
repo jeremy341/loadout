@@ -243,7 +243,7 @@ for (const theme of ["dark", "light"] as const) {
         await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
         expect((await new AxeBuilder({ page }).withTags(tags).analyze()).violations).toEqual([]);
         if (route === "/accessibility") {
-          await expect(page.getByLabel("Color vision palette")).toHaveValue(profile);
+          await expect(page.locator(".a11y-page").getByLabel("Color vision palette")).toHaveValue(profile);
           continue;
         }
         if (route !== "/") continue;

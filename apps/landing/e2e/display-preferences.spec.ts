@@ -1,14 +1,21 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const tags = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 async function openSettings(page: Page) {
-  const opener = page.getByRole("link", { name: "Accessibility", exact: true });
+  const opener = page.getByRole("link", { name: "Open accessibility settings" });
   await opener.click();
   const dialog = page.getByRole("dialog", { name: "Accessibility settings" });
   await expect(dialog).toBeVisible();
   return { opener, dialog };
+}
+
+async function openSettingsGroup(dialog: Locator, title: string) {
+  const index = ["Appearance", "Reading", "Effects"].indexOf(title);
+  expect(index).toBeGreaterThanOrEqual(0);
+  const group = dialog.locator(".a11y-settings-group").nth(index);
+  if (await group.getAttribute("open") === null) await group.locator("summary").click();
 }
 
 test("footer settings contain keyboard focus and return it on Escape", async ({ page }) => {
@@ -65,6 +72,7 @@ test("display choices persist across reloads, Docs and error routes", async ({ p
   const { dialog } = await openSettings(page);
   await dialog.getByRole("checkbox", { name: /^Light mode/ }).check();
   await dialog.getByLabel("Color vision palette").selectOption("deuteranopia");
+  await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await page.keyboard.press("Escape");
 
@@ -76,6 +84,7 @@ test("display choices persist across reloads, Docs and error routes", async ({ p
     const settings = (await openSettings(page)).dialog;
     await expect(settings.getByRole("checkbox", { name: /^Light mode/ })).toBeChecked();
     await expect(settings.getByLabel("Color vision palette")).toHaveValue("deuteranopia");
+    await openSettingsGroup(settings, "Effects");
     await expect(settings.getByRole("checkbox", { name: /^Reduce motion/ })).toBeChecked();
     await settings.getByRole("button", { name: "Close", exact: true }).click();
   }
@@ -95,6 +104,7 @@ test("all preferences work when browser storage is blocked", async ({ page }) =>
   const { dialog } = await openSettings(page);
   await expect(dialog.getByRole("checkbox", { name: /^Light mode/ })).toBeChecked();
   await dialog.getByLabel("Color vision palette").selectOption("protanopia");
+  await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await page.keyboard.press("Escape");
   await expect(page.locator("html")).toHaveAttribute("data-color-vision", "protanopia");
@@ -107,13 +117,16 @@ test("expanded reading and display preferences persist, and reset returns them t
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
   const { dialog } = await openSettings(page);
+  await openSettingsGroup(dialog, "Reading");
   await dialog.getByRole("checkbox", { name: "Phantom Sans" }).check();
   await dialog.getByRole("radio", { name: "200%" }).check();
   await dialog.getByRole("checkbox", { name: "More text spacing" }).check();
+  await dialog.getByRole("checkbox", { name: "Underline links" }).check();
+  await openSettingsGroup(dialog, "Appearance");
   await dialog.getByRole("checkbox", { name: "Stronger contrast" }).check();
   await dialog.getByRole("checkbox", { name: "Use system cursor" }).check();
   await dialog.getByRole("checkbox", { name: "Larger controls" }).check();
-  await dialog.getByRole("checkbox", { name: "Underline links" }).check();
+  await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: "Native scrolling" }).check();
   await dialog.getByRole("checkbox", { name: "Simplify decoration" }).check();
   await dialog.getByRole("radio", { name: "Off" }).check();
@@ -143,6 +156,7 @@ test("changes synchronize to another open tab", async ({ page, context }) => {
   const { dialog } = await openSettings(page);
   await dialog.getByRole("checkbox", { name: /^Light mode/ }).check();
   await dialog.getByLabel("Color vision palette").selectOption("deuteranopia");
+  await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await expect(other.locator("#theme")).toBeChecked();
   await expect(other.locator("html")).toHaveAttribute("data-color-vision", "deuteranopia");
@@ -162,6 +176,7 @@ test("motion stays enabled by default and an explicit stop persists outside sett
   await expect(page.locator("html")).toHaveAttribute("data-grain", "animated");
   await expect(page.locator(".pb-track")).toHaveCSS("animation-name", "pb-scroll");
   const { dialog } = await openSettings(page);
+  await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
   await page.keyboard.press("Escape");
   await page.locator(".hero .h1").scrollIntoViewIfNeeded();
@@ -266,7 +281,7 @@ test("Accessibility links provide a real page when JavaScript is unavailable", a
   await page.goto(baseURL!);
   await page.getByRole("link", { name: "Accessibility", exact: true }).click();
   await expect(page).toHaveURL(/\/accessibility$/);
-  const statement = page.getByRole("button", { name: "Accessibility statement" });
+  const statement = page.locator(".a11y-statement > summary");
   await expect(statement).toBeVisible();
   await statement.click();
   await expect(page.getByText("We aim to make LOADOUT usable with keyboard navigation", { exact: false })).toBeVisible();

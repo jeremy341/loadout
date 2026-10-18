@@ -242,6 +242,7 @@ jobs:
           REF: ${{ github.ref }}
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           GH_TOKEN: ${{ github.token }}
         run: bash .github/scripts/verified-tree.sh
       - name: Add the one tool the Bun setup needs

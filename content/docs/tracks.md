@@ -1,34 +1,36 @@
 ---
 title: "Tracks"
-description: "Pick the fields that describe your technical work, not just your project's label."
+description: "Tools, Systems, Compute and Hardware: choose the tracks you actually build in."
 group: "START HERE"
 order: 40
 status: draft
 ---
 
-There are four tracks. Each is a field where your work can build up depth over time, and your progress in each one stays with you.
+Which track should you pick? Look at what you're actually building. Designing a board gives you Hardware work to show, and building a substantial service to collect its readings could add Systems work too. Tell us about both when you ship, so we can put your Track XP into the fields you've worked in.
 
 ## The four fields
 
-| Track | What you might build | What to show |
+| Track | You might build | What helps us understand it |
 | --- | --- | --- |
-| Tools | A command-line tool, debugger, profiler, SDK, test system or developer automation. | How it makes a builder's work easier. |
-| Systems | A runtime, a database component, a protocol, a deployment tool or a network service. | How it behaves, where it's limited and how reliable it is. |
-| Compute | A renderer, an inference engine, a GPU workload, numerical code or an optimization. | That it's correct, with measurements under stated conditions. |
-| Hardware | A PCB, an embedded device, part of a robot, an FPGA design or an instrument. | Why you designed it that way, and proof the physical result works. |
+| Tools | A CLI, debugger, profiler, SDK or test system. | The task it makes possible or easier, with a real example of using it. |
+| Systems | A runtime, database component, protocol, deployment tool or network service. | Its design and behavior, including what happens when something fails. |
+| Compute | A renderer, inference engine, GPU workload or numerical optimization. | Correctness checks, measurements and the conditions behind them. |
+| Hardware | A PCB, embedded device, robot component, FPGA design or instrument. | The design files, the choices you made and evidence of the device working. |
+
+Choosing a track doesn't lock you into it forever, either. You can work on a profiler for one project and a circuit for the next. Each track has its own level, so you'll keep the progress you made in the first while you try the second.
 
 ## One project, several tracks
 
-Choose a main field and explain any extra technical work. Reviewers decide the final Track XP split from the work they approve.
+Let's use that sensor board and service as an example. The circuit and bench measurements explain your Hardware work. The service's storage design and failure tests show the Systems work. Including both gives reviewers a way to understand how much you contributed in each field.
 
-Say a device has firmware, electronics and a profiling tool. That doesn't mean every team member gets the same split, and the same work can't earn several full awards.
+Reviewers use that evidence to split **one Track XP award** between the relevant tracks. Adding a second track doesn't duplicate the award. On a team, the split follows each person's contribution, so the board designer's progress may look different from the service developer's.
 
 ## Why pick a track?
 
-Track XP builds lasting progress in the fields you actually show. Higher levels in a field can lower prices on related prizes, and open some specialist prizes and Custom Order tiers.
+As you keep building in a track, its XP adds up and your level rises. That's useful when you want equipment for the next build: higher levels give you permanent discounts on related gear and can meet the requirements for specialist prizes or Custom Orders. The [progress guide](/docs/progress#levels) walks through those milestones.
 
-[Ore, XP & levels](/docs/progress) explains how levels differ from Ore. [Pricing](/docs/pricing) explains how your specialty affects a purchase.
+You can still buy most prizes outside your specialty with the Ore you've earned. The item's related tracks determine which discount applies; [Pricing](/docs/pricing) walks through that calculation.
 
 ## Research is a mode
 
-Research Mode can go with any of the four tracks. It isn't a fifth track, and it doesn't replace normal review.
+[Research Mode](/docs/research) fits inside the four tracks. Comparing two renderers is Compute research; measuring a circuit is Hardware research. The question changes what you ship, while the technical field stays the same.

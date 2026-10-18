@@ -1,50 +1,49 @@
 ---
 title: "Project types"
-description: "What a ship looks like for software, hardware, web, mobile and games."
+description: "The files and demos to include for software, hardware, web apps, mobile apps and games."
 group: "BUILD & REVIEW"
 order: 63
 status: draft
 ---
 
-Every project has the same shipping checklist, but each kind of project has its own proof. Start with the one that fits yours.
+The files and demo we need depend on what you've made. We can open a web app through a URL, but a circuit needs a demonstration of the actual device. Find the sections that fit your build below, then use the [shipping checklist](/docs/shipping#checklist) to bring everything together.
 
 ## Software {#software}
 
-Before you ship software, check that you can answer yes to each of these.
+For software, the first question is whether someone else can run it. Follow your README from a clean checkout before shipping and see how far you get. That's often when you find the package you installed globally months ago and forgot anyone else would need.
 
-- **Source:** Is the code in a repository someone can open, with a clear license?
-- **Run it:** Can a stranger run it from a clean checkout using only your README? List the versions that matter (language, runtime, OS).
-- **Show it:** Is there a short demo, a recording, a terminal session or a screenshot of real output?
-- **Prove it:** Do tests, benchmarks or measurements back up the claim you are making? A nice screenshot alone does not show that a runtime, a tool or an algorithm works.
-- **Limits:** Does the README say what does not work yet?
-- **Your part:** Is it clear which code is yours, which came from a library and which came from a tutorial or an AI tool?
+- Include source we can open, with a clear license and the setup commands.
+- Name the runtime, language and operating-system versions that affect the build.
+- Show the main behavior through a demo, release, terminal session or reproducible output.
+- Include checks that support your claims, and explain the inputs and conditions for any measurements.
+- Credit dependencies and help, and describe the parts you haven't tested.
+
+Building a library or a CLI? You don't need to add an app interface just to show it off. Give us a small example we can run and the output we should expect. If the point is to make something faster, check that the output is still correct before comparing the timings.
 
 ## Hardware {#hardware}
 
-For hardware, check these.
+For hardware, help us follow the design through to the device you built. A render can explain how an enclosure fits together, but we'll also need to see the real circuit or mechanism doing its job. Here's what helps us check both:
 
-- **Design files:** Schematic, board layout, CAD or enclosure files, in their source format and as a viewable export.
-- **Firmware:** The code that runs on the device, with how to build and flash it.
-- **Parts list:** Every part, with the quantity and where you got it. Mark anything you designed yourself and anything you bought ready-made.
-- **Photos:** The real device, not only a render. Show it powered and doing something.
-- **Demo:** A short video or log of it working, ideally with the numbers it measures or the thing it controls.
-- **Tests:** What you checked and how. A bench measurement against a known reference counts. So does an honest "it failed here".
-- **Limits:** Say what is simulated, what is unfinished and what you haven't tested. Do not present those as a working physical result.
+| Include | Make sure it shows |
+| --- | --- |
+| Original schematics, layouts, CAD and viewable exports | What you designed and how the parts fit together. |
+| Firmware and flashing instructions | What runs on the device and how to build it. |
+| A parts list with quantities and sources | Custom parts, bought modules and the materials needed to reproduce it. |
+| Photos and a working demonstration | The real assembly, its connections and its output. |
+| Tests or measurements | What you checked, under which conditions and what happened. |
+
+If you fixed a board with a jumper wire, show the fix and update the design files to match. Someone building the published version shouldn't have to rediscover the same fault. Say clearly which parts are simulated, unfinished or untested.
 
 ## Web apps {#web}
 
-- **Demo:** a link anyone can open, not only you on your own machine.
-- **Run it:** the README lists the versions you need, and a stranger can start it from a clean copy.
-- **Show what you built:** a short recording of the main use, plus a note on what you wrote and what came from a library.
+Give us a deployed URL, the source and the setup instructions. A recording of the main feature helps explain what to try, especially when the interesting work happens behind the interface.
+
+Point reviewers to that work. If you wrote offline synchronization, demonstrate losing the connection and reconnecting, rather than only showing the sign-in page.
 
 ## Mobile apps {#mobile}
 
-- **Demo:** a recording of the app on a real phone, or a test build someone can install.
-- **Run it:** the README says which platform and tools you used.
-- **Show what you built:** the screens you designed and the parts that hold data or talk to a server.
+Include a recording on a real phone or a test build somebody can install, along with the platform and build tools. Explain the implementation behind the screens too: storage, device APIs, networking or whichever parts took substantial work.
 
 ## Games {#games}
 
-- **Demo:** a playable build, or a video of the game running from start to finish.
-- **Run it:** the README covers the engine version and any assets you did not make.
-- **Show what you built:** your scripts, levels or systems, and which art and music came from elsewhere, with its licence.
+Provide a playable build or a video that demonstrates the version you're shipping. List the engine version so someone can open the source, and credit art, music and other assets with their licenses. Then point out your own systems, scripts or levels so reviewers can follow your contribution.

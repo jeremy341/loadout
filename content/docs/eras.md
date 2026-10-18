@@ -1,75 +1,45 @@
 ---
 title: "Community Eras"
-description: "How shared technical themes, the 10% Era bonus and community progress fit together."
+description: "Build around a shared theme, earn the Era bonus, and help move the community forward."
 group: "COMMUNITY"
 order: 150
 status: draft
 ---
 
-An Era is a technical theme the whole community works on together. Approved projects move it forward. It is not a new track, a currency or a rank.
+An Era gives the community a shared technical theme. You can build something around it, help move the shared progress forward and earn an Ore bonus ,if your project meets one of its objectives. If you're already working on something else, you can carry on with the usual review and rewards though you will miss out on your 10% ore bonus.
 
 ## What an Era is {#shared}
 
-Each Era has a theme, for example measuring and controlling the physical world. It also comes with a handful of optional objectives. These are technical challenges you can answer in any of the four tracks.
+The same theme can lead to very different projects. For a theme about the physical world, one builder might design a sensor board while another writes a service that collects readings or a tool to visualize them. Each is working in their own track, with a reason to compare ideas and help the others.
 
-When a project is approved, it adds Era Points to one shared total. You can't buy, send or spend Era Points. They measure how far the community has come, not how much you own.
-
-Objectives are only inspiration. A project that doesn't match the theme counts like any other, as long as it passes normal review.
+Approved projects add **Era Points** to a community total. That total moves everyone toward the next theme. The points belong to shared progress, you can't spend them in the shop though you will still benefit from the community's overall progress.
 
 ## Does my project qualify? {#qualify}
 
-1. Build and ship it like any project.
-2. When you submit, you can ask for an Era check if your work answers one of the objectives.
-3. A reviewer decides yes or no, with a short reason. This is a separate decision from your normal review.
+Ask for an Era check when you submit and point to the objective your work meets. A reviewer checks that claim separately from the normal quality assessment and records a short reason.
 
-A "no" never changes your normal result. A project can be valid and still not match the theme.
+For an illustrative theme about electricity, the objectives might include measuring physical data, controlling a device, automating a process or improving efficiency. Those are examples of how a theme could work, rather than an announced set of challenges.
 
-For an Era about electricity, the objectives might look like this:
-
-| Objective | A project that answers it |
-| --- | --- |
-| Measure | Collects or visualizes physical data. |
-| Control | Builds electronic control of something. |
-| Automate | Automates a physical or computing process. |
-| Optimize | Improves efficiency or performance. |
-
-These are examples, not a list of what will be offered, and matching one does not guarantee a yes.
+The project needs to meet the actual objective, not just mention the theme in its description. If it doesn't qualify, that won't lower its normal review result.
 
 ## The Era bonus {#bonus}
 
-A project that qualifies earns 10% extra Ore on top of its approved base award.
+A qualifying project earns **10% extra Ore** on its base award. If its approved hours and multiplier earn 720 Ore, the bonus adds 72, for a total of 792 Ore.
 
-For example, a 720-Ore base award gets a 72-Ore bonus, making 792 Ore in total. This illustrates the 10% calculation; your actual base award comes from [approved hours and your project's rating](/docs/progress#work).
-
-There is no bonus to Track XP, and Era relevance is not a fifth quality score. Originality, Technical Depth, Execution and Documentation are judged the same way as ever. How the bonus combines with other Ore multipliers is still being worked out.
+This doesn't add Track XP or change the quality dimensions. Its effect is on the Ore payout after the base award is calculated. How it would combine with future Ore bonuses remains undecided but we will soon open a vote for the community so be ready for the results.
 
 ## How the community moves on {#advance}
 
-The order is **approved projects → shared Era Points → target and minimum duration met → next Era at a weekly reset**.
+The Era needs to reach its points target and run for a minimum time. Meeting only one of those conditions doesn't end it: hitting the target early still leaves time for people to build, and reaching the minimum time doesn't skip an unfinished community goal.
 
-Every Era has a minimum duration. If the community reaches the target early, the Era shows as ready to advance and waits for the next eligible weekly reset. If the target isn't met by then, the Era keeps going.
-
-Themes, point rules and targets aren't published yet, so this site doesn't show an active Era or a progress bar.
+Once both are met, the next Era begins at an eligible weekly reset. Themes, targets and point rules haven't been published yet, which is why this site doesn't show an active progress meter.
 
 ## Eras and your own levels {#xp}
 
-Your personal progress and the community's progress are separate.
-
-| What | Whose it is | What it does |
-| --- | --- | --- |
-| Track XP | Yours, for life | Raises your level in a track and your discount on prizes. |
-| Ore | Yours | The currency you spend on prizes. |
-| Era Points | The community's, shared | Moves the Era forward. You can't spend them, and they don't change your level. |
-| Era bonus | Yours, for a qualifying project | Extra Ore on that project. |
-
-An Era changing never resets your Ore, your Track XP or your shipped work.
+When the theme changes, you keep your Ore, Track XP, levels and accepted projects. You can follow the new objective or continue the project you were already building. [Ore, XP & levels](/docs/progress) explains that lifetime progress.
 
 ## Seasons are different {#seasons}
 
-| Layer | Purpose |
-| --- | --- |
-| Tracks | Your lifetime technical progress. |
-| Eras | Shared technical themes and community advancement. |
-| Seasons | Competitive periods and rankings. |
+A Season defines a period for competitive rankings. An Era gives the community its shared theme. Your personal progress carries through both, so a new ranking period or theme won't reset the levels you've earned.
 
-Accepted projects and lifetime Track XP stay with you through both Era changes and Seasons. No sequence of named Eras and no launch dates are promised here.
+We haven't announced a sequence of named Eras or launch dates.

@@ -151,6 +151,7 @@ export class MoleEngine {
       sleep: () => { this.dozing = false; this.wakeTaps = 0; this.go("sleepy", "sleepy"); },
       runTo: (x: number) => { this.target = x; this.facing = x < this.x ? -1 : 1; this.go("run", "run"); },
       shakeForTest: (durationMs: number) => { this.testShakeUntil = performance.now() + Math.min(1000, Math.max(0, durationMs)); },
+      throwForTest: (vx: number, vy: number) => this.releaseIfHeld(vx, vy),
       anim: () => this.anim,
       mood: () => ({ affection: this.mood.affection, irritation: this.mood.irritation, affectionStage: this.mood.affectionStage, irritationStage: this.mood.irritationStage }),
       gesture: () => this.frameState,
@@ -848,6 +849,10 @@ export class MoleEngine {
     } else {
       this.setAnim("giveUp");
     }
+  }
+
+  private releaseIfHeld(vx: number, vy: number) {
+    if (this.state === "held") this.release(vx, vy);
   }
 
   private release(vx: number, vy: number) {

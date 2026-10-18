@@ -40,6 +40,7 @@ test("directory remembers groups and keeps the active group open", async ({ page
 });
 
 test("search loads lazily, links to real headings, and supports keyboard navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   const indexRequests: string[] = [];
   page.on("request", (request) => {
     if (request.url().includes("/docs/search-index.json")) indexRequests.push(request.url());
@@ -52,6 +53,8 @@ test("search loads lazily, links to real headings, and supports keyboard navigat
   await input.fill("track xp");
   const result = page.locator("#docs-search-result-0");
   await expect(result).toBeVisible();
+  await expect(result.locator("strong")).toHaveCount(1);
+  await expect(result.locator("span, small")).toHaveCount(0);
   await expect(result).toHaveAttribute("href", /\/docs\//);
   await input.press("ArrowDown");
   await expect(result).toBeFocused();
@@ -69,6 +72,21 @@ test("search loads lazily, links to real headings, and supports keyboard navigat
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(expectedUrl);
   await expect(page.getByRole("searchbox", { name: "Search documentation" })).toHaveValue("");
+});
+
+test("the mobile Docs top bar stays compact and leaves room for the Accessibility tab", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/docs/eligibility");
+  await expect(page.locator(".docs-nav")).toHaveCSS("padding-bottom", "10px");
+  const topBarHeight = await page.locator(".docs-nav").evaluate((element) => element.getBoundingClientRect().height);
+  expect(topBarHeight).toBeLessThan(80);
+  await expect(page.locator(".doc-header .eyebrow")).toBeInViewport();
+  await expect(page.getByRole("link", { name: "Open accessibility settings" })).toBeVisible();
+});
+
+test("Docs articles credit the LOADOUT team", async ({ page }) => {
+  await page.goto("/docs/start");
+  await expect(page.getByText("Built with Love by the LOADOUT team", { exact: false })).toBeVisible();
 });
 
 test("search errors offer retry without exposing internal documents", async ({ page }) => {

@@ -322,8 +322,7 @@ test("depth numerals are faint and light up under the pointer, like the footer w
   const label = page.locator(".pit > span").first();
   expect(await label.evaluate((el) => getComputedStyle(el).backgroundClip)).toContain("text");
   expect(await label.evaluate((el) => getComputedStyle(el).fontFamily)).toContain("display");
-  // The label has a plate in the page colour, so the hatching does not run through it.
-  expect(await label.evaluate((el) => getComputedStyle(el).backgroundClip)).toContain("border-box");
+  // Depth labels use the same clipped highlight treatment as the numerals, not a raised text plate.
   expect(parseFloat(await label.evaluate((el) => getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(14);
   // The hatched band is back, and it lights near the pointer like the numerals do.
   const marker = page.locator(".pit").first();
@@ -589,8 +588,8 @@ test("each track shows one example and a tag, and How it works shows one worked 
   await expect(cards.nth(3)).toContainText("robot");
   const process = page.locator("#process");
   await expect(process.locator(".we-calc")).toHaveCount(1);
-  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /20 hours at a rating of 10 earns 200 Ore/);
-  await expect(process).toContainText("Rated 15 instead, the same 20 hours pay 300 Ore.");
+  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /20 approved hours at a multiplier of ten earn 200 Ore/);
+  await expect(process).toContainText("At 15×, the same 20 approved hours pay 300 Ore.");
   // the example sits between the review outcomes and the spend step
   const order = await process.locator(".fl > *").evaluateAll((nodes) => nodes.map((n) => n.className + "|" + (n.textContent ?? "").slice(0, 24)));
   const calc = order.findIndex((entry) => entry.startsWith("we-calc"));

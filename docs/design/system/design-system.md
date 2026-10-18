@@ -20,6 +20,7 @@ LOADOUT looks like an industrial field manual for builders: an engineering-paper
 - Two themes from one switch. Dark graphite is the default; light is stone paper.
 - On the homepage the switch is the hidden checkbox `#theme`. On the Docs it is the shared `ThemeSwitch`. Both store the choice in `localStorage`.
 - Both themes must pass the same checks: contrast, focus and reduced motion.
+- Shared display preferences live in `app/_components/display-preferences.ts`. The normal appearance remains the default. A persistent Accessibility tab and footer links open a native settings dialog. The tab sits below the homepage navbar on the left, or at the lower left of Docs to keep navigation clear; `/accessibility` supplies a full-page fallback and support statement. Color-safe accents, plain typography, reading size, wider spacing, stronger contrast, system cursor, text-link underlines, Reduce motion, simplified decoration and native scrolling are optional and persist when storage is available. Grain offers Animated, Still and Off, migrating the former Hide grain choice. Reduced motion always respects the device; simplified decoration removes the grain canvas and mascot engine. Appearance, Reading and Effects share native switches and radio groups between the sticky-header dialog and the full accessibility page. Reset changes only display preferences. The shortcut follows the skip link in keyboard order, and the dialog closes with Escape, Close or a complete outside click, returning focus to its opener. The theme checkbox remains beside its visible navbar/sidebar label in keyboard order.
 
 ## Colour
 
@@ -61,6 +62,8 @@ The homepage and the Docs choose their accents differently in light mode, on pur
 
 ## Typography
 
+Track and process-card titles are semantic h3 headings with the existing `.cn` typography. `semantics.css` resets heading margins to match their former div layout; heading semantics must not change the visible design.
+
 | Role | Font | Where |
 | --- | --- | --- |
 | Wordmark | Jersey 10 (`--font-display`) | The LOADOUT logo text, the nav logo (36px) and the Docs brand |
@@ -94,11 +97,12 @@ Rules:
 - Cards lift on hover. On narrower layouts the hover adds a 4px offset shadow. Do not use blurred elevation.
 - Primary homepage buttons are at least 52px tall, with 36px side padding, uppercase text and 0.1em letter spacing.
 - Touch targets are at least 44px for primary controls.
+- At normal text settings, the phone navbar keeps the full logo, menu, theme chooser and RSVP on one row across 320–430px phone widths. It uses an 8px outer inset and compact horizontal spacing; the wordmark scales from 26px at 320px to 31px at 390px. Controls remain at least 44px tall. Increased text size or spacing can reflow the bar, and the hero reserves space based on its measured height.
 - Focus is a visible `:focus-visible` outline in the accent colour, offset 2 to 3px. Never remove it.
 
 ## Depth markers and rulers
 
-- A depth marker divides two sections: two dashed rules over a hatched band, with the depth numeral on the left (for example "−300 M") and a label on the right in Jersey 10, the wordmark face, set on a plate in the page colour so the hatching never runs through it (for example "1. SOHLE / LEVELS & REWARDS", 32px on desktop, down to 20px on tablets and 16px on phones).
+- A depth marker divides two sections: two dashed rules over a hatched band, with the depth numeral on the left (for example "−300 M") and a label on the right in Jersey 10, the wordmark face (for example "1. SOHLE / LEVELS & REWARDS", up to 44px on desktop, down to 28px on tablets and 20px on phones). Both the numeral and label use text-clipped backgrounds, leaving the hatching visible behind them without a solid plate.
 - The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 3% of the text colour. Within 150px of the pointer they light to the glow colour: blue in dark mode at 60%, amber-red `#D9661F` in light mode at 85%, for the deepest marker. Deeper markers light more strongly: `DepthGlow` sets `--depth-light` on each marker from its numeral, from 40% of that strength at the shallowest to 100% at the deepest. The glow runs only on devices with a fine pointer (`hover: hover` and `pointer: fine`); touch screens see the faint marker only. The rules are `DepthGlow` and the `.home .pit` rules in `home.css`.
 - The top ruler is in pixels: a tick every 32px and a number every 160px.
 - The left ruler is in metres: a tick every 10 m, a number every 50 m, and a heavier mark at each depth strip. Markers are pinned to those strips.
@@ -153,6 +157,7 @@ Rules:
 - The hero facts scramble on hover.
 - The navigation hides on scroll down and returns on scroll up. Smooth scrolling stays under the user's control.
 - Under `prefers-reduced-motion: reduce`, entrances, reveals, scrambles, the ASCII drift, nudges and smooth scrolling all stop. Content stays fully usable.
+- The explicit Reduce motion setting also stops those effects and the prize belt while the user continues using the page. Device reduced motion is always respected. With both preferences off, the existing effects continue unchanged.
 
 ## Accessibility
 

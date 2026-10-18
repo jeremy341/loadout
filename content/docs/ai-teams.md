@@ -1,37 +1,37 @@
 ---
 title: "AI & team contributions"
-description: "Make clear who did what, and what help you had."
+description: "AI, libraries and teammates are allowed. Tell us who did what."
 group: "BUILD & REVIEW"
 order: 90
 status: draft
 ---
 
-LOADOUT is meant to work for people using AI and people working in teams, while crediting what each builder actually contributes.
+Most projects involve somebody else's work: a library, a tutorial, a teammate or an AI assistant. Tell us how that help fits into your build so the reviewer can see what you contributed and check the parts you're claiming.
 
 ## AI help
 
-AI help is allowed. Say where you used it, and explain the work, the decisions and the checks that you understand and did yourself.
+AI help is allowed. Though you need to provide context and explanation. Explain what it helped with and what you did with the output. “Used AI” doesn't tell us whether it suggested a variable name or wrote the first version of a parser.
 
-There is no published numerical AI limit. Reviewers need to see your own contribution and the checks you made; a percentage from an older plan or another program isn't a LOADOUT rule.
+Lets use the parser as an example, a useful disclosure might be: “An assistant drafted the command parser. I changed the error handling, added input-length checks and tested malformed commands against the device.” That gives the reviewer specific work to inspect and he can verify if the usage of AI in this case is appropriate. Also whenever you use AI, you should be able to explain the result you're shipping though this should be obvious as you dont learn without understanding.
+
+As for a ai percentage limit, we don't have one at the moment. Using AI doesn't automatically disqualify a project, ofthen times there are cases of greate projects where AI is used effectively and just because you used Ai these shouldnt be disqualified.
+
 
 ## Borrowed work and dependencies
 
-List your dependencies, reused code, tutorials, designs and other sources. Say what you changed or built beyond them, and follow their licenses and credit requirements.
+As for using any dependencies, try to credit the original authors of code, designs, libraries and tutorials, and follow their licenses. Though it isnt needed it would also be highly appreciated if you could provide a link to the original work in your README or journal. So the reviewer can see what you used and how it fits into your project. 
 
-Using a library isn't the same as writing it. Review looks at the technical contribution you can show.
 
-## Team projects
+## Can i build with a teammate?
 
-Each member keeps their own tracked work and journal. Describe who did what, and what proof backs each person's part.
+Yes, you can build together in the same repository. but each person keeps their own hours and journal, describing the contribution they made. 
 
-| On a team | For each person |
-| --- | --- |
-| One repository or device can hold everyone's work. | Each builder is credited for their own approved part. |
-| Members may work in different fields. | Their Track XP splits can differ. |
-| The result is shared. | The team's total hours aren't awarded to every member. |
+Suppose one person designs the board and another writes the firmware. They can submit work on the same device, with different evidence and Track XP splits. The board designer should show the circuit decisions and measurements; the firmware developer should explain the code and its tests. Neither person gets paid for the other's hours.
+
+When you work on the same task together, explain the collaboration. Describe who investigated, implemented or tested each part instead of claiming the whole implementation independently.
 
 ## What to say in a ship
 
-State your role, the work you did, the help you had and what you checked. Include a clear AI note where it applies.
+Put these notes alongside the relevant work in your submission and README. A reviewer should be able to follow a claim to its source and understand whose work they're opening.
 
-If roles overlap, explain how you worked together instead of claiming the same work twice. [Tracking & evidence](/docs/tracking) and [Project review](/docs/review) show how evidence and authorship fit together.
+Use [Tracking & evidence](/docs/tracking) for the records and [Project review](/docs/review) for how they are assessed.

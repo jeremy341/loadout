@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LOADOUT_HELP_URL, siteConfig } from "../../site-config";
+import { AccessibilityLink } from "../Accessibility";
 import { FooterWordmark } from "./FooterWordmark";
 import { Logo } from "./Logo";
 
@@ -83,6 +84,7 @@ export function SiteFooter() {
           Have an idea for the program?{" "}
           <a href={siteConfig.githubUrl}>Open an issue on GitHub</a>.
         </span>
+        <span><AccessibilityLink /></span>
       </div>
     </footer>
   );

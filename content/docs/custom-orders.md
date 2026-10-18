@@ -1,66 +1,42 @@
 ---
 title: "Custom Orders"
-description: "How to request equipment outside the shop, what the team checks, and what a quote includes."
+description: "Need gear that isn't in the shop? Tell us what you're after and what you'll use it for."
 group: "PROGRESS & PRIZES"
 order: 140
 status: draft
 ---
 
-Want equipment that isn't in the shop? A Custom Order lets you ask for it. Explain what you need and what you'll use it for, and the team checks whether it can source, fund and deliver it.
+Sometimes the shop won't have the equipment your next build needs. Though you would wish to get it, Custom Orders solve exactly that problem. It lets you ask for the by sending an item link, explainomg the technical use and showing how it would support you. If we can approve the request, we'll send an Ore quote price though be prepared for an uprise in pricefor you to accept or decline.
 
-## What you need to ask
+## Wha do I need to ask for a custom order?
 
-You need **approved work, the right track level or request tier, and enough Ore for the final quote**.
+You need **reviewed work, the level or request tier required for the item, and enough Ore for the quote**. Meeting those requirements lets you ask, but that doesn't guarantee approval. We're still deciding the level requirements, so you wont have to worry about that for now 
 
-Shipped, reviewed work builds Track XP and raises your level. [Ore, XP & levels](/docs/progress#levels) explains that progression. The level required for each kind of Custom Order is still being decided.
+Explain the job the item will do. If you want a machine for a home server, tell us what you'll run on it and which requirements your current setup can't meet. That gives the team a reason to consider that machine instead of treating every expensive device as interchangeable. Though do not worry to much our team will make sure to approve most items that are technically useful and meet the level requirements even if they provide a little less technical value ,).
 
-A Requisition can't get you past a level requirement.
+## From request to item
 
-## From request to quote
+1. **Describe the item and use.** Include a supplier link, the specifications that matter and the reason you want it.
+2. **Let us check it.** We look at the technical use, supplier, cost and whether we can deliver it to you or provide a grant.
+3. **Read the quote.** If approved, it should name the exact item, base Ore price, discounts, Requisition eligibility and delivery terms.
+4. **Accept or decline.** You need to meet the requirements and have enough Ore before accepting. Sending the request doesn't commit you to buying it.
 
-1. Explain the item, what it's for and how it relates to your projects.
-2. Add an item or supplier link and any specs that matter.
-3. The team checks that it fits the track, the budget, whether it's available and whether it can be delivered.
-4. If it can support it, the team sends you the final Ore quote and any conditions.
-5. You accept the quote, if you have enough Ore, or you decline it.
-
-A request isn't a purchase. Wait for the team's quote before treating a price as agreed.
+Wait for that quote before treating a price as agreed. A similar-looking model from another supplier can have a different total or different delivery terms.
 
 ## Example: a separate machine for your home server {#example}
 
-You've built a home server and want a small, low-power PC so it can run without tying up your everyday computer. The model you want isn't in the shop.
+You've built a Systems project on your everyday computer, but you'd like to leave the services running when that computer is off. You find a low-power mini PC that isn't in the shop.
 
-Here's what you would include:
+Send its model, RAM, storage and ports alongside a link to your reviewed project and your Systems level. Explain the memory your services need and why an available shop item won't suit the job. Include your country so the team can check a supplier that actually delivers there.
 
-| Part of the request | What you would send |
-| --- | --- |
-| Item | A supplier link, the model, and the RAM, storage and ports you need. |
-| Relevant track | Systems, with a link to your reviewed home-server project. |
-| Your level | Your current Systems level, so the team can check it against the request's requirements. |
-| Why this machine | What you plan to run, how much memory it needs, and why the listed shop equipment doesn't suit it. |
-| Delivery | Your country and any sourcing restrictions that affect the request. |
-
-The team checks your progress, the item's purpose, cost and availability. If it can support the request, the quote states:
-
-- The approved item and its base Ore price.
-- The track level required and the level discount that applies.
-- Whether a Systems Requisition is eligible and what it would save.
-- The final Ore total and any delivery conditions.
-
-You can accept if you meet the requirements and have enough Ore, or decline. This example describes the request process; it doesn't set a price or a level requirement for mini PCs. [Pricing](/docs/pricing#an-example) shows how an eligible discount is calculated.
-
-## What the team looks at
-
-A good request ties the item to a real build or a technical need you can show. The team also has to check that it can source, pay for and deliver the thing.
-
-Meeting the level requirement lets you request an item. The team still needs to approve its cost and delivery.
+If the request is approved, the quote shows what that particular machine costs after any Systems discount. It also says whether a matching Requisition can apply. [Pricing](/docs/pricing#an-example) shows the calculation; this example doesn't establish a mini-PC price or a required level.
 
 ## Requisitions and changes
 
-A Requisition applies only if the final approved quote says it's eligible. The usual rules still hold: it has to match the field, meet the minimum value, and be the only one on the order.
+A Requisition only applies if the quote says it is eligible, meets the minimum base price and matches the track. It won't bypass the item's level requirement, and you can use only one on an order so dont try to cheat the system ok?.
 
-If the specs or the supplier change, get a new quote before you treat the earlier one as final.
+If the supplier or specifications change, ask for an updated quote before accepting. Keep the version you accept so the agreed item, price and terms are in one place. Also notiify the team of any discounts so we can keep them in mind
 
 ## Before you request {#current-status}
 
-Check [program status](/docs/eligibility#where-things-stand) for request availability and the remaining tier and delivery decisions. Keep the approved quote: it records the item, requirements, final price and conditions you're accepting.
+Check [program status](/docs/eligibility#where-things-stand) for availability and the remaining level and delivery decisions. Ordering hasn't opened yet.

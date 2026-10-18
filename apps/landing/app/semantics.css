@@ -1,0 +1,4 @@
+/* Keep native heading semantics without changing the existing card title layout. */
+.home h3.cn {
+  margin: 0;
+}

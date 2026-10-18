@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "../grain.css";
+import { useDisplayPreferences } from "./display-preferences";
 import { useMotionPreference } from "./motion-preference";
 
 const TILE = 512; // px, the noise tile that is shifted around
@@ -69,7 +70,11 @@ function startGrain(canvas: HTMLCanvasElement, paused: boolean) {
 // which looks the same and costs almost nothing. It never takes pointer input.
 export function NoiseGrain() {
   const { paused } = useMotionPreference();
+  const { grain, simplifyDecoration } = useDisplayPreferences();
+  const hideGrain = grain === "off" || simplifyDecoration;
+  const still = paused || grain === "still";
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => (canvasRef.current ? startGrain(canvasRef.current, paused) : undefined), [paused]);
+  useEffect(() => (!hideGrain && canvasRef.current ? startGrain(canvasRef.current, still) : undefined), [still, hideGrain]);
+  if (hideGrain) return null;
   return <canvas ref={canvasRef} className="grain" aria-hidden="true" role="presentation" />;
 }

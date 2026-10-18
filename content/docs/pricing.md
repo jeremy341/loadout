@@ -1,25 +1,25 @@
 ---
 title: "Pricing"
-description: "How your levels and a Requisition reduce a prize's Ore price, with a worked example."
+description: "Work out what your level and a Requisition save on one purchase."
 group: "PROGRESS & PRIZES"
 order: 120
 status: draft
 ---
 
-Every prize has a price in Ore. Your progress in its track reduces that price. That doesn't change how much Ore a project earns.
+Why might someone else pay less Ore for the same item? Their level in its track might be higher. Your track level gives you a permanent discount, and a matching Requisition can take another 20% off the base price. Here's how those savings work together.
 
 ## How a price is worked out
 
-1. Every item has a **base price** in Ore and a track it relates to.
-2. Your **level** in that track takes a percentage off the base price: up to 20% at level 15.
-3. A matching [Requisition](/docs/requisitions) takes **another 20%** of the base price off one item.
-4. You see the final price in Ore before you order, and you pay that.
+1. Find the **base Ore price** on the item.
+2. Subtract your **related track discount**, which rises to 20% at LV.15.
+3. For an eligible purchase, subtract **another 20% of the base price** if you use a matching [Requisition](/docs/requisitions).
+4. Check the final total and the order terms before confirming.
 
-Both discounts are a share of the **base price**, so they add up, and there's no cap in Ore. The most anyone can save on one item is 40%.
+Notice that both discounts use the original price. So if your level saves 20% and you use a 20% Requisition, you save **40% of the base price** altogether. We don't take the second 20% from the smaller subtotal, and there's no Ore cap on how much the ticket can save.
 
 ## An example
 
-A prize with a base price of 1,000 Ore, bought at level 15 with a Requisition:
+Let's say you've reached LV.15 in a track and you're saving for a matching item listed at 1,000 Ore. Your level takes 200 Ore off, so you'd normally pay 800. But you also have a Requisition saved up. Using it takes another 200 off that same base price:
 
 | Line | Ore |
 | --- | --- |
@@ -28,16 +28,16 @@ A prize with a base price of 1,000 Ore, bought at level 15 with a Requisition:
 | Requisition (20%) | −200 |
 | **You pay** | **600** |
 
-A Requisition only works on prizes of 400 Ore or more, so small prizes just get your level discount.
+Without the ticket, you'd pay 800 and keep it for later. Requisitions only work on items with a **base price of at least 400 Ore**, so a smaller purchase can use your level discount while leaving the ticket untouched.
 
 ## When an item relates to two tracks
 
-You get the better of your two discounts, not both added together. That's how focusing on one track pays off: it takes about 350 hours to reach 20% in one track, and about twice that to reach it in two.
+What if an item belongs to both Systems and Hardware? Use whichever of your related tracks gives you the better discount. If that's Systems, we'll use your Systems level for the purchase. Having levels in both can be useful for other gear, but you can't add their two permanent discounts together on this item.
 
-## Buying outside your specialty
+## Can I buy outside my track? {#buying-outside-your-specialty}
 
-Most prizes are open to everyone, whichever track you work in. A discount can't unlock equipment that has its own level requirement, and a Requisition can't skip that requirement either.
+Yes. You can spend Ore earned in any track on most prizes, so earning it through Hardware doesn't stop you buying something for Compute. The difference is the discount: it comes from your level in the item's related track. Some specialist items also require a particular level, which you'll still need even if you have enough Ore or a Requisition.
 
 ## Still to be confirmed
 
-The prices on the [prize list](/docs/prizes) are the ones we're planning, not final. How tax and delivery are handled isn't decided. For something outside the catalog, the [Custom Order process](/docs/custom-orders) uses the final approved quote, not your first estimate.
+The intermediate level-discount percentages and the [working catalog prices](/docs/prizes) aren't a final launch price list. Tax and delivery terms also need to be settled. For equipment outside the shop, rely on the [Custom Order quote](/docs/custom-orders#from-request-to-item) we send you, which should show the item, price, discounts and delivery terms together.

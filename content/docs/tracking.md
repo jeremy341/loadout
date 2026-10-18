@@ -18,7 +18,7 @@ Recorded time is one piece of evidence. Your journal and your files explain what
 
 These can differ. A reviewer may need to ask you something, or may approve only the part of a submission that the evidence supports.
 
-Hackatime is planned for coding, and Lapse for hardware and other work that isn't code. The final tracking rules will come out before launch. This page isn't a setup guide, and neither tool is live yet.
+Use Hackatime to record coding and Lapse for eligible hardware and other non-code work. Your journal connects the recording to what you built. The LOADOUT account integrations are listed under [program status](/docs/eligibility#where-things-stand); that is separate from the availability of the tracking tools themselves.
 
 ## What a useful journal says
 

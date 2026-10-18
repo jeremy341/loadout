@@ -1,18 +1,18 @@
 ---
 title: "Custom Orders"
-description: "From your approved progress to a reviewed request and, if it works out, a final quote."
+description: "How to request equipment outside the shop, what the team checks, and what a quote includes."
 group: "PROGRESS & PRIZES"
 order: 140
 status: draft
 ---
 
-Custom Orders are planned for equipment or resources that aren't in the regular prize catalog. Tell us what you need for your technical work, and the team decides whether it can support the request.
+Want equipment that isn't in the shop? A Custom Order lets you ask for it. Explain what you need and what you'll use it for, and the team checks whether it can source, fund and deliver it.
 
 ## What you need to ask
 
 You need **approved work, the right track level or request tier, and enough Ore for the final quote**.
 
-Tracked hours alone don't open a request. Shipped, reviewed work builds Track XP, and that raises the level in the right track. The XP thresholds and the public request tiers aren't published yet.
+Shipped, reviewed work builds Track XP and raises your level. [Ore, XP & levels](/docs/progress#levels) explains that progression. The level required for each kind of Custom Order is still being decided.
 
 A Requisition can't get you past a level requirement.
 
@@ -24,13 +24,36 @@ A Requisition can't get you past a level requirement.
 4. If it can support it, the team sends you the final Ore quote and any conditions.
 5. You accept the quote, if you have enough Ore, or you decline it.
 
-A request isn't a purchase, and your estimate isn't the final price.
+A request isn't a purchase. Wait for the team's quote before treating a price as agreed.
+
+## Example: a separate machine for your home server {#example}
+
+You've built a home server and want a small, low-power PC so it can run without tying up your everyday computer. The model you want isn't in the shop.
+
+Here's what you would include:
+
+| Part of the request | What you would send |
+| --- | --- |
+| Item | A supplier link, the model, and the RAM, storage and ports you need. |
+| Relevant track | Systems, with a link to your reviewed home-server project. |
+| Your level | Your current Systems level, so the team can check it against the request's requirements. |
+| Why this machine | What you plan to run, how much memory it needs, and why the listed shop equipment doesn't suit it. |
+| Delivery | Your country and any sourcing restrictions that affect the request. |
+
+The team checks your progress, the item's purpose, cost and availability. If it can support the request, the quote states:
+
+- The approved item and its base Ore price.
+- The track level required and the level discount that applies.
+- Whether a Systems Requisition is eligible and what it would save.
+- The final Ore total and any delivery conditions.
+
+You can accept if you meet the requirements and have enough Ore, or decline. This example describes the request process; it doesn't set a price or a level requirement for mini PCs. [Pricing](/docs/pricing#an-example) shows how an eligible discount is calculated.
 
 ## What the team looks at
 
 A good request ties the item to a real build or a technical need you can show. The team also has to check that it can source, pay for and deliver the thing.
 
-Being allowed to ask doesn't mean a yes or that the item can be had. A level requirement and a budget decision answer different questions.
+Meeting the level requirement lets you request an item. The team still needs to approve its cost and delivery.
 
 ## Requisitions and changes
 
@@ -38,6 +61,6 @@ A Requisition applies only if the final approved quote says it's eligible. The u
 
 If the specs or the supplier change, get a new quote before you treat the earlier one as final.
 
-## Current status
+## Before you request {#current-status}
 
-> **Requests aren't open.** There's no live order form and no promise of delivery. The public tier rules, prices, delivery terms and cancellation steps will be confirmed before ordering starts.
+Check [program status](/docs/eligibility#where-things-stand) for request availability and the remaining tier and delivery decisions. Keep the approved quote: it records the item, requirements, final price and conditions you're accepting.

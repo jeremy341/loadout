@@ -285,8 +285,8 @@ Determine:
 - per-track reward balance
 - cross-track markups
 - permanent discount curve
-- expensive-item savings caps
-- Requisition I/II/Master values
+- full track and Requisition discounts, with no Ore savings cap and at most 40% combined saving
+- five identical 20% Field Requisitions at levels 3/6/9/12/15, minimum base price 400 Ore
 - General Requisition values
 - Mastery item list
 - Custom Order limits
@@ -310,7 +310,7 @@ Priority:
 - Ore
 - track level-up
 - one field-aware shop item
-- one capped discount
+- one purchase with permanent pricing plus one matching Requisition
 - one Requisition redemption flow
 
 ## Step 5 — Internal Test
@@ -391,7 +391,7 @@ Full launch only after the field economy is understandable and no single track i
 - savings prevented by normal caps
 - Requisitions earned / held / redeemed
 - Requisition redemption value
-- Master Requisition hoarding vs use
+- Field Requisition saving versus use across the five lifetime milestones
 - General Requisition issuance
 - Custom Order demand
 - spend by capability category

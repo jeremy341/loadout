@@ -3,13 +3,14 @@
 // Scroll reveal ported from main (cd1834a): fades and slides a section up once it is in view, and
 // can stagger the cards inside it. Content stays visible until hydration, and with reduced motion.
 
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useMotionPreference } from "../motion-preference";
 import { useEffect, useRef, useState } from "react";
 
 export default function Reveal({ children, className = "", delay = 0, stagger = false }: { children: React.ReactNode; className?: string; delay?: number; stagger?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -48px 0px" });
-  const reduceMotion = useReducedMotion();
+  const { paused: reduceMotion } = useMotionPreference();
   const [ready, setReady] = useState(false);
   useEffect(() => {
     const frame = requestAnimationFrame(() => setReady(true));

@@ -29,10 +29,10 @@ test("each of the eight prizes shows a photo that stays on its plate", async ({ 
   }
 });
 
-test("every prize has a category and an example name, and none can be ordered yet", async ({ page }) => {
+test("every prize has a category and an example name, and the prices are examples", async ({ page }) => {
   await page.goto("/");
   const section = page.locator("#shop");
-  await expect(section).toContainText("None are available to order yet");
+  await expect(section).toContainText("Examples of what Ore could buy");
   for (const text of ["Developer hardware", "Framework 16 laptop", "Embedded boards", "ESP32 starter kit", "Compute", "Raspberry Pi 5", "Tools", "Soldering iron kit", "Storage", "Samsung T7 SSD", "Fabrication", "Bambu Lab A1 Mini 3D printer", "Domains", "Custom equipment"]) {
     await expect(section.locator(".pb-half").first()).toContainText(text);
   }

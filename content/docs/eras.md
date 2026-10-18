@@ -1,6 +1,6 @@
 ---
 title: "Community Eras"
-description: "How shared technical themes, the planned Era bonus and community progress work, and how they differ from your own levels."
+description: "How shared technical themes, the 10% Era bonus and community progress fit together."
 group: "COMMUNITY"
 order: 150
 status: draft
@@ -35,19 +35,19 @@ For an Era about electricity, the objectives might look like this:
 
 These are examples, not a list of what will be offered, and matching one does not guarantee a yes.
 
-## The planned Era bonus {#bonus}
+## The Era bonus {#bonus}
 
-A project that qualifies is planned to get 10% extra Ore on top of its approved base award.
+A project that qualifies earns 10% extra Ore on top of its approved base award.
 
-Here is the sum with made-up numbers: an approved base award of 720 Ore gets 72 Ore more, so 792 Ore in total. Real award sizes are not published.
+For example, a 720-Ore base award gets a 72-Ore bonus, making 792 Ore in total. This illustrates the 10% calculation; your actual base award comes from [approved hours and your project's rating](/docs/progress#work).
 
 There is no bonus to Track XP, and Era relevance is not a fifth quality score. Originality, Technical Depth, Execution and Documentation are judged the same way as ever. How the bonus combines with other Ore multipliers is still being worked out.
 
 ## How the community moves on {#advance}
 
-The planned order is **approved projects, then shared Era Points, then the target is met and the minimum time has passed, then the next Era starts at a weekly reset**.
+The order is **approved projects → shared Era Points → target and minimum duration met → next Era at a weekly reset**.
 
-Every Era is planned to last a minimum amount of time. If the community reaches the target early, the Era shows as ready to advance and waits for the next eligible weekly reset. If the target isn't met by then, the Era simply keeps going.
+Every Era has a minimum duration. If the community reaches the target early, the Era shows as ready to advance and waits for the next eligible weekly reset. If the target isn't met by then, the Era keeps going.
 
 Themes, point rules and targets aren't published yet, so this site doesn't show an active Era or a progress bar.
 

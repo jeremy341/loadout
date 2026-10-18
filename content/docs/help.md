@@ -6,7 +6,7 @@ order: 170
 status: draft
 ---
 
-Use **#loadout-help** for questions about the draft, whether a project fits, or anything on this site that isn't clear.
+Use **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)** for questions about LOADOUT, whether a project fits, or anything on this site that isn't clear.
 
 ## Asking about a project
 
@@ -26,9 +26,9 @@ Don't post tokens, passwords, private evidence or anyone else's contact details.
 
 ## Keeping up with changes
 
-The **#loadout-docs** feed posts documentation updates with links to the site. Questions still go in **#loadout-help**.
+The **#loadout-docs** feed posts documentation updates with links to the site. Questions still go in **[#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7)**.
 
-Read this page together with the topic it links to. A copied message or an old screenshot may not match the latest draft.
+Read this page together with the topic it links to. A copied message or an old screenshot may not match the current guide.
 
 ## What isn't there yet
 

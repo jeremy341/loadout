@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useMotionPreference } from "../motion-preference";
 
 const FALL_MS = 1800;
 
@@ -11,13 +12,16 @@ const label = (depth: number) => `−${depth} M`;
 // and data-landed is set at the end (rock-bottom.css fades the numeral back into the rock and gives it one thud).
 // It writes straight into the text node, so React never re-renders while it counts. Reduced motion lands at once.
 export function DepthNumeral({ depth }: { depth: number }) {
+  const { paused } = useMotionPreference();
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const element = ref.current;
     const text = element?.firstChild;
     if (!element || !text) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (paused) {
+      text.nodeValue = label(depth);
+      delete element.dataset.falling;
       element.dataset.landed = "";
       return;
     }
@@ -42,7 +46,7 @@ export function DepthNumeral({ depth }: { depth: number }) {
       text.nodeValue = label(depth);
       delete element.dataset.falling;
     };
-  }, [depth]);
+  }, [depth, paused]);
 
   return <b ref={ref} className="rb-num">{label(depth)}</b>;
 }

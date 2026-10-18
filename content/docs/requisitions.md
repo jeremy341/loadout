@@ -1,43 +1,48 @@
 ---
 title: "Field Requisitions"
-description: "A rare one-use ticket that stretches your savings on one order, without skipping any access rules."
+description: "A one-use ticket that takes another 20% off one prize, without skipping any access rules."
 group: "PROGRESS & PRIZES"
 order: 130
 status: draft
 ---
 
-A Field Requisition lets more of the discount you've already earned apply to one order. It isn't another currency.
+A Field Requisition is a ticket that takes another 20% off one prize. It isn't another currency.
 
 ## How you earn one
 
-You earn Requisitions at fixed levels in a track:
+You earn one Requisition each time you reach levels **3, 6, 9, 12 and 15** in a track. That's five per track, and they're all the same. [Ore, XP & levels](/docs/progress) explains how your work builds track progress.
 
-| Track level | Field Requisition |
+## What one does
+
+It takes **20% of the base price** off one prize. That comes on top of your level discount, which is also a share of the base price, so the two add up to at most 40%.
+
+| Line | A 1,000 Ore prize |
 | --- | --- |
-| LV.3 and LV.6 | Field Requisition I at each level. |
-| LV.9 and LV.12 | Field Requisition II at each level. |
-| LV.15 | Master Field Requisition. |
+| Level 15 discount (20%) | −200 |
+| Requisition (20%) | −200 |
+| **You pay** | **600 Ore** |
 
-They come from your lasting progress in that track. How much each one saves, and the minimum item value, aren't published yet.
+There's no limit in Ore on how much a Requisition saves. It only works on prizes of **400 Ore or more**, so you can't spend one on something small.
 
 ## Using one
 
-The planned steps are: **check that the item qualifies, apply your field price, pick one matching Requisition, look at the final price, confirm the order**.
+The steps are: **pick a prize, check that you have a Requisition for its track, look at the final price, confirm the order.**
 
-The item has to be in the right field and above the minimum value. For a Custom Order, the approved quote has to say it's Requisition-eligible.
+The prize has to relate to the Requisition's track. For a Custom Order, the approved quote has to say it's Requisition-eligible.
 
 ## The limits
 
-- One use, can't be transferred, never expires.
+- One use. It can't be transferred, and it never expires.
 - Only one Requisition on an order.
-- It doesn't add Ore and it isn't a permanent discount.
+- It doesn't add Ore, and it isn't a permanent discount.
 - It doesn't remove a level requirement.
 - It doesn't make an impossible request possible.
+- If the program cancels an order, you get the Requisition back.
 
-A Field Requisition belongs to its field. We also plan a few rare General Requisitions for exceptional community contributions, which can apply to any eligible field. How they're awarded isn't decided.
+We may add a few rare General Requisitions later for exceptional contributions to the community. Whether we will, and how they'd be awarded, isn't decided.
 
 ## Not a coupon
 
-You don't get a public code to share. A Requisition is a scarce ticket that you earn through progress and spend on one eligible purchase.
+You don't get a public code to share. A Requisition is a ticket you earn by building, and you spend it on one prize.
 
-Ordering and redeeming Requisitions aren't live yet. [Pricing](/docs/pricing) explains the savings cap, and [Custom Orders](/docs/custom-orders) explains requests.
+[Pricing](/docs/pricing) shows a full example, and [Custom Orders](/docs/custom-orders) explains requests.

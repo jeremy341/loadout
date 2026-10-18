@@ -3,12 +3,14 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Lenis from "lenis";
+import { useMotionPreference } from "./motion-preference";
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const { paused } = useMotionPreference();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname.startsWith("/docs")) return;
+    if (pathname.startsWith("/docs") || paused) return;
 
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     let lenis: Lenis | undefined;
@@ -38,7 +40,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       preference.removeEventListener("change", syncPreference);
       stop();
     };
-  }, [pathname]);
+  }, [pathname, paused]);
 
   return <>{children}</>;
 }

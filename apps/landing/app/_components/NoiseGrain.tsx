@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "../grain.css";
+import { useMotionPreference } from "./motion-preference";
 
 const TILE = 512; // px, the noise tile that is shifted around
 const INTERVAL = 100; // ms between two frames, as on Stasis
@@ -38,7 +39,7 @@ function drawGrain(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D,
 
 // Starts the grain on a canvas and returns the function that stops it. Visitors who ask for
 // reduced motion get a single still frame instead of a frame every 100ms.
-function startGrain(canvas: HTMLCanvasElement) {
+function startGrain(canvas: HTMLCanvasElement, paused: boolean) {
   const context = canvas.getContext("2d");
   const pattern = context && makeNoisePattern(context);
   if (!context || !pattern) return undefined;
@@ -51,7 +52,7 @@ function startGrain(canvas: HTMLCanvasElement) {
   };
   resize();
   window.addEventListener("resize", resize);
-  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const still = paused;
   const timer = still ? 0 : window.setInterval(() => {
     if (document.visibilityState === "visible") draw();
   }, INTERVAL);
@@ -67,7 +68,8 @@ function startGrain(canvas: HTMLCanvasElement) {
 // on each frame; here one noise tile is rolled once and laid down at a random offset each frame,
 // which looks the same and costs almost nothing. It never takes pointer input.
 export function NoiseGrain() {
+  const { paused } = useMotionPreference();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => (canvasRef.current ? startGrain(canvasRef.current) : undefined), []);
+  useEffect(() => (canvasRef.current ? startGrain(canvasRef.current, paused) : undefined), [paused]);
   return <canvas ref={canvasRef} className="grain" aria-hidden="true" role="presentation" />;
 }

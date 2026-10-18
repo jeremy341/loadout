@@ -2,9 +2,9 @@
 
 Repository: `jeremy341/loadout`, personal account. Treat this document as a live settings record only after comparing it with GitHub's branch-protection API.
 
-## Latest read-only check — 2026-10-10
+## Dated read-only observations
 
-GitHub returned these current branch heads and required status-check names:
+On 2026-10-10, GitHub returned these branch heads, protection flags, and required status-check names:
 
 | Branch | Commit | Protected | Required checks reported |
 |---|---|---:|---|
@@ -12,7 +12,7 @@ GitHub returned these current branch heads and required status-check names:
 | `testing` | `cdd23fea985619ffff1213734d82452d0d55d3fc` | Yes | Repository integrity, Landing quality, Landing browser, Promotion lane |
 | `main` | `cd1834a52249424ed135adb65c5f15bd6ef7d56b` | Yes | Repository integrity, Landing quality, Landing browser, Promotion lane |
 
-PR #32, merged into `development`, had successful Repository integrity, Landing quality, Promotion lane, and CodeScene checks. `Landing browser` was skipped on the development lane. The GitHub connector returned HTTP 403 when asked for the detailed branch-protection endpoint, so the approval, bypass, administrator, force-push, deletion, and freshness settings below are the last full settings snapshot from 2026-10-06—not freshly reconfirmed today. No settings were changed.
+PR #32, merged into `development`, had successful Repository integrity, Landing quality, Promotion lane, and CodeScene checks. `Landing browser` was skipped on the development lane. The detailed protection readback on 2026-10-11 is the latest full settings snapshot. On 2026-10-18, the GitHub connector returned HTTP 403 for the detailed branch-protection endpoint, so live enforcement could not be freshly verified. The workflow and ship script describe repository policy and expected check names; they do not prove that GitHub currently enforces them. No settings were changed during the October 18 read.
 
 ## Collaborators
 
@@ -24,20 +24,23 @@ GitHub's live collaborator API showed these accounts on 2026-10-06:
 | `fazin-ahamed` | write |
 | `NeticYTOF` | write |
 
-The development direct-push rule applies to both write collaborators and the owner. On a personal repository, GitHub cannot limit that branch rule to only a selected trusted maintainer.
+The 2026-10-06 settings record showed the development direct-push rule applying to both write collaborators and the owner. On a personal repository, GitHub cannot limit that branch rule to only a selected trusted maintainer.
 
-## Lane policy
+## Lane policy in the workflow
 
 ```text
 short-lived branch → PR → development → promotion PR → testing → promotion PR → main
 ```
 
-- `development`: feature PRs are the normal route. A direct push is allowed only for a commit whose SHA already has successful `Repository integrity`, `Landing quality` and `Promotion lane` statuses; a fresh unverified commit remains blocked by required status checks.
-- `testing`: PR required, only from `development`.
-- `main`: PR required, only from `testing`.
+- `development`: feature PRs from the supported short-lived branch prefixes are accepted by the workflow.
+- `testing`: promotion PRs from `development` are accepted by the workflow.
+- `main`: release PRs from `testing` are accepted by the workflow.
+
+The following settings are from the 2026-10-11 protection readback and have not been freshly verified:
+
 - Human approvals: zero required on every lane. No Jeremy-only, owner-only, CODEOWNER, latest-pusher, or other one-person rule.
-- Administrators are subject to rules. Do not add bypass actors. Force pushes and branch deletion stay disabled.
-- CodeScene and Codecov are not required GitHub branch checks; CodeScene feedback remains advisory. Copilot code review is not included.
+- Administrators were subject to rules. No bypass actors were present. Force pushes and branch deletion were disabled.
+- CodeScene and Codecov were not required GitHub branch checks; CodeScene feedback was advisory. Copilot code review was not included.
 
 ## Lane settings
 
@@ -47,15 +50,17 @@ Applied on 2026-10-11 (repository options):
 - `development` moved by fast-forward to `main`'s commit, then one squash commit for the docs update. No content changes on the lanes.
 - Co-author lines removed from all three lanes' history (same file tree on all three).
 
-### Recommended rules
+### Historical fast-forward recommendation (superseded)
+
+This proposal predates the current PR-based promotion path. Its testing recommendation and toggle are superseded by `scripts/ship.ps1` and the 2026-10-11 readback, both of which use a testing promotion PR. Do not use this table as current guidance or as a live settings report.
 
 | Branch | PR required | Force pushes | Required checks | Why |
 |---|---|---|---|---|
 | `development` | Yes, 0 approvals | Off | Repository integrity, Landing quality, Promotion lane | Every change arrives as a squash-merged PR, so the history stays one commit per change. |
-| `testing` | No | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | Promotion is a fast-forward push of a commit that already passed. No PR per batch. |
+| `testing` | No | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | Historical proposal: fast-forward a development commit without a PR. Superseded. |
 | `main` | Yes, 0 approvals | Off | Repository integrity, Landing quality, Landing browser, Promotion lane | One release PR per batch, merged with a merge commit, so main records each release. |
 
-### Current rules (read back on 2026-10-11)
+### Rules read back on 2026-10-11
 
 | Branch | PR required | Force pushes |
 |---|---|---|
@@ -63,27 +68,23 @@ Applied on 2026-10-11 (repository options):
 | `testing` | Yes | Off |
 | `main` | Yes | Off |
 
-### Owner toggles to reach the recommended rules
+### Historical owner toggles (superseded)
 
-1. **development:** Settings → Branches → development → tick "Require a pull request before merging" (0 approvals). Leave the required checks as they are.
-2. **testing:** Settings → Branches → testing → untick "Require a pull request before merging". Leave the required checks and keep force pushes off.
-3. **development (recommended, optional):** turn "Allow force pushes" off once no history rewrite is planned. Turn it on only for a rewrite, then off again.
+The earlier proposal suggested requiring a PR on `development`, removing the PR requirement on `testing`, and optionally disabling force pushes on `development`. These are historical instructions, not actions to take. In particular, removing the testing PR requirement conflicts with the current PR-based ship path and the 2026-10-11 readback. Refresh the live settings before considering any change; the October 18 read returned HTTP 403.
 
-Until toggle 2 is done, promotion to testing is a PR from development merged with a merge commit. Until toggle 1 is done, development accepts direct pushes of a commit that already passed.
+## Workflow check names and dated PR settings
 
-## Required GitHub Actions checks
-
-| Branch | Required status checks | PR rule |
+| Branch | Check names listed in the 2026-10-11 protection readback | PR setting read back on 2026-10-11 |
 |---|---|---|
 | `development` | `Repository integrity`, `Landing quality`, `Promotion lane` | Not required; permits checked direct pushes |
 | `testing` | `Repository integrity`, `Landing quality`, `Landing browser`, `Promotion lane` | Required; only `development` may promote |
 | `main` | `Repository integrity`, `Landing quality`, `Landing browser`, `Promotion lane` | Required; only `testing` may promote |
 
-CI runs on pull requests into the three lanes and on pushes to the three lanes; pushes to feature branches run no CI, because their pull request already does. `Landing browser` runs when the app changed and is required on testing and main; the development push run supplies that result. It runs as five jobs that start at the same time as `Landing quality` — one for each half of the Orry tests, and the rest of the suite sharded three ways — and one aggregator job reports them under the single name `Landing browser`, so the required status name does not change. A shard is skipped only when the tree under test is a lane commit that already has a successful recorded `Landing browser` check run ([the rule](../../.github/scripts/verified-tree.sh)): tree equality alone is not evidence, because a lane can receive a tree whose browser run failed or never ran. That is what stops a promotion merge commit from repeating a suite that has already passed. One retry absorbs a load-sensitive timing failure instead of making the whole suite run again. `Landing quality` runs lint, typecheck, and unit tests on development; testing and main also run the production build. `Promotion lane` validates the PR head/base pair and accepts only the three edges in the lane diagram; on ordinary branch pushes it is skipped, which GitHub accepts as a satisfied required status.
+CI runs on pull requests into the three lanes and on pushes to the three lanes; pushes to feature branches run no CI. The current workflow defines `Landing quality` and `Landing browser` on each lane event. Landing quality's lint, typecheck, unit, and production-build steps run whenever app-affecting files change. Browser coverage has five shard jobs and one stable `Landing browser` aggregator. The browser suite skips only when the exact source-lane commit has a recorded successful `Landing browser` check run ([the rule](../../.github/scripts/verified-tree.sh)); tree equality alone is insufficient. `Promotion lane` validates the PR source and target. These are workflow behaviors; the October 18 live protection settings could not be read.
 
-Required status checks come from GitHub Actions. `development` requires an up-to-date branch so feature PRs and checked direct updates build on the current integration lane. `testing` and `main` do not require source-branch freshness: each promotion is checked on GitHub's merge candidate, avoiding reverse-merges of lane merge commits, and the browser suite runs there only when that candidate's tree is not one a lane push has already passed. Required checks must pass before a lane merge.
+The 2026-10-11 protection readback showed required status checks sourced from GitHub Actions. It recorded `development` as requiring an up-to-date branch; `testing` and `main` did not require source-branch freshness. The workflow checks promotion candidates and avoids reverse-merges of lane merge commits. These historical settings require a fresh protection read before relying on them.
 
-## Live verification record
+## Historical verification record
 
 ### Verified before rollout on 2026-10-06
 
@@ -109,9 +110,17 @@ The `main` push checks passed, and Vercel reported a successful Production deplo
 
 GitHub returned no additional repository rulesets on 2026-10-06. There are no separate ruleset bypass actors overriding these branch protections.
 
+### Full settings readback on 2026-10-11
+
+The most recent full readback recorded the rules in the "Rules read back on 2026-10-11" table above. It is historical evidence and does not establish that the settings remain in force.
+
+### Attempted refresh on 2026-10-18
+
+The detailed branch-protection endpoint returned HTTP 403. Live enforcement, approvals, bypass actors, administrator enforcement, force-push/deletion settings, and freshness settings could not be confirmed. Lane heads observed that day were development `fc37ebe`, testing `8b6e747`, and main `2c642a9` (PRs #111–#113). Do not treat workflow configuration or those commit observations as proof of branch protection.
+
 ## Personal-account limitation
 
-GitHub personal repositories do not provide the organization-style branch rule that limits pushes to a selected set of collaborators. Allowing direct updates to `development` therefore applies to every collaborator with write access. The branch rule checks the commit's required statuses; it does not verify that the same commit was first pushed to a short-lived branch. Using a checked short-lived branch is the documented path. `testing` and `main` remain PR-only. If tighter identity-based push restrictions become necessary, document the GitHub limitation; do not create a temporary organization.
+GitHub personal repositories do not provide the organization-style branch rule that limits pushes to a selected set of collaborators. Allowing direct updates to `development` therefore applies to every collaborator with write access. The 2026-10-11 readback recorded `testing` and `main` as PR-required, but current enforcement could not be verified on 2026-10-18. If tighter identity-based push restrictions become necessary, document the GitHub limitation; do not create a temporary organization.
 
 ## Manual follow-up
 

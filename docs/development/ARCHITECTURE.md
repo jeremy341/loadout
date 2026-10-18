@@ -26,4 +26,4 @@ The Docs layout owns bounded sidebar, article and contents panes. Native scrolli
 
 main drives Vercel Production; temporary/development/testing branches produce previews. Existing GitHub Actions lane gates remain unchanged. Unit checks include Docs source/navigation/link/search tests. Browser checks exercise navigation, internal scrolling and accessibility.
 
-References are pinned submodules. Pixl layout/navigation concepts are adapted under its recorded MIT basis; Template/Stardance are reference-only. See [attribution](../source-audit/attribution.md).
+References are pinned submodules. Pixl layout/navigation concepts are adapted under its recorded MIT basis; Template/Stardance are reference-only. See [attribution](../source-audit/ATTRIBUTION.md).

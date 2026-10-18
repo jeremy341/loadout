@@ -10,7 +10,6 @@
 | [`ascii-float-preview.md`](ascii-float-preview.md) | Owner-approved local ASCII floating motion with independent timing and mixed directions. |
 | [`homepage-visual-clarity.md`](homepage-visual-clarity.md) | Open proposal, linked to Plan 17. It does not authorize homepage changes until the owner approves that scope. |
 | [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md) | Product proposal only. Plans 01/02 must settle any bonus before it is implemented or published. |
-| [`color-safe-docs-followup.md`](color-safe-docs-followup.md) | Owner-requested color-safe palette and participant Docs updates; implementation follows the 2026-10-17 production release. |
 
 ## Implemented locally
 
@@ -29,7 +28,7 @@
 | [`prize-belt.md`](prize-belt.md) | The planned prizes ride a slow, pausable belt, as in Pixl and the YSWS template. |
 | [`prize-photos.md`](prize-photos.md) | The proposed prizes show one example product photo each, from Pixl, on the existing belt. |
 | [`homepage-voice.md`](homepage-voice.md) | Plainer homepage copy: hero, rewards, progression, Eras and IRL lines, with no new claims. |
-| [`real-details.md`](real-details.md) | The homepage and Docs say what is decided: teens 13 to 18, 10 Ore for a solid hour, the 0 to 20 rating, a worked example, prices on the prizes, short FAQ answers, and no invented drawing details. |
+| [`real-details.md`](real-details.md) | The homepage and Docs say what is decided: teens 13 to 18, 10 Ore for a solid hour, the 0 to 20 rating, a worked example, prices on the prizes, short FAQ answers, and no invented drawing details. The public Docs still say 13 to 19; correction is pending. |
 | [`copy-follow-through.md`](copy-follow-through.md) | Owner-approved fixes 1–4: accurate hero, direct launch wording, starter prizes first, shorter repeated copy, and clearer Custom Order and Era Docs. Real-project showcase deferred; existing How it works preserved. |
 | [`mole.md`](mole.md) | A pixel Maulwurf mascot turns up at the bottom of the homepage: it can be petted, picked up, and annoyed, and the footer button hides it. |
 | [`mole-behaviour.md`](mole-behaviour.md) | Proposed rework of Orry's behaviour: 19 ways to interact, what counts as each gesture, two mood meters with minimum times, per-frame animation timing, a run-and-pause rhythm, and rules for effects and the cursor. Not built. |
@@ -43,9 +42,11 @@
 
 | Brief | Current owner |
 |---|---|
-| [`accessibility-preferences-preserve-ui.md`](accessibility-preferences-preserve-ui.md) | Shared display preferences, footer Accessibility dialog/page, color-safe accents, optional reduced motion and visually unchanged semantic headings. |
 | [`mobile-nav-single-row.md`](mobile-nav-single-row.md) | Homepage mobile navigation: one row at normal phone text sizes, with accessible reflow when text is enlarged. |
 | [`docs-connected-prose.md`](docs-connected-prose.md) | Public Markdown guides and homepage payout labels: connected explanations, original worked examples, a longer fictional journal and explicit Ore multipliers. |
+| [`accessibility-field-panel.md`](accessibility-field-panel.md) | Current accessibility settings panel, visible shortcut and dedicated page. The mobile/color-vision follow-up is recorded in the next row. |
+| [`mobile-accessibility-color-vision.md`](mobile-accessibility-color-vision.md) | Retracting phone shortcut, optional color-vision palettes and the expanded display settings. |
+| [`color-safe-docs-followup.md`](color-safe-docs-followup.md) | Color-safe palette and participant Docs changes. |
 | [`depth-label-transparency.md`](depth-label-transparency.md) | `home.css` and the design system: depth labels have text-clipped backgrounds so the band hatching remains visible behind them. |
 | [`community-era-overview.md`](community-era-overview.md) | Plan 11 for policy; Plan 06 for homepage copy. |
 | [`docs-refresh.md`](docs-refresh.md) | `docs/development/architecture.md` and `content-authoring.md`; production promotion recorded in PR #28. |
@@ -62,6 +63,7 @@
 | Brief | Replaced by |
 |---|---|
 | [`loadout-docs-and-era-redesign.md`](loadout-docs-and-era-redesign.md) | The approved Docs refresh and Plan 11's current Era policy. |
+| [`accessibility-preferences-preserve-ui.md`](accessibility-preferences-preserve-ui.md) | [`accessibility-field-panel.md`](accessibility-field-panel.md), which supersedes its footer-only entry point and older control scope. |
 | [`pixel-sprite-svg-integration.md`](pixel-sprite-svg-integration.md), [`pre-sprite-icon-restoration.md`](pre-sprite-icon-restoration.md) | The final PNG icon set and asset catalog. Keep the owner-supplied Bolt SVG as a separate source asset. |
 
 Completed and superseded briefs are retained as historical decisions. Use current owners and implementation code for present behavior.

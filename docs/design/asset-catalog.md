@@ -10,6 +10,8 @@ The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and but
 
 Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
+The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files in `apps/landing/public/fonts/phantom-sans/`. They were copied from Pixl's live site at `https://pixl.hackclub.com/fonts/phantom-sans/` and are loaded locally only when a visitor enables the setting. This provenance does not establish a license for the WOFF2 files: the MIT license recorded for the pinned Pixl repository does not, by itself, document coverage of these live font assets, and this repository records no separate font permission. Do not present the pinned repository license as covering these files.
+
 ### Pixel font
 
 `apps/landing/public/fonts/PixelifySans.ttf` is Pixelify Sans with a widened opening in the capital C and the lowercase c. The stock font (`PixelifySans.original.ttf`) and the script that patches it (`patch-pixelify-c.py`) are in `assets/editable/fonts/`; the licence (SIL Open Font License 1.1, no reserved font name) stays in `apps/landing/public/fonts/PixelifySans-OFL.txt`. See `assets/editable/fonts/README.md`.

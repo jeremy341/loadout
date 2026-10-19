@@ -26,7 +26,7 @@
 
 Plan 06 owns the homepage sequence and the approved public explanations. The page gives a quick program overview and preserves the four tracks, Research Mode as a modifier, the existing build/review flow, progression and prizes, Requisitions, Custom Orders, Community Eras, the future-concept IRL section, FAQ, and organizer context. Owner-approved draft or working prices and thresholds may appear when clearly labelled provisional; unresolved values must not be presented as final. Dates, registration, live stock, ordering availability and fulfillment claims require confirmation.
 
-Internal age policy is 13–18. The current public site still says 13–19; its correction is pending in a later public-copy pass. No `content/docs/` copy is changed by this internal alignment.
+Internal age policy is 13–18. Public homepage and Docs age wording is being aligned in PR #130; Hack Club teen verification is required, with account integration and operating approval still open.
 
 Plan 17 remains an open proposal. Its unimplemented card-turn and expanded disclosure ideas are not part of the current homepage scope.
 
@@ -49,6 +49,7 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 ## Future proposals
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
+- [Pixl shell and participant-platform implementation plan](../docs/superpowers/plans/2026-10-19-pixl-shell-platform.md) is a draft, gated engineering sequence; it does not authorize implementation or deployment.
 - [`proposals/economy-calibration.md`](proposals/economy-calibration.md) is a mixed-status worksheet: recorded owner decisions plus candidate curves, review operations and Custom Order values. Plan 02 identifies what is agreed. A number appearing in the worksheet does not approve it.
 
 ## Historical consolidation

@@ -962,6 +962,17 @@ body:has(.home):not(:has(#theme:checked)) { background: #222627; }
 .home:not(:has(#theme:checked)) .strip, .home:not(:has(#theme:checked)) .fn, .home:not(:has(#theme:checked)) .era > div, .home:not(:has(#theme:checked)) .asd, .home:not(:has(#theme:checked)) .ft-sheet, .home:not(:has(#theme:checked)) .chip { border-color: var(--edge); }
 .home:not(:has(#theme:checked)) .card:hover { box-shadow: 4px 4px 0 rgba(233, 235, 231, .4); }
 
+/* Keep dark Era-step hover text readable and mark the edge with the active accent. */
+@media (hover: hover) {
+  .home:not(:has(#theme:checked)) .era > div:hover {
+    color: var(--fg);
+    background: var(--surface);
+    border-color: var(--ac);
+    box-shadow: inset 0 0 0 1px var(--ac);
+  }
+  .home:not(:has(#theme:checked)) .era > div:hover small { color: var(--ac); }
+}
+
 /* Amber for small highlights only. */
 .home:not(:has(#theme:checked)) .lnks a, .home:not(:has(#theme:checked)) .asd a, .home:not(:has(#theme:checked)) .card li:before, .home:not(:has(#theme:checked)) .fq2-icon, .home:not(:has(#theme:checked)) .era small, .home:not(:has(#theme:checked)) .sn { color: var(--hl); }
 .home:not(:has(#theme:checked)) .mc-c { border-color: var(--hl); }

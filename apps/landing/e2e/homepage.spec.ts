@@ -521,6 +521,34 @@ test("the cards use the first site's pixel icons: as drawn in light mode, turned
   expect(await filter()).toBe("none");
 });
 
+for (const [profile, expectedFilter] of [["tritanopia", "sepia("], ["achromatopsia", "grayscale("]] as const) {
+  test(`${profile} applies its homepage icon sprite treatment in both themes`, async ({ page }) => {
+    await page.addInitScript((selectedProfile) => localStorage.setItem("loadout-color-vision", selectedProfile), profile);
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
+    const filter = () => page.locator("#tracks .card .ic").first().evaluate((element) => getComputedStyle(element).filter);
+    expect(await filter()).toContain(expectedFilter);
+    await page.locator("label.tg").click();
+    await expect(page.locator("html")).toHaveAttribute("data-display-theme", "light");
+    expect(await filter()).toContain(expectedFilter);
+  });
+}
+
+for (const profile of ["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"] as const) {
+  test(`dark Era-step hover keeps readable text for ${profile}`, async ({ page }) => {
+    await page.addInitScript((selectedProfile) => {
+      localStorage.setItem("loadout-theme", "dark");
+      localStorage.setItem("loadout-color-vision", selectedProfile);
+    }, profile);
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
+    const step = page.locator(".era > div").first();
+    await step.hover();
+    await expect(step).toHaveCSS("background-color", "rgb(44, 49, 50)");
+    await expect(step).toHaveCSS("color", "rgb(233, 235, 231)");
+  });
+}
+
 test("buttons use main's style: bordered, rounded 2px, block shadow, capitals", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");

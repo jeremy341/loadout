@@ -38,7 +38,7 @@ export function Hero() {
 
       <div className="hero-badge">
         <span className="sl" />
-        <span className="tag"><span lang="de">GLÜCK AUF</span> · FOR TEENS 13 TO 19</span>
+        <span className="tag"><span lang="de">GLÜCK AUF</span> · FOR TEENS 13 TO 18</span>
         <span className="sl sl-flip" />
       </div>
 

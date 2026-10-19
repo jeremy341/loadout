@@ -1,7 +1,7 @@
 // Reference FAQ copy, kept as data so the accordion stays readable.
 export const faqItems = [
   { question: "Who can join?",
-    answer: "Teens aged 13 to 19. If you're in high school, it's for you." },
+    answer: "High-school students aged 13 to 18. Hack Club teen verification is required before joining." },
   { question: "Is it open yet?",
     answer: "Not yet, and there's no start date. RSVP and you'll hear when that changes. An RSVP isn't an enrollment." },
   { question: "What counts as a project?",

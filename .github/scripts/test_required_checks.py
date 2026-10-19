@@ -9,7 +9,7 @@ def load_contract():
     return json.loads((ROOT / ".github" / "required-checks.json").read_text(encoding="utf-8"))
 
 
-def workflow_source(browser_name="Landing browser", browser_needs="browser-shard"):
+def workflow_source(browser_name="Landing browser", browser_needs="[repository-integrity, browser-shard]"):
     return f"""name: Repository integrity
 jobs:
   repository-integrity:

@@ -13,6 +13,8 @@ import "./motion.css";
 import "./semantics.css";
 import "./accessibility.css";
 import "./color-vision.css";
+import "./decoration-preferences.css";
+import "./preference-layout.css";
 import { MotionPreference } from "./_components/motion-preference";
 import { DisplayPreferencesEffects } from "./_components/display-preferences";
 import { AccessibilityProvider } from "./_components/Accessibility";

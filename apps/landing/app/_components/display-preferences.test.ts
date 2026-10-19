@@ -38,6 +38,100 @@ describe("display preferences store", () => {
     unsubscribe();
   });
 
+  test("migrates legacy simplify decoration into independent quiet choices", () => {
+    const storage = memoryStorage({ "loadout-simplify-decoration": "true" });
+    const store = createDisplayPreferencesStore(() => storage);
+    const unsubscribe = store.subscribe(() => {});
+
+    expect(store.getSnapshot()).toEqual({
+      ...DEFAULT_PREFERENCES, grain: "off", hideGrid: true, hideAscii: true,
+      hideMascot: true, hideMarkings: true,
+    });
+    expect(storage.values.get("loadout-grain")).toBe("off");
+    expect(storage.values.get("loadout-hide-grid")).toBe("true");
+    expect(storage.values.get("loadout-hide-ascii")).toBe("true");
+    expect(storage.values.get("loadout-hide-mascot")).toBe("true");
+    expect(storage.values.get("loadout-hide-markings")).toBe("true");
+
+    store.setPreference("hideAscii", false);
+    store.setPreference("grain", "still");
+    expect(store.getSnapshot().hideAscii).toBe(false);
+    expect(store.getSnapshot().grain).toBe("still");
+    expect(storage.values.get("loadout-hide-ascii")).toBe("false");
+    expect(storage.values.get("loadout-grain")).toBe("still");
+    unsubscribe();
+  });
+
+  test("migrates legacy simplify over old grain but preserves a later grain choice", () => {
+    const storage = memoryStorage({
+      "loadout-simplify-decoration": "true",
+      "loadout-grain": "animated",
+    });
+    const migrated = createDisplayPreferencesStore(() => storage);
+    const unsubscribe = migrated.subscribe(() => {});
+
+    expect(migrated.getSnapshot().grain).toBe("off");
+    expect(storage.values.get("loadout-grain")).toBe("off");
+    migrated.setPreference("grain", "animated");
+    unsubscribe();
+
+    const restored = createDisplayPreferencesStore(() => storage);
+    const unsubscribeRestored = restored.subscribe(() => {});
+    expect(restored.getSnapshot().grain).toBe("animated");
+    unsubscribeRestored();
+  });
+
+  test("existing independent choices take priority over the legacy setting", () => {
+    const storage = memoryStorage({
+      "loadout-simplify-decoration": "true",
+      "loadout-hide-grid": "false",
+      "loadout-hide-ascii": "true",
+      "loadout-grain": "animated",
+    });
+    const store = createDisplayPreferencesStore(() => storage);
+    const unsubscribe = store.subscribe(() => {});
+
+    expect(store.getSnapshot()).toEqual({
+      ...DEFAULT_PREFERENCES, grain: "animated", hideGrid: false, hideAscii: true,
+      hideMascot: true, hideMarkings: true,
+    });
+    unsubscribe();
+  });
+
+  test("reset persists explicit defaults that supersede the legacy setting", () => {
+    const storage = memoryStorage({ "loadout-simplify-decoration": "true" });
+    const store = createDisplayPreferencesStore(() => storage);
+    const unsubscribe = store.subscribe(() => {});
+
+    store.reset();
+    expect(store.getSnapshot()).toEqual(DEFAULT_PREFERENCES);
+    expect(storage.values.get("loadout-grain")).toBe("animated");
+    for (const key of ["loadout-hide-grid", "loadout-hide-ascii", "loadout-hide-mascot", "loadout-hide-markings"]) {
+      expect(storage.values.get(key)).toBe("false");
+    }
+    unsubscribe();
+
+    const restored = createDisplayPreferencesStore(() => storage);
+    const unsubscribeRestored = restored.subscribe(() => {});
+    expect(restored.getSnapshot()).toEqual(DEFAULT_PREFERENCES);
+    unsubscribeRestored();
+  });
+
+  test("restores independently persisted decoration and grain choices", () => {
+    const storage = memoryStorage();
+    const first = createDisplayPreferencesStore(() => storage);
+    const unsubscribe = first.subscribe(() => {});
+    first.setPreference("hideGrid", true);
+    first.setPreference("hideAscii", true);
+    first.setPreference("grain", "still");
+    unsubscribe();
+
+    const restored = createDisplayPreferencesStore(() => storage);
+    const unsubscribeRestored = restored.subscribe(() => {});
+    expect(restored.getSnapshot()).toEqual({ ...DEFAULT_PREFERENCES, grain: "still", hideGrid: true, hideAscii: true });
+    unsubscribeRestored();
+  });
+
   test("retains in-memory changes when storage reads and writes throw", () => {
     const blockedStorage = {
       getItem() { throw new Error("blocked"); },

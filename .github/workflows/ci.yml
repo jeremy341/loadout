@@ -100,6 +100,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Lint GitHub Actions and shell scripts
+        run: bash .github/scripts/lint-workflows.sh
+
       - name: Check whitespace and pinned references
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}

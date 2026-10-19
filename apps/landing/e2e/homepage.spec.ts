@@ -621,7 +621,7 @@ test("Project fit is in the Docs, not the homepage; Custom Orders and IRL keep t
 test("Hack Club block carries Jerry's reason and makes no claim about other programs' rates", async ({ page }) => {
   await page.goto("/");
   const block = page.locator("#hack-club");
-  await expect(block.locator("figure.why")).toContainText("I love Hack Club");
+  await expect(block.locator("figure.why")).toContainText("While being part of Hack Club");
   await expect(block).toContainText("Where LOADOUT comes from");
   await expect(block).toContainText("has not accepted it yet");
   await expect(block.locator("figure.why figcaption")).toContainText("Jerry");

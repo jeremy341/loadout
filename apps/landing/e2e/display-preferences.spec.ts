@@ -5,6 +5,10 @@ const tags = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 async function openSettings(page: Page) {
   const opener = page.getByRole("link", { name: "Open accessibility settings" });
+  // Before the preferences root effect runs, this link intentionally works as a
+  // regular navigation link for visitors without JavaScript.
+  await expect(page.locator("html")).toHaveAttribute("data-display-theme", /^(dark|light)$/);
+  await opener.focus();
   await opener.click();
   const dialog = page.getByRole("dialog", { name: "Accessibility settings" });
   await expect(dialog).toBeVisible();
@@ -128,7 +132,10 @@ test("expanded reading and display preferences persist, and reset returns them t
   await dialog.getByRole("checkbox", { name: "Larger controls" }).check();
   await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: "Native scrolling" }).check();
-  await dialog.getByRole("checkbox", { name: "Simplify decoration" }).check();
+  await dialog.getByRole("checkbox", { name: "Hide background grid" }).check();
+  await dialog.getByRole("checkbox", { name: "Hide ASCII drawings" }).check();
+  await dialog.getByRole("checkbox", { name: "Hide mascot" }).check();
+  await dialog.getByRole("checkbox", { name: "Hide extra markings" }).check();
   await dialog.getByRole("radio", { name: "Off" }).check();
   await expect(page.locator("html")).toHaveAttribute("data-reading-size", "200");
   await expect(page.locator("html")).toHaveAttribute("data-phantom-sans", "true");
@@ -169,7 +176,7 @@ test("motion stays enabled by default and an explicit stop persists outside sett
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "false");
   await expect(page.locator("html")).toHaveAttribute("data-color-vision", "standard");
-  for (const preference of ["phantom-sans", "more-spacing", "strong-contrast", "system-cursor", "larger-controls", "simplify-decoration", "native-scroll", "underline-links"]) {
+  for (const preference of ["phantom-sans", "more-spacing", "strong-contrast", "system-cursor", "larger-controls", "hide-grid", "hide-ascii", "hide-mascot", "hide-markings", "native-scroll", "underline-links"]) {
     await expect(page.locator("html")).toHaveAttribute(`data-${preference}`, "false");
   }
   await expect(page.locator("html")).toHaveAttribute("data-reading-size", "100");
@@ -302,4 +309,62 @@ test("settings remain readable with enlarged and widely spaced text", async ({ p
   expect(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth + 1)).toBe(true);
   await dialog.getByRole("button", { name: "Close", exact: true }).click();
   await expect(dialog).not.toBeVisible();
+});
+
+test("reading size scales every settings control and spacing reflows at phone widths", async ({ page }) => {
+  const sizes = [320, 390];
+  const selectors = {
+    heading: ".a11y-dialog-head h2",
+    close: ".a11y-close",
+    category: ".a11y-settings-group > summary",
+    choice: ".a11y-choice-options label",
+    select: ".a11y-select-wrap select",
+    reset: ".a11y-reset",
+    footer: ".a11y-dialog-footer a",
+  };
+
+  for (const width of sizes) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/");
+    const { dialog } = await openSettings(page);
+    await openSettingsGroup(dialog, "Reading");
+
+    const baseSizes = await page.evaluate((entries) => Object.fromEntries(
+      Object.entries(entries).map(([name, selector]) => [name, Number.parseFloat(getComputedStyle(document.querySelector(selector)!).fontSize)]),
+    ), selectors);
+    await dialog.getByRole("radio", { name: "200%" }).check();
+    await dialog.getByRole("checkbox", { name: "More text spacing" }).check();
+    await expect(page.locator("html")).toHaveAttribute("data-reading-size", "200");
+    await expect(page.locator("html")).toHaveAttribute("data-more-spacing", "true");
+
+    const enlarged = await page.evaluate((entries) => Object.fromEntries(
+      Object.entries(entries).map(([name, selector]) => [name, Number.parseFloat(getComputedStyle(document.querySelector(selector)!).fontSize)]),
+    ), selectors);
+    for (const name of Object.keys(selectors)) {
+      expect(enlarged[name], `${name} at ${width}px`).toBeCloseTo(baseSizes[name] * 2, 1);
+    }
+
+    const spacing = await dialog.locator(".a11y-choice-options label").first().evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { lineHeight: Number.parseFloat(style.lineHeight), fontSize: Number.parseFloat(style.fontSize), letterSpacing: style.letterSpacing, wordSpacing: style.wordSpacing };
+    });
+    expect(spacing.lineHeight).toBeGreaterThan(spacing.fontSize);
+    expect(Number.parseFloat(spacing.letterSpacing)).toBeGreaterThan(0);
+    expect(Number.parseFloat(spacing.wordSpacing)).toBeGreaterThan(0);
+
+    const overflow = await dialog.evaluate((element) => {
+      const body = element.querySelector<HTMLElement>(".a11y-dialog-body")!;
+      return { dialog: element.scrollWidth <= element.clientWidth + 1, body: body.scrollWidth <= body.clientWidth + 1 };
+    });
+    expect(overflow).toEqual({ dialog: true, body: true });
+    const closeBounds = await dialog.getByRole("button", { name: "Close", exact: true }).boundingBox();
+    expect(closeBounds).not.toBeNull();
+    expect(closeBounds!.x).toBeGreaterThanOrEqual(0);
+    expect(closeBounds!.x + closeBounds!.width).toBeLessThanOrEqual(width);
+
+    await dialog.getByRole("button", { name: "Reset display settings" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-reading-size", "100");
+    await expect(page.locator("html")).toHaveAttribute("data-more-spacing", "false");
+    await expect(dialog.getByRole("button", { name: "Close", exact: true })).toHaveCSS("font-size", `${baseSizes.close}px`);
+  }
 });

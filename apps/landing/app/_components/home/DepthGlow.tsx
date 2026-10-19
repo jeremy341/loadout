@@ -11,14 +11,14 @@ import { useDisplayPreferences } from "../display-preferences";
 // re-renders React. Touch screens see the faint markers only.
 export function DepthGlow() {
   const { paused } = useMotionPreference();
-  const { simplifyDecoration } = useDisplayPreferences();
+  const { hideMarkings } = useDisplayPreferences();
   useEffect(() => {
     const pits = Array.from(document.querySelectorAll<HTMLElement>(".home .pit"));
     const depths = pits.map((pit) => Number(pit.querySelector("b")?.textContent?.replace(/\D/g, "") ?? 0));
     const deepest = Math.max(1, ...depths);
     pits.forEach((pit, index) => pit.style.setProperty("--depth-light", String(0.4 + 0.6 * (depths[index] / deepest))));
 
-    if (paused || simplifyDecoration) return;
+    if (paused || hideMarkings) return;
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const onPointerMove = (event: PointerEvent) => {
       const numerals = Array.from(document.querySelectorAll<HTMLElement>(".home .pit, .home .pit b, .home .pit > span"));
@@ -36,7 +36,7 @@ export function DepthGlow() {
         node.style.removeProperty("--my");
       });
     };
-  }, [paused, simplifyDecoration]);
+  }, [paused, hideMarkings]);
 
   return null;
 }

@@ -72,7 +72,8 @@ export function Hero() {
           <span>technical stack.</span>
         </h1>
         <p>
-          Build something technical, ship it, and earn Ore for it. Spend the Ore on gear for your next build.
+          <span className="hero-copy-full">Build something technical, ship it, and earn Ore for it. Spend the Ore on gear for your next build.</span>
+          <span className="hero-copy-compact">Build projects. Earn Ore. Get gear for your next build.</span>
         </p>
       </div>
 

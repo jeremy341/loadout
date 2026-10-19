@@ -1,0 +1,26 @@
+/* Independent decorative layers controlled by Accessibility settings. */
+html[data-hide-grid="true"] :is(.home, .a11y-dialog, .a11y-page) {
+  background-image: none !important;
+}
+
+html[data-hide-ascii="true"] .home :is(.ar, .art) {
+  display: none !important;
+}
+
+html[data-hide-markings="true"] .home :is(.depth-dark, .stp, .hero-side, .hero .meta, .hero .x, .ft-mark) {
+  display: none !important;
+}
+
+html[data-hide-markings="true"] .home .pit {
+  border-color: transparent !important;
+  background-image: none !important;
+}
+
+html[data-hide-markings="true"] .home .pit::before {
+  display: none !important;
+}
+
+html[data-hide-markings="true"] .home .pit b,
+html[data-hide-markings="true"] .home .pit > span {
+  background-image: linear-gradient(color-mix(in srgb, var(--fg) 3%, transparent), color-mix(in srgb, var(--fg) 3%, transparent)) !important;
+}

@@ -125,6 +125,7 @@ Run `rg -n "loadout-ysws\.vercel\.app"` across the repository. Expected: any rem
 - Preserve and include the current Pixl shell/backend design proposal in `plans/proposals/future-platform-ui.md` and `docs/superpowers/specs/2026-10-19-pixl-shell-platform-design.md` as a draft requiring owner review.
 - Include this release plan at `docs/superpowers/plans/2026-10-19-dino-domain-and-pending-changes.md` as the internal execution record.
 - Preserve and include `references/README.md` and the `references/stardance` submodule pointer update.
+- Update `.github/workflows/ci.yml` to validate the reviewed Stardance submodule pin instead of the retired SHA.
 
 **Interfaces:**
 - Consumes: the already-reviewed dirty worktree changes; Plans 01/02/11/15/22 remain policy authorities.

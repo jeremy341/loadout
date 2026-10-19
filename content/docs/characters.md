@@ -22,6 +22,8 @@ He hadn't forgotten the duck, though. When Orry arrived for his first day at LOA
 
 ## Goose Lee, the adventurous duck {#goose-lee}
 
+Despite his name, Goose Lee is a duck.
+
 Goose had come to Germany with much less to prove. He'd grown up in a comfortable Chinese-American family in the United States, done well at school and been popular his whole life. His parents expected university but Goose wanted an adventure, and when Pond university turned him down, he went looking for adventure in the German mines. If it didn't work out, home was still there, and he could always apply again for university.
 
 His family was surname was Li. He'd chosen to name himeslf “Goose Lee” after Bruce Lee, whose videos he watched and whose moves he tried to copy. Sharing his hero's Asian background he had somehow convinced himself that he shared the talent too. Which of course wasnt truem  In practice, Goose was trash and had very little skill, but plenty of confidence which borders arrogance. Most people let him show off cause they liked his personality. Orry tried telling him the truth, then gave up when he realised Goose thought the criticism was another joke.

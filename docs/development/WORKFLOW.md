@@ -39,13 +39,13 @@ Every change reaches `main` through three lanes. The feature PR is squash-merged
 short-lived branch → PR (squash) → development → testing → main
 ```
 
-| Lane | How a commit gets in | Workflow check names |
-| --- | --- | --- |
-| development | Feature PR from a short-lived branch, squash-merged. | Repository integrity, Landing quality, Promotion lane |
-| testing | Promotion PR from development, merged with a merge commit. | Repository integrity, Landing quality, Landing browser, Promotion lane |
-| main | Release PR from testing, merged with a merge commit. Vercel deploys main. | Repository integrity, Landing quality, Landing browser, Promotion lane |
+| Lane | How a commit gets in |
+| --- | --- |
+| development | Feature PR from a short-lived branch, squash-merged. |
+| testing | Promotion PR from development, merged with a merge commit. |
+| main | Release PR from testing, merged with a merge commit. Vercel deploys main. |
 
-These are the workflow's allowed PR edges and check names, not proof of GitHub branch protection. The live protection settings need separate verification; see [branch protection setup](branch-protection-setup.md). Landing quality reruns for app-affecting diffs on each lane. Browser shards can skip only when the candidate tree matches the source-lane commit and that exact commit has a recorded successful `Landing browser` check run. Changes limited to the ignored internal documentation/planning paths and root-file allowlist skip app checks; public `content/docs/` edits are app-affecting and run them (see Skips below).
+The workflow's expected status-check names are maintained once in [the required-check contract](required-checks.md). That contract describes workflow configuration, not proof of GitHub branch protection; see [branch protection setup](branch-protection-setup.md) for dated settings evidence. Landing quality reruns for app-affecting diffs on each lane. Browser shards can skip only when the candidate tree matches the source-lane commit and that exact commit has a recorded successful `Landing browser` check run. Changes limited to the ignored internal documentation/planning paths and root-file allowlist skip app checks; public `content/docs/` edits are app-affecting and run them (see Skips below).
 
 ```powershell
 # Every change, owner and co-developer alike
@@ -99,7 +99,7 @@ Either trusted maintainer may open, review and merge a check-green PR while anot
 
 GitHub's personal-repository rules cannot constrain development direct pushes to named write collaborators. Check live protections rather than treating this guide as proof; [branch protection setup](branch-protection-setup.md) records dated evidence.
 
-Promotion heads observed on 2026-10-18 were development `fc37ebe`, testing `8b6e747`, and main `2c642a9` (PRs #111–#113). These are dated observations, not a claim about current branch protection.
+Promotion heads observed on 2026-10-19 were development `34f0668`, testing `2eee7ef`, and main `eb94498`. These are dated observations, not a claim about current branch protection.
 
 History note: on 2026-10-11 the three lanes were aligned to one commit and the co-author lines were removed from history. Commit SHAs from before that date are gone from origin. If your local branches show SHAs that origin no longer has, save your work, switch away from the branch, and run `git fetch origin && git branch -f development origin/development`.
 

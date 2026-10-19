@@ -1,0 +1,628 @@
+/* Optional reading preferences reshape content around the selected type and spacing.
+   The unmodified page remains the default presentation. */
+
+.a11y-title-compact { display: none; }
+.hero-copy-compact { display: none; }
+.a11y-close-icon, .a11y-reset-compact { display: none; }
+
+/* Enlarged desktop copy needs a wider reading measure than the normal hero. */
+@media (min-width: 901px) {
+  html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero .hero-frame > p {
+    max-width: min(1140px, 100%);
+    text-wrap: pretty;
+  }
+  html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero .hero-frame {
+    width: min(1200px, 100%);
+  }
+}
+
+/* The Docs entry point belongs in its toolbar, clear of both article and
+   directory text. It uses existing space without adding a left-page gutter. */
+html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .docs .docs-nav-head { flex-wrap: wrap; }
+html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .docs .docs-nav { padding-bottom: 32px; }
+html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .docs .a11y-shortcut {
+  position: static;
+  flex: 0 0 100%;
+  order: 3;
+  max-width: none;
+  transform: none;
+}
+html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .docs .a11y-tab {
+  writing-mode: horizontal-tb;
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 14px;
+  min-height: 44px;
+}
+
+/* Keep preference controls grouped when their copy grows. The descriptions and
+   switch stay in the same row at normal sizes, then form a clear two-step row
+   once spacing or a larger reading scale makes that column too narrow. */
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px 16px;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-option-copy {
+  display: contents;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-option-copy > strong {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-option-copy > small {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-switch {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-palette-option {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-select-wrap {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  width: 100%;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-choice-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9em), 1fr));
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-page) .a11y-choice-options label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* These paragraphs are control hints and status messages, not reading prose.
+   Keep the requested letter and line spacing while removing the broad prose
+   margins that otherwise separate each control from its group. */
+html[data-more-spacing="true"] .a11y-settings :is(.a11y-save-note, .a11y-reset-status, .a11y-device-note, .a11y-choice > p) {
+  margin-block: .75em;
+}
+
+html[data-more-spacing="true"] .a11y-settings .a11y-reset-status:empty {
+  margin: 0;
+}
+
+/* The dialog header stays fixed while its settings scroll. At large sizes the
+   title takes the flexible column and Close remains a distinct target beside it. */
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+}
+
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 561px) {
+  html[data-reading-size="200"] .a11y-dialog {
+    width: min(900px, calc(100vw - 32px));
+  }
+}
+
+@media (min-width: 1361px) {
+  html:is([data-more-spacing="true"], [data-reading-size="150"], [data-reading-size="200"]) .home .hero .stp.s1 {
+    top: 65%;
+    right: 16px;
+    transform: translateY(-50%) rotate(-7deg);
+  }
+}
+
+/* Give the desktop settings rail enough room for its numbered labels at large
+   type, while retaining a readable settings panel beside it. */
+html[data-more-spacing="true"] .a11y-settings-layout,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-settings-layout {
+  grid-template-columns: minmax(190px, .38fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+html[data-more-spacing="true"] .a11y-category-panel,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-category-panel {
+  padding-left: 20px;
+}
+
+html[data-more-spacing="true"] .a11y-category-rail button,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-category-rail button {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1000px) {
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 8px 16px;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-option-copy {
+    display: contents;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-option-copy > strong {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-option-copy > small {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-switch {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-palette-option {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-select-wrap {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: 100%;
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-choice-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9em), 1fr));
+  }
+
+  html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-page) .a11y-choice-options label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  html[data-more-spacing="true"] .a11y-settings-layout,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-settings-layout {
+    grid-template-columns: minmax(178px, .42fr) minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  html[data-more-spacing="true"] .a11y-category-panel,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-category-panel {
+    padding-left: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  html[data-more-spacing="true"] .a11y-dialog-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 12px;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 8px 12px;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-kicker {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head {
+    display: contents;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head h2 {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-title-full {
+    display: none;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-title-compact {
+    display: inline;
+    text-transform: none;
+  }
+
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-close {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    min-width: 66px;
+    padding-inline: 8px;
+    overflow-wrap: anywhere;
+  }
+
+  html[data-more-spacing="true"] .a11y-settings .a11y-reset,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-settings .a11y-reset {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Docs uses its in-article contents disclosure before the three-column frame
+   would squeeze the reading column. The sidebar stays available for navigation. */
+@media (min-width: 821px) and (max-width: 1200px) {
+  html[data-more-spacing="true"] .docs,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .docs {
+    grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  }
+
+  html[data-more-spacing="true"] .docs-toc,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-toc {
+    display: none;
+  }
+
+  html[data-more-spacing="true"] .docs-inline-toc,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-inline-toc {
+    display: block;
+  }
+}
+
+html[data-more-spacing="true"] .docs-inline-toc,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-inline-toc {
+  margin: 18px 0 8px;
+  background: var(--panel);
+  border: 2px solid var(--stroke);
+  box-shadow: none;
+}
+
+html[data-more-spacing="true"] .docs-inline-toc summary,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-inline-toc summary {
+  min-height: 44px;
+  padding: 12px 14px;
+  font-size: calc(14px * var(--reading-scale, 1));
+  font-weight: 600;
+  cursor: pointer;
+}
+
+html[data-more-spacing="true"] .docs-inline-toc nav,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-inline-toc nav {
+  display: grid;
+  padding: 0 12px 12px;
+}
+
+html[data-more-spacing="true"] .docs-inline-toc a,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-inline-toc a {
+  min-height: 44px;
+  padding: 10px 8px;
+  font-size: calc(14px * var(--reading-scale, 1));
+  line-height: 1.6;
+  color: var(--ink);
+  text-decoration: none;
+  border-top: 2px solid var(--stroke);
+}
+
+html[data-more-spacing="true"] .docs-inline-toc a.subheading,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .docs-inline-toc a.subheading {
+  padding-left: 22px;
+}
+
+html[data-more-spacing="true"] .docs-inline-toc :is(summary, a) {
+  line-height: 1.8;
+  letter-spacing: .12em;
+  word-spacing: .16em;
+}
+
+/* Homepage content starts with a compact field grid. As reading copy grows,
+   fewer columns preserve comfortable line lengths in track cards, milestones,
+   quote blocks and the footer directory. */
+@media (min-width: 1201px) {
+  html[data-more-spacing="true"] .home #tracks .row,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home #tracks .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html[data-more-spacing="true"] .home .row.r3,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .row.r3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html[data-more-spacing="true"] .home .hc,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .hc {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
+  }
+
+  html[data-more-spacing="true"] .home .days,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .days {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 28px;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1200px) {
+  html[data-more-spacing="true"] .home #tracks .row,
+  html:is([data-reading-size="125"], [data-reading-size="150"]) .home #tracks .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html[data-reading-size="200"] .home #tracks .row,
+  html[data-more-spacing="true"] .home .row.r3,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .row.r3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-more-spacing="true"] .home .hc,
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .hc {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
+  }
+
+  html[data-more-spacing="true"] .home .days,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .days {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 24px;
+  }
+
+  html[data-more-spacing="true"] .home .era,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .era {
+    max-width: 700px;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  html[data-more-spacing="true"] .home .era > div,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .era > div {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  html[data-more-spacing="true"] .home .era > div + div,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .era > div + div {
+    margin-left: 0;
+  }
+
+  html[data-more-spacing="true"] .home .era > div + div::before,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .era > div + div::before {
+    content: "↓";
+    top: -27px;
+    left: 50%;
+    width: auto;
+    margin: 0;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 700px) {
+  html[data-more-spacing="true"] .home .row.r3,
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .row.r3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-more-spacing="true"] .home .days,
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .days {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  html[data-more-spacing="true"] .home .facts > div,
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .facts > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  html[data-more-spacing="true"] .home .ft-links,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .ft-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-more-spacing="true"] .home .hero .hero-actions,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .hero .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  html[data-more-spacing="true"] .home .hero .hero-actions > .mc,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .hero .hero-actions > .mc {
+    width: 100%;
+    max-width: 420px;
+    align-self: center;
+  }
+}
+
+/* Long technical words still fit when large type and spacing are combined. */
+html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.home .note, .a11y-page p) {
+  overflow-wrap: anywhere;
+}
+
+html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-choice-options label > span {
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero {
+    padding-top: max(184px, calc(var(--nav-clearance, 108px) + 112px));
+  }
+  html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero .meta {
+    top: calc(var(--nav-clearance, 108px) + 12px);
+  }
+}
+
+@media (max-width: 560px) {
+  html:is([data-more-spacing="true"], [data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .hero .meta-left { left: 56px; }
+  /* Large reading mode uses the available phone width, with a concise equivalent
+     lead. Navigation keeps its compact row; optional overlays move out of prose. */
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero {
+    padding-inline: 8px;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero .hero-frame {
+    padding-inline: 8px;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero .h1 {
+    font-size: clamp(30px, 8.5vw, 42px);
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home:not(.rb-page) .hero .hero-frame > p {
+    text-align: left;
+    text-wrap: pretty;
+    max-width: none;
+    margin-block: 20px 0;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .hero-copy-full {
+    display: none;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .hero-copy-compact {
+    display: inline;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home > .a11y-shortcut:not(:focus-within) {
+    transform: translateX(calc(-100% - 12px));
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .docs-tab {
+    position: static;
+    max-width: 100%;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home > nav[aria-label="Documentation shortcut"] {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+  }
+  /* Plus/minus is decoration; enlarging it must not break a section name. */
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-settings-group > summary {
+    gap: 8px;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-group-mark {
+    font-size: 22px;
+    width: 20px;
+  }
+}
+
+/* A short landscape viewport needs its height for the settings, rather than
+   the full decorative heading. Keep the selected type size and Close visible. */
+@media (max-height: 600px) {
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog {
+    max-height: calc(100dvh - 16px);
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header {
+    padding-block: 12px;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header .a11y-kicker,
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-title-full {
+    display: none;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-title-compact {
+    display: inline;
+    text-transform: none;
+  }
+}
+
+/* Reading modes use the sheet width, rather than squeezing enlarged controls
+   beside a rail. The default vertical directory is left untouched. */
+html[data-reading-layout="true"] .a11y-page-intro { gap: 12px 24px; padding-bottom: 16px; }
+html[data-reading-layout="true"] .a11y-page .a11y-page-intro p { margin-block: 0; }
+html[data-reading-layout="true"] .a11y-settings-layout { display: block; }
+html[data-reading-layout="true"] .a11y-category-rail {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+html[data-reading-layout="true"] .a11y-category-rail button {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  border: 1px solid var(--a11y-rule);
+}
+html[data-reading-layout="true"] .a11y-category-panel {
+  margin-top: 16px;
+  padding: 16px 0 0;
+  border-left: 0;
+  border-top: 1px solid var(--a11y-rule);
+}
+/* The selected tab already names its labelled panel. */
+html[data-reading-layout="true"] .a11y-category-panel > h2 { display: none; }
+@media (min-width: 821px) {
+  html[data-reading-layout="true"] .a11y-page { width: min(1240px, calc(100% - 64px)); }
+}
+
+/* A compact fixed toolbar leaves the selected reading size for actual controls. */
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header {
+  display: block;
+  padding-block: 12px;
+}
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header .a11y-kicker { display: none; }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head h2,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-close {
+  grid-column: auto;
+  grid-row: auto;
+}
+@media (min-width: 561px) {
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog {
+    width: min(1100px, calc(100vw - 32px));
+  }
+}
+@media (max-width: 560px) {
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header { padding-inline: 8px; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    line-height: 1;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-close-label, .a11y-reset-full) { display: none; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-close-icon, .a11y-reset-compact) { display: inline; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home.rb-page .hero.rb { padding-inline: 12px; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home.rb-page .hero-frame { padding-inline: 0; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home.rb-page .hero-frame > p {
+    max-width: none;
+    text-align: left;
+    text-wrap: pretty;
+    margin-block: 20px 0;
+  }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .home.rb-page .rb-path {
+    display: block;
+    max-width: 100%;
+    margin-block: 8px;
+    padding: 8px;
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-width: 370px) {
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-header { padding-inline: 4px; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head { grid-template-columns: minmax(0, 1fr); }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-close { grid-row: 1; justify-self: end; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head h2 { grid-row: 2; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-option:not(.a11y-palette-option) { grid-template-columns: minmax(0, 1fr); }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-option:not(.a11y-palette-option) .a11y-option-copy > strong { grid-column: 1; grid-row: 1; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-option:not(.a11y-palette-option) .a11y-switch { grid-column: 1; grid-row: 2; justify-self: start; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-option:not(.a11y-palette-option) .a11y-option-copy > small { grid-row: 3; }
+  html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-category-title { min-width: 0; overflow-wrap: normal; }
+}

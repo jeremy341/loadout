@@ -77,6 +77,7 @@ export class MoleEngine {
   private petGap = 0;
   private lastPetStage = "none";
   private handledStage: IrritationStage = "calm";
+  private moodReactionActive = false;
   private followCooldown = 0;
   private stareCooldown = 0;
   // Where he is looking, and for how long he keeps looking there (a solid while, and no flicking about).
@@ -152,6 +153,7 @@ export class MoleEngine {
       runTo: (x: number) => { this.target = x; this.facing = x < this.x ? -1 : 1; this.go("run", "run"); },
       shakeForTest: (durationMs: number) => { this.testShakeUntil = performance.now() + Math.min(1000, Math.max(0, durationMs)); },
       throwForTest: (vx: number, vy: number) => this.releaseIfHeld(vx, vy),
+      spamForTest: () => this.mood.spam(),
       anim: () => this.anim,
       mood: () => ({ affection: this.mood.affection, irritation: this.mood.irritation, affectionStage: this.mood.affectionStage, irritationStage: this.mood.irritationStage }),
       gesture: () => this.frameState,
@@ -251,6 +253,7 @@ export class MoleEngine {
 
   private hide(delay = rand(8000, 20000)) {
     this.state = "hidden";
+    this.moodReactionActive = false;
     this.burrowing = false;
     this.pressId = null;
     this.gestures.cancel(performance.now());
@@ -458,16 +461,47 @@ export class MoleEngine {
     const handled = STAGES.indexOf(this.handledStage);
     if (now === handled) return;
     if (now < handled) { this.handledStage = this.mood.irritationStage; return; }
-    if (!this.free || this.asleep || this.dozing) return;
-    this.handledStage = this.mood.irritationStage;
-    if (now === 1) { this.lookAnim = pick(["shakeNo", "worried"] as const); this.go("look", this.lookAnim); }
-    else if (now === 2) { this.fx("anger", 14, -4); this.go("annoyed", "grumpy"); }
-    else if (now === 3) { this.fx("exclamation", 0, -4, 16, 700); this.go("mad", "puff"); }
-    else if (now === 4) { this.fx("anger", 14, -4); this.mood.stomped(); this.go("stomp", "stomp"); }
+    if (!this.canReactToMood()) return;
+    const next = STAGES[handled + 1];
+    if (!next) return;
+    this.startMoodReaction(next);
+  }
+
+  private canReactToMood() {
+    if (!this.free) return false;
+    if (this.asleep) return false;
+    if (this.dozing) return false;
+    return !this.moodReactionActive;
+  }
+
+  private startMoodReaction(next: IrritationStage) {
+    this.handledStage = next;
+    this.moodReactionActive = true;
+    if (next === "wary") {
+      this.lookAnim = pick(["shakeNo", "worried"] as const);
+      this.go("look", this.lookAnim);
+      return;
+    }
+    if (next === "annoyed") {
+      this.fx("anger", 14, -4);
+      this.go("annoyed", "grumpy");
+      return;
+    }
+    if (next === "angry") {
+      this.fx("exclamation", 0, -4, 16, 700);
+      this.go("mad", "puff");
+      return;
+    }
+    if (next === "furious") {
+      this.fx("anger", 14, -4);
+      this.mood.stomped();
+      this.go("stomp", "stomp");
+    }
   }
 
   // ---- ordinary life --------------------------------------------------------------------------------------------
   private settle() {
+    this.moodReactionActive = false;
     this.scurrying = false;
     this.dwell = rand(0.6, 2);
     this.go("idle", "idle");

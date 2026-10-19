@@ -224,9 +224,8 @@ html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size
 html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .doc-content pre { font-size: calc(14px * var(--reading-scale)); }
 html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home :is(.lead, .dsc, .note, .faq2-a, .we-cap, .hero-credit) { font-size: calc(16px * var(--reading-scale)); }
 html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .hero .hero-frame > p { font-size: calc(14px * var(--reading-scale)); }
-html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-settings > p, .a11y-page-intro > p:last-child, .a11y-statement > p) { font-size: calc(16px * var(--reading-scale)); }
-html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-option small, .a11y-choice > p, .a11y-help p, .a11y-help a) { font-size: calc(14px * var(--reading-scale)); }
-html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-option strong, .a11y-settings .a11y-choice legend) { font-size: calc(20px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-page-intro > p:last-child, .a11y-statement > p) { font-size: calc(16px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-help p, .a11y-help a) { font-size: calc(12px * var(--reading-scale)); }
 html[data-more-spacing="true"] :is(.doc-content p, .doc-content li, .doc-content td, .home main p, .home .dsc, .faq2-a, .a11y-settings p, .a11y-option-copy, .a11y-statement p, .a11y-help p) {
   line-height: 1.8; letter-spacing: .12em; word-spacing: .16em;
 }
@@ -238,9 +237,6 @@ html:is([data-strong-contrast="true"], [data-system-contrast="true"]) :is(.home,
 html:is([data-strong-contrast="true"], [data-system-contrast="true"]) :is(.a11y-dialog, .a11y-shortcut) { --a11y-ink: #FFFFFF; --a11y-muted: #FFFFFF; --a11y-rule: #BBC4C1; }
 html:is([data-strong-contrast="true"], [data-system-contrast="true"])[data-display-theme="light"] :is(.a11y-dialog, .a11y-shortcut) { --a11y-ink: #000000; --a11y-muted: #000000; --a11y-rule: #000000; }
 html:is([data-strong-contrast="true"], [data-system-contrast="true"]) :is(a, button, input, summary, select):focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
-html[data-simplify-decoration="true"] :is(.home, .a11y-dialog) { background-image: none !important; }
-html[data-simplify-decoration="true"] .home :is(.art, .ar, .depth-dark, .stp, .mole-layer, .hero .x, .hero .meta, .hero-side, .ft-mark) { display: none !important; }
-html[data-simplify-decoration="true"] .home .pit { background-image: none !important; }
 html[data-native-scroll="true"] *, html[data-native-scroll="true"] *::before, html[data-native-scroll="true"] *::after { scroll-behavior: auto !important; }
 @media (forced-colors: active) {
   html .a11y-dialog, html .a11y-shortcut { --a11y-ink: CanvasText; --a11y-paper: Canvas; --a11y-muted: CanvasText; --a11y-rule: CanvasText; --a11y-accent: ButtonFace; --a11y-button-ink: ButtonText; }
@@ -250,6 +246,45 @@ html[data-native-scroll="true"] *, html[data-native-scroll="true"] *::before, ht
 html:is([data-strong-contrast="true"], [data-system-contrast="true"]) .a11y-switch input:focus-visible { outline-color: var(--a11y-ink, var(--fg)); }
 @media (forced-colors: active) {
   .a11y-dialog, .a11y-shortcut { --a11y-ink: CanvasText !important; --a11y-paper: Canvas !important; --a11y-muted: CanvasText !important; --a11y-rule: CanvasText !important; --a11y-accent: ButtonFace !important; --a11y-button-ink: ButtonText !important; }
+}
+
+/* Reading size scales the existing settings typography once, including controls
+   whose base font declarations otherwise stop inherited sizing at the parent. */
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog, .a11y-settings) { font-size: calc(14px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-kicker, .a11y-switch > span) { font-size: calc(10px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-switch > span { width: calc(22px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head h2 { font-size: calc(36px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-close { font-size: calc(16px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-footer { font-size: calc(12px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-dialog .a11y-settings-group > summary, .a11y-page .a11y-settings-group > summary, .a11y-group-mark) { font-size: calc(22px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-settings-group > summary { min-width: 0; overflow-wrap: anywhere; }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-group-mark { width: calc(20px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-save-note, .a11y-reset-status) { font-size: calc(12px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-option strong { font-size: calc(20px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-option small { font-size: calc(13px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-select-wrap select { font-size: calc(13px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-choice legend { font-size: calc(20px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-choice > p { font-size: calc(13px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-choice-options label { font-size: calc(13px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-reset { font-size: calc(14px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-device-note { font-size: calc(14px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-page .a11y-category-panel h2 { font-size: calc(28px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-category-rail button { min-width: 0; flex-wrap: wrap; overflow-wrap: anywhere; font-size: calc(20px * var(--reading-scale)); }
+html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-category-rail button > span { font-size: calc(11px * var(--reading-scale)); }
+
+html[data-more-spacing="true"] :is(.a11y-dialog, .a11y-settings) :is(h2, p, strong, small, summary, legend, label, button, a, select, .a11y-switch > span) {
+  line-height: 1.8;
+  letter-spacing: .12em;
+  word-spacing: .16em;
+}
+
+@media (max-width: 560px) {
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-dialog-head h2 {
+    font-size: clamp(calc(22px * var(--reading-scale)), calc(6.2vw * var(--reading-scale)), calc(28px * var(--reading-scale)));
+  }
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-close { font-size: calc(14px * var(--reading-scale)); }
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) :is(.a11y-option strong, .a11y-choice legend) { font-size: calc(18px * var(--reading-scale)); }
+  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .a11y-reset { max-width: 100%; overflow-wrap: anywhere; }
 }
 
 html:is([data-strong-contrast="true"], [data-system-contrast="true"]) .home:not(:has(#theme:checked)) { --fg: #FFFFFF; --mut: #E9EBE7; --edge: #BBC4C1; }

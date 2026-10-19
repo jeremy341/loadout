@@ -36,6 +36,8 @@ short-lived branch → PR → development → promotion PR → testing → promo
 - `testing`: promotion PRs from `development` are accepted by the workflow.
 - `main`: release PRs from `testing` are accepted by the workflow.
 
+The current workflow check-name contract is maintained in [required-checks.md](required-checks.md). The tables below preserve dated branch-protection observations and are not a second current policy source.
+
 The following settings are from the 2026-10-11 protection readback and have not been freshly verified:
 
 - Human approvals: zero required on every lane. No Jeremy-only, owner-only, CODEOWNER, latest-pusher, or other one-person rule.
@@ -117,6 +119,10 @@ The most recent full readback recorded the rules in the "Rules read back on 2026
 ### Attempted refresh on 2026-10-18
 
 The detailed branch-protection endpoint returned HTTP 403. Live enforcement, approvals, bypass actors, administrator enforcement, force-push/deletion settings, and freshness settings could not be confirmed. Lane heads observed that day were development `fc37ebe`, testing `8b6e747`, and main `2c642a9` (PRs #111–#113). Do not treat workflow configuration or those commit observations as proof of branch protection.
+
+### Branch endpoint summary on 2026-10-19
+
+GitHub's branch endpoints reported development `34f0668616f330b75c62276481314ca869eb28d0`, testing `2eee7ef6cee78bf9b4935921be07130aa05a38ff`, and main `eb94498cdb40b891a16f8542daf7a2ec0b9d879f` as protected, with the check names listed in [the current workflow contract](required-checks.md). The detailed branch-protection endpoint remained unavailable to this integration, so pull-request requirements, approvals, bypass rules, force pushes, and freshness settings were not confirmed.
 
 ## Personal-account limitation
 

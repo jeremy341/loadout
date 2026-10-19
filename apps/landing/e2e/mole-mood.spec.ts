@@ -48,6 +48,40 @@ test("two quick taps tickle him, and a tap during the tickle cannot cut it short
 });
 
 
+test("irritation stages play in order after a long uninterruptible sequence", async ({ page }) => {
+  test.setTimeout(45000);
+  await open(page, "?mole=pop&speed=20");
+  await waitForIdle(page);
+  await record(page);
+  const { x, y } = await centre(page);
+  await page.mouse.click(x, y);
+  await page.waitForTimeout(150);
+  await page.mouse.click(x, y);
+  await expect.poll(() => state(page)).toBe("tickle");
+
+  const irritant = await page.evaluate(() => window.setInterval(() => window.loadoutMole!.spamForTest(), 25));
+  try {
+    await expect.poll(async () => (await mood(page)).irritationStage, { timeout: 5000 }).toBe("furious");
+    await expect.poll(async () => {
+      const entries = await seen(page);
+      const wary = entries.some((entry) => entry === "look:shakeNo" || entry === "look:worried");
+      const annoyed = entries.some((entry) => entry.startsWith("annoyed:"));
+      const angry = entries.some((entry) => entry.startsWith("mad:"));
+      return wary && annoyed && angry;
+    }, { timeout: 30000 }).toBe(true);
+  } finally {
+    await page.evaluate((timer) => window.clearInterval(timer), irritant);
+  }
+
+  const entries = await seen(page);
+  const waryIndex = entries.findIndex((entry) => entry === "look:shakeNo" || entry === "look:worried");
+  const annoyedIndex = entries.findIndex((entry) => entry.startsWith("annoyed:"));
+  const angryIndex = entries.findIndex((entry) => entry.startsWith("mad:"));
+  expect(waryIndex).toBeLessThan(annoyedIndex);
+  expect(annoyedIndex).toBeLessThan(angryIndex);
+});
+
+
 test("slow strokes pet him: the flat hand cursor, affection goes up, and he is happy before he is blissful", async ({ page }) => {
   await open(page);
   await petFor(page, 1200);

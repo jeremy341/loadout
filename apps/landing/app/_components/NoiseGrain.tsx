@@ -70,8 +70,8 @@ function startGrain(canvas: HTMLCanvasElement, paused: boolean) {
 // which looks the same and costs almost nothing. It never takes pointer input.
 export function NoiseGrain() {
   const { paused } = useMotionPreference();
-  const { grain, simplifyDecoration } = useDisplayPreferences();
-  const hideGrain = grain === "off" || simplifyDecoration;
+  const { grain } = useDisplayPreferences();
+  const hideGrain = grain === "off";
   const still = paused || grain === "still";
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => (!hideGrain && canvasRef.current ? startGrain(canvasRef.current, still) : undefined), [still, hideGrain]);

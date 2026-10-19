@@ -4,21 +4,27 @@
    The docs and the 404 page keep the system arrow. The 32px image is the fallback; a screen with a pixel ratio of 2 gets
    the 64px one. Hotspots: the arrow's tip is at 3 1, the hand's fingertip at 15 3, the open hand and the fist near the middle of the palm. */
 @media (pointer: fine) and (forced-colors: none) {
-  html:not([data-system-cursor="true"]) .home {
+  html:not([data-system-cursor="true"]) :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut) {
     cursor: url("/loadout/cursors/arrow-dark.png") 3 1, auto;
     cursor: image-set(url("/loadout/cursors/arrow-dark.png") 1x, url("/loadout/cursors/arrow-dark@2x.png") 2x) 3 1, auto;
   }
-  html:not([data-system-cursor="true"]) .home:has(#theme:checked) {
+  html:not([data-system-cursor="true"])[data-display-theme="light"] :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut) {
     cursor: url("/loadout/cursors/arrow-light.png") 3 1, auto;
     cursor: image-set(url("/loadout/cursors/arrow-light.png") 1x, url("/loadout/cursors/arrow-light@2x.png") 2x) 3 1, auto;
   }
-  html:not([data-system-cursor="true"]) .home :is(a[href], button, label, summary, [role="button"]) {
+  html:not([data-system-cursor="true"]) :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut) :is(a[href], button, label, summary, select, input[type="checkbox"], input[type="radio"], [role="button"]) {
     cursor: url("/loadout/cursors/hand-dark.png") 15 3, pointer;
     cursor: image-set(url("/loadout/cursors/hand-dark.png") 1x, url("/loadout/cursors/hand-dark@2x.png") 2x) 15 3, pointer;
   }
-  html:not([data-system-cursor="true"]) .home:has(#theme:checked) :is(a[href], button, label, summary, [role="button"]) {
+  html:not([data-system-cursor="true"])[data-display-theme="light"] :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut) :is(a[href], button, label, summary, select, input[type="checkbox"], input[type="radio"], [role="button"]) {
     cursor: url("/loadout/cursors/hand-light.png") 15 3, pointer;
     cursor: image-set(url("/loadout/cursors/hand-light.png") 1x, url("/loadout/cursors/hand-light@2x.png") 2x) 15 3, pointer;
+  }
+
+  /* Nested labels and decorative hover text keep the cursor of their surface. */
+  html:not([data-system-cursor="true"]) .home :is(.hs, .art),
+  html:not([data-system-cursor="true"]) :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut) :is(a[href], button, label, summary, [role="button"]) :is(span, strong, small, svg, path) {
+    cursor: inherit;
   }
 
   /* The mole can be grabbed (.ulpi/design/mole.md): the open hand over it. */

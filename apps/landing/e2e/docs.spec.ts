@@ -74,12 +74,15 @@ test("search loads lazily, links to real headings, and supports keyboard navigat
   await expect(page.getByRole("searchbox", { name: "Search documentation" })).toHaveValue("");
 });
 
-test("the mobile Docs top bar stays compact and leaves room for the Accessibility tab", async ({ page }) => {
+test("the default mobile Docs top bar stays compact", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/docs/eligibility");
   await expect(page.locator(".docs-nav")).toHaveCSS("padding-bottom", "10px");
   const topBarHeight = await page.locator(".docs-nav").evaluate((element) => element.getBoundingClientRect().height);
   expect(topBarHeight).toBeLessThan(80);
+  const toolbar = await page.locator(".docs-nav").boundingBox();
+  const article = await page.locator(".docs-main").boundingBox();
+  expect(article!.y).toBeGreaterThanOrEqual(toolbar!.y + toolbar!.height);
   await expect(page.locator(".doc-header .eyebrow")).toBeInViewport();
   await expect(page.getByRole("link", { name: "Open accessibility settings" })).toBeVisible();
 });

@@ -18,7 +18,10 @@ export type DisplayPreferences = {
   strongContrast: boolean;
   systemCursor: boolean;
   largerControls: boolean;
-  simplifyDecoration: boolean;
+  hideGrid: boolean;
+  hideAscii: boolean;
+  hideMascot: boolean;
+  hideMarkings: boolean;
   nativeScroll: boolean;
 };
 
@@ -26,7 +29,8 @@ type StoragePort = Pick<Storage, "getItem" | "setItem">;
 export const DEFAULT_PREFERENCES: DisplayPreferences = {
   theme: "dark", colorVision: "standard", reduceMotion: false, grain: "animated",
   underlineLinks: false, phantomSans: false, readingSize: 100, moreSpacing: false,
-  strongContrast: false, systemCursor: false, largerControls: false, simplifyDecoration: false, nativeScroll: false,
+  strongContrast: false, systemCursor: false, largerControls: false,
+  hideGrid: false, hideAscii: false, hideMascot: false, hideMarkings: false, nativeScroll: false,
 };
 const preferenceKeys: Record<keyof DisplayPreferences, string> = {
   theme: "loadout-theme", colorVision: "loadout-color-vision", reduceMotion: "loadout-reduce-motion",
@@ -34,7 +38,8 @@ const preferenceKeys: Record<keyof DisplayPreferences, string> = {
   phantomSans: "loadout-phantom-sans", readingSize: "loadout-reading-size",
   moreSpacing: "loadout-more-spacing", strongContrast: "loadout-strong-contrast",
   systemCursor: "loadout-system-cursor", largerControls: "loadout-larger-controls",
-  simplifyDecoration: "loadout-simplify-decoration",
+  hideGrid: "loadout-hide-grid", hideAscii: "loadout-hide-ascii",
+  hideMascot: "loadout-hide-mascot", hideMarkings: "loadout-hide-markings",
   nativeScroll: "loadout-native-scroll",
 };
 const names = Object.keys(preferenceKeys) as (keyof DisplayPreferences)[];
@@ -56,10 +61,39 @@ export function createDisplayPreferencesStore(getStorage: () => StoragePort | nu
   const listeners = new Set<() => void>();
   function storage() { try { return getStorage(); } catch { return null; } }
   function read(key: string) { try { return storage()?.getItem(key) ?? null; } catch { return null; } }
+  function hasIndependentDecorationChoices() {
+    return ["loadout-hide-grid", "loadout-hide-ascii", "loadout-hide-mascot", "loadout-hide-markings"]
+      .some((key) => read(key) !== null);
+  }
   function migrateGrain(raw: string | null) {
+    if (legacyQuietModeNeedsMigration()) return "off";
     if (raw !== null) return raw;
     if (read("loadout-hide-grain") !== "true") return raw;
     return "off";
+  }
+  function migrateDecoration(raw: string | null) {
+    if (raw !== null) return raw;
+    if (read("loadout-simplify-decoration") !== "true") return raw;
+    return "true";
+  }
+  function legacyQuietModeNeedsMigration() {
+    return read("loadout-simplify-decoration") === "true" && !hasIndependentDecorationChoices();
+  }
+  function migratePreference(name: keyof DisplayPreferences, raw: string | null) {
+    switch (name) {
+      case "colorVision": return migrateColorVision(raw);
+      case "grain": return migrateGrain(raw);
+      case "phantomSans": return migratePhantomSans(raw);
+      case "hideGrid":
+      case "hideAscii":
+      case "hideMascot":
+      case "hideMarkings": return migrateDecoration(raw);
+      default: return raw;
+    }
+  }
+  function persistMigration(name: keyof DisplayPreferences, stored: string | null, migrated: string | null) {
+    if (migrated === null || migrated === stored) return;
+    try { storage()?.setItem(preferenceKeys[name], migrated); } catch { /* Memory remains usable. */ }
   }
   function migrateColorVision(raw: string | null) {
     if (raw !== null) return raw;
@@ -75,11 +109,11 @@ export function createDisplayPreferencesStore(getStorage: () => StoragePort | nu
     let next = { ...snapshot };
     for (const name of names) {
       if (dirty.has(name)) continue;
-      let raw = read(preferenceKeys[name]);
-      if (name === "colorVision") raw = migrateColorVision(raw);
-      if (name === "grain") raw = migrateGrain(raw);
-      if (name === "phantomSans") raw = migratePhantomSans(raw);
+      const storedRaw = read(preferenceKeys[name]);
+      const raw = migratePreference(name, storedRaw);
       next = { ...next, [name]: decode(name, raw) };
+      // Save migrated values so a later independent change or reset can override the legacy key.
+      persistMigration(name, storedRaw, raw);
     }
     snapshot = next;
   }
@@ -150,15 +184,19 @@ export function DisplayPreferencesEffects() {
     root.dataset.underlineLinks = String(preferences.underlineLinks);
     root.dataset.phantomSans = String(preferences.phantomSans);
     root.dataset.readingSize = String(preferences.readingSize);
+    root.dataset.readingLayout = String(preferences.readingSize !== 100 || preferences.moreSpacing);
     root.dataset.moreSpacing = String(preferences.moreSpacing);
     root.dataset.strongContrast = String(preferences.strongContrast);
     root.dataset.systemCursor = String(preferences.systemCursor);
     root.dataset.largerControls = String(preferences.largerControls);
-    root.dataset.simplifyDecoration = String(preferences.simplifyDecoration);
+    root.dataset.hideGrid = String(preferences.hideGrid);
+    root.dataset.hideAscii = String(preferences.hideAscii);
+    root.dataset.hideMascot = String(preferences.hideMascot);
+    root.dataset.hideMarkings = String(preferences.hideMarkings);
     root.dataset.nativeScroll = String(preferences.nativeScroll);
   }, [preferences.theme, preferences.colorVision, preferences.underlineLinks, preferences.phantomSans,
     preferences.grain, preferences.readingSize, preferences.moreSpacing, preferences.strongContrast, preferences.systemCursor, preferences.largerControls,
-    preferences.simplifyDecoration, preferences.nativeScroll]);
+    preferences.hideGrid, preferences.hideAscii, preferences.hideMascot, preferences.hideMarkings, preferences.nativeScroll]);
   useEffect(() => {
     const root = document.documentElement;
     if (systemContrast) root.dataset.systemContrast = "true";

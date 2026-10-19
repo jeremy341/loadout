@@ -9,13 +9,13 @@ import { useMotionPreference } from "../motion-preference";
 // The pointer position goes into CSS variables, so moving the mouse never re-renders React.
 export function AsciiField({ html, side = "right", top }: { html: string; side?: "left" | "right"; top?: string }) {
   const { paused } = useMotionPreference();
-  const { simplifyDecoration } = useDisplayPreferences();
+  const { hideAscii } = useDisplayPreferences();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const field = ref.current;
     if (!field) return;
-    if (paused || simplifyDecoration) return;
+    if (paused || hideAscii) return;
     const onPointerMove = (event: PointerEvent) => {
       const rect = field.getBoundingClientRect();
       field.style.setProperty("--mx", `${event.clientX - rect.left}px`);
@@ -23,7 +23,9 @@ export function AsciiField({ html, side = "right", top }: { html: string; side?:
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     return () => window.removeEventListener("pointermove", onPointerMove);
-  }, [paused, simplifyDecoration]);
+  }, [paused, hideAscii]);
+
+  if (hideAscii) return null;
 
   return (
     <div ref={ref} className={`ar ar-${side}`} style={top ? { top } : undefined} aria-hidden="true">

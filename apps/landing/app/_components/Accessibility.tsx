@@ -209,8 +209,8 @@ const colorProfiles: { value: ColorVisionProfile; label: string; description: st
   { value: "standard", label: "Standard", description: "LOADOUT's usual colors." },
   { value: "protanopia", label: "Protanopia", description: "For protanopia or protanomaly. Blue and amber accents." },
   { value: "deuteranopia", label: "Deuteranopia", description: "For deuteranopia or deuteranomaly. Blue and orange accents." },
-  { value: "tritanopia", label: "Tritanopia", description: "For tritanopia or tritanomaly. Distinct brightness and underlined links." },
-  { value: "achromatopsia", label: "Achromatopsia", description: "For achromatopsia or monochromacy. Grayscale accents and underlined links." },
+  { value: "tritanopia", label: "Tritanopia", description: "For tritanopia or tritanomaly. Warm sprites, native cursor, distinct brightness and underlined links." },
+  { value: "achromatopsia", label: "Achromatopsia", description: "For achromatopsia or monochromacy. Grayscale sprites and accents, native cursor and underlined links." },
 ];
 
 function ColorVisionSetting({ value, change }: { value: ColorVisionProfile; change: (value: ColorVisionProfile) => void }) {

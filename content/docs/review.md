@@ -33,11 +33,13 @@ We ask reviewers to consider four things. Each tells us something different abou
 
 Take the [sensor-board example](/docs/shipping#example). The circuit and firmware show what the builder implemented. The comparison with a reference thermometer backs up the temperature claim, while the stated limits stop a room-temperature test from becoming a claim about every environment. Together, those details give reviewers a much better picture than a polished product photo alone.
 
-Review produces a payout multiplier on the **0×–20×** scale. **10× is solid work**, **15× is great**, and **20× is outstanding**. Genuine work that passes the team's check pays at least **5×**. Rejected work earns nothing; 0× isn't a payable ship.
+Each ship needs **12 countable peer reviews**. Reviewers score the four dimensions from **1 to 9** and give a written reason of at least ten words. We take the median score in each dimension, average those four medians, compare that score with the review pool, then map its percentile through the payout curve.
+
+Normal rates run from **1× to 20×**, with a target mean of **10×**. At 10×, each approved hour earns 10 Ore. A project that reaches **Great Signal** can raise its hourly ceiling to **30×**. Good Signal grants +50 Ore and an achievement/shop reward; Great includes the Good rewards and a Great achievement. The total Signal reward, including any hourly-rate uplift, is capped at 5,000 Ore per project. Signal is for verified attention from outside LOADOUT; Usage Milestones for real project users are separate.
 
 **10× means 10 Ore per approved hour.** Twenty approved hours at 10× earn 200 base Ore. A higher multiplier raises that ship's payout; it doesn't change how many hours you recorded. [Ore, XP & levels](/docs/progress#work) has the full comparison.
 
-Reviewer counts, rating aggregation and review deadlines still need decisions. We haven't published a formula that turns the four dimensions into the final multiplier.
+Payout locks after both conditions are met: the ship has 12 countable reviews, and at least 24 hours have passed since its latest journal entry. A 24-hour flag window follows; a pending flag holds payout for moderator review. Builders can see the scores and reasons on their own ship, but reviewer names stay hidden. Three flags rejected within ten hours deduct 5% from that builder's next final Ore payout. There's no separate appeal after the flag window.
 
 ## Cheating {#fraud}
 
@@ -59,4 +61,4 @@ When you ship a new version instead, describe the changes and include the new jo
 
 If you think we missed something, send the review reference, the part you disagree with and the evidence behind your question to [#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7). That gives us a specific decision to look at.
 
-Formal appeal limits, timing and score-change rules aren't settled yet. We'll publish them once decided; asking about a review doesn't guarantee that its outcome changes.
+If you think a review breaks the published rules, flag it during the 24-hour window so a moderator can check it. There's no separate appeal after that window.

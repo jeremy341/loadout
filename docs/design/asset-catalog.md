@@ -30,7 +30,7 @@ The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files 
 
 ### Logo and share image
 
-The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and the touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are the 1200 by 630 share image (under 300 KB), each with its `.alt.txt`. The editable SVG sources, including the custom pixel wordmark, are in `assets/editable/logo/`. The helmet comes from the one-bit icon pack; the owner confirmed it can be used.
+The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are identical 1200 by 630 share images (under 300 KB), each with its `.alt.txt`. They preserve main's original background and details; its blue label is centered above the wordmark, the helmet is removed, and the enlarged bottom logo variant—with dirt-colored details—sits above centered Jersey 10 tagline and track names. The depth-strip readout is softened. `assets/editable/logo/build-share-preview.ps1` reproduces the exports from `share-preview-main-base.jpg`. Exact source revisions and unused logo alternatives are recorded in that folder's README.
 
 ### Current icon sprites
 

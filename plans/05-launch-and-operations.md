@@ -9,6 +9,8 @@ It does not redefine product/economy rules.
 
 # 29. Limited Drops
 
+**Open idea only.** No launch stock, schedule, or prize quantity is confirmed.
+
 Example:
 
 ```text
@@ -25,6 +27,8 @@ Drops give builders reasons to save Ore.
 ---
 
 # 30. Sponsor Drops
+
+**Open idea only.** Sponsor-supplied items or credits are not confirmed rewards.
 
 Examples:
 
@@ -47,6 +51,8 @@ Sponsors can contribute products/credits instead of cash.
 ---
 
 # 31. Sponsor Challenges
+
+**Open idea only.** Do not promise a challenge or special reward without a separate sponsor and budget approval.
 
 Sponsor challenges should map directly to LOADOUT's technical tracks.
 
@@ -217,7 +223,7 @@ LOADOUT should be especially legible to sponsors in:
 
 # 57. LOADOUT IRL
 
-Potential future physical extension, after the online loop and operating gates are ready. It is not an MVP requirement or a confirmed event. The current concept is `LOADOUT IRL // RUHR — Build the next Era.` Use the same online tracks, review, and global Era rules; do not promise travel support, applications, sponsors, or attendance. Plan 15 owns the proposal and its prerequisites.
+Planned future physical extension, after the online loop and operating gates are ready. It is not an MVP requirement, public event announcement, or operationally confirmed event. The current concept is `LOADOUT IRL // RUHR — Build the next Era.` Use the same online tracks, review, and global Era rules; do not promise travel support, applications, sponsors, or attendance. Plan 15 owns the event concept and readiness gates.
 
 ---
 
@@ -233,22 +239,21 @@ Before Season 00, publish these rules clearly:
 4. Generic product/UI work is not enough by itself.
 5. A larger app may receive credit only for its eligible technical core.
 6. Research is a **mode**, not a catch-all track.
-7. Hackatime/Lapse time must be tied to journals.
-8. Tracked time alone does not earn Ore.
-9. Each tracked minute can only be assigned once.
-10. Each shipped minute can only be rewarded once.
-11. AI may assist, but the participant must remain the primary builder.
-12. Ore is one **global** currency.
-13. Reviewers decide the final multi-track XP split.
-14. Track levels cap at **15** and persist across seasons.
-15. Most shop items are cross-track purchasable, but the relevant track affects price.
-16. Only a small set of Mastery rewards use hard level walls.
-17. Permanent field discounts are capped on expensive items.
-18. Field Requisitions are earned at LV.3, 6, 9, 12, and 15 only.
-19. Requisitions are one-use, non-transferable, non-expiring, and limited to one per order.
-20. Requisitions never bypass a level wall.
-21. Custom Orders require **level + Ore + program fit + fulfillment approval**.
-22. Imported/prior YSWS work cannot generate a second payout for the same work.
+7. Every accepted project is open source; required source/design files are public.
+8. Hackatime is required for software; Lapse is required for Hardware and its recordings are reviewer-only.
+9. Add a journal entry at least every eight hours of development; never count pre-program or double-submitted time.
+10. Hardware ships require a bill of materials.
+11. Review quality is peer-scored 1–9 in each of LOADOUT's four categories; 12 countable reviews are required for every ship, including Hardware.
+12. Normal Ore rates are 1×–20× with a 10× mean; Great Signal can raise the cap to 30×.
+13. Ore is one **global** currency; listed Ore prices remain the same across regions.
+14. Review payout timing, flags, and repeated-false-flag penalty follow Plan 22; there is no appeal.
+15. Track levels cap at **15** and persist across seasons.
+16. Permanent track discounts reach 20%; no Ore savings cap; combined savings top out at 40%.
+17. Field Requisitions are earned at LV.3, 6, 9, 12, and 15 only.
+18. Requisitions are one-use, non-transferable, non-expiring, and limited to one per order.
+19. Requisitions never bypass a level wall.
+20. Custom Orders require **level + Ore + program fit + fulfillment approval**.
+21. Imported/prior YSWS work cannot generate a second payout for the same work.
 
 Era launch rules are planned separately in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`. Before enabling an Era, operators must approve its theme, objective set, weekly-reset timezone, minimum-duration/threshold configuration, reviewer criteria, and audit/correction path. An unconfigured Era must not show live progress, a countdown, or a payout bonus.
 
@@ -258,21 +263,8 @@ The niche and economy must remain strict enough that a builder can understand bo
 
 # 63. Launch Sequence
 
-## Step 1 — Lock Brand System
-Current direction:
-- LOADOUT name
-- cream/black/lime palette
-- warm grid background
-- persistent left sidebar
-- pixel builder characters
-- block/pixel display typography
-- restrained SVG decoration
-
-Remaining:
-- choose final logo
-- choose exact fonts
-- finalize avatar style
-- create design tokens/components
+## Step 1 — Maintain the LOADOUT Design System
+Use the canonical design system in `docs/design/system/design-system.md`. Do not restore retired palette, layout, or homepage prototypes from old plans.
 
 ## Step 2 — Finalize Economy Configuration
 Determine:
@@ -293,10 +285,8 @@ Determine:
 
 Do not launch with one generic discount formula applied blindly to every product.
 
-## Step 3 — Fork/Prune Pixl
-Follow **Part II — Pixl Fork & Migration Plan** in this document.
-
-Get to a clean LOADOUT repository before stacking new economy logic on top of game/lore dependencies.
+## Step 3 — Build the Participant Platform
+Design and implement the approved future-platform features as separate reviewed releases. Reuse reference products as design evidence only; do not copy code or assets without a license. Keep the current public homepage and Docs separate from participant services until each service has an approved data, privacy, accessibility, and release plan.
 
 ## Step 4 — Build First Vertical Slice
 Priority:
@@ -319,12 +309,14 @@ Invite roughly 10–20 builders.
 Test:
 - project eligibility clarity
 - journaling friction
+- Hackatime/Lapse evidence and eight-hour journal cadence
+- public project/journal and reviewer-only Lapse visibility
 - hour assignment
-- reviewer track allocations
-- multiplier distribution
+- 12-review gate, 1–9 scoring, anonymized comments, and 24-hour flag flow
+- multiplier distribution and the Great Signal cap
 - level pacing
 - cross-track pricing
-- discount caps
+- discount limits and regional price consistency
 - Requisition desirability
 - whether any track is economically dominant
 - Ore inflation
@@ -401,9 +393,10 @@ Full launch only after the field economy is understandable and no single track i
 ## Review
 - queue length
 - review time
-- appeal rate
+- countable vote completion
 - reviewer agreement
 - fit-gate consistency
+- rejected flag rate and moderation outcomes
 
 ## Community
 - active builders
@@ -412,6 +405,7 @@ Full launch only after the field economy is understandable and no single track i
 - cross-project reuse
 - Signal events
 - technical collaboration
+- follow/like/post-notification use without an endless-scroll feed
 
 ---
 

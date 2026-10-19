@@ -1,5 +1,9 @@
 # Vercel deployment
 
+## Current Production address — 2026-10-19
+
+The stable public address is [https://loadout.dino.icu/](https://loadout.dino.icu/). The Vercel hostname `loadout-ysws.vercel.app` is retained as a redirecting alias. The historical configuration and deployment notes below describe earlier states and are kept as dated evidence.
+
 ## Latest deployment evidence — 2026-10-10
 
 GitHub's commit-status API reports a successful Vercel deployment status for current `main` commit `cd1834a52249424ed135adb65c5f15bd6ef7d56b`. Its message is “Deployment has completed.” The GitHub app does not expose the Vercel project console, and this status alone does not prove a fresh browser smoke test of the homepage and Docs routes.
@@ -11,7 +15,7 @@ GitHub's commit-status API reports a successful Vercel deployment status for cur
 - Application root: apps/landing.
 - Framework preset: Next.js.
 - Production Branch: main.
-- Only assigned Production domain: https://loadout-ysws.vercel.app/
+- Only assigned Production domain at the time: https://loadout-ysws.vercel.app/
 - The previous Production alias landing-mu-taupe.vercel.app was removed from this project on 2026-10-06.
 - No project environment variables are configured; none are needed for the current homepage.
 - The production homepage loaded at the stable URL during verification from the connected browser.
@@ -20,7 +24,7 @@ The project already had the correct Git connection, root directory, Production B
 
 ## Production and Preview URLs
 
-Use https://loadout-ysws.vercel.app/ as the stable Production address.
+The stable Production address is now https://loadout.dino.icu/.
 
 Vercel creates a unique generated URL for each Preview deployment. For example, PR #8 received https://loadout-ysws-abqz4yzoh-jerry-team1.vercel.app/. That long preview address is a per-deployment URL; it does not replace the stable Production domain. The current Hobby project dashboard marks custom Preview deployment suffixes as a Pro feature.
 
@@ -32,7 +36,7 @@ For a new deployment, verify:
 
 - Vercel reports the intended branch and commit;
 - the build completed and the deployment is Ready;
-- Production uses the stable loadout-ysws.vercel.app domain;
+- Production uses the stable loadout.dino.icu domain;
 - a PR Preview has its own generated deployment URL;
 - the deployed homepage has the expected RSVP link and metadata.
 

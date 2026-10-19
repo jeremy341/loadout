@@ -23,15 +23,16 @@
 | [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |
 | [`section-corner-brackets.md`](section-corner-brackets.md) | Four corner marks on the section headings, matching the hero frame. |
 | [`logo-helmet-mark.md`](logo-helmet-mark.md) | The miner's helmet logo, favicon, share image and the lamp blink. |
+| [`share-preview.md`](share-preview.md) | Main's original share-image composition with the owner's flatter wordmark and Jersey 10 supporting copy. |
 | [`ore-currency.md`](ore-currency.md) | The global currency is called Ore, with the ore gem icon, replacing Bolts. |
 | [`depth-darkness.md`](depth-darkness.md) | The homepage gets darker the deeper you scroll, down to the 404's near black. |
 | [`prize-belt.md`](prize-belt.md) | The planned prizes ride a slow, pausable belt, as in Pixl and the YSWS template. |
 | [`prize-photos.md`](prize-photos.md) | The proposed prizes show one example product photo each, from Pixl, on the existing belt. |
 | [`homepage-voice.md`](homepage-voice.md) | Plainer homepage copy: hero, rewards, progression, Eras and IRL lines, with no new claims. |
-| [`real-details.md`](real-details.md) | The homepage and Docs say what is decided: teens 13 to 18, 10 Ore for a solid hour, the 0 to 20 rating, a worked example, prices on the prizes, short FAQ answers, and no invented drawing details. The public Docs still say 13 to 19; correction is pending. |
+| [`real-details.md`](real-details.md) | Historical 2026-10-16 copy brief. Its 0–20 rating and numeric worked example are superseded by Plans 02/22; current public-age copy is tracked in Plan 06. |
 | [`copy-follow-through.md`](copy-follow-through.md) | Owner-approved fixes 1–4: accurate hero, direct launch wording, starter prizes first, shorter repeated copy, and clearer Custom Order and Era Docs. Real-project showcase deferred; existing How it works preserved. |
-| [`mole.md`](mole.md) | A pixel Maulwurf mascot turns up at the bottom of the homepage: it can be petted, picked up, and annoyed, and the footer button hides it. |
-| [`mole-behaviour.md`](mole-behaviour.md) | Proposed rework of Orry's behaviour: 19 ways to interact, what counts as each gesture, two mood meters with minimum times, per-frame animation timing, a run-and-pause rhythm, and rules for effects and the cursor. Not built. |
+| [`mole.md`](mole.md) | The homepage Orry is an interactive pet-care companion: visitors can pet, play with, pick up, and annoy him; his affection and irritation change his reactions. The old footer control has been removed. |
+| [`mole-behaviour.md`](mole-behaviour.md) | Implemented homepage pet-care behavior for Orry: gesture definitions, affection and irritation meters, pacing, reactions, sleep, motion/accessibility rules, and cursor interactions. Code lives in `apps/landing/app/_components/mole/`. |
 | [`custom-cursor.md`](custom-cursor.md) | The homepage cursor is a pixel arrow with a pointing hand for links, from Kenney's CC0 pack, in LOADOUT's ink, blue and yellow. |
 | [`rock-bottom-404.md`](rock-bottom-404.md) | The 404 page ("rock bottom") and the cave-in error page. |
 | [`pixel-font-open-c.md`](pixel-font-open-c.md) | An open C and c in the pixel font, so a C no longer reads as an O. |
@@ -43,7 +44,7 @@
 | Brief | Current owner |
 |---|---|
 | [`mobile-nav-single-row.md`](mobile-nav-single-row.md) | Homepage mobile navigation: one row at normal phone text sizes, with accessible reflow when text is enlarged. |
-| [`docs-connected-prose.md`](docs-connected-prose.md) | Public Markdown guides and homepage payout labels: connected explanations, original worked examples, a longer fictional journal and explicit Ore multipliers. |
+| [`docs-connected-prose.md`](docs-connected-prose.md) | Earlier Docs copy implementation record; rating/multiplier examples and the Jerry byline are superseded by the 2026-10-19 owner decision. Current rules are in Plans 02/22; current team byline is “Built with Love by the LOADOUT team.” |
 | [`accessibility-field-panel.md`](accessibility-field-panel.md) | Current accessibility settings panel, visible shortcut and dedicated page. The mobile/color-vision follow-up is recorded in the next row. |
 | [`mobile-accessibility-color-vision.md`](mobile-accessibility-color-vision.md) | Retracting phone shortcut, optional color-vision palettes and the expanded display settings. |
 | [`color-safe-docs-followup.md`](color-safe-docs-followup.md) | Color-safe palette and participant Docs changes. |

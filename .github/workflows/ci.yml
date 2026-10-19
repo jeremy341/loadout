@@ -149,6 +149,9 @@ jobs:
   # "Landing browser" stable, which is what branch protection and scripts/ship.ps1 look for.
   landing-quality:
     name: Landing quality
+    # Integrity failures (for example, a stale reference pin) should fail before the
+    # dependency install, lint, unit tests, build, and browser matrix spend runner time.
+    needs: repository-integrity
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -186,6 +189,7 @@ jobs:
 
   browser-shard:
     name: Browser ${{ matrix.name }}
+    needs: repository-integrity
     runs-on: ubuntu-latest
     timeout-minutes: 6
     # The browser jobs read these to pick their slice of the suite: the two Orry files get their
@@ -302,16 +306,22 @@ jobs:
     # branch protection and ship.ps1 need no change, and it pads nothing: it fails unless every
     # shard that ran passed.
     name: Landing browser
-    needs: browser-shard
+    needs: [repository-integrity, browser-shard]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
       - name: Aggregate the browser shards
         env:
+          INTEGRITY: ${{ needs.repository-integrity.result }}
           SHARDS: ${{ needs.browser-shard.result }}
         run: |
           set -euo pipefail
+
+          if [[ "$INTEGRITY" != "success" ]]; then
+            printf '::error::Repository integrity failed; browser checks were not started.\n'
+            exit 1
+          fi
 
           case "$SHARDS" in
             success)

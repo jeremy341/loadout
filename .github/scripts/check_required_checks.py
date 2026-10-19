@@ -162,7 +162,11 @@ def validate_lanes(lanes: list[Any], check_names: dict[str, Any]) -> list[str]:
 
 
 def validate_browser_aggregator(jobs: dict[str, dict[str, str]]) -> list[str]:
-    if jobs.get("landing-browser", {}).get("needs") == "browser-shard":
+    needs = jobs.get("landing-browser", {}).get("needs", "").strip()
+    if needs.startswith("[") and needs.endswith("]"):
+        needs = needs[1:-1]
+    dependencies = {dependency.strip().strip("\"'") for dependency in needs.split(",") if dependency.strip()}
+    if "browser-shard" in dependencies:
         return []
     return ["The 'landing-browser' job must aggregate 'browser-shard'."]
 

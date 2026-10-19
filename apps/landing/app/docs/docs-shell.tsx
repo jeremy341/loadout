@@ -128,9 +128,8 @@ export function DocsShell({ children, groups }: { children: React.ReactNode; gro
   return <div className="docs" ref={rootRef}>
     <NoiseGrain />
     <a className="docs-skip" href="#docs-main">Skip to documentation</a>
-      <AccessibilityTab />
     <aside className="docs-nav" aria-label="Documentation directory">
-      <div className="docs-nav-head"><Link className="docs-brand" href="/"><Logo /><span>DOCS</span></Link>
+      <div className="docs-nav-head"><AccessibilityTab /><Link className="docs-brand" href="/"><Logo /><span>DOCS</span></Link>
         <div className="docs-nav-actions">
           <ThemeSwitch />
           <label className="tg docs-theme" htmlFor="theme"><span className="pxw mo"><i className="b" /></span><span className="pxw su"><i className="a" /></span></label>

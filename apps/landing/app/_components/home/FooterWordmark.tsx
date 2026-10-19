@@ -9,13 +9,13 @@ import { useDisplayPreferences } from "../display-preferences";
 // moving the mouse never re-renders React. Touch visitors see the faint base only.
 export function FooterWordmark() {
   const { paused } = useMotionPreference();
-  const { simplifyDecoration } = useDisplayPreferences();
+  const { hideMarkings } = useDisplayPreferences();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mark = ref.current;
     if (!mark) return;
-    if (paused || simplifyDecoration) return;
+    if (paused || hideMarkings) return;
     const onPointerMove = (event: PointerEvent) => {
       const rect = mark.getBoundingClientRect();
       mark.style.setProperty("--mx", `${event.clientX - rect.left}px`);
@@ -27,7 +27,9 @@ export function FooterWordmark() {
       mark.style.removeProperty("--mx");
       mark.style.removeProperty("--my");
     };
-  }, [paused, simplifyDecoration]);
+  }, [paused, hideMarkings]);
+
+  if (hideMarkings) return null;
 
   return (
     <div ref={ref} className="ft-mark" aria-hidden="true">

@@ -50,11 +50,21 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
-# The checks each lane requires. They mirror the branch protection in docs/development/branch-protection-setup.md.
-$Required = @{
-  development = @('Repository integrity', 'Landing quality', 'Promotion lane')
-  testing     = @('Repository integrity', 'Landing quality', 'Landing browser', 'Promotion lane')
-  main        = @('Repository integrity', 'Landing quality', 'Landing browser', 'Promotion lane')
+# The checked-in contract is validated against the workflow job names and generated docs in CI.
+$CheckContractPath = Join-Path $PSScriptRoot '..\.github\required-checks.json'
+$CheckContract = Get-Content -Raw $CheckContractPath | ConvertFrom-Json -AsHashtable
+$Required = @{}
+foreach ($lane in $CheckContract.lanes) {
+  if (-not $lane.checks -or $lane.checks.Count -eq 0) {
+    throw "Required-check contract for '$($lane.branch)' must include at least one status check."
+  }
+  $names = foreach ($checkId in $lane.checks) {
+    if (-not $CheckContract.checks.ContainsKey($checkId)) {
+      throw "Required-check contract for '$($lane.branch)' references unknown check '$checkId'."
+    }
+    $CheckContract.checks[$checkId]
+  }
+  $Required[$lane.branch] = @($names)
 }
 $FailedStates = @('FAILURE', 'ERROR', 'CANCELLED', 'TIMED_OUT', 'ACTION_REQUIRED', 'STARTUP_FAILURE')
 $PendingStates = @('IN_PROGRESS', 'QUEUED', 'PENDING', 'WAITING', 'REQUESTED', 'EXPECTED')

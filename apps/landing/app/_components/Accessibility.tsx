@@ -80,8 +80,13 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
         <div className="a11y-dialog-header">
           <p className="a11y-kicker">LOADOUT / FIELD SETTINGS</p>
           <div className="a11y-dialog-head">
-            <h2 id="a11y-dialog-title" data-dialog-title tabIndex={-1} aria-label="Accessibility settings">Accessibility</h2>
-            <button className="a11y-close" type="button" onClick={() => dialogRef.current?.close()}>Close</button>
+            <h2 id="a11y-dialog-title" data-dialog-title tabIndex={-1} aria-label="Accessibility settings">
+              <span className="a11y-title-full">Accessibility</span>
+              <span className="a11y-title-compact" aria-hidden="true">Settings</span>
+            </h2>
+            <button className="a11y-close" type="button" aria-label="Close" onClick={() => dialogRef.current?.close()}>
+              <span className="a11y-close-label">Close</span><span className="a11y-close-icon" aria-hidden="true">×</span>
+            </button>
           </div>
         </div>
         <div className="a11y-dialog-body">
@@ -231,16 +236,15 @@ function hasSettingsRail() {
   return window.matchMedia("(min-width: 821px)").matches;
 }
 
-export function AccessibilitySettings({ layout = "compact" }: { layout?: "compact" | "page" }) {
-  const preferences = useDisplayPreferences();
-  const { reduced: deviceReducedMotion } = useMotionPreference();
-  const [status, setStatus] = useState("");
-  const groupName = useId();
-  const [activeCategory, setActiveCategory] = useState(0);
-  const wideViewport = useSyncExternalStore(subscribeSettingsViewport, hasSettingsRail, () => false);
-  const showRail = layout === "page" && wideViewport;
-  const { setPreference } = preferences;
-  const categories = [
+type SettingsCategory = { title: string; content: ReactNode };
+type CategoryNavigation = { count: number; horizontal: boolean; select: (index: number) => void };
+
+function createSettingsCategories(
+  preferences: ReturnType<typeof useDisplayPreferences>,
+  setPreference: ReturnType<typeof useDisplayPreferences>["setPreference"],
+  deviceReducedMotion: boolean,
+): SettingsCategory[] {
+  return [
     { title: "Appearance", content: <>
       <ToggleSetting title="Light mode" description="Switch from graphite to stone paper." checked={preferences.theme === "light"} change={(value) => preferences.setTheme(value ? "light" : "dark")} />
       <ColorVisionSetting value={preferences.colorVision} change={preferences.setColorVision} />
@@ -257,45 +261,91 @@ export function AccessibilitySettings({ layout = "compact" }: { layout?: "compac
     { title: "Effects", content: <>
       <ToggleSetting title="Reduce motion" description="Stop animations. Your device's reduced-motion preference always takes priority." checked={preferences.reduceMotion} change={preferences.setReduceMotion} />
       {deviceReducedMotion && <p className="a11y-device-note">Your device currently requests reduced motion, so animations stay off even when the switch is off.</p>}
-      <ChoiceSetting title="Grain texture" description="Reduced motion makes animated grain still. Simplify decoration removes it altogether." value={preferences.grain} choices={[{ value: "animated", label: "Animated" }, { value: "still", label: "Still" }, { value: "off", label: "Off" }]} change={(value) => setPreference("grain", value as "animated" | "still" | "off")} />
-      <ToggleSetting title="Simplify decoration" description="Hide grain, the background grid, decorative ASCII and wandering mascots. Useful diagrams and prize images stay." checked={preferences.simplifyDecoration} change={(value) => setPreference("simplifyDecoration", value)} />
+      <ChoiceSetting title="Grain texture" description="Choose animated grain, a still texture or no grain." value={preferences.grain} choices={[{ value: "animated", label: "Animated" }, { value: "still", label: "Still" }, { value: "off", label: "Off" }]} change={(value) => setPreference("grain", value as "animated" | "still" | "off")} />
+      <ToggleSetting title="Hide background grid" description="Remove the engineering-paper grid behind the page." checked={preferences.hideGrid} change={(value) => setPreference("hideGrid", value)} />
+      <ToggleSetting title="Hide ASCII drawings" description="Remove the decorative ASCII drawings around the page." checked={preferences.hideAscii} change={(value) => setPreference("hideAscii", value)} />
+      <ToggleSetting title="Hide mascot" description="Hide Orry and stop his animations and interactions." checked={preferences.hideMascot} change={(value) => setPreference("hideMascot", value)} />
+      <ToggleSetting title="Hide extra markings" description="Remove stamps, side labels, the footer wordmark and depth lighting." checked={preferences.hideMarkings} change={(value) => setPreference("hideMarkings", value)} />
       <ToggleSetting title="Native scrolling" description="Use normal browser scrolling without the smooth-scroll effect." checked={preferences.nativeScroll} change={(value) => setPreference("nativeScroll", value)} />
     </> },
   ];
+}
 
-  function navigateCategory(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    let next = index;
-    if (event.key === "ArrowDown") next = (index + 1) % categories.length;
-    else if (event.key === "ArrowUp") next = (index + categories.length - 1) % categories.length;
-    else if (event.key === "Home") next = 0;
-    else if (event.key === "End") next = categories.length - 1;
-    else return;
-    event.preventDefault();
-    setActiveCategory(next);
-    event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
-  }
+function categoryIndexForKey(key: string, index: number, { count, horizontal }: CategoryNavigation) {
+  const forward = horizontal ? "ArrowRight" : "ArrowDown";
+  const backward = horizontal ? "ArrowLeft" : "ArrowUp";
+  if (key === forward) return (index + 1) % count;
+  if (key === backward) return (index + count - 1) % count;
+  if (key === "Home") return 0;
+  if (key === "End") return count - 1;
+  return null;
+}
+
+function navigateCategory(event: KeyboardEvent<HTMLButtonElement>, index: number, navigation: CategoryNavigation) {
+  const next = categoryIndexForKey(event.key, index, navigation);
+  if (next === null) return;
+  event.preventDefault();
+  navigation.select(next);
+  event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+}
+
+function CategoryTabs({ categories, activeCategory, groupName, spacious, select }: {
+  categories: SettingsCategory[]; activeCategory: number; groupName: string; spacious: boolean; select: (index: number) => void;
+}) {
+  const navigation = { count: categories.length, horizontal: spacious, select };
+  return <div className="a11y-category-rail" role="tablist" aria-label="Settings categories" aria-orientation={spacious ? "horizontal" : "vertical"}>
+    {categories.map((category, index) => <button key={category.title} type="button" role="tab" id={`${groupName}-tab-${index}`} aria-controls={`${groupName}-panel-${index}`} aria-selected={activeCategory === index} tabIndex={activeCategory === index ? 0 : -1} onClick={() => select(index)} onKeyDown={(event) => navigateCategory(event, index, navigation)}>
+      <span aria-hidden="true">0{index + 1}</span>{category.title}
+    </button>)}
+  </div>;
+}
+
+function CategoryPanels({ categories, showRail, activeCategory, groupName, layout, select }: {
+  categories: SettingsCategory[]; showRail: boolean; activeCategory: number; groupName: string; layout: "compact" | "page"; select: (index: number) => void;
+}) {
+  return <div className="a11y-category-content">{categories.map((category, index) => {
+    if (showRail) return <section key={category.title} className="a11y-category-panel" role="tabpanel" id={`${groupName}-panel-${index}`} aria-labelledby={`${groupName}-tab-${index}`} hidden={activeCategory !== index} tabIndex={0}>
+      <h2>{category.title}</h2>
+      <div className="a11y-group-body">{category.content}</div>
+    </section>;
+    return <details key={category.title} className="a11y-settings-group" name={groupName} open={index === (layout === "page" ? activeCategory : 0)} onToggle={(event) => {
+      if (layout === "page" && event.currentTarget.open) select(index);
+    }}>
+      <summary aria-label={category.title}><span className="a11y-category-title">{category.title === "Appearance" ? <>Appear<wbr />ance</> : category.title}</span><span className="a11y-group-mark" aria-hidden="true" /></summary>
+      <div className="a11y-group-body">{category.content}</div>
+    </details>;
+  })}</div>;
+}
+
+export function AccessibilitySettings({ layout = "compact" }: { layout?: "compact" | "page" }) {
+  const preferences = useDisplayPreferences();
+  const { reduced: deviceReducedMotion } = useMotionPreference();
+  const [status, setStatus] = useState("");
+  const groupName = useId();
+  const [activeCategory, setActiveCategory] = useState(0);
+  const wideViewport = useSyncExternalStore(subscribeSettingsViewport, hasSettingsRail, () => false);
+  const showRail = layout === "page" && wideViewport;
+  const { setPreference } = preferences;
+  const spacious = preferences.moreSpacing || preferences.readingSize !== 100;
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (!active?.closest(".a11y-dialog[open]")) return;
+      active.closest(".a11y-option, .a11y-choice")?.scrollIntoView({ block: "nearest" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [preferences.readingSize, preferences.moreSpacing, preferences.phantomSans]);
+  const categories = createSettingsCategories(preferences, setPreference, deviceReducedMotion);
 
   return <section className={`a11y-settings${layout === "page" ? " a11y-page-settings" : ""}`} aria-label="Display preferences" onChangeCapture={() => setStatus("")}>
     <p className="a11y-save-note">Changes apply immediately and save in this browser.</p>
     <div className={showRail ? "a11y-settings-layout" : undefined}>
-      {showRail && <div className="a11y-category-rail" role="tablist" aria-label="Settings categories" aria-orientation="vertical">
-        {categories.map((category, index) => <button key={category.title} type="button" role="tab" id={`${groupName}-tab-${index}`} aria-controls={`${groupName}-panel-${index}`} aria-selected={activeCategory === index} tabIndex={activeCategory === index ? 0 : -1} onClick={() => setActiveCategory(index)} onKeyDown={(event) => navigateCategory(event, index)}>
-          <span aria-hidden="true">0{index + 1}</span>{category.title}
-        </button>)}
-      </div>}
-      <div className="a11y-category-content">
-        {categories.map((category, index) => showRail
-          ? <section key={category.title} className="a11y-category-panel" role="tabpanel" id={`${groupName}-panel-${index}`} aria-labelledby={`${groupName}-tab-${index}`} hidden={activeCategory !== index} tabIndex={0}>
-              <h2>{category.title}</h2>
-              <div className="a11y-group-body">{category.content}</div>
-            </section>
-          : <details key={category.title} className="a11y-settings-group" name={groupName} open={index === (layout === "page" ? activeCategory : 0)} onToggle={(event) => { if (layout === "page" && event.currentTarget.open) setActiveCategory(index); }}>
-              <summary>{category.title}<span className="a11y-group-mark" aria-hidden="true" /></summary>
-              <div className="a11y-group-body">{category.content}</div>
-            </details>)}
-      </div>
+      {showRail && <CategoryTabs categories={categories} activeCategory={activeCategory} groupName={groupName} spacious={spacious} select={setActiveCategory} />}
+      <CategoryPanels categories={categories} showRail={showRail} activeCategory={activeCategory} groupName={groupName} layout={layout} select={setActiveCategory} />
     </div>
-    <button type="button" className="a11y-reset" onClick={() => { preferences.reset(); setStatus("Display settings reset. Your device's reduced-motion and contrast preferences still apply."); }}>Reset display settings</button>
+    <button type="button" className="a11y-reset" aria-label="Reset display settings" onClick={() => { preferences.reset(); setStatus("Display settings reset. Your device's reduced-motion and contrast preferences still apply."); }}>
+      <span className="a11y-reset-full">Reset display settings</span><span className="a11y-reset-compact" aria-hidden="true">Reset</span>
+    </button>
     <p className="a11y-reset-status" role="status">{status}</p>
   </section>;
 }

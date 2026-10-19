@@ -10,6 +10,7 @@ export type Mole = {
   runTo: (x: number) => void;
   shakeForTest: (durationMs: number) => void;
   throwForTest: (vx: number, vy: number) => void;
+  spamForTest: () => void;
   burrow: () => void;
   anim: () => string;
   mood: () => Mood;
@@ -29,6 +30,8 @@ export const box = (page: Page) => page.evaluate(() => window.loadoutMole!.box()
 export const anim = (page: Page) => page.evaluate(() => window.loadoutMole!.anim());
 
 export const mood = (page: Page) => page.evaluate(() => window.loadoutMole!.mood());
+
+export const spamForTest = (page: Page) => page.evaluate(() => window.loadoutMole!.spamForTest());
 
 export const centre = async (page: Page) => {
   const { x, y, size } = await box(page);

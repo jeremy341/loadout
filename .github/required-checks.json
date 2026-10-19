@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "repository-integrity": "Repository integrity",
+    "landing-quality": "Landing quality",
+    "promotion-lane": "Promotion lane",
+    "landing-browser": "Landing browser"
+  },
+  "lanes": [
+    {
+      "branch": "development",
+      "checks": ["repository-integrity", "landing-quality", "promotion-lane"]
+    },
+    {
+      "branch": "testing",
+      "checks": ["repository-integrity", "landing-quality", "landing-browser", "promotion-lane"]
+    },
+    {
+      "branch": "main",
+      "checks": ["repository-integrity", "landing-quality", "landing-browser", "promotion-lane"]
+    }
+  ]
+}

@@ -2,6 +2,8 @@ import { defineConfig } from "@playwright/test";
 
 const port = process.env.LOADOUT_TEST_PORT ?? "3001";
 const baseURL = process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${port}`;
+// A local caller may test the already-running preview; CI always starts its isolated server.
+const reuseLocalServer = !process.env.CI && process.env.LOADOUT_TEST_REUSE_SERVER === "true";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -35,7 +37,7 @@ export default defineConfig({
     command: process.env.CI ? "bun run build && bun run start" : "bun run dev",
     url: baseURL,
     env: { PORT: port },
-    reuseExistingServer: false,
+    reuseExistingServer: reuseLocalServer,
     timeout: 120_000,
   },
 });

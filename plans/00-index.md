@@ -16,7 +16,7 @@
 | Credibility, prizes, economy and cursor | [19 Credibility, prizes, economy and cursor](19-credibility-prizes-economy-cursor.md) | Work sequence and decisions across Plans 02, 06, 11 and 15; those plans stay the owners of their topics. |
 | Pull interactions | [20 Pull interactions](20-pull-interactions.md) | A grab cursor, a pull tab and a pull cord, all tried and dropped on 2026-10-15; the Docs tab is a plain link. Kept for the record. |
 | Credibility follow-through | [21 Credibility follow-through](21-credibility-follow-through.md) | Public copy and rule reconciliation implemented locally. Personal organizer copy and any further visual work remain deferred. No participant platform is implemented. |
-| Peer review and multipliers | [22 Peer review and ship multipliers](22-peer-review-and-multipliers.md) | Agreed rating inputs with candidate review operations and XP formula. The status matrix in Plan 02 separates agreed rules from remaining decisions. |
+| Peer review and multipliers | [22 Peer review and ship multipliers](22-peer-review-and-multipliers.md) | Agreed 1–9 peer scoring, 12-review gate, multiplier/Signal tiers, payout timing, flag handling, and no-appeal policy. No review platform is built. |
 | Less vibed, pass two | [23 Less vibed, pass two](23-less-vibed-pass-two.md) | Pixl and Stardance compared with the homepage: one worked example, each term taught once, real track examples, a more natural voice, prizes up front, and each thing said once. Proposed, not built. |
 | Homepage visual-clarity proposal | [17 Homepage visual clarity](17-homepage-visual-clarity.md) | Proposal, not authorization to change the homepage. |
 | Locked visual system | [Design system](../docs/design/system/design-system.md) | Visual authority; design briefs do not override later owner decisions. |
@@ -48,7 +48,7 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 
 ## Future proposals
 
-- [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) preserves Plan 03's unapproved dashboard, builder-profile, submission, shop, ordering, and community-surface ideas. The current app remains the public homepage and program-draft Docs; a separate approved scope is required before implementing these services.
+- [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
 - [`proposals/economy-calibration.md`](proposals/economy-calibration.md) is a mixed-status worksheet: recorded owner decisions plus candidate curves, review operations and Custom Order values. Plan 02 identifies what is agreed. A number appearing in the worksheet does not approve it.
 
 ## Historical consolidation

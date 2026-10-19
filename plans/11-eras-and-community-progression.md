@@ -2,7 +2,7 @@
 
 **Status:** Approved product direction, recorded 2026-10-05. The planned qualifying-project bonus is +10% of base Ore; stacking, operations and implementation remain open and are not part of this change.
 
-**Canonical owner:** This plan owns Era cadence, advancement, Era Points, the Era Ore bonus, and Era objectives. Plan 01 owns product meaning, Plan 02 owns the economy formula, Plan 03 owns UI states, Plan 05 owns launch operations, and Plan 06 owns the compact public explanation. If copies disagree, this plan governs Era-specific behavior.
+**Canonical owner:** This plan owns Era cadence, advancement, Era Points, the Era Ore bonus, Era objectives, and the selected mission structure. Plan 01 owns product meaning, Plan 02 owns the economy formula, Plan 05 owns launch operations, Plan 06 owns the compact public explanation, and the future platform proposal records selected surfaces. If copies disagree, this plan governs Era-specific behavior.
 
 ## Product decision
 
@@ -112,7 +112,9 @@ The dashboard may show the current Era, verified community progress, the +10% qu
 
 ### Missions
 
-Treat Era Objectives as a separate optional layer beside weekly missions and seasonal quests. Explain what differs: weekly missions are short repeatable tasks, Era Objectives are optional technical themes for the active Era, and seasonal quests belong to the longer competitive season.
+LOADOUT will include guided missions inspired by Stardance's step-based flow: curated steps, prerequisites where useful, submissions/review, and configured achievements or rewards. Keep them in LOADOUT's own industrial builder interface; do not add an open-world map, NPC quest loop, or Restoration Energy mechanic.
+
+Treat missions, Era Objectives, and seasonal quests as distinct layers. Missions provide a guided path through a defined project or skill sequence. Era Objectives are optional technical themes for the active Community Era. Seasonal quests are short optional challenges during the longer competitive season. Their rewards and live progress must come from configured server state, not mock counters.
 
 ## Integrity and audit requirements
 

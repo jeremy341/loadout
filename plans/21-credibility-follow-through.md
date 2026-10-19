@@ -1,6 +1,8 @@
 # Plan 21: Credibility follow-through
 
 **Status:** Public details and voice changes implemented locally on `feature/real-details`; rule reconciliation updated through 2026-10-18. The participant platform is not built. Further decoration changes and personal organizer copy are not authorized by this record. It follows [Plan 19](19-credibility-prizes-economy-cursor.md). Commit, promotion and deployment remain separate actions.
+
+**Policy supersession (2026-10-19):** The review numbers and operations recorded here are historical snapshots. Current policy is in [Plan 02](02-economy-and-rewards.md) and [Plan 22](22-peer-review-and-multipliers.md): four 1–9 peer-scored categories, 1×–20× normal rates, 12 reviews, and a Great-tier Signal cap of 30×.
 **Owner:** Plan 02 stays the single authority for the economy, Plan 06 for the homepage. This plan sequences the work.
 
 ## 1. Where we are

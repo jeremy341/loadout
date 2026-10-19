@@ -70,7 +70,7 @@ $FailedStates = @('FAILURE', 'ERROR', 'CANCELLED', 'TIMED_OUT', 'ACTION_REQUIRED
 $PendingStates = @('IN_PROGRESS', 'QUEUED', 'PENDING', 'WAITING', 'REQUESTED', 'EXPECTED')
 $PassedStates = @('SUCCESS', 'SKIPPED', 'NEUTRAL')
 $BranchPattern = '^(feature|fix|refactor|docs|experiment|chore)/'
-$ProductionUrl = 'https://loadout-ysws.vercel.app/'
+$ProductionUrl = 'https://loadout.dino.icu/'
 
 function Write-Step([string]$Message) { Write-Host "==> $Message" -ForegroundColor Cyan }
 

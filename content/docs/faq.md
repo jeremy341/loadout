@@ -12,7 +12,7 @@ Looking for one answer without reading the whole guide? Start here. Each answer 
 
 ### Who can join?
 
-High-school students aged **13 to 19**, including people who haven't shipped a project before. [Eligibility](/docs/eligibility) covers the age-check and delivery decisions still to be confirmed.
+High-school students aged **13 to 18**, including people who haven't shipped a project before. [Eligibility](/docs/eligibility) covers the age-check and delivery decisions still to be confirmed.
 
 ### Has LOADOUT launched?
 
@@ -28,7 +28,7 @@ As many as you like. You can also [ship an updated version](/docs/shipping#versi
 
 ### How do I earn Ore?
 
-Multiply your approved hours by the **Ore multiplier** from review. At **10×**, each approved hour earns 10 Ore, so ten hours earn 100 base Ore. [Ore, XP & levels](/docs/progress#work) shows the 5×–20× scale and the separate Era bonus.
+Multiply your approved hours by the **Ore multiplier** from review. Normal rates run from **1× to 20×**, with a target mean of **10×**. At 10×, each approved hour earns 10 Ore, so ten hours earn 100 base Ore. A project that reaches **Great Signal** can earn up to 30× per approved hour. [Ore, XP & levels](/docs/progress#work) shows the scale and the separate Era bonus.
 
 ### Is Ore the same as XP?
 

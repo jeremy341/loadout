@@ -1,5 +1,7 @@
 # Real details: the homepage and Docs say what is decided
 
+**Historical brief:** This 2026-10-16 copy pass contains superseded 0–20 review scores and 5×–20× payout examples. Current review/economy policy is in [Plan 22](../../plans/22-peer-review-and-multipliers.md) and [Plan 02](../../plans/02-economy-and-rewards.md). Internal age policy is 13–18; public age copy is intentionally left for a later public-copy pass. Do not reuse its figures as current participant-facing rules.
+
 Status: implemented on the feature/real-details branch, awaiting owner check.
 Binds to: [DESIGN.md](DESIGN.md), the [design system](../../docs/design/system/design-system.md), [homepage-voice.md](homepage-voice.md) and [prize-photos.md](prize-photos.md). No layout, colour or motion change: this is copy, one new line of example text and a price on each prize card.
 

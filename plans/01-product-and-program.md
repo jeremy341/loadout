@@ -21,6 +21,9 @@ This document owns the definition of LOADOUT itself: who/what qualifies, how pro
 ### Main catchphrase
 **Build projects. Level up your profile. Upgrade your loadout. Build harder stuff.**
 
+### Eligibility and verification
+LOADOUT is for high-school students aged **13–18**. Participants must complete Hack Club teen verification before joining; confirm the account integration with Hack Club before implementation.
+
 ### Economy line
 **Levels unlock it. Ore buys it.**
 
@@ -50,6 +53,7 @@ A mix of:
 - a persistent builder progression system
 - a portfolio of technical capability
 - a developer-tool / systems / compute / hardware community
+- a bounded community where builders can find friends, follow people, and respond to their work
 - a hardware and compute upgrade program
 - a clean pixel-inspired technical interface
 
@@ -196,6 +200,8 @@ Each project must have a clear **Capability Statement**:
 
 > **What new technical capability does this project create, expose, improve, automate, accelerate, or make easier?**
 
+Every accepted project must publish its source and relevant design files under an open-source license. Public project pages and journals are the default. Hack Club teen verification is required before a participant can use the program; the exact account integration remains an operating decision.
+
 Each project stores:
 - Project name
 - Short description
@@ -204,6 +210,7 @@ Each project stores:
 - Optional secondary technical track
 - Optional **Research Mode**
 - Repository/project URL
+- Open-source license and source link
 - Demo URL
 - Team members
 - Start date
@@ -247,6 +254,9 @@ A project must satisfy **all** of these:
 
 5. **LOADOUT fit**  
    The project belongs meaningfully in Tools, Systems, Compute, or Hardware.
+
+6. **Open source**  
+   Every accepted project must publish its source and relevant design files under an open-source license. Hardware ships must include their design files and a bill of materials.
 
 ## 3.2 Borderline Projects
 
@@ -581,20 +591,22 @@ This is the central differentiator:
 
 # 5. Work Tracking
 
-LOADOUT uses:
+LOADOUT requires:
 
-- **Hackatime** for software/coding work
-- **Lapse** for hardware, CAD, electronics, fabrication, and valid non-code work
+- **Hackatime** for software projects
+- **Lapse** for Hardware projects; recordings are visible only to reviewers
 
 Tracked time by itself is **not enough**.
 
-Participants assign tracked work to journals.
+Participants assign tracked work to journals. Time before LOADOUT starts, time already submitted to another YSWS, and time spent only reading or watching learning material do not count. Do not inflate hours or record blank/idle Lapse footage.
 
 ---
 
 # 6. Journaling System
 
 Journals are a first-class feature, not an optional blog.
+
+For each project, each builder must add a journal entry at least once per **eight hours of development**. Team members track and journal their own work separately.
 
 They connect:
 
@@ -695,6 +707,8 @@ Better:
 
 Journals should be concise, but specific enough to verify real progress.
 
+Create at least one entry for every eight hours of development on each project. For team projects, each builder journals their own work and tracked time.
+
 ## 6.4 Reviewer Actions on Journaled Time
 
 Reviewers can:
@@ -730,6 +744,8 @@ Recommended:
 - terminal output
 - hardware test videos
 
+Hardware ships must include a bill of materials with quantities and sources. Lapse recordings remain reviewer-only; the project page, journals, and other evidence are public by default, subject to the existing per-attachment reviewer-only option below.
+
 ## 6.6 Journal-to-Hour Integrity
 
 Each tracked minute may be assigned only once.
@@ -763,13 +779,7 @@ for the same source session.
 
 ## 6.7 Public Journals
 
-Recommended default:
-- journal title/date/progress public
-- sensitive details can be private to reviewers
-- API keys/secrets must never be pasted
-- project owners may hide specific evidence attachments from public view while keeping them reviewable
-
-A public build log makes project discovery much better.
+Project pages and journals are public by default. Lapse recordings are visible only to reviewers. A builder may still keep a specific non-Lapse evidence attachment private to reviewers while leaving the project page and journal public. Never publish API keys, credentials, private addresses, or other personal information.
 
 ---
 
@@ -847,9 +857,7 @@ Possible results:
 
 ## Stage 2 — Quality Rating
 
-Once valid, the approved technical scope receives ratings.
-
-These ratings produce the multiplier.
+Once valid, the approved technical scope receives 12 countable anonymous peer reviews, including Hardware ships. Reviewers score the four LOADOUT categories from 1–9 and give a written reason of at least ten words. Plan 22 owns assignment, aggregation, payout timing, flags, and the multiplier. Hardware has no separate flat-rate path.
 
 ---
 
@@ -993,6 +1001,8 @@ The ship multiplier applies to each member’s approved hours.
 
 # 35. Reviewer System
 
+The reviewer interface separates the team fit/validity gate from anonymous peer scoring. A future review-quality panel lets moderators inspect individual scores, written reasons, and assignment activity. Builders can see every review on their ship and its reason, but not the reviewer's identity.
+
 Reviewer screen:
 
 ```text
@@ -1020,11 +1030,16 @@ APPROVED
 AI DECLARED
 18%
 
-QUALITY
-Originality       8.6
+QUALITY MEDIANS
+Originality       8.5
 Technical Depth   9.0
-Execution         8.1
-Documentation     7.8
+Execution         8.0
+Documentation     7.5
+
+PEER REVIEWS
+12 countable reviews locked
+Reviewer names hidden from builder
+Reasons visible to builder
 
 TRACK XP ALLOCATION
 Compute           70%
@@ -1034,7 +1049,7 @@ Tools              0%
                   100%
 
 ORE
-+589 B
++589 Ore
 
 TRACK XP
 +820 total
@@ -1047,7 +1062,9 @@ Reviewer actions:
 - narrow eligible scope;
 - approve all/partial time;
 - adjust final track allocation;
-- score quality dimensions;
+- inspect assigned peer reviews and score the four quality dimensions from 1–9;
+- leave a written reason of at least ten words;
+- view and moderate review scores and reasons without exposing reviewer identities to builders;
 - request changes;
 - reject;
 - flag AI;
@@ -1064,11 +1081,13 @@ Track allocation rules:
 
 For team projects, reviewers may set per-member allocation when contributions differ.
 
+Each builder must complete eight valid reviews of other ships before their own ship is paid.
+
 Reviewer quality metrics:
 - reviews completed;
 - useful feedback;
 - average review time;
-- appeals overturned;
+- repeated rejected flags;
 - reviewer/moderator agreement;
 - queue age;
 - moderation flags.
@@ -1089,17 +1108,9 @@ Quality matters more than raw throughput.
 
 ---
 
-# 37. Appeals
+# 37. Review Flags; No Appeals
 
-Participants can appeal:
-- rejected hours
-- AI decision
-- project rejection
-- fulfillment rejection
-
-Appeals go to a different reviewer/moderator.
-
-Limit repeated appeals.
+Builders can flag a counted review during the 24-hour post-lock review window. A pending flag pauses payout while a moderator checks the review. This flag window is the only challenge path; there is no separate appeal process. Three rejected flags by one builder within ten hours deduct 5% from that builder's next final Ore payout; see Plan 22.
 
 ---
 
@@ -1114,6 +1125,10 @@ Useful:
 - peer ratings
 - track feeds
 - season feed
+- friends and follows
+- likes and post notifications
+- a public idea board with upvotes and collectibles
+- Show & Tell, event RSVPs, and achievement certificates
 - achievements
 - leaderboards
 - ship announcements
@@ -1121,7 +1136,8 @@ Useful:
 Avoid:
 - follower obsession
 - engagement farming
-- generic social feed
+- an endless-scrolling generic feed
+- reposts in the initial feature scope
 
 ---
 

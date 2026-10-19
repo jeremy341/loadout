@@ -8,7 +8,7 @@ Use temporary branch → development → testing → main with existing required
 
 Vercel project jerry-team1/loadout-ysws uses apps/landing and main. Wait for Ready/success on the merged main commit, then inspect the stable Production URL. Check Docs topics, deep links, search and homepage navigation; a passing local build is not deployment evidence.
 
-Record the main SHA, Vercel deployment link and smoke-check result before posting the Docs release summary. Preview URLs remain per-deployment; they do not replace loadout-ysws.vercel.app.
+Record the main SHA, Vercel deployment link and smoke-check result before posting the Docs release summary. Preview URLs remain per-deployment; they do not replace [loadout.dino.icu](https://loadout.dino.icu/).
 
 ## Roll back application content
 

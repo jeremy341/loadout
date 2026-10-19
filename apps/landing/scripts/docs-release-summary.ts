@@ -8,13 +8,13 @@ if (!from || !to || ![from, to].every((ref) => /^[a-f0-9]{7,40}$/i.test(ref))) {
 }
 const changed = execFileSync('git', ['diff', '--name-only', `${from}..${to}`, '--', 'content/docs'], { encoding: 'utf8' }).trim().split(/\r?\n/).filter((file) => /^content\/docs\/[a-z][a-z0-9-]*\.md$/.test(file));
 console.log('LOADOUT Docs updated — program draft');
-console.log('https://loadout-ysws.vercel.app/docs/start');
+console.log('https://loadout.dino.icu/docs/start');
 for (const file of changed) {
   try {
     const source = execFileSync('git', ['show', `${to}:${file}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
     const slug = file.slice('content/docs/'.length, -3);
     const page = parsePublicDoc(slug, source);
-    console.log(`- ${page.label}: https://loadout-ysws.vercel.app/docs/${slug}`);
+    console.log(`- ${page.label}: https://loadout.dino.icu/docs/${slug}`);
   } catch {
     console.log(`- Retired topic: ${file.slice('content/docs/'.length, -3)} (check redirects before sharing).`);
   }

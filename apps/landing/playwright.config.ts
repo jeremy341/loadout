@@ -36,7 +36,7 @@ export default defineConfig({
   webServer: {
     command: process.env.CI ? "bun run build && bun run start" : "bun run dev",
     url: baseURL,
-    env: { PORT: port },
+    env: { PORT: port, NEXT_PUBLIC_LOADOUT_SITE_URL: "https://loadout.dino.icu" },
     reuseExistingServer: reuseLocalServer,
     timeout: 120_000,
   },

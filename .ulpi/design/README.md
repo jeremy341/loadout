@@ -18,6 +18,7 @@
 | [`restore-main-era-footer.md`](restore-main-era-footer.md) | Restore main's Era facts layout and footer revision panel only. |
 | [`prize-loop-spacing.md`](prize-loop-spacing.md) | Fixed card-column sizing for uniform spacing through the prize loop. |
 | [`accessibility-remediation.md`](accessibility-remediation.md) | Owner-approved fixes for the WCAG audit, with full public-page regression coverage. |
+| [`color-vision-palette-and-dark-hover.md`](color-vision-palette-and-dark-hover.md) | Warm Tritanopia and grayscale Achromatopsia icon sprites, native cursors for those profiles, and readable dark Era-step hover. |
 | [`community-channel-links.md`](community-channel-links.md) | Verified direct community/help links in the footer, FAQ and public Docs. |
 | [`faq-question-readability.md`](faq-question-readability.md) | Slightly looser FAQ question lettering on desktop and mobile; accordion behavior and layout stay the same. |
 | [`loadout-hero-atmosphere.md`](loadout-hero-atmosphere.md) | Local warm-paper palette, grain/grid, and decorative ASCII hero scenery; verified with the foundation pass. |

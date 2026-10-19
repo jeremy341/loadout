@@ -70,6 +70,42 @@ html[data-color-vision="achromatopsia"] .home:has(#theme:checked) {
   --logo-fill: #FBF3E4;
 }
 
+/* Keep homepage icon sprites warm under Tritanopia and grayscale under Achromatopsia in both themes. */
+html[data-color-vision="tritanopia"] .home:not(:has(#theme:checked)) .ic { filter: sepia(.85) saturate(1.4) hue-rotate(-8deg) brightness(1.12); }
+html[data-display-theme="light"][data-color-vision="tritanopia"] .home .ic { filter: sepia(.9) saturate(1.5) hue-rotate(-8deg) brightness(.72); }
+html[data-color-vision="achromatopsia"] .home:not(:has(#theme:checked)) .ic,
+html[data-color-vision="achromatopsia"] .home:has(#theme:checked) .ic { filter: grayscale(1); }
+
+/* Fixed cursor artwork uses blue/yellow fills. Keep native cursor shapes for these two profiles. */
+@media (pointer: fine) and (forced-colors: none) {
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut),
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .art {
+    cursor: auto;
+  }
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) :is(.home, body:has(.home) .a11y-dialog, body:has(.home) .a11y-shortcut) :is(a[href], button, label, summary, select, input[type="checkbox"], input[type="radio"], [role="button"]) {
+    cursor: pointer;
+  }
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-petted,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-bliss,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-stop,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-praised,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-petted *,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-bliss *,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-stop *,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-praised * {
+    cursor: grab !important;
+  }
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-held,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-held *,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-pinched,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-pinched *,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-shaken,
+  html:is([data-color-vision="tritanopia"], [data-color-vision="achromatopsia"]) .home .mole.is-shaken * {
+    cursor: grabbing !important;
+  }
+}
+
 /* The light homepage has legacy literal-yellow controls; selected profiles use their ink tokens. */
 html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) :is(.pri, .tag, .docs-tab),
 html[data-color-vision]:not([data-color-vision="standard"]) .home:has(#theme:checked) .docs-tab:hover,

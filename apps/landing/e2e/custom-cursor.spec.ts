@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-// The homepage cursor is a pixel arrow with a pointing hand for links (.ulpi/design/custom-cursor.md): blue in the dark
-// theme and yellow in the light theme, fine pointers only, and the system cursor on the docs and the 404 page.
+// The homepage uses a pixel arrow and pointing hand (.ulpi/design/custom-cursor.md): blue in dark and yellow in light by
+// default, with native cursors for Tritanopia/Achromatopsia and for the Docs, 404 page, and touch screens.
 const cursorOf = (page: import("@playwright/test").Page, selector: string) =>
   page.locator(selector).first().evaluate((element) => getComputedStyle(element).cursor);
 
@@ -56,3 +56,15 @@ test("a touch screen gets no custom cursor", async ({ browser }) => {
   expect(await cursorOf(page, ".home a[href]")).not.toMatch(/arrow-|hand-/);
   await context.close();
 });
+
+for (const profile of ["tritanopia", "achromatopsia"] as const) {
+  test(`${profile} uses native pointer shapes on the homepage`, async ({ page }) => {
+    await page.addInitScript((selectedProfile) => localStorage.setItem("loadout-color-vision", selectedProfile), profile);
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
+    await expect(page.locator(".home")).toHaveCSS("cursor", "auto");
+    await expect(page.locator(".home a[href]").first()).toHaveCSS("cursor", "pointer");
+    await page.locator(".mole").evaluate((element) => element.classList.add("is-held"));
+    await expect(page.locator(".mole")).toHaveCSS("cursor", "grabbing");
+  });
+}

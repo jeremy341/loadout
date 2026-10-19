@@ -6,7 +6,9 @@
 
 **Research date: 2026-10-04.** Public pages and repositories below were accessed on this date. Program dates, inventory, rules, and service capabilities can change; verify them again before publishing participant-facing claims.
 
-This is a research brief, not a LOADOUT product-plan revision. Plans `00–07` were read first and remain authoritative. LOADOUT remains the technical-capability YSWS defined by those plans: Tools, Systems, Compute, Hardware; Research Mode; a permanent Digital Loadout; global Ore; reviewer-assigned track XP; field-aware rewards; capped discounts; Requisitions; and its own **Industrial Field Manual + Pixel Utility** identity.
+**Owner decision update: 2026-10-19.** This is reference research, not current LOADOUT policy. The owner has since selected open-source projects, Hackatime for software, Lapse for Hardware, Hack Club teen verification, peer scoring, Signal tiers, bounded social features, and the other features recorded in Plans 01/02/11/15. These are LOADOUT choices; do not describe them as universal Hack Club requirements.
+
+This is a research brief, not a LOADOUT product-plan revision. Its recommendations describe the researcher's position on 2026-10-04 and may predate later owner decisions. Plans `00–07`, plus the newer [Plan 11](11-eras-and-community-progression.md), [Plan 15](15-loadout-irl-ruhr.md), [Plan 22](22-peer-review-and-multipliers.md), and [future-platform proposal](proposals/future-platform-ui.md), own current LOADOUT policy. Where this brief recommends against a feature that those owners now select, follow the owner plan and retain this passage only as historical research context.
 
 Significant claims use these labels:
 
@@ -28,7 +30,7 @@ Significant claims use these labels:
 5. **PROGRAM EXAMPLE:** Public review models include a staged functional/rules/fraud review (the general guide), peer ratings in broad programs such as Stardance/Flavortown, and hardware pitch → approval → devlog → ship flows in Forge. Partial awards, appeals, team splits, and AI policies are not universal in the sources reviewed.
 6. **PROGRAM EXAMPLE:** Rewards include fixed parts kits, physical shops funded by virtual currencies, tiered hardware grants, restricted virtual card grants, reimbursements, credits, and event support. HCB is one possible financial instrument, not a required YSWS integration.
 7. **SOURCE-CODE OBSERVATION:** Pixl, Forge, Flavortown, Hackpad, Lapse, and the YSWS Catalog show markedly different architectures. Reuse should be feature-by-feature and licensing-aware; a YSWS “template” should not be presumed to be the ecosystem standard.
-8. **LOADOUT RECOMMENDATION:** Keep LOADOUT’s narrow technical-fit gate, journals and unique-minute assignments, reviewer-controlled XP split, and equipment-focused shop. Explain that these are LOADOUT rules and avoid presenting them as universal Hack Club policy.
+8. **LOADOUT RECOMMENDATION (historical):** Keep LOADOUT’s narrow technical-fit gate, journals and unique-minute assignments, reviewer-controlled XP split, and equipment-focused shop. Current policy is defined by the canonical plans named above; explain that LOADOUT rules are program-specific and avoid presenting them as universal Hack Club policy.
 9. **UNVERIFIED:** The private organizer proposal process (`#ysws-drafts` and the linked Slack Canvas), LOADOUT’s official-program status, and direct permission to use Hack Club eligibility/tracking data or HCB processes need confirmation from Hack Club.
 
 ## 2. What a YSWS is
@@ -136,7 +138,7 @@ This is a representative map, not a claim that every program uses every stage.
 - **COMMON PATTERN:** The guide’s philosophy excludes learning-only time such as reading docs or watching a tutorial, while building/debugging with that knowledge is the practice the programs want to incentivize.
 - **PROGRAM-SPECIFIC:** Art caps, allowed activity, required tracking tool, session review, journal requirements, and how evidence is submitted differ by program.
 - **INFERENCE:** Hackatime answers “what editor activity metadata was recorded?” It does not answer “who authored this feature, is it in scope, is it duplicated, or does it work?” Lapse/Lookout add visual evidence but also add privacy and consent concerns.
-- **LOADOUT RECOMMENDATION:** Keep Hackatime/Lapse as evidence sources, not reward engines. Preserve LOADOUT’s journal assignment and unique-minute ledger, partial review if retained in the canonical plan, and evidence links. Do not assume provider history is eligible without the YSWS date window and program consent.
+- **LOADOUT RECOMMENDATION (historical):** Keep Hackatime/Lapse as evidence sources, not reward engines. The owner has since selected Hackatime for Software, Lapse for Hardware, and a journal entry every eight development hours; see Plan 01. Do not assume provider history is eligible without the YSWS date window and program consent.
 
 ## 8. Review + moderation
 
@@ -151,7 +153,7 @@ This is a representative map, not a claim that every program uses every stage.
 
 **UNVERIFIED:** A universal appeals body, mandatory partial approval, common rejection taxonomy, reviewer throughput target, fixed review SLA, universal public reviewer notes, or one shared admin role/permission scheme. Resubmission with feedback is presented as possible in the YSWS directory FAQ, not as a guaranteed universal mechanism.
 
-**LOADOUT RECOMMENDATION:** Retain the canonical separation between LOADOUT Fit, evidence/time validity, and quality. Show the participant which decision is pending, what was approved, what needs changes, the deadline, and how to contact support. Define independent appeal/review and moderation escalation before launch. Treat peer votes as optional evidence with anti-ring safeguards, never as a required measure of technical merit.
+**LOADOUT RECOMMENDATION (historical where it conflicts):** Retain the separation between LOADOUT Fit, evidence/time validity, and quality. Show participants which decision is pending, what was approved, what needs changes, the deadline, and how to contact support. The owner has selected required peer quality reviews and no separate appeal; Plan 22 defines the review and flag flow. Keep moderation escalation and anti-ring safeguards in the implementation plan.
 
 ## 9. Rewards, shops, and fulfillment
 
@@ -306,8 +308,8 @@ The examples below teach different things. Older programs are explicitly marked 
 
 - **LOADOUT RECOMMENDATION:** Do not turn tracked hours into the whole definition of achievement; keep project fit, shipped artifact, authorship, evidence, and review meaningful.
 - **LOADOUT RECOMMENDATION:** Do not borrow universal-program rules from one named example: open project scope, an open-source requirement, participant voting, hourly rate, reward amount, team split, or program age window.
-- **LOADOUT RECOMMENDATION:** Do not require Lapse screenshots/video for every project or expose sensitive recordings by default. Use the minimum evidence needed for review.
-- **LOADOUT RECOMMENDATION:** Do not create a large social feed, arbitrary engagement leaderboard, complex AI anti-fraud detector, or extensive organizer tooling before it supports the core ship/review/reward loop.
+- **LOADOUT RECOMMENDATION (superseded in part):** The owner selected Lapse for Hardware projects only, with recordings visible to reviewers. Do not require Lapse for software or expose its recordings publicly.
+- **LOADOUT RECOMMENDATION (updated):** Build the selected friend/follow/like/notification, idea-board, and leaderboard features without an endless-scrolling generic feed or engagement-farming incentives. Do not build a broad social platform beyond the owner-selected scope.
 - **LOADOUT RECOMMENDATION:** Do not present HCB as a guaranteed checkout provider, direct cash equivalence, or automatic international solution.
 - **LOADOUT RECOMMENDATION:** Do not reuse `EDRipper/ysws-template` code until it is accessible, its exact version and license are inspected, and compatibility with LOADOUT’s architecture is established.
 

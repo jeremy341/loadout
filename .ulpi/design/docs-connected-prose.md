@@ -1,5 +1,7 @@
 # Public Docs: connected explanations and multiplier labels
 
+**Policy update, 2026-10-19:** This brief records an earlier public-copy pass. The rating and multiplier wording below is historical where it conflicts with current policy: review dimensions are scored 1–9; normal payouts range 1×–20× with 10× mean; Great Signal can raise the hourly cap to 30×. Plan 22 and Plan 02 own these rules. The article byline is now **“Built with Love by the LOADOUT team”**, per the later owner decision. Do not reapply the earlier “Written by Jerry” direction.
+
 ## Scope and direction
 
 Follow the existing industrial field-manual identity in DESIGN.md. This is an editorial pass across the 25 public Markdown guides, plus multiplier wording in the homepage flow and FAQ. The approved reference comparison supplies the direction: Pixl's task order and approachable explanations, and Stardance's reasons, examples and common mistakes. Write original LOADOUT copy.

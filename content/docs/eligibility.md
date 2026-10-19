@@ -6,7 +6,7 @@ order: 20
 status: draft
 ---
 
-LOADOUT is for high-school students aged **13 to 19**. You don't need to belong to a club or know an organizer to take part. Before you plan a build around the program, though, check the launch status below: we haven't opened submissions or orders yet.
+LOADOUT is for high-school students aged **13 to 18**. You don't need to belong to a club or know an organizer to take part. Before you plan a build around the program, though, check the launch status below: we haven't opened submissions or orders yet.
 
 ## Who can take part in this GREAT EVENT? {#who}
 

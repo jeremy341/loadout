@@ -122,7 +122,7 @@ Review the actual diff and stage explicit paths if unrelated work exists. Docs s
 
 Open a PR into development from your branch and wait for the required checks. Squash-merge it. Promote to testing and then to main as described above. Do not bypass a failed check or send feature work directly to main.
 
-Vercel Production follows main at [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/). Preview URLs are deployment-specific. Verify commit, readiness and stable URL before announcing publication; see [deployment and rollback](deployment-and-rollback.md).
+Vercel Production follows main at [loadout.dino.icu](https://loadout.dino.icu/). Preview URLs are deployment-specific. Verify commit, readiness and stable URL before announcing publication; see [deployment and rollback](deployment-and-rollback.md).
 
 ## Authenticated GitHub CLI
 

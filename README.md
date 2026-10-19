@@ -4,7 +4,7 @@
 
 ## The website
 
-`apps/landing` contains the public homepage and program-draft Docs. Visit [loadout-ysws.vercel.app](https://loadout-ysws.vercel.app/) or read the [public Docs](https://loadout-ysws.vercel.app/docs/start). Public Markdown is maintained in `content/docs/`; internal plans, workflow, source audits, and design notes are not published or indexed.
+`apps/landing` contains the public homepage and program-draft Docs. Visit [loadout.dino.icu](https://loadout.dino.icu/) or read the [public Docs](https://loadout.dino.icu/docs/start). Public Markdown is maintained in `content/docs/`; internal plans, workflow, source audits, and design notes are not published or indexed.
 
 The site has no live participant accounts, project-submission, review, reward, ordering, or event service. The RSVP link expresses interest and does not enroll anyone.
 

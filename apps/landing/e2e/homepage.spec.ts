@@ -859,16 +859,26 @@ test("the logo's lamp blinks on hover, and holds still for reduced motion", asyn
 
 test("the page advertises the share image, the touch icon and the favicon", async ({ page, request }) => {
   await page.goto("/");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://loadout.dino.icu");
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", "https://loadout.dino.icu");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+  const imageBodies: Buffer[] = [];
+  const expectedImageOrigin = process.env.CI
+    ? "https://loadout.dino.icu"
+    : new URL(process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${process.env.LOADOUT_TEST_PORT ?? "3001"}`).origin;
   for (const [attribute, name] of [["property", "og:image"], ["name", "twitter:image"]]) {
     const url = await page.locator(`meta[${attribute}="${name}"]`).first().getAttribute("content");
     expect(url, name).toBeTruthy();
     const parsed = new URL(url!);
+    expect(parsed.origin, name).toBe(expectedImageOrigin);
     const response = await request.get(parsed.pathname + parsed.search);
     expect(response.status(), name).toBe(200);
     expect(response.headers()["content-type"]).toContain("image/jpeg");
-    expect((await response.body()).length, `${name} stays under 300 KB`).toBeLessThan(300_000);
+    const body = await response.body();
+    expect(body.length, `${name} stays under 300 KB`).toBeLessThan(300_000);
+    imageBodies.push(body);
   }
+  expect(imageBodies[0]).toEqual(imageBodies[1]);
   await expect(page.locator('link[rel="icon"]').first()).toHaveAttribute("href", /icon\.svg/);
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
 });

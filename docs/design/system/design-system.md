@@ -128,7 +128,7 @@ Rules:
 - The mark is a miner's helmet from the one-bit icon pack (the owner confirmed it can be used) on an octagon plate, 24 by 24 pixels (`Logo.tsx`). It is drawn as four SVG paths and shown at 24 pixels, so each mark pixel is one site pixel. Beside it the name is real text in Jersey 10.
 - The plate is the theme's accent (`--logo-bg`), the outline is ink (`--logo-fg`) and the helmet is the paper colour (`--logo-fill`: `--fg` in dark mode, `#FBF3E4` in light mode).
 - On hover, with a fine pointer and no reduced-motion request, the helmet's lamp blinks once. Nothing else moves.
-- The favicon (`icon.svg`) and the Apple touch icon (`apple-icon.png`) use the same mark. The share image (`opengraph-image.jpg`, also served as `twitter-image.jpg`) is 1200 by 630 and under 300 KB: the mark, the pixel wordmark, the grid, grain under the text, corner marks and the depth strip. The sources are in `assets/editable/logo/`.
+- The favicon (`icon.svg`) and the Apple touch icon (`apple-icon.png`) use the miner's helmet mark. The 1200 by 630 share images (`opengraph-image.jpg`, also served as `twitter-image.jpg`) preserve main's original background, blue label, grain/grid, corner marks, rulers and depth strip. The helmet is removed from the card; the owner's silver wordmark with dirt-colored details is enlarged and centered, with Jersey 10 tagline and track names below. The depth-strip readout is softened to keep the wordmark first in the hierarchy. Keep each file under 300 KB. Source assets and the repeatable export script are in `assets/editable/logo/`; the scoped brief is `.ulpi/design/share-preview.md`.
 
 ## Error pages
 

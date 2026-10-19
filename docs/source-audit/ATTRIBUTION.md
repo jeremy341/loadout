@@ -14,7 +14,7 @@ EDRipper/ysws-template at `1ac191fa5eee1e57983b29ab7101f700c166e207` on `master`
 
 ## Stardance
 
-Hack Club Stardance at `3a0fe8148b07c1edfe005e94dfc9d1faa4b64c14` on `main` is the PEER REVIEW / QUALITY SCORING / MULTIPLIER SPECIALIST REFERENCE. The checkout has no LICENSE file and no reported repository license. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. LOADOUT does not adopt Stardance's Rails architecture, four voting criteria, score formula, or payout formula.
+Hack Club Stardance at `d889f39060a443476a88b98a87d5088033626eff` on `main` is the PEER REVIEW / QUALITY SCORING / MULTIPLIER / VIRALITY REFERENCE. The checkout has no LICENSE file and no reported repository license. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. LOADOUT retains its own four rating areas, Ore currency, and product rules; any adopted mechanics are reimplemented independently.
 
 ## Stasis
 

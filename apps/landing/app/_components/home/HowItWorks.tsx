@@ -8,7 +8,7 @@ const STEPS: Step[] = [
   { label: "STEP 01", icon: "list", title: "Pick something to build", text: "Anything technical you want to make or fix. Choose the track it fits: Tools, Systems, Compute or Hardware." },
   { label: "STEP 02", icon: "code", title: "Build it and keep a journal", text: "Write down what you did, why you did it, and how you checked it. Your tracked hours come with it." },
   { label: "STEP 03", icon: "document", title: "Ship it", text: "Share a working version, a demo or other proof, and how to run it. Say what you built yourself, where AI helped, and what's still rough." },
-  { label: "STEP 04", icon: "check", title: "Other builders review it", text: "A team member checks the ship, then builders review it: 5× for rough work, 10× for solid work, 15× for great work and 20× for outstanding work. At 10×, each approved hour earns 10 Ore." },
+  { label: "STEP 04", icon: "check", title: "Other builders review it", text: "A team member checks the ship, then 12 peer reviews score four areas. Normal rates run from 1× to 20×, with a target mean of 10×. Great Signal can raise the hourly ceiling to 30×." },
 ];
 
 // What an accepted review adds, side by side. The Physical Loadout is not one of them:

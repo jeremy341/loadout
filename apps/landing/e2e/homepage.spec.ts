@@ -795,6 +795,20 @@ test("the process chart has three outcomes of review and the Physical Loadout co
   await expect(upgrade).toContainText("Physical Loadout");
 });
 
+test("homepage review copy matches the peer-scored payout curve", async ({ page }) => {
+  await page.goto("/");
+  const reviewStep = page.locator("#process .fn").filter({ hasText: "Other builders review it" });
+  await expect(reviewStep).toContainText("12 peer reviews score four areas");
+  await expect(reviewStep).toContainText("Normal rates run from 1× to 20×, with a target mean of 10×");
+  await expect(reviewStep).toContainText("Great Signal can raise the hourly ceiling to 30×");
+  await expect(reviewStep).not.toContainText("5× for rough work");
+
+  const earnOre = page.locator("#faq details", { hasText: "How do I earn Ore?" });
+  await earnOre.locator("summary").click();
+  await expect(earnOre).toContainText("Normal rates run from 1× to 20×");
+  await expect(earnOre).toContainText("Great Signal can raise the hourly ceiling to 30×");
+});
+
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");

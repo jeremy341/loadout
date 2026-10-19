@@ -68,6 +68,7 @@ Run `git status --short`, `git diff --stat`, and `git diff --name-status` in the
 - Modify if needed: `apps/landing/app/site-config.ts`
 - Modify: `apps/landing/app/site-config.test.ts`
 - Modify: `apps/landing/e2e/homepage.spec.ts`
+- Align: `apps/landing/app/_components/home/HowItWorks.tsx` and `apps/landing/app/_components/home/faq-items.ts` with the approved peer-scored payout curve
 - Reuse: `apps/landing/app/opengraph-image.jpg`, `apps/landing/app/twitter-image.jpg`, and their `.alt.txt` files
 
 **Interfaces:**
@@ -120,6 +121,7 @@ Run `rg -n "loadout-ysws\.vercel\.app"` across the repository. Expected: any rem
 - Preserve and include the current pending internal alignment in `.ulpi/design/`, `PRODUCT.md`, `plans/`, `docs/source-audit/`, `docs/development/repository-inventory.md`, and `docs/superpowers/plans/2026-10-18-internal-docs-alignment.md`.
 - Preserve and include the current public Docs edits in `content/docs/eligibility.md`, `faq.md`, `progress.md`, `review.md`, and `start.md`.
 - Preserve and include the social-preview brief and assets in `.ulpi/design/share-preview.md`, `assets/editable/logo/`, `apps/landing/app/opengraph-image*`, `apps/landing/app/twitter-image*`, `docs/design/asset-catalog.md`, and `docs/design/system/design-system.md`.
+- Align homepage review-rate copy and its FAQ with the approved peer-scored payout curve in `apps/landing/app/_components/home/HowItWorks.tsx` and `faq-items.ts`; add regression coverage in `apps/landing/e2e/homepage.spec.ts`.
 - Preserve and include the current Pixl shell/backend design proposal in `plans/proposals/future-platform-ui.md` and `docs/superpowers/specs/2026-10-19-pixl-shell-platform-design.md` as a draft requiring owner review.
 - Include this release plan at `docs/superpowers/plans/2026-10-19-dino-domain-and-pending-changes.md` as the internal execution record.
 - Preserve and include `references/README.md` and the `references/stardance` submodule pointer update.
@@ -199,5 +201,6 @@ Check HTTPS on `https://loadout.dino.icu/`, canonical URL, `og:url`, both image 
 
 - No changes have been pushed from the current dirty checkout. The custom domain and TLS already work; the DNS PR needs no follow-up.
 - Local verification passed: lint, typecheck, 62 unit tests / 634 assertions, production build with the dino.icu origin, and 351 Playwright tests in production-server CI mode. A first dev-server E2E run had two timing-related failures; both passed in the production CI-mode rerun. The focused share-metadata test also verifies both image URLs use dino.icu in Production and return identical image bytes.
+- PR preview review found the homepage still described fixed 5×/10×/15×/20× quality tiers while the updated Docs described the accepted peer-scored curve. Replaced that copy in How It Works and the Ore FAQ, added a regression test, and confirmed the focused browser test fails before the copy change and passes after it. The amended head's full CI suite is pending.
 - The share preview now uses the same image content for Open Graph and Twitter and identifies the custom domain in Production metadata. Slack's cached unfurl for an already-posted Vercel link may continue to show the older image; testing a fresh unfurl is separate from changing or sending a Slack message.
 - Recommended execution method: native sequential implementation. The content/assets can be prepared together, but branch preparation, production configuration, and promotions have ordering dependencies and should pass through one integration/review gate.

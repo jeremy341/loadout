@@ -6,6 +6,8 @@ This repository implements the public Docs source. Netics owns changes to Rivet 
 
 Checked 2026-10-10 against [Rivet main](https://github.com/NeticYTOF/rivet/commit/e2d2456834c204f7e4be29643527239d68a60571). Its [LOADOUT config](https://github.com/NeticYTOF/rivet/blob/e2d2456834c204f7e4be29643527239d68a60571/loadout/program.json) still points to `loadout-jerry-team1.vercel.app`, while LOADOUT's stable domain is `loadout-ysws.vercel.app`. It lists nine local corpus entries and old channel IDs. Its pinned facts include the four tracks, Ore versus Track XP, level caps, Requisition milestones, and Custom Order tiers; reconcile every numeric or readiness claim with the public-content gate before refreshing them.
 
+Current LOADOUT Production uses `https://loadout.dino.icu/`. Rivet's external config was not changed in this release and still needs a separately reviewed update.
+
 The current config says `posture: active` and `status: sandbox`, which communicate different readiness states. Its copy also describes LOADOUT as active in the program name and calls the makers “the org behind it.” Keep the bot's user-facing wording aligned with the website's program-draft status and confirmed organizer roles. The adjacent [README](https://github.com/NeticYTOF/rivet/blob/e2d2456834c204f7e4be29643527239d68a60571/loadout/README.md) says seven corpus sources are resolved and lists an eighth `08-public-copy.md` as reference-only; the config currently lists nine sources including `09-people.md` and `10-eras.md`. Resolve this source-count mismatch in the bot repo.
 
 This website repository does not update Rivet's configuration, sources, runtime, Slack scope, or pinned rules. Netics owns that separate handoff. Verify the latest Rivet source implementation before selecting a GitHub directory source; the previous `github-dir` behavior finding was from an older commit.
@@ -17,7 +19,7 @@ This website repository does not update Rivet's configuration, sources, runtime,
   "name": "LOADOUT public docs",
   "type": "github-dir",
   "url": "https://api.github.com/repos/jeremy341/loadout/contents/content/docs?ref=main",
-  "siteUrl": "https://loadout-ysws.vercel.app/docs"
+  "siteUrl": "https://loadout.dino.icu/docs"
 }
 ```
 

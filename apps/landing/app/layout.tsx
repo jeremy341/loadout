@@ -36,7 +36,14 @@ export const metadata: Metadata = {
   metadataBase: siteConfig.origin ? new URL(siteConfig.origin) : undefined,
   alternates: siteConfig.origin ? { canonical: "/" } : undefined,
   robots: { index: siteConfig.allowIndexing, follow: siteConfig.allowIndexing },
-  openGraph: { title: siteConfig.title, description: siteConfig.description, type: "website", locale: "en_US", siteName: "LOADOUT" },
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.origin,
+    type: "website",
+    locale: "en_US",
+    siteName: "LOADOUT",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

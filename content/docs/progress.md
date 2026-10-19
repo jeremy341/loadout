@@ -25,16 +25,18 @@ First, we check which of your hours we can approve. Other builders then review t
 base Ore = approved hours × Ore multiplier
 ```
 
-For example, **10× means 10 Ore per approved hour**, so ten approved hours earn 100 Ore. Here's how those same hours compare across the scale:
+For example, **10× means 10 Ore per approved hour**, so ten approved hours earn 100 Ore. Normal rates run from **1× to 20×**, with a target mean of 10×. A project that reaches Great Signal can earn up to 30× per approved hour. Here's what the same ten hours earn at different rates:
 
 | Ore multiplier | The work | Ten approved hours earn |
 | --- | --- | --- |
-| 5× | Rough but genuine work that passes review. | 50 Ore |
-| 10× | Solid work that runs and is explained clearly. | 100 Ore |
-| 15× | Great work above the solid-work baseline. | 150 Ore |
-| 20× | Outstanding work at the top of the scale. | 200 Ore |
+| 1× | Lower end of the normal review curve. | 10 Ore |
+| 5× | A below-average result on the normal curve. | 50 Ore |
+| 10× | The target mean of the normal scale. | 100 Ore |
+| 15× | An above-average result on the normal curve. | 150 Ore |
+| 20× | The normal hourly ceiling. | 200 Ore |
+| 30× | Great Signal ceiling only. | 300 Ore |
 
-You don't choose a row when you submit. These examples show what different review results would pay for the same ten hours. Reviewers look at Originality, Technical Depth, Execution and Documentation; [Project review](/docs/review#quality) explains what they're looking for in each. Work that passes review has a 5× floor, while a rejected ship earns nothing.
+You don't choose a row when you submit. These examples show what different review results would pay for the same ten hours. Reviewers look at Originality, Technical Depth, Execution and Documentation; [Project review](/docs/review#quality) explains how the multiplier is set. A ship that passes the team's checks can still receive a low multiplier; a rejected ship earns nothing.
 
 If the ship also qualifies for the [Era bonus](/docs/eras#bonus), add 10% of its base Ore award. A 100-Ore base award becomes 110 Ore. This is separate from the quality multiplier and adds no Track XP. How it combines with future Ore bonuses is still undecided.
 

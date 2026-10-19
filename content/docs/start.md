@@ -10,7 +10,7 @@ Got a tool you wish existed, a server you want to run, or a board you want to bu
 
 ## Who it's for {#program}
 
-LOADOUT is a You Ship, We Ship program for high-school students aged **13 to 19**. You can come with friends or build on your own, and your first project doesn't have to be huge. A useful command-line tool is a perfectly good place to start.
+LOADOUT is a You Ship, We Ship program for high-school students aged **13 to 18**. You can come with friends or build on your own, and your first project doesn't have to be huge. A useful command-line tool is a perfectly good place to start.
 
 The four tracks are **Tools, Systems, Compute and Hardware**. They're broad enough for a debugger, a database component, a renderer or a sensor board, but the important part is the work you do yourself. If you're building an app, tell us about the interesting engineering inside it. [What can I build?](/docs/projects) is a question which will help you work out whether your idea fits.
 
@@ -22,7 +22,7 @@ You don't have to start from scratch every time. Ship a first version, learn wha
 
 ## What an hour is worth {#hours}
 
-How much would your project earn? That depends on the hours we can approve and the **Ore multiplier** it gets in review. A solid ship earns **10×**, which means **10 Ore per approved hour**. If ten hours are approved, that's 100 Ore. Accepted work has a 5× floor, while outstanding work can reach 20×.
+How much would your project earn? That depends on the hours we can approve and the **Ore multiplier** it gets in review. Normal rates run from **1× to 20×**, with a target mean of **10×**. At 10×, each approved hour earns 10 Ore, so ten approved hours earn 100 Ore. A project that reaches **Great Signal** can earn up to **30× per approved hour**.
 
 For something to aim at, the working catalog lists an ESP32 starter kit at 50 Ore. That would take five approved hours at 10×, before any discount. The [prize list](/docs/prizes) has the other examples; [Ore, XP & levels](/docs/progress) explains how the rewards work.
 

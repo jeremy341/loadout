@@ -1,6 +1,6 @@
 # LOADOUT IRL // RUHR — Future Germany Build Weekend
 
-**Status:** Future-stage planning concept recorded 2026-10-06. This is not an event announcement, booking, funding commitment, or launch requirement.
+**Status:** LOADOUT IRL is a selected future program feature. This plan remains concept/readiness work, not an event announcement, booking, funding commitment, or launch authorization.
 
 **Homepage wording decision, 2026-10-06:** The user approved displaying this as a clearly labelled future concept with no dates, venue promises, or registration. That passes the public-content gate for concept copy only; the event readiness gates remain unresolved.
 
@@ -13,13 +13,15 @@
 
 ## 1. Purpose and boundary
 
-LOADOUT may later run a physical Germany build weekend connected directly to the online YSWS. The event should make the Digital Loadout / Physical Loadout idea tangible while using the existing online program, review, tracks, economy, and Community Era rules.
+LOADOUT plans to run a physical Germany build weekend connected directly to the online YSWS. The event should make the Digital Loadout / Physical Loadout idea tangible while using the existing online program, review, tracks, economy, and Community Era rules.
 
 This is post-online-launch work. It is not needed for the initial online MVP. Event attendance must not become necessary for online progression, and attending must not grant an event-only Track XP, Ore, level, or permanent advantage. Event projects use the normal eligibility, evidence, review, attribution, and award rules.
 
 Keep the identity centered on practical engineering and the Ruhr's industrial context. Do not use weapons or military styling, imply travel support, promise sponsors, or make the event look like a generic student hackathon. The older one- or two-day sketch in the parent workspace was superseded by this Friday-to-Sunday concept.
 
-The pinned [`Stasis` repository](../references/stasis/) is an additional Hack Club hardware-hackathon/event-program reference. It has no identified reuse license and has not been compared against this concept; do not treat its README claims, copy, or assets as LOADOUT facts.
+The pinned [`Stasis` repository](../references/stasis/) is an additional Hack Club hardware-hackathon/event-program reference. Its inventory, tool-rental, parts-ordering, NFC checkout, and manufacturing systems are reserved as possible IRL event operations, not online LOADOUT features. Its claims, copy, and assets are not LOADOUT facts.
+
+Stasis-style event operations—team parts inventory, equipment ordering, tool rentals, NFC checkout, and manufacturing/3D-printer queues—are reserved for possible in-person-event use. They are not part of the online LOADOUT platform and are not yet confirmed as required event systems.
 
 ## 2. Connect the event to the same LOADOUT Eras
 

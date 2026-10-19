@@ -795,6 +795,20 @@ test("the process chart has three outcomes of review and the Physical Loadout co
   await expect(upgrade).toContainText("Physical Loadout");
 });
 
+test("homepage review copy matches the peer-scored payout curve", async ({ page }) => {
+  await page.goto("/");
+  const reviewStep = page.locator("#process .fn").filter({ hasText: "Other builders review it" });
+  await expect(reviewStep).toContainText("12 peer reviews score four areas");
+  await expect(reviewStep).toContainText("Normal rates run from 1× to 20×, with a target mean of 10×");
+  await expect(reviewStep).toContainText("Great Signal can raise the hourly ceiling to 30×");
+  await expect(reviewStep).not.toContainText("5× for rough work");
+
+  const earnOre = page.locator("#faq details", { hasText: "How do I earn Ore?" });
+  await earnOre.locator("summary").click();
+  await expect(earnOre).toContainText("Normal rates run from 1× to 20×");
+  await expect(earnOre).toContainText("Great Signal can raise the hourly ceiling to 30×");
+});
+
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
@@ -859,16 +873,26 @@ test("the logo's lamp blinks on hover, and holds still for reduced motion", asyn
 
 test("the page advertises the share image, the touch icon and the favicon", async ({ page, request }) => {
   await page.goto("/");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://loadout.dino.icu");
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", "https://loadout.dino.icu");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+  const imageBodies: Buffer[] = [];
+  const expectedImageOrigin = process.env.CI
+    ? "https://loadout.dino.icu"
+    : new URL(process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${process.env.LOADOUT_TEST_PORT ?? "3001"}`).origin;
   for (const [attribute, name] of [["property", "og:image"], ["name", "twitter:image"]]) {
     const url = await page.locator(`meta[${attribute}="${name}"]`).first().getAttribute("content");
     expect(url, name).toBeTruthy();
     const parsed = new URL(url!);
+    expect(parsed.origin, name).toBe(expectedImageOrigin);
     const response = await request.get(parsed.pathname + parsed.search);
     expect(response.status(), name).toBe(200);
     expect(response.headers()["content-type"]).toContain("image/jpeg");
-    expect((await response.body()).length, `${name} stays under 300 KB`).toBeLessThan(300_000);
+    const body = await response.body();
+    expect(body.length, `${name} stays under 300 KB`).toBeLessThan(300_000);
+    imageBodies.push(body);
   }
+  expect(imageBodies[0]).toEqual(imageBodies[1]);
   await expect(page.locator('link[rel="icon"]').first()).toHaveAttribute("href", /icon\.svg/);
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
 });

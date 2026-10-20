@@ -17,7 +17,7 @@
 **Owner:** Public-facing `apps/landing` experience  
 **Status:** Canonical plan for the first public LOADOUT page  
 
-**Policy follow-up:** PR #130 aligns public age wording with the internal 13–18 policy. Hack Club teen verification is required; integration and operating approval remain unconfirmed. This is separate from participant-platform implementation.
+**Policy follow-up:** Public age wording is 13–18. Hack Club teen verification is required; integration and operating approval remain unconfirmed. The public-copy update is kept separate from participant-platform implementation.
 
 **Depends on:** `00`, `01`, `02`, `03`, `04`  
 **Primary source implementation:** Pixl `apps/landing`, redesigned for LOADOUT

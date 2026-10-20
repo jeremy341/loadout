@@ -4,7 +4,7 @@
 
 ## Platform and audience
 
-LOADOUT is a technical-builder YSWS for high-school students aged 13 to 18. Hack Club teen verification is required; the account integration and operational approval remain to be confirmed. PR #130 aligns homepage and public Docs age wording with this policy. Prize-delivery regions and operating dates remain open.
+LOADOUT is a technical-builder YSWS for high-school students aged 13 to 18. Hack Club teen verification is required; the account integration and operational approval remain to be confirmed. The homepage and public Docs use the 13–18 age policy. Prize-delivery regions and operating dates remain open.
 
 ## Purpose and positioning
 

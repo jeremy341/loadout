@@ -26,7 +26,7 @@
 
 Plan 06 owns the homepage sequence and the approved public explanations. The page gives a quick program overview and preserves the four tracks, Research Mode as a modifier, the existing build/review flow, progression and prizes, Requisitions, Custom Orders, Community Eras, the future-concept IRL section, FAQ, and organizer context. Owner-approved draft or working prices and thresholds may appear when clearly labelled provisional; unresolved values must not be presented as final. Dates, registration, live stock, ordering availability and fulfillment claims require confirmation.
 
-Internal age policy is 13–18. Public homepage and Docs age wording is being aligned in PR #130; Hack Club teen verification is required, with account integration and operating approval still open.
+Internal and public age wording is 13–18. Hack Club teen verification is required; the account integration and operating approval remain open. Public Docs are edited in a separate copy PR from the internal policy/source update.
 
 Plan 17 remains an open proposal. Its unimplemented card-turn and expanded disclosure ideas are not part of the current homepage scope.
 

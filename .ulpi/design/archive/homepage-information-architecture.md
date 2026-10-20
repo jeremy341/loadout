@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Homepage information architecture: implementation brief
 
-**Status:** Implemented and consolidated into [Plan 06](../../plans/06-public-homepage.md). This brief is historical context, not a second homepage-order authority.
+**Status:** Implemented and consolidated into [Plan 06](../../../plans/06-public-homepage.md). This brief is historical context, not a second homepage-order authority.
 **Authorization:** The user explicitly requested implementation of the original homepage information-architecture proposal on 2026-10-05.
 **Identity:** Bind to `DESIGN.md`: industrial field manual, muted grey graph paper, Bolt Yellow, Jersey 10 and IBM Plex Mono, transparent 32px pixel assets. Bespoke existing Next.js components remain the design system.
 
@@ -54,4 +56,4 @@ Design review scores (0–4): distinctiveness 3, hierarchy 3, consistency 4, acc
 
 ## Completed local review
 
-Implemented on 2026-10-05 and consolidated into [Plan 06](../../plans/06-public-homepage.md). Desktop/tablet/mobile views were inspected, the process component/styles and protected artwork matched their baseline, and the recorded browser suite passed all 24 checks. This brief is historical; verify current UI behavior in the application.
+Implemented on 2026-10-05 and consolidated into [Plan 06](../../../plans/06-public-homepage.md). Desktop/tablet/mobile views were inspected, the process component/styles and protected artwork matched their baseline, and the recorded browser suite passed all 24 checks. This brief is historical; verify current UI behavior in the application.

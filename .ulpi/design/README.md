@@ -31,7 +31,7 @@
 | [`prize-belt.md`](prize-belt.md) | The planned prizes ride a slow, pausable belt, as in Pixl and the YSWS template. |
 | [`prize-photos.md`](prize-photos.md) | The proposed prizes show one example product photo each, from Pixl, on the existing belt. |
 | [`homepage-voice.md`](homepage-voice.md) | Plainer homepage copy: hero, rewards, progression, Eras and IRL lines, with no new claims. |
-| [`real-details.md`](real-details.md) | Historical 2026-10-16 copy brief. Its 0–20 rating and numeric worked example are superseded by Plans 02/22; current public-age copy is tracked in Plan 06. |
+| [`real-details.md`](archive/real-details.md) | Historical 2026-10-16 copy brief. Its 0–20 rating and numeric worked example are superseded by Plans 02/22; current public-age copy is tracked in Plan 06. |
 | [`copy-follow-through.md`](copy-follow-through.md) | Owner-approved fixes 1–4: accurate hero, direct launch wording, starter prizes first, shorter repeated copy, and clearer Custom Order and Era Docs. Real-project showcase deferred; existing How it works preserved. |
 | [`mole.md`](mole.md) | The homepage Orry is an interactive pet-care companion: visitors can pet, play with, pick up, and annoy him; his affection and irritation change his reactions. The old footer control has been removed. |
 | [`mole-behaviour.md`](mole-behaviour.md) | Implemented homepage pet-care behavior for Orry: gesture definitions, affection and irritation meters, pacing, reactions, sleep, motion/accessibility rules, and cursor interactions. Code lives in `apps/landing/app/_components/mole/`. |
@@ -39,35 +39,37 @@
 | [`rock-bottom-404.md`](rock-bottom-404.md) | The 404 page ("rock bottom") and the cave-in error page. |
 | [`pixel-font-open-c.md`](pixel-font-open-c.md) | An open C and c in the pixel font, so a C no longer reads as an O. |
 | [`docs-phone-guides-drawer.md`](docs-phone-guides-drawer.md) | Docs on phones: the Guides drawer. The icons await licence confirmation. |
-| [`redesign-foundation.md`](redesign-foundation.md) | Current homepage colors, three font roles, grid/grain, thin borders, and light track panels. EN/DE and reference interactions are later passes. |
+| [`redesign-foundation.md`](archive/redesign-foundation.md) | Current homepage colors, three font roles, grid/grain, thin borders, and light track panels. EN/DE and reference interactions are later passes. |
 
 ## Completed implementation records
 
 | Brief | Current owner |
 |---|---|
 | [`mobile-nav-single-row.md`](mobile-nav-single-row.md) | Homepage mobile navigation: one row at normal phone text sizes, with accessible reflow when text is enlarged. |
-| [`docs-connected-prose.md`](docs-connected-prose.md) | Earlier Docs copy implementation record; rating/multiplier examples and the Jerry byline are superseded by the 2026-10-19 owner decision. Current rules are in Plans 02/22; current team byline is “Built with Love by the LOADOUT team.” |
+| [`docs-connected-prose.md`](archive/docs-connected-prose.md) | Earlier Docs copy implementation record; rating/multiplier examples and the Jerry byline are superseded by the 2026-10-19 owner decision. Current rules are in Plans 02/22; current team byline is “Built with Love by the LOADOUT team.” |
 | [`accessibility-field-panel.md`](accessibility-field-panel.md) | Current accessibility settings panel, visible shortcut and dedicated page. The mobile/color-vision follow-up is recorded in the next row. |
 | [`mobile-accessibility-color-vision.md`](mobile-accessibility-color-vision.md) | Retracting phone shortcut, optional color-vision palettes and the expanded display settings. |
 | [`color-safe-docs-followup.md`](color-safe-docs-followup.md) | Color-safe palette and participant Docs changes. |
 | [`depth-label-transparency.md`](depth-label-transparency.md) | `home.css` and the design system: depth labels have text-clipped backgrounds so the band hatching remains visible behind them. |
 | [`community-era-overview.md`](community-era-overview.md) | Plan 11 for policy; Plan 06 for homepage copy. |
-| [`docs-refresh.md`](docs-refresh.md) | `docs/development/architecture.md` and `content-authoring.md`; production promotion recorded in PR #28. |
-| [`homepage-copy-clarity.md`](homepage-copy-clarity.md), [`homepage-information-architecture.md`](homepage-information-architecture.md) | Plan 06. |
-| [`homepage-mechanics-clarity.md`](homepage-mechanics-clarity.md), [`loadout-homepage-clarity-flow-and-eras.md`](loadout-homepage-clarity-flow-and-eras.md), [`progress-and-prizes.md`](progress-and-prizes.md) | Plans 02/06/11/15 own the relevant product facts; Plan 06 owns page composition. |
-| [`loadout-homepage-refinement-proposal.md`](loadout-homepage-refinement-proposal.md), [`loadout-public-landing.md`](loadout-public-landing.md) | Plan 06 and the landing implementation record. |
+| [`docs-refresh.md`](archive/docs-refresh.md) | `docs/development/architecture.md` and `content-authoring.md`; production promotion recorded in PR #28. |
+| [`homepage-copy-clarity.md`](archive/homepage-copy-clarity.md), [`homepage-information-architecture.md`](archive/homepage-information-architecture.md) | Plan 06. |
+| [`homepage-mechanics-clarity.md`](archive/homepage-mechanics-clarity.md), [`loadout-homepage-clarity-flow-and-eras.md`](archive/loadout-homepage-clarity-flow-and-eras.md), [`progress-and-prizes.md`](archive/progress-and-prizes.md) | Plans 02/06/11/15 own the relevant product facts; Plan 06 owns page composition. |
+| [`loadout-homepage-refinement-proposal.md`](archive/loadout-homepage-refinement-proposal.md), [`loadout-public-landing.md`](archive/loadout-public-landing.md) | Plan 06 and the landing implementation record. |
 | [`loadout-irl-compact-card.md`](loadout-irl-compact-card.md) | Plans 06 and 15. |
-| [`mobile-responsiveness.md`](mobile-responsiveness.md) | Plan 06 and current responsive implementation; PR #29 records the mobile repair. |
-| [`pixel-icon-sprite-integration.md`](pixel-icon-sprite-integration.md), [`transparent-sprite-backgrounds-and-remove-bottom-cta.md`](transparent-sprite-backgrounds-and-remove-bottom-cta.md) | [`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md). |
+| [`mobile-responsiveness.md`](archive/mobile-responsiveness.md) | Plan 06 and current responsive implementation; PR #29 records the mobile repair. |
+| [`pixel-icon-sprite-integration.md`](pixel-icon-sprite-integration.md), [`transparent-sprite-backgrounds-and-remove-bottom-cta.md`](archive/transparent-sprite-backgrounds-and-remove-bottom-cta.md) | [`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md). |
 | [`whos-behind-loadout.md`](whos-behind-loadout.md) | Plan 06 and current homepage. |
 
 ## Superseded records
 
 | Brief | Replaced by |
 |---|---|
-| [`loadout-docs-and-era-redesign.md`](loadout-docs-and-era-redesign.md) | The approved Docs refresh and Plan 11's current Era policy. |
+| [`loadout-docs-and-era-redesign.md`](archive/loadout-docs-and-era-redesign.md) | The approved Docs refresh and Plan 11's current Era policy. |
 | [`accessibility-preferences-preserve-ui.md`](accessibility-preferences-preserve-ui.md) | [`accessibility-field-panel.md`](accessibility-field-panel.md), which supersedes its footer-only entry point and older control scope. |
-| [`pixel-sprite-svg-integration.md`](pixel-sprite-svg-integration.md), [`pre-sprite-icon-restoration.md`](pre-sprite-icon-restoration.md) | The final PNG icon set and asset catalog. Keep the owner-supplied Bolt SVG as a separate source asset. |
+| [`pixel-sprite-svg-integration.md`](archive/pixel-sprite-svg-integration.md), [`pre-sprite-icon-restoration.md`](archive/pre-sprite-icon-restoration.md) | The final PNG icon set and asset catalog. Keep the owner-supplied Bolt SVG as a separate source asset. |
+
+Briefs linked through `archive/` were archived on 2026-10-20 and remain records, not current instructions.
 
 Completed and superseded briefs are retained as historical decisions. Use current owners and implementation code for present behavior.
 

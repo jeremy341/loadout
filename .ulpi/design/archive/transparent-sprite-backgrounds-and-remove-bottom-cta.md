@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Transparent sprite backgrounds and bottom CTA removal
 
-**Status:** Completed historical cleanup brief. The current transparent 32×32 PNG sources and runtime mappings are in [`pixel-icon-sprite-integration.md`](pixel-icon-sprite-integration.md) and the [asset catalog](../../docs/design/asset-catalog.md).
+**Status:** Completed historical cleanup brief. The current transparent 32×32 PNG sources and runtime mappings are in [`pixel-icon-sprite-integration.md`](../pixel-icon-sprite-integration.md) and the [asset catalog](../../../docs/design/asset-catalog.md).
 
 ## Design read
 

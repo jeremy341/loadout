@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Public Docs: connected explanations and multiplier labels
 
 **Policy update, 2026-10-19:** This brief records an earlier public-copy pass. The rating and multiplier wording below is historical where it conflicts with current policy: review dimensions are scored 1–9; normal payouts range 1×–20× with 10× mean; Great Signal can raise the hourly cap to 30×. Plan 22 and Plan 02 own these rules. The article byline is now **“Built with Love by the LOADOUT team”**, per the later owner decision. Do not reapply the earlier “Written by Jerry” direction.

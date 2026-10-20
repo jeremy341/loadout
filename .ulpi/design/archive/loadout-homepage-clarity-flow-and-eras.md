@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 ---
 surface: public homepage
 mode: persuade

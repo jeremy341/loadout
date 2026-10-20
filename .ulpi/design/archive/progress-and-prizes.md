@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Progress and prizes: implementation brief
 
 **Status:** Implemented and consolidated. Plan 02 owns economy rules and Plan 06 owns homepage presentation; this brief records the hierarchy change and is historical, not a duplicate source of policy.
@@ -37,4 +39,4 @@ Design preflight: existing signature/identity retained; distinct intro, track ca
 
 ## Completed review
 
-Implemented on 2026-10-05 and consolidated into [Plan 06](../../plans/06-public-homepage.md); [Plan 02](../../plans/02-economy-and-rewards.md) owns mechanics. The combined section has one h2 and nests the pricing, Requisition, planned-prize, and Custom Order material. The historical test and visual evidence above is not a substitute for checking the current UI.
+Implemented on 2026-10-05 and consolidated into [Plan 06](../../../plans/06-public-homepage.md); [Plan 02](../../../plans/02-economy-and-rewards.md) owns mechanics. The combined section has one h2 and nests the pricing, Requisition, planned-prize, and Custom Order material. The historical test and visual evidence above is not a substitute for checking the current UI.

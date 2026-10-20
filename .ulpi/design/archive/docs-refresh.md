@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # LOADOUT Docs refresh — approved implementation brief
 
-**Status:** Implemented and promoted through production in PR #28. This is the completed Docs design brief; current layout behavior is in [`docs/development/ARCHITECTURE.md`](../../docs/development/ARCHITECTURE.md), while participant wording and publication gates are in [`content-authoring.md`](../../docs/development/content-authoring.md).
+**Status:** Implemented and promoted through production in PR #28. This is the completed Docs design brief; current layout behavior is in [`docs/development/ARCHITECTURE.md`](../../../docs/development/ARCHITECTURE.md), while participant wording and publication gates are in [`content-authoring.md`](../../../docs/development/content-authoring.md).
 
 ## Design read
 An industrial field manual with an open reading surface, compact directory, and yellow navigation markers. Preserve DESIGN.md tokens and fonts. Pixl's left-aligned article and persistent grouped directory are navigation references; its game rules and theme selector are not adopted. Direction: technical/utilitarian. DFII: impact 4, fit 5, feasibility 4, performance 4, consistency risk 2 = 15 (strong existing-system fit; no new aesthetic).

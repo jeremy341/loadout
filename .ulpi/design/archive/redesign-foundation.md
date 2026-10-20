@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Redesign foundation
 
 **Status:** Implemented and verified locally, 2026-10-10. No commit or publication requested.

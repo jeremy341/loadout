@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # LOADOUT homepage refinement — design proposal
 
-**Status:** Implemented; historical proposal. The current design authority is [DESIGN.md](DESIGN.md), the homepage owner is [Plan 06](../../plans/06-public-homepage.md), and implementation evidence is in the [landing audit](../../docs/source-audit/landing-port-and-assets.md). Do not reapply proposed values without checking those owners.
+**Status:** Implemented; historical proposal. The current design authority is [DESIGN.md](../DESIGN.md), the homepage owner is [Plan 06](../../../plans/06-public-homepage.md), and implementation evidence is in the [landing audit](../../../docs/source-audit/landing-port-and-assets.md). Do not reapply proposed values without checking those owners.
 
 ## Direction
 

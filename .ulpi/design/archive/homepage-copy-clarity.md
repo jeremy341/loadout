@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Homepage copy clarity — 2026-10-05
 
 **Status:** Completed implementation brief. Plan 06 now owns homepage wording and current policy references; this document records the 2026-10-05 copy pass and is not an active instruction set.

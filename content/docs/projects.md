@@ -8,6 +8,8 @@ status: draft
 
 If you're wondering whether your idea belongs here, start by telling us what you'll actually build. A small command-line tool might solve a problem nobody has fixed for you, while an ordinary-looking app could hide a sync engine you spent weeks getting right. We need to see that work to understand the project, so give us more to go on than its name or a screenshot.
 
+Accepted projects must be open source. Publish the source and relevant design files under an open-source license so other builders can inspect and use the work. Hardware ships must include their design files and a bill of materials.
+
 ## What makes a project fit? {#fit}
 
 Start by explaining what you want the project to do, then tell us which parts you'll build or substantially improve yourself. Once you've built it, someone else should be able to inspect those parts and see the result. That's how we work out what you've contributed.

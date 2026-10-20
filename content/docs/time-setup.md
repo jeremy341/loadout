@@ -1,6 +1,6 @@
 ---
 title: "Time tracking setup"
-description: "The tracking plan for code and hardware, with the program connections still to come."
+description: "Required tracking for software and Hardware projects, with the program connections still to come."
 group: "BUILD & REVIEW"
 order: 64
 status: draft
@@ -8,7 +8,7 @@ status: draft
 
 When should you start tracking? From your first build session. It's easy to think you'll sort it out when you're ready to ship, but a journal written then can't recreate a missing time record. Set up your records early and check them while you still remember the session.
 
-We're planning to use Hackatime for code and Lapse for eligible hardware and other non-code work. The LOADOUT connections aren't confirmed yet, so the explanation below is how we intend it to work. Recording time now doesn't guarantee it will qualify for a payout; we'll still need to confirm when eligible work can begin.
+LOADOUT requires Hackatime for software projects and Lapse for Hardware projects. The LOADOUT connections aren't live yet, and the eligible-work start date remains unconfirmed. This guide describes the required tools, not a working account setup. A tracker record is evidence; it does not guarantee payout approval.
 
 ## Hackatime for code {#hackatime}
 
@@ -18,7 +18,7 @@ Keep using that project name as you build. Moving a folder or changing editor se
 
 ## Lapse for hardware {#lapse}
 
-For soldering, assembly, printing, testing and other eligible non-code work, the plan is to record sessions with Lapse. Begin and end the record with the work you're claiming, and keep the project name consistent with your journal.
+For Hardware work such as soldering, assembly, printing and testing, record sessions with Lapse. Begin and end the recording with the work you're claiming, keep the project name consistent with your journal, and remember that Lapse recordings are visible only to reviewers.
 
 The footage and entry should explain the same session. For example, photos of an assembled board can accompany the entry about soldering and testing it; they won't explain unrelated coding hours.
 

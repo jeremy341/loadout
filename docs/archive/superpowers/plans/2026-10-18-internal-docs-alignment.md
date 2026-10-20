@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed execution record. Current policy is in [the plan index](../../../../plans/00-index.md).
+
 # LOADOUT Internal Docs Alignment Plan
 
 **Historical execution record:** This plan captured the 2026-10-18 starting state and its task checklist. The owner made further product decisions on 2026-10-19, including 1–9 peer scores, 1×–20× normal payout with a 10× mean, Great Signal up to 30×, the 12-review flow, and the future-platform feature set. Those decisions supersede earlier assumptions below; use Plans 01, 02, 11, 15 and 22 and `plans/proposals/future-platform-ui.md` for current policy. The public age-copy correction and public Docs copy pass remain separate work.

@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed design spec, kept for provenance. Current layout guidance is in [the workspace guide](../../development/workspace.md).
+
 # LOADOUT workspace and repository restructure
 
 ## Status and purpose

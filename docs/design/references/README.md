@@ -18,8 +18,8 @@ This folder contains user-provided concept screenshots and sprite-source art. Th
 
 ## UI explorations
 
-- [`ui/earlier-concepts/`](ui/earlier-concepts/) — early concept images from October 2–3.
-- [`ui/planned-concepts/`](ui/planned-concepts/) — planned section/page directions from October 4.
-- [`ui/alternate-concepts/`](ui/alternate-concepts/) — alternate UI direction.
+- [`UI/early-2026-10-02/`](UI/early-2026-10-02/) — early concept images from October 2–3.
+- [`UI/planned-2026-10-04/`](UI/planned-2026-10-04/) — planned section/page directions from October 4.
+- [`UI/alternate-2026-10-03/`](UI/alternate-2026-10-03/) — alternate UI direction.
 
-These images support design discussions only. Use current application code, canonical plans, and the design system for shipped behavior and product facts. See [`docs/README.md`](../../README.md) for documentation ownership and [`docs/source-audit/`](../../source-audit/) for upstream attribution and reuse rules.
+These images are frozen design history. Do not add new concept PNGs here; newer work belongs in the design brief or the parent workspace. These images support design discussions only. Use current application code, canonical plans, and the design system for shipped behavior and product facts. See [`docs/README.md`](../../README.md) for documentation ownership and [`docs/source-audit/`](../../source-audit/) for upstream attribution and reuse rules.

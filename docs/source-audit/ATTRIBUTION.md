@@ -48,7 +48,7 @@ The mole mascot (`apps/landing/public/loadout/mole/`, 2026-10-15) is AI-generate
 
 ## Pixl platform shell port — 2026-10-20
 
-The first participant-platform shell (`apps/platform`, branch `feature/platform-shell`) adapts Pixl's participant shell. Source: `references/pixl/apps/web-shell/app/(shell)/` and `references/pixl/apps/web-shell/app/globals.css` at commit `8141b992e92e05583246fd914c63a101100f6fe4`. The exact notice, from `references/pixl/LICENSE`, applies to these files and stays with them:
+The first participant-platform shell (`apps/platform`, merged to `development` in PR #134) adapts Pixl's participant shell. Source: `references/pixl/apps/web-shell/app/(shell)/` and `references/pixl/apps/web-shell/app/globals.css` at commit `8141b992e92e05583246fd914c63a101100f6fe4`. The exact notice, from `references/pixl/LICENSE`, applies to these files and stays with them:
 
 ```text
 MIT License

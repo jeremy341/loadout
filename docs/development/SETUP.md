@@ -1,10 +1,10 @@
 # Local contributor setup
 
-[WORKFLOW.md](WORKFLOW.md) contains the complete non-recursive clone and branch procedure. All three reference parents and tracked design images come from that checkout; do not manually duplicate them into application code.
+[WORKFLOW.md](WORKFLOW.md) contains the complete non-recursive clone and branch procedure. All four reference repositories and tracked design images come from that checkout; do not manually duplicate them into application code.
 
 ## Application
 
-Use Bun1.3.14 from the repository root:
+Use Bun 1.3.14 from the repository root:
 
 ```powershell
 bun install --frozen-lockfile
@@ -13,7 +13,15 @@ bun run dev
 
 The local site defaults to http://localhost:3000. Docs are at /docs/start. Stop with Ctrl+C. If that port is busy, use `bun run --cwd apps/landing dev --port 3002`.
 
-Lint, typecheck, unit, build and browser commands are listed in WORKFLOW.md. Browser tests normally start their own server on3001; LOADOUT_TEST_PORT overrides the port and LOADOUT_TEST_BASE_URL overrides its address. CI uses a production build.
+Lint, typecheck, unit, build and browser commands are listed in WORKFLOW.md. Browser tests normally start their own server on 3001; LOADOUT_TEST_PORT overrides the port and LOADOUT_TEST_BASE_URL overrides its address. CI uses a production build.
+
+The participant platform preview runs separately on port 3100:
+
+```powershell
+bun run dev:platform
+```
+
+Its checks are `lint:platform`, `typecheck:platform`, `test:platform` and `build:platform`. See [platform-preview.md](platform-preview.md).
 
 ## Environment names
 

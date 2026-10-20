@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed release plan. Current homepage scope is [Plan 06](../../../../plans/06-public-homepage.md).
+
 # Make dino.icu canonical and release pending LOADOUT changes
 
 **Status:** Historical plan. `loadout.dino.icu` is already the canonical Production origin and the release has reached `main`. This original all-in-one PR sequence is superseded: the remaining local changes are being split into focused PRs for internal plans/source research, public guidance, and the share preview. Do not execute the combined checklist below as a new release.

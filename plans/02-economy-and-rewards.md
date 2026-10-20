@@ -39,7 +39,7 @@ This table is the current decision summary and supersedes conflicting legacy pro
 | Tracking and evidence | Hackatime for software, Lapse for Hardware, journal every eight development hours, required Hardware BOM, Lapse videos visible only to reviewers | Tracker integration, consent, retention, and exact hardware evidence workflow | `content/docs/tracking.md`, `project-types.md`, `shipping.md` |
 | Signal | Stardance Good/Great structure, +50 Ore Good tier, Great-tier 30× cap, 5,000 Ore per-project ceiling; reviewer-verified outside traction | Adaptation of platform-specific thresholds and implementation | `content/docs/review.md`, `projects.md` |
 | Usage Milestones | Measure verified actual project users, separate from Signal reach | Thresholds, evidence definitions by project type, and rewards | `content/docs/projects.md` |
-| Referrals | Count only after verified builder's first approved ship | Reward values and milestone ladder | `content/docs/referrals.md` |
+| Referrals | Count only after verified builder's first approved ship | Reward values and milestone ladder | `content/docs/referrals.md` (planned) |
 | Contributor achievement | First meaningful external contribution earns +50 Ore | How later contributions are recognized | `content/docs/progress.md` |
 | General Requisitions | Rare one-use shop discounts for community actions/achievements | Award triggers, values, inventory and limits | `content/docs/requisitions.md` |
 | Shop | Wishlist included; prices uniform across regions; no shop-suggestion voting | Wishlist behavior, catalog operations, regional availability and delivery | `content/docs/pricing.md`, `prizes.md` |

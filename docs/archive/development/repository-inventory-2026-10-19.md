@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** dated inventory from before the platform landed. The parent layout has changed; current guidance is in [the workspace guide](../../development/workspace.md).
+
 # LOADOUT parent workspace inventory
 
 This note maps the parent `C:\Users\jerem\Documents\LOADOUT` workspace as observed on 2026-10-19. It is a navigation aid, not a claim that every checkout is current. Check each repository's branch and working-tree status before using it. The parent README is the quick index; this file records the repo's internal layout and cleanup boundaries.

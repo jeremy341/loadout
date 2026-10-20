@@ -1,6 +1,6 @@
 # Platform preview: rules the plans leave open
 
-Recorded 2026-10-20. The platform preview (`apps/platform`, branch `feature/platform-shell`) ships every tab as a working feature on sample data, by owner instruction (see [DECISIONS.md](DECISIONS.md), "Preview milestone ships working features on sample data"). Where a canonical plan settles a rule, the preview implements it as written. Where the plans are silent, the preview picks a working value, labels it "Draft preview rule" on screen, and keeps it in one constant.
+Recorded 2026-10-20. The platform preview (`apps/platform`, merged to `development` in PR #134) ships every tab as a working feature on sample data, by owner instruction (see [DECISIONS.md](DECISIONS.md), "Preview milestone ships working features on sample data"). Where a canonical plan settles a rule, the preview implements it as written. Where the plans are silent, the preview picks a working value, labels it "Draft preview rule" on screen, and keeps it in one constant.
 
 This file merges the "Unsettled by the plans" sections of the five `SOURCES.md` files under `apps/platform/components/pages/` (`build/`, `community-a/`, `community-b/`, `gear/`, `hub/`) into one deduplicated list, grouped by the plan that should decide. A draft value is a placeholder so a flow can run. It is not a proposal and not policy. Each question needs a policy owner before a real service uses it.
 

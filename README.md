@@ -8,6 +8,10 @@
 
 The site has no live participant accounts, project-submission, review, reward, ordering, or event service. The RSVP link expresses interest and does not enroll anyone.
 
+### Participant platform preview
+
+`apps/platform` is a Next 16 / React 19 participant-shell preview ported from Pixl's shell (MIT) and restyled in the LOADOUT design system. Every tab works on labelled sample data saved in the browser; there is no sign-in, database or API, and it is not deployed. Run it with `bun run dev:platform` on port 3100. See [the platform handoff](docs/development/platform-handoff.md).
+
 ## Working on the repository
 
 Start with [`AGENTS.md`](AGENTS.md) and the [documentation index](docs/README.md). [Local setup](docs/development/SETUP.md) covers installation and environment names. [The development workflow](docs/development/WORKFLOW.md) owns task kickoff, branches, checks, promotion, and release. Plans and their status are indexed in [`plans/00-index.md`](plans/00-index.md); the visual system is in [`docs/design/system/design-system.md`](docs/design/system/design-system.md).

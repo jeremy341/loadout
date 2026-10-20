@@ -1,6 +1,6 @@
 # Participant platform shell
 
-Status: scoped brief for the first participant-platform shell port, written 2026-10-20. Branch `feature/platform-shell`, app `apps/platform`. Implementation is in progress; this brief is the spec the code is checked against. Phase 0 of the [implementation plan](../../docs/superpowers/plans/2026-10-19-pixl-shell-platform.md) (identity, database, hosting, operating owners) is still open, so this milestone has no sign-in and no backend. Revised the same day: every tab is now a working preview feature on labelled sample data (see "Confirmed owner decisions" 3 and 4).
+Status: scoped brief for the first participant-platform shell port, written 2026-10-20. App `apps/platform`. The preview milestone is merged to `development` in PR #134; this brief is the spec the code is checked against. Phase 0 of the [implementation plan](../../docs/superpowers/plans/2026-10-19-pixl-shell-platform.md) (identity, database, hosting, operating owners) is still open, so this milestone has no sign-in and no backend. Revised the same day: every tab is now a working preview feature on labelled sample data (see "Confirmed owner decisions" 3 and 4).
 Binds to: [DESIGN.md](DESIGN.md) and the [design system](../../docs/design/system/design-system.md). Policy owners are named per tab below; this brief decides presentation only.
 Source map: [`docs/source-audit/pixl-platform-port-map.md`](../../docs/source-audit/pixl-platform-port-map.md). Attribution: [`docs/source-audit/ATTRIBUTION.md`](../../docs/source-audit/ATTRIBUTION.md).
 
@@ -370,4 +370,4 @@ How each applies to this milestone:
 
 ## Build handoff
 
-Implementation is in progress on `feature/platform-shell` against this brief. Deviations from the acceptance criteria are recorded in the PR description. Nothing here authorises real sign-in, real data, a backend, or a policy change. The preview rules in "Draft preview rule" labels are placeholders, not proposals.
+The preview implementation is merged to `development` in PR #134 against this brief. Deviations from the acceptance criteria are recorded in the PR description. Nothing here authorises real sign-in, real data, a backend, or a policy change. The preview rules in "Draft preview rule" labels are placeholders, not proposals.

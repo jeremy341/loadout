@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed execution plan, kept for provenance. Current layout guidance is in [the workspace guide](../../development/workspace.md).
+
 # LOADOUT Workspace and Repository Restructure Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Each step uses checkbox syntax and has a verifiable result.

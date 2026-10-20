@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed one-time disposition audit. Current layout guidance is in [the workspace guide](../../development/workspace.md); Git history remains the record.
+
 # LOADOUT workspace and repository disposition
 
 **Audit date:** 2026-10-10. **Base:** `development` at `b2628762133907e2e051543a29dcbf69bf02d041`. The attached [CSV](restructure-manifest.csv) has the path/disposition records spanning the parent workspace, protected worktrees, repository files, copied assets, and source references.

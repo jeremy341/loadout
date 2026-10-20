@@ -1,8 +1,8 @@
 # Pixl platform port map
 
-Recorded 2026-10-20 for the first participant-platform shell port (`apps/platform`, branch `feature/platform-shell`), and updated the same day when every tab became a working preview feature on sample data. This is the source map required by Phase 0 of the [implementation plan](../superpowers/plans/2026-10-19-pixl-shell-platform.md). It maps Pixl paths to LOADOUT targets and records a decision for each. It is source evidence, not product policy. Policy stays in the numbered plans.
+Recorded 2026-10-20 for the first participant-platform shell port (`apps/platform`, merged to `development` in PR #134), and updated the same day when every tab became a working preview feature on sample data. This is the source map required by Phase 0 of the [implementation plan](../superpowers/plans/2026-10-19-pixl-shell-platform.md). It maps Pixl paths to LOADOUT targets and records a decision for each. It is source evidence, not product policy. Policy stays in the numbered plans.
 
-Pixl is read at `8141b992e92e05583246fd914c63a101100f6fe4` (the pin in [source-bases.md](source-bases.md)), local root `references/pixl/`. Paths below are relative to that root unless they start with `apps/platform` or `docs`. Reading was done in the read-only workspace copy at `loadout-all/references/pixl/`; the submodules are not initialised in the `platform-shell` worktree.
+Pixl is read at `8141b992e92e05583246fd914c63a101100f6fe4` (the pin in [source-bases.md](source-bases.md)), local root `references/pixl/`. Paths below are relative to that root unless they start with `apps/platform` or `docs`. Read at the pinned submodule `references/pixl/`; initialise it with `git submodule update --init references/pixl`.
 
 Confirmed owner decisions behind this map are in [DECISIONS.md](DECISIONS.md) (2026-10-20 entries). Rules the plans leave open, and the draft value the preview uses for each, are in [platform-preview-open-questions.md](platform-preview-open-questions.md). The UI scope is in [`.ulpi/design/participant-platform-shell.md`](../../.ulpi/design/participant-platform-shell.md). Licence and notices are in [ATTRIBUTION.md](ATTRIBUTION.md).
 
@@ -14,7 +14,7 @@ Confirmed owner decisions behind this map are in [DECISIONS.md](DECISIONS.md) (2
 - **Reference only:** read for patterns; nothing is copied.
 - **Excluded:** not used, with the reason.
 
-"This change" means the row is implemented in the `feature/platform-shell` change under `apps/platform/**`. Targets are the paths in that change; check the PR diff for the exact file names before relying on a path.
+"This change" means the row is implemented in the platform change under `apps/platform/**`. Targets are the paths in that change; check the PR diff for the exact file names before relying on a path.
 
 ## Licence boundary
 

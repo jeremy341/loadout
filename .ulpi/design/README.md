@@ -10,7 +10,7 @@
 | [`ascii-float-preview.md`](ascii-float-preview.md) | Owner-approved local ASCII floating motion with independent timing and mixed directions. |
 | [`homepage-visual-clarity.md`](homepage-visual-clarity.md) | Open proposal, linked to Plan 17. It does not authorize homepage changes until the owner approves that scope. |
 | [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md) | Product proposal only. Plans 01/02 must settle any bonus before it is implemented or published. |
-| [`participant-platform-shell.md`](participant-platform-shell.md) | Owner-directed 2026-10-20: the participant shell for the new `apps/platform`, adapted from Pixl's shell with all 23 destinations; every internal tab is a working preview feature on labelled sample data saved in the browser. In progress on `feature/platform-shell`; no sign-in or backend. The Accessibility preferences dialog is not ported. |
+| [`participant-platform-shell.md`](participant-platform-shell.md) | Owner-directed 2026-10-20: the participant shell for the new `apps/platform`, adapted from Pixl's shell with all 23 destinations; every internal tab is a working preview feature on labelled sample data saved in the browser. Merged to `development` in PR #134; no sign-in or backend. The Accessibility preferences dialog is not ported. |
 
 ## Implemented locally
 

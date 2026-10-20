@@ -1,13 +1,13 @@
 # Platform handoff: what we did and what comes next
 
-**Written:** 2026-10-20, for the next developer (and their agent). **Owner:** jeremy341. **Branch:** `feature/platform-shell`, PR into `development`.
+**Written:** 2026-10-20, for the next developer (and their agent). **Owner:** jeremy341. **Status:** merged to `development` in PR #134 on 2026-10-20; not deployed.
 
 Read this page first, then [the development workflow](WORKFLOW.md), [AGENTS.md](../../AGENTS.md) and [the platform preview guide](platform-preview.md). Everything below is either a confirmed owner decision, a fact you can verify in the repo, or an open question. They are kept apart.
 
 ## 1. Where the project stands
 
 - LOADOUT's public site is `apps/landing` (homepage and program-draft Docs). It has no accounts, backend or participant features.
-- This PR adds `apps/platform`: a Next 16 / React 19 app holding the participant platform shell and a working **preview** of every tab. It runs on sample data saved in the browser (`localStorage`). There is no sign-in, database or API.
+- The platform PR (#134) added `apps/platform`: a Next 16 / React 19 app holding the participant platform shell and a working **preview** of every tab. It runs on sample data saved in the browser (`localStorage`). There is no sign-in, database or API.
 - The shell is a port of Pixl's participant shell (MIT) restyled in the LOADOUT design system. The tab list has 23 entries (22 platform pages plus Docs, which links to the landing app).
 - Nothing here is deployed. `apps/platform` is not wired to Vercel or a hostname.
 
@@ -31,7 +31,7 @@ Read this page first, then [the development workflow](WORKFLOW.md), [AGENTS.md](
 | Design brief | `.ulpi/design/participant-platform-shell.md` | The required scoped UI brief. |
 | Source audit | `docs/source-audit/` | `pixl-platform-port-map.md`, `platform-preview-open-questions.md`, updated ATTRIBUTION and DECISIONS. |
 
-Not in this PR: anything from the owner's other checkouts (`loadout-all` has uncommitted edits, `loadout-copy`, `loadout-docs`, `reports/`, `worktrees/`). Ask the owner before relying on those.
+Not in this change: the owner's other local checkouts and review evidence. Ask the owner before relying on those.
 
 ## 4. Next direction (owner instruction): redo the site from Pixl
 
@@ -59,7 +59,6 @@ Where the files go is your call. A recommended layout: put the verbatim copy in 
 ## 6. Where the reference code is
 
 - It is a pinned git submodule: `references/pixl`, commit `8141b992e92e05583246fd914c63a101100f6fe4`. Fresh clones and new worktrees do **not** have it checked out. Run `git submodule update --init references/pixl`. Do **not** use `--recursive` (Stardance's nested `secrets` repository is unavailable).
-- On the owner's machine a checked-out copy lives at `C:\Users\jerem\Documents\LOADOUT\loadout-all\references\pixl`. That path is local to them.
 - Stardance (`references/stardance`, missions, peer review) and Stasis (`references/stasis`, events, certificates) are also available for later steps. See [source-bases.md](../source-audit/source-bases.md) for the pins.
 - Never edit files under `references/`. Copy them out.
 

@@ -17,4 +17,4 @@ From a fresh clone, run:
 git submodule update --init
 ```
 
-Do not initialize recursively. Stardance has a nested `secrets` submodule whose remote was unavailable at the audited pin. The Stasis pin has no `.gitmodules` file. The source audit records exact pins and permission findings in [`docs/source-audit/source-bases.md`](../docs/source-audit/source-bases.md) and [`decisions.md`](../docs/source-audit/decisions.md).
+Do not initialize recursively. Stardance has a nested `secrets` submodule whose remote was unavailable at the audited pin. The Stasis pin has no `.gitmodules` file. The source audit records exact pins and permission findings in [`docs/source-audit/source-bases.md`](../docs/source-audit/source-bases.md) and [`decisions.md`](../docs/source-audit/DECISIONS.md).

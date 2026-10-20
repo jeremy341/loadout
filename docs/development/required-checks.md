@@ -9,5 +9,3 @@ This is the current workflow contract used by `scripts/ship.ps1`. The check name
 | `testing` | Repository integrity, Landing quality, Landing browser, Promotion lane |
 | `main` | Repository integrity, Landing quality, Landing browser, Promotion lane |
 <!-- required-checks:end -->
-
-Landing quality also runs four platform jobs when app-affecting files change: **Platform lint**, **Platform typecheck**, **Platform unit tests** and **Platform production build** (`bun run lint:platform`, `typecheck:platform`, `test:platform`, `build:platform`). They feed the same aggregator; they are not separate required check names.

@@ -15,14 +15,6 @@ The local site defaults to http://localhost:3000. Docs are at /docs/start. Stop 
 
 Lint, typecheck, unit, build and browser commands are listed in WORKFLOW.md. Browser tests normally start their own server on 3001; LOADOUT_TEST_PORT overrides the port and LOADOUT_TEST_BASE_URL overrides its address. CI uses a production build.
 
-The participant platform preview runs separately on port 3100:
-
-```powershell
-bun run dev:platform
-```
-
-Its checks are `lint:platform`, `typecheck:platform`, `test:platform` and `build:platform`. See [platform-preview.md](platform-preview.md).
-
 ## Environment names
 
 Optional public configuration is documented in `apps/landing/.env.example`; local private files are ignored.

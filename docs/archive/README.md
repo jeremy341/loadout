@@ -27,6 +27,20 @@ Read current policy from [`plans/00-index.md`](../../plans/00-index.md), [`docs/
 |---|---|---|
 | `repository-inventory-2026-10-19.md` | Dated workspace inventory from before the platform landed | [`workspace.md`](../development/workspace.md) |
 
+### `platform-preview-20261020/`
+
+The Pixl-derived participant platform preview was removed from the repository on 2026-10-20. The app source is kept outside the repo in the owner's parent workspace; these files record its plan, brief, source map and open questions.
+
+| File | What it is | Current owner |
+|---|---|---|
+| `platform-handoff.md` | What the preview contained and what came next | `plans/proposals/future-platform-ui.md` |
+| `platform-preview.md` | How to run, reset and retire the preview | Archived record; no current app |
+| `pixl-platform-port-map.md` | Path-by-path Pixl source map and reuse decisions | `docs/source-audit/ATTRIBUTION.md` |
+| `platform-preview-open-questions.md` | Rules the plans left open, with draft preview values | Numbered plans |
+| `2026-10-19-pixl-shell-platform.md` | Gated implementation plan | Archived record |
+| `2026-10-19-pixl-shell-platform-design.md` | Design spec for the port | Archived record |
+| `participant-platform-shell.md` | Scoped UI brief for the shell | Design system and numbered plans |
+
 ## Rules
 
 - Keep the original filename; add a date only when the name has none.

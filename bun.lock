@@ -37,23 +37,6 @@
         "typescript": "^5",
       },
     },
-    "apps/platform": {
-      "name": "@loadout/platform",
-      "version": "0.1.0",
-      "dependencies": {
-        "next": "16.3.5",
-        "react": "19.2.4",
-        "react-dom": "19.2.4",
-      },
-      "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "^19",
-        "@types/react-dom": "^19",
-        "eslint": "^9",
-        "eslint-config-next": "16.2.6",
-        "typescript": "^5",
-      },
-    },
   },
   "trustedDependencies": [
     "sharp",
@@ -195,8 +178,6 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@loadout/landing": ["@loadout/landing@workspace:apps/landing"],
-
-    "@loadout/platform": ["@loadout/platform@workspace:apps/platform"],
 
     "@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.2.4", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1 || ^2.0.0-alpha.4", "@emnapi/runtime": "^1.7.1 || ^2.0.0-alpha.4" } }, "sha512-AJxoUD2/15ESHbvpcyjU274nsAPLuOtPHCk0vKJM5pj//Fg/B1FXNWjPnXTT9PymCYYiHo4zPj0ZomXBKhoy7g=="],
 

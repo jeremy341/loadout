@@ -32,7 +32,7 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Use Bun 1.3.14. Do not use `--recursive` or `--recurse-submodules`: Stardance declares an inaccessible nested `secrets` repository. The landing app runs on port 3000; the platform preview runs on port 3100 with `bun run dev:platform`.
+Use Bun 1.3.14. Do not use `--recursive` or `--recurse-submodules`: Stardance declares an inaccessible nested `secrets` repository. The landing app runs on port 3000.
 
 ## Worktrees for tasks
 

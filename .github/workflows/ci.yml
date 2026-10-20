@@ -120,27 +120,12 @@ jobs:
             git diff-tree --check --root -r HEAD
           fi
 
-          while IFS='|' read -r name url expected_sha; do
-            actual_url="$(git config -f .gitmodules --get "submodule.references/${name}.url")"
-            test "$actual_url" = "$url"
-
-            entry="$(git ls-tree HEAD -- "references/${name}")"
-            expected_entry="$(printf '160000 commit %s\treferences/%s' "$expected_sha" "$name")"
-            if [[ "$entry" != "$expected_entry" ]]; then
-              printf 'Unexpected submodule pin for %s: %s\n' "$name" "$entry"
-              exit 1
-            fi
-          done <<'REFERENCES'
-          pixl|https://github.com/hackclub/pixl.git|8141b992e92e05583246fd914c63a101100f6fe4
-          ysws-template|https://github.com/EDRipper/ysws-template.git|1ac191fa5eee1e57983b29ab7101f700c166e207
-          stardance|https://github.com/hackclub/stardance.git|5b6bfb86462e0edc68592d6985168d09543f00d5
-          stasis|https://github.com/hackclub/stasis.git|7a230ced9ad793f0ad4cda30a7d71c02a58da6b6
-          REFERENCES
+          bash .github/scripts/check-reference-pins.sh
 
   # The landing jobs always run and always report, so a required check is never "skipped" by
-  # accident. A documentation-only change finishes after the first step. Every code change gets the
-  # full set (lint, typecheck, unit tests, production build, browser suite), so one green commit is
-  # good enough for every lane.
+  # accident. Documentation-only and reference-pin-only changes finish after the change-detection
+  # step. Public Docs and app changes get the full set (lint, typecheck, unit tests, production
+  # build, browser suite), so one green commit is good enough for every lane.
   #
   # The browser suite is the long pole, so it is spread across five runners that run at the same
   # time as the quality job. Shards are separate runners rather than more Playwright workers on one

@@ -18,7 +18,9 @@ Keep those records as you build. If you leave them until shipping day, you'll ha
 | Journal | What you tried, changed and decided during that time. |
 | Approved work | The eligible contribution the evidence supports. |
 
-These figures can differ. If a session is unclear, we may ask about it or approve only the part we can verify. Hackatime and Lapse are the planned tracking tools; [Time tracking setup](/docs/time-setup) explains the connections still to come.
+These figures can differ. If a session is unclear, we may ask about it or approve only the part we can verify. Hackatime is required for software projects; Lapse is required for Hardware projects. Their LOADOUT connections are not live yet; [Time tracking setup](/docs/time-setup) explains the planned setup.
+
+Each builder must add a journal entry for every eight hours of development on each project. Hardware ships also require a bill of materials. Project pages and journals are public by default; Lapse recordings are visible only to reviewers.
 
 ## What a useful journal says
 

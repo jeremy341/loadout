@@ -6,7 +6,7 @@ Each repository is a Git submodule pinned to a reviewed commit. The LOADOUT pare
 |---|---|---|---|
 | [`pixl/`](pixl/) | Primary engineering reference for the landing app | `8141b992e92e05583246fd914c63a101100f6fe4` | MIT; preserve notice and attribution. |
 | [`ysws-template/`](ysws-template/) | YSWS operations and infrastructure reference | `1ac191fa5eee1e57983b29ab7101f700c166e207` | No reuse license identified; do not vendor its implementation. |
-| [`stardance/`](stardance/) | Peer review, scoring, and virality-bonus reference | `d889f39060a443476a88b98a87d5088033626eff` | No reuse license identified; do not vendor its implementation. |
+| [`stardance/`](stardance/) | Peer review, scoring, virality, and community-poll reference | `5b6bfb86462e0edc68592d6985168d09543f00d5` | No reuse license identified; do not vendor its implementation. |
 | [`stasis/`](stasis/) | Hack Club hardware hackathon and event-program reference | `7a230ced9ad793f0ad4cda30a7d71c02a58da6b6` | No LICENSE file or GitHub license metadata found at this pin. Reference-only; obtain permission before reusing code or media. |
 
 ## Initialize the references

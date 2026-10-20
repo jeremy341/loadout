@@ -8,7 +8,7 @@ The source name in each row maps to these exact versions and permission bases:
 
 - Pixl: SHA 8141b992e92e05583246fd914c63a101100f6fe4; root MIT license, copyright (c) 2026 Pixl.
 - YSWS Template: SHA 1ac191fa5eee1e57983b29ab7101f700c166e207; no root license or README, no repository license metadata, backend package metadata UNLICENSED.
-- Stardance: SHA d889f39060a443476a88b98a87d5088033626eff; no LICENSE file and no repository license metadata.
+- Stardance: SHA 5b6bfb86462e0edc68592d6985168d09543f00d5; no LICENSE file and no repository license metadata. The 2026-10-20 update adds a community poll flow, recorded as reference-only.
 - Stasis: SHA 7a230ced9ad793f0ad4cda30a7d71c02a58da6b6; no root LICENSE file and no repository license metadata at the pin (checked 2026-10-11). Reuse permission reported by the project owner on 2026-10-11; see ATTRIBUTION.md.
 
 | Source | Exact source path(s) | Decision | LOADOUT treatment |

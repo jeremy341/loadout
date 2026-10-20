@@ -17,7 +17,7 @@
 **Owner:** Public-facing `apps/landing` experience  
 **Status:** Canonical plan for the first public LOADOUT page  
 
-**Policy follow-up:** Internal age policy is 13–18. The current public site still says 13–19; correcting the public copy remains pending and must be handled in a separately scoped public-copy pass. This internal plan update does not edit `content/docs/`.
+**Policy follow-up:** Public age wording is 13–18. Hack Club teen verification is required; integration and operating approval remain unconfirmed. The public-copy update is kept separate from participant-platform implementation.
 
 **Depends on:** `00`, `01`, `02`, `03`, `04`  
 **Primary source implementation:** Pixl `apps/landing`, redesigned for LOADOUT

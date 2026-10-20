@@ -1,6 +1,6 @@
 # LOADOUT participant platform: Pixl shell and backend design
 
-**Status:** Draft for owner review. This is a design specification, not permission to implement. The separate implementation plan follows after this spec is approved.
+**Status:** Draft for owner review. This is a design specification, not permission to implement. The separate [implementation plan](../plans/2026-10-19-pixl-shell-platform.md) is also a draft; review and explicit authorization are required before code changes.
 
 **Owner request:** Use Pixl's participant platform as the first-pass breadth and structure reference. Adapt the full global shell and backend capabilities to LOADOUT's product rules and visual system. Exclude Pixl's game and game-only features.
 
@@ -114,4 +114,4 @@ Each phase should deliver one usable vertical slice with real contracts, loading
 
 ## 9. Review gate
 
-Owner review required for the proposed app/API boundary, the phase order, and the first-release feature subset. After approval, create a separate implementation plan with file-level tasks, dependencies, acceptance checks, migration/release sequence, and an explicit execution method. Do not implement from this spec alone.
+Owner review is required for the proposed app/API boundary, phase order, and first-release feature subset. The separate [implementation plan](../plans/2026-10-19-pixl-shell-platform.md) records file-level tasks, dependencies, acceptance checks, migration/release gates, and unresolved service decisions. Neither document authorizes implementation by itself.

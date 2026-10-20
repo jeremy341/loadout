@@ -13,7 +13,7 @@ The reviewer's complaint was that the site feels vibed and has few real details.
 
 | Topic | Decision |
 |---|---|
-| Who it is for | High-school students aged 13 to 18 (owner update 2026-10-18). The public site and Docs still say 13 to 19; correcting that public wording is pending. |
+| Who it is for | High-school students aged 13 to 18. Public homepage and Docs copy use this age range; Hack Club teen verification is required. |
 | Rate | 10 Ore per approved hour at solid quality, worth about $5 of prizes (1 Ore is about $0.50, internal only). |
 | Savings | 20% permanent discount at level 15, plus a 20% Requisition. No limits in Ore. A Requisition needs an item of at least 400 Ore. |
 | Special prizes | The enclosed printer (1,000 Ore) and the Framework 16 (5,000 Ore) are priced at $3 an hour, with no level requirement. |

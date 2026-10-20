@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Homepage mechanics clarity and LOADOUT IRL concept
 
 **Status:** Implemented in the current homepage and consolidated into Plans 06 and 15. This brief is historical execution context; it is not an independent policy source.
@@ -101,4 +103,4 @@ Self-critique: distinctiveness 3, hierarchy 3, consistency 4, accessibility 3, s
 
 ## Implemented result
 
-Implemented on 2026-10-06 and consolidated into [Plan 06](../../plans/06-public-homepage.md), with event policy owned by Plan 15. The recorded concept-visibility test, five configuration tests, 24 browser checks, lint, TypeScript, and production build passed. This is historical implementation evidence; check current application code for present behavior. Publication and event operations remain separate.
+Implemented on 2026-10-06 and consolidated into [Plan 06](../../../plans/06-public-homepage.md), with event policy owned by Plan 15. The recorded concept-visibility test, five configuration tests, 24 browser checks, lint, TypeScript, and production build passed. This is historical implementation evidence; check current application code for present behavior. Publication and event operations remain separate.

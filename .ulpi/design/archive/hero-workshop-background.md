@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Hero workshop background
 
 Status: abandoned on 11 October 2026 by owner decision. Nothing renders this background. `HeroWorkshopBackground.tsx`, `hero-workshop-background.css` and the `hero-workshop` PNGs are kept as assets; wiring them into the hero needs a new owner decision.

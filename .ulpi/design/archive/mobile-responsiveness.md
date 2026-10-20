@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Mobile responsiveness repair
 
 **Status:** Implemented in the development lane and promoted through PR #29. This is a historical repair brief; check current homepage code and Plan 06 before making another mobile adjustment.

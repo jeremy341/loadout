@@ -1,3 +1,5 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # LOADOUT Public Landing Page
 
 **Status:** Implemented as the current public homepage. Plan 06 and the current application own live copy and behavior; this remains a historical design specification.
@@ -12,7 +14,7 @@ The latest direct user request authorizes UI implementation and supplies the clo
 
 Design Read: an industrial technical field manual with pixel utility, using a centered framed hero, broad graph-paper whitespace, and concise capability labels to make a technical builder program feel concrete.
 
-**Direction:** industrial / signage, bound to [`DESIGN.md`](./DESIGN.md). Follow its palette, typography, scales, motion, icon style, and voice throughout. **Every screen must read as the same product if placed side by side.**
+**Direction:** industrial / signage, bound to [`DESIGN.md`](../DESIGN.md). Follow its palette, typography, scales, motion, icon style, and voice throughout. **Every screen must read as the same product if placed side by side.**
 
 The screenshot is a composition and style reference only. Its sample RSVP, facts, tracks, reward names, figures, discount claims, and footer statements are not approved page content. The canonical four tracks are Tools, Systems, Compute, and Hardware. Research Mode is separate. Bolts are global, Track XP is per-track, shipped work grows the Digital Loadout, and rewards upgrade the Physical Loadout.
 
@@ -154,7 +156,7 @@ Use a disclosure button for each row. Click, Enter, or Space toggles its answer.
 
 ## Component briefs
 
-All components use tokens from [`DESIGN.md`](./DESIGN.md). Shared interactive target size is at least `44×44px`; text and icon alignment must not shrink the target.
+All components use tokens from [`DESIGN.md`](../DESIGN.md). Shared interactive target size is at least `44×44px`; text and icon alignment must not shrink the target.
 
 ### `PublicHeader`
 

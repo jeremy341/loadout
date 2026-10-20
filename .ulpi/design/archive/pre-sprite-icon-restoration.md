@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Restore the Earlier LOADOUT Icons
 
-Status: superseded on 2026-10-06 by [the final pixel icon integration](pixel-icon-sprite-integration.md). Its instructions to activate bolt.svg no longer apply; current icon sources and mappings are recorded in the [asset catalog](../../docs/design/asset-catalog.md).
+Status: superseded on 2026-10-06 by [the final pixel icon integration](../pixel-icon-sprite-integration.md). Its instructions to activate bolt.svg no longer apply; current icon sources and mappings are recorded in the [asset catalog](../../../docs/design/asset-catalog.md).
 
 Historical status: approved for implementation before the final icon set was supplied.
 

@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # Pixel sprite SVG integration
 
-> **Status: superseded.** The website uses the transparent PNG sprites recorded in [`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md). The owner-supplied `bolt.svg` remains preserved as a separate source asset and is not the active currency glyph. Do not apply this older SVG-export proposal.
+> **Status: superseded.** The website uses the transparent PNG sprites recorded in [`docs/design/asset-catalog.md`](../../../docs/design/asset-catalog.md). The owner-supplied `bolt.svg` remains preserved as a separate source asset and is not the active currency glyph. Do not apply this older SVG-export proposal.
 
 ## Design read
 

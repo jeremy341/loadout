@@ -1,6 +1,8 @@
+> **Archived 2026-10-20:** completed or superseded design brief, kept for provenance. Current visual authority: [design system](../../../docs/design/system/design-system.md).
+
 # LOADOUT Docs and Community Era Redesign
 
-**Status:** Superseded by the approved Docs refresh brief in [`docs-refresh.md`](docs-refresh.md) and the current public Era overview in [Plan 11](../../plans/11-eras-and-community-progression.md). Keep as historical research only; do not treat these earlier content/layout proposals as the active Docs specification.
+**Status:** Superseded by the approved Docs refresh brief in [`docs-refresh.md`](docs-refresh.md) and the current public Era overview in [Plan 11](../../../plans/11-eras-and-community-progression.md). Keep as historical research only; do not treat these earlier content/layout proposals as the active Docs specification.
 
 ## Design Read
 

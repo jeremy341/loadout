@@ -75,29 +75,21 @@ The 32×32 transparent PNGs in `apps/landing/public/loadout/sprites/` are the cu
 
 Original source artwork remains in `docs/design/references/2026-10-06/final-pixel-icons/source/`; every original was renamed descriptively without changing image pixels or transparency.
 
-### Standalone scenery vectors
+### Bolt source
 
 | Runtime file | Purpose |
 | --- | --- |
-| `apps/landing/public/loadout/hero/scenery/industrial-skyline.svg` | Preserved source; the new ASCII hero treatment no longer displays this skyline. |
-| `apps/landing/public/loadout/hero/scenery/hazard-stripes.svg` | Kept. The current homepage does not reference it. |
-| `apps/landing/public/loadout/hero/scenery/cloud-01.svg` – `cloud-03.svg` | Kept. The current homepage does not render clouds. |
-| `apps/landing/public/loadout/hero/scenery/scroll-cue.svg` | Kept. The current homepage does not reference it. |
 | `apps/landing/public/loadout/bolt.svg` | Owner-supplied custom Bolt SVG; kept byte-for-byte at its original URL. |
 
 The homepage uses `apps/landing/public/loadout/sprites/ore.png`, the ore gem, as the currency icon. The owner's `bolt.svg` is not shown anywhere and is kept as it was. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
 
-### Workshop scenery PNGs
-
-`apps/landing/public/loadout/hero-workshop/` contains the 31 verified PNGs from the abandoned hero workshop background. They are kept but not rendered. `HeroWorkshopBackground.tsx` and `hero-workshop-background.css` are kept with them, and nothing imports them. The workshop background was abandoned on 11 October 2026.
+The abandoned hero workshop background (31 PNGs, six scenery SVGs, `HeroWorkshopBackground.tsx` and `hero-workshop-background.css`) was removed on 2026-10-20. `bolt.svg` remains unchanged.
 
 ## Editable and incoming source artwork
 
 - `assets/inbox/icons/` holds the unintegrated Bolt and track references plus Rivet images. These are not included in homepage UI.
 - `assets/editable/icons/loadout-icon-palette.ase` is the icon palette source.
 - `assets/editable/homepage/rail-components-source.ase` is the editable rail source.
-- The numbered cloud PNGs in `apps/landing/public/loadout/hero-workshop/` are kept from the abandoned workshop background and are not rendered.
-- `docs/design/references/homepage-workshop/` holds the supplied full-page workshop concept and cloud/decorative source sheets as visual references.
 - `assets/archive/homepage-variants/` holds distinct older and alternate structures/workbench images. The three byte-identical old copies removed earlier are not included.
 
 New art starts in `assets/inbox/`. After approval, move it to its final runtime or source location, update this catalog, and remove the inbox copy. Never keep two identical runtime exports in separate folders.

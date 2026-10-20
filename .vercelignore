@@ -1,6 +1,5 @@
 # The deployment uses only the landing app and the root Bun workspace files.
 references/
-PLAN/
 docs/
 .github/
 .impeccable/

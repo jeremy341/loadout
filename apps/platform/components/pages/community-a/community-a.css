@@ -1,0 +1,420 @@
+/* Explore, Ideas, Show & Tell and Friends. Class prefix ca-. Shell tokens only (app/globals.css); the shared
+   building blocks (.btn, .card, .row-item, .toolbar, .pn, .tg) come from components/ui/ui.css. */
+
+.ca-conduct,
+.ca-rule,
+.ca-hidden-note {
+  max-width: 78ch;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--dim);
+}
+
+.ca-conduct {
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+}
+
+.ca-rule {
+  padding: 8px 12px;
+  background: var(--bg);
+  border-left: 4px solid var(--hl);
+}
+
+.ca-conduct strong,
+.ca-rule strong {
+  font-family: var(--font-pixel), monospace;
+  color: var(--fg);
+  letter-spacing: .04em;
+}
+
+.ca-hidden-note {
+  margin-top: 12px;
+}
+
+.ca-by {
+  overflow-wrap: anywhere;
+}
+
+.ca-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ca-error {
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 8px;
+  border-left: 4px solid var(--hl);
+}
+
+.ca-error::before {
+  content: "Fix: ";
+}
+
+.ca-over {
+  font-weight: 700;
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+.ca-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.ca-count {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 2px solid currentColor;
+  font-variant-numeric: tabular-nums;
+}
+
+.ca-confirm {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: var(--bw) solid var(--hl);
+  background: var(--bg);
+}
+
+.ca-confirm-q {
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ca-reported {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 14px;
+  color: var(--dim);
+}
+
+.ca-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 16px;
+}
+
+.ca-pager-state {
+  flex: 1 1 160px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.ca-report {
+  min-width: 0;
+  padding: 12px;
+  background: var(--bg);
+  border: var(--bw) solid var(--stroke);
+}
+
+.ca-report fieldset {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ca-report legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-family: var(--font-pixel), monospace;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ca-thread {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.ca-subhead {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ca-comments {
+  display: grid;
+  gap: 10px;
+}
+
+.ca-comment {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+}
+
+.ca-comment-head {
+  font-size: 14px;
+}
+
+.ca-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.ca-comment-form {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.ca-comment-form .ca-field {
+  width: 100%;
+}
+
+.ca-tools {
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px dashed var(--stroke);
+}
+
+.ca-tools summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-pixel), monospace;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ca-tools p {
+  margin-bottom: 10px;
+}
+
+.ca-tools .fld-label {
+  display: block;
+}
+
+.ca-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 14px;
+}
+
+.ca-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ca-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+  padding: 14px;
+  background: var(--panel);
+  border: var(--bw) solid var(--stroke);
+}
+
+.ca-card h3 {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.ca-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+}
+
+.ca-detail {
+  display: grid;
+  gap: 18px;
+}
+
+.ca-detail > header {
+  display: grid;
+  gap: 10px;
+}
+
+.ca-detail h2 {
+  font-size: clamp(22px, 4vw, 30px);
+  overflow-wrap: anywhere;
+}
+
+.ca-detail h3 {
+  font-size: 18px;
+}
+
+.ca-detail h2:focus-visible,
+.ca-thread h3:focus-visible,
+.ca-thread h4:focus-visible,
+.ca-focus:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.ca-note {
+  padding: 8px 12px;
+  font-size: 14px;
+  background: var(--bg);
+  border-left: 4px solid var(--hl);
+}
+
+.ca-journal {
+  display: grid;
+  gap: 10px;
+}
+
+.ca-journal li {
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+}
+
+.ca-journal h4 {
+  font-size: 16px;
+  font-family: var(--font-pixel), monospace;
+}
+
+.ca-share {
+  display: grid;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.ca-link {
+  overflow-wrap: anywhere;
+}
+
+.ca-featured {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 12px;
+}
+
+.ca-featured li {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+}
+
+.ca-featured h3 {
+  font-size: 16px;
+}
+
+.ca-day {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.ca-day:first-child {
+  margin-top: 0;
+}
+
+.ca-person {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  min-width: 0;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+}
+
+.ca-person-main {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.ca-person-main .ca-by {
+  font-size: 16px;
+}
+
+.ca-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.ca-form {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ca-form fieldset {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ca-form legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-family: var(--font-pixel), monospace;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.ca-warn {
+  padding: 8px 12px;
+  font-size: 14px;
+  background: var(--bg);
+  border: var(--bw) solid var(--hl);
+}
+
+.ca-warn::before {
+  content: "Check: ";
+  font-weight: 700;
+}
+
+.ca-sr-block {
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .ca-pager .btn {
+    flex: 1 1 100%;
+  }
+
+  .ca-pager-state {
+    order: -1;
+    flex-basis: 100%;
+  }
+}
+
+.toolbar .ca-field {
+  flex: 1 1 200px;
+}
+
+.ca-after {
+  margin-top: 14px;
+}

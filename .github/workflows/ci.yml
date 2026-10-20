@@ -171,6 +171,18 @@ jobs:
       - name: Production build
         if: steps.changed.outputs.app == 'true'
         run: bun run build
+      - name: Platform lint
+        if: steps.changed.outputs.app == 'true'
+        run: bun run lint:platform
+      - name: Platform typecheck
+        if: steps.changed.outputs.app == 'true'
+        run: bun run typecheck:platform
+      - name: Platform unit tests
+        if: steps.changed.outputs.app == 'true'
+        run: bun run test:platform
+      - name: Platform production build
+        if: steps.changed.outputs.app == 'true'
+        run: bun run build:platform
 
   browser-shard:
     name: Browser ${{ matrix.name }}

@@ -1,5 +1,7 @@
 # LOADOUT participant platform: Pixl shell and backend design
 
+> **Status update, 2026-10-20.** Owner direction: the first platform port copies Pixl's participant shell (structure and code, minus the game) into a new `apps/platform`, restyled with the LOADOUT design system. It ships all 23 destinations from `apps/platform/components/shell/nav-data.ts` (Build 6, Community 7, Gear 6, You 4; Pixl's Report tab excluded). The first commit routed each tab to a "not available yet" page. A later owner instruction the same day ("remove all the not available yet and add real functions and placeholders so add all real functionality") replaced that: **the first milestone is working preview features on labelled sample data.** Every internal tab works in the browser, saves its state in `localStorage` (`apps/platform/lib/preview-store.ts`), and sends nothing to LOADOUT; Docs links out to the landing site. For the preview milestone only, that overrides "Do not ship navigation items to dead or placeholder pages" in section 6 and the non-goals on fake participant values in section 1. Safeguards stay: a preview note on every page, a "Preview: sample data" chip in the top rail, sample items labelled Sample, invented rules labelled "Draft preview rule", `noindex` pages, and `NavStatus` of `preview` or `live` (only Docs is `live`). The rule applies again afterwards; the retirement condition is in `docs/source-audit/DECISIONS.md` (2026-10-20, "Preview milestone ships working features on sample data"). Implementation is in progress on `feature/platform-shell`. Phase 0 decisions (identity, database, hosting, operating owners) are still open, and nothing in this change adds sign-in or a backend. Phase 1's shell, Phase 0's source map (`docs/source-audit/pixl-platform-port-map.md`) and the scoped UI brief are the parts this change delivers; the Phase 1 exit gate (real sign-in entry points, platform CI jobs) is not met by it. Rules the plans leave open are listed in `docs/source-audit/platform-preview-open-questions.md`. Brief: [`.ulpi/design/participant-platform-shell.md`](../../../.ulpi/design/participant-platform-shell.md). Source map: [`pixl-platform-port-map.md`](../../../docs/source-audit/pixl-platform-port-map.md). Developer notes: [`docs/development/platform-preview.md`](../../../docs/development/platform-preview.md). The Slack scope post has not been sent; a maintainer must post it.
+
 **Status:** Draft for owner review. This is a design specification, not permission to implement. The separate [implementation plan](../plans/2026-10-19-pixl-shell-platform.md) is also a draft; review and explicit authorization are required before code changes.
 
 **Owner request:** Use Pixl's participant platform as the first-pass breadth and structure reference. Adapt the full global shell and backend capabilities to LOADOUT's product rules and visual system. Exclude Pixl's game and game-only features.
@@ -60,12 +62,12 @@ Plans 01, 02, 11, 15, and 22 remain the policy sources. This spec does not resta
 
 The participant app should use a persistent global shell around participant routes. Public marketing and Docs remain in their current public surface. Public project pages and journals can render without a session when their data is public; private evidence and participant operations remain protected.
 
-Proposed navigation families are **Build**, **Community**, **Gear**, and **You**. Exact labels and ordering are a UX decision for the implementation handoff. The initial route inventory should map to:
+Proposed navigation families are **Build**, **Community**, **Gear**, and **You**. Labels, order and groups now follow `apps/platform/components/shell/nav-data.ts` (23 tabs, Report excluded). The route inventory maps to:
 
-- **Build:** Overview, Projects/Ships, Journals, Missions, Docs.
-- **Community:** Explore, Leaderboards, Ideas, Show & Tell, Events.
-- **Gear:** Shop, Wishlist, Orders, Ore calculator, Collectibles, Referrals.
-- **You:** Profile, Account/verification, notifications, and personal progress.
+- **Build (6):** Overview, Projects, Journals, Reviews, Missions, Docs (an external link to the public Docs).
+- **Community (7):** Explore, Ideas, Show & Tell, Leaderboards, Seasons, Events, Friends.
+- **Gear (6):** Shop, Wishlist, Orders, Collectibles, Referrals, Ore calculator.
+- **You (4):** Profile, Achievements, Notifications, Account.
 
 Desktop can use a grouped rail and status/header area. Phones should use a compact bottom navigation or an equivalent LOADOUT-native pattern with a reachable overflow sheet; the shell must not reserve a permanent side gutter or shift page content horizontally. Use the existing 44px touch-target, reflow, keyboard, screen-reader, focus, reduced-motion, and optional-setting requirements.
 
@@ -96,7 +98,7 @@ This is a product sequence, not yet a task-level implementation plan:
 4. **Progress and community:** Missions, Seasons/Eras, achievements, social actions, notifications, idea board, collectibles, leaderboards, Show & Tell, and referrals.
 5. **Events and operations:** RSVP/certificates and LOADOUT IRL operational surfaces when their owners, dates, and integrations are ready.
 
-Each phase should deliver one usable vertical slice with real contracts, loading/empty/error states, privacy behavior, accessibility review, and tests. Do not ship navigation items to dead or placeholder pages.
+Each phase should deliver one usable vertical slice with real contracts, loading/empty/error states, privacy behavior, accessibility review, and tests. Do not ship navigation items to dead or placeholder pages. Exception for the preview milestone: a preview tab may run on labelled sample data saved in the browser. It leaves the preview state when the real service for its phase replaces the sample data and the preview store.
 
 ## 7. Open architecture questions for the implementation plan
 

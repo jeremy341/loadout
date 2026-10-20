@@ -8,6 +8,8 @@ This index records where LOADOUT-owned art lives, whether the website uses it, a
 
 The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and buttons, IBM Plex Mono for body and utility text, and DotGothic16 for rulers. JetBrains Mono (ASCII art) and Poppins (Docs body) load through `next/font/google`. The self-hosted files under `apps/landing/public/fonts/` are Jersey 10, Pixelify Sans and IBM Plex Mono, with their OFL notices. The current font roles are in [the design system](../design/system/design-system.md).
 
+`apps/platform/public/fonts/` carries copies of the same Jersey 10, Pixelify Sans (patched) and IBM Plex Mono files, with their OFL notices, for the participant platform shell. Keep the two folders in step when a font file changes.
+
 Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
 The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files in `apps/landing/public/fonts/phantom-sans/`. They were copied from Pixl's live site at `https://pixl.hackclub.com/fonts/phantom-sans/` and are loaded locally only when a visitor enables the setting. This provenance does not establish a license for the WOFF2 files: the MIT license recorded for the pinned Pixl repository does not, by itself, document coverage of these live font assets, and this repository records no separate font permission. Do not present the pinned repository license as covering these files.

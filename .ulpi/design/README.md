@@ -10,7 +10,6 @@
 | [`ascii-float-preview.md`](ascii-float-preview.md) | Owner-approved local ASCII floating motion with independent timing and mixed directions. |
 | [`homepage-visual-clarity.md`](homepage-visual-clarity.md) | Open proposal, linked to Plan 17. It does not authorize homepage changes until the owner approves that scope. |
 | [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md) | Product proposal only. Plans 01/02 must settle any bonus before it is implemented or published. |
-| [`participant-platform-shell.md`](participant-platform-shell.md) | Owner-directed 2026-10-20: the participant shell for the new `apps/platform`, adapted from Pixl's shell with all 23 destinations; every internal tab is a working preview feature on labelled sample data saved in the browser. Merged to `development` in PR #134; no sign-in or backend. The Accessibility preferences dialog is not ported. |
 
 ## Implemented locally
 
@@ -53,6 +52,7 @@
 | [`depth-label-transparency.md`](depth-label-transparency.md) | `home.css` and the design system: depth labels have text-clipped backgrounds so the band hatching remains visible behind them. |
 | [`community-era-overview.md`](community-era-overview.md) | Plan 11 for policy; Plan 06 for homepage copy. |
 | [`docs-refresh.md`](archive/docs-refresh.md) | `docs/development/architecture.md` and `content-authoring.md`; production promotion recorded in PR #28. |
+| [`participant-platform-shell.md`](../../docs/archive/platform-preview-20261020/participant-platform-shell.md) | Removed from the repository on 2026-10-20. The Pixl-derived preview lived in `apps/platform`; its brief is archived. |
 | [`homepage-copy-clarity.md`](archive/homepage-copy-clarity.md), [`homepage-information-architecture.md`](archive/homepage-information-architecture.md) | Plan 06. |
 | [`homepage-mechanics-clarity.md`](archive/homepage-mechanics-clarity.md), [`loadout-homepage-clarity-flow-and-eras.md`](archive/loadout-homepage-clarity-flow-and-eras.md), [`progress-and-prizes.md`](archive/progress-and-prizes.md) | Plans 02/06/11/15 own the relevant product facts; Plan 06 owns page composition. |
 | [`loadout-homepage-refinement-proposal.md`](archive/loadout-homepage-refinement-proposal.md), [`loadout-public-landing.md`](archive/loadout-public-landing.md) | Plan 06 and the landing implementation record. |

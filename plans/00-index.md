@@ -49,7 +49,6 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 ## Future proposals
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
-- [Pixl shell and participant-platform implementation plan](../docs/superpowers/plans/2026-10-19-pixl-shell-platform.md) is a draft, gated engineering sequence; it does not authorize implementation or deployment.
 - [`proposals/economy-calibration.md`](proposals/economy-calibration.md) is a mixed-status worksheet: recorded owner decisions plus candidate curves, review operations and Custom Order values. Plan 02 identifies what is agreed. A number appearing in the worksheet does not approve it.
 
 ## Historical consolidation

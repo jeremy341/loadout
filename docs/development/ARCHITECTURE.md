@@ -18,10 +18,6 @@ The search index contains reviewed public headings/text only. Internal docs, pla
 
 The Docs layout owns bounded sidebar, article and contents panes. Native scrolling stays inside them; scrollbar chrome is hidden. SmoothScroll detects /docs and disables Lenis. Homepage motion/assets and the Docs tab remain separate.
 
-## Participant platform preview
-
-`apps/platform` is a second Next.js app in the same Bun workspace. It renders the participant shell and every tab as a working preview on labelled sample data held in `localStorage`. It has no sign-in, database, API or deployed origin; links to the landing app are configured through `NEXT_PUBLIC_LANDING_URL`. It is not part of Vercel Production yet. See [the platform handoff](platform-handoff.md) and [the preview guide](platform-preview.md).
-
 ## Content ownership
 
 [content authoring](content-authoring.md) owns the public publishing gate. [docs/README.md](../README.md) maps internal sources. Product/economy/Era/IRL plans remain policies; public Markdown is the reviewed explanation, not an automatic plan export.

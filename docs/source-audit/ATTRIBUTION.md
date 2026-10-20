@@ -10,11 +10,11 @@ Hack Club Pixl at commit `8141b992e92e05583246fd914c63a101100f6fe4` on `main` is
 
 ## YSWS Template
 
-EDRipper/ysws-template at `1ac191fa5eee1e57983b29ab7101f700c166e207` on `master` is the GENERAL YSWS OPERATIONS / INFRASTRUCTURE REFERENCE. The checkout has no root license or README, no reported repository license, and backend package metadata says `UNLICENSED`. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. As of 2026-10-20 the owner states that reuse is permitted (see "Reuse permission statement — 2026-10-20"; written evidence pending). Log every copied file in `pixl-platform-port-map.md` and keep any notice the file carries.
+EDRipper/ysws-template at `1ac191fa5eee1e57983b29ab7101f700c166e207` on `master` is the GENERAL YSWS OPERATIONS / INFRASTRUCTURE REFERENCE. The checkout has no root license or README, no reported repository license, and backend package metadata says `UNLICENSED`. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. As of 2026-10-20 the owner states that reuse is permitted (see "Reuse permission statement — 2026-10-20"; written evidence pending). Log every copied file in `docs/archive/platform-preview-20261020/pixl-platform-port-map.md` and keep any notice the file carries.
 
 ## Stardance
 
-Hack Club Stardance at `5b6bfb86462e0edc68592d6985168d09543f00d5` on `main` is the PEER REVIEW / QUALITY SCORING / MULTIPLIER / VIRALITY / COMMUNITY POLL REFERENCE. The newest pin also contains a poll popup, which LOADOUT has not selected. The checkout has no LICENSE file and no reported repository license. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. LOADOUT retains its own four rating areas, Ore currency, and product rules; any adopted mechanics are reimplemented independently unless the owner decides to copy code under the 2026-10-20 permission statement below, in which case the files are logged in `pixl-platform-port-map.md`.
+Hack Club Stardance at `5b6bfb86462e0edc68592d6985168d09543f00d5` on `main` is the PEER REVIEW / QUALITY SCORING / MULTIPLIER / VIRALITY / COMMUNITY POLL REFERENCE. The newest pin also contains a poll popup, which LOADOUT has not selected. The checkout has no LICENSE file and no reported repository license. Its Git submodule is a link to the upstream repository; no source files or assets are copied into LOADOUT. LOADOUT retains its own four rating areas, Ore currency, and product rules; any adopted mechanics are reimplemented independently unless the owner decides to copy code under the 2026-10-20 permission statement below, in which case the files are logged in `docs/archive/platform-preview-20261020/pixl-platform-port-map.md`.
 
 ## Stasis
 
@@ -22,7 +22,7 @@ Hack Club Stasis at `7a230ced9ad793f0ad4cda30a7d71c02a58da6b6` on `main` is a ha
 
 ## Future additions
 
-Before copying code, text, or assets from any reference, preserve required notices, record the exact source SHA and paths (in `pixl-platform-port-map.md` for the platform port), and update `source-bases.md` and `DECISIONS.md`. For a reference without an identified licence, the basis is the owner-stated permission recorded below, with evidence pending; replace that statement with the written grants when they are attached.
+Before copying code, text, or assets from any reference, preserve required notices, record the exact source SHA and paths (in `docs/archive/platform-preview-20261020/pixl-platform-port-map.md` for the platform port), and update `source-bases.md` and `DECISIONS.md`. For a reference without an identified licence, the basis is the owner-stated permission recorded below, with evidence pending; replace that statement with the written grants when they are attached.
 
 ## Phantom Sans WOFF2 provenance — 2026-10-18
 
@@ -48,7 +48,9 @@ The mole mascot (`apps/landing/public/loadout/mole/`, 2026-10-15) is AI-generate
 
 ## Pixl platform shell port — 2026-10-20
 
-The first participant-platform shell (`apps/platform`, merged to `development` in PR #134) adapts Pixl's participant shell. Source: `references/pixl/apps/web-shell/app/(shell)/` and `references/pixl/apps/web-shell/app/globals.css` at commit `8141b992e92e05583246fd914c63a101100f6fe4`. The exact notice, from `references/pixl/LICENSE`, applies to these files and stays with them:
+The preview was removed from the repository on 2026-10-20. This section and its file table remain as the attribution record for the code that existed.
+
+The first participant-platform shell (`apps/platform`, merged in PR #134, removed 2026-10-20) adapted Pixl's participant shell. Source: `references/pixl/apps/web-shell/app/(shell)/` and `references/pixl/apps/web-shell/app/globals.css` at commit `8141b992e92e05583246fd914c63a101100f6fe4`. The exact notice, from `references/pixl/LICENSE`, applies to these files and stays with them:
 
 ```text
 MIT License
@@ -86,13 +88,13 @@ Adapted files (each needs a one-line header comment pointing here; check this in
 | `apps/platform/app/(participant)/layout.tsx` | `app/(shell)/layout.tsx` | Shell wrapper around the page | No session, wallet or event reads |
 | `apps/platform/app/globals.css` | `app/globals.css` (shell rules) | Shell geometry: 260px sidebar, 54px rail, bottom dock and sheet at 900px | LOADOUT tokens, fonts and shadows replace Pixl's; accessibility rules added |
 
-`apps/platform/app/layout.tsx` and `app/page.tsx` are reimplemented from the same Pixl files and carry no Pixl text beyond the redirect idea. The full path-level map, including everything read and not copied, is in [`pixl-platform-port-map.md`](pixl-platform-port-map.md). Check the PR diff for the final file list; the table above must match it.
+`apps/platform/app/layout.tsx` and `app/page.tsx` are reimplemented from the same Pixl files and carry no Pixl text beyond the redirect idea. The full path-level map, including everything read and not copied, is in [pixl-platform-port-map.md](../archive/platform-preview-20261020/pixl-platform-port-map.md). Check the PR diff for the final file list; the table above must match it.
 
 Not copied: Pixl's session, login, token handoff and server-API files, its Docs engine, its forms, its staff dashboard, `apps/pixorpheus`, and all Pixl art, fonts and brand assets.
 
 ## Platform preview pages — 2026-10-20
 
-By owner instruction on 2026-10-20 every internal tab of `apps/platform` is a working preview feature on labelled sample data (see `DECISIONS.md`). The pages are under `apps/platform/components/pages/`. Each folder has a `SOURCES.md` with the same facts as this section. No source text, markup, CSS, copy or art from any reference was pasted; the rules and flows were rewritten in React and TypeScript against LOADOUT's plans and tokens. The adapted-files table in the shell section above is unchanged.
+By owner instruction on 2026-10-20 every internal tab of `apps/platform` was a working preview feature on labelled sample data (see `DECISIONS.md`). The pages were under `apps/platform/components/pages/`. Each folder had a `SOURCES.md` with the same facts as this section. No source text, markup, CSS, copy or art from any reference was pasted; the rules and flows were rewritten in React and TypeScript against LOADOUT's plans and tokens. The adapted-files table in the shell section above is unchanged.
 
 Suggested attribution lines, one per reference. Reuse of Stardance and Stasis rests on the owner-stated permission (2026-10-20, evidence pending). Pixl is MIT and its notice, reproduced in the shell section above, stays with it.
 
@@ -136,7 +138,7 @@ Owner statement, recorded as stated and not verified: the repository owner says 
 
 Effect on this record:
 
-- Where earlier entries say a reference has "no reuse basis", "reference-only" or "no identified licence", the working basis is now this owner statement, with evidence pending. Copied files must still be logged in `pixl-platform-port-map.md` (or the landing record) with their source path and SHA, and any notice they carry must be kept.
+- Where earlier entries say a reference has "no reuse basis", "reference-only" or "no identified licence", the working basis is now this owner statement, with evidence pending. Copied files must still be logged in `docs/archive/platform-preview-20261020/pixl-platform-port-map.md` (or the landing record) with their source path and SHA, and any notice they carry must be kept.
 - Pixl stays MIT with the exceptions listed above. The statement does not widen them until the owner confirms it covers the non-MIT assets.
 - Product decisions in `DECISIONS.md` still stand. Permission to copy does not mean LOADOUT adopts the other project's rules, currency, copy or branding.
 

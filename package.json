@@ -3,7 +3,8 @@
   "private": true,
   "packageManager": "bun@1.3.14",
   "workspaces": [
-    "apps/landing"
+    "apps/landing",
+    "apps/platform"
   ],
   "scripts": {
     "dev": "bun run --filter @loadout/landing dev",
@@ -12,6 +13,11 @@
     "typecheck": "bun run --filter @loadout/landing typecheck",
     "test": "bun run --filter @loadout/landing test",
     "test:e2e": "bun run --filter @loadout/landing test:e2e",
-    "docs:release-summary": "bun run apps/landing/scripts/docs-release-summary.ts"
+    "docs:release-summary": "bun run apps/landing/scripts/docs-release-summary.ts",
+    "dev:platform": "bun run --filter @loadout/platform dev",
+    "build:platform": "bun run --filter @loadout/platform build",
+    "lint:platform": "bun run --filter @loadout/platform lint",
+    "typecheck:platform": "bun run --filter @loadout/platform typecheck",
+    "test:platform": "bun run --filter @loadout/platform test"
   }
 }

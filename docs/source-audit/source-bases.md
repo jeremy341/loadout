@@ -2,6 +2,8 @@
 
 Recorded 2026-10-10 from the pinned reference checkouts and GitHub metadata; Stardance was refreshed to upstream `main` on 2026-10-20 after reviewing the commits since the earlier pin. Each reference is an independent Git submodule under `references/`; the parent repository records only its URL and exact commit pointer. Initialize these top-level references with `git submodule update --init`. Commit IDs are immutable pins, not claims that upstream is still at its latest commit.
 
+The expected top-level reference URLs and commit pins are maintained in [`reference-pins.tsv`](reference-pins.tsv). The repository-integrity workflow checks that manifest against `.gitmodules` and the committed submodule pointers. Updating a reference pin requires changing both the manifest entry and its Git submodule pointer; reference-only updates still run repository-integrity validation while skipping Landing checks.
+
 | Source and role | Remote | Branch at audit | Exact SHA | License / permission basis | Reference path |
 |---|---|---|---|---|---|
 | Pixl — PRIMARY ENGINEERING BASE | https://github.com/hackclub/pixl.git | main | `8141b992e92e05583246fd914c63a101100f6fe4` | MIT; preserve the complete upstream notice available at `references/pixl/LICENSE`. | `references/pixl/` |

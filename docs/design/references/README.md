@@ -7,7 +7,6 @@ This folder contains user-provided concept screenshots and sprite-source art. Th
 - [`hero-desktop-concept.png`](hero-desktop-concept.png) — supplied desktop hero reference.
 - [`hero-concept-early.png`](hero-concept-early.png) — earlier hero direction.
 - [`landing-page-concept-01.png`](landing-page-concept-01.png), [`landing-page-concept-02.png`](landing-page-concept-02.png), and [`landing-page-concept-03.png`](landing-page-concept-03.png) — full-page design iterations.
-- [`homepage-workshop/`](homepage-workshop/) — supplied workshop background concept, cloud sheet, and decorative-motif reference sheet.
 
 ## Homepage and process references
 

@@ -2,7 +2,7 @@
 
 # Hero workshop background
 
-Status: abandoned on 11 October 2026 by owner decision. Nothing renders this background. `HeroWorkshopBackground.tsx`, `hero-workshop-background.css` and the `hero-workshop` PNGs are kept as assets; wiring them into the hero needs a new owner decision.
+Status: abandoned on 11 October 2026 by owner decision; the component, CSS, six scenery SVGs and 31 PNGs were removed on 2026-10-20. Do not restore them without a new owner decision.
 
 Earlier status: owner-approved background-only implementation, 2026-10-08. Bind to DESIGN.md existing paper/graphite/yellow pixel identity.
 

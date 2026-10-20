@@ -36,4 +36,4 @@ If you're reading an old screenshot or a copied message, open its linked guide a
 
 ## What isn't there yet
 
-We haven't promised a response time, and there isn't a live appeals portal. For a review question, include the decision reference and the evidence you want us to consider. [Project review](/docs/review) explains the current process; [Program status](/docs/eligibility) lists what hasn't opened.
+We haven't promised a response time. There is no separate appeal after the 24-hour review-flag window. For help understanding a published rule, include the page and decision reference. [Project review](/docs/review) explains the current process; [Program status](/docs/eligibility) lists what hasn't opened.

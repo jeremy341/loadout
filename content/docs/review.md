@@ -39,7 +39,7 @@ Normal rates run from **1× to 20×**, with a target mean of **10×**. At 10×, 
 
 **10× means 10 Ore per approved hour.** Twenty approved hours at 10× earn 200 base Ore. A higher multiplier raises that ship's payout; it doesn't change how many hours you recorded. [Ore, XP & levels](/docs/progress#work) has the full comparison.
 
-Payout locks after both conditions are met: the ship has 12 countable reviews, and at least 24 hours have passed since its latest journal entry. A 24-hour flag window follows; a pending flag holds payout for moderator review. Builders can see the scores and reasons on their own ship, but reviewer names stay hidden. Three flags rejected within ten hours deduct 5% from that builder's next final Ore payout. There's no separate appeal after the flag window.
+Payout locks after both conditions are met: the ship has 12 countable reviews, and at least 24 hours have passed since its latest journal entry. A 24-hour flag window follows; a pending flag holds payout for moderator review. Builders can see the scores and reasons on their own ship, but reviewer names stay hidden. Three flags rejected within ten hours deduct 5% from the flagger's next final Ore payout. There's no separate appeal after the flag window.
 
 ## Cheating {#fraud}
 

@@ -5,6 +5,7 @@ import { DocsTab } from "./_components/home/DocsTab";
 import { ICON_SPRITE } from "./_components/home/art";
 import { ScrambleHeadings } from "./_components/home/ScrambleHeadings";
 import { DepthGlow } from "./_components/home/DepthGlow";
+import { ViewportAnimations } from "./_components/home/ViewportAnimations";
 import { SiteNav } from "./_components/home/SiteNav";
 import { Hero } from "./_components/home/Hero";
 import Reveal from "./_components/home/Reveal";
@@ -27,6 +28,7 @@ export default function Home() {
       <AccessibilityTab />
       <ScrambleHeadings selector=".home .h1" duration={1800} />
       <DepthGlow />
+      <ViewportAnimations />
       <div style={{ display: "contents" }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: ICON_SPRITE }} />
       <NoiseGrain />
       <div className="depth-dark" aria-hidden="true" />

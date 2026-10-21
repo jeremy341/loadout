@@ -20,17 +20,27 @@ export function DepthGlow() {
 
     if (paused || hideMarkings) return;
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const numerals = Array.from(document.querySelectorAll<HTMLElement>(".home .pit, .home .pit b, .home .pit > span"));
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
     const onPointerMove = (event: PointerEvent) => {
-      const numerals = Array.from(document.querySelectorAll<HTMLElement>(".home .pit, .home .pit b, .home .pit > span"));
-      const boxes = numerals.map((numeral) => numeral.getBoundingClientRect());
-      numerals.forEach((numeral, index) => {
-        numeral.style.setProperty("--mx", `${event.clientX - boxes[index].left}px`);
-        numeral.style.setProperty("--my", `${event.clientY - boxes[index].top}px`);
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const boxes = numerals.map((numeral) => numeral.getBoundingClientRect());
+        numerals.forEach((numeral, index) => {
+          numeral.style.setProperty("--mx", `${pointerX - boxes[index].left}px`);
+          numeral.style.setProperty("--my", `${pointerY - boxes[index].top}px`);
+        });
       });
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
+      cancelAnimationFrame(frame);
       document.querySelectorAll<HTMLElement>(".home .pit, .home .pit b, .home .pit > span").forEach((node) => {
         node.style.removeProperty("--mx");
         node.style.removeProperty("--my");

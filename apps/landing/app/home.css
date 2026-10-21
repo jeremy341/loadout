@@ -246,7 +246,8 @@ html:has(.home) { scroll-behavior:smooth }
 .home .ar span:hover { color: inherit; }
 /* ASCII art shares one drift; independent phases keep the drawings out of sync. */
 @keyframes ar-drift { from { transform: translate3d(-4px, 12px, 0); } to { transform: translate3d(5px, -24px, 0); } }
-.home .ar { will-change: transform; animation: ar-drift var(--ar-period, 8s) ease-in-out infinite alternate; animation-delay: var(--ar-phase, 0s); }
+.home .ar { animation: ar-drift var(--ar-period, 8s) ease-in-out infinite alternate; animation-delay: var(--ar-phase, 0s); animation-play-state: paused; }
+.home .ar[data-motion-visible=true] { animation-play-state: running; }
 .home .hero .ar-left { --ar-period: 8s; --ar-phase: -1.3s; }
 .home .hero .ar-right { --ar-period: 9.7s; --ar-phase: -5.2s; }
 .home #tracks .ar { --ar-period: 8.9s; --ar-phase: -3.7s; }
@@ -758,6 +759,10 @@ html:has(.home) { scroll-behavior:smooth }
 
 /* The old scroll-scrubbed fade is replaced by Reveal (Reveal.tsx), so nothing animates twice. */
 .home .card, .home .h2 { animation: none; }
+
+/* Reveal uses native CSS transitions so the browser can animate without a motion runtime. */
+.home .reveal:not([data-stagger]) { opacity: 0; translate: 0 22px; transition: opacity 550ms var(--ease) var(--reveal-delay, 0ms), translate 550ms var(--ease) var(--reveal-delay, 0ms); }
+.home .reveal:not([data-stagger])[data-revealed=true] { opacity: 1; translate: 0 0; }
 
 /* Staggered cards inside a stagger Reveal (main: .reveal[data-stagger] .reveal-item). */
 .home .reveal[data-stagger] .row > .card { opacity: 1; translate: 0 0; transition: opacity 600ms var(--ease) calc(var(--reveal-index, 0) * 100ms), translate 600ms var(--ease) calc(var(--reveal-index, 0) * 100ms), transform .2s, box-shadow .2s; }

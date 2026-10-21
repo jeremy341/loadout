@@ -7,14 +7,14 @@ Orry is the LOADOUT Slack help character: a bot that answers program questions f
 | Fact | Value |
 |---|---|
 | Purpose | Answers builder questions from the LOADOUT Docs; hands unresolved questions to human helpers |
-| Owner | Netic (co-organizer). **Owner to confirm** for the canonical repository and current maintainer |
-| Repository | `https://github.com/NeticYTOF/orry` per the bot handoff; the Docs team page links `https://github.com/NeticYTOF/rivet`. **Owner to confirm** which is canonical |
-| Local checkout | `companions/orry-bot-patched/` (Rivet-derived, local history, no remote configured) |
+| Owner | Netic (co-organizer). **Owner to confirm** the current maintainer |
+| Repository | `https://github.com/NeticYTOF/orry` (the official repository). The Docs team page links to it |
+| Local checkout | A companion folder outside this repository. Its history is Rivet-derived, and its work branch is local and unpushed |
 | Plan | Bot repository `AGENTS.md`, `HANDOFF.md` and `docs/ORRY.md`; this repo keeps the Docs-source handoff in [`docs/development/rivet-handoff.md`](../development/rivet-handoff.md) |
 
 **How it connects.** The deployed bot reads a copied corpus today. A proposed GitHub directory source would read `content/docs/` directly; that source is not confirmed as deployed. Keep the folder flat, keep filenames stable, and do not rename a public Docs file without telling the bot owner: the filename is the indexed slug.
 
-Public wording: the Orry persona is described in [`content/docs/characters.md`](../../../content/docs/characters.md) and the team in [`content/docs/team.md`](../../../content/docs/team.md). The bot is not a LOADOUT service and has no Ore, XP or eligibility authority.
+Public wording: the Orry persona is described in [`content/docs/characters.md`](../../content/docs/characters.md) and the team in [`content/docs/team.md`](../../content/docs/team.md). The bot is not a LOADOUT service and has no Ore, XP or eligibility authority.
 
 ## Help-desk site
 
@@ -23,8 +23,8 @@ Public wording: the Orry persona is described in [`content/docs/characters.md`](
 | Purpose | Read-only view of open tickets, closed-ticket statistics and a leaderboard, behind invite-only sign-in |
 | Owner | **Owner to confirm** |
 | Repository | None yet. The source has no Git history |
-| Local checkout | `companions/orry-site/` |
-| Plan | `reports/orry-site-plan-2026-10-19/PLAN.md` in the owner's parent workspace |
+| Local checkout | A companion folder outside this repository |
+| Plan | The site plan in the owner's workspace (`reports/orry-site-plan-2026-10-19/PLAN.md`, not versioned here) |
 
 The site reads the bot's read-only bridge with a read-only token, signs in through Hack Club Auth and is planned for Hack Club Nest. It copies LOADOUT design tokens and the mole atlas by value, so token or sprite changes do not propagate automatically. It is not part of this repository and is not deployed by LOADOUT.
 
@@ -36,4 +36,4 @@ The site reads the bot's read-only bridge with a read-only token, signs in throu
 - Never commit the bot's tokens, the site's database, `.env` files or invite data here.
 - Vey (the decision model) is an optional bot dependency, currently reported as disabled. Public copy that says it powers Orry needs owner confirmation before it is repeated.
 
-Last verified: 2026-10-20.
+Last verified: 2026-10-21.

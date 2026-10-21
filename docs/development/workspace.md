@@ -5,15 +5,12 @@ This page describes a recommended local layout for people who work on LOADOUT wi
 ## Recommended layout
 
 ```text
-LOADOUT/                     parent notebook (plain folder or a local-only Git repo)
-  README.md                  local workspace map
-  REGISTRY.md                project and owner pointers
-  loadout/                   clean clone; do not edit here
-  worktrees/                 one task worktree per open pull request
-  companions/                Orry bot, Orry site, Goose Lee (own repositories)
-  art/mole-source/           raw mole sheets and frame inputs
-  reports/                   audits and evidence
-  scratch/                   disposable captures and notes
+workspace/                    local folder, not versioned
+  loadout/                    this repository; keep it on development
+  worktrees/                  one task worktree per open pull request
+  orry/                       Orry bot and site checkouts (their own repositories)
+  goose-lee/                  Goose Lee checkout (its own repository)
+  internal/                   plans, reports, art sources and archives (git-ignored inside loadout/)
 ```
 
 Nothing in this layout is required by the application. Do not add a sibling folder to a build path, import or CI configuration.
@@ -75,7 +72,7 @@ If local branches show commits that `origin` no longer has (the history rewrite 
 
 ## Local-only material
 
-Audits, Playwright output, review captures and PR drafts belong in the parent workspace, outside this repository. `.env*`, `.vercel/`, `.claude/`, `.superpowers/`, `node_modules/`, `.next/` and test output stay ignored here. Never commit a database, browser profile or trace.
+Audits, Playwright output, review captures and PR drafts belong in the workspace's `internal/` folder. Keep them out of version control. In the local clone, add `/internal/` to `.git/info/exclude` so they can't be committed by accident. `.env*`, `.vercel/`, `.claude/`, `.superpowers/`, `node_modules/`, `.next/` and test output stay ignored here. Never commit a database, browser profile or trace.
 
 ## Common failures
 
@@ -89,4 +86,4 @@ Audits, Playwright output, review captures and PR drafts belong in the parent wo
 
 Update this file when the recommended layout, tool versions or companion projects change, and refresh the date below. Do not list personal paths or machines.
 
-Last verified: 2026-10-20.
+Last verified: 2026-10-21.

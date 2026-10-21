@@ -18,7 +18,7 @@ Fazin researches how LOADOUT should work and helps organize the program. He also
 
 ## Netic, developer and co-organizer {#netic}
 
-Seen the mole on the homepage? That's Orry, who also has a job in Slack. Netic develops the bot that lets Orry answer program questions using these Docs and pass difficult questions to human helpers. You can see the work in the bot's [public repository](https://github.com/NeticYTOF/rivet), under Netic's NeticYTOF account.
+Seen the mole on the homepage? That's Orry, who also has a job in Slack. Netic develops the bot that lets Orry answer program questions using these Docs and pass difficult questions to human helpers. You can see the work in the bot's [public repository](https://github.com/NeticYTOF/orry), under Netic's NeticYTOF account.
 
 ## Kernel, community manager {#kernel}
 

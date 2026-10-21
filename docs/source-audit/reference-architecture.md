@@ -2,7 +2,9 @@
 
 ## Reference path convention
 
-Pixl, YSWS Template, and Stardance are pinned as independent Git submodules under `references/` and are covered by the stack audit below. Paths in the audit tables are relative to the named source repository; prefix them with `references/pixl/`, `references/ysws-template/`, or `references/stardance/` to open the exact local file. Stasis is also pinned as a Hack Club hardware-hackathon reference; it has not yet received a stack/architecture audit and must not be treated as a software-reuse basis.
+Pixl, YSWS Template, and Stardance are pinned as independent Git submodules under `references/` and are covered by the stack audit below. Paths in the audit tables are relative to the named source repository; prefix them with `references/pixl/`, `references/ysws-template/`, or `references/stardance/` to open the exact local file. Stasis is also pinned as a Hack Club hardware-hackathon reference; it has not yet received a stack/architecture audit and its architecture has not been audited.
+
+Update 2026-10-20: the owner states reuse of all four references is permitted (evidence pending; see DECISIONS.md and ATTRIBUTION.md). Cells below that say "no reuse basis was established" describe the repositories' own licences at the audited pins, not LOADOUT's current working basis. The archived Pixl platform source map is [`pixl-platform-port-map.md`](../archive/platform-preview-20261020/pixl-platform-port-map.md).
 
 ## Source stacks
 

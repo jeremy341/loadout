@@ -143,7 +143,7 @@ Rules:
 - The homepage uses them as SVG symbols defined in `art.ts` (`ICON_SPRITE`). To add an icon, add its name to `SPRITE_NAMES` and add its PNG.
 - In dark mode the icons are turned blue by a CSS hue rotation (`hue-rotate(170deg) saturate(.95)`). In light mode they show as drawn.
 - The Ore currency icon (`ore.png`, the gem) nudges on its card. The owner's original `bolt.svg` is not shown anywhere and stays unchanged.
-- The hero scenery vectors under `hero/scenery/` and the 31 `hero-workshop` PNGs are kept but not rendered. Do not wire them in without a new owner decision.
+- The abandoned hero workshop background and its scenery art were removed on 2026-10-20. `bolt.svg` remains unchanged.
 
 ## ASCII art
 

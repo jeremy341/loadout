@@ -26,7 +26,7 @@ Add one playful gesture to the homepage: **things you can grab and pull, which s
 
 ## 3. Phase 1: grab cursor and pull tab
 
-**Changed after the owner's review (2026-10-15):** the first version lifted the tab on a dashed rope. A second version turned it into a blue rubber band that thinned as it stretched; the owner preferred the rope, so the rope is back. The extra resistance and the order the owner asked for, **snap back first and only then open the Docs**, are kept. `.ulpi/design/pull-tab.md` is the current behaviour (maximum lift 130 px, a pull of 110 px opens the Docs).
+**Changed after the owner's review (2026-10-15):** the first version lifted the tab on a dashed rope. A second version turned it into a blue rubber band that thinned as it stretched; the owner preferred the rope, so the rope is back. The extra resistance and the order the owner asked for, **snap back first and only then open the Docs**, are kept. This record describes the implemented pull tab (maximum lift 130 px, a pull of 110 px opens the Docs); the separate design brief has been retired.
 
 **The tab.**
 - Hover: the open hand (`grab`). While dragging: the closed fist (`grabbing`). Everywhere else the cursor is as today.

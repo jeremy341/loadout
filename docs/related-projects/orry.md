@@ -8,7 +8,7 @@ Orry is the LOADOUT Slack help character: a bot that answers program questions f
 |---|---|
 | Purpose | Answers builder questions from the LOADOUT Docs; hands unresolved questions to human helpers |
 | Owner | Netic (co-organizer). **Owner to confirm** the current maintainer |
-| Repository | `https://github.com/NeticYTOF/orry` (the official repository). The Docs team page still links `https://github.com/NeticYTOF/rivet`; that link should be updated |
+| Repository | `https://github.com/NeticYTOF/orry` (the official repository). The Docs team page links to it |
 | Local checkout | A companion folder outside this repository. Its history is Rivet-derived, and its work branch is local and unpushed |
 | Plan | Bot repository `AGENTS.md`, `HANDOFF.md` and `docs/ORRY.md`; this repo keeps the Docs-source handoff in [`docs/development/rivet-handoff.md`](../development/rivet-handoff.md) |
 

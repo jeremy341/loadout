@@ -12,9 +12,8 @@
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
-  will-change: transform;
 }
-.mole.is-visible { display: block; }
+.mole.is-visible { display: block; will-change: transform; }
 .mole-sprite {
   width: 100%;
   height: 100%;

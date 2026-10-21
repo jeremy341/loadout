@@ -396,6 +396,31 @@ test("sections reveal with main's triggered slide-in, not a scroll-scrubbed fade
   expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(8);
   await expect(page.locator(".reveal[data-stagger]").first()).toHaveCount(1);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("animation-name", "none");
+
+  const lastReveal = page.locator(".reveal").last();
+  await expect(lastReveal).toHaveAttribute("data-revealed", "false");
+  await lastReveal.scrollIntoViewIfNeeded();
+  await expect(lastReveal).toHaveAttribute("data-revealed", "true");
+  await expect(lastReveal).toHaveCSS("opacity", "1");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.locator(".reveal").last()).toHaveAttribute("data-revealed", "true");
+  await expect(page.locator(".reveal").last()).toHaveCSS("opacity", "1");
+});
+
+test("decorative loops pause offscreen and resume near the viewport", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const art = page.locator("#tracks .ar");
+  await expect(art).toHaveCSS("animation-play-state", "paused");
+  await art.scrollIntoViewIfNeeded();
+  await expect(art).toHaveCSS("animation-play-state", "running");
+
+  const belt = page.locator(".pb-track");
+  await expect(belt).toHaveCSS("animation-play-state", "paused");
+  await belt.scrollIntoViewIfNeeded();
+  await expect(belt).toHaveCSS("animation-play-state", "running");
 });
 
 test("the hero enters with main's title, badge and copy animations, and holds still for reduced motion", async ({ page }) => {
@@ -560,7 +585,7 @@ test("buttons use main's style: bordered, rounded 2px, block shadow, capitals", 
   }
 });
 
-test("the grain is a full-screen noise canvas that redraws and never takes input", async ({ page }) => {
+test("the grain is a full-screen noise canvas that shifts without repainting and never takes input", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
@@ -574,11 +599,21 @@ test("the grain is a full-screen noise canvas that redraws and never takes input
     const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 64).data;
     let covered = 0;
     for (let index = 3; index < data.length; index += 4) if (data[index] > 0) covered++;
-    return { covered, hash: Array.from(data.slice(0, 256)).join(",") };
+    const bounds = canvas.getBoundingClientRect();
+    return { covered, transform: canvas.style.transform, bounds: { left: bounds.left, top: bounds.top, right: bounds.right, bottom: bounds.bottom } };
   });
   const first = await sample();
   expect(first.covered).toBeGreaterThan(64 * 64 * 0.9);
-  await expect.poll(async () => (await sample()).hash, { timeout: 3000 }).not.toBe(first.hash);
+  expect(first.bounds.left).toBeLessThanOrEqual(0);
+  expect(first.bounds.top).toBeLessThanOrEqual(0);
+  expect(first.bounds.right).toBeGreaterThanOrEqual(1440);
+  expect(first.bounds.bottom).toBeGreaterThanOrEqual(900);
+  await expect.poll(async () => (await sample()).transform, { timeout: 3000 }).not.toBe(first.transform);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => grain.evaluate((canvas: HTMLCanvasElement) => {
+    const bounds = canvas.getBoundingClientRect();
+    return bounds.left <= 0 && bounds.top <= 0 && bounds.right >= 390 && bounds.bottom >= 844;
+  })).toBe(true);
 });
 
 test("the docs use the Pixl layout: boxed sidebar, hard rules, block shadows", async ({ page }) => {

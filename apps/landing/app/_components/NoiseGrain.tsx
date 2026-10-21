@@ -26,16 +26,12 @@ function makeNoisePattern(context: CanvasRenderingContext2D) {
   return context.createPattern(tile, "repeat");
 }
 
-// Lays the tile over the whole canvas at a random offset.
+// Paint once, then shift the oversized canvas to change the tile phase without repainting the viewport.
 function drawGrain(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, pattern: CanvasPattern) {
   if (!canvas.width || !canvas.height) return;
-  const x = Math.floor(Math.random() * TILE);
-  const y = Math.floor(Math.random() * TILE);
   context.setTransform(1, 0, 0, 1, 0, 0);
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.setTransform(1, 0, 0, 1, -x, -y);
   context.fillStyle = pattern;
-  context.fillRect(x, y, canvas.width, canvas.height);
+  context.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 // Starts the grain on a canvas and returns the function that stops it. Visitors who ask for
@@ -45,22 +41,55 @@ function startGrain(canvas: HTMLCanvasElement, paused: boolean) {
   const pattern = context && makeNoisePattern(context);
   if (!context || !pattern) return undefined;
 
+  let pad = 0;
   const draw = () => drawGrain(canvas, context, pattern);
   const resize = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    pad = Math.min(TILE, Math.max(1, Math.floor(Math.min(window.innerWidth, window.innerHeight) / 8)));
+    canvas.width = window.innerWidth + pad;
+    canvas.height = window.innerHeight + pad;
+    canvas.style.left = `${-pad}px`;
+    canvas.style.top = `${-pad}px`;
+    canvas.style.width = `${canvas.width}px`;
+    canvas.style.height = `${canvas.height}px`;
+    canvas.style.transform = "translate3d(0px, 0px, 0px)";
     draw();
   };
   resize();
   window.addEventListener("resize", resize);
   const still = paused;
-  const timer = still ? 0 : window.setInterval(() => {
-    if (document.visibilityState === "visible") draw();
-  }, INTERVAL);
+  canvas.dataset.animated = String(!still);
+  const shift = () => {
+    canvas.style.transform = `translate3d(${Math.floor(Math.random() * pad)}px, ${Math.floor(Math.random() * pad)}px, 0)`;
+  };
+  let timer: number | undefined;
+  const animate = () => {
+    if (!still && document.visibilityState === "visible" && timer === undefined) {
+      timer = window.setInterval(shift, INTERVAL);
+    }
+  };
+  const pause = () => {
+    if (timer !== undefined) window.clearInterval(timer);
+    timer = undefined;
+  };
+  const onVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      canvas.dataset.animated = String(!still);
+      shift();
+      animate();
+    } else {
+      canvas.dataset.animated = "false";
+      pause();
+    }
+  };
+  if (!still) {
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    onVisibilityChange();
+  }
 
   return () => {
     window.removeEventListener("resize", resize);
-    window.clearInterval(timer);
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+    pause();
   };
 }
 

@@ -16,13 +16,14 @@ test("the prize belt loops one list while assistive technology reads it once", a
   await expect(page.locator(".pb-half").nth(1)).toHaveAttribute("aria-hidden", "true");
   await expect(page.getByRole("list").filter({ has: page.getByText("Developer hardware") })).toHaveCount(1);
   await expect(page.locator(".pb-half").nth(0).locator("li")).toHaveCount(8);
+  await page.locator(".pb-track").scrollIntoViewIfNeeded();
   const loop = await page.locator(".pb-track").evaluate((track) => {
     const halves = [...track.querySelectorAll<HTMLElement>(".pb-half")];
     return { second: halves[1].offsetLeft, first: halves[0].getBoundingClientRect().width, track: track.getBoundingClientRect().width };
   });
   expect(loop.second).toBeCloseTo(loop.first, 1);
   expect(loop.track).toBeCloseTo(loop.first * 2, 1);
-  expect(await animationState(page)).toEqual({ name: "pb-scroll", play: "running" });
+  await expect.poll(() => animationState(page)).toEqual({ name: "pb-scroll", play: "running" });
 });
 
 test("hover and keyboard focus pause the prize belt without a global pause button", async ({ page }) => {

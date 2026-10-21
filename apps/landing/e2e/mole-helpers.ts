@@ -78,31 +78,42 @@ export const sawState = async (page: Page, name: string) => (await seen(page)).s
 export const sawAnim = async (page: Page, name: string) => (await seen(page)).some((entry) => entry.endsWith(":" + name));
 
 // Strokes slowly back and forth over his body, about 250 px a second, for `ms`. Gentle petting.
+// The moves are dispatched inside the page on a fixed timer: a CI runner's round trips to the browser would stretch
+// the gaps between moves and drop a stroke out of the petting speed band.
 
 export async function stroke(page: Page, x: number, y: number, ms: number) {
-  let offset = -30;
-  let direction = 1;
-  await page.mouse.move(x + offset, y);
-  const end = Date.now() + ms;
-  while (Date.now() < end) {
-    offset += direction * 4;
-    if (Math.abs(offset) >= 30) direction = -direction;
-    await page.mouse.move(x + offset, y);
-    await page.waitForTimeout(16);
-  }
+  await page.evaluate(({ x, y, ms }) => new Promise<void>((resolve) => {
+    let offset = -30;
+    let direction = 1;
+    const end = performance.now() + ms;
+    const move = () => window.dispatchEvent(new PointerEvent("pointermove", { clientX: x + offset, clientY: y }));
+    const step = () => {
+      if (performance.now() >= end) return resolve();
+      offset += direction * 4;
+      if (Math.abs(offset) >= 30) direction = -direction;
+      move();
+      setTimeout(step, 16);
+    };
+    move();
+    setTimeout(step, 16);
+  }), { x, y, ms });
 }
 
 // Scribbles fast over his head, thousands of pixels a second. It crosses the head diagonally, edge to edge, so each
-// move covers more ground and a loaded CI runner must not stretch one gap into the slower petting band.
+// move covers more ground. Dispatched inside the page for the same reason as stroke: the gaps must stay short.
 
 export async function scribble(page: Page, x: number, y: number, ms: number) {
-  let side = 1;
-  const end = Date.now() + ms;
-  while (Date.now() < end) {
-    await page.mouse.move(x + side * 30, y - side * 24);
-    side = -side;
-    await page.waitForTimeout(10);
-  }
+  await page.evaluate(({ x, y, ms }) => new Promise<void>((resolve) => {
+    let side = 1;
+    const end = performance.now() + ms;
+    const step = () => {
+      if (performance.now() >= end) return resolve();
+      window.dispatchEvent(new PointerEvent("pointermove", { clientX: x + side * 30, clientY: y - side * 24 }));
+      side = -side;
+      setTimeout(step, 10);
+    };
+    step();
+  }), { x, y, ms });
 }
 
 // Orry only takes a stroke while he is standing about, so stroke again if he happened to run off.

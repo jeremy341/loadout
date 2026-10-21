@@ -12,9 +12,9 @@ test("a pointer that does not move never pets him, even when he runs right under
   await page.mouse.move(spot, y);
   await page.mouse.move(spot + 1, y);
   await page.evaluate((target) => (window as unknown as { loadoutMole: { runTo?: (x: number) => void } }).loadoutMole.runTo?.(target), spot - 64);
-  await page.waitForTimeout(4500);
-  const { x: now } = await centre(page);
-  expect(Math.abs(now - spot)).toBeLessThan(200); // he did run to it
+  // Wait until he has run all the way to the pointer, however long a loaded runner takes, then let any petting show.
+  await expect.poll(async () => Math.abs((await centre(page)).x - spot), { timeout: 15000 }).toBeLessThan(200); // he did run to it
+  await page.waitForTimeout(1500);
   expect(await sawState(page, "pet")).toBe(false);
   expect(await sawState(page, "poke")).toBe(false);
   expect((await mood(page)).affection).toBe(0);
@@ -248,6 +248,7 @@ test("a pointer that stares at him makes him suspicious, then squinting, then ha
   await waitForIdle(page);
   await record(page);
   for (let attempt = 0; attempt < 3 && !(await sawAnim(page, "halfLid")); attempt++) {
+    await waitForIdle(page);
     const { x, y } = await centre(page);
     const side = x > 760 ? -1 : 1;
     await page.mouse.move(x + side * 200, y);

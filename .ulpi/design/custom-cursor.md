@@ -59,3 +59,17 @@ All seven UI skills were loaded for this change: `frontend-design-ui-ux` (this b
 3. The eight PNGs are 32 px and 64 px, and served.
 4. The Docs and the 404 page do not use them, and a touch screen does not either.
 5. The whole browser suite, typecheck, lint and unit tests pass.
+
+## Colour-vision modes
+
+Each colour-vision mode gets its own set of cursors, in both themes, so the cursor follows the mode instead of staying blue or yellow. The fill is the mode's own accent in the dark theme and its highlight in the light theme, taken from `apps/landing/app/color-vision.css`:
+
+| Mode | Dark theme fill | Light theme fill |
+|---|---|---|
+| Standard | blue `#5E9EF4` | yellow `#FDCF03` |
+| Protanopia | `#56B4E9` | `#6B4700` |
+| Deuteranopia | `#56B4E9` | `#7A4600` |
+| Tritanopia | `#E69F00` | `#1A1714` |
+| Achromatopsia | `#E9EBE7` | `#4F4739` |
+
+The ink outline stays `#0E1215` in every mode. `make-cursors.js` writes the images (`<name>-<mode>-<theme>.png`, standard keeps `<name>-<theme>.png`) and `app/cursor-palettes.css`, which sets the `--cursor-*` variables that `cursor.css` reads. Regenerate both together whenever a colour-vision token changes.

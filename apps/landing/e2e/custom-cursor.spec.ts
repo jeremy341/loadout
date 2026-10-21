@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 // The homepage uses a pixel arrow and pointing hand (.ulpi/design/custom-cursor.md): blue in dark and yellow in light by
-// default, with native cursors for Tritanopia/Achromatopsia and for the Docs, 404 page, and touch screens.
+// default, with the same pixel cursors recoloured for each colour-vision mode, and the system cursor for the Docs, 404 page, and touch screens.
 const cursorOf = (page: import("@playwright/test").Page, selector: string) =>
   page.locator(selector).first().evaluate((element) => getComputedStyle(element).cursor);
 
@@ -57,14 +57,17 @@ test("a touch screen gets no custom cursor", async ({ browser }) => {
   await context.close();
 });
 
-for (const profile of ["tritanopia", "achromatopsia"] as const) {
-  test(`${profile} uses native pointer shapes on the homepage`, async ({ page }) => {
+for (const profile of ["protanopia", "deuteranopia", "tritanopia", "achromatopsia"] as const) {
+  test(`${profile} gets its own pixel cursors in both themes`, async ({ page }) => {
     await page.addInitScript((selectedProfile) => localStorage.setItem("loadout-color-vision", selectedProfile), profile);
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/");
     await expect(page.locator("html")).toHaveAttribute("data-color-vision", profile);
-    await expect(page.locator(".home")).toHaveCSS("cursor", "auto");
-    await expect(page.locator(".home a[href]").first()).toHaveCSS("cursor", "pointer");
+    await expect.poll(() => cursorOf(page, ".home")).toMatch(new RegExp(`arrow-${profile}-dark(@2x)?\.png`));
+    await expect.poll(() => cursorOf(page, ".home a[href]")).toMatch(new RegExp(`hand-${profile}-dark(@2x)?\.png`));
     await page.locator(".mole").evaluate((element) => element.classList.add("is-held"));
-    await expect(page.locator(".mole")).toHaveCSS("cursor", "grabbing");
+    await expect.poll(() => cursorOf(page, ".mole")).toMatch(new RegExp(`grabbing-${profile}-dark(@2x)?\.png`));
+    await page.locator("label.tg").click();
+    await expect.poll(() => cursorOf(page, ".home")).toMatch(new RegExp(`arrow-${profile}-light(@2x)?\.png`));
   });
 }

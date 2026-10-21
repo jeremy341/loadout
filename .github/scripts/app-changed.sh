@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Writes app=true to $GITHUB_OUTPUT when a change can affect the landing app, and
-# app=false when it only touches documentation. When in doubt it answers true.
+# app=false when it only touches documentation or reference pin entries.
+# When in doubt it answers true.
 #
 # The comparison base is always a commit that was already verified:
 #   pull request            the base branch tip
@@ -35,7 +36,7 @@ fi
 app=false
 while IFS= read -r file; do
   case "$file" in
-    docs/* | plans/* | .ulpi/* | assets/* | README.md | AGENTS.md | PRODUCT.md | LOADOUT_DESIGN_SYSTEM.md | LICENSE)
+    docs/* | plans/* | .ulpi/* | assets/* | references/* | README.md | AGENTS.md | PRODUCT.md | LICENSE)
       ;;
     *)
       echo "Changes the app: $file"
@@ -47,5 +48,5 @@ done < <(git diff --name-only "$base" HEAD)
 
 echo "app=$app" >> "$GITHUB_OUTPUT"
 if [[ "$app" != "true" ]]; then
-  echo "Only documentation changed since ${base}; lint, build and browser steps are skipped."
+  echo "Only documentation or reference pins changed since ${base}; Landing checks are skipped."
 fi

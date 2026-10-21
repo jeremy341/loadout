@@ -5,7 +5,7 @@ The canonical visual rules are in [the LOADOUT design system](../../docs/design/
 ## Current owners
 
 - Public homepage composition and copy scope: [Plan 06](../../plans/06-public-homepage.md).
-- Docs surface and publishing: [Docs architecture](../../docs/development/architecture.md) and [content authoring](../../docs/development/content-authoring.md).
+- Docs surface and publishing: [Docs architecture](../../docs/development/ARCHITECTURE.md) and [content authoring](../../docs/development/content-authoring.md).
 - Program facts: [Plan 01](../../plans/01-product-and-program.md), [Plan 02](../../plans/02-economy-and-rewards.md), [Plan 11](../../plans/11-eras-and-community-progression.md) and [Plan 15](../../plans/15-loadout-irl-ruhr.md).
 
 ## Design read

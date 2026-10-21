@@ -14,11 +14,11 @@ Jerry leads LOADOUT and builds the whole website you're reading, from the UI to 
 
 ## Fazin / Wind, researcher and co-organizer {#fazin}
 
-Fazin researches how LOADOUT should work and helps organize the program. He also built Vey, the model that powers Orry, our Slack bot. Vey makes structured decisions on an ordinary CPU without generating text; you can find the project at [fazinahamed/vey](https://huggingface.co/fazinahamed/vey) on Hugging Face.
+Fazin researches how LOADOUT should work and helps organize the program.
 
 ## Netic, developer and co-organizer {#netic}
 
-Seen the mole on the homepage? That's Orry, who also has a job in Slack. Netic develops the bot that lets Orry answer program questions using these Docs and pass difficult questions to human helpers. You can see the work in the bot's [public repository](https://github.com/NeticYTOF/rivet), under Netic's NeticYTOF account.
+Seen the mole on the homepage? That's Orry, who also has a job in Slack. Netic develops the bot that lets Orry answer program questions using these Docs and pass difficult questions to human helpers. You can see the work in the bot's [public repository](https://github.com/NeticYTOF/orry), under Netic's NeticYTOF account.
 
 ## Kernel, community manager {#kernel}
 

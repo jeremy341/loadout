@@ -15,7 +15,7 @@
 - Keep the paper grid and add only a faint, even print-grain layer.
 - Frame the existing hero with static, decorative ASCII mine structures.
 - Keep the current section order, copy, links, content, and interactions unchanged.
-- Do not use the prepared hero-workshop PNGs or introduce new raster scenery. Keep the existing cloud SVGs and their scroll motion.
+- Do not use the prepared hero-workshop PNGs or introduce new raster scenery. The old cloud SVGs were removed with the abandoned hero workshop on 2026-10-20.
 - Remove the separate industrial skyline background so the ASCII treatment carries the workshop reference in the hero.
 
 ## Visual tokens
@@ -27,14 +27,14 @@ Use the shared tokens in `docs/design/system/design-system.md`: canvas `#DDD3BF`
 - Existing hero title, supporting copy, calls to action, facts, badge, frame, and scroll cue retain their markup and order.
 - ASCII studies are fixed-width `<pre>` content with `aria-hidden="true"`, no pointer events, and no animation. Position them outside the central text/action area on wide desktop.
 - Hide the ASCII details before they collide with side labels or buttons at tablet/mobile widths. Keep all actual content visible.
-- PaperScenery keeps its existing horizontal scroll-linked cloud motion and registration marks; cloud image paths point to the tracked scenery SVGs.
+- The current hero uses the ASCII treatment; the old PaperScenery cloud motion and scenery SVGs were removed on 2026-10-20.
 - Keep page and Docs route scrolling behavior unchanged.
 
 ## Accessibility and acceptance
 
 - Text and controls retain readable contrast; decor never carries program information.
 - No horizontal overflow at desktop, tablet, or mobile widths.
-- Reduced-motion settings continue to disable scroll-linked cloud movement; ASCII art is static.
+- Reduced-motion settings keep ASCII art static.
 - The page uses no prepared workshop PNGs as a background.
 - Existing section content, anchor links, actions, and order remain unchanged.
 - Run the app build and inspect desktop plus narrow viewport renders before reporting completion.

@@ -8,6 +8,7 @@ This index records where LOADOUT-owned art lives, whether the website uses it, a
 
 The homepage uses Jersey 10 for the wordmark, Pixelify Sans for headings and buttons, IBM Plex Mono for body and utility text, and DotGothic16 for rulers. JetBrains Mono (ASCII art) and Poppins (Docs body) load through `next/font/google`. The self-hosted files under `apps/landing/public/fonts/` are Jersey 10, Pixelify Sans and IBM Plex Mono, with their OFL notices. The current font roles are in [the design system](../design/system/design-system.md).
 
+
 Official SIL Open Font License notices are included beside the self-hosted files: `Jersey10-OFL.txt`, `PixelifySans-OFL.txt` and `IBMPlexMono-OFL.txt`. JetBrains Mono and Poppins are fetched by the framework under their own licences from [Google Fonts](https://github.com/google/fonts).
 
 The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files in `apps/landing/public/fonts/phantom-sans/`. They were copied from Pixl's live site at `https://pixl.hackclub.com/fonts/phantom-sans/` and are loaded locally only when a visitor enables the setting. This provenance does not establish a license for the WOFF2 files: the MIT license recorded for the pinned Pixl repository does not, by itself, document coverage of these live font assets, and this repository records no separate font permission. Do not present the pinned repository license as covering these files.
@@ -18,7 +19,7 @@ The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files 
 
 ### Cursor
 
-`apps/landing/public/loadout/cursors/` holds the homepage cursors: `arrow-*`, `hand-*`, `grab-*`, `grabbing-*`, `pet-*`, `petHeart-*`, `pinch-*`, `shake-*`, `thumbs-*` and `stop-*` PNGs, each in `dark` (blue fill) and `light` (yellow fill), at 32 px and as `@2x` versions at 64 px for screens with a pixel ratio of 2. Hotspots in CSS pixels: arrow 3, 1; hand 15, 3; open hand 17, 17; fist 17, 19; petting hand 17, 17; petting hand with a heart 17, 25 (40 px); pinch 17, 17; shaking fist 17, 13; thumbs up 19, 15; stop hand 15, 15. They are Kenney's Cursor Pixel Pack tiles 0168 (arrow), 0157 (hand), 0138 (open hand), 0139 (fist), 0175 (flat petting hand, also used for the heart version, which adds a small pink heart drawn in the generator) and 0178 (pinch), CC0, plus three of our own for the mole (a shaking fist drawn by hand on the 16 by 16 grid, and a thumbs up and a stop hand from an image-model sheet shrunk onto the grid and tidied), recoloured to LOADOUT's ink outline and theme fill by `assets/editable/cursors/make-cursors.js`, which reproduces the PNGs exactly from the sources in `assets/editable/cursors/source/`. `app/cursor.css` applies them; the open hand and fist show on the mole (see `.ulpi/design/mole.md). The other cursor packs in `assets/inbox/cursors/` were candidates only.
+`apps/landing/public/loadout/cursors/` holds the homepage cursors: `arrow-*`, `hand-*`, `grab-*`, `grabbing-*`, `pet-*`, `petHeart-*`, `pinch-*`, `shake-*`, `thumbs-*` and `stop-*` PNGs, each in `dark` (blue fill) and `light` (yellow fill), at 32 px and as `@2x` versions at 64 px for screens with a pixel ratio of 2. Hotspots in CSS pixels: arrow 3, 1; hand 15, 3; open hand 17, 17; fist 17, 19; petting hand 17, 17; petting hand with a heart 17, 25 (40 px); pinch 17, 17; shaking fist 17, 13; thumbs up 19, 15; stop hand 15, 15. They are Kenney's Cursor Pixel Pack tiles 0168 (arrow), 0157 (hand), 0138 (open hand), 0139 (fist), 0175 (flat petting hand, also used for the heart version, which adds a small pink heart drawn in the generator) and 0178 (pinch), CC0, plus three of our own for the mole (a shaking fist drawn by hand on the 16 by 16 grid, and a thumbs up and a stop hand from an image-model sheet shrunk onto the grid and tidied), recoloured to LOADOUT's ink outline and theme fill by `assets/editable/cursors/make-cursors.js`, which reproduces the PNGs exactly from the sources in `assets/editable/cursors/source/`. `app/cursor.css` applies them; the open hand and fist show on the mole (see [`.ulpi/design/mole.md`](../../.ulpi/design/mole.md)). The four candidate packs were removed on 2026-10-20; their licence record and Gabl's editable source are in `assets/archive/cursor-packs/`.
 
 ### The mole
 
@@ -30,7 +31,7 @@ The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files 
 
 ### Logo and share image
 
-The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are identical 1200 by 630 share images (under 300 KB), each with its `.alt.txt`. They preserve main's original background and details; its blue label is centered above the wordmark, the helmet is removed, and the enlarged bottom logo variant—with dirt-colored details—sits above centered Jersey 10 tagline and track names. The depth-strip readout is softened. `assets/editable/logo/build-share-preview.ps1` reproduces the exports from `share-preview-main-base.jpg`. Exact source revisions and unused logo alternatives are recorded in that folder's README.
+The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are identical 1200 by 630 share images (under 300 KB), each with its `.alt.txt`. They preserve main's original background and details; its blue label is centered above the wordmark, the helmet is removed, and the enlarged bottom logo variant—with dirt-colored details—sits above centered Jersey 10 tagline and track names. The depth-strip readout is softened. `assets/editable/logo/build-share-preview.ps1` reproduces the exports from `share-preview-main-base.jpg`. The owner's 2304 by 768 presentation of both variants is `assets/editable/logo/wordmark-composite-2304.png`; the 192 by 64 PNGs remain the pixel masters. Exact source revisions and unused logo alternatives are recorded in that folder's README.
 
 ### Current icon sprites
 
@@ -73,29 +74,21 @@ The 32×32 transparent PNGs in `apps/landing/public/loadout/sprites/` are the cu
 
 Original source artwork remains in `docs/design/references/2026-10-06/final-pixel-icons/source/`; every original was renamed descriptively without changing image pixels or transparency.
 
-### Standalone scenery vectors
+### Bolt source
 
 | Runtime file | Purpose |
 | --- | --- |
-| `apps/landing/public/loadout/hero/scenery/industrial-skyline.svg` | Preserved source; the new ASCII hero treatment no longer displays this skyline. |
-| `apps/landing/public/loadout/hero/scenery/hazard-stripes.svg` | Kept. The current homepage does not reference it. |
-| `apps/landing/public/loadout/hero/scenery/cloud-01.svg` – `cloud-03.svg` | Kept. The current homepage does not render clouds. |
-| `apps/landing/public/loadout/hero/scenery/scroll-cue.svg` | Kept. The current homepage does not reference it. |
 | `apps/landing/public/loadout/bolt.svg` | Owner-supplied custom Bolt SVG; kept byte-for-byte at its original URL. |
 
 The homepage uses `apps/landing/public/loadout/sprites/ore.png`, the ore gem, as the currency icon. The owner's `bolt.svg` is not shown anywhere and is kept as it was. Original brand artwork and favicon files are retained. Navigation now displays the reference's simple CSS hexagon; the footer brand and favicon keep their existing artwork.
 
-### Workshop scenery PNGs
-
-`apps/landing/public/loadout/hero-workshop/` contains the 31 verified PNGs from the abandoned hero workshop background. They are kept but not rendered. `HeroWorkshopBackground.tsx` and `hero-workshop-background.css` are kept with them, and nothing imports them. The workshop background was abandoned on 11 October 2026.
+The abandoned hero workshop background (31 PNGs, six scenery SVGs, `HeroWorkshopBackground.tsx` and `hero-workshop-background.css`) was removed on 2026-10-20. `bolt.svg` remains unchanged.
 
 ## Editable and incoming source artwork
 
-- `assets/inbox/icons/` holds the unintegrated Bolt and track references plus Rivet images. These are not included in homepage UI.
+- `assets/archive/icons/` holds the retained 32 px Bolt and track-layer references. The Rivet avatar and mascot concepts moved to the Orry project on 2026-10-20; they are not homepage assets.
 - `assets/editable/icons/loadout-icon-palette.ase` is the icon palette source.
 - `assets/editable/homepage/rail-components-source.ase` is the editable rail source.
-- The numbered cloud PNGs in `apps/landing/public/loadout/hero-workshop/` are kept from the abandoned workshop background and are not rendered.
-- `docs/design/references/homepage-workshop/` holds the supplied full-page workshop concept and cloud/decorative source sheets as visual references.
 - `assets/archive/homepage-variants/` holds distinct older and alternate structures/workbench images. The three byte-identical old copies removed earlier are not included.
 
 New art starts in `assets/inbox/`. After approval, move it to its final runtime or source location, update this catalog, and remove the inbox copy. Never keep two identical runtime exports in separate folders.

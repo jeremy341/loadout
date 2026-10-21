@@ -121,7 +121,7 @@ ESLint, TypeScript, and production build pass through the host runner. Manual re
 
 ### Copy clarification follow-up
 
-The user approved the visual result and requested a plain-language rewrite. The new brief is .ulpi/design/homepage-copy-clarity.md. The reopened browser resolves the earlier error-tab blocker. The current wording was manually inspected at desktop and 390/320px mobile, including the Requisition example and expanded Custom Order FAQ; no horizontal page overflow was observed. No styles, assets, motion, routes, or source reuse decisions changed in the copy follow-up. Automated tests, lint/typecheck/build suites, CI, and publication were not run for the string-only revision; previous build evidence applies to the preceding code revision.
+The user approved the visual result and requested a plain-language rewrite. The new brief is .ulpi/design/archive/homepage-copy-clarity.md. The reopened browser resolves the earlier error-tab blocker. The current wording was manually inspected at desktop and 390/320px mobile, including the Requisition example and expanded Custom Order FAQ; no horizontal page overflow was observed. No styles, assets, motion, routes, or source reuse decisions changed in the copy follow-up. Automated tests, lint/typecheck/build suites, CI, and publication were not run for the string-only revision; previous build evidence applies to the preceding code revision.
 
 
 ## Asset inventory and rights

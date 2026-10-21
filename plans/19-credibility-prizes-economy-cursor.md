@@ -39,7 +39,7 @@ Order: **A and D first** (independent, visible), **C and E next**, **B when the 
 
 **Design read.** A landing page for teenage builders in the locked industrial and signage language. The cursor must still look like a mouse pointer, be pixelated, and resemble Pixl's, fitted to LOADOUT. The system text cursor is not kept over body text, because the page is mostly text. An optional miner's lamp that follows the pointer is a separate decision (below).
 
-**Art.** The first attempt, a pickaxe drawn in house, was rejected: it no longer looked like a mouse. The owner chose a pixel arrow similar to Pixl's, fitted to LOADOUT. Built from Kenney's Cursor Pixel Pack (CC0): the classic arrow (tile 0168) and the index-finger hand (tile 0157), recoloured to an ink outline and the theme's fill (blue in the dark theme, yellow in the light theme). The hand shows over links, buttons and labels. Other packs in [`assets/inbox/cursors/`](../assets/inbox/cursors/README.md) were candidates; the choice and the reasons are in `.ulpi/design/custom-cursor.md`.
+**Art.** The first attempt, a pickaxe drawn in house, was rejected: it no longer looked like a mouse. The owner chose a pixel arrow similar to Pixl's, fitted to LOADOUT. Built from Kenney's Cursor Pixel Pack (CC0): the classic arrow (tile 0168) and the index-finger hand (tile 0157), recoloured to an ink outline and the theme's fill (blue in the dark theme, yellow in the light theme). The hand shows over links, buttons and labels. The other candidate packs (removed 2026-10-20) are recorded in [`assets/archive/cursor-packs/`](../assets/archive/cursor-packs/README.md); the choice and the reasons are in `.ulpi/design/custom-cursor.md`.
 
 **Build.**
 - CSS `cursor: url(...) x y, auto` on the homepage, with the system cursor as the fallback, for fine pointers only (`@media (pointer: fine)`).
@@ -121,7 +121,7 @@ These come from the earlier audit of the site. The assistant will not invent the
 ## 9. Records and licensing
 
 - **Pixl photos.** The Pixl owner gave permission in Slack on 2026-10-14 and said everything is under MIT. `docs/source-audit/ATTRIBUTION.md` records it. The LOADOUT owner adds the Pixl owner's name and the message link there. Every photo that is added is listed in the same file with its Pixl path, and Pixl's MIT notice stays in `LICENSE`.
-- **Cursor packs.** Recorded in [`assets/inbox/cursors/README.md`](../assets/inbox/cursors/README.md). Kenney and Gabl have licence files; Megabyte and KabGames are confirmed only by their listings.
+- **Cursor packs.** Recorded in [`assets/archive/cursor-packs/README.md`](../assets/archive/cursor-packs/README.md) after the unused packs were removed. Kenney and Gabl have licence files; Megabyte and KabGames were confirmed only by their listings.
 - **Stardance, Stasis, ysws-template.** Still reference only; no text, code or images are copied from them.
 
 ## 10. Not in this plan

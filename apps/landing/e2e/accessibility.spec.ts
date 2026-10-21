@@ -19,8 +19,9 @@ for (const path of PAGES) {
       await page.emulateMedia({ reducedMotion: "reduce", colorScheme: scheme });
       await page.addInitScript((theme) => localStorage.setItem("loadout-theme", theme), scheme);
       await page.goto(path);
-      if (scheme === "light") await expect(page.locator("#theme")).toBeChecked();
-      else await expect(page.locator("#theme")).not.toBeChecked();
+      // A cold route on the dev server can take well over 5 s to hydrate on a loaded runner, so allow for that.
+      if (scheme === "light") await expect(page.locator("#theme")).toBeChecked({ timeout: 30000 });
+      else await expect(page.locator("#theme")).not.toBeChecked({ timeout: 30000 });
       await page.evaluate(() => document.fonts.ready);
       const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
       expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);

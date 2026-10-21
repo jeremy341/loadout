@@ -7,6 +7,7 @@ import "./rock-bottom.css";
 import "./depth-dark.css";
 import "./prize-belt.css";
 import "./cursor.css";
+import "./cursor-palettes.css";
 import "./mole.css";
 import "./docs.css";
 import "./motion.css";

@@ -6,7 +6,7 @@ Status: owner-approved scope; local implementation. No commit, push, deployment,
 
 Make the existing program explanation more accurate and easier to read. Keep LOADOUT's industrial field-manual identity, the existing design system, page sequence, rulers, paper/grain, typography, prize belt, Jeff, and interaction behavior. No new layout, art, components, or animations. The real-project showcase is deferred.
 
-References: [DESIGN.md](DESIGN.md), [design system](../../docs/design/system/design-system.md), [real-details.md](real-details.md). Macondo informs direct, friendly wording; its program rules are not LOADOUT facts.
+References: [DESIGN.md](DESIGN.md), [design system](../../docs/design/system/design-system.md), [real-details.md](archive/real-details.md). Macondo informs direct, friendly wording; its program rules are not LOADOUT facts.
 
 ## Approved changes
 

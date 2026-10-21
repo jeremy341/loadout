@@ -3,8 +3,7 @@
 # Shell scripts run under bash on Linux, where a CR would break them, so pin the line ending
 # rather than relying on each committer's core.autocrlf.
 *.sh text eol=lf
+*.tsv text eol=lf
 apps/landing/public/fonts/*-OFL.txt -text whitespace=-blank-at-eol
 # Cursor pack licence and readme text is upstream and kept byte for byte.
-assets/inbox/cursors/**/*.txt -text whitespace=-blank-at-eol,-blank-at-eof
-assets/inbox/cursors/**/*.inf -text whitespace=-blank-at-eol,-blank-at-eof
 assets/editable/cursors/source/*.txt -text whitespace=-blank-at-eol,-blank-at-eof

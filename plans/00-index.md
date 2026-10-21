@@ -53,6 +53,6 @@ Plan 17 remains an open proposal. Its unimplemented card-turn and expanded discl
 
 ## Historical consolidation
 
-Plans 03, 04, 07, 09, 10, 12, 13, 14, 16, and completed Plan 18 were reconciled into the design system, Plans 01/02/06/11, and focused source-audit/development records. Plan 03's distinct future product UI ideas remain in the unapproved proposal above. The retired plans are not executable tasks. The old plan README and bootstrap prompts were merged into this index, current owners, and source-audit records, then retired. Git history remains the record of their original text. [`README.md`](README.md) is only a compatibility pointer.
+Plans 03, 04, 07, 09, 10, 12, 13, 14, 16, and completed Plan 18 were reconciled into the design system, Plans 01/02/06/11, and focused source-audit/development records. Plan 03's distinct future product UI ideas remain in the unapproved proposal above. The retired plans are not executable tasks. The old plan README and bootstrap prompts were merged into this index, current owners, and source-audit records, then retired. Git history remains the record of their original text.
 
 `plans/` is canonical. The parent workspace snapshot, if present, is a one-time review copy and does not synchronize automatically.

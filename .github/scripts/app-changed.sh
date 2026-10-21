@@ -36,7 +36,7 @@ fi
 app=false
 while IFS= read -r file; do
   case "$file" in
-    docs/* | plans/* | .ulpi/* | assets/* | references/* | README.md | AGENTS.md | PRODUCT.md | LOADOUT_DESIGN_SYSTEM.md | LICENSE)
+    docs/* | plans/* | .ulpi/* | assets/* | references/* | README.md | AGENTS.md | PRODUCT.md | LICENSE)
       ;;
     *)
       echo "Changes the app: $file"

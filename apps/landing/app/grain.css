@@ -1,2 +1,3 @@
 /* Stasis-style film grain: one full-screen canvas (NoiseGrain.tsx), clearly visible but soft, and never interactive. */
-.grain { position: fixed; inset: 0; z-index: 40; width: 100%; height: 100%; pointer-events: none; opacity: .33; }
+.grain { position: fixed; left: -512px; top: -512px; z-index: 40; width: auto; height: auto; pointer-events: none; opacity: .33; }
+.grain[data-animated="true"] { will-change: transform; }

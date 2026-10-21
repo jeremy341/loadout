@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import Lenis from "lenis";
+import type Lenis from "lenis";
 import { useDisplayPreferences } from "./display-preferences";
 import { useMotionPreference } from "./motion-preference";
 
@@ -16,19 +16,30 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     if (paused || nativeScroll) return;
 
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let active = true;
+    let generation = 0;
     let lenis: Lenis | undefined;
     let observer: ResizeObserver | undefined;
     let frame = 0;
     function stop() {
+      generation += 1;
       cancelAnimationFrame(frame);
       lenis?.destroy();
       observer?.disconnect();
       lenis = undefined;
     }
-    function syncPreference() {
+    async function syncPreference() {
       stop();
-      if (preference.matches) return;
-      lenis = new Lenis({ anchors: { offset: -90 }, duration: 0.7 });
+      const currentGeneration = generation;
+      if (!active || preference.matches) return;
+      let LenisConstructor: typeof Lenis;
+      try {
+        ({ default: LenisConstructor } = await import("lenis"));
+      } catch {
+        return;
+      }
+      if (!active || currentGeneration !== generation || preference.matches) return;
+      lenis = new LenisConstructor({ anchors: { offset: -90 }, duration: 0.7 });
       function raf(time: number) {
         lenis?.raf(time);
         frame = requestAnimationFrame(raf);
@@ -40,6 +51,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     syncPreference();
     preference.addEventListener("change", syncPreference);
     return () => {
+      active = false;
       preference.removeEventListener("change", syncPreference);
       stop();
     };

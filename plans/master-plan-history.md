@@ -13,4 +13,4 @@ This index replaces the former 138 KB `LOADOUT_MASTER_PLAN_v4.md` and lists plan
 | Plan 18 — public Docs refresh | [Current Docs architecture](../docs/development/ARCHITECTURE.md), [content-authoring guide](../docs/development/content-authoring.md), and the merged Docs-refresh PRs #25–28. Production promotion was recorded in PR #28. |
 | PROMPT_00 and PROMPT_01 — bootstrap inputs | Durable ecosystem research, source boundaries, and contribution rules are in [Plan 08](08-ysws-ecosystem-context.md), the source audit, and [WORKFLOW](../docs/development/WORKFLOW.md). These prompts are retired and should not be run. |
 
-These are historical proposals and execution records, not runnable tasks. The canonical product/policy set remains Plans 01, 02, 05, 06, 08, 11, 15, and open proposal 17, linked from [`00-index.md`](00-index.md). The short [`README.md`](README.md) exists only as a compatibility pointer.
+These are historical proposals and execution records, not runnable tasks. The canonical product/policy set remains Plans 01, 02, 05, 06, 08, 11, 15, and open proposal 17, linked from [`00-index.md`](00-index.md). The canonical index is [`00-index.md`](00-index.md).

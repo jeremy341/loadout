@@ -86,7 +86,7 @@ The abandoned hero workshop background (31 PNGs, six scenery SVGs, `HeroWorkshop
 
 ## Editable and incoming source artwork
 
-- `assets/inbox/icons/` holds the unintegrated Bolt and track references plus Rivet images. These are not included in homepage UI.
+- `assets/archive/icons/` holds the retained 32 px Bolt and track-layer references. The Rivet avatar and mascot concepts moved to the Orry project on 2026-10-20; they are not homepage assets.
 - `assets/editable/icons/loadout-icon-palette.ase` is the icon palette source.
 - `assets/editable/homepage/rail-components-source.ase` is the editable rail source.
 - `assets/archive/homepage-variants/` holds distinct older and alternate structures/workbench images. The three byte-identical old copies removed earlier are not included.

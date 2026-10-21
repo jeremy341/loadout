@@ -1,0 +1,418 @@
+{
+  "note": "Frame numbers follow the order of the prompts. Verify a few against the previews before relying on a name: GPT does not always keep the requested order.",
+  "sizes": {
+    "mole": "64x64 (frames/64); 32x32 and 48x48 also provided",
+    "effects": "32x32 in every folder"
+  },
+  "ground": "Characters stand with their feet on row 59 of 64 (93%), centred on their own bounding box.",
+  "sheets": {
+    "A-moving": [
+      {
+        "frame": "01.png",
+        "name": "idle-1"
+      },
+      {
+        "frame": "02.png",
+        "name": "idle-2"
+      },
+      {
+        "frame": "03.png",
+        "name": "idle-3-blink"
+      },
+      {
+        "frame": "04.png",
+        "name": "idle-4"
+      },
+      {
+        "frame": "05.png",
+        "name": "walk-1"
+      },
+      {
+        "frame": "06.png",
+        "name": "walk-2"
+      },
+      {
+        "frame": "07.png",
+        "name": "walk-3"
+      },
+      {
+        "frame": "08.png",
+        "name": "walk-4"
+      },
+      {
+        "frame": "09.png",
+        "name": "scurry-1"
+      },
+      {
+        "frame": "10.png",
+        "name": "scurry-2"
+      },
+      {
+        "frame": "11.png",
+        "name": "scurry-3"
+      },
+      {
+        "frame": "12.png",
+        "name": "scurry-4"
+      },
+      {
+        "frame": "13.png",
+        "name": "sniff"
+      },
+      {
+        "frame": "14.png",
+        "name": "look-up"
+      },
+      {
+        "frame": "15.png",
+        "name": "yawn"
+      },
+      {
+        "frame": "16.png",
+        "name": "look-back"
+      }
+    ],
+    "B-expressions": [
+      {
+        "frame": "01.png",
+        "name": "neutral"
+      },
+      {
+        "frame": "02.png",
+        "name": "happy"
+      },
+      {
+        "frame": "03.png",
+        "name": "very-happy"
+      },
+      {
+        "frame": "04.png",
+        "name": "blissful"
+      },
+      {
+        "frame": "05.png",
+        "name": "surprised"
+      },
+      {
+        "frame": "06.png",
+        "name": "confused"
+      },
+      {
+        "frame": "07.png",
+        "name": "sleepy"
+      },
+      {
+        "frame": "08.png",
+        "name": "sleeping"
+      },
+      {
+        "frame": "09.png",
+        "name": "annoyed"
+      },
+      {
+        "frame": "10.png",
+        "name": "angry"
+      },
+      {
+        "frame": "11.png",
+        "name": "furious"
+      },
+      {
+        "frame": "12.png",
+        "name": "sad"
+      },
+      {
+        "frame": "13.png",
+        "name": "sulking"
+      },
+      {
+        "frame": "14.png",
+        "name": "embarrassed"
+      },
+      {
+        "frame": "15.png",
+        "name": "smug"
+      },
+      {
+        "frame": "16.png",
+        "name": "determined"
+      }
+    ],
+    "C-dig": [
+      {
+        "frame": "01.png",
+        "name": "dig-1"
+      },
+      {
+        "frame": "02.png",
+        "name": "dig-2"
+      },
+      {
+        "frame": "03.png",
+        "name": "dig-3"
+      },
+      {
+        "frame": "04.png",
+        "name": "dig-4"
+      },
+      {
+        "frame": "05.png",
+        "name": "sink-1"
+      },
+      {
+        "frame": "06.png",
+        "name": "sink-2"
+      },
+      {
+        "frame": "07.png",
+        "name": "sink-3"
+      },
+      {
+        "frame": "08.png",
+        "name": "sink-4"
+      },
+      {
+        "frame": "09.png",
+        "name": "pop-out-1"
+      },
+      {
+        "frame": "10.png",
+        "name": "pop-out-2"
+      },
+      {
+        "frame": "11.png",
+        "name": "pop-out-3"
+      },
+      {
+        "frame": "12.png",
+        "name": "pop-out-4"
+      },
+      {
+        "frame": "13.png",
+        "name": "peek-up"
+      },
+      {
+        "frame": "14.png",
+        "name": "peek-left"
+      },
+      {
+        "frame": "15.png",
+        "name": "peek-right"
+      },
+      {
+        "frame": "16.png",
+        "name": "peek-duck"
+      }
+    ],
+    "D-picked-up": [
+      {
+        "frame": "01.png",
+        "name": "grabbed"
+      },
+      {
+        "frame": "02.png",
+        "name": "dangle-left"
+      },
+      {
+        "frame": "03.png",
+        "name": "dangle-centre"
+      },
+      {
+        "frame": "04.png",
+        "name": "dangle-right"
+      },
+      {
+        "frame": "05.png",
+        "name": "struggle-1"
+      },
+      {
+        "frame": "06.png",
+        "name": "struggle-2"
+      },
+      {
+        "frame": "07.png",
+        "name": "struggle-3"
+      },
+      {
+        "frame": "08.png",
+        "name": "struggle-4"
+      },
+      {
+        "frame": "09.png",
+        "name": "tired"
+      },
+      {
+        "frame": "10.png",
+        "name": "give-up"
+      },
+      {
+        "frame": "11.png",
+        "name": "falling"
+      },
+      {
+        "frame": "12.png",
+        "name": "landing-squash"
+      },
+      {
+        "frame": "13.png",
+        "name": "dizzy"
+      },
+      {
+        "frame": "14.png",
+        "name": "shake-off"
+      },
+      {
+        "frame": "15.png",
+        "name": "stand-up"
+      },
+      {
+        "frame": "16.png",
+        "name": "neutral"
+      }
+    ],
+    "E-pet": [
+      {
+        "frame": "01.png",
+        "name": "lean-in-with-hand"
+      },
+      {
+        "frame": "02.png",
+        "name": "happy-wiggle-1"
+      },
+      {
+        "frame": "03.png",
+        "name": "happy-wiggle-2"
+      },
+      {
+        "frame": "04.png",
+        "name": "happy-wiggle-3"
+      },
+      {
+        "frame": "05.png",
+        "name": "happy-wiggle-4"
+      },
+      {
+        "frame": "06.png",
+        "name": "blissful-1"
+      },
+      {
+        "frame": "07.png",
+        "name": "blissful-2"
+      },
+      {
+        "frame": "08.png",
+        "name": "annoyed-1"
+      },
+      {
+        "frame": "09.png",
+        "name": "annoyed-2"
+      },
+      {
+        "frame": "10.png",
+        "name": "shake-head-no"
+      },
+      {
+        "frame": "11.png",
+        "name": "angry-puff"
+      },
+      {
+        "frame": "12.png",
+        "name": "stomp-1"
+      },
+      {
+        "frame": "13.png",
+        "name": "stomp-2"
+      },
+      {
+        "frame": "14.png",
+        "name": "turn-back"
+      },
+      {
+        "frame": "15.png",
+        "name": "storm-off-1"
+      },
+      {
+        "frame": "16.png",
+        "name": "storm-off-2"
+      }
+    ],
+    "F-effects": [
+      {
+        "frame": "01.png",
+        "name": "heart-small"
+      },
+      {
+        "frame": "02.png",
+        "name": "heart-big"
+      },
+      {
+        "frame": "03.png",
+        "name": "sweat"
+      },
+      {
+        "frame": "04.png",
+        "name": "anger"
+      },
+      {
+        "frame": "05.png",
+        "name": "zzz"
+      },
+      {
+        "frame": "06.png",
+        "name": "exclamation"
+      },
+      {
+        "frame": "07.png",
+        "name": "question"
+      },
+      {
+        "frame": "08.png",
+        "name": "sparkle"
+      },
+      {
+        "frame": "09.png",
+        "name": "dizzy-star-1"
+      },
+      {
+        "frame": "10.png",
+        "name": "dizzy-star-2"
+      },
+      {
+        "frame": "11.png",
+        "name": "dust-1"
+      },
+      {
+        "frame": "12.png",
+        "name": "dust-2"
+      },
+      {
+        "frame": "13.png",
+        "name": "dust-3"
+      },
+      {
+        "frame": "14.png",
+        "name": "dirt-chunk-1"
+      },
+      {
+        "frame": "15.png",
+        "name": "dirt-chunk-2"
+      },
+      {
+        "frame": "16.png",
+        "name": "dirt-chunk-3"
+      },
+      {
+        "frame": "17.png",
+        "name": "dirt-mound-1"
+      },
+      {
+        "frame": "18.png",
+        "name": "dirt-mound-2"
+      },
+      {
+        "frame": "19.png",
+        "name": "dirt-mound-3"
+      }
+    ]
+  }
+}

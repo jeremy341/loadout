@@ -3,7 +3,7 @@ import { GestureTracker, type GestureEvent, type GestureFrame, type Rect } from 
 import { Mood, type IrritationStage } from "./mood";
 import { TUNING } from "./tuning";
 
-// Orry, the homepage mole (.ulpi/design/mole.md and mole-behaviour.md): a pixel Maulwurf that turns up at the bottom of the
+// Orry, the homepage mole (.ulpi/design/mole-record.md and mole-behaviour.md): a pixel Maulwurf that turns up at the bottom of the
 // screen. This file is the state machine and the animation loop. What the person did comes from gestures.ts, how he feels
 // comes from mood.ts, every number comes from tuning.ts. No React in the loop, and Orry is decoration: he never takes focus,
 // and the page never waits for him.

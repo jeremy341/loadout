@@ -88,7 +88,7 @@ Adapted files (each needs a one-line header comment pointing here; check this in
 | `apps/platform/app/(participant)/layout.tsx` | `app/(shell)/layout.tsx` | Shell wrapper around the page | No session, wallet or event reads |
 | `apps/platform/app/globals.css` | `app/globals.css` (shell rules) | Shell geometry: 260px sidebar, 54px rail, bottom dock and sheet at 900px | LOADOUT tokens, fonts and shadows replace Pixl's; accessibility rules added |
 
-`apps/platform/app/layout.tsx` and `app/page.tsx` are reimplemented from the same Pixl files and carry no Pixl text beyond the redirect idea. The full path-level map, including everything read and not copied, is in [pixl-platform-port-map.md](../archive/platform-preview-20261020/pixl-platform-port-map.md). Check the PR diff for the final file list; the table above must match it.
+`apps/platform/app/layout.tsx` and `app/page.tsx` are reimplemented from the same Pixl files and carry no Pixl text beyond the redirect idea. The full path-level map, including everything read and not copied, is in pixl-platform-port-map.md (removed; see git history). Check the PR diff for the final file list; the table above must match it.
 
 Not copied: Pixl's session, login, token handoff and server-API files, its Docs engine, its forms, its staff dashboard, `apps/pixorpheus`, and all Pixl art, fonts and brand assets.
 

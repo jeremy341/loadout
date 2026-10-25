@@ -26,16 +26,15 @@ What does all of that look like in a submission? We'll start with a real project
 
 Jerry made [Poorup](https://poorup.tech), a multiplayer property-trading game in the browser. Its server checks player moves and lets players reconnect after dropping out. You can open the [public code](https://github.com/jeremy341/Poorup) to inspect the implementation and automated tests.
 
-Jerry used his own assessment of 18.8× to illustrate the payout math. **LOADOUT reviewers haven't awarded that multiplier**, and a result that high would be unusual:
+Jerry's example shows the payout math. **The team hasn't accepted this project for a payout**, so treat the numbers as an illustration:
 
 | Part | Illustration |
 | --- | --- |
 | Time | About 100 hours. |
-| Multiplier | 18.8×, Jerry's own assessment. |
-| Payout | 100 × 18.8 = 1,880 Ore. |
-| Catalog comparison | An enclosed printer at 1,000 Ore and an A1 Mini at 500 Ore, using working prices. |
+| Payout | 100 hours × 10 Ore = 1,000 Ore. |
+| Catalog comparison | An enclosed printer at 1,045 Ore and an A1 Mini at 630 Ore, using working prices. |
 
-Use the project as something to inspect, rather than a promise about your own payout. Each ship goes through review, and catalog availability still needs to be confirmed.
+Use the project as something to inspect, rather than a promise about your own payout. Each ship goes through the team's check, and catalog availability still needs to be confirmed.
 
 ### An invented example: a sensor board {#example}
 
@@ -45,7 +44,7 @@ If this were your project, you might introduce the first version like this:
 
 > I wanted to compare the temperature at my desk during the day, so I built a logger I could leave running without a computer. It reads the sensor over I2C and stores readings in a flash ring buffer. Connecting it over USB lets me download the log. Getting that download to work without interrupting sampling took longer than the initial sensor code; the journal below follows that bug.
 
-Now the reviewer has an idea of what you made. To let them check it, you'd include things like these:
+Now the team has an idea of what you made. To let them check it, you'd include things like these:
 
 | Evidence | What it lets a reviewer check |
 | --- | --- |
@@ -79,8 +78,8 @@ Notice how the entry follows the problem from finding the gaps to checking the f
 
 ## Shipping again {#versions}
 
-Want to keep working on it after the first ship? You can come back with another version once you have something new to show and **at least five new approved hours**. Tell us what's changed and include the journal entries since the last ship. That way, reviewers can follow the new work without having to guess which parts they've already seen.
+Want to keep working on it after the first ship? You can come back with another version once you have something new to show and **at least five new approved hours**. Tell us what's changed and include the journal entries since the last ship. That way, we can follow the new work without having to guess which parts you've already shown us.
 
-Each ship gets its own multiplier. Twenty hours at 9× earn 180 Ore. If a later version adds twelve hours and earns 13×, that ship earns another 156 Ore. The first payout stays as it was.
+Each accepted ship earns Ore at 10 Ore per approved hour. Twenty hours earn 200 Ore. If a later version adds twelve approved hours, that version earns another 120 Ore. The first payout stays as it was.
 
 If we return a submission for fixes, correct the unpaid work and resubmit it in the same window. Your hours stay recorded; we still need enough evidence to approve them.

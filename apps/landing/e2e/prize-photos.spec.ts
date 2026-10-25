@@ -1,17 +1,17 @@
 import { expect, test } from "@playwright/test";
 
-// The proposed prizes show one product photo each (.ulpi/design/prize-photos.md): photos from Pixl, small, decorative
+// The proposed prizes show one product photo each (.ulpi/design/prize-record.md): photos from Pixl, small, decorative
 // next to a visible name, and kept on their white plate.
 const PHOTOS = ["framework-16", "esp32", "rpi", "soldering-iron", "samsung-t7-ssd", "a1-mini", "domain-grant", "centauri-carbon"];
 
-test("each of the eight prizes shows a photo that stays on its plate", async ({ page }) => {
+test("each of the ten prizes shows a photo that stays on its plate", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await expect(page.locator("#shop h2")).toHaveText(/Proposed\s+prizes/);
   const cards = page.locator(".pb-half").first().locator("li");
-  await expect(cards).toHaveCount(8);
-  for (let index = 0; index < 8; index++) {
+  await expect(cards).toHaveCount(10);
+  for (let index = 0; index < 10; index++) {
     const card = cards.nth(index);
     await card.scrollIntoViewIfNeeded();
     const image = card.locator("img");
@@ -33,7 +33,7 @@ test("every prize has a category and an example name, and the prices are example
   await page.goto("/");
   const section = page.locator("#shop");
   await expect(section).toContainText("Examples of what Ore could buy");
-  for (const text of ["Developer hardware", "Framework 16 laptop", "Embedded boards", "ESP32 starter kit", "Compute", "Raspberry Pi 5", "Tools", "Soldering iron kit", "Storage", "Samsung T7 SSD", "Fabrication", "Bambu Lab A1 Mini 3D printer", "Domains", "Custom equipment"]) {
+  for (const text of ["Developer hardware", "Framework 16 laptop", "Embedded boards", "ESP32 starter kit", "Compute", "Raspberry Pi 5", "Tools", "Soldering iron kit", "Storage", "Samsung T7 SSD", "Fabrication", "Bambu Lab A1 Mini 3D printer", "Domains", "Custom equipment", "Travel", "$10 flight grant", "Event", "Ticket to LOADOUT IRL in Düsseldorf", "Limited"]) {
     await expect(section.locator(".pb-half").first()).toContainText(text);
   }
 });

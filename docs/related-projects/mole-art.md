@@ -9,7 +9,7 @@ The mole is the interactive homepage mascot, also called Orry. It is an in-repo 
 | Animation contract | `apps/landing/app/_components/mole/frames.ts` |
 | Editable source | `assets/editable/mole/` (build kit, prompts, slice/atlas scripts) |
 | Raw sheets and frame pipeline | The owner's art workspace (not versioned) |
-| Design brief | [`.ulpi/design/mole.md`](../../.ulpi/design/mole.md) and [`.ulpi/design/mole-behaviour.md`](../../.ulpi/design/mole-behaviour.md) |
+| Design brief | [`.ulpi/design/mole-record.md`](../../.ulpi/design/mole-record.md) and [`.ulpi/design/mole-record.md`](../../.ulpi/design/mole-record.md) |
 
 **How it connects.** Only the built atlas ships. If the raw source is lost, the atlas can still be served but cannot be edited or rebuilt. The owner controls whether the raw sheets go into this repository, a release asset, or stay local.
 

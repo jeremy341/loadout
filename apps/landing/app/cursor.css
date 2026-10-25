@@ -1,4 +1,4 @@
-/* The homepage cursor is a pixel arrow, like Pixl's, in LOADOUT's colours (.ulpi/design/custom-cursor.md): Kenney's classic
+/* The homepage cursor is a pixel arrow, like Pixl's, in LOADOUT's colours (.ulpi/design/brand-and-type-record.md): Kenney's classic
    arrow and index-finger hand (CC0) recoloured to an ink outline and the theme's fill, blue in the dark theme like its icons
    and yellow in the light theme. Links, buttons and labels get the hand. Fine pointers only: a touch screen has no cursor.
    The docs and the 404 page keep the system arrow. The 32px image is the fallback; a screen with a pixel ratio of 2 gets
@@ -23,7 +23,7 @@
     cursor: inherit;
   }
 
-  /* The mole can be grabbed (.ulpi/design/mole.md): the open hand over it. */
+  /* The mole can be grabbed (.ulpi/design/mole-record.md): the open hand over it. */
   html:not([data-system-cursor="true"]) .home .mole {
     cursor: var(--cursor-grab-dark) 17 17, grab;
   }

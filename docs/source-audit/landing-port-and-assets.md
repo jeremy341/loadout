@@ -2,7 +2,7 @@
 
 This is the implementation record for LOADOUT's public landing site. The audit records the pinned Pixl baseline and how the resulting LOADOUT site adapted its composition, assets, and motion. The dated sections below are historical snapshots; the active PNG sprite set and current scenery paths are listed in the [asset catalog](../design/asset-catalog.md), and current behavior comes from the application code. Licensing and attribution live in [source bases](source-bases.md) and [attribution](ATTRIBUTION.md).
 
-Currency and implementation descriptions in the dated snapshots below are historical records. They may use the former name Bolts; current program currency is Ore. The mobile shortcut and color-vision follow-up is documented in `.ulpi/design/mobile-accessibility-color-vision.md`; its implementation is included with the internal-docs update for promotion through the current release lanes.
+Currency and implementation descriptions in the dated snapshots below are historical records. They may use the former name Bolts; current program currency is Ore. The mobile shortcut and color-vision follow-up is documented in `.ulpi/design/accessibility-record.md`; its implementation is included with the internal-docs update for promotion through the current release lanes.
 
 ## Port and implementation evidence
 

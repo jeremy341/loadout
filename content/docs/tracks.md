@@ -23,7 +23,7 @@ Choosing a track doesn't lock you into it forever, either. You can work on a pro
 
 Let's use that sensor board and service as an example. The circuit and bench measurements explain your Hardware work. The service's storage design and failure tests show the Systems work. Including both gives reviewers a way to understand how much you contributed in each field.
 
-Reviewers use that evidence to split **one Track XP award** between the relevant tracks. Adding a second track doesn't duplicate the award. On a team, the split follows each person's contribution, so the board designer's progress may look different from the service developer's.
+The team uses that evidence to split **one Track XP award** between the relevant tracks. Adding a second track doesn't duplicate the award. On a team, the split follows each person's contribution, so the board designer's progress may look different from the service developer's.
 
 ## Why pick a track?
 

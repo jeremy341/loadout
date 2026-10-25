@@ -10,15 +10,8 @@
 | Ore, Track XP, levels, pricing and prizes | [02 Economy and rewards](02-economy-and-rewards.md) | Exact rates, prices and thresholds remain unpublished unless approved. |
 | Launch and operating gates | [05 Launch and operations](05-launch-and-operations.md) | Planning controls; not a live order or fulfillment system. |
 | Public homepage | [06 Public homepage](06-public-homepage.md) | Current public-site wording, structure and approved scope. |
-| YSWS ecosystem research | [08 YSWS ecosystem context](08-ysws-ecosystem-context.md) | Dated reference research; LOADOUT plans override generic patterns. |
 | Community Eras | [11 Eras and community progression](11-eras-and-community-progression.md) | Shared community progression; separate from personal XP and Ore. |
 | LOADOUT IRL concept | [15 LOADOUT IRL Ruhr](15-loadout-irl-ruhr.md) | Future concept only; no event, venue or dates are confirmed. |
-| Credibility, prizes, economy and cursor | [19 Credibility, prizes, economy and cursor](19-credibility-prizes-economy-cursor.md) | Work sequence and decisions across Plans 02, 06, 11 and 15; those plans stay the owners of their topics. |
-| Pull interactions | [20 Pull interactions](20-pull-interactions.md) | A grab cursor, a pull tab and a pull cord, all tried and dropped on 2026-10-15; the Docs tab is a plain link. Kept for the record. |
-| Credibility follow-through | [21 Credibility follow-through](21-credibility-follow-through.md) | Public copy and rule reconciliation implemented locally. Personal organizer copy and any further visual work remain deferred. No participant platform is implemented. |
-| Peer review and multipliers | [22 Peer review and ship multipliers](22-peer-review-and-multipliers.md) | Agreed 1–9 peer scoring, 12-review gate, multiplier/Signal tiers, payout timing, flag handling, and no-appeal policy. No review platform is built. |
-| Less vibed, pass two | [23 Less vibed, pass two](23-less-vibed-pass-two.md) | Pixl and Stardance compared with the homepage: one worked example, each term taught once, real track examples, a more natural voice, prizes up front, and each thing said once. Proposed, not built. |
-| Homepage visual-clarity proposal | [17 Homepage visual clarity](17-homepage-visual-clarity.md) | Proposal, not authorization to change the homepage. |
 | Locked visual system | [Design system](../docs/design/system/design-system.md) | Visual authority; design briefs do not override later owner decisions. |
 | Contribution and release workflow | [Contributor workflow](../docs/development/WORKFLOW.md) | Repository process; it is not participant-facing program content. |
 
@@ -28,28 +21,23 @@ Plan 06 owns the homepage sequence and the approved public explanations. The pag
 
 Internal and public age wording is 13–18. Hack Club teen verification is required; the account integration and operating approval remain open. Public Docs are edited in a separate copy PR from the internal policy/source update.
 
-Plan 17 remains an open proposal. Its unimplemented card-turn and expanded disclosure ideas are not part of the current homepage scope.
-
 ## Plan map
 
 - `01-product-and-program.md` — product and program policy.
 - `02-economy-and-rewards.md` — personal progress, Ore, pricing and prizes.
 - `05-launch-and-operations.md` — launch readiness and operational planning.
 - `06-public-homepage.md` — approved public homepage.
-- `08-ysws-ecosystem-context.md` — dated external context.
 - `11-eras-and-community-progression.md` — Era policy.
 - `15-loadout-irl-ruhr.md` — future IRL concept.
-- `17-homepage-visual-clarity.md` — unresolved visual proposal.
-- `19-credibility-prizes-economy-cursor.md` — approved work sequence for credibility, prize photos, economy decisions and the custom cursor.
-- `20-pull-interactions.md` — idea and plan for pullable handles on the homepage.
-- `21-credibility-follow-through.md` — work sequence and local implementation status for public details and rule reconciliation.
-- `22-peer-review-and-multipliers.md` — agreed rating scale and candidate review operations; no live review service.
 - `master-plan-history.md` — short history of the retired master plan and completed proposals.
 
 ## Future proposals
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
-- [`proposals/economy-calibration.md`](proposals/economy-calibration.md) is a mixed-status worksheet: recorded owner decisions plus candidate curves, review operations and Custom Order values. Plan 02 identifies what is agreed. A number appearing in the worksheet does not approve it.
+
+## Removed on 25 Oct 2026
+
+Plan 22 (peer review and ship multipliers, removed 25 Oct 2026 because peer review no longer exists), plans 08 (YSWS ecosystem research), 17 (homepage visual clarity proposal), 19 (credibility, prizes, economy and cursor), 20 (pull interactions), 21 (credibility follow-through) and 23 (less vibed, pass two), and the economy calibration worksheet were removed as superseded. Their text is in git history.
 
 ## Historical consolidation
 

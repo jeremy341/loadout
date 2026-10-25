@@ -8,13 +8,13 @@ const STEPS: Step[] = [
   { label: "STEP 01", icon: "list", title: "Pick something to build", text: "Anything technical you want to make or fix. Choose the track it fits: Tools, Systems, Compute or Hardware." },
   { label: "STEP 02", icon: "code", title: "Build it and keep a journal", text: "Write down what you did, why you did it, and how you checked it. Your tracked hours come with it." },
   { label: "STEP 03", icon: "document", title: "Ship it", text: "Share a working version, a demo or other proof, and how to run it. Say what you built yourself, where AI helped, and what's still rough." },
-  { label: "STEP 04", icon: "check", title: "Other builders review it", text: "The team checks LOADOUT fit, then 12 peer reviews score four areas from 1 to 9. Normal rates run from 1× to 20×, with a target mean of 10×. Great Signal can raise the hourly ceiling to 30×." },
+  { label: "STEP 04", icon: "check", title: "The team accepts it", text: "The team checks LOADOUT fit and your hours, then accepts the ship or sends it back with a short written reason. Each approved hour earns 10 Ore." },
 ];
 
 // What an accepted review adds, side by side. The Physical Loadout is not one of them:
 // it is what spending Ore buys, so it belongs to the upgrade step below.
 const OUTCOMES: Step[] = [
-  { icon: "ore", nudge: true, title: "Ore to spend", text: "Approved hours times your multiplier. Ten approved hours at 10× earn 100 Ore." },
+  { icon: "ore", nudge: true, title: "Ore to spend", text: "Approved hours times 10 Ore. Ten approved hours earn 100 Ore." },
   { icon: "xp-star", title: "Track XP to keep", text: "Your levels. They never reset, and they take money off prizes." },
   { icon: "document", title: "Digital Loadout", text: "Every accepted project goes on your profile." },
 ];
@@ -73,16 +73,16 @@ export function HowItWorks() {
             {OUTCOMES.map((outcome) => <StepCard step={outcome} key={outcome.title} />)}
           </div>
           <i className="fc" aria-hidden="true"></i>
-          <div className="we-calc" role="img" aria-label="Example: 20 approved hours at a multiplier of ten earn 200 Ore, enough for a Raspberry Pi 5.">
-            <span><b>20 h</b>approved</span>
+          <div className="we-calc" role="img" aria-label="Example: 50 approved hours at 10 Ore per hour earn 500 Ore, enough for a Raspberry Pi 5.">
+            <span><b>50 h</b>approved</span>
             <i>×</i>
-            <span><b>10×</b>multiplier</span>
+            <span><b>10 Ore</b>per hour</span>
             <i>=</i>
-            <span><b>200 Ore</b>earned</span>
+            <span><b>500 Ore</b>earned</span>
             <i>→</i>
-            <span><b>Raspberry Pi 5</b>200 Ore</span>
+            <span><b>Raspberry Pi 5</b>500 Ore</span>
           </div>
-          <p className="we-cap">At 15×, the same 20 approved hours pay 300 Ore.</p>
+          <p className="we-cap">Every approved hour earns the same 10 Ore.</p>
           <i className="fc" aria-hidden="true"></i>
           <StepCard step={UPGRADE}>
             <div className="lnks">

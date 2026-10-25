@@ -6,6 +6,7 @@ order: 140
 status: draft
 ---
 
+**Deferred until after the first run.** Custom Orders are not open yet. The rules below are planned and may change.
 Sometimes the shop won't have the equipment your next build needs. Though you would wish to get it, Custom Orders solve exactly that problem. It lets you ask for the by sending an item link, explainomg the technical use and showing how it would support you. If we can approve the request, we'll send an Ore quote price though be prepared for an uprise in pricefor you to accept or decline.
 
 ## Wha do I need to ask for a custom order?

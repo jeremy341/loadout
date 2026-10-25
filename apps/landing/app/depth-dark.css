@@ -1,7 +1,7 @@
 .home { --depth-core: rgba(6, 8, 9, .6); --depth-rim: rgba(0, 0, 0, .86); }
 .home:has(#theme:checked) { --depth-core: rgba(26, 23, 20, .08); --depth-rim: rgba(26, 23, 20, .18); }
 
-/* The mine gets darker the deeper you read (.ulpi/design/depth-darkness.md). One fixed layer sits behind the content
+/* The mine gets darker the deeper you read (.ulpi/design/homepage-layout-motion-record.md). One fixed layer sits behind the content
    (above the page and its grid, below the sections, the nav and the grain), so it darkens the backdrop and never the
    text or the cards. Its opacity follows the scroll position through a CSS scroll-driven animation, so there is no
    scroll listener and no React state: it goes from nothing at the top to the full shade at the bottom, the depth of the

@@ -1,4 +1,4 @@
-// Every number that decides how Orry reacts, in one place (.ulpi/design/mole-behaviour.md). Times are in milliseconds for the
+// Every number that decides how Orry reacts, in one place (.ulpi/design/mole-record.md). Times are in milliseconds for the
 // gesture classifier (it reads real pointer timestamps) and in seconds for the mood and the sequences (they run on the engine
 // clock, which a test can speed up). Change pacing here, not in the code that uses it.
 export const TUNING = {

@@ -2,7 +2,7 @@
 
 > **Archived 2026-10-20:** the unused candidate packs were removed from the repository. Only this licence and provenance record and Gabl's editable source (`gabl-cursor.aseprite`) are kept.
 
-Record of candidate art for the custom cursor ([Plan 19](../../../plans/19-credibility-prizes-economy-cursor.md), workstream A). Nothing here was served by the website; the tiles in use are in `assets/editable/cursors/source/`. Any future use must copy or redraw the file to its final path under `apps/landing/public/loadout/` and record it in `docs/source-audit/ATTRIBUTION.md` and `docs/design/asset-catalog.md`.
+Record of candidate art for the custom cursor (Plan 19, removed 25 Oct 2026, workstream A). Nothing here was served by the website; the tiles in use are in `assets/editable/cursors/source/`. Any future use must copy or redraw the file to its final path under `apps/landing/public/loadout/` and record it in `docs/source-audit/ATTRIBUTION.md` and `docs/design/asset-catalog.md`.
 
 All packs arrived from the owner's downloads on 2026-10-14. Licence status means what the files themselves prove: **file** means the archive contains a licence text, **listing** means only the author's itch.io page said so and the archive has no licence file. Treat **listing** as unverified until the owner re-checks the page.
 
@@ -19,4 +19,4 @@ The owner supplied it without a note. Its layers (`cursor_loading`, `Hourglass`,
 
 ## How these packs were used
 
-The homepage cursor uses Kenney's classic arrow (tile 0168) and index-finger hand (tile 0157), recoloured to LOADOUT's ink outline and theme fill. Those two tiles, the licence text and the generator are in `assets/editable/cursors/`. The other packs were candidates and stay here: Gabl's is a complete, good set (but asks that its art not be used to feed AI models), Megabyte's has many fun pointers (swords, a chunky arrow) but its licence is only confirmed by its listing, and KabGames' 8 by 8 set is only silhouettes. See `.ulpi/design/custom-cursor.md`.
+The homepage cursor uses Kenney's classic arrow (tile 0168) and index-finger hand (tile 0157), recoloured to LOADOUT's ink outline and theme fill. Those two tiles, the licence text and the generator are in `assets/editable/cursors/`. The other packs were candidates and stay here: Gabl's is a complete, good set (but asks that its art not be used to feed AI models), Megabyte's has many fun pointers (swords, a chunky arrow) but its licence is only confirmed by its listing, and KabGames' 8 by 8 set is only silhouettes. See `.ulpi/design/brand-and-type-record.md`.

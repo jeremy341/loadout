@@ -40,7 +40,7 @@ LOADOUT looks like an industrial field manual for builders: an engineering-paper
 
 - In light mode the yellow button is the primary action, and rust marks links and small accents. Keep rust to small details.
 - In dark mode the icons are turned blue (see Icons). In light mode they show as drawn.
-- The homepage cursor is a pixel arrow with a pointing hand for links, in the same two colours (`app/cursor.css`): blue fill in dark mode, yellow in light mode, fine pointers only. The homepage settings modal and shortcut use the same cursor, including nested labels and controls. Use system cursor restores native pointers; forced colors and coarse pointers stay native. The Docs and the 404 page keep the system cursor. A pixel Maulwurf mascot in a miner's helmet (`app/_components/mole/`, `.ulpi/design/mole.md`) turns up at the bottom of the homepage now and then; it can be petted, picked up and annoyed, and the footer button hides it for good. It is the same in both themes and is decoration only.
+- The homepage cursor is a pixel arrow with a pointing hand for links, in the same two colours (`app/cursor.css`): blue fill in dark mode, yellow in light mode, fine pointers only. The homepage settings modal and shortcut use the same cursor, including nested labels and controls. Use system cursor restores native pointers; forced colors and coarse pointers stay native. The Docs and the 404 page keep the system cursor. A pixel Maulwurf mascot in a miner's helmet (`app/_components/mole/`, `.ulpi/design/mole-record.md`) turns up at the bottom of the homepage now and then; it can be petted, picked up and annoyed, and the footer button hides it for good. It is the same in both themes and is decoration only.
 - No blue or purple glow, gradients or glass as decoration.
 
 ### Docs
@@ -67,6 +67,7 @@ Track and process-card titles are semantic h3 headings with the existing `.cn` t
 | Role | Font | Where |
 | --- | --- | --- |
 | Wordmark | Jersey 10 (`--font-display`) | The LOADOUT logo text, the nav logo (36px) and the Docs brand |
+| Numerals | Jersey 10 (`--font-display`) | The worked-example readout and the Ore figures on the planned prize cards, where digits must read at small sizes |
 | Headings | Pixelify Sans 400 to 700 (`--font-pixel`) | Homepage headings and card titles. Docs h1 46px/700, h2 30px/600, h3 14px uppercase/600 |
 | Buttons | Pixelify Sans | Homepage buttons (the hero and nav buttons were checked) |
 | Body and lead | IBM Plex Mono 400 and 600 (`--font-ui`) | Homepage body text, leads, notes, nav links (11px), hero side labels (14px) and depth markers |
@@ -83,7 +84,7 @@ Rules:
 - Essential body copy is 16px. Do not shrink it to fit.
 - Fonts are self-hosted, except JetBrains Mono and Poppins, which load through the framework, with `display: swap`.
 - The scramble on the hero title measures its letters only after the pixel font has loaded.
-- `PixelifySans.ttf` is a patched copy of the stock font: the capital C and the lowercase c have a wider opening, because in the stock font a C differs from an O only by a one-pixel notch that shrinks to a hairline in the bold weights ("ROCK" read "ROOK"). Nothing else in the font changed, and the advance widths are identical, so no text reflows. The stock font and the script that makes the patched one are in `assets/editable/fonts/` (brief: `.ulpi/design/pixel-font-open-c.md`). Regenerate with `python assets/editable/fonts/patch-pixelify-c.py` and check with `--check`.
+- `PixelifySans.ttf` is a patched copy of the stock font: the capital C and the lowercase c have a wider opening, because in the stock font a C differs from an O only by a one-pixel notch that shrinks to a hairline in the bold weights ("ROCK" read "ROOK"). Nothing else in the font changed, and the advance widths are identical, so no text reflows. The stock font and the script that makes the patched one are in `assets/editable/fonts/` (brief: `.ulpi/design/brand-and-type-record.md`). Regenerate with `python assets/editable/fonts/patch-pixelify-c.py` and check with `--check`.
 
 ## Layout
 
@@ -108,8 +109,8 @@ Rules:
 - The hatching, the numeral and the label are faint at rest: the hatching at 6% of the rule colour, the numeral and label at 3% of the text colour. Within 150px of the pointer they light to the glow colour: blue in dark mode at 60%, amber-red `#D9661F` in light mode at 85%, for the deepest marker. Deeper markers light more strongly: `DepthGlow` sets `--depth-light` on each marker from its numeral, from 40% of that strength at the shallowest to 100% at the deepest. The glow runs only on devices with a fine pointer (`hover: hover` and `pointer: fine`); touch screens see the faint marker only. The rules are `DepthGlow` and the `.home .pit` rules in `home.css`.
 - The top ruler is in pixels: a tick every 32px and a number every 160px.
 - The left ruler is in metres: a tick every 10 m, a number every 50 m, and a heavier mark at each depth strip. Markers are pinned to those strips.
-- Homepage depth navigation uses the same metre stops as the ruler. On wide, tall screens it sits in the left gutter; on narrower or short screens it becomes a compact bottom-left section picker beside the Docs tab. The current stop has a visible accent marker and `aria-current="location"`. Links retain native section hashes; the compact list has bounded internal scrolling, keyboard focus and Escape behavior. Absent sections are omitted without renumbering later depths. These controls describe page position, not live program progress (brief: `.ulpi/design/homepage-copy-depth-navigation.md`).
-- The homepage gets darker the deeper you scroll (`app/depth-dark.css`, brief `.ulpi/design/depth-darkness.md`). One fixed, `aria-hidden` layer behind the content follows the scroll position through a CSS scroll-driven animation: nothing at the top, the full shade at the footer. In the dark theme the shade ends near the 404's black (`#0e1112`) with a darker rim; in the light theme the paper stays and only the rim deepens. It darkens the backdrop, never the text or the cards. A browser without scroll-driven animations shows the page as before. The 404, the cave-in page and the Docs do not use it.
+- Homepage depth navigation uses the same metre stops as the ruler. On wide, tall screens it sits in the left gutter; on narrower or short screens it becomes a compact bottom-left section picker beside the Docs tab. The current stop has a visible accent marker and `aria-current="location"`. Links retain native section hashes; the compact list has bounded internal scrolling, keyboard focus and Escape behavior. Absent sections are omitted without renumbering later depths. These controls describe page position, not live program progress (brief: `.ulpi/design/homepage-copy-record.md`).
+- The homepage gets darker the deeper you scroll (`app/depth-dark.css`, brief `.ulpi/design/homepage-layout-motion-record.md`). One fixed, `aria-hidden` layer behind the content follows the scroll position through a CSS scroll-driven animation: nothing at the top, the full shade at the footer. In the dark theme the shade ends near the 404's black (`#0e1112`) with a darker rim; in the light theme the paper stays and only the rim deepens. It darkens the backdrop, never the text or the cards. A browser without scroll-driven animations shows the page as before. The 404, the cave-in page and the Docs do not use it.
 
 ## Grain and paper
 
@@ -128,7 +129,7 @@ Rules:
 - The mark is a miner's helmet from the one-bit icon pack (the owner confirmed it can be used) on an octagon plate, 24 by 24 pixels (`Logo.tsx`). It is drawn as four SVG paths and shown at 24 pixels, so each mark pixel is one site pixel. Beside it the name is real text in Jersey 10.
 - The plate is the theme's accent (`--logo-bg`), the outline is ink (`--logo-fg`) and the helmet is the paper colour (`--logo-fill`: `--fg` in dark mode, `#FBF3E4` in light mode).
 - On hover, with a fine pointer and no reduced-motion request, the helmet's lamp blinks once. Nothing else moves.
-- The favicon (`icon.svg`) and the Apple touch icon (`apple-icon.png`) use the miner's helmet mark. The 1200 by 630 share images (`opengraph-image.jpg`, also served as `twitter-image.jpg`) preserve main's original background, blue label, grain/grid, corner marks, rulers and depth strip. The helmet is removed from the card; the owner's silver wordmark with dirt-colored details is enlarged and centered, with Jersey 10 tagline and track names below. The depth-strip readout is softened to keep the wordmark first in the hierarchy. Keep each file under 300 KB. Source assets and the repeatable export script are in `assets/editable/logo/`; the scoped brief is `.ulpi/design/share-preview.md`.
+- The favicon (`icon.svg`) and the Apple touch icon (`apple-icon.png`) use the miner's helmet mark. The 1200 by 630 share images (`opengraph-image.jpg`, also served as `twitter-image.jpg`) preserve main's original background, blue label, grain/grid, corner marks, rulers and depth strip. The helmet is removed from the card; the owner's silver wordmark with dirt-colored details is enlarged and centered, with Jersey 10 tagline and track names below. The depth-strip readout is softened to keep the wordmark first in the hierarchy. Keep each file under 300 KB. Source assets and the repeatable export script are in `assets/editable/logo/`; the scoped brief is `.ulpi/design/brand-and-type-record.md`.
 
 ## Error pages
 
@@ -148,7 +149,7 @@ Rules:
 ## ASCII art
 
 - Decorative ASCII fields (`AsciiField`) use JetBrains Mono. Each has a faint base layer and a brighter copy that is revealed around the pointer.
-- The art floats through 36px of vertical travel. Each drawing has its own 8 to 10.7 second period per direction and a negative phase offset; initial directions are mixed so the drawings do not move in sync. Both layers move together, and the animation stops under reduced motion (brief: `.ulpi/design/ascii-float-preview.md`).
+- The art floats through 36px of vertical travel. Each drawing has its own 8 to 10.7 second period per direction and a negative phase offset; initial directions are mixed so the drawings do not move in sync. Both layers move together, and the animation stops under reduced motion (brief: `.ulpi/design/homepage-layout-motion-record.md`).
 - Fields are `aria-hidden`, do not take pointer input in sections, and are hidden on small screens.
 
 ## Motion

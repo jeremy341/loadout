@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// The currency is called Ore, with the ore gem icon (.ulpi/design/ore-currency.md). These tests guard against a
+// The currency is called Ore, with the ore gem icon (.ulpi/design/brand-and-type-record.md). These tests guard against a
 // half-finished rename: the old name must not be readable anywhere a visitor can read.
 const oldName = /\bBolts?\b/i;
 

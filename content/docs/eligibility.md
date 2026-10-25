@@ -22,12 +22,12 @@ Some rules are settled, while others still need a decision:
 
 | Topic | Decided | Still to finish |
 | --- | --- | --- |
-| Progress | Four lifetime tracks. LV.15 is about 350 hours of solid work in one track. | The XP equation, intermediate level thresholds and Research bonus. |
-| Discounts | Up to 20% from your track level, plus one 20% Requisition. Five tickets per track at levels 3/6/9/12/15; eligible prizes start at 400 Ore. | Intermediate discounts and Custom Order tiers. |
-| Building | No cap on real hours or projects. A repeat ship needs at least five new approved hours. | Account, tracking and submission integrations. |
+| Progress | Four lifetime tracks. LV.15 is about 275 hours of solid work in one track. | The XP equation, intermediate level thresholds and Research bonus. |
+| Discounts | Your track level gives a permanent discount. Four Requisitions per track, at levels 5, 8, 11 and 15, each add 10% on one eligible prize. Eligible prizes start at 400 Ore, and combined savings cap at 25%. | The maximum permanent discount, intermediate discounts and Custom Order tiers. |
+| Building | Any number of real projects. A repeat ship needs at least five new approved hours. | Account, tracking and submission integrations. |
 | Prizes | Eight examples with working Ore prices. | Final catalog, stock, delivery and tax terms. |
 | Eras | 10% extra Ore for qualifying projects. | Era Points rules, themes and targets. |
-| Launch and IRL | The online program and a three-day Ruhr event are being developed. | Acceptance, funding and dates; the event's venue and registration. |
+| Launch and IRL | The online program and a three-day event in Germany are being developed. | Acceptance, funding and dates; the event's venue and registration. |
 
 The working prices and milestones may be tuned before launch. They're useful for understanding the program, but listing an item doesn't reserve stock for you.
 

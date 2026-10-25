@@ -1,4 +1,4 @@
-// Which atlas frames make up each animation (.ulpi/design/mole.md). The mole atlas (public/loadout/mole/mole.png) holds twelve
+// Which atlas frames make up each animation (.ulpi/design/mole-record.md). The mole atlas (public/loadout/mole/mole.png) holds twelve
 // sheets of 16 frames in a row of 10 columns: A moving, B expressions, C dig and peek, D picked up, E petted, G reactions,
 // H walk and run cycles, I idle, jump, fall and landing, J a second walk (8 frames, half a sheet, not used now that he runs), K looking in 8 directions and more moods, L falling, landing, jumping for joy and being pinched, M dazed and confused after a fall and getting back up. Frame numbers
 // below are the 1-based numbers inside a sheet. The effects atlas (fx.png) holds 19 frames of 32 px in 8 columns.
@@ -81,7 +81,7 @@ export const ANIMS = {
   dazedShake: anim(run("M", 5, 6), 6),
   rubHead: anim(run("M", 7, 8), 3),
   getUp: anim([f("D", 15), ...run("M", 13, 15)], 3.3, false), // the stand-up pose first, then M13 to M15 (M16 is not used: the stomp follows at once)
-  // Frames that were drawn but unused until 2026-10-16 (see .ulpi/design/mole-behaviour.md, "Spare frames").
+  // Frames that were drawn but unused until 2026-10-16 (see .ulpi/design/mole-record.md, "Spare frames").
   turnedAway: anim([f("E", 14)], 1, false), // his back to you: sulking
   grumpy: anim([f("B", 10)], 1, false), // brows down: the end of a sulk
   furious: anim([f("B", 11)], 1, false), // gritted teeth: the third beat of mad

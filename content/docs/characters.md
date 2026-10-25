@@ -8,7 +8,7 @@ status: draft
 
 *Orry and Goose Lee are characters and workers from LOADOUT. This is how a miner who wanted a fortune ended up working with a duck who wanted an adventure.*
 
-## Orry, the Ruhr miner {#orry}
+## Orry, the Ore miner {#orry}
 
 Orry grew up poor in the Ruhrgebiet of Germany, and the other children made sure he knew it. He couldn't do much about their taunts then, but he carried the shame with him into adulthood. By the time he became a miner, he had decided that by getting rich he would put an end to being looked down upon and win the respect he deserved.
 

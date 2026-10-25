@@ -127,7 +127,7 @@ Each peer review scores the four LOADOUT dimensions from 1 to 9. The four catego
 | 5 | Meets the middle of the category's published anchors |
 | 9 | Exceptional evidence against the category |
 
-Originality, Technical Depth, Execution and Documentation are the four quality dimensions. LOADOUT follows the current Stardance median, percentile, and payout-curve approach, with its own category descriptions and Ore currency. Review operations and the Great-tier exception are in [Plan 22](22-peer-review-and-multipliers.md). Do not reintroduce the older 5× minimum, 0–20 category scores, or a claim that Signal cannot exceed 20×.
+Originality, Technical Depth, Execution and Documentation are the four quality dimensions. LOADOUT follows the current Stardance median, percentile, and payout-curve approach, with its own category descriptions and Ore currency. Review operations and the Great-tier exception are in Plan 22 (removed 25 Oct 2026). Do not reintroduce the older 5× minimum, 0–20 category scores, or a claim that Signal cannot exceed 20×.
 
 ---
 
@@ -1148,7 +1148,7 @@ No older example, fallback default or unpublished candidate silently changes the
 
 ## Working Values To Pilot-Test
 
-The following remain open: intermediate discount and XP curves, the XP quality equation, any Research XP bonus, minimum track-allocation share, cross-track markup, Usage Milestone thresholds/rewards, referral reward values, General Requisition triggers/values, Custom Order tier values, and buyer-refund terms. Limited Drops and sponsor drops/challenges remain open ideas, not approved program features. See [the calibration worksheet](proposals/economy-calibration.md) and [Plan 22](22-peer-review-and-multipliers.md). Do not treat an open item as an entitlement.
+The following remain open: intermediate discount and XP curves, the XP quality equation, any Research XP bonus, minimum track-allocation share, cross-track markup, Usage Milestone thresholds/rewards, referral reward values, General Requisition triggers/values, Custom Order tier values, and buyer-refund terms. Limited Drops and sponsor drops/challenges remain open ideas, not approved program features. See the calibration worksheet (removed; see git history) and Plan 22 (removed 25 Oct 2026). Do not treat an open item as an entitlement.
 
 ---
 

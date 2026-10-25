@@ -5,7 +5,7 @@ import { useDisplayPreferences } from "../display-preferences";
 import { useMotionPreference } from "../motion-preference";
 import { MoleEngine } from "./engine";
 
-// The homepage mole (.ulpi/design/mole.md). This only hosts the elements; engine.ts does everything else. The layer is
+// The homepage mole (.ulpi/design/mole-record.md). This only hosts the elements; engine.ts does everything else. The layer is
 // decoration: hidden from assistive technology, it lets the pointer through everywhere except on the mole itself.
 export function Mole() {
   const { paused } = useMotionPreference();

@@ -12,6 +12,12 @@ Read [the development workflow](docs/development/WORKFLOW.md) before changing th
 - For any UI change, follow [the UI skill guide](docs/development/ui-skills.md), create the required scoped design brief, and follow the [current design system](docs/design/system/design-system.md). Skill use does not authorize additional features or policy changes.
 - Keep internal plans, workflow, source audits, and private notes out of `content/docs/`; only that folder enters the public Docs renderer and search.
 
+## Kept files
+
+- `docs/keepsakes/NETICS PROMISE NEVER DELETE.png` is kept on the owner's instruction (25 Oct 2026). Never delete, move, rename, overwrite or regenerate it, and leave it out of any cleanup, `git clean`, prune, or bulk file deletion.
+- The Repository integrity job runs `.github/scripts/check-kept-files.sh` on every pull request to `development`, `testing` and `main`, and fails if the file is missing or empty. Do not weaken, skip or remove that check.
+- If a task seems to need the file removed, stop and ask the owner. Change this rule and the check together, and only with the owner's approval.
+
 ## Product and source boundaries
 
 The current app is the public homepage and program-draft Docs in `apps/landing`; it has no live participant, reviewer, economy, ordering, fulfillment, or event services. Internal age policy is 13–18, and the public Docs state 13–18. The [canonical plan index](plans/00-index.md) identifies policy owners. Preserve four quality dimensions—Originality, Technical Depth, Execution, and Documentation—and four tracks—Tools, Systems, Compute, and Hardware. Research Mode remains a modifier.

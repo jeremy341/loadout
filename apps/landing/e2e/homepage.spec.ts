@@ -847,10 +847,10 @@ test("Track XP and levels follow main: four stops, requisition markers and arrow
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const rail = page.getByRole("group", { name: "Field Requisition milestones" });
-  await expect(rail.locator(".st")).toHaveCount(3);
+  await expect(rail.locator(".st")).toHaveCount(4);
   await expect(rail.locator(".st .cn")).toHaveText(["LV.5", "LV.8", "LV.11", "LV.15"]);
   await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition"]);
-  await expect(rail.locator(".st .bd use")).toHaveCount(3);
+  await expect(rail.locator(".st .bd use")).toHaveCount(4);
   const marker = await rail.locator(".bd").first().boundingBox();
   expect([marker!.width, marker!.height]).toEqual([64, 64]);
   await expect(rail.locator(".st").first()).toHaveCSS("text-align", "center");

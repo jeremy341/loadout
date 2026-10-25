@@ -28,4 +28,4 @@
 .home .pb-photo img.pb-icon { inset: 0; width: 128px; height: 128px; margin: auto; padding: 0; image-rendering: pixelated; }
 .home:not(:has(#theme:checked)) .pb-icon { filter: hue-rotate(170deg) saturate(.95); }
 .home .pb-kind { display: flex; align-items: center; gap: 8px; }
-.home .pb-limited { padding: 1px 6px; background: var(--ac); color: var(--acf); font-family: var(--font-ui), monospace; font-size: 11px; line-height: 1.5; letter-spacing: .08em; text-transform: uppercase; }
+.home .pb-limited { padding: 1px 6px; border: 1.5px solid var(--ac); color: var(--fg); font-family: var(--font-ui), monospace; font-size: 11px; line-height: 1.5; letter-spacing: .08em; text-transform: uppercase; }

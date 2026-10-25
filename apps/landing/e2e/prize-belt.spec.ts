@@ -15,7 +15,7 @@ test("the prize belt loops one list while assistive technology reads it once", a
   await expect(page.locator(".pb-half").nth(0)).not.toHaveAttribute("aria-hidden", "true");
   await expect(page.locator(".pb-half").nth(1)).toHaveAttribute("aria-hidden", "true");
   await expect(page.getByRole("list").filter({ has: page.getByText("Developer hardware") })).toHaveCount(1);
-  await expect(page.locator(".pb-half").nth(0).locator("li")).toHaveCount(8);
+  await expect(page.locator(".pb-half").nth(0).locator("li")).toHaveCount(10);
   const loop = await page.locator(".pb-track").evaluate((track) => {
     const halves = [...track.querySelectorAll<HTMLElement>(".pb-half")];
     return { second: halves[1].offsetLeft, first: halves[0].getBoundingClientRect().width, track: track.getBoundingClientRect().width };

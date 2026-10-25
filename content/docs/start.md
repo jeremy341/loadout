@@ -22,13 +22,13 @@ You don't have to start from scratch every time. Ship a first version, learn wha
 
 ## What an hour is worth {#hours}
 
-How much would your project earn? That depends on the hours we can approve and the **Ore multiplier** it gets in review. Normal rates run from **1× to 20×**, with a target mean of **10×**. At 10×, each approved hour earns 10 Ore, so ten approved hours earn 100 Ore. A project that reaches **Great Signal** can earn up to **30× per approved hour**.
+How much would your project earn? That depends on the hours we approve. Every approved hour earns **10 Ore**, so ten approved hours earn 100 Ore. There's no multiplier at launch.
 
-For something to aim at, the working catalog lists an ESP32 starter kit at 50 Ore. That would take five approved hours at 10×, before any discount. The [prize list](/docs/prizes) has the other examples; [Ore, XP & levels](/docs/progress) explains how the rewards work.
+For something to aim at, the working catalog lists an ESP32 starter kit at 50 Ore. That would take five approved hours, before any discount. The [prize list](/docs/prizes) has the other examples; [Ore, XP & levels](/docs/progress) explains how the rewards work.
 
 ## How you join {#join}
 
-For now, you can [RSVP for launch updates](https://rsvp.soon.it/loadout). We'll still need you to register when the program opens; the RSVP is how you keep up with it in the meantime. And if you join after the first Season, your own progress will carry into the next one. You won't have to start your levels over every time.
+For now, you can [RSVP for launch updates](https://rsvp.soon.it/loadout). We'll still need you to register when the program opens; the RSVP is how you keep up with it in the meantime. And if you join after the first Era, your own progress will carry into the next one. You won't have to start your levels over every time.
 
 ## Where things stand {#status}
 

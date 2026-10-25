@@ -9,8 +9,8 @@ describe('participant documentation scope', () => {
   const pages = getDocs();
   test('all public draft topics have a unique source and ordered directory', () => {
     expect(getDocsGroups().map((group) => group.label)).toEqual([...docsGroupLabels]);
-    expect(pages).toHaveLength(25);
-    expect(new Set(pages.map((page) => page.slug)).size).toBe(25);
+    expect(pages).toHaveLength(26);
+    expect(new Set(pages.map((page) => page.slug)).size).toBe(26);
     for (const slug of ['start','projects','shipping','review','progress','prizes','eras','irl','faq']) expect(pages.some((page) => page.slug === slug)).toBe(true);
     expect(pages.every((page) => page.status === 'draft')).toBe(true);
   });
@@ -33,8 +33,8 @@ describe('participant documentation scope', () => {
   });
   test('excludes internal documents and unpublished economy calibration', () => {
     const text = pages.map((page) => page.body).join(' ');
-    // Public on purpose: the planned 10% Era Ore bonus (approved 2026-10-14, Plan 19), and the rate of 10 Ore an hour, the 20% level
-    // discount, the 20% Requisition (so up to 40% off) and the planned prices (approved by the owner 2026-10-15, Plan 21).
+    // Public on purpose: the planned 10% Era Ore bonus (approved 2026-10-14, Plan 19), and the rate of 10 Ore an hour, the level discount,
+    // the 10% Field Requisition (so up to 25% off in total) and the planned prices (approved by the owner 2026-10-15, Plan 21).
     // Other calibration stays out.
     expect(text).not.toMatch(/GitHub CLI|CodeScene|branch protection|promotion PR|bootstrap prompt|PLAN\/|\b14 days\b/);
     expect(pages.find((page) => page.slug === 'eras')?.body).toMatch(/10% extra Ore/);

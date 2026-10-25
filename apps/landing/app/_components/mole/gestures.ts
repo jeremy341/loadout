@@ -1,6 +1,6 @@
 import { TUNING } from "./tuning";
 
-// What did the person do to Orry? (.ulpi/design/mole-behaviour.md, section 2.) This file turns raw pointer positions into
+// What did the person do to Orry? (.ulpi/design/mole-record.md, section 2.) This file turns raw pointer positions into
 // gestures and knows nothing about moods or sprites. It is plain code with no DOM, so every rule is unit tested.
 //
 // One rule above all: only a real change of the pointer's position counts. If Orry runs under a pointer that is not moving,

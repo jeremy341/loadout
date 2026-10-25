@@ -1,4 +1,4 @@
-"""Opens the letter C in Pixelify Sans (see .ulpi/design/pixel-font-open-c.md).
+"""Opens the letter C in Pixelify Sans (see .ulpi/design/brand-and-type-record.md).
 
 In the stock font the capital C differs from the O only by a one-pixel notch on its right side, and in the bold
 weights that notch shrinks to a hairline, so "ROCK" reads "ROOK". This script widens the opening of C and c at both

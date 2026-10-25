@@ -111,7 +111,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home .loop { margin-top:14px;font-size:12px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase }
 .home .asd h4 { margin:2px 0 6px;font:700 22px var(--font-pixel),monospace }
 .home .sig { font-size:11px;letter-spacing:.14em;color:var(--mut);text-transform:uppercase }
-.home .l5 { grid-template-columns:repeat(5,1fr) }
+.home .l3 { grid-template-columns:repeat(3,1fr) }
 .home .era { display:flex;align-items:stretch;flex-wrap:wrap }
 .home .era>div { flex:1 1 200px;position:relative;border:1px solid var(--fg);padding:22px 26px;background:var(--bg);font:700 20px var(--font-pixel),monospace }
 .home .era>div+div { margin-left:34px }
@@ -1154,7 +1154,6 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   .home .pit > span { font-size: 20px; }
 }
 .home .we { max-width: 700px; margin: 40px auto 0; padding: 14px 18px; border-left: 3px solid var(--ac); font-size: 15px; line-height: 1.7; color: var(--fg); }
-.home .pb-price { font-size: 13px; }
 .home .hero-credit { margin: 22px 0 0; font-size: 14px; text-align: center; color: var(--mut); }
 .home .hero-credit a { color: var(--ac); text-decoration: underline; }
 .home #hack-club { padding-block: 80px; }
@@ -1177,13 +1176,13 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .we-calc { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 10px 12px; margin: 0; max-width: 860px; }
 .home .we-cap { margin: 12px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--mut); text-align: center; }
 .home .we-calc span { display: flex; flex-direction: column; gap: 4px; min-width: 112px; padding: 14px 18px; border: 1.5px solid var(--fg); background: var(--bg); text-align: center; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--mut); }
-.home .we-calc b { font-family: var(--font-pixel), monospace; font-size: 24px; letter-spacing: 0; color: var(--fg); font-weight: 700; }
+.home .we-calc b { font-family: var(--font-display), monospace; font-size: 34px; line-height: 1; letter-spacing: 0; color: var(--fg); font-weight: 400; }
 .home .we-calc span:last-child { border-color: var(--ac); }
-.home .we-calc span:last-child b { color: var(--ac); font-size: 20px; }
+.home .we-calc span:last-child b { color: var(--ac); font-size: 30px; }
 .home .we-calc i { align-self: center; font-style: normal; font-family: var(--font-pixel), monospace; font-size: 22px; color: var(--ac); }
 @media (max-width: 700px) {
   .home .we-calc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .home .we-calc b { font-size: 18px; }
+  .home .we-calc b { font-size: 26px; }
   .home .we-calc i { display: none; }
   .home .we-calc span { min-width: 0; padding: 12px 10px; }
   .home .we-calc span:last-child { grid-column: 1 / -1; }
@@ -1279,6 +1278,6 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   .home .pit:not(.rb-rock) :is(b, span) { color: CanvasText; background: Canvas; }
 }
 @media (min-width: 701px) {
-  .home .lad.l5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .home .lad.l4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .home .st, .home .st .cn, .home .st .dsc { min-width: 0; overflow-wrap: anywhere; }

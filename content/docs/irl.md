@@ -1,12 +1,12 @@
 ---
 title: "LOADOUT IRL"
-description: "A three-day hackathon we're planning in Germany's Ruhr area."
+description: "A three-day hackathon we're planning in Germany."
 group: "COMMUNITY"
 order: 160
 status: draft
 ---
 
-We're planning **three days in Germany's Ruhr area** where you can meet the people you've been sharing projects with online. You'd spend the weekend building alongside other LOADOUT builders, getting help and trying each other's work, then show what you managed to make by Sunday.
+We're planning **three days in Germany** where you can meet the people you've been sharing projects with online. You'd spend the weekend building alongside other LOADOUT builders, getting help and trying each other's work, then show what you managed to make by Sunday.
 
 > **Event status:** The weekend is a future concept. Dates, venue, funding and registration aren't confirmed. A program RSVP doesn't reserve an event place.
 

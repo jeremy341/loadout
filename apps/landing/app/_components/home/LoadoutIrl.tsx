@@ -22,10 +22,10 @@ export function LoadoutIrl() {
       <div className="sect" id="loadout-irl">
         <h2 className="h2">
           Loadout IRL
-          {" // Ruhr"}
+          {" // Düsseldorf"}
         </h2>
         <p className="lead">
-          A proposed three-day build weekend in Germany’s Ruhr area, Friday to Sunday.
+          A proposed three-day build weekend in Düsseldorf, Germany, Friday to Sunday.
         </p>
         <ol className="days">
           {DAYS.map((day) => (

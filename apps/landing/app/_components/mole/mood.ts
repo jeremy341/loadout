@@ -1,6 +1,6 @@
 import { TUNING } from "./tuning";
 
-// How Orry feels (.ulpi/design/mole-behaviour.md, section 3): two meters, a short memory of being fed up, and stages that
+// How Orry feels (.ulpi/design/mole-record.md, section 3): two meters, a short memory of being fed up, and stages that
 // cannot change faster than a minimum time, so he never goes from happy to stomping in a moment. Plain code on its own clock
 // (the engine calls update with the seconds that passed), so the pacing is unit tested without a browser.
 export type AffectionStage = "none" | "happy" | "bliss" | "overjoyed";

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// The homepage uses a pixel arrow and pointing hand (.ulpi/design/custom-cursor.md): blue in dark and yellow in light by
+// The homepage uses a pixel arrow and pointing hand (.ulpi/design/brand-and-type-record.md): blue in dark and yellow in light by
 // default, with the same pixel cursors recoloured for each colour-vision mode, and the system cursor for the Docs, 404 page, and touch screens.
 const cursorOf = (page: import("@playwright/test").Page, selector: string) =>
   page.locator(selector).first().evaluate((element) => getComputedStyle(element).cursor);

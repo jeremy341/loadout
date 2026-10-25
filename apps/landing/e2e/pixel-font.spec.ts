@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-// The pixel face's C must not read as an O (.ulpi/design/pixel-font-open-c.md). The page draws each letter in the
+// The pixel face's C must not read as an O (.ulpi/design/brand-and-type-record.md). The page draws each letter in the
 // font the browser actually loads, then measures how much of the letter's right edge is open: the longest vertical run
 // of rows with no ink in the right fifth of the letter, as a share of the letter's height.
 async function openness(page: import("@playwright/test").Page, weight: number) {

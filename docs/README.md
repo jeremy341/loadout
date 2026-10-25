@@ -18,7 +18,7 @@ This repository has separate public, contributor, and planning material. Use the
 | [`source-audit/`](source-audit/) | Engineers and reviewers | Reference pins, licenses, attribution, and comparative audits | Preserve source boundaries; upstream repos stay pinned |
 | [`../plans/00-index.md`](../plans/00-index.md) | Organizers and maintainers | Product decisions, proposals, and plan status | Product rules are not automatically public copy |
 | [`.ulpi/design/DESIGN.md`](../.ulpi/design/DESIGN.md), [briefs index](../.ulpi/design/README.md), [`design/references/README.md`](design/references/README.md) | UI contributors | Tool entrypoint, brief status, and visual references | Design references are not product facts |
-| [`archive/`](archive/README.md) | Maintainers | Completed records and one-time audits, with their current owners | Read-only by convention; not current policy |
+| `archive/` (removed; see git history) | Maintainers | Completed records and one-time audits, with their current owners | Read-only by convention; not current policy |
 
 ## Publication boundary
 

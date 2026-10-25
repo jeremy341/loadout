@@ -4,12 +4,12 @@ import { AsciiField } from "./AsciiField";
 
 // Levels and rewards in one section: the level rail (one marker per Field Requisition milestone), then the savings rules as plain
 // rows. Ore and Track XP are taught once, in How it works, so this section only holds the numbers.
-const MILESTONES = ["LV.3", "LV.6", "LV.9", "LV.12", "LV.15"] as const;
+const MILESTONES = ["LV.5", "LV.8", "LV.11", "LV.15"] as const;
 
 const SAVINGS = [
-  { term: "Level discount", text: "Grows with your track level, up to 20% at LV.15, on prizes in that track." },
-  { term: "Field Requisition", text: "One use: 20% off the base price of a matching prize worth at least 400 Ore.", id: "requisitions" },
-  { term: "Together", text: "Up to 40% off, with your level discount." },
+  { term: "Level discount", text: "Grows with your track level, up to 15% at LV.15, on prizes in that track." },
+  { term: "Field Requisition", text: "One use: 10% off the base price of a matching prize worth at least 400 Ore.", id: "requisitions" },
+  { term: "Together", text: "Up to 25% off in total, including your level discount." },
   { term: "Price", text: "You see the final price before you order." },
 ] as const;
 
@@ -33,9 +33,9 @@ export function LevelsAndRewards() {
           and rewards
         </h2>
         <p className="lead">
-          Your levels never reset. Reaching LV.15 takes about 350 approved hours of solid work in one track, and levels 3, 6, 9, 12 and 15 each give you one Field Requisition.
+          Your levels never reset. Reaching LV.15 takes about 275 approved hours of solid work in one track, and levels 5, 8, 11 and 15 each give you one Field Requisition.
         </p>
-        <div className="lad l5" role="group" aria-label="Field Requisition milestones">
+        <div className="lad l4" role="group" aria-label="Field Requisition milestones">
           {MILESTONES.map((level) => (
             <div className="st" key={level}>
               <span className="bd" aria-hidden="true">

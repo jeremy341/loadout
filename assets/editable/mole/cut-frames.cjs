@@ -2,7 +2,7 @@
 // in place, so every frame number in app/_components/mole/frames.ts is unchanged; they are just transparent now. The drawings
 // remain in the sliced sheets (see build-atlas.cjs), so nothing is lost at the source.
 //   node assets/editable/mole/cut-frames.cjs [atlas.png]
-// The list is the audit of 2026-10-16 (.ulpi/design/mole-behaviour.md, "Frame reconciliation").
+// The list is the audit of 2026-10-16 (.ulpi/design/mole-record.md, "Frame reconciliation").
 const fs = require("fs");
 const path = require("path");
 const K = require("./png.cjs");

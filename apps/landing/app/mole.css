@@ -1,4 +1,4 @@
-/* The homepage mole (.ulpi/design/mole.md): a fixed layer over the page that lets the pointer through everywhere except on the
+/* The homepage mole (.ulpi/design/mole-record.md): a fixed layer over the page that lets the pointer through everywhere except on the
    mole itself. The mole is a 64 px frame of an atlas shown at 2x (1x on a phone); engine.ts moves it and picks its frame. */
 .mole-layer { --s: 2; position: fixed; inset: 0; z-index: 25; overflow: hidden; pointer-events: none; }
 .mole {

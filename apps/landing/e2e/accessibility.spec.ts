@@ -5,7 +5,7 @@ import { resolve } from "node:path";
 
 // The standard: WCAG 2.2 level AA, the bar GOV.UK Design System works to. Checked automatically here on every page of the
 // homepage and the Docs, at phone and desktop width, in light and dark. Automated checks catch only part of WCAG, so the
-// manual checks (screen reader, keyboard, zoom) are listed in .ulpi/design/accessibility.md.
+// manual checks (screen reader, keyboard, zoom) are listed in .ulpi/design/accessibility-record.md.
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const PUBLIC_GUIDES = readdirSync(resolve(__dirname, "../../../content/docs"))
   .filter((name) => name.endsWith(".md"))

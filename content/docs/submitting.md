@@ -1,5 +1,5 @@
 ---
-title: "Submitting and reviewers"
+title: "Submitting your ship"
 description: "What to send with a ship, and what we'll check when we open it."
 group: "BUILD & REVIEW"
 order: 65
@@ -28,11 +28,11 @@ Not sure how to put the description together? These headings give you somewhere 
 
 For the [sensor board](/docs/shipping#example), “evidence” means more than a photo. It includes the board files and firmware, a working demonstration and measurements that support the claimed behavior. The journal then explains the decisions that connect those files to the finished version.
 
-## What reviewers check first {#reviewers}
+## What we check first {#reviewers}
 
 We open the files and demo, check that the project fits LOADOUT, and look for evidence that the claimed work and hours are yours. If something is missing, the feedback should tell you what to fix or provide.
 
-Once those checks pass, other builders assess Originality, Technical Depth, Execution and Documentation. Their ratings set the Ore multiplier. [Project review](/docs/review) explains the difference between getting a ship accepted and determining its payout.
+Once those checks pass, the team looks at Originality, Technical Depth, Execution and Documentation when it accepts or sends back the ship. Accepted ships earn 10 Ore per approved hour. [Project review](/docs/review) explains the decision.
 
 ## Credit and AI disclosure {#disclosure}
 

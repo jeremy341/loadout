@@ -616,8 +616,8 @@ test("each track shows one example and a tag, and How it works shows one worked 
   await expect(cards.nth(3)).toContainText("robot");
   const process = page.locator("#process");
   await expect(process.locator(".we-calc")).toHaveCount(1);
-  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /20 approved hours at a multiplier of ten earn 200 Ore/);
-  await expect(process).toContainText("At 15×, the same 20 approved hours pay 300 Ore.");
+  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /50 approved hours at 10 Ore per hour earn 500 Ore/);
+  await expect(process).toContainText("Every approved hour earns the same 10 Ore.");
   // the example sits between the review outcomes and the spend step
   const order = await process.locator(".fl > *").evaluateAll((nodes) => nodes.map((n) => n.className + "|" + (n.textContent ?? "").slice(0, 24)));
   const calc = order.findIndex((entry) => entry.startsWith("we-calc"));
@@ -723,7 +723,7 @@ test("Community Eras keeps its main wording and has no leaked Era rules elsewher
   await page.goto("/");
   const eras = page.locator("#eras");
   await expect(eras.getByRole("heading", { name: "Build the next Era together." })).toBeVisible();
-  await expect(eras).toContainText("+10% PLANNED");
+  await expect(eras).toContainText("AT LAUNCH");
   await expect(eras).toContainText("Ore bonus");
   await expect(eras).toContainText("Era Points are separate from Ore and Track XP.");
   await expect(eras).not.toContainText(/Steam|Electrification|Computing|Networks|Acceleration|14 days|weekly reset|target|Season/i);
@@ -823,18 +823,17 @@ test("the process chart has three outcomes of review and the Physical Loadout co
   await expect(upgrade).toContainText("Physical Loadout");
 });
 
-test("homepage review copy matches the peer-scored payout curve", async ({ page }) => {
+test("homepage review copy matches the team acceptance rule", async ({ page }) => {
   await page.goto("/");
-  const reviewStep = page.locator("#process .fn").filter({ hasText: "Other builders review it" });
-  await expect(reviewStep).toContainText("12 peer reviews score four areas");
-  await expect(reviewStep).toContainText("Normal rates run from 1× to 20×, with a target mean of 10×");
-  await expect(reviewStep).toContainText("Great Signal can raise the hourly ceiling to 30×");
-  await expect(reviewStep).not.toContainText("5× for rough work");
+  const reviewStep = page.locator("#process .fn").filter({ hasText: "The team accepts it" });
+  await expect(reviewStep).toContainText("sends it back with a short written reason");
+  await expect(reviewStep).not.toContainText("peer");
+  await expect(reviewStep).not.toContainText("×");
 
   const earnOre = page.locator("#faq details", { hasText: "How do I earn Ore?" });
   await earnOre.locator("summary").click();
-  await expect(earnOre).toContainText("Normal rates run from 1× to 20×");
-  await expect(earnOre).toContainText("Great Signal can raise the hourly ceiling to 30×");
+  await expect(earnOre).toContainText("Each approved hour earns 10 Ore");
+  await expect(earnOre).not.toContainText("×");
 });
 
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
@@ -843,15 +842,15 @@ test("caveats stay next to the claims they qualify after the copy cuts", async (
   await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 
-test("Track XP and levels follow main: five stops, requisition markers and arrows between them", async ({ page }) => {
+test("Track XP and levels follow main: four stops, requisition markers and arrows between them", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const rail = page.getByRole("group", { name: "Field Requisition milestones" });
-  await expect(rail.locator(".st")).toHaveCount(5);
-  await expect(rail.locator(".st .cn")).toHaveText(["LV.3", "LV.6", "LV.9", "LV.12", "LV.15"]);
-  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition", "Requisition"]);
-  await expect(rail.locator(".st .bd use")).toHaveCount(5);
+  await expect(rail.locator(".st")).toHaveCount(3);
+  await expect(rail.locator(".st .cn")).toHaveText(["LV.5", "LV.8", "LV.11", "LV.15"]);
+  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition"]);
+  await expect(rail.locator(".st .bd use")).toHaveCount(3);
   const marker = await rail.locator(".bd").first().boundingBox();
   expect([marker!.width, marker!.height]).toEqual([64, 64]);
   await expect(rail.locator(".st").first()).toHaveCSS("text-align", "center");

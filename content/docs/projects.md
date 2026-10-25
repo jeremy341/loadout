@@ -39,7 +39,7 @@ These comparisons show what to explain when an idea is borderline:
 | A screen around an AI API. | Any original runtime, evaluation, data-processing or other engineering you added and checked. |
 | An ordinary app interface. | The technical work behind it, such as your own sync or rendering engine. |
 
-Once the work fits LOADOUT, review considers **Originality, Technical Depth, Execution and Documentation**. A difficult implementation still needs evidence, and a polished demo still needs a contribution you can explain.
+Once the work fits LOADOUT, the team considers **Originality, Technical Depth, Execution and Documentation**. A difficult implementation still needs evidence, and a polished demo still needs a contribution you can explain.
 
 ## Research Mode {#research}
 

@@ -61,7 +61,7 @@ export function Eras() {
           <div className="card sm">
             <div className="ct">
               <span>
-                +10% PLANNED
+                AT LAUNCH
               </span>
             </div>
             <div className="cn">

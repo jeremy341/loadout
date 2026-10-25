@@ -28,7 +28,7 @@ As many as you like. You can also [ship an updated version](/docs/shipping#versi
 
 ### How do I earn Ore?
 
-Multiply your approved hours by the **Ore multiplier** from review. Normal rates run from **1× to 20×**, with a target mean of **10×**. At 10×, each approved hour earns 10 Ore, so ten hours earn 100 base Ore. A project that reaches **Great Signal** can earn up to 30× per approved hour. [Ore, XP & levels](/docs/progress#work) shows the scale and the separate Era bonus.
+Multiply your approved hours by **10 Ore**. The rate is fixed, so ten approved hours earn 100 Ore. There's no multiplier at launch. [Ore, XP & levels](/docs/progress#work) explains the rate and how Track XP works.
 
 ### Is Ore the same as XP?
 
@@ -40,7 +40,7 @@ The [working prize list](/docs/prizes) includes boards, tools, storage, printers
 
 ### What does a Requisition do?
 
-It saves another **20% of the base price** on one matching prize worth at least **400 Ore**. You earn five tickets per track at levels 3/6/9/12/15 and can use one per order. [Field Requisitions](/docs/requisitions) shows how that combines with your level discount.
+It saves another **10% of the base price** on one matching prize worth at least **400 Ore**. You earn four tickets per track at levels 5, 8, 11 and 15 and can use one per order. [Field Requisitions](/docs/requisitions) shows how that combines with your level discount.
 
 ### Do I need a team?
 
@@ -48,11 +48,11 @@ No. Build solo or with friends. If you work together, each person records and ge
 
 ### Can I use AI?
 
-Yes. Explain where it helped, what you changed and what you checked yourself. Reviewers still need to see your contribution and understanding. [AI & team contributions](/docs/ai-teams) gives an example disclosure.
+Yes. Explain where it helped, what you changed and what you checked yourself. We still need to see your contribution and understanding. [AI & team contributions](/docs/ai-teams) gives an example disclosure.
 
 ### What happens to someone who cheats?
 
-Fraud means a permanent ban from this event, with everything earned or bought taken back. [Project review](/docs/review#fraud) describes fake hours, copied work, invented evidence and traded ratings.
+Fraud means a permanent ban from this event, with everything earned or bought taken back. [Project review](/docs/review#fraud) describes fake hours, copied work and invented evidence.
 
 ### Is Research Mode a fifth track?
 
@@ -64,7 +64,7 @@ Yes, you can. Use a [Custom Order](/docs/custom-orders) to explain what you want
 
 ### Does an Era reset my levels?
 
-No. You keep your Ore, Track XP, levels and accepted work when a theme changes. [Eras](/docs/eras) are shared themes; Seasons define periods for competitive rankings.
+No. You keep your Ore, Track XP, levels and accepted work when a theme changes. [Eras](/docs/eras) are shared themes that each run for two weeks.
 
 ### Is this a real Hack Club program?
 
@@ -72,7 +72,7 @@ LOADOUT is a proposal for a Hack Club program. Acceptance hasn't been confirmed.
 
 ### Can I sign up for LOADOUT IRL?
 
-Event registration isn't open. The [IRL page](/docs/irl#status) will have confirmed details for the three-day Ruhr-area hackathon when dates, venue and funding are ready.
+Event registration isn't open. The [IRL page](/docs/irl#status) will have confirmed details for the three-day hackathon in Germany when dates, venue and funding are ready.
 
 ### Where do I ask something else?
 

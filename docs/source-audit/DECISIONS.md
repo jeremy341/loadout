@@ -2,7 +2,7 @@
 
 Paths in source rows are relative to their upstream repository root; local roots are `references/pixl/`, `references/ysws-template/`, and `references/stardance/`.
 
-Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in [source-bases.md](source-bases.md). Current LOADOUT decisions are owned by Plans 01, 02, 11, 15, and 22; later owner decisions supersede earlier “not adopted” or “not decided” rows. The four repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template, Stardance, and Stasis code/media remain reference-only in the rows below, and no source code from them is copied yet. Update 2026-10-20: the owner states reuse of all four references is permitted (evidence pending); see "Owner decisions — 2026-10-20" below. [`landing-port-and-assets.md`](landing-port-and-assets.md) records final landing source/target paths.
+Each row records a source-derived idea considered for LOADOUT. Exact commit/license bases are in the source bases section of [reference-audits.md](reference-audits.md). Current LOADOUT decisions are owned by Plans 01, 02, 11 and 15 (Plan 22 removed 25 Oct 2026); later owner decisions supersede earlier “not adopted” or “not decided” rows. The four repositories remain pinned submodules. A temporary Pixl subset was verified in Stage A and replaced in Stage B; the final landing adapts only its composition and scrolling/navigation/motion patterns. YSWS Template, Stardance, and Stasis code/media remain reference-only in the rows below, and no source code from them is copied yet. Update 2026-10-20: the owner states reuse of all four references is permitted (evidence pending); see "Owner decisions — 2026-10-20" below. [`landing-port-and-assets.md`](landing-port-and-assets.md) records final landing source/target paths.
 
 The source name in each row maps to these exact versions and permission bases:
 
@@ -13,7 +13,7 @@ The source name in each row maps to these exact versions and permission bases:
 
 ## Owner decisions — 2026-10-20
 
-Recorded for the first participant-platform shell port. The owner stated these decisions on 2026-10-20. The preview was removed from the repository on 2026-10-20; this section and its links are archived records. Implementation detail is in [`pixl-platform-port-map.md`](../archive/platform-preview-20261020/pixl-platform-port-map.md) and [`participant-platform-shell.md`](../archive/platform-preview-20261020/participant-platform-shell.md).
+Recorded for the first participant-platform shell port. The owner stated these decisions on 2026-10-20. The preview was removed from the repository on 2026-10-20; this section and its links are archived records. Implementation detail is in `pixl-platform-port-map.md` (removed; see git history) and `participant-platform-shell.md` (removed; see git history).
 
 ### 1. Reuse permission for all four references (owner statement, evidence pending)
 
@@ -35,9 +35,9 @@ Recorded for the first participant-platform shell port. The owner stated these d
 
 ### 3. Resolution: Pixl server rows read differently in two documents
 
-This file marks `apps/server/src/routes/auth.ts` and `auth/session.ts`, `routes/hackatime.ts` and `hackatime/api.ts`, `routes/projects.ts` and `routes/collaborators.ts` as REFERENCE ONLY, and `routes/shop.ts` as IGNORE. [`reference-comparison.md`](reference-comparison.md) marks the same files ADAPT. Resolution, dated 2026-10-20:
+This file marks `apps/server/src/routes/auth.ts` and `auth/session.ts`, `routes/hackatime.ts` and `hackatime/api.ts`, `routes/projects.ts` and `routes/collaborators.ts` as REFERENCE ONLY, and `routes/shop.ts` as IGNORE. `reference-comparison.md` (removed; see git history) marks the same files ADAPT. Resolution, dated 2026-10-20:
 
-| Pixl file | Before here | In reference-comparison.md | Resolved |
+| Pixl file | Before here | In reference-audits.md (comparison section) | Resolved |
 |---|---|---|---|
 | `routes/auth.ts`, `auth/session.ts` | REFERENCE ONLY | ADAPT after security review | ADAPT allowed after security review. Not copyable verbatim: Pixl OAuth callbacks, its JWT/token contract and token-in-URL handoff |
 | `routes/hackatime.ts`, `hackatime/api.ts` | REFERENCE ONLY | ADAPT | ADAPT allowed, as a narrow integration once scope, consent and eligible-time rules are approved (Plan 01). Not verbatim: Pixl OAuth app configuration and cutoff dates |
@@ -48,16 +48,16 @@ None of these files is copied in the first platform change; it has no server. Wh
 
 ### 4. Correction: `apps/dashboard` is a staff tool
 
-Pixl's `apps/dashboard` is the internal moderation and operations dashboard (its README says so). The participant UI is `apps/web-shell` (`app/(shell)/`) and the static pages under `apps/game/web/`. The "Participant dashboard" and "Account/settings" rows of [`reference-comparison.md`](reference-comparison.md) cite `apps/dashboard`; read them as the web-shell sources in the port map. The rows in this file that cite `apps/dashboard/app/review/**` and `lib/operationsReview.ts` are correct as staff references.
+Pixl's `apps/dashboard` is the internal moderation and operations dashboard (its README says so). The participant UI is `apps/web-shell` (`app/(shell)/`) and the static pages under `apps/game/web/`. The "Participant dashboard" and "Account/settings" rows of `reference-comparison.md` (removed; see git history) cite `apps/dashboard`; read them as the web-shell sources in the port map. The rows in this file that cite `apps/dashboard/app/review/**` and `lib/operationsReview.ts` are correct as staff references.
 
 ### 5. Stale statement in a canonical plan (not edited here)
 
-`plans/17-homepage-visual-clarity.md` says the YSWS Template and Stardance "have no identified reuse license in this checkout; do not copy their code or media". The plan's owner should add a pointer to item 1 above. This change does not edit canonical plans.
+The retired plan 17 (removed 25 Oct 2026) said the YSWS Template and Stardance "have no identified reuse license in this checkout; do not copy their code or media". The plan's owner should add a pointer to item 1 above. This change does not edit canonical plans.
 
 ### 6. Preview milestone ships working features on sample data (2026-10-20)
 
 - **Instruction.** The owner said on 2026-10-20: "remove all the not available yet and add real functions and placeholders so add all real functionality". The first commit (`8a3bb44`) had routed every tab to a "not available yet" page. Every one of the 22 internal tabs (Docs links out to the landing site) was a fully working feature that ran in the browser on clearly labelled sample data ("placeholders"). State was saved in `localStorage` (`apps/platform/lib/preview-store.ts`). There is no backend, no sign-in and no network call to LOADOUT.
-- **What this overrides, for the preview milestone only.** The draft plan's rules "show only real records", "no fake balances", "no seeded sample data outside tests" and "do not ship placeholder pages", in [`docs/superpowers/plans/2026-10-19-pixl-shell-platform.md`](../archive/platform-preview-20261020/2026-10-19-pixl-shell-platform.md) (Global constraints), the matching rule in the [design spec](../archive/platform-preview-20261020/2026-10-19-pixl-shell-platform-design.md) (section 6 and the non-goal on fake balances), and the "unimplemented modules" rule in [`plans/proposals/future-platform-ui.md`](../../plans/proposals/future-platform-ui.md). Canonical plans 01, 02, 11, 15 and 22 are not changed and are not overridden. Where they settle a rule, the preview implements it as written. Where they leave a rule open, the preview uses a value labelled "Draft preview rule" and the value is listed in [`platform-preview-open-questions.md`](../archive/platform-preview-20261020/platform-preview-open-questions.md).
+- **What this overrides, for the preview milestone only.** The draft plan's rules "show only real records", "no fake balances", "no seeded sample data outside tests" and "do not ship placeholder pages", in `docs/superpowers/plans/2026-10-19-pixl-shell-platform.md` (removed; see git history) (Global constraints), the matching rule in the design spec (removed; see git history) (section 6 and the non-goal on fake balances), and the "unimplemented modules" rule in [`plans/proposals/future-platform-ui.md`](../../plans/proposals/future-platform-ui.md). Canonical plans 01, 02, 11, 15 and 22 are not changed and are not overridden. Where they settle a rule, the preview implements it as written. Where they leave a rule open, the preview uses a value labelled "Draft preview rule" and the value is listed in `platform-preview-open-questions.md` (removed; see git history).
 - **Safeguards that stay in force.**
   - A `PreviewNote` on every page says what is sample and that changes are saved only in this browser.
   - A "Preview: sample data" chip is in the top rail, and the Ore chip shows a sample balance.
@@ -66,7 +66,7 @@ Pixl's `apps/dashboard` is the internal moderation and operations dashboard (its
   - `NavStatus` in `apps/platform/components/shell/nav-data.ts` was `"preview" | "live"`. Only Docs is `live`.
   - The shared Ore ledger (`lib/ore-ledger.ts`) and notification inbox (`lib/notifications.ts`) are append-only or shared, and account data can be exported or reset (Account > Data).
 - **Not changed.** No eligibility, scoring, multiplier, Signal, Ore, shop, referral, privacy, event or fulfilment policy changes. Preview values are placeholders, not proposals.
-- **Retire the override** per module, when its sample data and `localStorage` store are replaced by a real service passing the matching phase gate of the [implementation plan](../archive/platform-preview-20261020/2026-10-19-pixl-shell-platform.md): identity and the database (Phases 0 and 2: Overview, Profile, Account, Notifications), projects and evidence (Phase 3), team review and award ledger (Phase 4: Reviews, the ship and Ore award steps), shop, wishlist and orders (Phase 5), and community, missions and progression (Phase 6, with Events in Phase 7). When a module is retired its seed data and preview tools are deleted, and the tab either reads real records or leaves the navigation. The checklist is in [`docs/development/platform-preview.md`](../archive/platform-preview-20261020/platform-preview.md).
+- **Retire the override** per module, when its sample data and `localStorage` store are replaced by a real service passing the matching phase gate of the implementation plan (removed; see git history): identity and the database (Phases 0 and 2: Overview, Profile, Account, Notifications), projects and evidence (Phase 3), team review and award ledger (Phase 4: Reviews, the ship and Ore award steps), shop, wishlist and orders (Phase 5), and community, missions and progression (Phase 6, with Events in Phase 7). When a module is retired its seed data and preview tools are deleted, and the tab either reads real records or leaves the navigation. The checklist is in `docs/development/platform-preview.md` (removed; see git history).
 - **Status.** Owner decision, recorded as stated. The scope post to `#loadout-development` has still not been sent. A maintainer must post it ([WORKFLOW.md](../development/WORKFLOW.md)).
 
 | Source | Exact source path(s) | Decision | LOADOUT treatment |

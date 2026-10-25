@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 // The homepage gets darker the deeper you scroll, down to the near black of the 404 page
-// (.ulpi/design/depth-darkness.md). The darkness is one fixed layer behind the content whose opacity follows the
+// (.ulpi/design/homepage-layout-motion-record.md). The darkness is one fixed layer behind the content whose opacity follows the
 // scroll position through a CSS scroll-driven animation. Chromium supports it, so the tests read the animated value.
 const darkness = (page: import("@playwright/test").Page) =>
   page.locator(".depth-dark").evaluate((layer) => Number(getComputedStyle(layer).opacity));

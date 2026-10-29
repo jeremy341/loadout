@@ -156,10 +156,10 @@ does this actually belong in the program?
 VALIDITY REVIEW
 hours + journals + AI + project validity
         ↓
-QUALITY RATING
-originality + technical depth + execution + documentation
+TEAM ACCEPTANCE
+fit + validity + evidence + short reason
         ↓
-APPROVED HOURS × QUALITY
+APPROVED HOURS × 10 ORE
         ↓
 EARN ORE + TRACK XP
         ↓
@@ -855,9 +855,9 @@ Possible results:
 - Partially approved hours
 - Rejected
 
-## Stage 2 — Quality Rating
+## Stage 2 — Team Acceptance
 
-Once valid, the approved technical scope receives 12 countable anonymous peer reviews, including Hardware ships. Reviewers score the four LOADOUT categories from 1–9 and give a written reason of at least ten words. Plan 22 owns assignment, aggregation, payout timing, flags, and the multiplier. Hardware has no separate flat-rate path.
+Once valid, the team accepts or rejects the ship and writes a short reason. Originality, Technical Depth, Execution and Documentation guide that reason; they do not produce a score or a multiplier. Hardware uses the same team decision. Peer review was removed on 22 Oct 2026.
 
 ---
 
@@ -995,15 +995,15 @@ Maya
 21h
 ```
 
-The ship multiplier applies to each member’s approved hours.
+Each member’s approved hours earn the flat 10 Ore rate.
 
 ---
 
-# 35. Reviewer System
+# 35. Team Review
 
-The reviewer interface separates the team fit/validity gate from anonymous peer scoring. A future review-quality panel lets moderators inspect individual scores, written reasons, and assignment activity. Builders can see every review on their ship and its reason, but not the reviewer's identity.
+The team checks LOADOUT fit, validity and evidence, then accepts or rejects each ship with a short written reason. Builders see that decision and its reason. Peer review was removed on 22 Oct 2026.
 
-Reviewer screen:
+Team screen:
 
 ```text
 PROJECT
@@ -1036,10 +1036,9 @@ Technical Depth   9.0
 Execution         8.0
 Documentation     7.5
 
-PEER REVIEWS
-12 countable reviews locked
-Reviewer names hidden from builder
-Reasons visible to builder
+TEAM DECISION
+Accepted with reason
+Reason visible to builder
 
 TRACK XP ALLOCATION
 Compute           70%
@@ -1057,14 +1056,12 @@ TRACK XP
 → +246 Systems
 ```
 
-Reviewer actions:
+Team actions:
 - approve / reject LOADOUT fit;
 - narrow eligible scope;
 - approve all/partial time;
 - adjust final track allocation;
-- inspect assigned peer reviews and score the four quality dimensions from 1–9;
-- leave a written reason of at least ten words;
-- view and moderate review scores and reasons without exposing reviewer identities to builders;
+- check the ship against the four quality dimensions and leave a short written reason;
 - request changes;
 - reject;
 - flag AI;
@@ -1073,44 +1070,13 @@ Reviewer actions:
 
 Track allocation rules:
 - builder proposal is visible but not binding;
-- reviewer percentages total 100%;
+- team percentages total 100%;
 - normal UI uses 5% steps;
 - usually allocate to no more than three fields;
 - only approved technical contribution counts;
 - do not award token XP to unrelated fields merely because a technology appears in the stack.
 
-For team projects, reviewers may set per-member allocation when contributions differ.
-
-Each builder must complete eight valid reviews of other ships before their own ship is paid.
-
-Reviewer quality metrics:
-- reviews completed;
-- useful feedback;
-- average review time;
-- repeated rejected flags;
-- reviewer/moderator agreement;
-- queue age;
-- moderation flags.
-
-If reviewer activity earns General Requisitions, use a **quality-weighted reviewer score**, not raw review count.
-
----
-
-# 36. Reviewer Compensation
-
-Possible models:
-- per valid completed review
-- small reviewer stipend
-- sponsor-supported
-- volunteer during early beta
-
-Quality matters more than raw throughput.
-
----
-
-# 37. Review Flags; No Appeals
-
-Builders can flag a counted review during the 24-hour post-lock review window. A pending flag pauses payout while a moderator checks the review. This flag window is the only challenge path; there is no separate appeal process. Three rejected flags by one builder within ten hours deduct 5% from that builder's next final Ore payout; see Plan 22.
+For team projects, the team may set per-member allocation when contributions differ.
 
 ---
 
@@ -1122,7 +1088,6 @@ Useful:
 - project discovery
 - journals
 - comments
-- peer ratings
 - track feeds
 - season feed
 - friends and follows
@@ -1203,7 +1168,7 @@ TECHNICAL CAPABILITY GAP
 → BUILD A TOOL / SYSTEM / COMPUTE / HARDWARE ARTIFACT
 → PROVE THE WORK
 → SHIP
-→ REVIEWER ALLOCATES TRACK XP
+→ TEAM ALLOCATES TRACK XP
 → ADD IT TO YOUR DIGITAL LOADOUT
 → LEVEL THE RELEVANT TRACKS
 → EARN GLOBAL ORE
@@ -1277,7 +1242,7 @@ Main catchphrase:
 
 # 71. Final One-Paragraph Pitch
 
-> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 15% permanent discount at LV.15, and four Field Requisitions per track, at LV.5, LV.8, LV.11 and LV.15, each add 10% off one eligible purchase. Combined savings are capped at 25% of the base price. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
+> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, the team allocates its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 15% permanent discount at LV.15, and four Field Requisitions per track, at LV.5, LV.8, LV.11 and LV.15, each add 10% off one eligible purchase. Combined savings are capped at 25% of the base price. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
 
 ---
 

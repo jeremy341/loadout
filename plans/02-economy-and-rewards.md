@@ -10,17 +10,17 @@ This document owns all rules that affect XP, Ore, reward pricing, specialization
 
 ## Decisions recorded through 2026-10-19
 
-This table is the current decision summary and supersedes conflicting legacy prose below. Plan 22 owns the peer-review process; this plan owns rates, Ore, prizes, and economic limits. The future platform and review service are not implemented. The calibration worksheet contains candidate calculations but does not override this plan.
+This table is the current decision summary and supersedes conflicting legacy prose below. This plan owns rates, Ore, prizes, and economic limits. Peer review was removed on 22 Oct 2026. The future platform and review service are not implemented. The calibration worksheet contains candidate calculations but does not override this plan.
 
 | Topic | Agreed direction |
 |---|---|
 | Who it is for | High-school students aged 13–18. Use Hack Club teen verification; integration and operating details remain to be confirmed. |
 | Open source | Every accepted project must be open source. |
-| Tracking and journals | Hackatime is required for software; Lapse is required for Hardware. Every builder must write a project journal entry for each eight hours of development. Hardware ships require a bill of materials. Lapse recordings are reviewer-only; project pages and journals are public by default. |
-| Review input | Peer reviewers score Originality, Technical Depth, Execution, and Documentation from 1–9, with a written reason of at least ten words for each review. All projects, including Hardware, use peer review. |
-| Review gate | Each ship needs 12 countable peer reviews; continue assigning peers until full. Each builder owes eight valid reviews of other ships before their own payout. See Plan 22 for journal-age, flag-window, moderation, and penalty rules. |
-| Rate | Normal reviewed ships pay a percentile-based rate from 1×–20×, with 10× as the mean. A Great-tier Signal claim can raise the cap to 30×. Ore = approved hours × the applicable rate, before separate bonuses or deductions. |
-| Signal / Virality | Adapt Stardance's two external-traction tiers and platform thresholds. Good grants +50 Ore and achievement/shop rewards. Great raises the hourly cap to 30× and includes Good rewards. Total Signal bonus is capped at 5,000 Ore per project. Exact platform thresholds follow the current Stardance guide. |
+| Tracking and journals | Hackatime is required for software; Lapse is required for Hardware. Every builder must write a project journal entry for each eight hours of development. Hardware ships require a bill of materials. Lapse recordings are visible only to the team; project pages and journals are public by default. |
+| Review input | The team checks LOADOUT fit, validity, and evidence, then accepts or rejects each ship with a short written reason. Originality, Technical Depth, Execution, and Documentation guide that reason and produce no score. All projects, including Hardware, use the same team decision. |
+| Review gate | Team acceptance only. There is no peer-review count, reviewer debt, journal-age gate, flag window, or penalty. |
+| Rate | Every approved hour earns a fixed 10 Ore. There is no multiplier, percentile curve, or quality-based rate. Ore = approved hours × 10, before separate bonuses or deductions. |
+| Signal / Virality | Adapt Stardance's two external-traction tiers and platform thresholds. Good grants +50 Ore and achievement/shop rewards. Great grants Good rewards and a Great achievement. Total Signal bonus is capped at 5,000 Ore per project. Exact platform thresholds follow the current Stardance guide. |
 | Usage Milestones | Keep separate from Signal and count verified real users of the project. Thresholds and rewards remain open. |
 | External contributors | Open source is required. The first meaningful external contribution earns a separate achievement and +50 Ore. |
 | Referrals | A referral counts only after the invited builder verifies, tracks and journals real work, and earns a first approved ship. Referral reward amounts and milestone ladder remain open. |
@@ -34,10 +34,10 @@ This table is the current decision summary and supersedes conflicting legacy pro
 
 | Topic | Current rule | Still open | Public owner |
 |---|---|---|---|
-| Ore and quality | Team checks LOADOUT fit and validity; 12 peer reviews set the four 1–9 category scores. Median per category, mean of medians, percentile curve; normal rate 1×–20×, mean 10×; Great Signal may reach 30×. | Final rounding, curve versioning and implementation details | `content/docs/review.md`, `progress.md` |
-| Review operations | Eight reviews owed; peer assignments continue until 12 countable votes; 24-hour journal-age gate, then 24-hour flag window; no appeal. Three rejected flags in ten hours deduct 5% from the next final Ore payout. | Reviewer debt bookkeeping, repeat-penalty behavior, and implementation | `content/docs/review.md` |
-| Tracking and evidence | Hackatime for software, Lapse for Hardware, journal every eight development hours, required Hardware BOM, Lapse videos visible only to reviewers | Tracker integration, consent, retention, and exact hardware evidence workflow | `content/docs/tracking.md`, `project-types.md`, `shipping.md` |
-| Signal | Stardance Good/Great structure, +50 Ore Good tier, Great-tier 30× cap, 5,000 Ore per-project ceiling; reviewer-verified outside traction | Adaptation of platform-specific thresholds and implementation | `content/docs/review.md`, `projects.md` |
+| Ore and quality | Team accepts or rejects each ship with a short written reason. Every approved hour earns a fixed 10 Ore. No quality score, multiplier, or payout curve. | Team review workflow and reason templates | `content/docs/review.md`, `progress.md` |
+| Review operations | Team decision with a short written reason. Peer review, reviewer debt, flags, and penalties were removed on 22 Oct 2026. | Team review workflow | `content/docs/review.md` |
+| Tracking and evidence | Hackatime for software, Lapse for Hardware, journal every eight development hours, required Hardware BOM, Lapse videos visible only to the team | Tracker integration, consent, retention, and exact hardware evidence workflow | `content/docs/tracking.md`, `project-types.md`, `shipping.md` |
+| Signal | Stardance Good/Great structure, +50 Ore Good tier, Great achievement, 5,000 Ore per-project ceiling; team-verified outside traction | Adaptation of platform-specific thresholds and implementation | `content/docs/review.md`, `projects.md` |
 | Usage Milestones | Measure verified actual project users, separate from Signal reach | Thresholds, evidence definitions by project type, and rewards | `content/docs/projects.md` |
 | Referrals | Count only after verified builder's first approved ship | Reward values and milestone ladder | `content/docs/referrals.md` (planned) |
 | Contributor achievement | First meaningful external contribution earns +50 Ore | How later contributions are recognized | `content/docs/progress.md` |
@@ -51,11 +51,11 @@ Intermediate level-discount and XP curves, Research Mode bonuses, Custom Order d
 
 ---
 
-# 9. Multiplier System
+# 9. Quality Dimensions
 
-LOADOUT Fit is a gate, not a multiplier category.
+LOADOUT Fit is a gate, not a quality dimension.
 
-Once a project passes that gate, rate four dimensions:
+Once a project passes that gate, the team uses four dimensions to write its decision:
 
 ## 9.1 Originality
 > Is the idea, implementation, or approach meaningfully interesting?
@@ -117,17 +117,11 @@ Research Mode projects are expected to be especially strong here.
 
 ---
 
-# 10. Multiplier Range
+# 10. Flat Rate
 
-Each peer review scores the four LOADOUT dimensions from 1 to 9. The four category medians are averaged and mapped through Stardance's percentile payout curve. The normal hourly Ore rate ranges from 1× to 20×, with 10× as the mean. A Great-tier Signal claim raises the maximum hourly rate to 30×; it does not add 30× on top of the base payout. LOADOUT has no minimum payout floor beyond the 1× lower end of the curve. A ship rejected by the team receives no payout.
+Every approved hour earns 10 Ore, the solid-work baseline. There is no multiplier range, percentile curve, or Great-tier cap. A ship rejected by the team receives no payout.
 
-| Category score | Anchor |
-|---:|---|
-| 1 | Very weak evidence against the category |
-| 5 | Meets the middle of the category's published anchors |
-| 9 | Exceptional evidence against the category |
-
-Originality, Technical Depth, Execution and Documentation are the four quality dimensions. LOADOUT follows the current Stardance median, percentile, and payout-curve approach, with its own category descriptions and Ore currency. Review operations and the Great-tier exception are in Plan 22 (removed 25 Oct 2026). Do not reintroduce the older 5× minimum, 0–20 category scores, or a claim that Signal cannot exceed 20×.
+Originality, Technical Depth, Execution and Documentation are the four quality dimensions. They guide the team's written reason and produce no score.
 
 ---
 
@@ -136,31 +130,25 @@ Originality, Technical Depth, Execution and Documentation are the four quality d
 The current base award is:
 
 ```text
-base Ore = approved hours × percentile-mapped hourly multiplier
+base Ore = approved hours × 10 Ore
 qualifying Era bonus = base Ore × 10%
 ```
 
-Twenty approved hours at a 10× hourly multiplier earn 200 base Ore. If the project qualifies for the Era bonus, that adds 20 Ore, for 220 total. A Great-tier Signal claim raises the payout curve's maximum hourly multiplier to 30×. The Signal Good tier grants a separate 50 Ore and achievement/shop rewards. Plan 11 owns Era qualification; Era stacking with Signal and exact rounding remain open.
+Twenty approved hours earn 200 base Ore. If the project qualifies for the Era bonus, that adds 20 Ore, for 220 total. The Signal Good tier grants a separate 50 Ore and achievement/shop rewards. Plan 11 owns Era qualification; Era stacking with Signal and exact rounding remain open.
 
 Ore is global and spendable. A completed purchase reduces the available Ore balance. Spending does not remove XP, accepted projects or levels.
 
-Track XP is one non-spendable award divided across the fields shown by the work. The split cannot duplicate the award. LV.15 is 3,500 XP, about 350 approved hours at the solid-work baseline. The exact XP award equation is still open. Plan 22's `approved hours × (10 + rating) ÷ 2` and its proposed 25% Research bonus are candidates, not agreed formulas. Do not publish an exact award calculated from them as a current rule.
+Track XP is one non-spendable award divided across the fields shown by the work. The split cannot duplicate the award. LV.15 is 3,500 XP, about 350 approved hours at the solid-work baseline. The exact XP award equation is still open. Do not publish an exact award as a current rule.
 
 ---
 
-# 12. Voting / Multiplier Abuse Protection
+# 12. Abuse Protection
 
 Agreed protections:
-- no self-rating or rating a ship the reviewer owns;
-- one countable review per reviewer per ship;
-- reviewer assignments exclude projects the peer has already reviewed, skipped, or reported;
-- medians reduce the influence of a single extreme rating; scores are not trimmed as outliers;
-- review-quality moderation can inspect score reasons and assignment activity;
-- fabricated hours/evidence, copied work, collusion, or deliberate rating manipulation can remove review privileges and trigger the program's fraud consequences.
+- fabricated hours or evidence, copied work, or collusion can remove team access and trigger the program's fraud consequences;
+- the team checks fit, validity, and evidence before it accepts a ship.
 
-Reviewers cannot buy a better score for their own ship. Team review verifies fit, validity, and evidence; peers determine the quality score.
-
-Keep the final scoring understandable.
+Keep the team's written reason short and specific.
 
 ---
 
@@ -189,16 +177,16 @@ Reward amounts, milestone counts, cosmetics, and any sponsor rewards remain unap
 
 Signal adapts Stardance's **Good** and **Great** Virality Bonus. It rewards external project attention and is separate from Usage Milestones, which measure verified people actually using a project.
 
-The ship must already pass normal LOADOUT review, be original, and satisfy the open-source requirement. A participant submits a third-party link; a reviewer verifies the claim. Internal Hack Club channels/sites, bot reposts, SEO mirrors, and paid engagement do not count. Multiple claims may upgrade a project from Good to Great; if the ship has already been paid, recalculate and credit only the difference.
+The ship must already pass normal LOADOUT team review, be original, and satisfy the open-source requirement. A participant submits a third-party link; a reviewer verifies the claim. Internal Hack Club channels/sites, bot reposts, SEO mirrors, and paid engagement do not count. Multiple claims may upgrade a project from Good to Great; if the ship has already been paid, recalculate and credit only the difference.
 
 | Tier | Qualification | LOADOUT reward |
 |---|---|---|
 | **Good** | Meet one of Stardance's published platform thresholds | +50 Ore, a Good Signal achievement, and an exclusive shop reward |
-| **Great** | Meet one of Stardance's published Great-tier platform thresholds | Raise the hourly payout curve's cap from 20× to 30×, plus all Good rewards and a Great Signal achievement |
+| **Great** | Meet one of Stardance's published Great-tier platform thresholds | All Good rewards and a Great Signal achievement |
 
-The current Stardance thresholds are the reference for both tiers: Reddit 25/500 upvotes; Hacker News 10/100 points (Great requires the front page); GitHub 25/100 stars; YouTube 250/50,000 views; TikTok/Reels/Shorts 5,000/100,000 views; X and Bluesky/Threads 50/1,500 likes; Instagram 200 likes/100,000 views or 10,000 likes; app stores 100/10,000 downloads; package managers 1,000/50,000 downloads; Modrinth/CurseForge 2,500/100,000 downloads; third-party blog/news coverage qualifies at reviewer discretion.
+The current Stardance thresholds are the reference for both tiers: Reddit 25/500 upvotes; Hacker News 10/100 points (Great requires the front page); GitHub 25/100 stars; YouTube 250/50,000 views; TikTok/Reels/Shorts 5,000/100,000 views; X and Bluesky/Threads 50/1,500 likes; Instagram 200 likes/100,000 views or 10,000 likes; app stores 100/10,000 downloads; package managers 1,000/50,000 downloads; Modrinth/CurseForge 2,500/100,000 downloads; third-party blog/news coverage qualifies at team discretion.
 
-The total Signal bonus is capped at **5,000 Ore per project**. This cap includes the hourly-rate uplift from Great. Signal does not raise the normal 20× cap for non-Great ships. These rules adapt Stardance's published guide; no Stardance source code or media is reused.
+The total Signal bonus is capped at **5,000 Ore per project**. These rules adapt Stardance's published guide; no Stardance source code or media is reused.
 
 ---
 
@@ -311,7 +299,7 @@ Research Mode, benchmarks, profilers, test infrastructure, reproducible technica
 
 Eras are a shared technical-progression layer, separate from competitive seasons. They use non-spendable Era Points, not a new currency. Approved projects that a reviewer marks as qualifying earn a separate **10% of their approved base Ore award**. Era qualification adds no Track XP and does not alter the quality multiplier or the four quality dimensions. The reviewer records a reason. No partial Era-bonus percent is used in the approved design.
 
-Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing multiplier or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in [Plan 11](11-eras-and-community-progression.md).
+Era bonus stacking, caps, contribution aggregation/reversal, and point thresholds remain open implementation decisions. Do not silently add the bonus to an existing rate or ceiling or expose an unapproved Era Points formula. The canonical behavior and pre-implementation gates are in [Plan 11](11-eras-and-community-progression.md).
 
 If a future physical weekend is approved, its projects use this same shared Era and this same reviewer-gated bonus. There is no event-specific Ore or XP rule; see [Plan 15](15-loadout-irl-ruhr.md). This is a cross-reference only and does not settle the open stacking/configuration questions above.
 
@@ -374,9 +362,6 @@ Separate boards for:
 - Compute
 - Hardware
 
-## Review Contribution
-Quality-weighted peer/reviewer contribution, not raw review count.
-
 ## New Builders
 Only users who joined this season.
 
@@ -384,7 +369,7 @@ This keeps late joiners competitive.
 
 ---
 
-# 25. Leaderboard, Reviewer & Community Rewards
+# 25. Leaderboard & Community Rewards
 
 Avoid large recurring Ore prizes and avoid **permanent global percentage discounts** for leaderboard position.
 
@@ -415,29 +400,19 @@ TRACK WINNER
 Field Requisition
 for that track
 
-TOP REVIEWER
+TOP BUILDER
 General Requisition II
 
-TOP REVIEW SCORE / TOP 5
+TOP 5 BUILDERS
 General Requisition I
 ```
-
-Reviewer rewards must be based on **review quality**, not raw review count.
-
-Suggested reviewer score inputs:
-- valid completed reviews
-- useful written feedback
-- agreement with later moderation / low overturn rate
-- consistency
-- no rubber-stamping
-- queue help / reliability
 
 Possible non-economic rewards:
 - season badge
 - profile trophy
 - limited merch
 - sponsor reward
-- featured project/reviewer
+- featured project
 - special hardware
 - event invitation
 
@@ -738,7 +713,6 @@ They are **not permanent global discounts**.
 They should be awarded rarely for major community/program contributions such as:
 - season champion;
 - top track performance;
-- exceptional peer-review contribution;
 - sponsor challenge;
 - organizer-selected exceptional contribution.
 
@@ -1074,7 +1048,7 @@ Sponsor integration should be relevant to building, not just logo placement.
 
 Model program cost using the actual approved catalog, delivery cost, expected quantities, sponsor support and the maximum 25% purchase reduction. No Ore savings cap or total-hour limit is authorized by this section.
 
-For example, 200 builders × 30 approved hours × rating 10 issues 60,000 base Ore. Qualifying Era bonuses add separately. This is a scenario, not a participation claim or funded commitment.
+For example, 200 builders × 30 approved hours × 10 Ore issues 60,000 base Ore. Qualifying Era bonuses add separately. This is a scenario, not a participation claim or funded commitment.
 
 Check concentration on expensive items, all four tickets in each track, cross-track access, supplier changes, stock and delivery costs. Keep any budgeting conversion internal; no fixed cash value for Ore is promised publicly. Do not count a discount both as a reduced price and as an additional cash purchase cost.
 
@@ -1125,12 +1099,12 @@ Use the decision table at the top of this document and current sections 10, 11, 
 
 - Four tracks, Research Mode as a modifier, fifteen lifetime levels.
 - Spendable global Ore; a single XP award split across demonstrated fields.
-- Approved hours × the peer-percentile-mapped hourly rate; normal range 1×–20× with a 10× mean. Great Signal may raise the cap to 30×; no lower 5× floor.
-- Signal Good grants +50 Ore and achievement/shop rewards; Signal Great raises the hourly cap to 30× and includes Good rewards, up to 5,000 Ore total per project.
+- Approved hours × 10 Ore.
+- Signal Good grants +50 Ore and achievement/shop rewards; Signal Great includes Good rewards, up to 5,000 Ore total per project.
 - Every accepted project is open source. First meaningful external contribution grants the project achievement and +50 Ore.
 - Hardware ships require a bill of materials. Hackatime is required for software, Lapse for Hardware, and journals are required at least every eight development hours.
-- Every ship needs twelve countable peer reviews, eight valid reviews owed by the builder, 1–9 scores per category, and the Plan 22 payout/flag timing.
-- Public project pages and journals by default; Lapse recordings are reviewer-only.
+- Every ship needs a team decision with a short written reason; the payout is a fixed 10 Ore per approved hour.
+- Public project pages and journals by default; Lapse recordings are visible only to the team.
 - LV.15 at 3,500 XP / about 350 solid-work hours in one track.
 - Permanent track discount reaches 15%; use the best related track.
 - Four identical 10% Field Requisitions at LV.5, LV.8, LV.11 and LV.15; 400-Ore minimum base price.
@@ -1148,13 +1122,13 @@ No older example, fallback default or unpublished candidate silently changes the
 
 ## Working Values To Pilot-Test
 
-The following remain open: intermediate discount and XP curves, the XP quality equation, any Research XP bonus, minimum track-allocation share, cross-track markup, Usage Milestone thresholds/rewards, referral reward values, General Requisition triggers/values, Custom Order tier values, and buyer-refund terms. Limited Drops and sponsor drops/challenges remain open ideas, not approved program features. See the calibration worksheet (removed; see git history) and Plan 22 (removed 25 Oct 2026). Do not treat an open item as an entitlement.
+The following remain open: intermediate discount and XP curves, the XP quality equation, any Research XP bonus, minimum track-allocation share, cross-track markup, Usage Milestone thresholds/rewards, referral reward values, General Requisition triggers/values, Custom Order tier values, and buyer-refund terms. Limited Drops and sponsor drops/challenges remain open ideas, not approved program features. See the calibration worksheet (removed; see git history). Do not treat an open item as an entitlement.
 
 ---
 
 ## Questions To Resolve Before Public Season 00
 
-1. Exact XP award formula, intermediate thresholds, quality weighting and track allocation precision.
+1. Exact XP award formula, intermediate thresholds, and track allocation precision.
 2. Research bonus amount and qualification criteria.
 3. Full level-discount curve, rounding and cross-track pricing.
 4. Usage Milestone qualification/evidence and referral reward configuration.

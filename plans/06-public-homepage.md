@@ -225,7 +225,7 @@ The visual should be replaceable with a static PNG/SVG without affecting the lay
 A new visitor should understand the program concept without needing to understand:
 
 - Requisition formulas
-- multiplier math
+- fixed-rate math
 - review stages
 - cross-track markup
 - detailed level thresholds

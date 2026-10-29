@@ -243,10 +243,10 @@ Before Season 00, publish these rules clearly:
 8. Hackatime is required for software; Lapse is required for Hardware and its recordings are reviewer-only.
 9. Add a journal entry at least every eight hours of development; never count pre-program or double-submitted time.
 10. Hardware ships require a bill of materials.
-11. Review quality is peer-scored 1–9 in each of LOADOUT's four categories; 12 countable reviews are required for every ship, including Hardware.
-12. Normal Ore rates are 1×–20× with a 10× mean; Great Signal can raise the cap to 30×.
+11. The team accepts or rejects every ship with a short written reason, including Hardware. Peer review was removed on 22 Oct 2026.
+12. Every approved hour earns a fixed 10 Ore; there is no multiplier.
 13. Ore is one **global** currency; listed Ore prices remain the same across regions.
-14. Review payout timing, flags, and repeated-false-flag penalty follow Plan 22; there is no appeal.
+14. There are no peer-review flags or penalties, and there is no appeal.
 15. Track levels cap at **15** and persist across seasons.
 16. Permanent track discounts reach 15% at LV.15; combined savings, including a Requisition, are capped at 25% of the base price.
 17. Field Requisitions are earned at LV.5, 8, 11, and 15 only.
@@ -271,7 +271,7 @@ Determine:
 - sponsor budget
 - expected users
 - expected approved hours
-- average multiplier
+- average approved hours per builder
 - total Ore liability
 - LV.1–15 XP thresholds
 - per-track reward balance
@@ -312,8 +312,8 @@ Test:
 - Hackatime/Lapse evidence and eight-hour journal cadence
 - public project/journal and reviewer-only Lapse visibility
 - hour assignment
-- 12-review gate, 1–9 scoring, anonymized comments, and 24-hour flag flow
-- multiplier distribution and the Great Signal cap
+- team decision and written-reason flow
+- Signal Good and Great payouts
 - level pacing
 - cross-track pricing
 - discount limits and regional price consistency
@@ -333,7 +333,7 @@ Keep stock controlled and observe the economy closely.
 
 ## Step 7 — Rebalance
 Adjust:
-- multiplier distribution
+- Signal payouts
 - XP curve
 - reward prices
 - cross-track markups
@@ -393,10 +393,8 @@ Full launch only after the field economy is understandable and no single track i
 ## Review
 - queue length
 - review time
-- countable vote completion
-- reviewer agreement
+- team decision turnaround
 - fit-gate consistency
-- rejected flag rate and moderation outcomes
 
 ## Community
 - active builders

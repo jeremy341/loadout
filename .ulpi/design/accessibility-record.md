@@ -377,7 +377,7 @@ Keep the established field-manual design system. The palette control is a compac
 - Add `characters.md` under COMMUNITY. Mark the profiles as fiction and write from the friend-facing source files. Use internal backstories only to verify details; do not publish open questions, unconfirmed accident mechanics, or private notes.
 - Keep identity respectful and explicit: Goose Lee's mistaken belief that his background gives him Bruce Lee's martial-arts talent is his own misconception, not a claim about Asian people.
 - Make the `start.md` overview explain the proposed program and its distinct loop plainly, while keeping its development/not-open status accurate.
-- Explain the Ore rating as the multiplier on approved hours in `progress.md`: e.g. 10 approved hours at rating 10 earn 100 base Ore. Keep the separate +10% Era example labeled planned and do not invent a stacking rule or an XP formula.
+- Explain the fixed rate in `progress.md`: every approved hour earns 10 Ore, so 10 approved hours earn 100 Ore. Keep the separate +10% Era example labeled planned and do not invent a stacking rule or an XP formula.
 
 ### Component and content states
 
@@ -389,12 +389,12 @@ Keep the established field-manual design system. The palette control is a compac
 | Any route | Storage unavailable | Toggle works for the current page; the default palette remains usable. |
 | Any route | Forced colors | System colors stay legible and the button remains operable. |
 | Docs | Character page | Fiction label appears; only friend-facing story is public. |
-| Docs | Program explanation | Multiplier example uses the approved hours × rating rule and separates Ore from Track XP. |
+| Docs | Program explanation | Rate example uses the fixed 10 Ore per approved hour and separates Ore from Track XP. |
 
 ### Acceptance
 
 - The color-safe button is available on homepage, Docs, and error pages; its name, pressed state, focus, persistence, route synchronization, and mobile reflow are tested.
 - Axe checks pass on homepage and Docs in both themes with the palette enabled. The project remains usable with forced colors and reduced motion.
 - Team and character pages are clearly distinct. Existing organizer anchors remain valid; a route/link check covers the new character page.
-- Public claims match Plans 01 and 02. The example does not publish unsettled multiplier aggregation, XP weighting, or Era stacking.
+- Public claims match Plans 01 and 02. The example does not publish unsettled XP weighting or Era stacking.
 - Lint, typecheck, unit tests, production build, relevant browser tests, and `git diff --check` pass.

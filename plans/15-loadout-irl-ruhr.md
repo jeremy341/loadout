@@ -147,7 +147,7 @@ The current planning range is approximately **60–100 builders**. It is not com
 Do not proceed to event launch/booking until organizers have evidence that:
 
 - the online project → review → progression loop works reliably;
-- peer/project reviews and participant support are reliable;
+- team reviews and participant support are reliable;
 - the Ore/XP economy and reward fulfillment are stable enough;
 - there is meaningful German/European participant demand;
 - staffing and organizer workload are sustainable;

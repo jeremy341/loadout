@@ -66,8 +66,8 @@ The authoritative reset timezone, reset-hour behavior, downtime/retry policy, an
 - The planned qualifying-project bonus is **+10% of its approved base Ore award**. Example: 720 approved base Ore → 72 Era bonus → 792 total Ore.
 - There is **no Era bonus to Track XP**. Era relevance is not a fifth quality dimension and must not alter LOADOUT's four quality dimensions: Originality, Technical Depth, Execution, and Documentation.
 - Non-qualifying Era relevance never makes an otherwise valid LOADOUT project invalid and never reduces its normal approved award.
-- Store the reviewer decision and a short reason in the audit record. The review UI should distinguish the Era decision from the quality score and any other multiplier.
-- The final stacking order against existing Ore multipliers, ceilings, corrections, and duplicate-award protections must be resolved in the economy implementation plan before code ships. The +10% value does not silently change other formulas.
+- Store the team decision and a short reason in the audit record. The review UI should distinguish the Era decision from the team decision and any other bonus.
+- The final stacking order against existing Ore ceilings, corrections, and duplicate-award protections must be resolved in the economy implementation plan before code ships. The +10% value does not silently change other formulas.
 
 ## Era objectives
 

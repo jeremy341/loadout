@@ -6,7 +6,7 @@
 
 **Current progression/prize hierarchy:** Prices, discounts, Requisitions, the planned prize catalog and Custom Orders are subsections of one Progress & Prizes section. Plan 02 owns the mechanics; the earlier hierarchy proposal was consolidated into this plan and retired.
 
-**Future event and copy clarity, 2026-10-06:** [Plan 15](15-loadout-irl-ruhr.md) owns the future `LOADOUT IRL // RUHR` event concept. The Era, Field Requisition, and Custom Order explanations and user-approved visible future-concept block are consolidated into this homepage plan, with policy in Plans 01/02/11. Event operations, live mechanics, and publication remain separate scopes. The retired copy-clarity proposal is summarized in [retired plan history](master-plan-history.md).
+**Future event and copy clarity, 2026-10-06:** [Plan 15](15-loadout-irl-ruhr.md) owns the future `LOADOUT IRL // Düsseldorf` event concept. The Era, Field Requisition, and Custom Order explanations and user-approved visible future-concept block are consolidated into this homepage plan, with policy in Plans 01/02/11. Event operations, live mechanics, and publication remain separate scopes. The retired copy-clarity proposal is summarized in [retired plan history](master-plan-history.md).
 
 **Visual density follow-up, 2026-10-06:** Plan 17 (removed 25 Oct 2026) was the proposed whole-homepage pass for shorter first-read copy, connected diagrams, and press-to-turn track cards. It preserves the approved section order, program facts, and unchanged How it works component. No implementation is authorized by that proposal.
 
@@ -541,7 +541,7 @@ LV.15   FIELD REQUISITION
 
 Explain only the concept:
 
-> Each Requisition is a one-use 20% discount on the base price of a matching prize priced at 400 Ore or more. It applies on top of the permanent track discount.
+> Each Requisition is a one-use 10% discount on the base price of a matching prize priced at 400 Ore or more. It applies on top of the permanent track discount.
 
 Rules worth showing:
 
@@ -834,6 +834,6 @@ The Era mechanic may be explained in one compact community-progression section; 
 
 ## 23. Mechanics clarity and future LOADOUT IRL section
 
-The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use additional 20% discount on the base Ore price of a matching prize from 400 Ore, applied alongside the permanent track discount, with one Requisition per order and no separate Ore savings cap; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
+The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use additional 10% discount on the base Ore price of a matching prize from 400 Ore, applied alongside the permanent track discount, with one Requisition per order and combined savings capped at 25% of the base price; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
 
-The user approved a separate **LOADOUT IRL // RUHR — Build the next Era** block after Community Eras and before the FAQ, clearly labelled as a future concept. Show no unconfirmed date, venue, registration, capacity, price, partner, sponsor, or event-specific progression claim. Keep visibility configurable. Plan 15 owns event facts and readiness; Plan 11 owns Era rules. The UI authorization covers concept copy, not event launch or backend mechanics.
+The user approved a separate **LOADOUT IRL // Düsseldorf — Build the next Era** block after Community Eras and before the FAQ, clearly labelled as a future concept. Show no unconfirmed date, venue, registration, capacity, price, partner, sponsor, or event-specific progression claim. Keep visibility configurable. Plan 15 owns event facts and readiness; Plan 11 owns Era rules. The UI authorization covers concept copy, not event launch or backend mechanics.

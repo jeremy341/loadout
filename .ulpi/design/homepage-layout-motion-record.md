@@ -77,7 +77,7 @@ Keep the eight current planned prize categories as a static icon list or mosaic,
 A static Approved projects → Shared progress → Next theme rail may help if it reads as a concept rather than a live timeline. No counters, dates, schedules, or readiness indicators.
 ### LOADOUT IRL
 
-A compact future-concept plate says an optional Ruhr build weekend would use the online tracks, review, and shared Era. A three-part Friday Start → Saturday Build → Sunday Ship line communicates its format. The dates/venue/funding/registration status stays visible. No event promise or RSVP is added.
+A compact future-concept plate says an optional Düsseldorf build weekend would use the online tracks, review, and shared Era. A three-part Friday Start → Saturday Build → Sunday Ship line communicates its format. The dates/venue/funding/registration status stays visible. No event promise or RSVP is added.
 
 ### FAQ and progressive disclosure
 

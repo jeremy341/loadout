@@ -46,7 +46,7 @@ This table is the current decision summary and supersedes conflicting legacy pro
 | Shop and event ideas | Limited Drops and sponsor drops/challenges remain unconfirmed; free resource directory is planned later | Whether/when to scope these ideas and which services are actually available | Internal only until approved |
 | Custom Orders | Relevant level, approved work, sufficient Ore and team fulfillment approval; program cancellation restores the Requisition | Tier levels and limits, quote validity, exact sourcing formula and cancellation/refund terms | `content/docs/custom-orders.md` |
 
-Intermediate level-discount and XP curves, Research Mode bonuses, Custom Order details, and unconfirmed reward thresholds remain open. No answer or elapsed time automatically approves an open value. The agreed Field Requisition schedule remains 3/6/9/12/15; the alternative 5/8/10/12/15 is not adopted.
+Intermediate level-discount and XP curves, Research Mode bonuses, Custom Order details, and unconfirmed reward thresholds remain open. No answer or elapsed time automatically approves an open value. The agreed Field Requisition schedule is LV.5, LV.8, LV.11 and LV.15, four tickets per track (decided 24 Oct 2026).
 
 
 ---
@@ -648,21 +648,21 @@ But someone who has invested in Hardware should get a better deal.
 
 ## 26.5 Permanent Track Discount
 
-Related track levels give an ongoing discount, reaching 20% at LV.15. The precise intermediate curve remains open. The calibration proposal's exponent-1.2 curve is a candidate; its public milestone figures are working estimates.
+Related track levels give an ongoing discount, reaching 15% at LV.15. The precise intermediate curve remains open. The calibration proposal's exponent-1.2 curve is a candidate; its public milestone figures are working estimates.
 
 Use the best related discount for a multi-track item. Never add two track discounts. Discounts change the purchase price, not the Ore earned by a ship.
 
 ## 26.6 Expensive-Item Savings Cap
 
-The older Ore cap model is retired. Permanent and Field Requisition discounts each use the base price and apply without a separate Ore savings cap. Their maximum combined reduction is 40%.
+The older Ore cap model is retired. Permanent and Field Requisition discounts each use the base price and apply without a separate Ore savings cap. Their combined reduction is capped at 25% of the base price.
 
 For a 1,000-Ore eligible prize at LV.15:
 
 ```text
 Base price                 1,000 Ore
-Permanent discount (20%)     200 Ore
-One Requisition (20%)        200 Ore
-Final price                 600 Ore
+Permanent discount (15%)     150 Ore
+One Requisition (10%)        100 Ore
+Final price                 750 Ore
 ```
 
 The same calculation applies to more expensive eligible items. Control program exposure through approved catalog pricing, inventory and fulfillment decisions, not by silently restoring the removed caps.
@@ -706,13 +706,13 @@ Many rewards should be multi-track:
 
 ## 26.8 Field Requisitions
 
-Each track awards five identical Field Requisitions at levels 3, 6, 9, 12 and 15. There are no I, II or Master variants in the current field-ticket model.
+Each track awards four identical Field Requisitions at levels 5, 8, 11 and 15. There are no I, II or Master variants in the current field-ticket model.
 
-- Each ticket gives an extra 20% of the item's base Ore price as savings.
+- Each ticket gives an extra 10% of the item's base Ore price as savings.
 - The base price must be at least 400 Ore and the item's track must match.
 - It adds to the permanent track discount; both use the base price, not a compounded remainder.
 - One use, non-transferable, no expiry, maximum one Requisition per order.
-- No separate Ore savings cap; maximum combined permanent-plus-ticket discount is 40%.
+- Combined permanent-plus-ticket discount is capped at 25% of the base price.
 - It cannot bypass an equipment or Custom Order level requirement.
 - A Custom Order quote must explicitly permit its use.
 - If the program cancels fulfillment, restore the ticket. Broader buyer-cancellation terms remain open.
@@ -771,7 +771,7 @@ Permanent track pricing still applies first. The General Requisition then adds i
 
 ## 26.12 Requisition Inventory
 
-Record the track, quantity, milestone provenance and whether a ticket is available, reserved, consumed or restored. Every field ticket has the same 20% benefit. Display matching eligibility and the actual saving rather than a tier or an “additional cap allowance”. Record program cancellations and restorations without deleting the original history.
+Record the track, quantity, milestone provenance and whether a ticket is available, reserved, consumed or restored. Every field ticket has the same 10% benefit. Display matching eligibility and the actual saving rather than a tier or an “additional cap allowance”. Record program cancellations and restorations without deleting the original history.
 
 ---
 
@@ -1072,11 +1072,11 @@ Sponsor integration should be relevant to building, not just logo placement.
 
 # 65. Economic Guardrails
 
-Model program cost using the actual approved catalog, delivery cost, expected quantities, sponsor support and the maximum 40% purchase reduction. No Ore savings cap or total-hour limit is authorized by this section.
+Model program cost using the actual approved catalog, delivery cost, expected quantities, sponsor support and the maximum 25% purchase reduction. No Ore savings cap or total-hour limit is authorized by this section.
 
 For example, 200 builders × 30 approved hours × rating 10 issues 60,000 base Ore. Qualifying Era bonuses add separately. This is a scenario, not a participation claim or funded commitment.
 
-Check concentration on expensive items, all five tickets in each track, cross-track access, supplier changes, stock and delivery costs. Keep any budgeting conversion internal; no fixed cash value for Ore is promised publicly. Do not count a discount both as a reduced price and as an additional cash purchase cost.
+Check concentration on expensive items, all four tickets in each track, cross-track access, supplier changes, stock and delivery costs. Keep any budgeting conversion internal; no fixed cash value for Ore is promised publicly. Do not count a discount both as a reduced price and as an additional cash purchase cost.
 
 ---
 
@@ -1086,11 +1086,11 @@ Each item has a base Ore price. Calculate:
 
 ```text
 permanent saving = base price × best related track discount
-ticket saving = base price × 20%, when one matching ticket is eligible
+ticket saving = base price × 10%, when one matching ticket is eligible
 final Ore price = base price − permanent saving − ticket saving
 ```
 
-The maximum permanent rate is 20%; the maximum combined reduction is 40%. A ticket needs a base price of at least 400 Ore. The exact intermediate discount curve, any cross-track markup and rounding convention remain open. No hidden cap or surcharge should be inferred from older examples.
+The maximum permanent rate is 15%; the maximum combined reduction is 25%. A ticket needs a base price of at least 400 Ore. The exact intermediate discount curve, any cross-track markup and rounding convention remain open. No hidden cap or surcharge should be inferred from older examples.
 
 A Custom Order uses its final approved base quote. Show eligibility, each saving and the final balance before acceptance. The team's sourcing and tax/delivery treatment are still being settled. Do not publish a fixed `1 Ore = $X` conversion.
 
@@ -1098,7 +1098,7 @@ A Custom Order uses its final approved base quote. Show eligibility, each saving
 
 # 67. Example Launch Shop
 
-These eight sample prices are working examples for planning copy, not final price promises, current stock or fulfillment commitments. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
+These sample prices are working examples for planning copy, not final price promises, current stock or fulfillment commitments. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
 
 | Item | Base Ore | Solid-work hours |
 |---|---:|---:|
@@ -1132,10 +1132,10 @@ Use the decision table at the top of this document and current sections 10, 11, 
 - Every ship needs twelve countable peer reviews, eight valid reviews owed by the builder, 1–9 scores per category, and the Plan 22 payout/flag timing.
 - Public project pages and journals by default; Lapse recordings are reviewer-only.
 - LV.15 at 3,500 XP / about 350 solid-work hours in one track.
-- Permanent track discount reaches 20%; use the best related track.
-- Five identical 20% Field Requisitions at 3/6/9/12/15; 400-Ore minimum base price.
+- Permanent track discount reaches 15%; use the best related track.
+- Four identical 10% Field Requisitions at LV.5, LV.8, LV.11 and LV.15; 400-Ore minimum base price.
 - One ticket per order, no expiry or transfers, no bypass of equipment levels.
-- No Ore savings caps; at most 40% total reduction.
+- Combined reduction capped at 25% of the base price.
 - Program cancellation restores a Field Requisition.
 - No total limit on legitimate hours or projects; repeat ships need five new approved hours and new work.
 - Lifetime progress persists across Seasons and Eras.

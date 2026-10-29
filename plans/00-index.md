@@ -11,7 +11,7 @@
 | Launch and operating gates | [05 Launch and operations](05-launch-and-operations.md) | Planning controls; not a live order or fulfillment system. |
 | Public homepage | [06 Public homepage](06-public-homepage.md) | Current public-site wording, structure and approved scope. |
 | Community Eras | [11 Eras and community progression](11-eras-and-community-progression.md) | Shared community progression; separate from personal XP and Ore. |
-| LOADOUT IRL concept | [15 LOADOUT IRL Ruhr](15-loadout-irl-ruhr.md) | Future concept only; no event, venue or dates are confirmed. |
+| LOADOUT IRL concept | [15 LOADOUT IRL Düsseldorf](15-loadout-irl-ruhr.md) | Future concept only; no event, venue or dates are confirmed. |
 | Locked visual system | [Design system](../docs/design/system/design-system.md) | Visual authority; design briefs do not override later owner decisions. |
 | Contribution and release workflow | [Contributor workflow](../docs/development/WORKFLOW.md) | Repository process; it is not participant-facing program content. |
 

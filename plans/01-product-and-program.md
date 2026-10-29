@@ -182,7 +182,7 @@ Three lifetime records grow with approved work:
 
 Community Eras add a separate, non-spendable Era Points progress counter. Era Points do not replace or mix with those three records, do not change the four tracks, and do not change the four quality dimensions. Era behavior and the separate 10% qualifying-project Ore bonus are defined in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
-The future `LOADOUT IRL // RUHR` concept uses the same four tracks and global Community Era. It creates no IRL-only progression or attendance advantage; event projects follow the ordinary online project/review/economy rules. See [Plan 15](15-loadout-irl-ruhr.md); this concept does not authorize building or announcing an event.
+The future `LOADOUT IRL // Düsseldorf` concept uses the same four tracks and global Community Era. It creates no IRL-only progression or attendance advantage; event projects follow the ordinary online project/review/economy rules. See [Plan 15](15-loadout-irl-ruhr.md); this concept does not authorize building or announcing an event.
 
 A user should immediately understand:
 
@@ -1277,7 +1277,7 @@ Main catchphrase:
 
 # 71. Final One-Paragraph Pitch
 
-> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 20% permanent discount, and five identical Field Requisitions per track each add 20% off one eligible purchase. There is no Ore savings cap; combined savings reach at most 40%. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
+> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, reviewers allocate its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 15% permanent discount at LV.15, and four Field Requisitions per track, at LV.5, LV.8, LV.11 and LV.15, each add 10% off one eligible purchase. Combined savings are capped at 25% of the base price. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
 
 ---
 
@@ -1293,7 +1293,7 @@ Main catchphrase:
 >
 > Your track levels give better pricing and specialist unlocks. Most cross-track gear is still buyable, while mastery gear rewards real specialization.
 >
-> **Field Requisitions** at levels 3, 6, 9, 12 and 15 each add 20% off one eligible purchase, alongside your track discount.
+> **Field Requisitions** at levels 5, 8, 11 and 15 each add 10% off one eligible purchase, alongside your track discount.
 >
 > **Build projects. Level up your profile. Upgrade your loadout. Build harder stuff.**
 

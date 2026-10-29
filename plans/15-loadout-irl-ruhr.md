@@ -1,12 +1,12 @@
-# LOADOUT IRL // RUHR — Future Germany Build Weekend
+# LOADOUT IRL // Düsseldorf — Future Germany Build Weekend
 
 **Status:** LOADOUT IRL is a selected future program feature. This plan remains concept/readiness work, not an event announcement, booking, funding commitment, or launch authorization.
 
 **Homepage wording decision, 2026-10-06:** The user approved displaying this as a clearly labelled future concept with no dates, venue promises, or registration. That passes the public-content gate for concept copy only; the event readiness gates remain unresolved.
 
-**Working identity:** **LOADOUT IRL // RUHR**
+**Working identity:** **LOADOUT IRL // Düsseldorf**
 
-**Current concept:** a proposed three-day Friday–Sunday build weekend in Germany's Ruhr area. The event date, selected city and venue, and all launch, safety, funding and fulfillment details remain open.
+**Current concept:** a proposed three-day Friday–Sunday build weekend in Düsseldorf, Germany. The event date, selected city and venue, and all launch, safety, funding and fulfillment details remain open.
 **Line:** **Build the next Era.**
 
 **Owner:** This plan owns the physical-event concept and its operations/readiness gates. Plan 05 owns the concise launch roadmap; Plan 11 owns Era mechanics; Plans 01 and 02 own program and economy rules; Plan 06 owns any eventual public-homepage treatment.
@@ -17,7 +17,7 @@ LOADOUT plans to run a physical Germany build weekend connected directly to the 
 
 This is post-online-launch work. It is not needed for the initial online MVP. Event attendance must not become necessary for online progression, and attending must not grant an event-only Track XP, Ore, level, or permanent advantage. Event projects use the normal eligibility, evidence, review, attribution, and award rules.
 
-Keep the identity centered on practical engineering and the Ruhr's industrial context. Do not use weapons or military styling, imply travel support, promise sponsors, or make the event look like a generic student hackathon. The older one- or two-day sketch in the parent workspace was superseded by this Friday-to-Sunday concept.
+Keep the identity centered on practical engineering and the region's industrial context. Do not use weapons or military styling, imply travel support, promise sponsors, or make the event look like a generic student hackathon. The older one- or two-day sketch in the parent workspace was superseded by this Friday-to-Sunday concept.
 
 The pinned [`Stasis` repository](../references/stasis/) is an additional Hack Club hardware-hackathon/event-program reference. Its inventory, tool-rental, parts-ordering, NFC checkout, and manufacturing systems are reserved as possible IRL event operations, not online LOADOUT features. Its claims, copy, and assets are not LOADOUT facts.
 
@@ -53,12 +53,12 @@ If the shared threshold is reached at the event, the Sunday close can say **ADVA
 
 ## 3. Location strategy
 
-**Preferred region: NRW / Ruhrgebiet.** Every named place below is a research target only; no venue, partner, date, access, capacity, price, or agreement is confirmed.
+**Preferred city: Düsseldorf, with Essen as the backup.** Every named place below is a research target only; no venue, partner, date, access, capacity, price, or agreement is confirmed.
 
-1. **Essen** — first-choice concept: Zollverein or another industrial venue in/around the Zollverein complex. It best combines Ruhr location, access, industrial identity, and LOADOUT's technical theme.
-2. **Duisburg** — alternative concept: Landschaftspark Duisburg-Nord, with a strong industrial setting.
-3. **Bochum** — especially viable if a university or technical partner can provide an affordable practical venue.
-4. **Düsseldorf** — useful transport/airport access, though less directly connected to the industrial theme.
+1. **Düsseldorf** — main case (owner decision, 24 Oct 2026): strongest transport and airport access, and the lead city in the sponsor budget.
+2. **Essen** — backup: Zollverein or another industrial venue in/around the Zollverein complex. It best combines industrial identity and LOADOUT's technical theme.
+3. **Duisburg** — alternative concept: Landschaftspark Duisburg-Nord, with a strong industrial setting.
+4. **Bochum** — especially viable if a university or technical partner can provide an affordable practical venue.
 
 If NRW proves impractical, **Hamburg** is the current non-NRW alternative because of its engineering, port, logistics, and industrial identity.
 
@@ -136,9 +136,9 @@ Displaying an item does not mean it will be given away. Do not advertise equipme
 
 ## 8. Optional public-homepage section
 
-Plan 06 includes the proposed **LOADOUT IRL // RUHR — Build the next Era** section after Community Eras and before the FAQ. The later user instruction authorizes its homepage implementation as a future concept; it does not authorize organizing or launching the event.
+Plan 06 includes the proposed **LOADOUT IRL // Düsseldorf — Build the next Era** section after Community Eras and before the FAQ. The later user instruction authorizes its homepage implementation as a future concept; it does not authorize organizing or launching the event.
 
-The user subsequently approved a visible future-concept block on 2026-10-06. Show only that approved concept information, with a configuration switch to omit it. Before venue/date/registration are confirmed, use no location-specific booking claim, date, capacity, price, sponsor logo, or registration CTA. Do not present the proposed Ruhr venues as selected. The section must clearly say it is a future concept. A later planned/open-registration state needs separate confirmed details and approval. Plan 06 owns its homepage copy; this plan owns event facts and readiness.
+The user subsequently approved a visible future-concept block on 2026-10-06. Show only that approved concept information, with a configuration switch to omit it. Before venue/date/registration are confirmed, use no location-specific booking claim, date, capacity, price, sponsor logo, or registration CTA. Do not present the proposed venues as selected. The section must clearly say it is a future concept. A later planned/open-registration state needs separate confirmed details and approval. Plan 06 owns its homepage copy; this plan owns event facts and readiness.
 
 ## 9. Scale and readiness gates
 
@@ -147,7 +147,7 @@ The current planning range is approximately **60–100 builders**. It is not com
 Do not proceed to event launch/booking until organizers have evidence that:
 
 - the online project → review → progression loop works reliably;
-- peer/project reviews and participant support are reliable;
+- team reviews and participant support are reliable;
 - the Ore/XP economy and reward fulfillment are stable enough;
 - there is meaningful German/European participant demand;
 - staffing and organizer workload are sustainable;

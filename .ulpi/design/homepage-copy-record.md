@@ -65,7 +65,7 @@ A reviewer said the site feels written by AI and has few real details. The homep
 | Progression | Each track has its own lifetime level. Higher levels unlock better prices on that track's prizes. | Each track has its own level, and you keep it. A higher level means better prices on that track's prizes. |
 | Project fit labels | Higher signal / Lower signal | Stronger fit / Weaker fit |
 | Eras | A shared technical theme advanced by approved projects across the four tracks. | A technical theme the whole community works toward. Approved projects, in any of the four tracks, move it forward. |
-| IRL | A proposed three-day hackathon in Germany's Ruhr area, not an announced event. | A proposed three-day build weekend in Germany's Ruhr area, Friday to Sunday. It is not an announced event. |
+| IRL | A proposed three-day hackathon in Düsseldorf, Germany, not an announced event. | A proposed three-day build weekend in Düsseldorf, Germany, Friday to Sunday. It is not an announced event. |
 
 The same hero sentence is kept in `app/site-content.ts`. The test that pins the Eras line is updated; the IRL test keeps its wording rules ("proposed", "not an announced event", not "A planned three-day").
 
@@ -321,7 +321,7 @@ Use four paragraphs on the left and three in the right quote. Introduce Orry and
 _Merged from `loadout-irl-compact-card.md`._
 
 ---
-feature: compact LOADOUT IRL Ruhr card
+feature: compact LOADOUT IRL Düsseldorf card
 design_language: ./DESIGN.md
 surface: public landing page
 status: implemented as a labeled future concept; details and readiness owned by Plan 15 and Plan 06
@@ -341,8 +341,8 @@ shadows only. Do not add gradients, pills, rounded cards, new colors, or new ico
 ### Copy
 
 - Eyebrow: `Future concept`
-- Heading: `LOADOUT IRL // RUHR`
-- Lead: `A planned three-day hackathon in Germany's Ruhr area.`
+- Heading: `LOADOUT IRL // Düsseldorf`
+- Lead: `A planned three-day hackathon in Düsseldorf, Germany.`
 - Supporting copy: `Builders will meet in person to choose a technical project, build together, and share what they make using LOADOUT's four tracks.`
 - Status: `Planned concept. Dates, venue, funding, and registration are not confirmed yet.`
 

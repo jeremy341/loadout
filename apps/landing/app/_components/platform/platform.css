@@ -1,0 +1,611 @@
+/* Participant platform (M1), styled like the homepage (home.css) and bound to docs/design/system/design-system.md:
+   graphite and blue in dark (default), stone paper with a yellow action and rust links in light. Engineering-paper
+   grid, hard 1px rules, hard offset shadows, square corners, pixel headings, IBM Plex Mono for reading. The film
+   grain (NoiseGrain) and the darkening depth layer (.pf-depth) come from PlatformBackdrop. Only transform and opacity
+   ever animate, and nothing moves under reduced motion. */
+
+.pf {
+  --pf-bg: #222627;
+  --pf-fg: #E9EBE7;
+  --pf-mut: #A7AEAB;
+  --pf-ac: #5E9EF4;
+  --pf-acf: #16191A;
+  --pf-panel: #2C3132;
+  --pf-rule: rgba(233, 235, 231, 0.22);
+  --pf-ln: rgba(233, 235, 231, 0.06);
+  --pf-link: #5E9EF4;
+  --pf-focus: #5E9EF4;
+  --pf-err: #FF9B8A;
+  --pf-ok: #9FD8A8;
+  --pf-edge: #0C0E0E;
+  --pf-press: rgba(0, 0, 0, 0.45);
+  --pf-btn-bg: var(--pf-ac);
+  --pf-btn-fg: var(--pf-acf);
+  --pf-btn-bd: var(--pf-ac);
+  --pf-cur-bg: var(--pf-ln);
+  --pf-cur-fg: var(--pf-ac);
+  --pf-depth-core: rgba(6, 8, 9, 0.6);
+  --pf-depth-rim: rgba(0, 0, 0, 0.86);
+  --pf-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  /* The names the shared settings components (a11y-sheet and friends) read. */
+  --bg: var(--pf-bg);
+  --fg: var(--pf-fg);
+  --mut: var(--pf-mut);
+  --ac: var(--pf-ac);
+  --acf: var(--pf-acf);
+  --logo-bg: var(--pf-ac);
+  --logo-fg: var(--pf-acf);
+  --logo-fill: var(--pf-fg);
+
+  position: relative;
+  overflow-x: clip;
+  min-height: 100dvh;
+  background-color: var(--pf-bg);
+  background-image:
+    linear-gradient(var(--pf-ln) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pf-ln) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--pf-fg);
+  font-family: var(--font-ui), monospace;
+  /* Reading size from the accessibility settings scales everything below, which is set in em. */
+  font-size: calc(16px * var(--reading-scale, 1));
+  line-height: 1.6;
+}
+
+html[data-display-theme="light"] .pf {
+  --pf-bg: #DDD3BF;
+  --pf-fg: #1A1714;
+  --pf-mut: #463F34;
+  --pf-ac: #E3C26B;
+  --pf-acf: #1A1714;
+  --pf-panel: #D6CCB7;
+  --pf-rule: rgba(26, 23, 20, 0.3);
+  --pf-ln: rgba(26, 23, 20, 0.08);
+  --pf-link: #8A3413;
+  --pf-focus: #8A3413;
+  --pf-err: #8A1F1F;
+  --pf-ok: #2F5E36;
+  --pf-edge: #1A1714;
+  --pf-press: rgba(26, 23, 20, 0.5);
+  --pf-btn-bg: #E3C26B;
+  --pf-btn-fg: #1A1714;
+  --pf-btn-bd: #1A1714;
+  /* The current page in the sidebar is a yellow plate with ink text; yellow text on paper would fail contrast. */
+  --pf-cur-bg: #E3C26B;
+  --pf-cur-fg: #1A1714;
+  --pf-depth-core: rgba(26, 23, 20, 0.04);
+  --pf-depth-rim: rgba(26, 23, 20, 0.12);
+  --logo-bg: #E3C26B;
+  --logo-fg: #1A1714;
+  --logo-fill: #FBF3E4;
+}
+
+body:has(.pf) { margin: 0; background: #222627; }
+html[data-display-theme="light"] body:has(.pf) { background: #DDD3BF; }
+
+/* ---- Accessibility preferences (the same settings the homepage and the Docs honour) ---- */
+html[data-hide-grid="true"] .pf { background-image: none !important; }
+html[data-hide-markings="true"] .pf .pf-depth { display: none !important; }
+html[data-more-spacing="true"] .pf :is(p, li, dd, td, th, label, .pf-hint) {
+  line-height: 1.8;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+html[data-larger-controls="true"] .pf :is(.pf-nav a, .pf-pager a, .pf-who a, .pf-table a) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+html[data-larger-controls="true"] .pf .pf-nav a { min-height: 48px; }
+html[data-larger-controls="true"] .pf .pf-btn { min-height: 52px; }
+
+html:is([data-strong-contrast="true"], [data-system-contrast="true"]):not([data-display-theme="light"]) .pf {
+  --pf-fg: #FFFFFF;
+  --pf-mut: #E9EBE7;
+  --pf-rule: #BBC4C1;
+  --pf-link: #FFFFFF;
+  --pf-focus: #FFFFFF;
+}
+html:is([data-strong-contrast="true"], [data-system-contrast="true"])[data-display-theme="light"] .pf {
+  --pf-fg: #000000;
+  --pf-mut: #26211C;
+  --pf-rule: #000000;
+  --pf-link: #6F2516;
+  --pf-focus: #000000;
+}
+
+/* Colour-vision palettes: the accent follows the chosen profile, as on the homepage. */
+html:is([data-color-vision="protanopia"], [data-color-vision="deuteranopia"]):not([data-display-theme="light"]) .pf { --pf-ac: #56B4E9; --pf-link: #56B4E9; --pf-focus: #56B4E9; }
+html[data-color-vision="tritanopia"]:not([data-display-theme="light"]) .pf { --pf-ac: #E69F00; --pf-link: #E69F00; --pf-focus: #E69F00; }
+html[data-color-vision="achromatopsia"]:not([data-display-theme="light"]) .pf { --pf-ac: #E9EBE7; --pf-link: #E9EBE7; --pf-focus: #E9EBE7; }
+html[data-display-theme="light"]:is([data-color-vision="protanopia"], [data-color-vision="deuteranopia"]) .pf {
+  --pf-ac: #005A8D; --pf-acf: #FBF3E4; --pf-link: #005A8D; --pf-focus: #005A8D;
+  --pf-btn-bg: #005A8D; --pf-btn-fg: #FBF3E4; --pf-cur-bg: #005A8D; --pf-cur-fg: #FBF3E4; --logo-bg: #005A8D;
+}
+html[data-display-theme="light"][data-color-vision="tritanopia"] .pf {
+  --pf-ac: #7A4600; --pf-acf: #FBF3E4; --pf-link: #7A4600; --pf-focus: #7A4600;
+  --pf-btn-bg: #7A4600; --pf-btn-fg: #FBF3E4; --pf-cur-bg: #7A4600; --pf-cur-fg: #FBF3E4; --logo-bg: #7A4600;
+}
+html[data-display-theme="light"][data-color-vision="achromatopsia"] .pf {
+  --pf-ac: #1A1714; --pf-acf: #FBF3E4; --pf-link: #1A1714; --pf-focus: #1A1714;
+  --pf-btn-bg: #1A1714; --pf-btn-fg: #FBF3E4; --pf-cur-bg: #1A1714; --pf-cur-fg: #FBF3E4; --logo-bg: #1A1714;
+}
+
+/* ---- Depth: the page gets darker as you scroll, as on the homepage (depth-dark.css) ----
+   One fixed layer behind the content, so it darkens the backdrop and never the text or the panels. Its opacity follows
+   the scroll position through a CSS scroll-driven animation: no scroll listener, no React state. A browser without
+   scroll-driven animations, and a page too short to scroll, keep the page as it was. */
+.pf .pf-depth { display: none; }
+@supports (animation-timeline: scroll()) {
+  .pf .pf-depth {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(ellipse 90% 85% at 50% 50%, var(--pf-depth-core) 35%, var(--pf-depth-rim) 100%);
+    animation: pf-descend linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes pf-descend { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- Base ---- */
+.pf * { box-sizing: border-box; }
+.pf a { color: var(--pf-link); text-decoration: underline; text-underline-offset: 3px; }
+.pf :focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 3px; }
+.pf code { font-family: var(--font-mono-art), monospace; font-size: 0.9em; padding: 1px 6px; border: 1px solid var(--pf-rule); background: var(--pf-panel); }
+
+.pf-skip {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  padding: 10px 14px;
+  background: var(--pf-btn-bg);
+  color: var(--pf-btn-fg);
+  text-decoration: none;
+  z-index: 10;
+}
+.pf .pf-skip { color: var(--pf-btn-fg); }
+.pf-skip:focus { top: 12px; }
+
+.pf-frame, .pf-plain { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr; grid-template-rows: auto; align-content: start; min-height: 100dvh; }
+.pf-frame { grid-template-rows: auto 1fr; grid-auto-rows: auto; }
+
+/* ---- Top bar and wordmark ---- */
+/* The bar is framed like the homepage nav: a 2px ink border, a slightly rounded corner and a thin hard shadow. */
+.pf-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 16px 0;
+  min-height: 58px;
+  padding: 7px 12px;
+  border: 2px solid var(--pf-fg);
+  border-radius: 3px;
+  background: var(--pf-bg);
+  box-shadow: 0 2px 0 var(--pf-rule);
+}
+.pf .pf-top .pf-brand { order: 1; }
+.pf .pf-brand { color: var(--pf-fg); text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
+.pf .lg { display: inline-flex; align-items: center; gap: 8px; }
+/* The wordmark matches the homepage nav: Jersey 10, 31px on phones and 36px wide, tracked -0.02em. */
+.pf .lg-text { font-family: var(--font-display), monospace; font-size: 31px; line-height: 1; letter-spacing: -0.02em; color: var(--pf-fg); }
+.pf .lg-mark { display: inline-grid; flex: none; width: 24px; height: 24px; }
+.pf .lg-mark svg { display: block; width: 24px; height: 24px; }
+.pf .lg-a { fill: var(--logo-bg); }
+.pf .lg-b { fill: var(--logo-fg); }
+.pf .lg-c, .pf .lg-lamp { fill: var(--logo-fill); }
+@keyframes pf-lamp { 0% { fill: var(--logo-bg); } 18% { fill: var(--logo-fill); } 36% { fill: var(--logo-bg); } 54%, 100% { fill: var(--logo-fill); } }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf a:hover .lg-lamp { animation: pf-lamp 0.9s steps(1, end) 1; }
+}
+
+.pf-who { font-size: 0.875em; color: var(--pf-mut); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+/* Profile icon placeholder, top right. A square with a pixel head and shoulders, drawn in the ink colour. */
+.pf .pf-profile-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  color: var(--pf-fg);
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--pf-edge);
+}
+.pf .pf-profile-slot svg { fill: currentColor; }
+.pf .pf-profile-slot:hover { color: var(--pf-link); }
+
+/* The Ore chip and the user icon sit together at the far right of the top bar. */
+.pf .pf-top .pf-top-end { order: 3; display: flex; align-items: center; gap: 6px; flex: none; }
+.pf .pf-ore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 3px 3px 0 var(--pf-edge);
+  font-size: 0.875em;
+  white-space: nowrap;
+}
+/* The Ore gem is the sprite used as a mask, so it takes the accent colour: blue in dark mode, yellow in light. */
+.pf .pf-ore-icon {
+  display: block;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background: var(--pf-ac);
+  -webkit-mask: url("/loadout/sprites/ore.png") center / contain no-repeat;
+  mask: url("/loadout/sprites/ore.png") center / contain no-repeat;
+}
+.pf .pf-ore-label { font: 600 0.75em var(--font-ui), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-ore-value { font: 700 1.25em var(--font-pixel), monospace; }
+.pf-who a { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* ---- Buttons: the homepage .btn, hard offset shadow and press ---- */
+.pf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid var(--pf-fg);
+  border-radius: 0;
+  background: transparent;
+  color: var(--pf-fg);
+  font: 700 1em var(--font-pixel), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pf-btn.pri { min-height: 52px; padding: 0 32px; background: var(--pf-btn-bg); color: var(--pf-btn-fg); border-color: var(--pf-btn-bd); }
+.pf-btn:disabled { opacity: 0.6; cursor: wait; }
+
+/* ---- Navigation ----
+   Phone: the menu button sits in the top bar and opens a full-width vertical list under it. */
+/* Phones: the menu button sits at the far right, after the Ore chip and the user icon. */
+.pf-nav-toggle { display: inline-flex; order: 4; min-height: 44px; margin-left: auto; padding: 0 12px; }
+.pf-who { order: 3; width: 100%; }
+.pf-nav { display: none; order: 5; width: 100%; border-top: 1px solid var(--pf-rule); padding: 12px 0 4px; }
+.pf-nav[data-open="true"] { display: block; }
+.pf-nav ul { list-style: none; margin: 0; padding: 0; }
+.pf-nav-group { margin-bottom: 14px; }
+.pf-nav-group h2 {
+  margin: 0 0 6px;
+  font: 600 0.75em var(--font-ui), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-mut);
+}
+.pf .pf-nav a {
+  display: block;
+  min-height: 44px;
+  line-height: 44px;
+  color: var(--pf-fg);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+  overflow-wrap: anywhere;
+}
+.pf .pf-nav a[aria-current="page"] {
+  border-left-color: var(--pf-fg);
+  background: var(--pf-cur-bg);
+  color: var(--pf-cur-fg);
+  font-weight: 600;
+}
+.pf .pf-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ---- Main column, headings, rules ---- */
+.pf-main { padding: 28px 16px 56px; max-width: 1080px; width: 100%; min-width: 0; margin-inline: auto; }
+.pf-main h1 {
+  position: relative;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: 14px 12px 24px;
+  font-family: var(--font-pixel), monospace;
+  font-weight: 700;
+  font-size: clamp(2.25em, 9vw, 3.5em);
+  line-height: 1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+/* Four registration marks around the page title, one set per page (design-system.md, Corner brackets). */
+.pf-main h1::before {
+  content: "";
+  position: absolute;
+  inset: -12px -14px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--pf-fg), var(--pf-fg)) top left / 16px 2px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) top left / 2px 16px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) top right / 16px 2px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) top right / 2px 16px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) bottom left / 16px 2px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) bottom left / 2px 16px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) bottom right / 16px 2px no-repeat,
+    linear-gradient(var(--pf-fg), var(--pf-fg)) bottom right / 2px 16px no-repeat;
+}
+.pf-lead { color: var(--pf-fg); opacity: 0.85; max-width: 65ch; margin: 0 0 32px; line-height: 1.75; }
+.pf-section { border-top: 1px solid var(--pf-fg); padding: 28px 0; }
+.pf-section h2 {
+  font-family: var(--font-pixel), monospace;
+  font-weight: 700;
+  font-size: 1.75em;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Panels and cards: 1px ink outline, hard offset shadow, lift on hover ---- */
+.pf-facts { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 0; }
+.pf-facts div,
+.pf-panel,
+.pf-sign {
+  position: relative;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: inset 0 0 0 1px var(--pf-ln), 4px 4px 0 var(--pf-edge);
+}
+.pf-facts div { padding: 18px 20px; min-width: 0; }
+.pf-facts dt { font: 600 0.75em var(--font-ui), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf-facts dd { margin: 6px 0 0; font: 700 2.25em/1.1 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+
+.pf-empty { border: 1px dashed var(--pf-fg); padding: 22px 24px; background: var(--pf-panel); }
+.pf-empty h3 { margin: 0 0 8px; font: 700 1.375em/1.2 var(--font-pixel), monospace; }
+.pf-empty p { margin: 0; color: var(--pf-mut); max-width: 60ch; }
+
+.pf-panel { padding: 22px; margin-top: 20px; }
+.pf-sign { max-width: 520px; padding: 24px; }
+
+/* ---- Forms ---- */
+.pf-field { display: grid; gap: 6px; margin-bottom: 16px; }
+.pf-field label, .pf-check { font-weight: 600; }
+.pf-input, .pf-textarea {
+  font: 400 1em var(--font-ui), monospace;
+  color: var(--pf-fg);
+  background: var(--pf-bg);
+  border: 2px solid var(--pf-fg);
+  border-radius: 0;
+  padding: 10px 12px;
+  min-height: 44px;
+  max-width: 100%;
+}
+.pf-textarea { min-height: 96px; }
+.pf-input:focus-visible, .pf-textarea:focus-visible { outline-offset: 2px; }
+.pf-hint { font-size: 0.875em; color: var(--pf-mut); }
+.pf-error { color: var(--pf-err); font-size: 0.9375em; margin: 0; }
+.pf-saved { color: var(--pf-ok); font-size: 0.9375em; margin: 0; }
+.pf-check { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.pf-check input { width: 22px; height: 22px; accent-color: var(--pf-link); }
+
+/* ---- Tables: a ruled sheet, header labels in the card-title style ---- */
+.pf-table-wrap { border: 1px solid var(--pf-fg); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); }
+.pf-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.pf-table caption { padding: 12px 12px 8px; text-align: left; }
+.pf-table th, .pf-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 12px 12px;
+  border-bottom: 1px solid var(--pf-rule);
+  overflow-wrap: break-word;
+}
+/* Long unbroken values (emails, ids, reasons) may break anywhere, so short words in the other columns stay whole. */
+.pf-table .pf-break { overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .pf-table { font-size: 0.8125em; }
+  .pf-table th, .pf-table td { padding: 10px 6px; }
+  .pf-table th { letter-spacing: 0.04em; }
+}
+.pf-table th { font: 600 0.75em var(--font-ui), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); border-bottom-color: var(--pf-fg); }
+.pf-table tbody tr:last-child td { border-bottom: 0; }
+
+.pf-pager { display: flex; gap: 16px; align-items: center; margin-top: 20px; font-size: 0.875em; }
+.pf-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+/* ---- Pointer feedback ----
+   Lifts and presses are transform only, on devices that hover, and never under reduced motion. The hard shadow is a
+   plain state change that stays where the card was, so the card rises off it. */
+@media (hover: hover) and (pointer: fine) {
+  .pf-table tbody tr:hover td { background: var(--pf-bg); }
+  .pf-btn:not(:disabled):hover { box-shadow: 0 6px 0 var(--pf-press); }
+  .pf-btn:not(:disabled):active { box-shadow: none; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-facts div,
+  html:not([data-motion-paused="true"]) .pf .pf-table tbody tr,
+  html:not([data-motion-paused="true"]) .pf .pf-btn { transition: transform 160ms var(--pf-ease); }
+  html:not([data-motion-paused="true"]) .pf .pf-btn:active { transition-duration: 80ms; }
+
+  html:not([data-motion-paused="true"]) .pf .pf-facts div:hover { transform: translateY(-4px); box-shadow: inset 0 0 0 1px var(--pf-ln), 4px 8px 0 var(--pf-edge); }
+  /* A strip under the card keeps the pointer inside it while it rises, so it does not flicker at the lower edge. */
+  html:not([data-motion-paused="true"]) .pf .pf-facts div::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 6px; }
+  html:not([data-motion-paused="true"]) .pf .pf-table tbody tr:hover { transform: translateY(-2px); }
+  html:not([data-motion-paused="true"]) .pf .pf-btn:not(:disabled):hover { transform: translateY(-3px); }
+  html:not([data-motion-paused="true"]) .pf .pf-btn:not(:disabled):active { transform: translateY(2px); }
+}
+.pf-facts div:focus-within { z-index: 2; }
+
+/* ---- Pixel cursor, as on the homepage (cursor.css), unless the visitor chose the system cursor ---- */
+@media (pointer: fine) and (forced-colors: none) {
+  html:not([data-system-cursor="true"]) :is(.pf, body:has(.pf) .a11y-dialog, body:has(.pf) .a11y-shortcut) {
+    cursor: var(--cursor-arrow-dark) 3 1, auto;
+  }
+  html:not([data-system-cursor="true"])[data-display-theme="light"] :is(.pf, body:has(.pf) .a11y-dialog, body:has(.pf) .a11y-shortcut) {
+    cursor: var(--cursor-arrow-light) 3 1, auto;
+  }
+  html:not([data-system-cursor="true"]) :is(.pf, body:has(.pf) .a11y-dialog, body:has(.pf) .a11y-shortcut) :is(a[href], button, label, summary, select, input[type="checkbox"], input[type="radio"], [role="button"]) {
+    cursor: var(--cursor-hand-dark) 15 3, pointer;
+  }
+  html:not([data-system-cursor="true"])[data-display-theme="light"] :is(.pf, body:has(.pf) .a11y-dialog, body:has(.pf) .a11y-shortcut) :is(a[href], button, label, summary, select, input[type="checkbox"], input[type="radio"], [role="button"]) {
+    cursor: var(--cursor-hand-light) 15 3, pointer;
+  }
+  html:not([data-system-cursor="true"]) :is(.pf, body:has(.pf) .a11y-dialog) :is(a[href], button, label, summary, [role="button"]) :is(span, strong, small, svg, path) {
+    cursor: inherit;
+  }
+  html:not([data-system-cursor="true"]) .pf :is(input:not([type="checkbox"]):not([type="radio"]), textarea) { cursor: text; }
+  html:not([data-system-cursor="true"]) .pf :is(button, input, textarea):disabled { cursor: wait; }
+}
+
+/* ---- Wide screens: the pages sit in the top bar as tokens, the current one in brackets ---- */
+@media (min-width: 900px) {
+  .pf-top { margin-inline: 24px; padding-inline: 20px; gap: 4px 28px; }
+  .pf-nav-toggle { display: none; }
+  .pf-who { order: 3; width: auto; margin-left: 0; }
+  .pf-nav {
+    display: flex;
+    order: 2;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    width: auto;
+    border: 0;
+    padding: 0;
+  }
+  .pf-nav-group { display: flex; align-items: center; margin: 0; }
+  .pf-nav ul { display: flex; flex-wrap: wrap; align-items: center; gap: 0 2px; }
+  /* Build and You need no visible label here; screen readers still hear each group's heading. */
+  .pf-nav-group h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* The staff group follows the pages after a rule, with its label shown. */
+  .pf-nav-group[data-group="staff"] {
+    margin-left: 14px;
+    padding-left: 18px;
+    border-left: 1px solid var(--pf-rule);
+  }
+  .pf-nav-group[data-group="staff"] h2 {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    margin: 0 6px 0 0;
+    font: 400 0.75em var(--font-ui), monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pf-mut);
+  }
+  .pf .pf-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    line-height: 1.2;
+    padding: 0 10px;
+    border-left: 0;
+    background: none;
+    color: var(--pf-mut);
+    font: 400 0.8125em var(--font-ui), monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .pf .pf-nav a:hover { color: var(--pf-fg); }
+  .pf .pf-nav a[aria-current="page"] {
+    border-left-color: transparent;
+    background: none;
+    color: var(--pf-link);
+    font-weight: 600;
+  }
+  /* Brackets mark the current page without relying on colour. They are decoration, so they have no spoken text. */
+  .pf .pf-nav a[aria-current="page"]::before { content: "[ "; content: "[ " / ""; white-space: pre; }
+  .pf .pf-nav a[aria-current="page"]::after { content: " ]"; content: " ]" / ""; white-space: pre; }
+  .pf-facts { grid-template-columns: repeat(3, 1fr); }
+  .pf-main { padding: 36px 24px 72px; }
+  .pf .lg-text { font-size: 36px; }
+}
+@media (min-width: 900px) and (max-width: 1100px) {
+  .pf-facts { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (forced-colors: active) {
+  .pf-depth { display: none; }
+  .pf-btn, .pf-facts div, .pf-panel, .pf-sign, .pf-table-wrap { border: 1px solid CanvasText; box-shadow: none; }
+  .pf .pf-nav a[aria-current="page"] { border-left-color: Highlight; color: Highlight; }
+}
+
+/* Reduced motion: no transform, no animation, no transition. The depth layer stays at rest. */
+@media (prefers-reduced-motion: reduce) {
+  .pf *, .pf *::before, .pf *::after { transition: none !important; animation: none !important; }
+}
+
+/* ---- Overview: the headline block, track cards and the start block ----
+   Content is centred in a 1080px column; the text inside stays left-aligned for reading. */
+.pf-hero { margin: 8px 0 44px; }
+.pf-hero-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  font: 400 12px/1.6 var(--font-dot), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pf-mut);
+}
+.pf-hero-meta span:last-child { text-align: right; }
+.pf-hero-frame { position: relative; max-width: 100%; padding: 18px 22px 20px; }
+.pf-corner { position: absolute; width: 18px; height: 20px; border: 0 solid var(--pf-fg); }
+.pf-corner.top-left { left: 0; top: 0; border-left-width: 2px; border-top-width: 2px; }
+.pf-corner.top-right { right: 0; top: 0; border-right-width: 2px; border-top-width: 2px; }
+.pf-corner.bottom-left { left: 0; bottom: 0; border-left-width: 2px; border-bottom-width: 2px; }
+.pf-corner.bottom-right { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; }
+/* The frame carries the corners, so the title drops the page-wide brackets that other pages use. */
+/* The size follows the width, so the title fits the frame on a 320px phone and never breaks inside the word. */
+.pf-hero h1 { margin: 0; font-weight: 900; font-size: clamp(36px, calc((100vw - 80px) / 5.8), 120px); line-height: 0.95; letter-spacing: -0.015em; white-space: nowrap; }
+.pf-hero h1::before { content: none; }
+.pf-hero .pf-lead { margin: 20px 0 0; }
+
+/* Phones: Ore and Projects share a row, and the next step takes the full width below them. */
+.pf-facts-three { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pf-facts-three > div:last-child { grid-column: 1 / -1; }
+.pf-facts-three dd { font-size: 1.75em; }
+.pf-facts-three > div { padding: 14px 16px; }
+.pf-next { font-size: 20px !important; line-height: 1.25 !important; }
+
+/* Track cards: the homepage card, a 1px ink outline and a hard shadow. Four across on wide screens. */
+.pf-track-grid { display: grid; grid-template-columns: 1fr; gap: 16px; list-style: none; margin: 0; padding: 0; }
+.pf-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 20px 20px 16px;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: inset 0 0 0 1px var(--pf-ln), 4px 4px 0 var(--pf-edge);
+}
+.pf-card-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; color: var(--pf-mut); }
+.pf-card-top img { image-rendering: pixelated; width: 32px; height: 32px; }
+.pf-card h3 { margin: 0; font: 700 1.75em/1 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf-card-text { margin: 0; font-size: 0.9375em; line-height: 1.6; }
+.pf-chip { align-self: flex-start; border: 1px solid var(--pf-fg); padding: 4px 10px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; background: var(--pf-bg); }
+.pf-track-status { margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--pf-rule); font-size: 0.875em; color: var(--pf-mut); }
+.pf-start-text { margin: 0; max-width: 60ch; }
+.pf-status-list { list-style: none; margin: 0 0 12px; padding: 0; }
+.pf-status-list li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--pf-rule); }
+@media (min-width: 560px) and (max-width: 899px) {
+  .pf-track-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .pf-facts-three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .pf-facts-three > div:last-child { grid-column: auto; }
+  .pf-facts-three dd { font-size: 2.25em; }
+  .pf-facts-three > div { padding: 18px 20px; }
+  .pf-track-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pf-hero-meta { font-size: 13px; }
+}

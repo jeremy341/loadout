@@ -1,13 +1,6 @@
 import { ART } from "./art";
 import { AsciiField } from "./AsciiField";
-
-// Each track names one concrete thing you could build, with a tag for what kind of project it is.
-const TRACKS = [
-  { name: "Tools", icon: "wrench", tag: "CLI", text: "Build a command-line tool that removes a step you keep repeating." },
-  { name: "Systems", icon: "gear", tag: "Database", text: "Build a small database or a chat server that other programs can use." },
-  { name: "Compute", icon: "cpu", tag: "GPU", text: "Build a program that runs a machine-learning model on a GPU." },
-  { name: "Hardware", icon: "board", tag: "Board", text: "Build a custom circuit board or a robot." },
-] as const;
+import { TRACK_BUILDS } from "./tracks-data";
 
 // Tracks section ported from the LOADOUT redesign reference.
 export function Tracks() {
@@ -33,7 +26,7 @@ export function Tracks() {
           Pick the fields your project touches. One project can sit in more than one.
         </p>
         <div className="row">
-          {TRACKS.map((track, index) => (
+          {TRACK_BUILDS.map((track, index) => (
             <div className="card t" key={track.name}>
               <div className="ct">
                 <span>

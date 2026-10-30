@@ -1,0 +1,80 @@
+// M1 participant platform data. Milestone scope: docs/plans participant-platform-milestones.md.
+// Keep this file to the M1 tables; later milestones add their own migrations.
+
+generator client {
+  provider   = "prisma-client"
+  output     = "../lib/generated/prisma"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Person {
+  id          String     @id @default(cuid())
+  email       String     @unique
+  displayName String
+  // Staff-only reason for a ban. Never shown to the banned person.
+  bannedAt    DateTime?
+  banReason   String?
+  createdAt   DateTime   @default(now())
+  roles       RoleGrant[]
+  sessions    Session[]
+  projects    Project[]
+}
+
+model RoleGrant {
+  id        String   @id @default(cuid())
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  role      String
+  grantedAt DateTime @default(now())
+
+  @@unique([personId, role])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  // SHA-256 of the cookie value. The raw token is never stored.
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([personId])
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     Person   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title     String
+  status    String   @default("draft")
+  createdAt DateTime @default(now())
+
+  @@index([ownerId])
+}
+
+// Append-only. Rows are never updated or deleted by the app.
+model AuditEvent {
+  id         String   @id @default(cuid())
+  actorId    String
+  action     String
+  targetType String
+  targetId   String
+  reason     String
+  before     Json?
+  after      Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model FeatureFlag {
+  name        String   @id
+  description String
+  enabled     Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+}

@@ -34,6 +34,9 @@ Internal and public age wording is 13–18. Hack Club teen verification is requi
 ## Future proposals
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
+- [`proposals/participant-platform-milestones.md`](proposals/participant-platform-milestones.md) sets the gated milestones for that feature set. Planning only.
+- [`proposals/participant-platform-feature-inventory.md`](proposals/participant-platform-feature-inventory.md) lists the participant and admin surfaces taken from the references, with milestone and keep/reshape/cut decisions. Planning only.
+- [`proposals/participant-platform-infrastructure.md`](proposals/participant-platform-infrastructure.md) compares the four references' infrastructure and proposes a host, database, auth and job setup for owner approval. Planning only.
 
 ## Removed on 25 Oct 2026
 

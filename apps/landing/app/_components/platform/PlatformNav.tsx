@@ -4,6 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useId, useState } from "react";
 import type { NavGroup } from "@/lib/platform/nav";
+import { PlatformThemeToggle } from "./PlatformThemeToggle";
+
+// A tab is current on its own page and below it: a project belongs to Projects, and a track page to Overview.
+function isCurrent(pathname: string, href: string): boolean {
+  if (pathname === href) return true;
+  if (href === "/dashboard") return pathname.startsWith("/dashboard/tracks/");
+  return pathname.startsWith(href + "/");
+}
 
 // Phone: a labelled button opens a vertical list. Desktop: the pages sit in the top bar as tokens, the current one
 // in brackets, and the staff group follows after a divider (CSS). The group headings stay for screen readers.
@@ -29,7 +37,7 @@ export function PlatformNav({ groups }: { groups: NavGroup[] }) {
             <h2>{group.label}</h2>
             <ul>
               {group.items.map((item) => {
-                const current = pathname === item.href;
+                const current = isCurrent(pathname, item.href);
                 return (
                   <li key={item.href}>
                     <Link href={item.href} aria-current={current ? "page" : undefined} onClick={() => setOpen(false)}>
@@ -41,6 +49,9 @@ export function PlatformNav({ groups }: { groups: NavGroup[] }) {
             </ul>
           </div>
         ))}
+        <div className="pf-nav-theme">
+          <PlatformThemeToggle showLabel />
+        </div>
       </nav>
     </>
   );

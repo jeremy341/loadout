@@ -50,9 +50,12 @@ model Project {
   id        String   @id @default(cuid())
   ownerId   String
   owner     Person   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  title     String
-  status    String   @default("draft")
-  createdAt DateTime @default(now())
+  title       String
+  description String?
+  // One of the track names in lib/platform/progress.ts. Null until the builder picks one.
+  track       String?
+  status      String   @default("draft")
+  createdAt   DateTime @default(now())
 
   @@index([ownerId])
 }

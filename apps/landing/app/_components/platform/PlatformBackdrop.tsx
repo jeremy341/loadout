@@ -1,13 +1,8 @@
 import { NoiseGrain } from "../NoiseGrain";
 
-// The two page-wide layers the homepage has, for every platform page: the darkening depth layer
-// (platform.css, a CSS scroll-driven animation, nothing in React) and the shared film grain, which
-// already follows the grain preference and reduced motion. Both are decorative and never take input.
+// The page-wide layer the platform keeps from the homepage: the shared film grain, which already follows the grain
+// preference and reduced motion. It is decorative and never takes input. The homepage's scroll-driven darkening is not
+// used here, so a platform page keeps the same colours from top to bottom.
 export function PlatformBackdrop() {
-  return (
-    <>
-      <div className="pf-depth" aria-hidden="true" />
-      <NoiseGrain />
-    </>
-  );
+  return <NoiseGrain />;
 }

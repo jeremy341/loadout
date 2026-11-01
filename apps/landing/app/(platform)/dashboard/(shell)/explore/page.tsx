@@ -8,7 +8,7 @@ export default async function ExplorePage() {
   await requireViewer();
   return (
     <>
-      <h1>Explore</h1>
+      <h1 className="pf-sr">Explore</h1>
       <p className="pf-lead">Public projects from other builders.</p>
       <EmptyState title="Opens in a later release">
         Public project pages open once projects can be shipped. There are no projects to browse yet.

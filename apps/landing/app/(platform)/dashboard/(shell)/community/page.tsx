@@ -8,7 +8,7 @@ export default async function CommunityPage() {
   await requireViewer();
   return (
     <>
-      <h1>Community</h1>
+      <h1 className="pf-sr">Community</h1>
       <p className="pf-lead">The idea board, Show and Tell, events and follows.</p>
       <EmptyState title="Opens in a later release">
         Community features open after projects and profiles are live.

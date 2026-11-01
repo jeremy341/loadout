@@ -1,4 +1,5 @@
-// The top-level tabs. Overview and Projects are live in M1; the rest are placeholders until their milestone lands.
+// The top-level tabs. Overview and Projects are live in M1; the rest are placeholders until their milestone lands. Docs
+// leaves the dashboard for the public documentation, which the platform has no other link to.
 // Settings is not a tab: it is reached from the account controls in the top bar. The You tab waits for the
 // character icon design. Ship lives inside Projects.
 export type NavItem = { href: string; label: string };
@@ -14,6 +15,7 @@ export const PARTICIPANT_NAV: NavGroup[] = [
       { href: "/dashboard/explore", label: "Explore" },
       { href: "/dashboard/community", label: "Community" },
       { href: "/dashboard/expeditions", label: "Expeditions" },
+      { href: "/docs/start", label: "Docs" },
     ],
   },
 ];

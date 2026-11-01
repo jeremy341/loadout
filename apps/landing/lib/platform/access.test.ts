@@ -26,17 +26,17 @@ describe("navigation", () => {
     expect(navFor(true)).toContain(STAFF_NAV);
   });
 
-  test("has the six agreed tabs and no You tab", () => {
+  test("has the six agreed tabs, a Docs link and no You tab", () => {
     const labels = PARTICIPANT_NAV.flatMap((group) => group.items.map((item) => item.label));
-    expect(labels).toEqual(["Overview", "Projects", "Shop", "Explore", "Community", "Expeditions"]);
+    expect(labels).toEqual(["Overview", "Projects", "Shop", "Explore", "Community", "Expeditions", "Docs"]);
     expect(labels).not.toContain("Settings");
     expect(labels).not.toContain("Ship");
   });
 
-  test("every tab is a dashboard route", () => {
-    const hrefs = navFor(true).flatMap((group) => group.items.map((item) => item.href));
-    for (const href of hrefs) {
-      expect(href.startsWith("/dashboard")).toBe(true);
+  test("every tab is a dashboard route, except the Docs link", () => {
+    const items = navFor(true).flatMap((group) => group.items);
+    for (const item of items) {
+      expect(item.href.startsWith(item.label === "Docs" ? "/docs/" : "/dashboard")).toBe(true);
     }
   });
 });

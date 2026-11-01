@@ -8,7 +8,7 @@ export default async function ExpeditionsPage() {
   await requireViewer();
   return (
     <>
-      <h1>Expeditions</h1>
+      <h1 className="pf-sr">Expeditions</h1>
       <p className="pf-lead">Guided steps with configured rewards.</p>
       <EmptyState title="Opens in a later release">
         Expeditions open in a later release. None are available yet.

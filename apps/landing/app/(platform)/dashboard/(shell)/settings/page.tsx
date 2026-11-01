@@ -9,7 +9,7 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <h1>Settings</h1>
+      <h1 className="pf-sr">Settings</h1>
       <p className="pf-lead">Your account details and the display settings used across LOADOUT.</p>
       <section className="pf-section" aria-labelledby="account-heading">
         <h2 id="account-heading">Account</h2>

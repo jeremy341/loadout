@@ -1,9 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { navFor } from "@/lib/platform/nav";
 import { oreBalance } from "@/lib/platform/progress";
 import type { Viewer } from "@/lib/platform/session";
 import { PlatformNav } from "./PlatformNav";
+import { PlatformThemeToggle } from "./PlatformThemeToggle";
 import { PlatformBackdrop } from "./PlatformBackdrop";
 
 export function PlatformShell({ viewer, children }: { viewer: Viewer; children: ReactNode }) {
@@ -16,9 +18,11 @@ export function PlatformShell({ viewer, children }: { viewer: Viewer; children: 
           <Link className="pf-brand" href="/"><span className="lg-text">LOADOUT</span></Link>
           <PlatformNav groups={navFor(viewer.isStaff)} />
           <div className="pf-top-end">
+            {/* The homepage's light and dark switch. On phones it moves into the menu, where there is room for it. */}
+            <PlatformThemeToggle className="pf-theme-top" />
             {/* Ore is shown on every page, as Pixl and Stardance show their balance. It stays at zero until approved hours exist. */}
             <span className="pf-ore">
-              <span className="pf-ore-icon" aria-hidden="true" />
+              <Image className="pf-ore-icon" src="/loadout/sprites/ore.png" alt="" width={32} height={32} unoptimized />
               <span className="pf-ore-label">Ore</span>
               <span className="pf-ore-value">{oreBalance().toLocaleString("en-GB")}</span>
             </span>

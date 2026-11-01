@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import {
+  discountForHours,
   formatDepth,
+  formatDiscount,
   hoursForLevel,
   hoursToNextLevel,
   LEVEL_CAP,
@@ -92,6 +94,34 @@ describe("level hours", () => {
     expect(sampleTrackProgress().map((row) => row.level)).toEqual([6, 3, 0, 1]);
     expect(hoursToNextLevel(sampleTrackHours("Tools").approved)).toBe(12);
     expect(hoursToNextLevel(sampleTrackHours("Systems").approved)).toBe(10);
+  });
+});
+
+describe("level discount", () => {
+  test("it is nothing at the start and 15% at LV.15's hours, and stops there", () => {
+    expect(discountForHours(0)).toBe(0);
+    expect(discountForHours(275)).toBe(15);
+    expect(discountForHours(500)).toBe(15);
+    expect(discountForHours(-4)).toBe(0);
+  });
+
+  test("it rises with every approved hour", () => {
+    expect(discountForHours(58)).toBeGreaterThan(discountForHours(57));
+    expect(discountForHours(137.5)).toBeCloseTo(7.5, 5);
+  });
+
+  test("it is shown to one decimal and rounded down", () => {
+    expect(formatDiscount(discountForHours(0))).toBe("0%");
+    expect(formatDiscount(discountForHours(2))).toBe("0.1%");
+    expect(formatDiscount(discountForHours(58))).toBe("3.1%");
+    expect(formatDiscount(discountForHours(55))).toBe("3%");
+    expect(formatDiscount(discountForHours(275))).toBe("15%");
+  });
+
+  test("the levels' discounts never pass 15% and rise level by level", () => {
+    const shown = LEVEL_HOURS.map((hours) => discountForHours(hours));
+    expect(Math.max(...shown)).toBe(15);
+    for (let index = 1; index < shown.length; index++) expect(shown[index]).toBeGreaterThan(shown[index - 1]);
   });
 });
 

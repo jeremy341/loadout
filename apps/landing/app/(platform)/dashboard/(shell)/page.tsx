@@ -3,7 +3,9 @@ import Link from "next/link";
 import { db } from "@/lib/platform/db";
 import { nextStep } from "@/lib/platform/next-step";
 import {
+  discountForHours,
   formatDepth,
+  formatDiscount,
   hoursToNextLevel,
   LEVEL_CAP,
   levelCells,
@@ -83,13 +85,14 @@ export default async function OverviewPage() {
           {trackHours.map(({ track, hours }) => {
             const level = levelForHours(hours.approved);
             const missing = hoursToNextLevel(hours.approved);
+            const off = formatDiscount(discountForHours(hours.approved));
             return (
               <li key={track}>
                 <Link
                   className="pf-track-line"
                   href={`/dashboard/tracks/${trackSlug(track)}`}
                   data-track={trackSlug(track)}
-                  aria-label={`${track}, level ${level} of ${LEVEL_CAP}. View levels`}
+                  aria-label={`${track}, level ${level} of ${LEVEL_CAP}, ${off} off ${track} prizes. View levels`}
                 >
                   <span className="pf-swatch" aria-hidden="true" />
                   <span className="pf-line-name">{track}</span>
@@ -99,7 +102,9 @@ export default async function OverviewPage() {
                       <span key={cell} className={filled ? "pf-cell on" : "pf-cell"} />
                     ))}
                   </span>
-                  <span className="pf-line-hours">{missing === null ? "max level" : `${missing} H to LV.${level + 1}`}</span>
+                  <span className="pf-line-hours">
+                    <b className="pf-line-off">{off} off</b> / {missing === null ? "max level" : `${missing} H to LV.${level + 1}`}
+                  </span>
                   <span className="pf-line-arrow" aria-hidden="true">→</span>
                 </Link>
               </li>

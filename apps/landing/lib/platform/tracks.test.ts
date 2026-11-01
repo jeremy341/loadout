@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { TRACKS } from "./progress";
-import { TRACK_ABOUT, trackBySlug, trackSlug } from "./tracks";
+import { trackBySlug, trackSlug } from "./tracks";
 
 describe("track addresses", () => {
   test("a slug names its track, ignoring case", () => {
@@ -13,11 +13,7 @@ describe("track addresses", () => {
     expect(trackBySlug("")).toBeNull();
   });
 
-  test("every track has a slug that finds it and some copy", () => {
-    for (const track of TRACKS) {
-      expect(trackBySlug(trackSlug(track))).toBe(track);
-      expect(TRACK_ABOUT[track].summary.length).toBeGreaterThan(0);
-      expect(TRACK_ABOUT[track].counts.length).toBeGreaterThan(0);
-    }
+  test("every track has a slug that finds it", () => {
+    for (const track of TRACKS) expect(trackBySlug(trackSlug(track))).toBe(track);
   });
 });

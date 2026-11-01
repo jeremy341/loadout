@@ -24,7 +24,7 @@ import { SmoothScroll } from "./_components/SmoothScroll";
 import { siteConfig } from "./site-config";
 
 const display = localFont({ src: "../public/fonts/Jersey10-Regular.ttf", variable: "--font-display", display: "swap" });
-const pixel = localFont({ src: "../public/fonts/PixelifySans.ttf", variable: "--font-pixel", weight: "400 700", display: "swap" });
+const pixel = localFont({ src: "../public/fonts/PixelifySans.ttf", variable: "--font-pixel-base", weight: "400 700", display: "swap" });
 const mono = localFont({ src: [
   { path: "../public/fonts/IBMPlexMono-Regular.ttf", weight: "400" },
   { path: "../public/fonts/IBMPlexMono-SemiBold.ttf", weight: "600" },

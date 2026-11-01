@@ -33,6 +33,26 @@ export function hoursToNextLevel(hours: number): number | null {
   return level >= LEVEL_CAP ? null : Math.max(0, LEVEL_HOURS[level] - hours);
 }
 
+// The shop discount a track's approved hours give: linear per hour, 15% at LV.15's 275 hours and no more (owner decision,
+// 24 Oct 2026). The rules doc still calls the curve between the set levels open, so treat the figures as a draft.
+export const DISCOUNT_MAX = 15;
+
+export function discountForHours(hours: number): number {
+  return Math.min(DISCOUNT_MAX, Math.max(0, (hours / LEVEL_HOURS[LEVEL_CAP - 1]) * DISCOUNT_MAX));
+}
+
+// The discount as shown: one decimal, rounded down, so a builder is never promised more than they have earned. Prices use
+// this figure too, so what the page says and what the price does always agree.
+export function shownDiscount(percent: number): number {
+  return Math.floor(percent * 10 + 1e-9) / 10;
+}
+
+// Shown to one decimal and rounded down: 3.1%, 15%.
+export function formatDiscount(percent: number): string {
+  const shown = shownDiscount(percent);
+  return Number.isInteger(shown) ? `${shown}%` : `${shown.toFixed(1)}%`;
+}
+
 // Hours needed for a level, with LV.0 at zero.
 export function hoursForLevel(level: number): number {
   return level <= 0 ? 0 : LEVEL_HOURS[Math.min(level, LEVEL_CAP) - 1];

@@ -16,6 +16,7 @@ const PARTICIPANT_PAGES = [
   "/dashboard/projects",
   "/dashboard/settings",
   "/dashboard/shop",
+  "/dashboard/shop/raspberry-pi-5",
   "/dashboard/explore",
   "/dashboard/community",
   "/dashboard/expeditions",
@@ -48,7 +49,7 @@ test("the Overview is the next step, three numbers and the four tracks", async (
   await expect(page.getByRole("heading", { level: 2, name: "Recent" })).toBeVisible();
   await expect(page.locator(".pf-recent-text").first()).toHaveAttribute("href", /^\/dashboard\/projects\//);
   await expect(page.getByRole("navigation", { name: "Participant" }).getByRole("link", { name: "Docs" })).toHaveAttribute("href", "/docs/start");
-  await expect(page.getByRole("link", { name: /^Systems, level 3 of 15/ })).toContainText("10 H to LV.4");
+  await expect(page.getByRole("link", { name: /^Systems, level 3 of 15, 0\.7% off Systems prizes/ })).toContainText("0.7% off / 10 H to LV.4");
   await expect(page.getByRole("heading", { name: /^(Your projects|Milestone map|Start here)$/ })).toHaveCount(0);
   await expect(page.getByText(/sample/i)).toHaveCount(0);
 });
@@ -59,10 +60,200 @@ test("pressing a track card opens its levels", async ({ page }) => {
   await expect(card).toBeVisible({ timeout: 30000 });
   await card.click();
   await expect(page.getByRole("heading", { level: 1, name: "Tools" })).toBeVisible({ timeout: 30000 });
-  await expect(page.locator(".pf-tile-next dt")).toHaveText("To LV.7");
-  await expect(page.locator(".pf-tile-next dd").first()).toHaveText("12 H");
-  await expect(page.getByRole("list").filter({ has: page.locator(".pf-core-row") }).getByRole("listitem")).toHaveCount(15);
+  await expect(page.getByRole("img", { name: /^3\.1% off Tools prizes, at level 6/ })).toHaveText("3.1%");
+  await expect(page.locator(".pf-strip-n")).toHaveText("LV.6");
+  await expect(page.locator(".pf-strip-next")).toHaveText("12 H to LV.7");
+  await expect(page.locator(".pf-strip-hint")).toHaveText("6 H waiting for review");
+  const cells = page.locator(".pf-strip-cells li");
+  await expect(cells).toHaveCount(15);
+  await expect(page.locator('.pf-strip-cells li[data-state="done"]')).toHaveCount(6);
+  await expect(cells.nth(6)).toHaveAttribute("data-state", "next");
+  await expect(page.locator(".pf-strip-pending")).toHaveCount(1);
+  const flags = page.locator(".pf-strip-flags li");
+  await expect(flags).toHaveCount(4);
+  await expect(flags.first()).toContainText("LV.5 / 35 H");
+  await expect(flags.first()).toHaveAttribute("data-reached", "true");
+  await expect(flags.nth(1)).toHaveAttribute("data-reached", "false");
+  await expect(flags.last()).toContainText("Max level");
+  // No level cell carries a percentage; only the reward flags below the cells name a coupon.
+  await expect(page.locator(".pf-strip-cells").getByText(/%/)).toHaveCount(0);
+  await expect(page.locator(".pf-track-page h2")).toHaveText(["Level and discount", "Tools projects"]);
+  const switcher = page.getByRole("navigation", { name: "Switch track" }).getByRole("link");
+  await expect(switcher).toHaveText(["Tools", "Systems", "Compute", "Hardware"]);
+  await expect(switcher.first()).toHaveAttribute("aria-current", "page");
+  await switcher.nth(2).click();
+  await expect(page).toHaveURL(/\/dashboard\/tracks\/compute$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Compute" })).toBeVisible({ timeout: 30000 });
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1, name: "Tools" })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByRole("link", { name: "How levels work" })).toHaveAttribute("href", "/docs/progress#levels");
+  await expect(page.getByRole("link", { name: "What counts in Tools" })).toHaveAttribute("href", "/docs/tracks");
   await expect(page.getByRole("link", { name: "Overview", exact: true })).toHaveAttribute("aria-current", "page");
+});
+
+test("a level cell gives its hours by keyboard and by tap, and the row is one tab stop", async ({ page }) => {
+  await page.goto("/dashboard/tracks/tools");
+  const cells = page.locator(".pf-strip-cell");
+  await expect(cells).toHaveCount(15, { timeout: 30000 });
+  await expect(cells.nth(8)).toHaveAttribute("aria-label", "Level 9, 112 hours, locked");
+  await expect(page.locator('.pf-strip-cell[tabindex="0"]')).toHaveCount(1);
+  await expect(cells.nth(6)).toHaveAttribute("tabindex", "0");
+
+  const tip = page.locator(".pf-strip-tip");
+  await cells.nth(6).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(tip).toHaveText("LV.8 / 90 H");
+  await expect(cells.nth(7)).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(tip).toHaveText("LV.15 / 275 H");
+  await page.keyboard.press("Escape");
+  await expect(tip).toHaveCount(0);
+
+  // A mouse shows it on hover, a click keeps it, and moving away hides it.
+  await cells.nth(2).click();
+  await expect(tip).toHaveText("LV.3 / 14 H");
+  await cells.nth(2).click();
+  await expect(tip).toHaveText("LV.3 / 14 H");
+  await page.mouse.move(0, 0);
+  await expect(tip).toHaveCount(0);
+});
+
+test.describe("on a touch screen", () => {
+  test.use({ hasTouch: true });
+
+  test("tapping a level cell shows its hours, a second tap or a tap elsewhere hides them", async ({ page }) => {
+    await page.goto("/dashboard/tracks/tools");
+    const cells = page.locator(".pf-strip-cell");
+    await expect(cells).toHaveCount(15, { timeout: 30000 });
+    const tip = page.locator(".pf-strip-tip");
+    await cells.nth(8).tap();
+    await expect(tip).toHaveText("LV.9 / 112 H");
+    await cells.nth(8).tap();
+    await expect(tip).toHaveCount(0);
+    await cells.nth(10).tap();
+    await expect(tip).toHaveText("LV.11 / 160 H");
+    await page.getByRole("heading", { level: 1, name: "Tools" }).tap();
+    await expect(tip).toHaveCount(0);
+  });
+});
+
+test("the Shop lists the proposed items with track tags, discounts and a plain notice that nothing can be ordered", async ({ page }) => {
+  await page.goto("/dashboard/shop");
+  await expect(page.getByText("Ordering opens in a later release. These are proposed items at draft prices.")).toBeVisible({ timeout: 30000 });
+  const cards = page.locator(".pf-shop-card");
+  await expect(cards).toHaveCount(72);
+  await expect(page.getByRole("button", { name: /buy|order now|checkout/i })).toHaveCount(0);
+
+  // Your Ore and the discount earned in each track.
+  const discounts = page.getByRole("region", { name: "Your Ore and discounts" });
+  await expect(discounts).toContainText("10 Ore per approved hour");
+  await expect(discounts.getByRole("link", { name: /Tools.*3\.1% off/ })).toHaveAttribute("href", "/dashboard/tracks/tools");
+  await expect(discounts.getByRole("link", { name: /Hardware.*0\.1% off/ })).toBeVisible();
+
+  // The tag chips: the four tracks and General.
+  const tags = page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link");
+  await expect(tags).toHaveText(["All items", "Tools", "Systems", "Compute", "Hardware", "General"]);
+  await expect(tags.first()).toHaveAttribute("aria-current", "page");
+
+  // A multi-track item shows under every track it relates to.
+  await tags.filter({ hasText: "Systems" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/shop\?tag=systems$/);
+  await expect(cards).toHaveCount(16);
+  await expect(cards.filter({ hasText: "Raspberry Pi 5" })).toHaveCount(1);
+  await expect(cards.filter({ hasText: "Hardware security key" })).toHaveCount(1);
+  await expect(cards.filter({ hasText: "Framework 16 laptop" })).toHaveCount(1);
+  // The best related track's discount applies: Systems LV.3 is 0.7%, which takes the Pi from 500 to 497 Ore.
+  const pi = cards.filter({ hasText: "Raspberry Pi 5" });
+  await expect(pi).toContainText("Was 500");
+  await expect(pi).toContainText("now 497");
+
+  // General items are open to everyone at the full price.
+  await page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link", { name: "General" }).click();
+  await expect(cards).toHaveCount(12);
+  await expect(cards.first().locator("h3")).toHaveText("Ticket to LOADOUT IRL in Düsseldorf");
+  await expect(cards.filter({ hasText: "Electric precision screwdriver set" })).toHaveCount(1);
+  await expect(cards.filter({ hasText: "Cable and adapter kit" })).toHaveCount(1);
+  await expect(cards.filter({ hasText: "Ticket to LOADOUT IRL" })).toContainText("Limited");
+  await expect(cards.filter({ hasText: "Ticket to LOADOUT IRL" }).locator("s")).toHaveCount(0);
+
+  // Search, sort and the affordable filter live in the address, with a message when nothing matches.
+  await page.goto("/dashboard/shop?sort=high");
+  await expect(cards.first().locator("h3")).toHaveText("Framework 16 laptop", { timeout: 30000 });
+  await page.goto("/dashboard/shop?afford=1");
+  await expect(page.getByText(/Nothing you can afford yet/)).toBeVisible({ timeout: 30000 });
+  await page.goto("/dashboard/shop?q=zzzz");
+  await expect(page.getByText("No items match.")).toBeVisible({ timeout: 30000 });
+  await page.getByRole("link", { name: "Clear the filters" }).click();
+  await expect(cards).toHaveCount(72);
+});
+
+test("a Shop item shows how its price is worked out and nothing to buy, and an unknown item is a 404", async ({ page }) => {
+  await page.goto("/dashboard/shop");
+  await page.locator(".pf-shop-card").filter({ hasText: "Enclosed 3D printer" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Enclosed 3D printer" })).toBeVisible({ timeout: 30000 });
+  const price = page.getByRole("region", { name: "Your price" });
+  await expect(price).toContainText("Base price1,045 Ore");
+  await expect(price).toContainText("Hardware level discount−0.1%");
+  await expect(price).toContainText("You pay1,044 Ore");
+  await expect(price).toContainText("With a Field Requisition this would be 939 Ore");
+  await expect(price).toContainText("Ordering opens in a later release");
+  await expect(page.getByRole("button", { name: /buy|order|checkout/i })).toHaveCount(0);
+
+  // A General item has no level discount and no Requisition.
+  await page.goto("/dashboard/shop/irl-ticket");
+  await expect(page.getByRole("heading", { level: 1, name: /Ticket to LOADOUT IRL/ })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByRole("region", { name: "Your price" })).toContainText("General itemNo discount");
+  await expect(page.getByRole("region", { name: "Your price" })).toContainText("You pay700 Ore");
+  await expect(page.getByText(/With a Field Requisition/)).toHaveCount(0);
+
+  // A gated item shows what it needs, on its card and on its page, and still shows the price.
+  await page.goto("/dashboard/shop?q=oscilloscope");
+  const scope = page.locator(".pf-shop-card");
+  await expect(scope).toHaveCount(1, { timeout: 30000 });
+  await expect(scope).toContainText("Needs Hardware LV.8");
+  await scope.click();
+  await expect(page.getByRole("heading", { level: 1, name: "Digital oscilloscope" })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByRole("note")).toContainText("Needs Hardware LV.8. 88 more approved hours in Hardware to unlock it.");
+  // A photo taken from Wikimedia Commons is credited on the item page; one from Pixl's shop has no credit line.
+  await page.goto("/dashboard/shop/nas");
+  await expect(page.getByRole("heading", { level: 1, name: "2-bay NAS" })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByText("Photo: DYVER, CC BY-SA 4.0, via")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Wikimedia Commons" })).toHaveAttribute("href", /commons[.]wikimedia[.]org[/]wiki[/]File:Synology_Disk_Station/);
+  await page.goto("/dashboard/shop/flipper-zero");
+  await expect(page.getByRole("heading", { level: 1, name: "Flipper Zero" })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByText(/^Photo: /)).toHaveCount(0);
+
+  const response = await page.goto("/dashboard/shop/not-an-item");
+  expect(response?.status()).toBe(404);
+});
+
+test("Explore has a search box, the track filters and a message when nothing is published", async ({ page }) => {
+  await page.goto("/dashboard/explore");
+  await expect(page.getByRole("search")).toBeVisible({ timeout: 30000 });
+  const filters = page.getByRole("navigation", { name: "Filter by track" }).getByRole("link");
+  await expect(filters).toHaveText(["All tracks", "Tools", "Systems", "Compute", "Hardware"]);
+  await expect(filters.first()).toHaveAttribute("aria-current", "page");
+
+  await filters.nth(1).click();
+  await expect(page).toHaveURL(/\/dashboard\/explore\?track=tools$/);
+  await expect(page.getByRole("link", { name: "Tools", exact: true })).toHaveAttribute("aria-current", "page");
+
+  await page.getByRole("searchbox").fill("zzzz nothing matches this");
+  await page.getByRole("button", { name: "Search" }).click();
+  await expect(page).toHaveURL(/q=zzzz\+nothing\+matches\+this&track=tools/);
+  await expect(page.getByText("No projects match.")).toBeVisible();
+  await page.getByRole("link", { name: "Clear the search" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/explore$/);
+});
+
+test("a draft is not public: its Explore page is a 404, and so is an unknown id", async ({ page }) => {
+  test.skip(STAFF_MODE, "participant pages are checked in builder mode");
+  await openFirstProject(page);
+  const id = new URL(page.url()).pathname.split("/").pop();
+  const draft = await page.goto(`/dashboard/explore/${id}`);
+  expect(draft?.status()).toBe(404);
+  const unknown = await page.goto("/dashboard/explore/not-a-project");
+  expect(unknown?.status()).toBe(404);
 });
 
 test("an unknown track is a 404", async ({ page }) => {
@@ -159,6 +350,8 @@ async function openFirstProject(page: Page) {
   // The oldest project: the edit and delete test works on a new one in parallel, so this one is never deleted under us.
   await cards.last().click();
   await expect(page.getByRole("link", { name: "Back to projects" })).toBeVisible({ timeout: 30000 });
+  // The title arrives with the page's metadata, a moment after the content; axe flags a missing title if it runs first.
+  await expect(page).toHaveTitle("Project - LOADOUT");
 }
 
 for (const [width, height] of VIEWPORTS) {

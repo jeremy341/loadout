@@ -16,14 +16,12 @@ Here's the same working prize list you'll find on the homepage. Ore prices are e
 | --- | --- | --- |
 | ESP32 starter kit | 30 Ore | 3 |
 | Soldering iron kit | 80 Ore | 8 |
-| Raspberry Pi 5 | 500 Ore | 50 |
-| Samsung T7 SSD | 470 Ore | 47 |
+| Raspberry Pi 5 | 490 Ore | 49 |
+| Samsung T7 SSD | 460 Ore | 46 |
 | A domain for your project | 25 Ore | 2.5 |
-| Bambu Lab A1 Mini 3D printer | 630 Ore | 63 |
-| Enclosed 3D printer | 1,045 Ore | 104.5 |
-| Framework 16 laptop | 2,985 Ore | 298.5 |
-| $10 flight grant | 20 Ore | 2 |
-| Ticket to LOADOUT IRL in Düsseldorf (limited) | 700 Ore | 70 |
+| Bambu Lab A1 Mini 3D printer | 615 Ore | 61.5 |
+| Enclosed 3D printer | 1,020 Ore | 102 |
+| Framework 16 laptop | 2,915 Ore | 291.5 |
 
 The enclosed printer and Framework are longer-term goals with steeper prices. Neither has a specific level requirement in these examples; you'd need enough Ore to cover the price.
 
@@ -31,7 +29,7 @@ The enclosed printer and Framework are longer-term goals with steeper prices. Ne
 
 For most prizes, you're free to spend Ore from any track. If you earned it designing a board but now want a domain, go ahead. What changes is the discount: that uses your level in the item's related track. Building more in one field makes its equipment cheaper, while leaving you free to try something else.
 
-The permanent discount grows with your level, up to 15% at LV.15. Some specialist prizes can have their own level requirements; a discount doesn't skip those. [Pricing](/docs/pricing) explains how the final total is worked out.
+The permanent discount grows with your level, up to 15% at LV.15 and 20% at LV.20. Some specialist prizes can have their own level requirements; a discount doesn't skip those. [Pricing](/docs/pricing) explains how the final total is worked out.
 
 ## Field Requisitions {#requisitions}
 

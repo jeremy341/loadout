@@ -253,7 +253,7 @@ for (const width of [390, 1440]) {
     await question.click();
     await expect(page.locator(".fq2").first()).toHaveAttribute("open", "");
     await expect(page.locator(".fq2-a p").first()).toBeVisible();
-    const prizes = page.getByRole("region", { name: "Proposed prize examples" });
+    const prizes = page.getByRole("region", { name: "Prices" });
     await prizes.focus();
     const start = await prizes.evaluate(element => element.scrollLeft);
     await page.keyboard.press("ArrowRight");

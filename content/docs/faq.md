@@ -36,11 +36,11 @@ No, you spend Ore on gear and Track XP stays in the fields you worked in and bui
 
 ### What can I buy, and what does it cost?
 
-The [working prize list](/docs/prizes) includes boards, tools, storage, printers and laptops, from a 24-Ore domain to a 5,000-Ore Framework 16. These are provisional example prices before discounts; final prices, stock and delivery arrangements are not confirmed.
+The [working prize list](/docs/prizes) includes boards, tools, storage, printers and laptops, from a 25-Ore domain to a 2,915-Ore Framework 16. These are provisional example prices before discounts; final prices, stock and delivery arrangements are not confirmed.
 
 ### What does a Requisition do?
 
-It saves another **10% of the base price** on one matching prize worth at least **400 Ore**. You earn four tickets per track at levels 5, 8, 11 and 15 and can use one per order. [Field Requisitions](/docs/requisitions) shows how that combines with your level discount.
+It saves another **10% of the base price** on one matching prize worth at least **400 Ore**. You earn six tickets per track at levels 5, 8, 11, 15, 18 and 20 and can use one per order. [Field Requisitions](/docs/requisitions) shows how that combines with your level discount.
 
 ### Do I need a team?
 
@@ -69,10 +69,6 @@ No. You keep your Ore, Track XP, levels and accepted work when a theme changes. 
 ### Is this a real Hack Club program?
 
 LOADOUT is a proposal for a Hack Club program. Acceptance hasn't been confirmed. [Current status](/docs/eligibility) explains where things stand.
-
-### Can I sign up for LOADOUT IRL?
-
-Event registration isn't open. The [IRL page](/docs/irl#status) will have confirmed details for the three-day hackathon in Germany when dates, venue and funding are ready.
 
 ### Where do I ask something else?
 

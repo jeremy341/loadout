@@ -32,7 +32,7 @@ Jerry's example shows the payout math. **The team hasn't accepted this project f
 | --- | --- |
 | Time | About 100 hours. |
 | Payout | 100 hours × 10 Ore = 1,000 Ore. |
-| Catalog comparison | An enclosed printer at 1,045 Ore and an A1 Mini at 630 Ore, using working prices. |
+| Catalog comparison | An enclosed printer at 1,020 Ore and an A1 Mini at 615 Ore, using working prices. |
 
 Use the project as something to inspect, rather than a promise about your own payout. Each ship goes through the team's check, and catalog availability still needs to be confirmed.
 

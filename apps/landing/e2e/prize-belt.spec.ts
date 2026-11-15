@@ -10,7 +10,7 @@ test("the prize belt loops one list while assistive technology reads it once", a
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
+  await expect(page.locator("#shop")).toContainText("What your Ore can buy");
   await expect(page.locator(".pb-half")).toHaveCount(2);
   await expect(page.locator(".pb-half").nth(0)).not.toHaveAttribute("aria-hidden", "true");
   await expect(page.locator(".pb-half").nth(1)).toHaveAttribute("aria-hidden", "true");

@@ -42,7 +42,7 @@ export function SiteFooter({ anchorBase = "" }: { anchorBase?: string }) {
             <Link href="/docs/projects">Project fit</Link>
             <a href={`${anchorBase}#research`}>Research Mode</a>
             <a href={`${anchorBase}#requisitions`}>Field Requisitions</a>
-            <a href={`${anchorBase}#custom-orders`}>Custom Orders</a>
+            <Link href="/docs/custom-orders">Custom Orders</Link>
             <a href="https://hackclub.com/conduct/">Code of Conduct</a>
             <a href="https://hackclub.com/philosophy/">Hack Club philosophy</a>
           </div>

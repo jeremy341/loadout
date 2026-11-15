@@ -50,7 +50,7 @@ The project-choice stage branches to four compact track labels with an existing 
 
 Keep a visible fit rule near project choice/review: product label alone does not determine fit; assess original technical work. Show two short contrasting examples and put the other approved examples and longer reasons in a native See more examples disclosure. Do not imply approval is guaranteed.
 
-The review stage keeps the canonical dimensions by name: Originality, Technical Depth, Execution, Documentation. State that the quality assessment informs the Ore multiplier without inventing a score or percentage. Reviewers assign Track XP according to the technical fields used. The outcomes then distinguish personal, non-spendable Track XP from global, spendable Ore.
+The review stage keeps the canonical dimensions by name: Originality, Technical Depth, Execution, Documentation. State that the four dimensions guide the team's written reason, with no score or percentage. The team assigns Track XP according to the technical fields used. The outcomes then distinguish personal, non-spendable Track XP from global, spendable Ore.
 
 Accepted projects add to the Digital Loadout. Ore and related field levels support prizes and the builder’s Physical Loadout. Link to detailed prize mechanics rather than repeating them here.
 
@@ -77,7 +77,7 @@ Keep the eight current planned prize categories as a static icon list or mosaic,
 A static Approved projects → Shared progress → Next theme rail may help if it reads as a concept rather than a live timeline. No counters, dates, schedules, or readiness indicators.
 ### LOADOUT IRL
 
-A compact future-concept plate says an optional Ruhr build weekend would use the online tracks, review, and shared Era. A three-part Friday Start → Saturday Build → Sunday Ship line communicates its format. The dates/venue/funding/registration status stays visible. No event promise or RSVP is added.
+A compact future-concept plate says an optional Düsseldorf build weekend would use the online tracks, review, and shared Era. A three-part Friday Start → Saturday Build → Sunday Ship line communicates its format. The dates/venue/funding/registration status stays visible. No event promise or RSVP is added.
 
 ### FAQ and progressive disclosure
 

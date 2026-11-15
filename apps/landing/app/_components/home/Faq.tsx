@@ -9,7 +9,7 @@ export function Faq() {
     <>
       <div className="pit">
         <b>
-          −800 M
+          −500 M
         </b>
         <span>
           3. Sohle

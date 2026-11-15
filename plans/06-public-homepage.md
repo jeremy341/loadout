@@ -2,17 +2,19 @@
 
 **Homepage refinement, 2026-10-05:** The implemented vertical process, lifetime progression, Community Eras overview, Requisition and Custom Order explanations, icon treatment, footer, spacing, and horizontal cloud motion are recorded in this plan and the [landing implementation record](../docs/source-audit/landing-port-and-assets.md). Plans 01/02/11 remain the product-policy owners. Tests, CI/pipeline changes, live mechanics, and publication are separate scopes. The former Plan 12 was consolidated and retired; see [retired plan history](master-plan-history.md).
 
-**Current section order, 2026-10-06:** The owner-approved homepage simplification replaces the earlier separate About placement and untouched-process constraint. The hero carries LOADOUT's orientation copy, followed by Tracks/Research Mode, How it works (with Digital/Physical outcomes), Project Fit, Progress & Prizes, Community Eras, optional LOADOUT IRL, FAQ, Who's Behind LOADOUT, and the footer. Track/project-fit examples remain available; the separate About explanation was removed to reduce repetition. A fixed LOADOUT DOCS tab pulls up a preview sheet and links to the full field manual at `/docs`. The full card-turn and progressive-disclosure proposal in Plan 17 (removed; see git history) remains a separate, unimplemented scope. The retired information-architecture decision is summarized in [retired plan history](master-plan-history.md).
+**Current section order, 2026-10-06:** The owner-approved homepage simplification replaces the earlier separate About placement and untouched-process constraint. The hero carries LOADOUT's orientation copy, followed by Tracks/Research Mode, How it works (with Digital/Physical outcomes), Project Fit, Progress & Prizes, Community Eras, FAQ, Who's Behind LOADOUT, and the footer. Track/project-fit examples remain available; the separate About explanation was removed to reduce repetition. A fixed LOADOUT DOCS tab pulls up a preview sheet and links to the full field manual at `/docs`. The full card-turn and progressive-disclosure proposal in Plan 17 (removed; see git history) remains a separate, unimplemented scope. The retired information-architecture decision is summarized in [retired plan history](master-plan-history.md).
 
 **Current progression/prize hierarchy:** Prices, discounts, Requisitions, the planned prize catalog and Custom Orders are subsections of one Progress & Prizes section. Plan 02 owns the mechanics; the earlier hierarchy proposal was consolidated into this plan and retired.
 
-**Future event and copy clarity, 2026-10-06:** [Plan 15](15-loadout-irl-ruhr.md) owns the future `LOADOUT IRL // RUHR` event concept. The Era, Field Requisition, and Custom Order explanations and user-approved visible future-concept block are consolidated into this homepage plan, with policy in Plans 01/02/11. Event operations, live mechanics, and publication remain separate scopes. The retired copy-clarity proposal is summarized in [retired plan history](master-plan-history.md).
+**Future event and copy clarity, 2026-10-06:** [Plan 15](15-loadout-irl-ruhr.md) owns the parked `LOADOUT IRL // Düsseldorf` concept, which has been off the public site since 2026-11-13. The Era, Field Requisition, and Custom Order explanations and user-approved visible future-concept block are consolidated into this homepage plan, with policy in Plans 01/02/11. Event operations, live mechanics, and publication remain separate scopes. The retired copy-clarity proposal is summarized in [retired plan history](master-plan-history.md).
 
 **Visual density follow-up, 2026-10-06:** Plan 17 (removed 25 Oct 2026) was the proposed whole-homepage pass for shorter first-read copy, connected diagrams, and press-to-turn track cards. It preserves the approved section order, program facts, and unchanged How it works component. No implementation is authorized by that proposal.
 
 **Who's Behind LOADOUT?, 2026-10-06:** The user approved one final section after FAQ and before the footer, naming Jerry, Fazin / Wind, and Netic with their supplied organizing/development responsibilities. It pairs the organizer directory with factual Hack Club/YSWS context and LOADOUT's current proposal status. The bounded design and source-use record is in [the section spec](../.ulpi/design/homepage-copy-record.md). It is implemented locally on `feature/whos-behind-loadout`; lint, typecheck, four unit tests, production build, and all 24 existing browser checks passed. Publication follows the documented lane PR workflow separately.
 
-**Rule reconciliation, 2026-10-15:** Plan 02's agreed table and status matrix govern public rates, levels, discounts, Requisitions and prices. The Docs explain settled mechanics directly, with program availability in Start/Eligibility and event status on IRL. Intermediate curves and unselected review/XP/Custom Order details remain candidates. This reconciliation does not authorize a new homepage layout or a live participant service.
+**Team update, 2026-11-15:** Kernel is promoted to co-organizer and is responsible for the community (owner decision). The hero credit line, the team Docs page, the About page and the Hack Club section say so; the team Docs page and the homepage name Kernel as co-organizer.
+
+**Rule reconciliation, 2026-10-15:** Plan 02's agreed table and status matrix govern public rates, levels, discounts, Requisitions and prices. The Docs explain settled mechanics directly, with program availability in Start/Eligibility. Intermediate curves and unselected review/XP/Custom Order details remain candidates. This reconciliation does not authorize a new homepage layout or a live participant service.
 
 **Owner:** Public-facing `apps/landing` experience  
 **Status:** Canonical plan for the first public LOADOUT page  
@@ -225,7 +227,7 @@ The visual should be replaceable with a static PNG/SVG without affecting the lay
 A new visitor should understand the program concept without needing to understand:
 
 - Requisition formulas
-- multiplier math
+- fixed-rate math
 - review stages
 - cross-track markup
 - detailed level thresholds
@@ -532,16 +534,17 @@ SAVE YOUR REQUISITIONS FOR THE GEAR THAT MATTERS.
 Show the canonical lifetime milestones:
 
 ```text
-LV.03   FIELD REQUISITION
-LV.06   FIELD REQUISITION
-LV.09   FIELD REQUISITION
-LV.12   FIELD REQUISITION
+LV.05   FIELD REQUISITION
+LV.08   FIELD REQUISITION
+LV.11   FIELD REQUISITION
 LV.15   FIELD REQUISITION
+LV.18   FIELD REQUISITION
+LV.20   FIELD REQUISITION
 ```
 
 Explain only the concept:
 
-> Each Requisition is a one-use 20% discount on the base price of a matching prize priced at 400 Ore or more. It applies on top of the permanent track discount.
+> Each Requisition is a one-use 10% discount on the base price of a matching prize priced at 400 Ore or more. It applies on top of the permanent track discount.
 
 Rules worth showing:
 
@@ -603,7 +606,7 @@ Each card should expose:
 - track badges
 - optional Research Mode marker
 - real project image / screenshot
-- Signal or usage indicator if meaningful
+- usage indicator if meaningful
 - link to project
 
 Do not fill the launch page with fake testimonials.
@@ -832,8 +835,8 @@ The public homepage is ready for the first release when:
 
 The Era mechanic may be explained in one compact community-progression section; it must not displace the homepage's projects → skills → progression → rewards story. Do not publish an active Era, progress meter, threshold, reset countdown, objective, or bonus as current without configured program data. Plan 11 owns the rules; current site copy is a brief concept overview, not a live Era interface.
 
-## 23. Mechanics clarity and future LOADOUT IRL section
+## 23. Mechanics clarity (IRL section parked)
 
-The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use additional 20% discount on the base Ore price of a matching prize from 400 Ore, applied alongside the permanent track discount, with one Requisition per order and no separate Ore savings cap; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
+The current page sequence and explanations are owned here. Plan 02 owns the economy: distinguish personal Track XP, global Ore, and shared Era Points; explain a Field Requisition as a one-use additional 10% discount on the base Ore price of a matching prize from 400 Ore, applied alongside the permanent track discount, with one Requisition per order and combined savings capped at 40% of the base price; and describe Custom Order eligibility from reviewed shipped work to the relevant Track Level, sufficient Ore for a final quote, and fulfillment review. Plan 11 owns Era rules. Do not label Requisitions as coupons or invent an approved-hours threshold.
 
-The user approved a separate **LOADOUT IRL // RUHR — Build the next Era** block after Community Eras and before the FAQ, clearly labelled as a future concept. Show no unconfirmed date, venue, registration, capacity, price, partner, sponsor, or event-specific progression claim. Keep visibility configurable. Plan 15 owns event facts and readiness; Plan 11 owns Era rules. The UI authorization covers concept copy, not event launch or backend mechanics.
+On 2026-10-06 the user approved a separate **LOADOUT IRL // Düsseldorf — Build the next Era** block after Community Eras. On 2026-11-13 the owner decided not to make the event happen for now, so the block was removed from the homepage. Plan 15 keeps the concept if it is revisited; Plan 15 owns event facts and readiness; Plan 11 owns Era rules.

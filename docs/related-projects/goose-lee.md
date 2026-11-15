@@ -4,7 +4,7 @@ Goose Lee is a community duck bot for the `#loadout` Slack channel. It scores ch
 
 | Fact | Value |
 |---|---|
-| Owner | Kernel (community manager, per [`content/docs/team.md`](../../content/docs/team.md)); **owner to confirm** |
+| Owner | Kernel (co-organizer, responsible for the community, per [`content/docs/team.md`](../../content/docs/team.md)); **owner to confirm** |
 | Repository | `https://github.com/jeremy341/community-slack-bot`, branch `feat/goose-lee-v6` (the official working branch) |
 | Local checkout | A companion folder outside this repository, with the same branch |
 | Plan | Version 6 is the current plan. The bot repository's `docs/PLAN.md` still holds version 5; **owner to confirm** when the repository is updated to match |

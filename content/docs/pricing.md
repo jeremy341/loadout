@@ -15,7 +15,7 @@ Why might someone else pay less Ore for the same item? Their level in its track 
 3. For an eligible purchase, subtract **another 10% of the base price** if you use a matching [Requisition](/docs/requisitions).
 4. Check the final total and the order terms before confirming.
 
-Both discounts use the original price. Together they can't go above **25% of the base price**. We don't take the second discount from the smaller subtotal.
+Both discounts use the original price. Together they can't go above **40% of the base price** with a General Requisition, or **30%** with only a Field Requisition. We don't take the second discount from the smaller subtotal.
 
 ## An example
 
@@ -27,7 +27,7 @@ Say you're saving for a matching item listed at 1,000 Ore, and you have a Requis
 | Requisition (10%) | −100 |
 | **Before your level discount** | **900** |
 
-Your level discount then comes off the same 1,000 base price. At LV.15 that is another 150 Ore, so you'd pay 750 Ore in total, the most the two discounts can save. If you don't use the ticket yet, keep it for a later purchase. Requisitions only work on items with a **base price of at least 400 Ore**, so a smaller purchase can use your level discount while leaving the ticket untouched.
+Your level discount then comes off the same 1,000 base price. At LV.15 that is another 150 Ore, so you'd pay 750 Ore in total, the most the two discounts can save at LV.15. At LV.20 the most is 30% with a Field Requisition, and 40% with a General Requisition as well. If you don't use the ticket yet, keep it for a later purchase. Requisitions only work on items with a **base price of at least 400 Ore**, so a smaller purchase can use your level discount while leaving the ticket untouched.
 
 ## When an item relates to two tracks
 

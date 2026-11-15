@@ -28,13 +28,16 @@ The 2026-10-06 settings record showed the development direct-push rule applying 
 
 ## Lane policy in the workflow
 
+Retired on 2026-11-15: the development → testing → main relay. The workflow now accepts one path:
+
 ```text
-short-lived branch → PR → development → promotion PR → testing → promotion PR → main
+short-lived branch → PR → main
 ```
 
-- `development`: feature PRs from the supported short-lived branch prefixes are accepted by the workflow.
-- `testing`: promotion PRs from `development` are accepted by the workflow.
-- `main`: release PRs from `testing` are accepted by the workflow.
+- `main`: pull requests from the supported short-lived branch prefixes are checked once, squash-merged, and deployed by Vercel.
+- `development` and `testing`: no longer used; the workflow does not run for pull requests to them.
+
+Target settings for `main` after the change (owner applies; not yet verified against GitHub's API): pull request required, zero approvals, required checks Repository integrity, Landing quality and Landing browser (no "Promotion lane"), force pushes and deletion off, auto-merge allowed, squash merge only, merged branches deleted automatically.
 
 The current workflow check-name contract is maintained in [required-checks.md](required-checks.md). The tables below preserve dated branch-protection observations and are not a second current policy source.
 

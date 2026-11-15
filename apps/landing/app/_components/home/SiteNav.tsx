@@ -8,11 +8,12 @@ import { Logo } from "./Logo";
 import { ThemeSwitch } from "../ThemeSwitch";
 import { AccessibilityLink } from "../Accessibility";
 
-// The bar carries the four in-page sections, as main does. DOCS is reached from the mobile
+// The bar carries the in-page sections, as main does. DOCS is reached from the mobile
 // menu and the floating docs tab, so it is not a bar link.
 const sections = [
   ["TRACKS", "#tracks"],
   ["HOW IT WORKS", "#process"],
+  ["TOOLBELT", "#toolbelt"],
   ["PRIZES", "#shop"],
   ["LEVELS", "#progression"],
   ["FAQ", "#faq"],

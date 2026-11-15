@@ -11,10 +11,9 @@ import Reveal from "./_components/home/Reveal";
 import { Tracks } from "./_components/home/Tracks";
 import { HowItWorks } from "./_components/home/HowItWorks";
 import { LevelsAndRewards } from "./_components/home/LevelsAndRewards";
+import { Toolbelt } from "./_components/home/Toolbelt";
 import { PlannedPrizes } from "./_components/home/PlannedPrizes";
-import { CustomOrders } from "./_components/home/CustomOrders";
 import { Eras } from "./_components/home/Eras";
-import { LoadoutIrl } from "./_components/home/LoadoutIrl";
 import { Faq } from "./_components/home/Faq";
 import { HackClub } from "./_components/home/HackClub";
 import { SiteFooter } from "./_components/home/SiteFooter";
@@ -36,11 +35,10 @@ export default function Home() {
           <Hero />
           <Reveal stagger><Tracks /></Reveal>
           <Reveal><HowItWorks /></Reveal>
+          <Reveal stagger><Toolbelt /></Reveal>
           <Reveal stagger><PlannedPrizes /></Reveal>
           <Reveal><LevelsAndRewards /></Reveal>
-          <Reveal stagger><CustomOrders /></Reveal>
           <Reveal stagger><Eras /></Reveal>
-          {siteConfig.showIrlConcept && <Reveal><LoadoutIrl /></Reveal>}
           <Reveal><Faq /></Reveal>
           <HackClub />
         </main>

@@ -6,9 +6,9 @@ import Image from "next/image";
 const PRIZES = [
   { category: "Embedded boards", example: "ESP32 starter kit", ore: 30, photo: "esp32", width: 500, height: 484, icon: false, limited: false },
   { category: "Tools", example: "Soldering iron kit", ore: 80, photo: "soldering-iron", width: 508, height: 525, icon: false, limited: false },
-  { category: "Compute", example: "Raspberry Pi 5", ore: 500, photo: "rpi", width: 800, height: 592, icon: false, limited: false },
+  { category: "Compute", example: "Raspberry Pi 5", ore: 490, photo: "rpi", width: 800, height: 592, icon: false, limited: false },
   { category: "Domains", example: "A domain for your project", ore: 25, photo: "domain-grant", width: 800, height: 800, icon: false, limited: false },
-  { category: "Fabrication", example: "Bambu Lab A1 Mini 3D printer", ore: 630, photo: "a1-mini", width: 666, height: 800, icon: false, limited: false },
+  { category: "Fabrication", example: "Bambu Lab A1 Mini 3D printer", ore: 615, photo: "a1-mini", width: 666, height: 800, icon: false, limited: false },
   { category: "Developer hardware", example: "Framework 16 laptop", ore: 2915, photo: "framework-16", width: 548, height: 560, icon: false, limited: false },
 ] as const;
 

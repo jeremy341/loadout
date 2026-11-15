@@ -23,7 +23,7 @@ test("the footer docs link leaves the homepage for the separate docs route", asy
   await expect(page.locator(".home #docs")).toHaveCount(0);
   await expect(page.locator(".nav").getByRole("link", { name: "DOCS" })).toHaveCount(0);
   await page.locator("footer.ft").getByRole("link", { name: "LOADOUT docs", exact: true }).click();
-  await expect(page).toHaveURL(/\/docs\/start$/);
+  await expect(page).toHaveURL(/\/docs$/);
   await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
 });
 
@@ -117,7 +117,8 @@ for (const width of [390, 1440]) {
       }).length
     );
     expect(incomplete).toBe(0);
-    await expect(page.locator("#process .fn")).toHaveCount(4);
+    // four steps, three outcomes of review, then the upgrade and build-again steps
+    await expect(page.locator("#process .fn")).toHaveCount(9);
   });
 }
 
@@ -392,7 +393,7 @@ test("on phones the depth numerals stay on one line and the labels fit their str
 test("sections reveal with main's triggered slide-in, not a scroll-scrubbed fade", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(8);
+  expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(7);
   await expect(page.locator(".reveal[data-stagger]").first()).toHaveCount(1);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("animation-name", "none");
 });
@@ -437,7 +438,7 @@ test("section headings carry the four corner brackets, and nothing else gets the
   await page.goto("/");
   const headings = page.locator(".home .sect > .h2");
   const count = await headings.count();
-  expect(count).toBeGreaterThanOrEqual(9);
+  expect(count).toBeGreaterThanOrEqual(8);
   for (let i = 0; i < count; i++) {
     const marks = await headings.nth(i).evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
     expect(marks.match(/linear-gradient/g)?.length ?? 0).toBe(8);
@@ -606,7 +607,7 @@ test("the docs sidebar groups fold with their chevron and the back button lifts 
   await expect.poll(() => back.evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe("8px");
 });
 
-test("each track shows one short line and a tag, and How it works has four steps", async ({ page }) => {
+test("each track shows one example and a tag, and How it works shows one worked example", async ({ page }) => {
   await page.goto("/");
   const cards = page.locator("#tracks .card.t");
   await expect(cards).toHaveCount(4);
@@ -614,8 +615,16 @@ test("each track shows one short line and a tag, and How it works has four steps
   await expect(cards.nth(0)).toContainText("command-line tool");
   await expect(cards.nth(3)).toContainText("robot");
   const process = page.locator("#process");
-  await expect(process).toContainText("each approved hour earns 10 Ore");
-  await expect(process).toContainText("Digital Loadout");
+  await expect(process.locator(".we-calc")).toHaveCount(1);
+  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /50 approved hours at 10 Ore per hour earn 500 Ore/);
+  await expect(process).toContainText("Every approved hour earns the same 10 Ore.");
+  // the example sits between the review outcomes and the spend step
+  const order = await process.locator(".fl > *").evaluateAll((nodes) => nodes.map((n) => n.className + "|" + (n.textContent ?? "").slice(0, 24)));
+  const calc = order.findIndex((entry) => entry.startsWith("we-calc"));
+  const outcomes = order.findIndex((entry) => entry.startsWith("br2"));
+  const spend = order.findIndex((entry) => entry.includes("SPEND YOUR ORE") || entry.includes("Spend your Ore") || entry.includes("STEP 05"));
+  expect(outcomes).toBeLessThan(calc);
+  expect(calc).toBeLessThan(spend);
   await expect(process).not.toContainText("Joining late");
   await expect(page.locator("#faq")).not.toContainText("Joining late");
 });
@@ -635,11 +644,19 @@ test("Project fit, Custom Orders and the Hack Club story are in the Docs, not th
   await page.goto("/");
   await expect(page.locator("#project-fit")).toHaveCount(0);
   await expect(page.locator("#custom-orders")).toHaveCount(0);
-  await expect(page.locator("#hack-club")).toHaveCount(0);
   await page.goto("/docs/about");
   await expect(page.getByRole("heading", { level: 1, name: "Where LOADOUT comes from" })).toBeVisible();
   await expect(page.locator("blockquote")).toContainText("While being part of Hack Club");
   await expect(page.locator("main")).toContainText("has not accepted it yet");
+});
+test("Hack Club block carries Jerry's reason and makes no claim about other programs' rates", async ({ page }) => {
+  await page.goto("/");
+  const block = page.locator("#hack-club");
+  await expect(block.locator("figure.why")).toContainText("While being part of Hack Club");
+  await expect(block).toContainText("Where LOADOUT comes from");
+  await expect(block).toContainText("has not accepted it yet");
+  await expect(block.locator("figure.why figcaption")).toContainText("Jerry");
+  await expect(block).not.toContainText(/better rates|higher rates|best rates/i);
 });
 
 for (const width of [1024, 1280, 1440, 1920]) {
@@ -806,7 +823,7 @@ test("homepage review copy matches the team acceptance rule", async ({ page }) =
 
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
+  await expect(page.locator("#shop")).toContainText("What your Ore can buy");
   await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 
@@ -815,10 +832,10 @@ test("Track XP and levels follow main: four stops, requisition markers and arrow
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const rail = page.getByRole("group", { name: "Field Requisition milestones" });
-  await expect(rail.locator(".st")).toHaveCount(4);
+  await expect(rail.locator(".st")).toHaveCount(6);
   await expect(rail.locator(".st .cn")).toHaveText(["LV.5", "LV.8", "LV.11", "LV.15", "LV.18", "LV.20"]);
-  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition"]);
-  await expect(rail.locator(".st .bd use")).toHaveCount(4);
+  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition", "Requisition", "Requisition"]);
+  await expect(rail.locator(".st .bd use")).toHaveCount(6);
   const marker = await rail.locator(".bd").first().boundingBox();
   expect([marker!.width, marker!.height]).toEqual([64, 64]);
   await expect(rail.locator(".st").first()).toHaveCSS("text-align", "center");

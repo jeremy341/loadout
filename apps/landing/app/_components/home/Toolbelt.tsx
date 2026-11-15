@@ -29,7 +29,7 @@ export function Toolbelt() {
           Toolbelt
         </h2>
         <p className="lead">
-          Use other builders' finished projects in your own, and both of you earn Ore.
+          Use other builders&apos; finished projects in your own, and both of you earn Ore.
         </p>
         <div className="row r2">
           {STEPS.map((step) => (

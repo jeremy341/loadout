@@ -9,7 +9,7 @@ const PRIZES = [
   { category: "Compute", example: "Raspberry Pi 5", ore: 500, photo: "rpi", width: 800, height: 592, icon: false, limited: false },
   { category: "Domains", example: "A domain for your project", ore: 25, photo: "domain-grant", width: 800, height: 800, icon: false, limited: false },
   { category: "Fabrication", example: "Bambu Lab A1 Mini 3D printer", ore: 630, photo: "a1-mini", width: 666, height: 800, icon: false, limited: false },
-  { category: "Developer hardware", example: "Framework 16 laptop", ore: 2985, photo: "framework-16", width: 548, height: 560, icon: false, limited: false },
+  { category: "Developer hardware", example: "Framework 16 laptop", ore: 2915, photo: "framework-16", width: 548, height: 560, icon: false, limited: false },
 ] as const;
 
 function PrizeList({ hidden = false }: { hidden?: boolean }) {

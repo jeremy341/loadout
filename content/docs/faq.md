@@ -36,7 +36,7 @@ No, you spend Ore on gear and Track XP stays in the fields you worked in and bui
 
 ### What can I buy, and what does it cost?
 
-The [working prize list](/docs/prizes) includes boards, tools, storage, printers and laptops, from a 24-Ore domain to a 5,000-Ore Framework 16. These are provisional example prices before discounts; final prices, stock and delivery arrangements are not confirmed.
+The [working prize list](/docs/prizes) includes boards, tools, storage, printers and laptops, from a 25-Ore domain to a 2,915-Ore Framework 16. These are provisional example prices before discounts; final prices, stock and delivery arrangements are not confirmed.
 
 ### What does a Requisition do?
 

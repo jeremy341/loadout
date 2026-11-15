@@ -91,7 +91,7 @@ export function Hero() {
       </div>
 
       <p className="hero-credit">
-        Organized by <Link href="/docs/team#jerry">Jerry</Link>, <Link href="/docs/team#fazin">Fazin</Link> &amp; <Link href="/docs/team#netic">Netic</Link>. Community by <Link href="/docs/team#kernel">Kernel</Link>
+        Organized by <Link href="/docs/team#jerry">Jerry</Link>, <Link href="/docs/team#fazin">Fazin</Link>, <Link href="/docs/team#netic">Netic</Link> &amp; <Link href="/docs/team#kernel">Kernel</Link>
       </p>
 
       <div className="m hero-facts">

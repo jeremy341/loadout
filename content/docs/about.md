@@ -22,6 +22,6 @@ LOADOUT is currently in development. It is a proposal, and Hack Club has not acc
 >
 > A payout rate alone doesn’t give people much reason to stick around. You build, save up, buy what you want, and then what? With LOADOUT, your rates start low, but your tracks level up as you build, making gear in those tracks cheaper. Those discounts help you afford the tools for your next project.
 >
-> Then there’s Orry, the mole on the homepage, and Goose Lee, our duck. Kernel, our community manager, came up with Orry’s name and the idea for Goose Lee. I expanded their stories from there, and now we’re working on turning Goose into a community bot that rewards taking part in Slack. I want people to have a reason to hang out in #loadout between projects too. Writing their stories has been one of my favorite parts of making LOADOUT, and I hope people get just as attached to them as I am.
+> Then there’s Orry, the mole on the homepage, and Goose Lee, our duck. Kernel, our co-organizer in charge of the community, came up with Orry’s name and the idea for Goose Lee. I expanded their stories from there, and now we’re working on turning Goose into a community bot that rewards taking part in Slack. I want people to have a reason to hang out in #loadout between projects too. Writing their stories has been one of my favorite parts of making LOADOUT, and I hope people get just as attached to them as I am.
 
 Jerry, lead organizer

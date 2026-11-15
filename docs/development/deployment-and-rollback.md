@@ -4,7 +4,7 @@
 
 ## Release
 
-Use temporary branch → development → testing → main with existing required checks. Do not bypass checks, alter protections or use a direct production deployment to skip the lanes.
+Use temporary branch → pull request → main with the required checks. Do not bypass checks, alter protections or use a direct production deployment to skip them.
 
 Vercel project jerry-team1/loadout-ysws uses apps/landing and main. Wait for Ready/success on the merged main commit, then inspect the stable Production URL. Check Docs topics, deep links, search and homepage navigation; a passing local build is not deployment evidence.
 
@@ -12,7 +12,7 @@ Record the main SHA, Vercel deployment link and smoke-check result before postin
 
 ## Roll back application content
 
-Prepare a targeted revert on a temporary branch from current development. Inspect the diff to preserve unrelated later work, run the relevant checks, and use the same development/testing/main promotion route.
+Prepare a targeted revert on a temporary branch from current main. Inspect the diff to preserve unrelated later work, run the relevant checks, and use the same pull request route to main.
 
 A content rollback may also need a corrected release-feed post and Netics source refresh. Do not delete the Vercel project, rewrite shared Git history, remove secrets or change domains as a rollback shortcut.
 

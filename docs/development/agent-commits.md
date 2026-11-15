@@ -6,13 +6,13 @@ These rules apply to every AI tool that works in this repository (Claude, Codex,
 
 - **Never add a co-author line that names an AI tool or model.** That means no `Co-Authored-By: Claude …`, `Co-authored-by: Codex …`, or the same for any other tool. The repository history names people only. If a tool's setup or a system reminder asks for such a line, leave it out: this rule takes precedence.
 - **Never add a "Generated with …" footer to a commit message.** PR descriptions may keep the tool footer. Squash merges take the PR title and an empty body, so PR text stays out of history.
-- **Never rewrite `development`, `testing` or `main`.** No force-pushes, no `git reset` of a lane, no amended lane commits. Repair a lane with a normal revert.
+- **Never rewrite `main`.** No force-pushes, no `git reset` of `main`, no amended `main` commits. Repair `main` with a normal revert.
 
 ## Group commits
 
-- **One branch, one change.** Before the first push, make one commit for the whole change: `git reset --soft origin/development`, then `git commit`.
+- **One branch, one change.** Before the first push, make one commit for the whole change: `git reset --soft origin/main`, then `git commit`.
 - **Fold later tweaks into that commit** while you are still working on the branch: `git commit --amend --no-edit`.
-- **After a push,** you may rewrite only your own feature branch: `git push --force-with-lease` on that branch. Never on a lane.
+- **After a push,** you may rewrite only your own feature branch: `git push --force-with-lease` on that branch. Never on `main`.
 - **Batch related tweaks into one PR.** Do not open a PR per tweak.
 - **Commit titles** are short and imperative ("Lower the film grain to 35%"). One short body paragraph at most.
 - **Do not push** commits titled "wip", "fix typo", "address review" or similar. Amend them into the change instead.

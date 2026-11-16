@@ -56,7 +56,14 @@ export const SEED_USES = [
 // Juniper stops Bolt from equipping their tools.
 export const SEED_BLOCKS = [{ maker: "juniper@loadout.test", blocked: "bolt@loadout.test" }] as const;
 
-export async function seedLocalProfiles(): Promise<{ builders: number; projects: number; uses: number; blocks: number }> {
+// The builder test account saves three approved projects, so Saved is not empty locally.
+export const SEED_BOOKMARKS = [
+  { person: "builder@loadout.test", projectId: "seed-tinyparse" },
+  { person: "builder@loadout.test", projectId: "seed-orbit-sim" },
+  { person: "builder@loadout.test", projectId: "seed-tape-deck" },
+] as const;
+
+export async function seedLocalProfiles(): Promise<{ builders: number; projects: number; uses: number; blocks: number; bookmarks: number }> {
   const prisma = db();
   const ids = new Map<string, string>();
 
@@ -99,5 +106,13 @@ export async function seedLocalProfiles(): Promise<{ builders: number; projects:
     const blockedId = ids.get(b.blocked) as string;
     await prisma.toolbeltBlock.upsert({ where: { makerId_blockedId: { makerId, blockedId } }, create: { makerId, blockedId }, update: {} });
   }
-  return { builders: SEED_BUILDERS.length + 1, projects: SEED_PROJECTS.length, uses: SEED_USES.length, blocks: SEED_BLOCKS.length };
+  for (const b of SEED_BOOKMARKS) {
+    const personId = ids.get(b.person) as string;
+    await prisma.projectBookmark.upsert({
+      where: { personId_projectId: { personId, projectId: b.projectId } },
+      create: { personId, projectId: b.projectId },
+      update: {},
+    });
+  }
+  return { builders: SEED_BUILDERS.length + 1, projects: SEED_PROJECTS.length, uses: SEED_USES.length, blocks: SEED_BLOCKS.length, bookmarks: SEED_BOOKMARKS.length };
 }

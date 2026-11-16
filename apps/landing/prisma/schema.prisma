@@ -28,6 +28,8 @@ model Person {
   // Toolbelt: builders this person has blocked from equipping their tools, and people who blocked this person.
   blocksMade     ToolbeltBlock[] @relation("ToolbeltMaker")
   blocksReceived ToolbeltBlock[] @relation("ToolbeltBlocked")
+  // Saved projects (lib/platform/bookmarks.ts).
+  bookmarks      ProjectBookmark[]
 }
 
 model RoleGrant {
@@ -73,8 +75,23 @@ model Project {
   // Toolbelt: tools this project equips, and projects that equip this one.
   equips      ToolbeltUse[] @relation("ToolbeltEquipper")
   usedBy      ToolbeltUse[] @relation("ToolbeltTool")
+  bookmarks   ProjectBookmark[]
 
   @@index([ownerId])
+}
+
+// "Saved": a builder keeps a project they may see. Private to the person who saved it; never listed publicly.
+model ProjectBookmark {
+  id        String   @id @default(cuid())
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([personId, projectId])
+  @@index([personId])
+  @@index([projectId])
 }
 
 // Toolbelt (plans/proposals/toolbelt.md): an equipping project uses another builder's approved open-source project.

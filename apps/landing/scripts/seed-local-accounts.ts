@@ -11,5 +11,5 @@ if (!localTestAccountsEnabled()) {
 const count = await seedLocalTestAccounts();
 console.log(`Seeded ${count} local test accounts.`);
 const profiles = await seedLocalProfiles();
-console.log(`Seeded ${profiles.builders} builders with handles, ${profiles.projects} projects, ${profiles.uses} Toolbelt uses and ${profiles.blocks} block.`);
+console.log(`Seeded ${profiles.builders} builders with handles, ${profiles.projects} projects, ${profiles.uses} Toolbelt uses, ${profiles.blocks} block and ${profiles.bookmarks} saved projects.`);
 await db().$disconnect();

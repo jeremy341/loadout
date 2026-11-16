@@ -112,6 +112,12 @@ The retired plan 17 (removed 25 Oct 2026) said the YSWS Template and Stardance "
 | Stasis | app/components/AsteroidCat.tsx; ImageCarousel.tsx; signup counter and bar in app/page.tsx; EventJsonLd.tsx; badge bracket panel in app/page.tsx | UNDECIDED | Blocked on: a license check of the `lots-o-nekos` package and our own sprite; approved prize or item data and images; a live count source (the app has no live services); approved event dates; a LOADOUT use for the panel. |
 | Stasis | app/page.tsx copy and FAQ; lib/ascii-art.ts artwork; README.md; SPEC.md; public art, photos and logos | NOT ADOPTED | Copy, artwork, photos, logos, event dates, location, scale and operating claims are not copied, even under the reuse permission. |
 
+## Owner decisions — 2026-11-15
+
+- One track per project. It is picked at creation, can be changed while the project is a draft or in "needs changes", and locks on submit. All Track XP goes to that track; there is no percent split.
+- Track fit is a needs-changes reason ("Does not fit the track"), not a new verdict.
+- The rules are owned by plans/01-product-and-program.md section 4.7 and plans/02-economy-and-rewards.md.
+
 ## Stardance behavior and test evidence
 
 - A countable Vote has four 1–9 values: originality, technicality, usability, and storytelling. Vote validation requires a reason of at least ten words, rejects self-votes, and enforces one voter per ship event. See app/models/vote.rb and test/models/vote_test.rb.

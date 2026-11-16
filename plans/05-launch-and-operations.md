@@ -1,6 +1,6 @@
 # LOADOUT — Launch & Operations Plan
 
-This document owns how LOADOUT is funded, fulfilled, launched, measured, moderated operationally, and eventually expanded into IRL activity.
+This document owns how LOADOUT is funded, fulfilled, launched, measured, moderated operationally, and, if ever revisited, expanded into IRL activity (parked; see Plan 15).
 
 It does not redefine product/economy rules.
 
@@ -134,13 +134,6 @@ Watch for:
 - mass downvoting
 - coordinated score manipulation
 
-## Signal Abuse
-Watch for:
-- fake stars
-- bots
-- paid views
-- artificial downloads
-
 ## AI Abuse
 Watch for:
 - fully AI-generated repos
@@ -221,9 +214,9 @@ LOADOUT should be especially legible to sponsors in:
 
 ---
 
-# 57. LOADOUT IRL
+# 57. LOADOUT IRL (parked)
 
-Planned future physical extension, after the online loop and operating gates are ready. It is not an MVP requirement, public event announcement, or operationally confirmed event. The current concept is `LOADOUT IRL // Düsseldorf — Build the next Era.` Use the same online tracks, review, and global Era rules; do not promise travel support, applications, sponsors, or attendance. Plan 15 owns the event concept and readiness gates.
+Parked. We have decided not to make LOADOUT IRL happen for now. Plan 15 keeps the plans in case we decide to revisit the idea. It is not an MVP requirement, public event announcement, or operationally confirmed event. The parked concept was `LOADOUT IRL // Düsseldorf — Build the next Era.` Use the same online tracks, review, and global Era rules; do not promise travel support, applications, sponsors, or attendance. Plan 15 owns the event concept and readiness gates.
 
 ---
 
@@ -247,9 +240,9 @@ Before Season 00, publish these rules clearly:
 12. Every approved hour earns a fixed 10 Ore; there is no multiplier.
 13. Ore is one **global** currency; listed Ore prices remain the same across regions.
 14. There are no peer-review flags or penalties, and there is no appeal.
-15. Track levels cap at **15** and persist across seasons.
-16. Permanent track discounts reach 15% at LV.15; combined savings, including a Requisition, are capped at 25% of the base price.
-17. Field Requisitions are earned at LV.5, 8, 11, and 15 only.
+15. Track levels cap at **20** and persist across seasons.
+16. Permanent track discounts reach 15% at LV.15 and 20% at LV.20; combined savings, including a Requisition, are capped at 40% of the base price.
+17. Field Requisitions are earned at LV.5, 8, 11, 15, 18 and 20 only.
 18. Requisitions are one-use, non-transferable, non-expiring, and limited to one per order.
 19. Requisitions never bypass a level wall.
 20. Custom Orders require **level + Ore + program fit + fulfillment approval**.
@@ -277,8 +270,8 @@ Determine:
 - per-track reward balance
 - cross-track markups
 - permanent discount curve
-- full track and Requisition discounts, with combined savings capped at 25% of the base price
-- four identical 10% Field Requisitions at levels 5/8/11/15, minimum base price 400 Ore
+- full track and Requisition discounts, with combined savings capped at 40% of the base price
+- six identical 10% Field Requisitions at levels 5/8/11/15/18/20, minimum base price 400 Ore
 - General Requisition values
 - Mastery item list
 - Custom Order limits
@@ -296,7 +289,7 @@ Priority:
 - tracking
 - shipping
 - fit review
-- multi-track XP allocation
+- one track per project, with Track XP going to it
 - Ore
 - track level-up
 - one field-aware shop item
@@ -313,7 +306,6 @@ Test:
 - public project/journal and reviewer-only Lapse visibility
 - hour assignment
 - team decision and written-reason flow
-- Signal Good and Great payouts
 - level pacing
 - cross-track pricing
 - discount limits and regional price consistency
@@ -333,7 +325,6 @@ Keep stock controlled and observe the economy closely.
 
 ## Step 7 — Rebalance
 Adjust:
-- Signal payouts
 - XP curve
 - reward prices
 - cross-track markups
@@ -383,7 +374,7 @@ Full launch only after the field economy is understandable and no single track i
 - savings prevented by normal caps
 - Requisitions earned / held / redeemed
 - Requisition redemption value
-- Field Requisition saving versus use across the five lifetime milestones
+- Field Requisition saving versus use across the six lifetime milestones
 - General Requisition issuance
 - Custom Order demand
 - spend by capability category
@@ -401,7 +392,6 @@ Full launch only after the field economy is understandable and no single track i
 - external project users
 - external contributors
 - cross-project reuse
-- Signal events
 - technical collaboration
 - follow/like/post-notification use without an endless-scroll feed
 
@@ -449,8 +439,8 @@ A smaller, technically coherent community is preferable to a much larger general
 
 ---
 
-# LOADOUT IRL — Germany roadmap pointer
+# LOADOUT IRL — parked Germany pointer
 
-The later-stage Germany concept is owned by [Plan 15 — LOADOUT IRL // Düsseldorf](15-loadout-irl-ruhr.md). It replaces this section's earlier one-to-two-day format sketch with the user's newer three-calendar-day Friday-to-Sunday recommendation, Düsseldorf and Essen city/venue research order, and same-global-Era connection. It remains a future concept: no venue, date, attendance capacity, funding, partner, or event operation is confirmed.
+The parked Germany concept is kept in [Plan 15 — LOADOUT IRL // Düsseldorf](15-loadout-irl-ruhr.md). It replaces this section's earlier one-to-two-day format sketch with the user's newer three-calendar-day Friday-to-Sunday recommendation, Düsseldorf and Essen city/venue research order, and same-global-Era connection. It remains parked: no venue, date, attendance capacity, funding, partner, or event operation is confirmed.
 
 Do not pursue it until the online project/review/reward loop, fulfillment, regional demand, organizer capacity, safeguarding, venue research, and realistic funding are ready. Plan 15 is the detailed source; this operations plan retains only the roadmap and launch boundary.

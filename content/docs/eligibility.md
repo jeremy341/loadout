@@ -22,21 +22,21 @@ Some rules are settled, while others still need a decision:
 
 | Topic | Decided | Still to finish |
 | --- | --- | --- |
-| Progress | Four lifetime tracks. LV.15 is about 275 hours of solid work in one track. | The XP equation, intermediate level thresholds and Research bonus. |
-| Discounts | Your track level gives a permanent discount. Four Requisitions per track, at levels 5, 8, 11 and 15, each add 10% on one eligible prize. Eligible prizes start at 400 Ore, and combined savings cap at 25%. | The maximum permanent discount, intermediate discounts and Custom Order tiers. |
+| Progress | Four lifetime tracks. LV.15 is about 178 hours of solid work in one track, and LV.20 is about 275. | The XP equation, intermediate level thresholds and Research bonus. |
+| Discounts | Your track level gives a permanent discount. Six Requisitions per track, at levels 5, 8, 11, 15, 18 and 20, each add 10% on one eligible prize. Eligible prizes start at 400 Ore, and combined savings cap at 40%. | The maximum permanent discount, intermediate discounts and Custom Order tiers. |
 | Building | Any number of real projects. A repeat ship needs at least five new approved hours. | Account, tracking and submission integrations. |
 | Prizes | Eight examples with working Ore prices. | Final catalog, stock, delivery and tax terms. |
 | Eras | 10% extra Ore for qualifying projects. | Era Points rules, themes and targets. |
-| Launch and IRL | The online program and a three-day event in Germany are being developed. | Acceptance, funding and dates; the event's venue and registration. |
+| Launch | The online program is being developed. | Acceptance, funding and dates. |
 
 The working prices and milestones may be tuned before launch. They're useful for understanding the program, but listing an item doesn't reserve stock for you.
 
 ## What does RSVP do?
 
-[RSVP](https://rsvp.soon.it/loadout) puts you on the interest list for updates. It helps us see how many people want to build through LOADOUT. You'll still need to register when the program opens, and an RSVP doesn't reserve a prize or an IRL place.
+[RSVP](https://rsvp.soon.it/loadout) puts you on the interest list for updates. It helps us see how many people want to build through LOADOUT. You'll still need to register when the program opens, and an RSVP doesn't reserve a prize.
 
 ## Which rules can I rely on?
 
-These guides describe the current program draft. Where a missing decision affects what you can do, the relevant guide will say so. The [IRL page](/docs/irl#status) is where we'll publish event details.
+These guides describe the current program draft. Where a missing decision affects what you can do, the relevant guide will say so.
 
 Found two pages that disagree? Send both links to [#loadout-help](https://app.slack.com/client/E09V59WQY1E/C0C6XBLM0M7), or open a [GitHub issue](https://github.com/jeremy341/loadout). It helps us fix the actual sentence instead of leaving you to guess which version to trust.

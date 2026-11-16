@@ -114,7 +114,7 @@ The earlier verification sections above apply to the previous homepage revision,
 
 Pixl's MIT notice and all reference repository pins are retained. YSWS Template/Stardance remain reference-only for this public UI work; no Rails code or specialist scoring policy was introduced.
 
-Implemented: clearer program/track/review copy; lifetime progression and five Requisition milestones; Community Eras and separate Season distinction; pricing/Requisition/Custom Order explanation; removal of redundant review/award rows; wider vertical spacing and 16px essential text; larger footer; larger clouds with farther X-only motion. The hero headline, fullscreen behavior, RSVP URL, Lenis/navigation/FAQ baseline, and backend scope remain unchanged.
+Implemented: clearer program/track/review copy; lifetime progression and six Requisition milestones; Community Eras and separate Season distinction; pricing/Requisition/Custom Order explanation; removal of redundant review/award rows; wider vertical spacing and 16px essential text; larger footer; larger clouds with farther X-only motion. The hero headline, fullscreen behavior, RSVP URL, Lenis/navigation/FAQ baseline, and backend scope remain unchanged.
 
 ESLint, TypeScript, and production build pass through the host runner. Manual responsive/browser inspection is pending because the old error tab was rejected by browser URL policy; a replacement preview opening was requested. This is local, uncommitted work on feature/homepage-clarity-flow-eras. No publication or pipeline completion is claimed.
 
@@ -308,7 +308,7 @@ Conclusion: the essential scroll experience is present. Fullscreen behavior is a
 | Digital vs Physical Loadout / permanent artifacts | Brief overview card and progression note | Add a compact labeled two-part explanation, no fake participant profile/level stats. |
 | Work tracking and journals | Short process line; no tracking FAQ | Add planned Hackatime/software, Lapse/hardware/non-code, attributable journals, and evidence explanation. No integration wiring. |
 | Global Bolts vs non-spendable lifetime Track XP | Mentioned, but distinction brief | Strengthen the two-concept explanation; include multi-track reviewer allocation in FAQ. No numeric payout formula. |
-| Requisition milestones and limitations | Combined general panel/FAQ | Add canonical LV.3/6/9/12/15 as a concise text line and non-expiry/one-per-order/no-mastery-bypass summary. Keep fulfillment conditional. |
+| Requisition milestones and limitations | Combined general panel/FAQ | Add canonical LV.5/8/11/15/18/20 as a concise text line and non-expiry/one-per-order/no-mastery-bypass summary. Keep fulfillment conditional. |
 | AI policy / multi-track FAQ / how to join | Missing specific answers | Add plain-language FAQ. AI disclosure/authorship is canonical; the draft40% ceiling is tunable before launch and must not become a live public promise without confirmation. |
 | Final CTA after FAQ | Missing | Add concise “Equip your next build” closing RSVP block before footer. |
 | Real project proof | No published verified LOADOUT examples | Keep deferred; conceptual examples explicitly describe eligible project types. No invented builders/testimonials/metrics. |

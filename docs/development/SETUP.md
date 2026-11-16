@@ -25,7 +25,6 @@ Optional public configuration is documented in `apps/landing/.env.example`; loca
 | NEXT_PUBLIC_LOADOUT_JOIN_URL | RSVP destination; defaults to the public interest form. |
 | NEXT_PUBLIC_LOADOUT_LOGIN_URL | Optional confirmed login destination; leave unset while unavailable. |
 | NEXT_PUBLIC_LOADOUT_COMMUNITY_URL | Optional confirmed community destination. |
-| NEXT_PUBLIC_LOADOUT_IRL_CONCEPT | Show the labeled future concept on the homepage. |
 | LOADOUT_ALLOW_INDEXING | Indexing only when true with a valid origin; Vercel previews remain excluded. |
 
 These are existing homepage settings, not new Docs credentials. Markdown and search need no secret or external search service.

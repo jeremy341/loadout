@@ -29,17 +29,17 @@ So ten approved hours earn 100 Ore, and twenty earn 200. There's no multiplier, 
 
 ## How an hour becomes Track XP {#xp}
 
-The team splits Track XP between the tracks your ship declares and uses. Designing a board and building a substantial service for it can contribute to Hardware and Systems, but the two tracks share one award. Listing both doesn't double your XP.
+A project has exactly one track. You pick it when you create the project, and all the Track XP from a ship goes to that track. A board and the service that runs on it are two different projects if you want both fields to count, each with its own track.
 
-We haven't settled the XP equation, so don't predict an exact XP number. We do have a target for how long it should take to reach the top level.
+Each approved hour gives **10 Track XP** in the project's track. XP is a straight count of your approved hours, so the hours you've logged tell you your XP. Your level depends on your approved hours in one track, not on XP.
 
 ## Your field levels {#levels}
 
-Each track has **15 lifetime levels**. LV.15 is **2,750 Track XP**, with a target of about **275 approved hours of solid work in one track**. If you split the work equally between two tracks, reaching LV.15 in both is a target of about 500 hours altogether.
+Each track has **20 lifetime levels**. LV.15 is a target of about **178 approved hours of solid work in one track**, LV.18 about **236 hours**, and LV.20 about **275 hours**. The Track XP figures for these levels are still being set, so this page doesn't give an XP number for them yet. If you spread your projects equally between two tracks, reaching LV.15 in both is a target of about 356 hours altogether.
 
 If the ship also qualifies for the [Era bonus](/docs/eras#bonus), add 10% of its base Ore award. A 100-Ore base award becomes 110 Ore. It adds no Track XP. How it combines with future Ore bonuses is still undecided.
 
-Your permanent discount on related gear grows with your track level, reaching **15% at LV.15**. Along the way, levels **5, 8, 11 and 15** each give you a [Field Requisition](/docs/requisitions) for an extra 10% off one larger purchase.
+Your permanent discount on related gear grows with your track level, reaching **15% at LV.15** and **20% at LV.20**. Along the way, levels **5, 8, 11, 15, 18 and 20** each give you a [Field Requisition](/docs/requisitions) for an extra 10% off one larger purchase.
 
 We're still setting the intermediate XP thresholds and discount percentages. The milestones above don't imply a published percentage at every level, and leveling up doesn't change the Ore you earn per hour.
 

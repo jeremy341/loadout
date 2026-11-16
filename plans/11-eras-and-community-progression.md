@@ -73,7 +73,7 @@ The authoritative reset timezone, reset-hour behavior, downtime/retry policy, an
 
 - Each Era can offer approximately **4–8 optional objectives** as a planning target, not a hard limit.
 - Objectives describe technical challenges that can be answered in Tools, Systems, Compute, or Hardware. They do not require every participant to produce a historically accurate artifact.
-- A project can qualify across tracks when its actual technical work fits the objective.
+- A project in any track can qualify when its actual technical work fits the objective.
 - Objective examples for an Electrification-themed Era:
   - **Measure:** collect or visualize physical data.
   - **Control:** build electronic control.
@@ -104,7 +104,7 @@ Use illustrative sequence copy until live Era configuration exists. Do not show 
 
 ### Physical event continuity
 
-A future LOADOUT IRL event uses the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Ore, or attendance-gated progression is created. The detailed event concept is in [Plan 15](15-loadout-irl-ruhr.md). Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
+A parked LOADOUT IRL event, if it is ever revisited, would use the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Ore, or attendance-gated progression is created. The detailed event concept is in [Plan 15](15-loadout-irl-ruhr.md). Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
 
 ### Builder dashboard
 

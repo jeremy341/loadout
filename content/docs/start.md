@@ -36,4 +36,4 @@ For now, you can [RSVP for launch updates](https://rsvp.soon.it/loadout). We'll 
 
 ## Where to read next
 
-If you've got an idea, check [what fits](/docs/projects) and [which tracks it uses](/docs/tracks). If you're wondering how to get from that idea to a finished version, follow [your first project](/docs/first-project). Already have something working? Start with the [shipping checklist](/docs/shipping#checklist).
+If you've got an idea, check [what fits](/docs/projects) and [which track it fits](/docs/tracks). If you're wondering how to get from that idea to a finished version, follow [your first project](/docs/first-project). Already have something working? Start with the [shipping checklist](/docs/shipping#checklist).

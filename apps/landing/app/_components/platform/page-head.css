@@ -1,0 +1,12 @@
+/* The shared page opening (PageHead): one h1 size and one rhythm on every page that uses it. The h1 itself is the shared
+   .pf-main h1; only its spacing and the lead below it are set here. */
+.pf .pf-head { margin: 0 0 24px; }
+.pf .pf-head h1 { margin: 0 0 14px; }
+.pf .pf-head .pf-lead { margin: 0; }
+
+/* Settings: the account facts are values, not headlines. The email must fit its box without breaking inside a word. */
+.pf .pf-facts-account { grid-template-columns: minmax(0, 1fr); }
+.pf .pf-facts-account dd { font-size: 1.5em; text-transform: none; overflow-wrap: anywhere; }
+@media (min-width: 720px) {
+  .pf .pf-facts-account { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

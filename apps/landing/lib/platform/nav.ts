@@ -1,7 +1,7 @@
-// The top-level tabs. Overview and Projects are live in M1; the rest are placeholders until their milestone lands. Docs
-// leaves the dashboard for the public documentation, which the platform has no other link to.
-// Settings is not a tab: it is reached from the account controls in the top bar. The You tab waits for the
-// character icon design. Ship lives inside Projects.
+// The top-level tabs: seven, and the same for everyone. Events lives inside Community, Referrals is reached from Settings and the
+// Community hub, and Orders and the wishlist are reached from the Shop. Docs leaves the dashboard for the public documentation,
+// which the platform has no other link to. Settings is not a tab: it is reached from the account controls in the top bar.
+// There is no staff group, ever: reviewer and admin pages are a separate site on their own host (see lib/reviewer/host.ts).
 export type NavItem = { href: string; label: string };
 export type NavGroup = { label: string; items: NavItem[] };
 
@@ -19,16 +19,3 @@ export const PARTICIPANT_NAV: NavGroup[] = [
     ],
   },
 ];
-
-export const STAFF_NAV: NavGroup = {
-  label: "Staff",
-  items: [
-    { href: "/dashboard/staff/users", label: "Users" },
-    { href: "/dashboard/staff/audit", label: "Audit log" },
-    { href: "/dashboard/staff/flags", label: "Feature flags" },
-  ],
-};
-
-export function navFor(isStaff: boolean): NavGroup[] {
-  return isStaff ? [...PARTICIPANT_NAV, STAFF_NAV] : PARTICIPANT_NAV;
-}

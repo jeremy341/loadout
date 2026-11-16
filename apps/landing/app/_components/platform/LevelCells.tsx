@@ -13,9 +13,9 @@ export type LevelCell = {
 
 const stateLabel = { done: "reached", next: "next level", locked: "locked" } as const;
 
-// The fifteen level cells. Each one is a button, so a keyboard, a finger and a mouse can all ask for its hours: hover or
+// The twenty level cells. Each one is a button, so a keyboard, a finger and a mouse can all ask for its hours: hover or
 // focus or a tap shows "LV.9 / 112 H" above it. The row is one tab stop (arrow keys, Home and End move along it) so a
-// keyboard user does not tab through fifteen cells. The cell's name already carries the hours for a screen reader, so
+// keyboard user does not tab through twenty cells. The cell's name already carries the hours for a screen reader, so
 // the tooltip itself is hidden from it.
 export function LevelCells({ cells, start }: Readonly<{ cells: LevelCell[]; start: number }>) {
   const [shown, setShown] = useState<number | null>(null);

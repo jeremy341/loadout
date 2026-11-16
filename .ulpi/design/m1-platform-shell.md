@@ -22,7 +22,7 @@ Out: Ship, Earn and Community groups (no live pages yet, so the shell does not s
 - Tabs, agreed 30 Oct 2026: Overview and Projects are live in M1; Shop, Explore, Community and Expeditions are placeholder tabs until their milestones. Ship lives inside Projects. There is no You tab yet: it waits for the character icon design. Settings is a text link in the top bar, not a tab.
 - Placeholder tabs are the one exception to "no coming soon pages" in the Pages section below. Each one says in plain words when it opens, in one sentence, and shows no figures, names or sample data.
 - The top bar carries only the user icon at the top right, a placeholder that links to Settings for now. Settings, Accessibility and Sign out live on the Settings page until the profile menu replaces the icon.
-- The staff group (Users, Audit log, Flags) follows the tabs after a vertical rule on desktop, shown only to holders of the staff role. Its label is shown on desktop, and the tab group heading stays for screen readers only.
+- Superseded 6 Nov 2026: there is no staff group. Users, Audit log and Flags moved to the separate reviewer site (see [reviewer-site.md](reviewer-site.md)), which answers on its own `review.<domain>` host and has its own shell and nav. A staff person on the participant site sees what a builder sees.
 - The current page has `aria-current="page"`. The nav landmark has the accessible name `Participant`.
 - Keyboard: the skip link is first; Tab order follows the visual order; no focus trap.
 
@@ -49,17 +49,17 @@ Out: Ship, Earn and Community groups (no live pages yet, so the shell does not s
 - Reuses the existing `AccessibilitySettings` page layout so the display preferences match the homepage and Docs exactly.
 - Sign out button (native form POST). Account details shown: display name and email.
 
-### Admin: users (`/dashboard/staff/users`)
+### Admin: users (now `/users` on the reviewer site; was `/dashboard/staff/users`)
 
 - Table with columns Name, Email, Roles, Status. Empty state if no users match search.
 - Row action opens a side panel (not a new page) with: role grants (checkbox per role), ban toggle. Both require a reason field (required, min 10 characters). Submit records one audit event per change.
 - Errors: inline below the reason field, announced by the field's `aria-describedby`.
 
-### Admin: audit log (`/dashboard/staff/audit`)
+### Admin: audit log (now `/audit` on the reviewer site)
 
 - Newest first, 50 rows per page with Previous and Next links. Columns: time, actor, action, target, reason. Empty state: "No staff actions yet."
 
-### Admin: feature flags (`/dashboard/staff/flags`)
+### Admin: feature flags (now `/flags` on the reviewer site)
 
 - List of flags with name, description and state. Toggle form with reason, same validation as users. A flag absent from the table is off.
 
@@ -200,3 +200,4 @@ Source: Paper file "LOADOUT participant platform", page "E - Projects", artboard
 - Shop pictures, owner's corrections (1 Nov 2026): the catalog is 75 items on 62 pictures (Stardance 14, Pixl 22, Commons 24, template 2). The Nintendo Switch, the 4K camera and the thermal sticker printer are gone. LOADOUT's own icons now stand for the IRL ticket, the conference and book grants, the $10 hosting grant, the cloud database credits, the laptop grant and the e-ink, Cardputer, LoRa, phone thermal camera, debug probe and bench power supply items (LOADOUT already has a sprite for each of those). The software items use the real marks: Pixl's API wordmark for API credits, Pixl's Apple logo for the Apple Developer item, the public-domain PICO-8 logo, and the public-domain VS Code icon for the code editor. One-colour marks carry `logo: "dark" | "light"` in `shop.ts`, and the page inverts them in the theme where they would vanish. The Stasis drawings are dropped (oscilloscope back to the Commons photo, power supply on its sprite), the Mac mini uses Pixl's cut-out front view, and filament is a real ABS spool photo. Details in docs/source-audit/ATTRIBUTION.md.
 - Shop, last corrections (1 Nov 2026): removed the two nights' stays and the $10 parts grant (72 items, 60 pictures); the PCB grant takes Stardance's build-fund picture; the USB-C dock is a silver hub with its ports visible (Commons, public domain); shop pictures are now named with a content hash so a replaced picture is never served from a stale cache (the oscilloscope showed its old Stasis drawing for that reason; it is the Rigol photo).
 - Digits (1 Nov 2026, owner: the numbers were unreadable, use a better font for them across the whole site): the pixel face (Pixelify Sans) draws 2, 5 and 8 almost alike, so "$25" read as "$88". Every digit in anything set in `--font-pixel` now comes from IBM Plex Mono (Regular up to weight 500, SemiBold from 600) through a `LOADOUT Digits` face limited to U+0030 to U+0039, which leaves the letters, the dollar sign and the rest in the pixel face. `layout.tsx` names the pixel face `--font-pixel-base`, and `loadout.css` makes `--font-pixel` that face with the digit face in front, so the homepage, the Docs and the platform all change at once with no per-page edits. The display face (Jersey 10) and the dot face (DotGothic16) already had clear digits and are unchanged.
+- Top bar cut to seven tabs and staff pages moved out (owner, 12 Nov session: "there should not be 20 to 30 global tabs", and the reviewer and admin side is separate from the application users see, as in Pixl). Tabs: Overview, Projects, Shop, Explore, Community, Expeditions, Docs. Events became a tab inside Community (`/dashboard/community/events`); Referrals lost its tab and stays at `/dashboard/referrals`, linked from Settings and the Community hub; Orders and the wishlist are reached from the Shop. `STAFF_NAV` and `navFor` are gone, so `PlatformShell` takes no viewer and always shows `PARTICIPANT_NAV`. The staff pages live on the reviewer site: host `review.<domain>` rewritten by `proxy.ts` to `app/(reviewer)/reviewer`, 404 on `/reviewer` for every other host, own shell and nav, `noindex`. Cookie sharing across the two hosts is open until Hack Club Auth is connected: the cookie domain must be decided then. Details in [reviewer-site.md](reviewer-site.md).

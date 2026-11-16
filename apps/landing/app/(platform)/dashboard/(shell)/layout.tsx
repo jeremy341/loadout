@@ -17,13 +17,12 @@ export default async function PlatformShellLayout({ children }: { children: Reac
       </PlatformNotice>
     );
   }
-  const viewer = await readViewer();
-  if (!viewer) {
+  if (!(await readViewer())) {
     return (
       <PlatformNotice title="Opening soon">
         The participant platform opens once Hack Club Auth is connected.
       </PlatformNotice>
     );
   }
-  return <PlatformShell viewer={viewer}>{children}</PlatformShell>;
+  return <PlatformShell>{children}</PlatformShell>;
 }

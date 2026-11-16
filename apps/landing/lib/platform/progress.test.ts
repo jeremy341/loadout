@@ -55,12 +55,14 @@ describe("depth", () => {
 });
 
 describe("level hours", () => {
-  test("the owner-set levels sit at 35, 90, 160 and 275 hours", () => {
-    expect(LEVEL_HOURS[4]).toBe(35);
-    expect(LEVEL_HOURS[7]).toBe(90);
-    expect(LEVEL_HOURS[10]).toBe(160);
-    expect(LEVEL_HOURS[14]).toBe(275);
+  test("the set levels sit at 23, 58, 104, 178 and 275 hours (rescaled 14 Nov 2026, LV.20 at 275)", () => {
+    expect(LEVEL_HOURS[4]).toBe(23);
+    expect(LEVEL_HOURS[7]).toBe(58);
+    expect(LEVEL_HOURS[10]).toBe(104);
+    expect(LEVEL_HOURS[14]).toBe(178);
+    expect(LEVEL_HOURS[19]).toBe(275);
     expect(LEVEL_HOURS).toHaveLength(LEVEL_CAP);
+    expect(LEVEL_CAP).toBe(20);
   });
 
   test("hours rise with every level", () => {
@@ -71,56 +73,64 @@ describe("level hours", () => {
 
   test("a level is reached exactly at its hours", () => {
     expect(levelForHours(0)).toBe(0);
-    expect(levelForHours(1.9)).toBe(0);
-    expect(levelForHours(2)).toBe(1);
-    expect(levelForHours(58)).toBe(6);
-    expect(levelForHours(70)).toBe(7);
+    expect(levelForHours(0.9)).toBe(0);
+    expect(levelForHours(1)).toBe(1);
+    expect(levelForHours(57)).toBe(7);
+    expect(levelForHours(58)).toBe(8);
     expect(levelForHours(500)).toBe(LEVEL_CAP);
   });
 
   test("the hours missing for the next level, and none at the top", () => {
-    expect(hoursToNextLevel(58)).toBe(12);
-    expect(hoursToNextLevel(0)).toBe(2);
+    expect(hoursToNextLevel(58)).toBe(14);
+    expect(hoursToNextLevel(0)).toBe(1);
+    expect(hoursToNextLevel(178)).toBe(19);
     expect(hoursToNextLevel(275)).toBeNull();
   });
 
   test("hoursForLevel starts at zero for LV.0", () => {
     expect(hoursForLevel(0)).toBe(0);
-    expect(hoursForLevel(6)).toBe(52);
-    expect(hoursForLevel(15)).toBe(275);
+    expect(hoursForLevel(6)).toBe(34);
+    expect(hoursForLevel(15)).toBe(178);
+    expect(hoursForLevel(20)).toBe(275);
   });
 
   test("the sample hours give the levels the Overview shows", () => {
-    expect(sampleTrackProgress().map((row) => row.level)).toEqual([6, 3, 0, 1]);
-    expect(hoursToNextLevel(sampleTrackHours("Tools").approved)).toBe(12);
-    expect(hoursToNextLevel(sampleTrackHours("Systems").approved)).toBe(10);
+    expect(sampleTrackProgress().map((row) => row.level)).toEqual([8, 3, 0, 1]);
+    expect(hoursToNextLevel(sampleTrackHours("Tools").approved)).toBe(14);
+    expect(hoursToNextLevel(sampleTrackHours("Systems").approved)).toBe(2);
   });
 });
 
 describe("level discount", () => {
-  test("it is nothing at the start and 15% at LV.15's hours, and stops there", () => {
+  test("it is nothing at the start, 15% at LV.15's hours, 20% at LV.20's, and stops there", () => {
     expect(discountForHours(0)).toBe(0);
-    expect(discountForHours(275)).toBe(15);
-    expect(discountForHours(500)).toBe(15);
+    expect(discountForHours(178)).toBe(15);
+    expect(discountForHours(275)).toBe(20);
+    expect(discountForHours(500)).toBe(20);
     expect(discountForHours(-4)).toBe(0);
+  });
+
+  test("between LV.15 and LV.20 it rises in a straight line", () => {
+    expect(discountForHours(226.5)).toBeCloseTo(17.5, 5);
+    expect(discountForHours(197)).toBeCloseTo(15 + (19 / 97) * 5, 5);
   });
 
   test("it rises with every approved hour", () => {
     expect(discountForHours(58)).toBeGreaterThan(discountForHours(57));
-    expect(discountForHours(137.5)).toBeCloseTo(7.5, 5);
+    expect(discountForHours(89)).toBeCloseTo(7.5, 5);
   });
 
   test("it is shown to one decimal and rounded down", () => {
     expect(formatDiscount(discountForHours(0))).toBe("0%");
     expect(formatDiscount(discountForHours(2))).toBe("0.1%");
-    expect(formatDiscount(discountForHours(58))).toBe("3.1%");
-    expect(formatDiscount(discountForHours(55))).toBe("3%");
-    expect(formatDiscount(discountForHours(275))).toBe("15%");
+    expect(formatDiscount(discountForHours(58))).toBe("4.8%");
+    expect(formatDiscount(discountForHours(55))).toBe("4.6%");
+    expect(formatDiscount(discountForHours(178))).toBe("15%");
   });
 
-  test("the levels' discounts never pass 15% and rise level by level", () => {
+  test("the levels' discounts never pass 20% and rise level by level", () => {
     const shown = LEVEL_HOURS.map((hours) => discountForHours(hours));
-    expect(Math.max(...shown)).toBe(15);
+    expect(Math.max(...shown)).toBe(20);
     for (let index = 1; index < shown.length; index++) expect(shown[index]).toBeGreaterThan(shown[index - 1]);
   });
 });
@@ -142,6 +152,6 @@ describe("level cells", () => {
   });
 
   test("the status names the level out of the cap", () => {
-    expect(trackStatus(9)).toBe("LV.9 of 15");
+    expect(trackStatus(9)).toBe("LV.9 of 20");
   });
 });

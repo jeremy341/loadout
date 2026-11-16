@@ -40,7 +40,7 @@ export function Tracks() {
                 {track.name}
               </h3>
               <div className="m dsc">
-                {track.text}
+                {track.short}
               </div>
               <span className="chip tag-chip">
                 {track.tag}
@@ -57,7 +57,7 @@ export function Tracks() {
               Research Mode
             </b>
             <div className="m dsc">
-              Add it to any track: publish a reproducible report with your project for bonus Track XP and faster discounts in that track. It is not a fifth track.
+              Publish a reproducible report with a project for bonus Track XP. It is not a fifth track.
             </div>
           </div>
           <span className="chip">

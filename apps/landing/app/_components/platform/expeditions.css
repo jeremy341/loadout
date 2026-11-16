@@ -1,0 +1,207 @@
+/* Expeditions, Events, Referrals and Orders (prefix ex-). Built on the platform tokens (--pf-*) and the track colours
+   (--tk, set by data-track). The look is a field log: ruled lists, numbered checkpoints and hard-edged meters. Lists
+   are single bordered sheets divided by rules, never cards inside cards. Nothing here animates. */
+
+/* ---- Shared parts ---- */
+.pf .ex-label { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-tag { display: inline-flex; align-items: center; gap: 8px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .ex-tag::before { content: ""; flex: none; width: 10px; height: 10px; background: var(--tk, var(--pf-mut)); }
+.pf .ex-num { font-variant-numeric: tabular-nums; }
+.pf .ex-closed { margin: 10px 0 0; font-size: 0.8125em; line-height: 1.5; color: var(--pf-mut); }
+.pf .ex-section { margin: 0 0 32px; }
+.pf .ex-section > h2 { margin: 0 0 12px; font: 700 1.25em/1.2 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .ex-section > .ex-lead { margin: -4px 0 14px; max-width: 64ch; font-size: 0.875em; color: var(--pf-mut); }
+
+/* A ruled sheet of rows. The sheet has the one border; the rows are divided by rules. */
+.pf .ex-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--pf-fg); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); }
+.pf .ex-list > li + li { border-top: 1px solid var(--pf-rule); }
+
+/* A row whose whole area is one link: the name's link is stretched over the row, so there is one tab stop per row. */
+.pf .ex-row { position: relative; display: grid; gap: 8px 20px; align-items: center; padding: 14px 16px; min-height: 64px; }
+.pf .ex-row a.ex-stretch::after { content: ""; position: absolute; inset: 0; }
+.pf .ex-row:has(a.ex-stretch:focus-visible) { outline: 2px solid var(--pf-focus); outline-offset: -2px; }
+.pf .ex-row a.ex-stretch:focus-visible { outline: none; }
+.pf .ex-row:has(a.ex-stretch):hover .ex-name { color: var(--pf-link); text-decoration: underline; text-underline-offset: 4px; }
+.pf .ex-name { margin: 0; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .ex-name a { color: inherit; text-decoration: none; }
+.pf .ex-summary { margin: 4px 0 0; font-size: 0.8125em; line-height: 1.55; color: var(--pf-mut); max-width: 62ch; }
+.pf .ex-main { min-width: 0; }
+
+/* The step meter: one hard cell per step, filled in the track colour (or the accent where there is no track). */
+.pf .ex-meter { display: flex; gap: 3px; width: 100%; max-width: 150px; margin: 0; padding: 0; list-style: none; }
+.pf .ex-cell { flex: 1 1 0; height: 10px; border: 1px solid var(--pf-fg); background: transparent; }
+.pf .ex-cell[data-on="true"] { border-color: var(--tk, var(--pf-ac)); background: var(--tk, var(--pf-ac)); }
+.pf .ex-progress { display: grid; gap: 6px; min-width: 0; }
+.pf .ex-progress-text { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+
+/* ---- Filters ---- */
+.pf .ex-filters { display: grid; gap: 4px; margin: 0 0 22px; }
+.pf .ex-filter { display: grid; gap: 6px; }
+.pf .ex-filters .pf-explore-filters { margin: 0 0 8px; }
+.pf .ex-count { margin: 0 0 18px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+
+/* ---- Expedition rows ---- */
+.pf .ex-mission { grid-template-columns: minmax(0, 1fr); }
+.pf .ex-mission-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.pf .ex-lock { margin: 8px 0 0; font-size: 0.8125em; line-height: 1.5; color: var(--pf-fg); }
+.pf .ex-lock::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border: 2px solid var(--pf-fg); box-sizing: border-box; vertical-align: 0; }
+.pf .ex-reward { display: grid; gap: 2px; font-size: 0.8125em; line-height: 1.45; }
+@media (min-width: 900px) {
+  .pf .ex-mission { grid-template-columns: 110px minmax(0, 1fr) 160px 190px; padding: 16px 20px; }
+}
+
+/* ---- Expedition page ---- */
+.pf .ex-detail { display: grid; gap: 24px; align-items: start; }
+.pf .ex-detail > div { display: grid; gap: 24px; min-width: 0; align-content: start; }
+.pf .ex-detail .pf-box { margin: 0; }
+@media (min-width: 900px) {
+  .pf .ex-detail { grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; }
+}
+.pf .ex-status { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding: 4px 10px; border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+.pf .ex-steps { list-style: none; margin: 0; padding: 0; }
+.pf .ex-step { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 2px 14px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
+.pf .ex-step:first-child { padding-top: 0; border-top: 0; }
+.pf .ex-step:last-child { padding-bottom: 0; }
+.pf .ex-node { grid-row: span 2; display: grid; place-items: center; width: 32px; height: 32px; box-sizing: border-box; border: 2px solid var(--pf-rule); font: 700 13px var(--font-pixel), monospace; color: var(--pf-mut); }
+.pf .ex-node svg { width: 16px; height: 16px; }
+.pf .ex-step[data-state="done"] .ex-node,
+.pf .ex-flow-step[data-state="done"] .ex-node { border-color: var(--pf-ac); background: var(--pf-ac); color: var(--pf-acf); }
+.pf .ex-step[data-state="done"] .ex-node svg,
+.pf .ex-flow-step[data-state="done"] .ex-node svg { fill: var(--pf-acf); }
+.pf .ex-step[data-state="current"] .ex-node,
+.pf .ex-flow-step[data-state="active"] .ex-node { border-color: var(--pf-ac); color: var(--pf-fg); }
+.pf .ex-step[data-state="current"] .ex-node::after { content: ""; width: 10px; height: 10px; background: var(--pf-ac); }
+.pf .ex-steps-meter { margin: 0 0 16px; }
+.pf .pf-box .ex-lock { margin: 0 0 16px; }
+.pf .ex-step-title { margin: 0; font: 600 1em/1.35 var(--font-ui), monospace; align-self: center; }
+.pf .ex-step[data-state="todo"] .ex-step-title { color: var(--pf-mut); }
+.pf .ex-step-detail { margin: 0; font-size: 0.8125em; line-height: 1.55; color: var(--pf-mut); }
+.pf .ex-step-flag { margin-left: 8px; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-plain { list-style: none; margin: 0; padding: 0; }
+.pf .ex-plain li { padding: 9px 0; border-top: 1px solid var(--pf-rule); font-size: 0.875em; line-height: 1.5; }
+.pf .ex-plain li:first-child { padding-top: 0; border-top: 0; }
+.pf .ex-plain a { color: var(--pf-link); }
+.pf .ex-plain .ex-label { display: block; margin-top: 2px; }
+.pf .ex-reward-big { margin: 0; font: 400 2.25em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
+.pf .ex-reward-big small { font: 700 0.4em var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-submit .pf-btn { width: 100%; margin-top: 14px; min-height: 52px; }
+
+/* ---- Step flow (referrals and order status) ---- */
+.pf .ex-flow { display: grid; grid-template-columns: minmax(0, 1fr); list-style: none; margin: 0; padding: 0; }
+.pf .ex-flow-step { position: relative; align-content: start; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 2px 14px; padding-bottom: 18px; }
+.pf .ex-flow-step:last-child { padding-bottom: 0; }
+.pf .ex-flow-step:not(:last-child)::after { content: ""; position: absolute; top: 34px; bottom: 2px; left: 15px; width: 2px; background: var(--pf-rule); }
+.pf .ex-flow-step[data-state="done"]:not(:last-child)::after { background: var(--pf-ac); }
+.pf .ex-flow-step .ex-node { grid-row: span 2; }
+.pf .ex-flow-step[data-state="active"] .ex-node::after { content: ""; width: 10px; height: 10px; background: var(--pf-ac); }
+.pf .ex-flow-label { align-self: center; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-flow-step[data-state="done"] .ex-flow-label { color: var(--pf-link); }
+.pf .ex-flow-step[data-state="active"] .ex-flow-label { color: var(--pf-fg); }
+.pf .ex-flow-note { margin: 0; font-size: 0.8125em; line-height: 1.5; color: var(--pf-mut); max-width: 34ch; }
+@media (min-width: 720px) {
+  .pf .ex-flow { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
+  .pf .ex-flow-step { grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 10px; padding: 0 14px 0 0; }
+  .pf .ex-flow-step .ex-node { grid-row: auto; }
+  .pf .ex-flow-step:not(:last-child)::after { top: 15px; bottom: auto; left: 42px; right: 8px; width: auto; height: 2px; }
+  .pf .ex-flow-label { align-self: start; }
+}
+
+/* ---- Events ---- */
+.pf .ex-event { display: grid; gap: 24px; margin: 0 0 32px; }
+.pf .ex-event-grid { display: grid; gap: 24px; }
+@media (min-width: 900px) {
+  .pf .ex-event-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 36px; align-items: start; }
+}
+.pf .ex-event-title { margin: 6px 0 0; font: 700 1.75em/1.15 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-fg); overflow-wrap: anywhere; }
+.pf .ex-event-line { margin: 4px 0 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-event-text { margin: 14px 0 0; max-width: 56ch; line-height: 1.65; }
+.pf .ex-event-actions { margin-top: 18px; }
+.pf .ex-event-actions .pf-btn { width: 100%; min-height: 52px; }
+@media (min-width: 560px) {
+  .pf .ex-event-actions .pf-btn { width: auto; }
+}
+.pf .ex-open { margin: 0; }
+.pf .ex-open h3 { margin: 0 0 8px; font: 700 1em/1.2 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-open dl { margin: 0; }
+.pf .ex-open dl > div { display: grid; gap: 2px 16px; padding: 10px 0; border-top: 1px solid var(--pf-rule); }
+.pf .ex-open dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .ex-open dd { margin: 0; font-size: 0.875em; color: var(--pf-mut); }
+@media (min-width: 560px) {
+  .pf .ex-open dl > div { grid-template-columns: 170px minmax(0, 1fr); }
+}
+.pf .ex-shifts { display: grid; grid-template-columns: minmax(0, 1fr); list-style: none; margin: 0; padding: 0; border: 1px solid var(--pf-fg); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); }
+.pf .ex-shifts > li { display: grid; gap: 6px; align-content: start; padding: 16px 18px; }
+.pf .ex-shifts > li + li { border-top: 1px solid var(--pf-rule); }
+.pf .ex-shift-day { font: 400 2em/1 var(--font-display), monospace; }
+.pf .ex-shift-name { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-shift-text { margin: 0; font-size: 0.875em; line-height: 1.55; }
+@media (min-width: 720px) {
+  .pf .ex-shifts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pf .ex-shifts > li + li { border-top: 0; border-left: 1px solid var(--pf-rule); }
+}
+.pf .ex-rules { list-style: none; margin: 0; padding: 0; max-width: 64ch; }
+.pf .ex-rules li { display: flex; gap: 12px; padding: 9px 0; border-top: 1px solid var(--pf-rule); line-height: 1.5; }
+.pf .ex-rules li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 0.5em; background: var(--pf-ac); }
+.pf .ex-event-row { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .pf .ex-event-row { grid-template-columns: minmax(0, 1fr) auto; }
+}
+
+/* ---- Referrals ---- */
+.pf .ex-invite { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+.pf .ex-invite input { flex: 1 1 260px; min-width: 0; min-height: 52px; padding: 0 16px; border: 1px solid var(--pf-rule); border-radius: 0; background: var(--pf-bg); color: var(--pf-mut); font: inherit; }
+.pf .ex-invite .pf-btn { min-height: 52px; }
+.pf .ex-field-label { display: block; margin: 0 0 6px; font-weight: 600; }
+.pf .ex-split { display: grid; gap: 24px; margin: 0 0 32px; }
+.pf .ex-split > .pf-box { margin: 0; }
+
+/* ---- Orders and wishlist ---- */
+.pf .ex-order { grid-template-columns: 64px minmax(0, 1fr); }
+.pf .ex-order-side { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; }
+.pf .ex-thumb { width: 64px; height: 64px; }
+.pf .ex-thumb .pf-shop-photo { min-height: 0; width: 64px; height: 64px; padding: 6px; border: 1px solid var(--pf-rule); box-sizing: border-box; }
+.pf .ex-thumb .pf-shop-photo img { max-width: 100%; max-height: 50px; }
+.pf .ex-thumb .pf-shop-photo .pf-shop-sprite { width: 36px; height: 36px; }
+.pf .ex-total { font: 400 1.5em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
+.pf .ex-total small { font: 700 0.55em var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+@media (min-width: 720px) {
+  .pf .ex-order { grid-template-columns: 64px minmax(0, 1fr) 190px 120px; }
+  .pf .ex-order-side { display: contents; }
+}
+.pf .ex-lines td, .pf .ex-lines th { vertical-align: middle; }
+.pf .ex-lines tbody th { font: 400 1em var(--font-ui), monospace; letter-spacing: 0; text-transform: none; color: var(--pf-fg); }
+.pf .ex-line-item { display: flex; align-items: center; gap: 12px; }
+.pf .ex-line-item .ex-thumb { flex: none; }
+.pf .ex-line-item a { display: inline-flex; align-items: center; min-height: 44px; color: var(--pf-link); }
+.pf .ex-right { text-align: right; font-variant-numeric: tabular-nums; }
+.pf .ex-wish { grid-template-columns: 64px minmax(0, 1fr); }
+.pf .ex-wish-price { grid-column: 1 / -1; display: grid; gap: 2px; margin: 0; }
+.pf .ex-wish-action { grid-column: 1 / -1; }
+.pf .ex-wish-action .pf-btn { width: 100%; }
+@media (min-width: 720px) {
+  .pf .ex-wish { grid-template-columns: 64px minmax(0, 1fr) 150px auto; }
+  .pf .ex-wish-price { grid-column: auto; }
+  .pf .ex-wish-action { grid-column: auto; }
+  .pf .ex-wish-action .pf-btn { width: auto; }
+}
+.pf .ex-wish-lock { margin: 6px 0 0; font-size: 0.8125em; color: var(--pf-fg); }
+.pf .ex-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 0 0 16px; }
+.pf .ex-tools p { margin: 0; }
+.pf .ex-tools .pf-btn { min-height: 44px; }
+.pf .ex-was { color: var(--pf-mut); }
+
+/* ---- Formatting pass (round 2) ---- */
+/* A count on a chip or tab: a rule and a gap keep it clear of the label. */
+.pf .ex-count-pill { margin-left: 12px; padding-left: 12px; border-left: 1px solid currentColor; }
+/* Row headers in the line tables: the same hairline as the cells beside them, none under the last row, and a price never wraps. */
+.pf .ex-lines tbody th { border-bottom-color: var(--pf-rule); }
+.pf .ex-lines tbody tr:last-child th { border-bottom: 0; }
+.pf .ex-right { white-space: nowrap; }
+/* Tablet (600 to 899px): the row is two columns, name and line beside the steps and reward, instead of one long stack. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .pf .ex-mission { grid-template-columns: minmax(0, 1fr) 190px; grid-template-areas: "tag progress" "main reward"; align-items: start; }
+  .pf .ex-mission > .ex-tag { grid-area: tag; }
+  .pf .ex-mission > .ex-main { grid-area: main; }
+  .pf .ex-mission > .ex-progress { grid-area: progress; }
+  .pf .ex-mission > .ex-reward { grid-area: reward; margin: 0; }
+}

@@ -152,8 +152,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home:has(#d-prizes:checked) .dn label[for=d-prizes] { border-left-color:var(--ac);background:var(--ln);color:var(--ac) }
 .home:has(#d-eras:checked) #pn-eras { display:block }
 .home:has(#d-eras:checked) .dn label[for=d-eras] { border-left-color:var(--ac);background:var(--ln);color:var(--ac) }
-.home:has(#d-irl:checked) #pn-irl { display:block }
-.home:has(#d-irl:checked) .dn label[for=d-irl] { border-left-color:var(--ac);background:var(--ln);color:var(--ac) }
 @media(max-width:800px) {
   .home .br2 { grid-template-columns:1fr }
   .home .br2:before, .home .br2:after { display:none }
@@ -1088,12 +1086,12 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .st:not(:last-child)::after { content: ""; position: absolute; top: 31px; left: calc(50% + 42px); width: calc(100% - 64px); height: 10px; background: var(--fg); clip-path: polygon(0 35%, 85% 35%, 85% 0, 100% 50%, 85% 100%, 85% 65%, 0 65%); }
 @media (max-width: 700px) { .home .st:not(:last-child)::after { display: none; } .home .bd { margin: 0 0 18px; } }
 
-/* ===== Animations from main: ore nudge, era connector and IRL status entrances ===== */
+/* ===== Animations from main: ore nudge and era connector entrances ===== */
 @keyframes ore-nudge { from { transform: translateY(0); } to { transform: translateY(-3px) rotate(-2deg); } }
 @keyframes era-connector-enter { from { border-color: transparent; } }
 .home .ic.nudge { animation: ore-nudge 2400ms ease-in-out infinite alternate; }
 .home .era > div + div { animation: era-connector-enter 500ms var(--ease) both; }
-@media (prefers-reduced-motion: reduce) { .home .ic.nudge, .home .era > div + div, .home #loadout-irl .asd { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .home .ic.nudge, .home .era > div + div { animation: none; } }
 .home .st .cn { display: block; }
 .home .st .dsc { display: block; margin-top: 8px; }
 .home #progression .asd { background: none !important; }
@@ -1198,18 +1196,6 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 }
 
 /* Custom Orders: three steps in a line, joined by arrows. */
-/* LOADOUT IRL: three days on a line with a square marker for each. */
-.home .days { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 36px; margin: 44px auto 0; padding: 0; max-width: 980px; border-top: 2px dashed var(--mut); }
-.home .days > li { position: relative; display: flex; flex-direction: column; gap: 10px; padding-top: 26px; }
-.home .days > li::before { content: ""; position: absolute; top: -9px; left: 0; width: 16px; height: 16px; background: var(--ac); border: 2px solid var(--fg); }
-.home .days small { color: var(--ac); font-size: 12px; letter-spacing: .14em; }
-.home .days .cn { font-size: 24px; line-height: 1.2; }
-@media (max-width: 700px) {
-  .home .days { border-top: 0; border-left: 2px dashed var(--mut); padding-left: 24px; }
-  .home .days > li { padding-top: 0; }
-  .home .days > li::before { top: 2px; left: -34px; }
-}
-
 /* Jerry's reason for LOADOUT, as a plain pull quote. */
 .home .why { max-width: 760px; margin: 34px auto 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--ac); text-align: left; }
 .home .why blockquote { margin: 0; }
@@ -1278,6 +1264,6 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   .home .pit:not(.rb-rock) :is(b, span) { color: CanvasText; background: Canvas; }
 }
 @media (min-width: 701px) {
-  .home .lad.l4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .home .lad.l6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 .home .st, .home .st .cn, .home .st .dsc { min-width: 0; overflow-wrap: anywhere; }

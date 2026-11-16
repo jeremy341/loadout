@@ -12,7 +12,7 @@ import { trackBySlug, trackSlug } from "@/lib/platform/tracks";
 export const metadata: Metadata = { title: "Track - LOADOUT" };
 
 // One track (Paper file "LOADOUT participant platform", page "E - Projects", artboard E6): the name and what it is, a row to
-// switch to another track, one wide level strip (the level, the hours to the next, the discount earned and the fifteen levels sideways), then the builder's
+// switch to another track, one wide level strip (the level, the hours to the next, the discount earned and the twenty levels sideways), then the builder's
 // projects in the track beside two link boxes to the docs. The hours are sample figures until approved hours exist.
 export default async function TrackPage({ params }: { params: Promise<{ track: string }> }) {
   const viewer = await requireViewer();

@@ -37,7 +37,8 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
 
       <p className="pf-event-line">
         <span className="pf-event-dot" aria-hidden="true" />
-        Ordering opens in a later release. These are proposed items at draft prices.
+        Ordering opens in a later release. These are proposed items at draft prices.{" "}
+        <Link href="/dashboard/orders">Your orders and wishlist</Link>
       </p>
 
       <section className="pf-box pf-shop-bar" aria-label="Your Ore and discounts">

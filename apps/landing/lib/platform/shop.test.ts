@@ -23,8 +23,8 @@ const all: ShopQuery = { q: "", tag: null, sort: "featured", afford: false };
 const item = (id: string) => shopItemById(id) as ShopItem;
 
 describe("catalog", () => {
-  test("it holds the 72 proposed items", () => {
-    expect(SHOP_ITEMS).toHaveLength(72);
+  test("it holds the 70 proposed items", () => {
+    expect(SHOP_ITEMS).toHaveLength(70);
   });
 
   test("every item has a unique id, a positive price and a photo", () => {
@@ -37,9 +37,8 @@ describe("catalog", () => {
 
   test("the working prices match the Docs table", () => {
     expect(item("esp32-starter-kit").baseOre).toBe(30);
-    expect(item("raspberry-pi-5").baseOre).toBe(500);
-    expect(item("framework-16").baseOre).toBe(2985);
-    expect(item("irl-ticket").baseOre).toBe(700);
+    expect(item("raspberry-pi-5").baseOre).toBe(490);
+    expect(item("framework-16").baseOre).toBe(2915);
   });
 
   test("an unknown id is not an item", () => {
@@ -51,21 +50,21 @@ describe("price", () => {
   test("a single-track item uses that track's level discount", () => {
     const price = priceFor(item("domain"), approved);
     expect(price.track).toBe("Tools");
-    expect(price.percent).toBe(3.1);
+    expect(price.percent).toBe(4.8);
     expect(price.final).toBe(24);
   });
 
   test("a multi-track item uses the best related track, never a sum", () => {
     const price = priceFor(item("raspberry-pi-5"), approved);
     expect(price.track).toBe("Systems");
-    expect(price.percent).toBe(0.7);
-    expect(price.final).toBe(497);
+    expect(price.percent).toBe(1.1);
+    expect(price.final).toBe(485);
     expect(priceFor(item("framework-16"), approved).track).toBe("Tools");
   });
 
   test("a General item has no discount at any level", () => {
     const maxed: TrackHours = { Tools: 275, Systems: 275, Compute: 275, Hardware: 275 };
-    for (const id of ["irl-ticket", "flight-grant"]) {
+    for (const id of ["conference-grant"]) {
       const price = priceFor(item(id), maxed);
       expect(price.track).toBeNull();
       expect(price.percent).toBe(0);
@@ -74,12 +73,12 @@ describe("price", () => {
   });
 
   test("LV.15 in a track takes 15% off its items", () => {
-    const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 275 };
-    expect(priceFor(item("enclosed-printer"), maxed).final).toBe(888);
+    const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 178 };
+    expect(priceFor(item("enclosed-printer"), maxed).final).toBe(867);
   });
 
   test("hours of work is the price at 10 Ore an hour", () => {
-    expect(hoursOfWork(497)).toBe(49.7);
+    expect(hoursOfWork(487)).toBe(48.7);
     expect(hoursOfWork(25)).toBe(2.5);
   });
 });
@@ -90,20 +89,36 @@ describe("requisition preview", () => {
     const preview = requisitionPreview(entry, priceFor(entry, approved));
     expect(preview.eligible).toBe(true);
     expect(preview.percent).toBe(10.1);
-    expect(preview.final).toBe(939);
+    expect(preview.final).toBe(917);
   });
 
-  test("the two discounts together stop at 25%", () => {
+  test("the two discounts together stop at 30%: LV.20 plus a Requisition", () => {
     const entry = item("enclosed-printer");
     const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 275 };
     const preview = requisitionPreview(entry, priceFor(entry, maxed));
-    expect(preview.percent).toBe(25);
-    expect(preview.final).toBe(784);
+    expect(preview.percent).toBe(30);
+    expect(preview.final).toBe(714);
+  });
+
+  test("a General Requisition stacks on the track discount and a Field Requisition, up to 40%", () => {
+    const entry = item("enclosed-printer");
+    const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 275 };
+    const preview = requisitionPreview(entry, priceFor(entry, maxed), { general: true });
+    expect(preview.eligible).toBe(true);
+    expect(preview.percent).toBe(40);
+    expect(preview.final).toBe(612);
+  });
+
+  test("a General Requisition works on a General item of 400 Ore or more, in any track", () => {
+    const entry = item("ipad");
+    const preview = requisitionPreview(entry, priceFor(entry, approved), { general: true });
+    expect(preview.eligible).toBe(true);
+    expect(preview.percent).toBe(10);
   });
 
   test("a cheap item or a General item is not eligible", () => {
     expect(requisitionPreview(item("esp32-starter-kit"), priceFor(item("esp32-starter-kit"), approved)).eligible).toBe(false);
-    expect(requisitionPreview(item("irl-ticket"), priceFor(item("irl-ticket"), approved)).eligible).toBe(false);
+    expect(requisitionPreview(item("conference-grant"), priceFor(item("conference-grant"), approved)).eligible).toBe(false);
   });
 });
 
@@ -115,11 +130,11 @@ describe("level lock", () => {
   });
 
   test("a level still missing gives the hours to go", () => {
-    expect(lockFor(gated, approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 88 });
+    expect(lockFor(gated, approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 56 });
   });
 
   test("the level reached unlocks it", () => {
-    expect(lockFor(gated, { ...approved, Hardware: 90 })).toBeNull();
+    expect(lockFor(gated, { ...approved, Hardware: 58 })).toBeNull();
   });
 });
 
@@ -155,7 +170,7 @@ describe("filter and sort", () => {
   });
 
   test("General shows only the items with no track", () => {
-    expect(ids({ ...all, tag: "General" })).toEqual(["irl-ticket", "flight-grant", "conference-grant", "book-grant", "screwdriver-set", "cable-kit", "retro-handheld", "ipad", "meta-quest-3", "airpods", "kindle", "blahaj"]);
+    expect(ids({ ...all, tag: "General" })).toEqual(["conference-grant", "book-grant", "screwdriver-set", "cable-kit", "retro-handheld", "ipad", "meta-quest-3", "airpods", "kindle", "blahaj"]);
   });
 
   test("the tags cover every item", () => {
@@ -171,7 +186,7 @@ describe("filter and sort", () => {
 
   test("affordable keeps only what the balance covers", () => {
     expect(ids({ ...all, afford: true }, 0)).toEqual([]);
-    expect(ids({ ...all, afford: true }, 30)).toEqual(["flight-grant", "domain", "api-credits", "hosting-grant", "pico-w", "esp32-starter-kit", "debug-probe", "pcb-grant"]);
+    expect(ids({ ...all, afford: true }, 30)).toEqual(["domain", "api-credits", "hosting-grant", "pico-w", "esp32-starter-kit", "debug-probe", "pcb-grant"]);
   });
 
   test("price sorts use the price after the discount", () => {
@@ -185,20 +200,19 @@ describe("filter and sort", () => {
 describe("the proposed catalog", () => {
   test("General items have no track and everything else names at least one", () => {
     const general = SHOP_ITEMS.filter((entry) => entry.tracks.length === 0).map((entry) => entry.id);
-    expect(general).toEqual(["irl-ticket", "flight-grant", "conference-grant", "book-grant", "screwdriver-set", "cable-kit", "retro-handheld", "ipad", "meta-quest-3", "airpods", "kindle", "blahaj"]);
+    expect(general).toEqual(["conference-grant", "book-grant", "screwdriver-set", "cable-kit", "retro-handheld", "ipad", "meta-quest-3", "airpods", "kindle", "blahaj"]);
   });
 
   test("the graphics card and the oscilloscope are the gated items, each locked until LV.8 in its track", () => {
     const gated = SHOP_ITEMS.filter((entry) => entry.need);
     expect(gated.map((entry) => entry.id)).toEqual(["rx-9060", "oscilloscope"]);
-    expect(lockFor(gated[0], approved)).toEqual({ track: "Compute", level: 8, hoursToGo: 90 });
-    expect(lockFor(gated[1], approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 88 });
+    expect(lockFor(gated[0], approved)).toEqual({ track: "Compute", level: 8, hoursToGo: 58 });
+    expect(lockFor(gated[1], approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 56 });
   });
 
   test("items at 400 Ore or more with a track can use a Requisition, the rest cannot", () => {
     const eligible = SHOP_ITEMS.filter((entry) => requisitionPreview(entry, priceFor(entry, approved)).eligible).map((entry) => entry.id);
     expect(eligible).toContain("flipper-zero");
-    expect(eligible).not.toContain("irl-ticket");
     for (const entry of SHOP_ITEMS.filter((candidate) => candidate.baseOre < 400)) {
       expect(eligible).not.toContain(entry.id);
     }

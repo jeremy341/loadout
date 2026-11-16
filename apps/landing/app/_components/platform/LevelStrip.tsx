@@ -13,7 +13,7 @@ import {
 } from "@/lib/platform/progress";
 
 // A track's level laid out sideways: the level and the hours to the next one on the left, the discount earned on the
-// right (depth stays on the Overview), the fifteen levels as one row of cells (reached filled, the next one part-filled
+// right (depth stays on the Overview), the twenty levels as one row of cells (reached filled, the next one part-filled
 // with hours waiting for review hatched; each cell shows its hours on hover, focus or tap), and the four reward levels
 // hanging underneath with the hours they need. No per-level table and no per-level percentages: the docs only set the
 // milestones. The hours are sample values until approved hours exist.

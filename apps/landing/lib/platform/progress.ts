@@ -4,9 +4,9 @@
 export const TRACKS = ["Tools", "Systems", "Compute", "Hardware"] as const;
 export type Track = (typeof TRACKS)[number];
 
-// Lifetime levels run from LV.1 to LV.15 (plans/02-economy-and-rewards.md). The XP curve between them is still open,
-// so the bar shows levels, not XP.
-export const LEVEL_CAP = 15;
+// Lifetime levels run from LV.1 to LV.20 (plans/02-economy-and-rewards.md; LV.16 to LV.20 added 14 Nov 2026). Track XP is
+// 10 per approved hour (owner, 14 Nov 2026), linear. Levels are still gated by approved hours, so the bar shows levels.
+export const LEVEL_CAP = 20;
 
 export type TrackProgress = { track: Track; level: number };
 
@@ -15,12 +15,13 @@ export function trackProgress(): TrackProgress[] {
   return TRACKS.map((track) => ({ track, level: 0 }));
 }
 
-// Approved track hours needed for each level, LV.1 to LV.15. Only LV.5, 8, 11 and 15 (35, 90, 160 and 275 hours) are
-// set by the owner's decisions; the other values are sample values until the XP curve is decided (plans/02).
-export const LEVEL_HOURS = [2, 6, 14, 24, 35, 52, 70, 90, 112, 135, 160, 188, 216, 245, 275] as const;
+// Approved track hours needed for each level, LV.1 to LV.20. The whole curve was rescaled on 14 Nov 2026 so that LV.20 sits at
+// 275 hours (the owner's request). The set levels LV.5, 8, 11, 15, 18 and 20 are 23, 58, 104, 178, 236 and 275 hours. The XP curve
+// between them is still open (plans/02).
+export const LEVEL_HOURS = [1, 4, 9, 16, 23, 34, 45, 58, 72, 87, 104, 122, 140, 159, 178, 197, 217, 236, 256, 275] as const;
 
 // Rewards at the set levels. A draft, like the hours: the discount plan is provisional.
-export const LEVEL_REWARDS: Record<number, string> = { 5: "10% coupon", 8: "10% coupon", 11: "10% coupon", 15: "Max level" };
+export const LEVEL_REWARDS: Record<number, string> = { 5: "10% coupon", 8: "10% coupon", 11: "10% coupon", 15: "10% coupon", 18: "10% coupon", 20: "Max level, 10% coupon" };
 
 // The level a number of approved hours reaches: how many levels' hours it has met.
 export function levelForHours(hours: number): number {
@@ -33,12 +34,18 @@ export function hoursToNextLevel(hours: number): number | null {
   return level >= LEVEL_CAP ? null : Math.max(0, LEVEL_HOURS[level] - hours);
 }
 
-// The shop discount a track's approved hours give: linear per hour, 15% at LV.15's 275 hours and no more (owner decision,
-// 24 Oct 2026). The rules doc still calls the curve between the set levels open, so treat the figures as a draft.
-export const DISCOUNT_MAX = 15;
+// The shop discount a track's approved hours give. Up to LV.15's hours it is linear per hour, 15% at LV.15 (now 178 hours),
+// then rises linearly to 20% at LV.20's 275 hours, then stops (rescaled 14 Nov 2026). The rules doc still calls the curve
+// between the set levels open, so treat the figures as a draft.
+export const DISCOUNT_AT_LV15 = 15;
+export const DISCOUNT_MAX = 20;
 
 export function discountForHours(hours: number): number {
-  return Math.min(DISCOUNT_MAX, Math.max(0, (hours / LEVEL_HOURS[LEVEL_CAP - 1]) * DISCOUNT_MAX));
+  const approved = Math.max(0, hours);
+  const lv15 = LEVEL_HOURS[14];
+  const top = LEVEL_HOURS[LEVEL_CAP - 1];
+  if (approved <= lv15) return (approved / lv15) * DISCOUNT_AT_LV15;
+  return Math.min(DISCOUNT_MAX, DISCOUNT_AT_LV15 + ((approved - lv15) / (top - lv15)) * (DISCOUNT_MAX - DISCOUNT_AT_LV15));
 }
 
 // The discount as shown: one decimal, rounded down, so a builder is never promised more than they have earned. Prices use

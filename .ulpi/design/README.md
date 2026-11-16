@@ -17,5 +17,6 @@ On 25 Oct 2026 the 43 separate briefs were merged into the seven records below. 
 Kept as its own file:
 
 - [`research-mode-builder-benefit.md`](research-mode-builder-benefit.md): **proposal only.** Do not publish or implement a Research Mode XP bonus unless the canonical product and economy plans say so.
+- [`reviewer-desk-parity.md`](reviewer-desk-parity.md): one track per project on the reviewer desk and the platform, and the Pixl review features the desk lacked, on sample data. Brief written 15 Nov 2026; not reviewed by the owner.
 
 The design system ([`docs/design/system/design-system.md`](../../docs/design/system/design-system.md)) and the asset catalog ([`docs/design/asset-catalog.md`](../../docs/design/asset-catalog.md)) remain the current visual references.

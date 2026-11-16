@@ -161,7 +161,7 @@ The Shop tab (`apps/landing/lib/platform/shop.ts`, `app/(platform)/dashboard/(sh
 | `yubikey.png` | File:YubiKey_5_NFC.png | FelixLadd | CC BY-SA 4.0 |
 | `mini-pc.jpg` | File:Intel_NUC_Mini_PC.jpg | Project Kei | CC BY-SA 4.0 |
 
-Page URLs are `https://commons.wikimedia.org/wiki/` plus the file name. The share-alike licences apply to those photos only, not to the rest of the site. The tickets and grants (`irl-ticket`, `flight-grant`, `conference-grant`) use LOADOUT's own sprites.
+Page URLs are `https://commons.wikimedia.org/wiki/` plus the file name. The share-alike licences apply to those photos only, not to the rest of the site. The conference grant (`conference-grant`) uses LOADOUT's own sprites.
 
 ## Shop catalog photos, second round — 2026-11-01
 
@@ -235,10 +235,14 @@ The owner reviewed the shop again: official marks for the software items, LOADOU
 
 **Wikimedia Commons, new:** `File:ABS_filament_spool.jpg` (Tatár Lehel, CC BY-SA 3.0, credited on the item page), `File:Visual_Studio_Code_1.35_icon.svg` (Microsoft, public domain) for the code editor item, and `File:PICO-8_logo.png` (Lexaloffle, public domain) for the PICO-8 item. The Rigol photo (`File:RIGOL_DS1054Z_Digital_Storage_Oscilloscope.jpg`, Draconichiaro, CC BY-SA 4.0) is back with its credit. The two public-domain marks carry no credit line; the PICO-8 mark is one pale colour on black, keyed out by brightness, and the page flips it to black in the light theme.
 
-**LOADOUT's own icons** (`apps/landing/public/loadout/sprites/`) now stand for: the IRL ticket (`ticket`), the conference grant (`people`), the book grant (`cap`), the $10 hosting grant (`cloud`), the cloud database credits (`storage`), the laptop grant (`laptop`), the e-ink module (`eink`), the Cardputer (`cardputer`), the LoRa node (`lora`), the phone thermal camera (`thermal`), the debug probe (`probe`) and the bench power supply (`psu`).
+**LOADOUT's own icons** (`apps/landing/public/loadout/sprites/`) now stand for: the conference grant (`people`), the book grant (`cap`), the $10 hosting grant (`cloud`), the cloud database credits (`storage`), the laptop grant (`laptop`), the e-ink module (`eink`), the Cardputer (`cardputer`), the LoRa node (`lora`), the phone thermal camera (`thermal`), the debug probe (`probe`) and the bench power supply (`psu`).
 
 **Removed from the catalog:** the Nintendo Switch, the compact 4K camera and the mini thermal sticker printer.
 
 ## Shop pictures, last corrections — 2026-11-01
 
 The two nights' stays and the $10 parts grant were removed (72 items on 60 pictures). The $10 PCB fabrication grant now uses Stardance's `shop/hardware_build_fund.png` (the picture the parts grant had). The USB-C dock uses `File:ALMIGHTY_DOCK_C1.jpg` from Wikimedia Commons (しろうるり, public domain) instead of the StarTech dock photo, which showed a flat slab without ports, and its credit line was updated. Shop pictures are now saved as `<name>.<content hash>.webp`, so a replaced picture can never be shown from the browser's or the image optimiser's cache under an old name. That is why the oscilloscope still showed the old Stasis drawing: the new Rigol photo (`File:RIGOL_DS1054Z_Digital_Storage_Oscilloscope.jpg`, Draconichiaro, CC BY-SA 4.0) had kept the same file name. The unused Pixl `pcb.webp` and the StarTech dock photo are no longer in the shop.
+
+## Reviewer site: copy of Pixl's internal dashboard — 2026-11-15
+
+The reviewer site (`apps/landing/reviewer-dash/` and the review routes in `apps/landing/app/(reviewer)/reviewer/`) is a copy of `references/pixl/apps/internal-dashboard` at commit `1468ba6942b13add1ac50e1319541a033ee1df38`, under Pixl's MIT licence and the owner-stated permission recorded above. Pixl's notice is kept in `apps/landing/reviewer-dash/PIXL-LICENSE.md`. The files are copied by `apps/landing/reviewer-dash/scripts/copy-from-pixl.mjs`, which rewrites the import aliases and prints how each file differs from Pixl's; every hand edit is listed in `apps/landing/reviewer-dash/ADJUSTMENTS.md` and `ADJUSTED.txt`. The data layer, sign-in, session and server actions are LOADOUT's own and run on sample data. Not copied: Phantom Sans and every other font, images and art, `apps/pixorpheus`, the game, pixels and shop code, and anything that needs a key or a network call. The copied code uses `@hackclub/icons` (the Hack Foundation, a three-clause BSD-style licence), `motion`, `d3-scale`, `d3-shape`, `d3-array`, `clsx` and `tailwind-merge` (MIT or ISC).

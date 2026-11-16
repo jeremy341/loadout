@@ -8,9 +8,15 @@ import { EditProjectDialog } from "@/app/_components/platform/EditProjectDialog"
 import { HackatimePanel } from "@/app/_components/platform/HackatimePanel";
 import { ProjectCover } from "@/app/_components/platform/ProjectCover";
 import { StageProgress } from "@/app/_components/platform/StageProgress";
+import { ToolbeltSection } from "@/app/_components/platform/ToolbeltSection";
+import { ToolbeltUsers } from "@/app/_components/platform/ToolbeltUsers";
 import { db } from "@/lib/platform/db";
+import { listUsersOfTool, listUsesForProject, searchEquippableTools, usedByCounts } from "@/lib/platform/profile-data";
+import { normalizeStatus } from "@/lib/platform/profile";
+import { TOOLBELT_USERS_MAX } from "@/lib/platform/toolbelt-ui";
+import { activeUses, EQUIP_STATUSES, TOOLBELT_MAX_PER_PROJECT } from "@/lib/platform/toolbelt";
 import { projectHours } from "@/lib/platform/progress";
-import { projectStatusLabel } from "@/lib/platform/projects";
+import { projectStatusLabel, trackLocked } from "@/lib/platform/projects";
 import { requireViewer } from "@/lib/platform/session";
 
 export const metadata: Metadata = { title: "Project - LOADOUT" };
@@ -27,6 +33,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   if (!project) notFound();
 
   const hours = projectHours(project.id);
+  // Toolbelt: the uses this project equips, the tools it could still equip, and (for a maker) who equipped it.
+  const uses = await listUsesForProject(project.id);
+  const canEquipMore = EQUIP_STATUSES.includes(normalizeStatus(project.status)) && activeUses(uses).length < TOOLBELT_MAX_PER_PROJECT;
+  const tools = canEquipMore ? await searchEquippableTools(viewer.id, "") : [];
+  const users = await listUsersOfTool(project.id, viewer.id);
+  const blocked = new Set((await db().toolbeltBlock.findMany({ where: { makerId: viewer.id }, select: { blockedId: true } })).map((row) => row.blockedId));
+  const showMakerView = (normalizeStatus(project.status) === "approved" && Boolean(project.repoUrl)) || users.length > 0;
+  const usedBy = (await usedByCounts([project.id]))[project.id] ?? 0;
+  const slotsUsed = activeUses(uses).length;
   const build = TRACK_BUILDS.find((item) => item.name === project.track);
   const hardware = project.track === "Hardware";
   // Each requirement is read from the project. Nothing is linked and no journal exists yet, so those stay open.
@@ -47,7 +62,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           </svg>
           Back to projects
         </Link>
-        <EditProjectDialog project={{ id: project.id, title: project.title, description: project.description, track: project.track }} />
+        <EditProjectDialog project={{ id: project.id, title: project.title, description: project.description, track: project.track, status: project.status, repoUrl: project.repoUrl, demoUrl: project.demoUrl }} />
       </div>
 
       <div className="pf-project-head">
@@ -77,6 +92,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
             </div>
           </dl>
           <p className="pf-hint pf-depth-note">Depth is your approved hours in metres: 1 M for every approved hour.</p>
+          <p className="pf-hint pf-belt-summary">
+            <a href="#toolbelt-heading">Toolbelt</a>: {slotsUsed} of {TOOLBELT_MAX_PER_PROJECT} slots in use. Used by {usedBy} {usedBy === 1 ? "builder" : "builders"}.
+          </p>
           <div className="pf-actions">
             <div className="pf-actions-row">
               <button type="button" className="pf-btn pri" disabled>+ New journal entry</button>
@@ -95,6 +113,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           <div className="pf-side-track" data-track={project.track ? project.track.toLowerCase() : undefined}>
             <span className="pf-side-label">Track</span>
             <span className="pf-side-name">{project.track ?? "Not picked"}</span>
+            {trackLocked(project.status) ? (
+              <span className="pf-tag" title="Locked on submit">
+                Locked
+              </span>
+            ) : null}
             <span className="pf-side-text">{build?.text ?? "No track yet."}</span>
           </div>
         </div>
@@ -131,6 +154,29 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           <p className="pf-hint pf-box-note">Ship opens in a later release.</p>
         </section>
       </div>
+
+      <ToolbeltSection
+        projectId={project.id}
+        projectStatus={project.status}
+        uses={uses.map((use) => ({ id: use.id, status: use.status, note: use.note, tool: use.tool }))}
+        tools={tools.map((tool) => ({ id: tool.id, title: tool.title, description: tool.description, track: tool.track, ownerHandle: tool.ownerHandle, usedBy: tool.usedBy }))}
+        hours={hours}
+      />
+
+      {showMakerView ? (
+        <ToolbeltUsers
+          total={users.length}
+          rows={users.slice(0, TOOLBELT_USERS_MAX).map((row) => ({
+            id: row.id,
+            userId: row.userId,
+            userHandle: row.userHandle,
+            status: row.status,
+            note: row.note,
+            blocked: blocked.has(row.userId),
+            project: row.project,
+          }))}
+        />
+      ) : null}
 
       <section className="pf-box" aria-labelledby="timeline-heading">
         <h2 id="timeline-heading">Timeline</h2>

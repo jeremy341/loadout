@@ -19,9 +19,15 @@ model Person {
   bannedAt    DateTime?
   banReason   String?
   createdAt   DateTime   @default(now())
+  // Public profile (lib/platform/profile.ts). Lower-case handle, unique; null until the builder picks one.
+  handle      String?    @unique
+  bio         String?
   roles       RoleGrant[]
   sessions    Session[]
   projects    Project[]
+  // Toolbelt: builders this person has blocked from equipping their tools, and people who blocked this person.
+  blocksMade     ToolbeltBlock[] @relation("ToolbeltMaker")
+  blocksReceived ToolbeltBlock[] @relation("ToolbeltBlocked")
 }
 
 model RoleGrant {
@@ -56,8 +62,50 @@ model Project {
   track       String?
   status      String   @default("draft")
   createdAt   DateTime @default(now())
+  // Public source and demo addresses (https only, checked in lib/platform/profile.ts).
+  repoUrl     String?
+  demoUrl     String?
+  pinned      Boolean  @default(false)
+  // Owner hides the project from the public profile and Explore.
+  hidden      Boolean  @default(false)
+  // Show a logging project as "currently building" on the profile.
+  showBuilding Boolean @default(false)
+  // Toolbelt: tools this project equips, and projects that equip this one.
+  equips      ToolbeltUse[] @relation("ToolbeltEquipper")
+  usedBy      ToolbeltUse[] @relation("ToolbeltTool")
 
   @@index([ownerId])
+}
+
+// Toolbelt (plans/proposals/toolbelt.md): an equipping project uses another builder's approved open-source project.
+// status is "pending" | "confirmed" | "declined". At most two pending or confirmed rows per projectId (enforced in code).
+model ToolbeltUse {
+  id        String    @id @default(cuid())
+  projectId String
+  project   Project   @relation("ToolbeltEquipper", fields: [projectId], references: [id], onDelete: Cascade)
+  toolId    String
+  tool      Project   @relation("ToolbeltTool", fields: [toolId], references: [id], onDelete: Cascade)
+  note      String
+  status    String    @default("pending")
+  createdAt DateTime  @default(now())
+  decidedAt DateTime?
+
+  @@unique([projectId, toolId])
+  @@index([projectId])
+  @@index([toolId])
+}
+
+// A maker stops a builder from equipping their tools.
+model ToolbeltBlock {
+  id        String   @id @default(cuid())
+  makerId   String
+  maker     Person   @relation("ToolbeltMaker", fields: [makerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   Person   @relation("ToolbeltBlocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([makerId, blockedId])
+  @@index([blockedId])
 }
 
 // Append-only. Rows are never updated or deleted by the app.

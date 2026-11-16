@@ -1,0 +1,156 @@
+/* Profile screens (pf-prof-*) and the account control (pf-account-*). Existing tokens only: the colours, fonts, square corners
+   and hard shadows come from platform.css, and nothing here animates. The ID plate and the dashed free pin slots are the two
+   marks that make a profile recognisable without its nav. */
+
+/* ---- Account control in the top bar ---- */
+.pf .pf-account { position: relative; flex: none; }
+.pf .pf-account-button { padding: 0; font: inherit; cursor: pointer; }
+.pf .pf-account-button[data-current="true"] { border: 2px solid var(--pf-link); }
+.pf .pf-account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  width: min(200px, calc(100vw - 32px));
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 4px 4px 0 var(--pf-edge);
+}
+.pf .pf-account-menu ul { margin: 0; padding: 0; list-style: none; }
+.pf .pf-account-menu li + li { border-top: 1px solid var(--pf-rule); }
+.pf .pf-account-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--pf-fg);
+  font: 700 1em var(--font-pixel), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.pf .pf-account-menu a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.pf .pf-account-menu a[aria-current="page"] { color: var(--pf-link); background: var(--pf-ln); }
+.pf .pf-account-menu a[aria-current="page"]::before { content: "[ "; white-space: pre; }
+.pf .pf-account-menu a[aria-current="page"]::after { content: " ]"; white-space: pre; }
+html[data-larger-controls="true"] .pf :is(.pf-account-menu a, .pf-prof-handle, .pf-prof-btn) { min-height: 48px; }
+
+/* ---- Frame ---- */
+.pf .pf-prof-saved { margin: 0; }
+.pf .pf-prof-live { margin: 0 0 8px; }
+.pf .pf-prof-live:empty { margin: 0; }
+.pf .pf-prof-section { border-top: 1px solid var(--pf-fg); padding: 24px 0 0; margin: 0 0 32px; }
+.pf .pf-prof-section h2 {
+  margin: 0 0 16px;
+  font: 700 1.75em/1.1 var(--font-pixel), monospace;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+/* ---- Identity: the ID plate, the handle and the facts ---- */
+.pf .pf-prof-id {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  grid-template-areas: "plate head" "rest rest";
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 32px;
+}
+.pf .pf-prof-plate {
+  grid-area: plate;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 3px 3px 0 var(--pf-edge);
+}
+.pf .pf-prof-plate-letter { padding-bottom: 8px; font: 400 2.25em/1 var(--font-display), monospace; color: var(--pf-fg); }
+.pf .pf-prof-plate-strip { position: absolute; inset: auto 0 0 0; height: 8px; background: var(--tk, var(--pf-rule)); }
+.pf .pf-prof-id .pf-prof-h1 { grid-area: head; margin: 0; font-size: clamp(1.75em, 7vw, 3em); }
+.pf .pf-prof-h1-solo { margin: 0 0 24px; }
+.pf .pf-prof-rest { grid-area: rest; display: grid; gap: 14px; min-width: 0; }
+.pf .pf-prof-rest .pf-hint { margin: 0; max-width: 64ch; }
+.pf .pf-prof-top::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 8px; background: var(--tk); }
+@media (min-width: 560px) {
+  .pf .pf-prof-id { grid-template-columns: 112px minmax(0, 1fr); grid-template-areas: "plate head" "plate rest"; column-gap: 24px; row-gap: 14px; align-items: start; }
+  .pf .pf-prof-plate { width: 112px; height: 112px; }
+  .pf .pf-prof-plate-letter { padding-bottom: 12px; font-size: 3.5em; }
+  .pf .pf-prof-id .pf-prof-h1 { font-size: clamp(2.25em, 6vw, 3.5em); }
+}
+
+/* ---- Pinned strip ---- */
+.pf .pf-prof-pins { display: grid; grid-template-columns: 1fr; gap: 16px; margin: 0; padding: 0 4px 4px 0; list-style: none; }
+@media (min-width: 900px) {
+  .pf .pf-prof-pins { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.pf .pf-prof-pins > li { display: flex; min-width: 0; }
+.pf .pf-prof-pin {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+  align-content: start;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 4px 4px 0 var(--pf-edge);
+  color: var(--pf-fg);
+  text-decoration: none;
+}
+.pf a.pf-prof-pin:hover { border-color: var(--pf-link); }
+.pf .pf-prof-pin-title { overflow: hidden; font: 700 1.125em/1.2 var(--font-pixel), monospace; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; }
+.pf .pf-prof-pin-track { display: flex; align-items: center; gap: 8px; font-size: 0.875em; }
+.pf .pf-prof-pin-track::before { content: ""; flex: none; width: 12px; height: 12px; background: var(--tk, var(--pf-rule)); }
+.pf .pf-prof-pin-foot { display: flex; justify-content: space-between; gap: 12px; padding-top: 8px; border-top: 1px solid var(--pf-rule); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-prof-pin-empty { border-style: dashed; box-shadow: none; background: transparent; align-content: center; min-height: 104px; }
+.pf .pf-prof-pin-empty .pf-prof-pin-title { color: var(--pf-mut); }
+
+/* ---- Loadout ---- */
+.pf .pf-prof-loadout { margin: 0 0 32px; }
+
+/* ---- Project list ---- */
+.pf .pf-prof-filters { margin: 0 0 12px; }
+.pf .pf-prof-filters a[data-zero="true"]:not([aria-current="page"]) { color: var(--pf-mut); border-color: var(--pf-rule); }
+.pf .pf-prof-n { margin-left: 8px; }
+.pf .pf-prof-note { margin: 0 0 20px; }
+.pf .pf-prof-note a { display: inline-flex; align-items: center; min-height: 44px; }
+.pf .pf-prof-item { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.pf .pf-prof-item > .pf-card { flex: 1; }
+.pf .pf-prof-controls { display: grid; gap: 8px; margin-bottom: 8px; }
+.pf .pf-prof-status { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.pf .pf-prof-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; }
+.pf .pf-prof-actions form { display: grid; gap: 4px; }
+.pf .pf-prof-btn { padding: 0 14px; font-size: 0.875em; }
+.pf .pf-prof-btn[aria-disabled="true"] { opacity: 0.6; cursor: not-allowed; }
+.pf .pf-prof-controls .pf-hint { font-size: 0.75em; }
+
+/* ---- Toolbelt on a profile ---- */
+.pf .pf-prof-lower { margin-top: 0; }
+.pf .pf-prof-belt h3 { margin: 0 0 10px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-prof-belt-groups { display: grid; gap: 20px; }
+.pf .pf-prof-belt-groups p { margin: 0 0 8px; }
+.pf .pf-prof-belt-groups > div + div { padding-top: 18px; border-top: 1px solid var(--pf-rule); }
+@media (min-width: 900px) {
+  .pf .pf-prof-lower .pf-prof-belt-groups { grid-template-columns: 1fr; }
+}
+.pf .pf-prof-tools { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.pf .pf-prof-tool-title { font: 700 1em var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-prof-note-line { margin: 4px 0 0; font-size: 0.875em; color: var(--pf-mut); overflow-wrap: anywhere; }
+.pf .pf-prof-handles { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 16px; }
+.pf .pf-prof-handle { display: inline-flex; align-items: center; min-height: 44px; }
+.pf .pf-prof-links { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.pf .pf-prof-link-label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); margin-right: 8px; }
+.pf .pf-prof-links a { overflow-wrap: anywhere; }
+
+/* ---- Edit profile dialog ---- */
+.pf .pf-prof-count { white-space: nowrap; }
+
+/* ---- Cards and Settings ---- */
+.pf .pf-foot-by { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf .pf-project-foot > span:last-child { flex: none; }
+.pf .pf-facts-account .pf-fact-wide { grid-column: 1 / -1; }
+.pf .pf-fact-link { font: 600 0.5em var(--font-ui), monospace; letter-spacing: 0; text-transform: none; }

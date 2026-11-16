@@ -2,8 +2,9 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 // M1 participant platform. Local development opens without sign-in as the builder test account; the server reads
-// LOADOUT_PREVIEW_ROLE from .env.local. Staff pages are checked only when the server runs in staff mode:
-//   LOADOUT_PREVIEW_ROLE=staff bun run dev   and then   LOADOUT_E2E_STAFF=true bunx playwright test e2e/platform.spec.ts
+// LOADOUT_PREVIEW_ROLE from .env.local. The staff, reviewer and admin pages are NOT part of this site: they live on the
+// review host and are covered by e2e/reviewer.spec.ts and e2e/reviewer-roles.spec.ts. Here we only check that a staff person sees what a builder sees and
+// that the staff addresses are closed on the main host.
 // Needs a local Postgres with the migrations applied and the local test accounts seeded.
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const VIEWPORTS = [
@@ -23,7 +24,6 @@ const PARTICIPANT_PAGES = [
   "/dashboard/tracks/tools",
   "/dashboard/tracks/compute",
 ];
-const STAFF_PAGES = ["/dashboard/staff/users", "/dashboard/staff/audit", "/dashboard/staff/flags"];
 const STAFF_MODE = process.env.LOADOUT_E2E_STAFF === "true";
 
 async function setTheme(page: Page, width: number, height: number, scheme: (typeof SCHEMES)[number]) {
@@ -71,7 +71,7 @@ test("pressing a track card opens its levels", async ({ page }) => {
   await expect(page.locator(".pf-strip-pending")).toHaveCount(1);
   const flags = page.locator(".pf-strip-flags li");
   await expect(flags).toHaveCount(4);
-  await expect(flags.first()).toContainText("LV.5 / 35 H");
+  await expect(flags.first()).toContainText("LV.5 / 23 H");
   await expect(flags.first()).toHaveAttribute("data-reached", "true");
   await expect(flags.nth(1)).toHaveAttribute("data-reached", "false");
   await expect(flags.last()).toContainText("Max level");
@@ -102,18 +102,18 @@ test("a level cell gives its hours by keyboard and by tap, and the row is one ta
   const tip = page.locator(".pf-strip-tip");
   await cells.nth(6).focus();
   await page.keyboard.press("ArrowRight");
-  await expect(tip).toHaveText("LV.8 / 90 H");
+  await expect(tip).toHaveText("LV.8 / 58 H");
   await expect(cells.nth(7)).toBeFocused();
   await page.keyboard.press("End");
-  await expect(tip).toHaveText("LV.15 / 275 H");
+  await expect(tip).toHaveText("LV.15 / 178 H");
   await page.keyboard.press("Escape");
   await expect(tip).toHaveCount(0);
 
   // A mouse shows it on hover, a click keeps it, and moving away hides it.
   await cells.nth(2).click();
-  await expect(tip).toHaveText("LV.3 / 14 H");
+  await expect(tip).toHaveText("LV.3 / 9 H");
   await cells.nth(2).click();
-  await expect(tip).toHaveText("LV.3 / 14 H");
+  await expect(tip).toHaveText("LV.3 / 9 H");
   await page.mouse.move(0, 0);
   await expect(tip).toHaveCount(0);
 });
@@ -127,11 +127,11 @@ test.describe("on a touch screen", () => {
     await expect(cells).toHaveCount(15, { timeout: 30000 });
     const tip = page.locator(".pf-strip-tip");
     await cells.nth(8).tap();
-    await expect(tip).toHaveText("LV.9 / 112 H");
+    await expect(tip).toHaveText("LV.9 / 72 H");
     await cells.nth(8).tap();
     await expect(tip).toHaveCount(0);
     await cells.nth(10).tap();
-    await expect(tip).toHaveText("LV.11 / 160 H");
+    await expect(tip).toHaveText("LV.11 / 104 H");
     await page.getByRole("heading", { level: 1, name: "Tools" }).tap();
     await expect(tip).toHaveCount(0);
   });
@@ -162,19 +162,17 @@ test("the Shop lists the proposed items with track tags, discounts and a plain n
   await expect(cards.filter({ hasText: "Raspberry Pi 5" })).toHaveCount(1);
   await expect(cards.filter({ hasText: "Hardware security key" })).toHaveCount(1);
   await expect(cards.filter({ hasText: "Framework 16 laptop" })).toHaveCount(1);
-  // The best related track's discount applies: Systems LV.3 is 0.7%, which takes the Pi from 500 to 497 Ore.
+  // The best related track's discount applies: Systems LV.3 is 0.7%, which takes the Pi from 490 to 487 Ore.
   const pi = cards.filter({ hasText: "Raspberry Pi 5" });
-  await expect(pi).toContainText("Was 500");
-  await expect(pi).toContainText("now 497");
+  await expect(pi).toContainText("Was 490");
+  await expect(pi).toContainText("now 487");
 
   // General items are open to everyone at the full price.
   await page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link", { name: "General" }).click();
-  await expect(cards).toHaveCount(12);
-  await expect(cards.first().locator("h3")).toHaveText("Ticket to LOADOUT IRL in Düsseldorf");
+  await expect(cards).toHaveCount(10);
+  await expect(cards.first().locator("h3")).toHaveText("$50 technical conference grant");
   await expect(cards.filter({ hasText: "Electric precision screwdriver set" })).toHaveCount(1);
   await expect(cards.filter({ hasText: "Cable and adapter kit" })).toHaveCount(1);
-  await expect(cards.filter({ hasText: "Ticket to LOADOUT IRL" })).toContainText("Limited");
-  await expect(cards.filter({ hasText: "Ticket to LOADOUT IRL" }).locator("s")).toHaveCount(0);
 
   // Search, sort and the affordable filter live in the address, with a message when nothing matches.
   await page.goto("/dashboard/shop?sort=high");
@@ -192,18 +190,18 @@ test("a Shop item shows how its price is worked out and nothing to buy, and an u
   await page.locator(".pf-shop-card").filter({ hasText: "Enclosed 3D printer" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Enclosed 3D printer" })).toBeVisible({ timeout: 30000 });
   const price = page.getByRole("region", { name: "Your price" });
-  await expect(price).toContainText("Base price1,045 Ore");
+  await expect(price).toContainText("Base price1,020 Ore");
   await expect(price).toContainText("Hardware level discount−0.1%");
   await expect(price).toContainText("You pay1,044 Ore");
-  await expect(price).toContainText("With a Field Requisition this would be 939 Ore");
+  await expect(price).toContainText("With a Field Requisition this would be 917 Ore");
   await expect(price).toContainText("Ordering opens in a later release");
   await expect(page.getByRole("button", { name: /buy|order|checkout/i })).toHaveCount(0);
 
   // A General item has no level discount and no Requisition.
-  await page.goto("/dashboard/shop/irl-ticket");
-  await expect(page.getByRole("heading", { level: 1, name: /Ticket to LOADOUT IRL/ })).toBeVisible({ timeout: 30000 });
+  await page.goto("/dashboard/shop/conference-grant");
+  await expect(page.getByRole("heading", { level: 1, name: /technical conference grant/ })).toBeVisible({ timeout: 30000 });
   await expect(page.getByRole("region", { name: "Your price" })).toContainText("General itemNo discount");
-  await expect(page.getByRole("region", { name: "Your price" })).toContainText("You pay700 Ore");
+  await expect(page.getByRole("region", { name: "Your price" })).toContainText("You pay120 Ore");
   await expect(page.getByText(/With a Field Requisition/)).toHaveCount(0);
 
   // A gated item shows what it needs, on its card and on its page, and still shows the price.
@@ -282,17 +280,25 @@ test("the platform has no scroll-darkening layer", async ({ page }) => {
   await expect(page.locator(".pf-depth")).toHaveCount(0);
 });
 
-test("participants get a 404 on staff pages", async ({ page }) => {
-  test.skip(STAFF_MODE, "the server runs as staff in this mode");
-  const response = await page.goto("/dashboard/staff/users");
-  expect(response?.status()).toBe(404);
-});
+// The old staff addresses are gone, and /reviewer answers 404 on any host that is not review.<domain>, staff or not.
+for (const path of ["/dashboard/staff/users", "/dashboard/review", "/dashboard/reviewers", "/reviewer", "/reviewer/users", "/reviewer/ship/sh-2041"]) {
+  test(`${path} is a 404 on the participant site`, async ({ page }) => {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+  });
+}
 
-test("the participant view shows no staff group", async ({ page }) => {
-  test.skip(STAFF_MODE, "the server runs as staff in this mode");
+// The top bar has seven tabs and no staff group, whoever is signed in. A staff person sees what a builder sees.
+test("the top bar has the seven participant tabs and no staff tabs", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/dashboard");
-  await expect(page.getByRole("navigation", { name: "Participant" })).toBeVisible({ timeout: 30000 });
-  await expect(page.getByRole("link", { name: "Users" })).toHaveCount(0);
+  const nav = page.getByRole("navigation", { name: "Participant" });
+  await expect(nav).toBeVisible({ timeout: 30000 });
+  await expect(nav.getByRole("link")).toHaveText(["Overview", "Projects", "Shop", "Explore", "Community", "Expeditions", "Docs"]);
+  for (const name of ["Users", "Review", "Reviewers", "Audit log", "Feature flags", "Flags", "Events", "Referrals"]) {
+    await expect(nav.getByRole("link", { name, exact: true })).toHaveCount(0);
+  }
+  await expect(page.getByText("Staff", { exact: true })).toHaveCount(0);
 });
 
 for (const path of PARTICIPANT_PAGES) {
@@ -300,21 +306,6 @@ for (const path of PARTICIPANT_PAGES) {
     for (const scheme of SCHEMES) {
       test(`${path} has no WCAG 2.2 AA violations at ${width}px, ${scheme}`, async ({ page }) => {
         test.skip(STAFF_MODE, "participant pages are checked in builder mode");
-        await setTheme(page, width, height, scheme);
-        await page.goto(path);
-        await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30000 });
-        const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
-        expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);
-      });
-    }
-  }
-}
-
-for (const path of STAFF_PAGES) {
-  for (const [width, height] of VIEWPORTS) {
-    for (const scheme of SCHEMES) {
-      test(`${path} has no WCAG 2.2 AA violations at ${width}px, ${scheme}`, async ({ page }) => {
-        test.skip(!STAFF_MODE, "staff pages are checked only in staff mode");
         await setTheme(page, width, height, scheme);
         await page.goto(path);
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30000 });

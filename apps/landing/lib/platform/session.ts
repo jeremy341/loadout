@@ -1,19 +1,28 @@
 import { createHash, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { db } from "./db";
-import { localTestAccountsEnabled } from "./local-accounts";
+import { LOCAL_OWNER_EMAILS, PREVIEW_ACCOUNTS, localTestAccountsEnabled } from "./local-accounts";
+import {
+  idsFromEnv,
+  landingFor,
+  resolveAccess,
+  satisfies,
+  type Requirement,
+  type ReviewerAccess,
+} from "@/lib/reviewer/access";
 
 export const SESSION_COOKIE = "loadout_session";
 export const SESSION_DAYS = 30;
-export const STAFF_ROLE = "staff";
+export const PREVIEW_COOKIE = "loadout_preview_role";
 
 export type Viewer = {
   id: string;
   email: string;
   displayName: string;
   roles: string[];
-  isStaff: boolean;
+  // What the person may do on the reviewer site, or null for a builder. Owners come from LOADOUT_OWNER_EMAILS only.
+  access: ReviewerAccess | null;
 };
 
 export function hashToken(token: string): string {
@@ -52,21 +61,34 @@ export async function destroySession(token: string): Promise<void> {
   await db().session.deleteMany({ where: { tokenHash: hashToken(token) } });
 }
 
-// Local development opens without sign-in: the platform shows the builder test account, or the staff test account
-// when LOADOUT_PREVIEW_ROLE=staff. This only runs when local test accounts are on, which never happens in production.
-// Otherwise the signed-in person comes from the session cookie, and no sign-in exists yet, so it is null.
-const PREVIEW_EMAILS = { builder: "builder@loadout.test", staff: "staff@loadout.test" } as const;
+// Local development opens without sign-in: the platform shows the builder test account, or a staff test account chosen with
+// LOADOUT_PREVIEW_ROLE (see PREVIEW_ACCOUNTS in local-accounts.ts: owner, owner-no-review, reviewer, final-reviewer,
+// hardware-reviewer, software-reviewer, senior-reviewer, integrity-reviewer, helper, fulfiller, builder, none; "staff" is the owner).
+// This only runs when local test accounts are on, which never happens in production. Otherwise the signed-in person comes
+// from the session cookie, and no sign-in exists yet, so it is null.
+export const PREVIEW_EMAILS: Record<string, string> = {
+  staff: "staff@loadout.test",
+  ...Object.fromEntries(PREVIEW_ACCOUNTS.map((account) => [account.key, account.email])),
+};
+
+export function ownerEmails(env: NodeJS.ProcessEnv = process.env): string[] {
+  const listed = idsFromEnv(env.LOADOUT_OWNER_EMAILS);
+  return localTestAccountsEnabled(env) ? [...listed, ...LOCAL_OWNER_EMAILS] : listed;
+}
 
 function toViewer(person: { id: string; email: string; displayName: string; bannedAt: Date | null; roles: { role: string }[] }): Viewer | null {
   if (person.bannedAt) return null;
   const roles = person.roles.map((grant) => grant.role);
-  return { id: person.id, email: person.email, displayName: person.displayName, roles, isStaff: roles.includes(STAFF_ROLE) };
+  const access = resolveAccess({ id: person.id, email: person.email }, { ownerEmails: ownerEmails(), roles });
+  return { id: person.id, email: person.email, displayName: person.displayName, roles, access };
 }
 
 export async function readViewer(now = new Date()): Promise<Viewer | null> {
   if (localTestAccountsEnabled()) {
-    const role = process.env.LOADOUT_PREVIEW_ROLE === "staff" ? "staff" : "builder";
-    const person = await db().person.findUnique({ where: { email: PREVIEW_EMAILS[role] }, include: { roles: true } });
+    // A loadout_preview_role cookie switches the test account without restarting the server (tests and screenshots use it).
+    const chosen = (await cookies()).get(PREVIEW_COOKIE)?.value ?? process.env.LOADOUT_PREVIEW_ROLE ?? "builder";
+    const email = PREVIEW_EMAILS[chosen] ?? PREVIEW_EMAILS.builder;
+    const person = await db().person.findUnique({ where: { email }, include: { roles: true } });
     return person ? toViewer(person) : null;
   }
   const store = await cookies();
@@ -87,9 +109,13 @@ export async function requireViewer(): Promise<Viewer> {
   return viewer;
 }
 
-// Staff pages answer with 404 for everyone else, so their existence is not advertised.
-export async function requireStaff(): Promise<Viewer> {
+// Reviewer-site pages. Not signed in, or no role at all: the plain 404, so the site does not advertise itself. A person who
+// holds some role but not this one lands on their own queue instead (as Pixl does). Each page and action calls this with what
+// it needs; the nav only decides what is worth showing.
+export async function requireAccess(requirement: Requirement = "staff"): Promise<Viewer & { access: ReviewerAccess }> {
   const viewer = await requireViewer();
-  if (!viewer.isStaff) notFound();
-  return viewer;
+  const access = viewer.access;
+  if (!access) notFound();
+  if (!satisfies(access, requirement)) redirect(landingFor(access));
+  return { ...viewer, access };
 }

@@ -1,0 +1,122 @@
+/* The Toolbelt on the project page and its dialogs (design spec 3.14 to 3.17). Existing platform tokens only; both themes follow the
+   --pf-* values. No motion beyond the platform's own button transitions. */
+
+/* ---- Slots ---- */
+.pf .pf-belt-slots { display: grid; grid-template-columns: 1fr; gap: 16px; list-style: none; margin: 0 0 12px; padding: 0; }
+@media (min-width: 560px) {
+  .pf .pf-belt-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.pf .pf-belt-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 14px 16px 16px 20px;
+  border: 1px solid var(--pf-fg);
+  border-left: 4px solid var(--pf-rule);
+}
+.pf .pf-belt-slot[data-status="confirmed"] { border-left-color: var(--pf-ok); }
+.pf .pf-belt-slot[data-status="declined"] { border-left-color: var(--pf-err); }
+.pf .pf-belt-slot-empty { padding: 0; border: 0; }
+.pf .pf-belt-slot-empty .pf-new-card { min-height: 160px; height: 100%; }
+.pf .pf-new-card[aria-disabled="true"] { cursor: not-allowed; color: var(--pf-mut); border-color: var(--pf-rule); }
+.pf .pf-new-card[aria-disabled="true"]:hover { color: var(--pf-mut); border-color: var(--pf-rule); }
+.pf .pf-new-card[aria-disabled="true"]:focus-visible { border-color: var(--pf-focus); color: var(--pf-fg); }
+.pf .pf-belt-title { font: 700 1.125em/1.2 var(--font-pixel), monospace; overflow-wrap: anywhere; color: var(--pf-fg); }
+.pf .pf-belt-by { font-size: 0.8125em; color: var(--pf-mut); }
+.pf .pf-belt-note-text { margin: 0; font-size: 0.875em; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-line; }
+.pf .pf-belt-slot .pf-btn { margin-top: auto; }
+.pf .pf-belt-slot .pf-hint { margin: auto 0 0; }
+.pf .pf-belt-reason { margin: 0 0 12px; }
+.pf .pf-belt-status { margin: 0 0 12px; min-height: 1.4em; }
+.pf .pf-belt-status:empty { min-height: 0; margin: 0; }
+
+/* Chips: the word carries the meaning. Colour is only the border. */
+.pf .pf-belt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--pf-fg);
+  color: var(--pf-fg);
+  font: 400 11px var(--font-dot), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.pf .pf-belt-chip[data-status="pending"] { border-style: dashed; }
+.pf .pf-belt-chip[data-status="confirmed"] { border-color: var(--pf-ok); }
+.pf .pf-belt-chip[data-status="confirmed"] svg { fill: var(--pf-ok); }
+.pf .pf-belt-chip[data-status="declined"], .pf .pf-belt-chip[data-status="blocked"] { border-color: var(--pf-err); }
+
+/* Declined lines under the slots. */
+.pf .pf-belt-list { list-style: none; margin: 0 0 12px; padding: 0; }
+.pf .pf-belt-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 10px 0; border-top: 1px solid var(--pf-rule); color: var(--pf-mut); }
+.pf .pf-belt-declined-text { display: grid; gap: 2px; flex: 1 1 200px; min-width: 0; }
+.pf .pf-belt-declined-text .pf-belt-title { color: var(--pf-mut); font-size: 1em; }
+
+/* ---- Gate card ---- */
+.pf .pf-belt-gate { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--pf-rule); }
+.pf .pf-belt-gate h3 { margin: 0 0 10px; font: 700 1em/1.2 var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-belt-gate .pf-checks li { flex-wrap: wrap; }
+.pf .pf-belt-gate-text { flex: 1 1 220px; min-width: 0; }
+.pf .pf-belt-gate-value { margin-left: auto; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-belt-gate .pf-checks li.pf-belt-meter-row { padding: 0 0 10px; border-top: 0; }
+.pf .pf-belt-meter { position: relative; display: block; flex: 1; height: 8px; border: 1px solid var(--pf-fg); overflow: hidden; }
+.pf .pf-belt-meter-fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--pf-ac); }
+.pf .pf-belt-meter-pending {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 3px, var(--pf-ac) 3px 5px);
+  opacity: 0.7;
+}
+.pf .pf-belt-gate > .pf-hint { margin: 0; }
+
+/* ---- Rewards note ---- */
+.pf .pf-belt-note { margin: 16px 0 0; max-width: 72ch; line-height: 1.6; }
+.pf .pf-belt-note .pf-tag { margin-right: 6px; }
+
+/* ---- Toolbelt users ---- */
+.pf .pf-belt-users { list-style: none; margin: 0; padding: 0; }
+.pf .pf-belt-user { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
+.pf .pf-belt-user:first-child { border-top: 0; padding-top: 0; }
+.pf .pf-belt-user-main { display: grid; gap: 6px; flex: 1 1 260px; min-width: 0; }
+.pf .pf-belt-user-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font: 700 1em var(--font-pixel), monospace; }
+.pf .pf-belt-user .pf-btn { flex: none; }
+.pf .pf-belt-users + .pf-hint, .pf .pf-belt > .pf-hint { margin: 8px 0 0; }
+
+/* Summary line on the project header. */
+.pf .pf-belt-summary { margin: -8px 0 0; }
+
+/* ---- Dialogs ---- */
+.pf .pf-confirm { width: min(440px, calc(100vw - 32px)); }
+.pf .pf-confirm-form { display: grid; gap: 14px; padding: 18px 22px 0; }
+.pf .pf-confirm-body p { margin: 0; line-height: 1.6; }
+.pf .pf-confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 0 18px; border-top: 1px solid var(--pf-rule); }
+
+.pf .pf-belt-alert { margin-bottom: 12px; }
+.pf .pf-belt-results { margin: 0; min-height: 1.4em; }
+.pf .pf-belt-counter { display: inline-block; margin-left: 4px; white-space: nowrap; }
+.pf .pf-belt-toollist {
+  display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 10px;
+  max-height: min(280px, 34vh);
+  overflow-y: auto;
+  padding: 2px 4px 4px 2px;
+}
+.pf .pf-belt-choice { min-height: 44px; min-width: 0; }
+.pf .pf-belt-desc { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.pf .pf-belt-by { margin: 0; }
+.pf .pf-belt-tools { margin-bottom: 16px; }
+.pf .pf-belt-empty-wrap { padding: 20px 22px 0; }
+.pf .pf-belt-empty-wrap .pf-dialog-actions { grid-template-columns: 1fr; }
+
+html[data-larger-controls="true"] .pf .pf-belt-slots .pf-btn,
+html[data-larger-controls="true"] .pf .pf-belt-user .pf-btn { min-height: 52px; }
+html[data-larger-controls="true"] .pf .pf-belt-choice { min-height: 52px; }
+
+/* The dialog action bar is sticky, so an error scrolled into view must stop above it. */
+.pf .pf-dialog-form .pf-error { scroll-margin-bottom: 96px; }

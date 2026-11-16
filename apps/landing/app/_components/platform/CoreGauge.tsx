@@ -1,17 +1,18 @@
 import { LEVEL_CAP, levelCells, sampleTrackProgress } from "@/lib/platform/progress";
 
-// Progress across the four tracks, drawn as a core sample: one band per track, fifteen cells per band, filled up to
+// Progress across the four tracks, drawn as a core sample: one band per track, twenty cells per band, filled up to
 // the level. The levels come from sampleTrackProgress until approved hours exist.
-export function CoreGauge() {
+// title and headingId are optional so the profile can reuse it as "Loadout"; the defaults leave the Projects page unchanged.
+export function CoreGauge({ title = "Core depth across the four tracks", headingId = "gauge-heading" }: Readonly<{ title?: string; headingId?: string }> = {}) {
   const rows = sampleTrackProgress();
   const total = rows.reduce((sum, row) => sum + row.level, 0);
   const max = LEVEL_CAP * rows.length;
 
   return (
-    <section className="pf-gauge" aria-labelledby="gauge-heading">
+    <section className="pf-gauge" aria-labelledby={headingId}>
       <div className="pf-gauge-head">
         <div>
-          <h2 id="gauge-heading">Core depth across the four tracks</h2>
+          <h2 id={headingId}>{title}</h2>
           <p className="pf-gauge-note">
             {total} of {max} levels. Approved hours raise each band.
           </p>

@@ -51,8 +51,15 @@ export function deleteConfirmed(typed: unknown, title: string): boolean {
   return name.length > 0 && typeof typed === "string" && typed.trim().toLowerCase() === name;
 }
 
+// A project's track locks when it is submitted. It stays open while the project is a draft, being logged, or sent back for changes.
+export function trackLocked(status: string): boolean {
+  return status !== "draft" && status !== "logging" && status !== "needs-changes";
+}
+
 // The status a project has. Only drafts exist in M1; submission stages arrive with the ship flow.
 export function projectStatusLabel(status: string): string {
   if (status === "draft") return "Draft";
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  // "in-review" and "needs-changes" read as words ("In review"), as the profile tabs write them.
+  const words = status.replace(/[-_]/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }

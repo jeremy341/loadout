@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { handleLabel } from "@/lib/platform/profile-view";
 import { projectHours } from "@/lib/platform/progress";
 import { ProjectCover } from "./ProjectCover";
 
@@ -8,11 +9,14 @@ export type ExploreProject = {
   description: string | null;
   track: string | null;
   status: string;
-  owner: { displayName: string };
+  owner: { handle: string | null };
+  // Confirmed Toolbelt uses, shown only for an open-source project (a source address is set).
+  usedBy?: number;
+  openSource?: boolean;
 };
 
 // One public project in the Explore grid: the same cover as a builder's own card, then the title, the description and
-// who built it. It opens the read-only project page.
+// who built it (by handle, never a name). It opens the read-only project page.
 export function ExploreCard({ project }: Readonly<{ project: ExploreProject }>) {
   const hours = projectHours(project.id);
   return (
@@ -25,8 +29,8 @@ export function ExploreCard({ project }: Readonly<{ project: ExploreProject }>) 
         </p>
       </div>
       <span className="pf-project-foot">
-        <span>by {project.owner.displayName}</span>
-        <span>{hours.approved} H</span>
+        <span className="pf-foot-by">by {handleLabel(project.owner.handle)}</span>
+        {project.openSource ? <span>Used by {project.usedBy ?? 0}</span> : <span>{hours.approved} H</span>}
       </span>
     </Link>
   );

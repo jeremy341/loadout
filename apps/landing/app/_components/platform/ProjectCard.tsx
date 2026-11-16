@@ -20,7 +20,12 @@ function evidenceLabel(track: string | null): string {
 
 // One project in the grid, laid out as the Stasis project card: a cover with a status badge and a track badge, then
 // the title, the description and the footer.
-export function ProjectCard({ project }: Readonly<{ project: ProjectSummary }>) {
+// The profile variant swaps the evidence footer for what a visitor cares about: approved hours and, for an open-source
+// project, how many builders use it.
+export function ProjectCard({
+  project,
+  profile,
+}: Readonly<{ project: ProjectSummary; profile?: { usedBy: number; openSource: boolean } }>) {
   return (
     <Link className="pf-card pf-project-card" href={`/dashboard/projects/${project.id}`}>
       <ProjectCover status={project.status} track={project.track} hours={projectHours(project.id)} />
@@ -30,10 +35,17 @@ export function ProjectCard({ project }: Readonly<{ project: ProjectSummary }>) 
           {project.description ?? "No description yet."}
         </p>
       </div>
-      <span className="pf-project-foot">
-        <span>{evidenceLabel(project.track)}</span>
-        <span>0 entries</span>
-      </span>
+      {profile ? (
+        <span className="pf-project-foot">
+          <span>{projectHours(project.id).approved} H approved</span>
+          {profile.openSource ? <span>Used by {profile.usedBy}</span> : null}
+        </span>
+      ) : (
+        <span className="pf-project-foot">
+          <span>{evidenceLabel(project.track)}</span>
+          <span>0 entries</span>
+        </span>
+      )}
     </Link>
   );
 }

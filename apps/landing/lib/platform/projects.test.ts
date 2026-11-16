@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { checkProjectInput, deleteConfirmed, PROJECT_DESCRIPTION_MAX, PROJECT_TITLE_MAX, projectStatusLabel } from "./projects";
+import { checkProjectInput, deleteConfirmed, PROJECT_DESCRIPTION_MAX, PROJECT_TITLE_MAX, projectStatusLabel, trackLocked } from "./projects";
 
 describe("checkProjectInput", () => {
   test("accepts a name with an optional description and track", () => {
@@ -50,5 +50,15 @@ describe("deleteConfirmed", () => {
 describe("projectStatusLabel", () => {
   test("drafts read as Draft", () => {
     expect(projectStatusLabel("draft")).toBe("Draft");
+  });
+});
+
+describe("trackLocked", () => {
+  test("the track is open in a draft, while logging and after changes are asked for", () => {
+    for (const status of ["draft", "logging", "needs-changes"]) expect(trackLocked(status)).toBe(false);
+  });
+
+  test("the track is locked once the project is submitted", () => {
+    for (const status of ["submitted", "in-review", "approved", "rejected"]) expect(trackLocked(status)).toBe(true);
   });
 });

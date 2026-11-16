@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ExploreCard } from "@/app/_components/platform/ExploreCard";
 import { db } from "@/lib/platform/db";
+import { usedByCounts } from "@/lib/platform/profile-data";
 import { EXPLORE_PAGE_SIZE, EXPLORE_QUERY_MAX, EXPLORE_STATUS, exploreHref, parseExploreQuery } from "@/lib/platform/explore";
 import { TRACKS } from "@/lib/platform/progress";
 import { requireViewer } from "@/lib/platform/session";
@@ -17,21 +18,25 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
   const projects = await db().project.findMany({
     where: {
       status: EXPLORE_STATUS,
+      // A hidden project and a banned builder's work never show here.
+      hidden: false,
+      owner: { bannedAt: null },
       ...(track ? { track } : {}),
       ...(q
         ? {
             OR: [
               { title: { contains: q, mode: "insensitive" } },
               { description: { contains: q, mode: "insensitive" } },
-              { owner: { displayName: { contains: q, mode: "insensitive" } } },
+              { owner: { handle: { contains: q, mode: "insensitive" } } },
             ],
           }
         : {}),
     },
     orderBy: { createdAt: "desc" },
     take: EXPLORE_PAGE_SIZE,
-    select: { id: true, title: true, description: true, track: true, status: true, owner: { select: { displayName: true } } },
+    select: { id: true, title: true, description: true, track: true, status: true, repoUrl: true, owner: { select: { handle: true } } },
   });
+  const used = await usedByCounts(projects.map((project) => project.id));
 
   const filtered = q !== "" || track !== null;
 
@@ -70,7 +75,7 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
         <ul className="pf-project-grid">
           {projects.map((project) => (
             <li key={project.id}>
-              <ExploreCard project={project} />
+              <ExploreCard project={{ ...project, usedBy: used[project.id] ?? 0, openSource: Boolean(project.repoUrl) }} />
             </li>
           ))}
         </ul>

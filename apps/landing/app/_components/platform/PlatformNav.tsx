@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import type { NavGroup } from "@/lib/platform/nav";
+import { CLOSE_ACCOUNT_EVENT, CLOSE_MENU_EVENT } from "./PlatformAccountMenu";
 import { PlatformThemeToggle } from "./PlatformThemeToggle";
 
 // A tab is current on its own page and below it: a project belongs to Projects, and a track page to Overview.
@@ -14,11 +15,18 @@ function isCurrent(pathname: string, href: string): boolean {
 }
 
 // Phone: a labelled button opens a vertical list. Desktop: the pages sit in the top bar as tokens, the current one
-// in brackets, and the staff group follows after a divider (CSS). The group headings stay for screen readers.
+// in brackets. The group headings stay for screen readers.
 export function PlatformNav({ groups }: { groups: NavGroup[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const listId = useId();
+
+  // The account panel and this menu close each other.
+  useEffect(() => {
+    const close = () => setOpen(false);
+    window.addEventListener(CLOSE_MENU_EVENT, close);
+    return () => window.removeEventListener(CLOSE_MENU_EVENT, close);
+  }, []);
 
   return (
     <>
@@ -27,7 +35,10 @@ export function PlatformNav({ groups }: { groups: NavGroup[] }) {
         className="pf-btn pf-nav-toggle"
         aria-expanded={open}
         aria-controls={listId}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          if (!open) window.dispatchEvent(new Event(CLOSE_ACCOUNT_EVENT));
+          setOpen((value) => !value);
+        }}
       >
         {open ? "Close" : "Menu"}
       </button>

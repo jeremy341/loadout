@@ -215,26 +215,98 @@ export function parseShopQuery(raw: { q?: string | string[]; tag?: string | stri
 }
 
 // The address for a view. The default view has no query at all.
-export function shopHref(query: ShopQuery): string {
+export function shopHref(query: ShopQuery, page = 1): string {
   const params = new URLSearchParams();
   if (query.q) params.set("q", query.q);
   if (query.tag) params.set("tag", query.tag.toLowerCase());
   if (query.sort !== "featured") params.set("sort", query.sort);
   if (query.afford) params.set("afford", "1");
+  if (page > 1) params.set("page", String(Math.trunc(page)));
   const text = params.toString();
   return text ? `/dashboard/shop?${text}` : "/dashboard/shop";
 }
 
 // The items a view shows, in order. An item with several tracks shows under each of them; General is the items with none.
 export function filterShopItems(items: readonly ShopItem[], query: ShopQuery, approved: TrackHours, ore: number): ShopItem[] {
-  const needle = query.q.toLowerCase();
   const shown = items.filter((item) => {
-    if (query.tag === "General" ? item.tracks.length > 0 : query.tag !== null && !item.tracks.includes(query.tag)) return false;
-    if (needle && !`${item.name} ${item.kind} ${item.blurb}`.toLowerCase().includes(needle)) return false;
+    if (!hasTag(item, query.tag)) return false;
+    if (!matchesShopText(item, query.q)) return false;
     if (query.afford && priceFor(item, approved).final > ore) return false;
     return true;
   });
   if (query.sort === "featured") return shown;
   const sign = query.sort === "low" ? 1 : -1;
   return [...shown].sort((a, b) => sign * (priceFor(a, approved).final - priceFor(b, approved).final));
+}
+
+// Whether an item sits under a tag. No tag matches everything; General is the items with no track.
+export function hasTag(item: ShopItem, tag: ShopTag | null): boolean {
+  if (tag === null) return true;
+  return tag === "General" ? item.tracks.length === 0 : item.tracks.includes(tag);
+}
+
+// The search match: the words in the name, kind or blurb, case ignored. An empty search matches everything.
+export function matchesShopText(item: ShopItem, text: string): boolean {
+  const needle = text.trim().toLowerCase();
+  return needle === "" || `${item.name} ${item.kind} ${item.blurb}`.toLowerCase().includes(needle);
+}
+
+// The shop has no dates, so "new" is a hand-set flag on the last entries of the catalog (spec K.5).
+export const NEW_ITEM_COUNT = 8;
+const NEW_IDS: ReadonlySet<string> = new Set(SHOP_ITEMS.slice(-NEW_ITEM_COUNT).map((entry) => entry.id));
+
+export function isNewItem(item: ShopItem): boolean {
+  return NEW_IDS.has(item.id);
+}
+
+// The items flagged new, newest first.
+export function recentlyAdded(items: readonly ShopItem[] = SHOP_ITEMS): ShopItem[] {
+  return items.filter(isNewItem).reverse();
+}
+
+// Items whose final price is at or below the Ore balance, the dearest first so the strip leads with the best buy.
+export function withinReach(items: readonly ShopItem[], approved: TrackHours, ore: number): ShopItem[] {
+  return items.filter((entry) => priceFor(entry, approved).final <= ore).sort((a, b) => priceFor(b, approved).final - priceFor(a, approved).final);
+}
+
+// Up to `limit` other items that share a track with this one (or, for a General item, other General items): the ones sharing
+// the most tracks first, then the same kind, then the closest price.
+export function relatedItems(item: ShopItem, limit = 4, items: readonly ShopItem[] = SHOP_ITEMS): ShopItem[] {
+  const scored: { entry: ShopItem; shared: number }[] = [];
+  for (const entry of items) {
+    if (entry.id === item.id) continue;
+    const shared = item.tracks.length === 0 ? (entry.tracks.length === 0 ? 1 : 0) : entry.tracks.filter((track) => item.tracks.includes(track)).length;
+    if (shared > 0) scored.push({ entry, shared });
+  }
+  scored.sort(
+    (a, b) =>
+      b.shared - a.shared ||
+      Number(b.entry.kind === item.kind) - Number(a.entry.kind === item.kind) ||
+      Math.abs(a.entry.baseOre - item.baseOre) - Math.abs(b.entry.baseOre - item.baseOre) ||
+      a.entry.id.localeCompare(b.entry.id),
+  );
+  return scored.slice(0, limit).map((row) => row.entry);
+}
+
+// The first items under a tag that have a picture worth showing small: a brand mark that has to flip with the theme is left out.
+export function categoryThumbs(tag: ShopTag, limit = 3, items: readonly ShopItem[] = SHOP_ITEMS): ShopItem[] {
+  return items.filter((entry) => hasTag(entry, tag) && !entry.logo).slice(0, limit);
+}
+
+export function categoryCount(tag: ShopTag, items: readonly ShopItem[] = SHOP_ITEMS): number {
+  return items.filter((entry) => hasTag(entry, tag)).length;
+}
+
+export const SHOP_PAGE_SIZE = 24;
+
+// The page named in the address: a whole number from 1.
+export function parseShopPage(raw: { page?: string | string[] }): number {
+  const value = Number.parseInt(first(raw.page), 10);
+  return Number.isFinite(value) && value >= 1 ? Math.min(value, 1000) : 1;
+}
+
+// "Show more" is a link to the next page that keeps everything already shown, so nothing is lost and no script is needed.
+export function visibleItems<T>(items: readonly T[], page: number, size = SHOP_PAGE_SIZE): { shown: T[]; total: number; next: number | null } {
+  const current = Math.max(1, Math.trunc(page));
+  return { shown: items.slice(0, current * size), total: items.length, next: current * size < items.length ? current + 1 : null };
 }

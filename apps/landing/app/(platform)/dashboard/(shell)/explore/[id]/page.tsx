@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import "@/app/_components/platform/explore.css";
 import "@/app/_components/platform/profile.css";
-import { TRACK_BUILDS } from "@/app/_components/home/tracks-data";
 import { DepthValue } from "@/app/_components/platform/DepthValue";
+import { SaveButton, SavedStatus } from "@/app/_components/platform/SaveButton";
 import { ProjectCover } from "@/app/_components/platform/ProjectCover";
 import { db } from "@/lib/platform/db";
+import { isBookmarked } from "@/lib/platform/discover-data";
 import { EXPLORE_STATUS } from "@/lib/platform/explore";
 import { listToolsUsedBy, listUsersOfTool, usedByCounts } from "@/lib/platform/profile-data";
 import { handleLabel, summariseHandles } from "@/lib/platform/profile-view";
 import { projectHours } from "@/lib/platform/progress";
+import { trackSlugOf } from "@/lib/platform/search-view";
 import { requireViewer } from "@/lib/platform/session";
 
 export const metadata: Metadata = { title: "Project - LOADOUT" };
@@ -42,7 +45,8 @@ export default async function ExploreProjectPage({ params }: { params: Promise<{
   const openSource = Boolean(project.repoUrl);
 
   const hours = projectHours(project.id);
-  const build = TRACK_BUILDS.find((item) => item.name === project.track);
+  const saved = await isBookmarked(viewer.id, project.id);
+  const trackSlug = trackSlugOf(project.track);
 
   return (
     <>
@@ -53,22 +57,43 @@ export default async function ExploreProjectPage({ params }: { params: Promise<{
           </svg>
           Back to Explore
         </Link>
+        <SaveButton projectId={project.id} saved={saved} title={project.title} variant="button" />
       </div>
+      <SavedStatus className="pf-explore-saved-status" />
 
-      <div className="pf-project-head">
-        <div className="pf-project-head-main">
-          <h1>{project.title}</h1>
-          <p className={project.description ? "pf-project-lead" : "pf-project-lead pf-muted"}>{project.description ?? "No description."}</p>
-          <dl className="pf-meta-box">
+      <div className="pf-explore-hero">
+        <ProjectCover status={project.status} track={project.track} hours={hours} large />
+        <div className="pf-explore-plate">
+          <div className="pf-explore-plate-main">
+            <h1>{project.title}</h1>
+            <p className={project.description ? "pf-explore-lead" : "pf-explore-lead pf-muted"}>{project.description ?? "No description yet."}</p>
+            <p className="pf-explore-byline">
+              <span>
+                By{" "}
+                {project.owner.handle ? (
+                  <Link className="pf-meta-link" href={`/dashboard/builders/${project.owner.handle}`}>
+                    {project.owner.handle}
+                  </Link>
+                ) : (
+                  handleLabel(null)
+                )}
+              </span>
+              <span className="pf-explore-tag" data-track={trackSlug}>
+                <span className="pf-swatch" aria-hidden="true" />
+                {project.track ?? "Track not picked"}
+              </span>
+            </p>
+            {project.repoUrl || project.demoUrl ? (
+              <div className="pf-explore-actions">
+                {project.repoUrl ? <ExternalButton label="Source" url={project.repoUrl} /> : null}
+                {project.demoUrl ? <ExternalButton label="Demo" url={project.demoUrl} /> : null}
+              </div>
+            ) : null}
+          </div>
+          <dl className="pf-explore-stats">
             <div>
-              <dt>Builder</dt>
-              <dd>
-                {project.owner.handle ? <Link className="pf-meta-link" href={`/dashboard/builders/${project.owner.handle}`}>{project.owner.handle}</Link> : handleLabel(null)}
-              </dd>
-            </div>
-            <div>
-              <dt>Track</dt>
-              <dd>{project.track ?? "None"}</dd>
+              <dt>Approved hours</dt>
+              <dd>{hours.approved} H</dd>
             </div>
             <div>
               <dt>Depth</dt>
@@ -77,46 +102,18 @@ export default async function ExploreProjectPage({ params }: { params: Promise<{
               </dd>
             </div>
             <div>
-              <dt>Hours</dt>
-              <dd>{hours.approved} H</dd>
+              <dt>Journal entries</dt>
+              <dd>0</dd>
             </div>
-            {openSource ? (
-              <div>
-                <dt>Used by</dt>
-                <dd>{usedCount}</dd>
-              </div>
-            ) : null}
+            <div>
+              <dt>{openSource ? "Used by" : "Pending hours"}</dt>
+              <dd>{openSource ? usedCount : `${hours.pending} H`}</dd>
+            </div>
           </dl>
-        </div>
-
-        <div className="pf-project-head-side">
-          <ProjectCover status={project.status} track={project.track} hours={hours} large />
-          <div className="pf-side-track" data-track={project.track ? project.track.toLowerCase() : undefined}>
-            <span className="pf-side-label">Track</span>
-            <span className="pf-side-name">{project.track ?? "None"}</span>
-            <span className="pf-side-text">{build?.text ?? "No track."}</span>
-          </div>
         </div>
       </div>
 
       <div className="pf-split">
-        {project.repoUrl || project.demoUrl ? (
-          <section className="pf-box" aria-labelledby="links-heading">
-            <h2 id="links-heading">Links</h2>
-            <ul className="pf-prof-links">
-              {project.repoUrl ? (
-                <li>
-                  <span className="pf-prof-link-label">Source code</span> <ExternalLink url={project.repoUrl} />
-                </li>
-              ) : null}
-              {project.demoUrl ? (
-                <li>
-                  <span className="pf-prof-link-label">Demo</span> <ExternalLink url={project.demoUrl} />
-                </li>
-              ) : null}
-            </ul>
-          </section>
-        ) : null}
         <section className="pf-box" aria-labelledby="used-by-heading">
           <h2 id="used-by-heading">Used by</h2>
           {confirmedUsers.length === 0 ? (
@@ -134,32 +131,46 @@ export default async function ExploreProjectPage({ params }: { params: Promise<{
             </p>
           )}
         </section>
+        <section className="pf-box" aria-labelledby="tools-heading">
+          <h2 id="tools-heading">Tools in this project</h2>
+          {equipped.length === 0 ? (
+            <p className="pf-muted">This project does not equip any tools.</p>
+          ) : (
+            <ul className="pf-prof-tools">
+              {equipped.map((row) => (
+                <li key={row.id}>
+                  <Link className="pf-prof-tool-title" href={`/dashboard/explore/${row.tool.id}`}>{row.tool.title}</Link>{" "}
+                  <span className="pf-muted">
+                    by {row.tool.ownerHandle ? <Link href={`/dashboard/builders/${row.tool.ownerHandle}`}>{row.tool.ownerHandle}</Link> : handleLabel(null)}
+                  </span>
+                  <p className="pf-prof-note-line">{row.note}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
 
-      <section className="pf-box" aria-labelledby="tools-heading">
-        <h2 id="tools-heading">Tools in this project</h2>
-        {equipped.length === 0 ? (
-          <p className="pf-muted">This project does not equip any tools.</p>
-        ) : (
-          <ul className="pf-prof-tools">
-            {equipped.map((row) => (
-              <li key={row.id}>
-                <Link className="pf-prof-tool-title" href={`/dashboard/explore/${row.tool.id}`}>{row.tool.title}</Link>{" "}
-                <span className="pf-muted">
-                  by {row.tool.ownerHandle ? <Link href={`/dashboard/builders/${row.tool.ownerHandle}`}>{row.tool.ownerHandle}</Link> : handleLabel(null)}
-                </span>
-                <p className="pf-prof-note-line">{row.note}</p>
-              </li>
-            ))}
-          </ul>
-        )}
+      <section className="pf-box" aria-labelledby="journal-heading">
+        <h2 id="journal-heading">Journal</h2>
+        <ul className="pf-timeline">
+          <li className="pf-timeline-empty">No journal entries yet. Journals open in a later release.</li>
+        </ul>
       </section>
+
+      {project.repoUrl ? (
+        <section className="pf-box" aria-labelledby="readme-heading">
+          <h2 id="readme-heading">README</h2>
+          <p className="pf-muted pf-box-note">The README shows here once the source address is set and readable.</p>
+        </section>
+      ) : null}
     </>
   );
 }
 
-// Only an https address becomes a link; anything else is shown as plain text. The host and path are the visible text.
-function ExternalLink({ url }: { url: string }) {
+// Only an https address becomes a link; anything else is shown as plain text. The label is the button text and the host and
+// path follow it, so the destination is always visible.
+function ExternalButton({ label, url }: { label: string; url: string }) {
   let shown = url;
   let safe = false;
   try {
@@ -170,8 +181,13 @@ function ExternalLink({ url }: { url: string }) {
     safe = false;
   }
   return safe ? (
-    <a href={url} target="_blank" rel="noopener noreferrer">{shown}</a>
+    <a className="pf-btn pf-explore-action" href={url} target="_blank" rel="noopener noreferrer">
+      <span>{label}</span>
+      <span className="pf-explore-action-host">{shown}</span>
+    </a>
   ) : (
-    <span>{shown}</span>
+    <span className="pf-explore-action pf-explore-action-plain">
+      <span>{label}</span> <span className="pf-explore-action-host">{shown}</span>
+    </span>
   );
 }

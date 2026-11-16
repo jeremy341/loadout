@@ -1,48 +1,52 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TRACK_BUILDS } from "@/app/_components/home/tracks-data";
 import { DeleteProject } from "@/app/_components/platform/DeleteProject";
-import { DepthValue } from "@/app/_components/platform/DepthValue";
 import { EditProjectDialog } from "@/app/_components/platform/EditProjectDialog";
 import { HackatimePanel } from "@/app/_components/platform/HackatimePanel";
-import { ProjectCover } from "@/app/_components/platform/ProjectCover";
+import { ProjectHero } from "@/app/_components/platform/ProjectHero";
 import { StageProgress } from "@/app/_components/platform/StageProgress";
 import { ToolbeltSection } from "@/app/_components/platform/ToolbeltSection";
 import { ToolbeltUsers } from "@/app/_components/platform/ToolbeltUsers";
 import { db } from "@/lib/platform/db";
-import { listUsersOfTool, listUsesForProject, searchEquippableTools, usedByCounts } from "@/lib/platform/profile-data";
+import { searchEquippableTools } from "@/lib/platform/discover-data";
+import { listUsersOfTool, listUsesForProject, usedByCounts } from "@/lib/platform/profile-data";
 import { normalizeStatus } from "@/lib/platform/profile";
 import { TOOLBELT_USERS_MAX } from "@/lib/platform/toolbelt-ui";
 import { activeUses, EQUIP_STATUSES, TOOLBELT_MAX_PER_PROJECT } from "@/lib/platform/toolbelt";
 import { projectHours } from "@/lib/platform/progress";
-import { projectStatusLabel, trackLocked } from "@/lib/platform/projects";
+import { trackLocked } from "@/lib/platform/projects";
 import { requireViewer } from "@/lib/platform/session";
 
 export const metadata: Metadata = { title: "Project - LOADOUT" };
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 
-// One project, laid out as the Stasis project page and drawn in LOADOUT's style (Paper file "LOADOUT participant
-// platform", page "E - Projects", artboard E4): breadcrumb, header with cover and track card, stage strip, Hackatime
-// and requirements, then the timeline. Only its owner can open it; any other id is a plain 404.
+// One project as a core sample sheet (stardance-layout.md D): crumb row, the hero (dithered core, identity plate, four numbers),
+// the stage band, then the Toolbelt before Hackatime and Ship, then the journal. Only its owner can open it; any other id is a plain 404.
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const viewer = await requireViewer();
   const { id } = await params;
-  const project = await db().project.findFirst({ where: { id, ownerId: viewer.id } });
+  const project = await db().project.findFirst({ where: { id, ownerId: viewer.id }, include: { owner: { select: { handle: true } } } });
   if (!project) notFound();
 
   const hours = projectHours(project.id);
-  // Toolbelt: the uses this project equips, the tools it could still equip, and (for a maker) who equipped it.
+  // Toolbelt: the uses this project equips, the saved tools it could equip next, and (for a maker) who equipped it.
   const uses = await listUsesForProject(project.id);
   const canEquipMore = EQUIP_STATUSES.includes(normalizeStatus(project.status)) && activeUses(uses).length < TOOLBELT_MAX_PER_PROJECT;
-  const tools = canEquipMore ? await searchEquippableTools(viewer.id, "") : [];
+  const savedTools = canEquipMore
+    ? (await searchEquippableTools(viewer.id, project.id, "", { limit: 30 })).rows
+        .filter((row) => row.saved)
+        .slice(0, 3)
+        .map(({ equip, ...row }) => {
+          void equip;
+          return row;
+        })
+    : [];
   const users = await listUsersOfTool(project.id, viewer.id);
   const blocked = new Set((await db().toolbeltBlock.findMany({ where: { makerId: viewer.id }, select: { blockedId: true } })).map((row) => row.blockedId));
   const showMakerView = (normalizeStatus(project.status) === "approved" && Boolean(project.repoUrl)) || users.length > 0;
   const usedBy = (await usedByCounts([project.id]))[project.id] ?? 0;
-  const slotsUsed = activeUses(uses).length;
-  const build = TRACK_BUILDS.find((item) => item.name === project.track);
   const hardware = project.track === "Hardware";
   // Each requirement is read from the project. Nothing is linked and no journal exists yet, so those stay open.
   const requirements = [
@@ -65,73 +69,45 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <EditProjectDialog project={{ id: project.id, title: project.title, description: project.description, track: project.track, status: project.status, repoUrl: project.repoUrl, demoUrl: project.demoUrl }} />
       </div>
 
-      <div className="pf-project-head">
-        <div className="pf-project-head-main">
-          <h1>{project.title}</h1>
-          <p className={project.description ? "pf-project-lead" : "pf-project-lead pf-muted"}>
-            {project.description ?? "No description yet."}
-          </p>
-          <dl className="pf-meta-box">
-            <div>
-              <dt>Status</dt>
-              <dd>{projectStatusLabel(project.status)}</dd>
-            </div>
-            <div>
-              <dt>Entries</dt>
-              <dd>0</dd>
-            </div>
-            <div>
-              <dt>Depth</dt>
-              <dd>
-                <DepthValue hours={hours} />
-              </dd>
-            </div>
-            <div>
-              <dt>Hours</dt>
-              <dd>{hours.approved} H</dd>
-            </div>
-          </dl>
-          <p className="pf-hint pf-depth-note">Depth is your approved hours in metres: 1 M for every approved hour.</p>
-          <p className="pf-hint pf-belt-summary">
-            <a href="#toolbelt-heading">Toolbelt</a>: {slotsUsed} of {TOOLBELT_MAX_PER_PROJECT} slots in use. Used by {usedBy} {usedBy === 1 ? "builder" : "builders"}.
-          </p>
-          <div className="pf-actions">
-            <div className="pf-actions-row">
-              <button type="button" className="pf-btn pri" disabled>+ New journal entry</button>
-              <a className="pf-btn" href="https://lapse.hackclub.com/timelapse/create" target="_blank" rel="noopener noreferrer">
-                Start timelapse
-              </a>
-            </div>
-            <p className="pf-hint">
-              Journal entries open in a later release. Hardware ships need a Lapse recording. Planning 7+ hours? Record the session.
-            </p>
-          </div>
-        </div>
+      <ProjectHero
+        title={project.title}
+        description={project.description}
+        status={project.status}
+        track={project.track}
+        locked={trackLocked(project.status)}
+        handle={project.owner.handle}
+        hours={hours}
+        usedBy={project.repoUrl ? usedBy : null}
+        repoUrl={project.repoUrl}
+        demoUrl={project.demoUrl}
+      />
 
-        <div className="pf-project-head-side">
-          <ProjectCover status={project.status} track={project.track} hours={hours} large />
-          <div className="pf-side-track" data-track={project.track ? project.track.toLowerCase() : undefined}>
-            <span className="pf-side-label">Track</span>
-            <span className="pf-side-name">{project.track ?? "Not picked"}</span>
-            {trackLocked(project.status) ? (
-              <span className="pf-tag" title="Locked on submit">
-                Locked
-              </span>
-            ) : null}
-            <span className="pf-side-text">{build?.text ?? "No track yet."}</span>
-          </div>
-        </div>
-      </div>
+      <nav className="pf-proj-jump" aria-label="On this page">
+        <a href="#toolbelt">Toolbelt</a>
+        <a href="#hackatime">Hackatime</a>
+        <a href="#ship">Ship</a>
+        <a href="#journal">Journal</a>
+      </nav>
 
+      <div className="pf-proj-flow">
       <StageProgress status={project.status} />
 
+      <ToolbeltSection
+        projectId={project.id}
+        projectStatus={project.status}
+        uses={uses.map((use) => ({ id: use.id, status: use.status, note: use.note, tool: use.tool }))}
+        savedTools={savedTools}
+        hours={hours}
+      />
+      </div>
+
       <div className="pf-split">
-        <section className="pf-box" aria-labelledby="hackatime-heading">
+        <section className="pf-box" aria-labelledby="hackatime-heading" id="hackatime">
           <h2 id="hackatime-heading">Hackatime</h2>
           <HackatimePanel hardware={hardware} />
         </section>
 
-        <section className="pf-box" aria-labelledby="requirements-heading">
+        <section className="pf-box" aria-labelledby="requirements-heading" id="ship">
           <h2 id="requirements-heading">Ship requirements</h2>
           <ul className="pf-checks">
             {requirements.map((item) => (
@@ -155,13 +131,29 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         </section>
       </div>
 
-      <ToolbeltSection
-        projectId={project.id}
-        projectStatus={project.status}
-        uses={uses.map((use) => ({ id: use.id, status: use.status, note: use.note, tool: use.tool }))}
-        tools={tools.map((tool) => ({ id: tool.id, title: tool.title, description: tool.description, track: tool.track, ownerHandle: tool.ownerHandle, usedBy: tool.usedBy }))}
-        hours={hours}
-      />
+      <section className="pf-box" aria-labelledby="timeline-heading" id="journal">
+        <h2 id="timeline-heading">Journal</h2>
+        <ol className="pf-timeline">
+          <li className="pf-timeline-empty">
+            <span>No journal entries yet. Journals open in a later release.</span>
+          </li>
+          <li>
+            <svg className="pf-timeline-plus" viewBox="0 0 12 12" width="20" height="20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+              <rect x="5" y="1" width="2" height="10" />
+              <rect x="1" y="5" width="10" height="2" />
+            </svg>
+            <span>Project created</span>
+            <time dateTime={project.createdAt.toISOString()}>{dateFormat.format(project.createdAt)}</time>
+          </li>
+        </ol>
+      </section>
+
+      {project.repoUrl ? (
+        <section className="pf-box" aria-labelledby="readme-heading">
+          <h2 id="readme-heading">README</h2>
+          <p className="pf-muted">The README shows here once the source address is set and readable.</p>
+        </section>
+      ) : null}
 
       {showMakerView ? (
         <ToolbeltUsers
@@ -177,23 +169,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           }))}
         />
       ) : null}
-
-      <section className="pf-box" aria-labelledby="timeline-heading">
-        <h2 id="timeline-heading">Timeline</h2>
-        <ol className="pf-timeline">
-          <li className="pf-timeline-empty">
-            <span>No journal entries yet. Journals open in a later release.</span>
-          </li>
-          <li>
-            <svg className="pf-timeline-plus" viewBox="0 0 12 12" width="20" height="20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-              <rect x="5" y="1" width="2" height="10" />
-              <rect x="1" y="5" width="10" height="2" />
-            </svg>
-            <span>Project created</span>
-            <time dateTime={project.createdAt.toISOString()}>{dateFormat.format(project.createdAt)}</time>
-          </li>
-        </ol>
-      </section>
 
       <DeleteProject id={project.id} title={project.title} />
     </>

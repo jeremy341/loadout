@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { filterTools, handleLabel, meterPercents, slotsView, toolsCountText } from "./toolbelt-ui";
+import { filterTools, finderEscape, finderReduce, finderStatusText, handleLabel, meterPercents, slotsView, toolsCountText } from "./toolbelt-ui";
 
 describe("slotsView", () => {
   test("two empty slots with no uses on a draft", () => {
@@ -64,5 +64,51 @@ describe("handleLabel", () => {
     expect(handleLabel("ferrite")).toBe("ferrite");
     expect(handleLabel(null)).toBe("a builder");
     expect(handleLabel("")).toBe("a builder");
+  });
+});
+
+describe("finderReduce", () => {
+  const closed = { open: false, active: -1 };
+  test("Down on a closed list opens it on the first option, Up on the last", () => {
+    expect(finderReduce(closed, { type: "next", count: 4 })).toEqual({ open: true, active: 0 });
+    expect(finderReduce(closed, { type: "prev", count: 4 })).toEqual({ open: true, active: 3 });
+  });
+  test("the active option wraps at both ends", () => {
+    expect(finderReduce({ open: true, active: 3 }, { type: "next", count: 4 })).toEqual({ open: true, active: 0 });
+    expect(finderReduce({ open: true, active: 0 }, { type: "prev", count: 4 })).toEqual({ open: true, active: 3 });
+    expect(finderReduce({ open: true, active: -1 }, { type: "prev", count: 4 }).active).toBe(3);
+  });
+  test("with no options nothing is active", () => {
+    expect(finderReduce(closed, { type: "next", count: 0 })).toEqual({ open: true, active: -1 });
+    expect(finderReduce({ open: true, active: -1 }, { type: "prev", count: 0 })).toEqual({ open: true, active: -1 });
+  });
+  test("new results leave nothing active, except a lone typed result", () => {
+    expect(finderReduce({ open: true, active: 2 }, { type: "results", count: 3, auto: true })).toEqual({ open: true, active: -1 });
+    expect(finderReduce({ open: true, active: -1 }, { type: "results", count: 1, auto: true })).toEqual({ open: true, active: 0 });
+    expect(finderReduce({ open: true, active: -1 }, { type: "results", count: 1, auto: false })).toEqual({ open: true, active: -1 });
+  });
+  test("close and open reset the active option", () => {
+    expect(finderReduce({ open: true, active: 1 }, { type: "close" })).toEqual(closed);
+    expect(finderReduce(closed, { type: "open" })).toEqual({ open: true, active: -1 });
+  });
+});
+
+describe("finderEscape", () => {
+  test("once closes the list and keeps the text, twice clears it", () => {
+    const first = finderEscape({ open: true, text: "tiny" });
+    expect(first).toEqual({ open: false, text: "tiny" });
+    expect(finderEscape(first)).toEqual({ open: false, text: "" });
+  });
+});
+
+describe("finderStatusText", () => {
+  test("says the exact lines", () => {
+    expect(finderStatusText({ phase: "results", count: 5, query: "" })).toBe("Saved and most used tools.");
+    expect(finderStatusText({ phase: "results", count: 1, query: "tiny" })).toBe("1 tool matches.");
+    expect(finderStatusText({ phase: "results", count: 3, query: "t" })).toBe("3 tools match.");
+    expect(finderStatusText({ phase: "results", count: 0, query: "zzz" })).toBe("No tools match. Clear the search.");
+    expect(finderStatusText({ phase: "loading" })).toBe("Searching.");
+    expect(finderStatusText({ phase: "error" })).toBe("Search is not available. Try again.");
+    expect(finderStatusText({ phase: "limited" })).toBe("Searching too fast. Wait a moment.");
   });
 });

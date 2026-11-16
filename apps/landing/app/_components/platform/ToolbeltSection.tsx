@@ -6,8 +6,10 @@ import { removeToolUse } from "@/lib/platform/profile-actions";
 import { canRemoveUse, TOOLBELT_MAKER_CAP_ORE, TOOLBELT_MAKER_ORE, TOOLBELT_MAX_PER_PROJECT, TOOLBELT_USER_ORE } from "@/lib/platform/toolbelt";
 import { handleLabel, SLOTS_CLOSED_TEXT, SLOTS_FULL_TEXT, slotsView } from "@/lib/platform/toolbelt-ui";
 import { ConfirmDialog } from "./ConfirmDialog";
-import { EquipDialog, type EquipTool } from "./EquipDialog";
+import { ProjectResultRow } from "./ProjectResultRow";
 import { ToolbeltGate } from "./ToolbeltGate";
+import { ToolFinder, type FinderTool } from "./ToolFinder";
+import { ToolStep } from "./ToolStep";
 import "./toolbelt.css";
 
 export type ToolbeltUseView = {
@@ -49,31 +51,33 @@ function MakerLine({ handle }: { handle: string | null }) {
   );
 }
 
-// The Toolbelt box on an owner's project page (design spec 3.14): two slots, the declined lines, the gate card and the one
-// provisional rewards note. Equip and Remove run server actions in native dialogs; the page refreshes in place and focus goes where
-// the spec says, because the button that opened a dialog is often replaced.
+// The Toolbelt on an owner's project page (stardance-layout.md F): a search to find a tool, an inline step to say how it is used,
+// two compact slots, the declined lines, the gate card and the one provisional rewards note. The page refreshes in place after a
+// server action and focus goes where the spec says, because the element that had it is often replaced.
 export function ToolbeltSection({
   projectId,
   projectStatus,
   uses,
-  tools,
+  savedTools,
   hours,
 }: Readonly<{
   projectId: string;
   projectStatus: string;
   uses: ToolbeltUseView[];
-  tools: EquipTool[];
+  savedTools: FinderTool[];
   hours: { approved: number; pending: number };
 }>) {
   const root = useRef<HTMLElement>(null);
-  const [equipOpen, setEquipOpen] = useState(false);
-  // The tools are copied when the dialog opens: the refreshed page arrives with the action's result and must not swap the form out first.
-  const [equipTools, setEquipTools] = useState<EquipTool[]>([]);
+  const finderInput = useRef<HTMLInputElement>(null);
+  const [chosen, setChosen] = useState<FinderTool | null>(null);
+  // Bumped after an equip so the finder starts clean (empty text, fresh results).
+  const [finderKey, setFinderKey] = useState(0);
   const [removing, setRemoving] = useState<ToolbeltUseView | null>(null);
   const [message, setMessage] = useState("");
   const [focusKey, setFocusKey] = useState<string | null>(null);
   const view = slotsView(uses, projectStatus);
   const reasonId = `belt-reason-${projectId}`;
+  const canEquip = !view.closed && !view.full;
 
   // Where focus goes once the refreshed page has the element (it may arrive a moment after the action finishes).
   useEffect(() => {
@@ -90,21 +94,27 @@ export function ToolbeltSection({
     return () => window.clearTimeout(timer);
   }, [focusKey]);
 
-  const closeEquip = useCallback(() => setEquipOpen(false), []);
   const closeRemove = useCallback(() => setRemoving(null), []);
+  const choose = useCallback((tool: FinderTool) => setChosen(tool), []);
+  const cancelStep = useCallback(() => {
+    setChosen(null);
+    window.requestAnimationFrame(() => finderInput.current?.focus());
+  }, []);
   const equipDone = useCallback((toolId: string) => {
-    setEquipOpen(false);
+    setChosen(null);
+    setFinderKey((key) => key + 1);
     setMessage("Equip sent. It stays Pending until a reviewer confirms it.");
     setFocusKey(`chip-${toolId}`);
   }, []);
   const removeDone = useCallback(() => {
     if (!removing) return;
     setMessage(`Removed ${removing.tool.title}.`);
-    setFocusKey(removing.status === "declined" ? "heading" : "equip-slot");
+    setFocusKey(removing.status === "declined" ? "heading" : "finder");
     setRemoving(null);
   }, [removing]);
 
-  const emptySlots = Array.from({ length: view.emptySlots }, (_, index) => index);
+  const freeSlots = Array.from({ length: view.emptySlots }, (_, index) => view.active.length + index + 1);
+  const savedLeft = canEquip ? savedTools.filter((tool) => !view.active.some((use) => use.tool.id === tool.id)) : [];
 
   return (
     <section className="pf-box pf-belt" aria-labelledby="toolbelt-heading" ref={root} id="toolbelt">
@@ -113,53 +123,67 @@ export function ToolbeltSection({
         <span className="pf-hint">{view.active.length} of {TOOLBELT_MAX_PER_PROJECT} slots in use</span>
       </div>
 
-      <ul className="pf-belt-slots">
+      {canEquip ? (
+        <>
+          <ToolFinder key={finderKey} projectId={projectId} chosen={chosen} onChoose={choose} onEdit={() => setChosen(null)} inputRef={finderInput} />
+          {chosen ? <ToolStep key={chosen.id} projectId={projectId} tool={chosen} onCancel={cancelStep} onDone={equipDone} /> : null}
+        </>
+      ) : view.closed ? (
+        <p className="pf-hint pf-belt-reason" id={reasonId}>{SLOTS_CLOSED_TEXT}</p>
+      ) : (
+        <p className="pf-hint pf-belt-reason" id={reasonId}>{SLOTS_FULL_TEXT}</p>
+      )}
+
+      <ul className="pf-belt-slots" aria-label="Slots">
         {view.active.map((use) => {
           const removable = canRemoveUse(use.status).ok;
           return (
             <li className="pf-belt-slot" data-status={use.status} key={use.id}>
-              <UseChip status={use.status} focusKey={`chip-${use.tool.id}`} />
-              <ToolTitle tool={use.tool} />
-              <MakerLine handle={use.tool.ownerHandle} />
+              <div className="pf-belt-slot-head">
+                <UseChip status={use.status} focusKey={`chip-${use.tool.id}`} />
+                <ToolTitle tool={use.tool} />
+                <MakerLine handle={use.tool.ownerHandle} />
+                {removable ? (
+                  <button type="button" className="pf-btn pf-belt-remove" aria-label={`Remove ${use.tool.title}`} onClick={() => setRemoving(use)}>
+                    Remove
+                  </button>
+                ) : null}
+              </div>
               <p className="pf-belt-note-text">{use.note}</p>
-              {removable ? (
-                <button type="button" className="pf-btn" aria-label={`Remove ${use.tool.title}`} onClick={() => setRemoving(use)}>
-                  Remove
-                </button>
-              ) : (
-                <p className="pf-hint">A confirmed use stays on the record.</p>
-              )}
+              {removable ? null : <p className="pf-hint">A confirmed use stays on the record.</p>}
             </li>
           );
         })}
-        {emptySlots.map((index) => (
-          <li className="pf-belt-slot pf-belt-slot-empty" key={`empty-${index}`}>
-            <button
-              type="button"
-              className="pf-new-card"
-              aria-label="Equip a tool"
-              aria-disabled={view.closed ? true : undefined}
-              aria-describedby={view.closed ? reasonId : undefined}
-              data-focus={index === 0 ? "equip-slot" : undefined}
-              onClick={() => {
-                if (view.closed) return;
-                setEquipTools(tools.filter((tool) => !view.active.some((use) => use.tool.id === tool.id)));
-                setEquipOpen(true);
-              }}
-            >
-              <svg className="pf-new-plus" viewBox="0 0 12 12" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-                <rect x="5" y="1" width="2" height="10" />
-                <rect x="1" y="5" width="10" height="2" />
-              </svg>
-              <span className="pf-new-label">Equip a tool</span>
-              <span className="pf-new-sub">Pick an approved open-source project.</span>
-            </button>
+        {freeSlots.map((number) => (
+          <li className="pf-belt-slot pf-belt-slot-empty" key={`free-${number}`}>
+            {view.closed ? `Slot ${number} is empty` : `Slot ${number} is free`}
           </li>
         ))}
       </ul>
 
-      {view.closed && view.emptySlots > 0 ? <p className="pf-hint pf-belt-reason" id={reasonId}>{SLOTS_CLOSED_TEXT}</p> : null}
-      {view.full ? <p className="pf-hint pf-belt-reason">{SLOTS_FULL_TEXT}</p> : null}
+      {savedLeft.length > 0 ? (
+        <section className="pf-belt-saved" aria-labelledby={`belt-saved-${projectId}`}>
+          <div className="pf-belt-saved-head">
+            <h3 id={`belt-saved-${projectId}`}>Saved tools</h3>
+            <Link href="/dashboard/explore?saved=1">See all saved</Link>
+          </div>
+          <ul className="pf-belt-saved-list">
+            {savedLeft.slice(0, 3).map((tool) => (
+              <ProjectResultRow
+                as="li"
+                row={tool}
+                showRepo
+                key={tool.id}
+                saveSlot={
+                  <button type="button" className="pf-btn pf-belt-equip" aria-label={`Equip ${tool.title}`} onClick={() => setChosen(tool)}>
+                    Equip
+                  </button>
+                }
+              />
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {view.declined.length > 0 ? (
         <ul className="pf-belt-list" aria-label="Declined uses">
@@ -180,14 +204,14 @@ export function ToolbeltSection({
 
       <p className="pf-belt-status pf-saved" role="status">{message}</p>
 
-      <ToolbeltGate projectId={projectId} hours={hours} />
+      <div className="pf-belt-foot">
+        <ToolbeltGate projectId={projectId} hours={hours} />
+        <p className="pf-belt-note pf-hint">
+          <span className="pf-tag">Provisional</span> Provisional rewards, not paid yet: {TOOLBELT_USER_ORE} Ore once per tool for the builder who uses it,{" "}
+          {TOOLBELT_MAKER_ORE} Ore for the maker for each verified user, up to {TOOLBELT_MAKER_CAP_ORE} Ore per tool each season. Equipping gives no Track XP.
+        </p>
+      </div>
 
-      <p className="pf-belt-note pf-hint">
-        <span className="pf-tag">Provisional</span> Provisional rewards, not paid yet: {TOOLBELT_USER_ORE} Ore once per tool for the builder who uses it,{" "}
-        {TOOLBELT_MAKER_ORE} Ore for the maker for each verified user, up to {TOOLBELT_MAKER_CAP_ORE} Ore per tool each season. Equipping gives no Track XP.
-      </p>
-
-      <EquipDialog open={equipOpen} onClose={closeEquip} onDone={equipDone} projectId={projectId} tools={equipTools} />
       <ConfirmDialog
         open={removing !== null}
         onClose={closeRemove}

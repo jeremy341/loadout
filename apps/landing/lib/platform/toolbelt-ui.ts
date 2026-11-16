@@ -53,3 +53,71 @@ export function meterPercents(approved: number, pending: number): { done: number
 }
 
 export const handleLabel = (handle: string | null | undefined): string => (handle ? handle : "a builder");
+
+// ---- Find a tool combobox (stardance-layout.md, F.3 and F.4) ----
+//
+//   finderReduce(state, action)     list open/closed and the active option index (-1 = none) as the keys move it
+//       open        opens the list, no option active          close   closes it, no option active
+//       next / prev with the option count: Down and Up. Closed: opens, Down lands on the first option, Up on the last.
+//                   Open: moves one and wraps at both ends. With no options nothing moves.
+//       results     the option count changed; `auto` makes a lone result active (typed query only), otherwise none is active
+//   finderEscape({ open, text })    Escape once closes the list and keeps the text; Escape again clears the text
+//   finderStatusText(view)          the polite status line under the field
+export type FinderState = { open: boolean; active: number };
+export type FinderAction =
+  | { type: "open" }
+  | { type: "close" }
+  | { type: "next"; count: number }
+  | { type: "prev"; count: number }
+  | { type: "results"; count: number; auto: boolean };
+
+export const FINDER_CLOSED: FinderState = { open: false, active: -1 };
+
+export function finderReduce(state: FinderState, action: FinderAction): FinderState {
+  switch (action.type) {
+    case "open":
+      return state.open ? state : { open: true, active: -1 };
+    case "close":
+      return FINDER_CLOSED;
+    case "next":
+      if (action.count <= 0) return state.open ? state : { open: true, active: -1 };
+      if (!state.open) return { open: true, active: 0 };
+      return { open: true, active: (state.active + 1) % action.count };
+    case "prev":
+      if (action.count <= 0) return state.open ? state : { open: true, active: -1 };
+      if (!state.open) return { open: true, active: action.count - 1 };
+      return { open: true, active: state.active <= 0 ? action.count - 1 : state.active - 1 };
+    case "results":
+      return { open: state.open, active: action.auto && action.count === 1 ? 0 : -1 };
+  }
+}
+
+export function finderEscape(input: { open: boolean; text: string }): { open: boolean; text: string } {
+  return input.open ? { open: false, text: input.text } : { open: false, text: "" };
+}
+
+export const FINDER_EMPTY_TEXT = "No tools to equip yet. Tools show up here once other builders have an approved, open-source project.";
+
+export type FinderView =
+  | { phase: "idle" }
+  | { phase: "loading" }
+  | { phase: "results"; count: number; query: string }
+  | { phase: "error" }
+  | { phase: "limited" };
+
+export function finderStatusText(view: FinderView): string {
+  switch (view.phase) {
+    case "idle":
+      return "";
+    case "loading":
+      return "Searching.";
+    case "error":
+      return "Search is not available. Try again.";
+    case "limited":
+      return "Searching too fast. Wait a moment.";
+    case "results":
+      if (view.query.trim() === "") return view.count > 0 ? "Saved and most used tools." : "No tools to equip yet.";
+      if (view.count === 0) return "No tools match. Clear the search.";
+      return `${view.count} ${view.count === 1 ? "tool matches" : "tools match"}.`;
+  }
+}

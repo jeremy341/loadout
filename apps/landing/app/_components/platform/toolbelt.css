@@ -1,36 +1,111 @@
-/* The Toolbelt on the project page and its dialogs (design spec 3.14 to 3.17). Existing platform tokens only; both themes follow the
-   --pf-* values. No motion beyond the platform's own button transitions. */
+/* The Toolbelt on the project page (stardance-layout.md F, profile-and-toolbelt.md 3.16 and 3.17): the finder, the inline step, two
+   compact slots, the gate card and the confirm dialog. Existing platform tokens only; both themes follow the --pf-* values.
+   Motion: a 120 ms fade on result rows (discover.css) and a 160 ms fade and 4 px rise on the step, both off under reduced motion. */
 
-/* ---- Slots ---- */
-.pf .pf-belt-slots { display: grid; grid-template-columns: 1fr; gap: 16px; list-style: none; margin: 0 0 12px; padding: 0; }
-@media (min-width: 560px) {
-  .pf .pf-belt-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* ---- Find a tool ---- */
+.pf .pf-finder { position: relative; display: grid; gap: 6px; margin: 0 0 14px; }
+.pf .pf-finder-label { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-finder-field { position: relative; display: flex; align-items: center; }
+.pf .pf-finder-glass { position: absolute; left: 14px; width: 20px; height: 20px; fill: currentColor; color: var(--pf-mut); pointer-events: none; }
+.pf .pf-finder-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 52px 0 46px;
+  border: 2px solid var(--pf-fg);
+  border-radius: 0;
+  background: var(--pf-bg);
+  color: var(--pf-fg);
+  font: 400 1em var(--font-ui), monospace;
 }
-.pf .pf-belt-slot {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  min-width: 0;
-  padding: 14px 16px 16px 20px;
+.pf .pf-finder-input:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-finder-input[aria-readonly="true"] { border-style: dashed; }
+.pf .pf-finder-clear { position: absolute; right: 0; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 100%; padding: 0; border: 0; background: transparent; color: var(--pf-fg); cursor: pointer; }
+.pf .pf-finder-clear svg { width: 16px; height: 16px; fill: currentColor; }
+.pf .pf-finder-clear:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: -4px; }
+.pf .pf-finder-hint, .pf .pf-finder-status { margin: 0; }
+.pf .pf-finder-status { min-height: 1.4em; }
+.pf .pf-finder-status:empty { min-height: 0; }
+.pf .pf-finder-status[data-error="true"] { color: var(--pf-err); }
+
+.pf .pf-finder-pop { border: 1px solid var(--pf-fg); background: var(--pf-bg); }
+.pf .pf-finder-pop { --pf-row-h: 84px; }
+@media (max-width: 599px) {
+  .pf .pf-finder-pop { --pf-row-h: 104px; }
+}
+.pf .pf-finder-scroll { max-height: 336px; overflow-y: auto; overscroll-behavior: contain; }
+@media (max-width: 599px) {
+  .pf .pf-finder-scroll { max-height: 312px; }
+}
+.pf .pf-finder-cols { display: grid; grid-template-columns: minmax(0, 1fr) 52px; }
+.pf .pf-finder-group, .pf .pf-finder-group-gap { box-sizing: border-box; height: 32px; padding: 9px 12px 0; border-bottom: 1px solid var(--pf-rule); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-finder-option { box-sizing: border-box; height: var(--pf-row-h); padding-left: 10px; overflow: hidden; cursor: pointer; }
+.pf .pf-finder-option .pf-result { height: 100%; box-sizing: border-box; }
+.pf .pf-finder-option:hover { background: var(--pf-ln); }
+/* The active option: a left bar and an inset outline, so it is never colour alone. */
+.pf .pf-finder-option[data-active="true"] { background: var(--pf-ln); box-shadow: inset 4px 0 0 var(--pf-ac), inset 0 0 0 2px var(--pf-focus); }
+.pf .pf-finder-save { box-sizing: border-box; display: flex; align-items: center; justify-content: center; height: var(--pf-row-h); border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-finder-save[data-active="true"] { background: var(--pf-ln); }
+.pf .pf-finder-more { margin: 0; padding: 10px 12px; border-top: 1px solid var(--pf-rule); }
+.pf .pf-finder-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 0; padding: 14px; color: var(--pf-mut); }
+.pf .pf-finder-note p { margin: 0; max-width: 60ch; }
+.pf .pf-finder-note .pf-btn { min-height: 44px; }
+.pf .pf-finder-skeleton { display: grid; }
+.pf .pf-finder-skeleton span { display: block; height: 56px; border-bottom: 1px solid var(--pf-rule); background: linear-gradient(var(--pf-ln), var(--pf-ln)) 14px 20px / 40% 16px no-repeat; }
+
+/* ---- Inline step ---- */
+.pf .pf-belt-step {
+  margin: 0 0 14px;
+  padding: 14px 16px 4px 18px;
   border: 1px solid var(--pf-fg);
-  border-left: 4px solid var(--pf-rule);
+  border-left: 4px solid var(--tk, var(--pf-ac));
+  background: var(--pf-bg);
 }
+.pf .pf-belt-step-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: 0 0 12px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.06em; color: var(--pf-mut); }
+.pf .pf-belt-step-sum strong { font: 700 16px/1.2 var(--font-pixel), monospace; text-transform: uppercase; letter-spacing: 0; color: var(--pf-fg); overflow-wrap: anywhere; }
+.pf .pf-belt-step .pf-swatch { width: 12px; height: 12px; }
+.pf .pf-belt-step .pf-field { margin-bottom: 14px; }
+.pf .pf-belt-step .pf-field > label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-belt-step .pf-textarea { min-height: 88px; }
+.pf .pf-belt-step-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 14px; }
+@media (max-width: 559px) {
+  .pf .pf-belt-step-actions { flex-direction: column; }
+  .pf .pf-belt-step-actions .pf-btn { width: 100%; }
+}
+.pf .pf-belt-step .pf-error { scroll-margin-bottom: 24px; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-belt-step { animation: pf-step-in 160ms var(--pf-ease) both; }
+}
+@keyframes pf-step-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ---- Slots: two ruled rows, never tall boxes ---- */
+.pf .pf-belt-slots { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; list-style: none; margin: 0 0 12px; padding: 0; }
+@media (min-width: 900px) {
+  .pf .pf-belt-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+.pf .pf-belt-slot { display: grid; gap: 8px; min-width: 0; padding: 12px 14px 12px 16px; border: 1px solid var(--pf-fg); border-left: 4px solid var(--pf-rule); background: var(--pf-bg); }
 .pf .pf-belt-slot[data-status="confirmed"] { border-left-color: var(--pf-ok); }
 .pf .pf-belt-slot[data-status="declined"] { border-left-color: var(--pf-err); }
-.pf .pf-belt-slot-empty { padding: 0; border: 0; }
-.pf .pf-belt-slot-empty .pf-new-card { min-height: 160px; height: 100%; }
-.pf .pf-new-card[aria-disabled="true"] { cursor: not-allowed; color: var(--pf-mut); border-color: var(--pf-rule); }
-.pf .pf-new-card[aria-disabled="true"]:hover { color: var(--pf-mut); border-color: var(--pf-rule); }
-.pf .pf-new-card[aria-disabled="true"]:focus-visible { border-color: var(--pf-focus); color: var(--pf-fg); }
+.pf .pf-belt-slot-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; min-width: 0; }
+.pf .pf-belt-slot-head .pf-belt-remove { margin-left: auto; min-height: 44px; padding: 0 16px; }
+.pf .pf-belt-slot-empty { display: flex; align-items: center; min-height: 44px; padding-block: 0; border-style: dashed; border-color: var(--pf-rule); background: transparent; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-belt-title { font: 700 1.125em/1.2 var(--font-pixel), monospace; overflow-wrap: anywhere; color: var(--pf-fg); }
 .pf .pf-belt-by { font-size: 0.8125em; color: var(--pf-mut); }
 .pf .pf-belt-note-text { margin: 0; font-size: 0.875em; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-line; }
-.pf .pf-belt-slot .pf-btn { margin-top: auto; }
-.pf .pf-belt-slot .pf-hint { margin: auto 0 0; }
-.pf .pf-belt-reason { margin: 0 0 12px; }
+.pf .pf-belt-slot > .pf-hint { margin: 0; }
+.pf .pf-belt > .pf-hint.pf-belt-reason { margin: 0 0 12px; }
 .pf .pf-belt-status { margin: 0 0 12px; min-height: 1.4em; }
 .pf .pf-belt-status:empty { min-height: 0; margin: 0; }
+.pf .pf-belt-alert { margin-bottom: 12px; }
+.pf .pf-belt-counter { display: inline-block; margin-left: 4px; white-space: nowrap; }
+
+/* Saved tools: up to three result rows with an Equip button each. */
+.pf .pf-belt-saved { margin: 0 0 14px; }
+.pf .pf-belt-saved-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.pf .pf-belt-saved-head h3 { margin: 0; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-belt-saved-head a { display: inline-flex; align-items: center; min-height: 44px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-belt-saved-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--pf-rule); }
+.pf .pf-belt-saved-list .pf-result-save { padding-right: 4px; }
+.pf .pf-belt-equip { min-height: 44px; padding: 0 16px; }
 
 /* Chips: the word carries the meaning. Colour is only the border. */
 .pf .pf-belt-chip {
@@ -55,8 +130,12 @@
 .pf .pf-belt-declined-text { display: grid; gap: 2px; flex: 1 1 200px; min-width: 0; }
 .pf .pf-belt-declined-text .pf-belt-title { color: var(--pf-mut); font-size: 1em; }
 
-/* ---- Gate card ---- */
-.pf .pf-belt-gate { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--pf-rule); }
+/* ---- Gate card and the one provisional note, side by side on wide screens ---- */
+.pf .pf-belt-foot { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--pf-rule); }
+@media (min-width: 900px) {
+  .pf .pf-belt-foot { grid-template-columns: minmax(0, 1fr) 320px; gap: 28px; }
+}
+.pf .pf-belt-foot .pf-belt-gate { margin: 0; padding: 0; border-top: 0; }
 .pf .pf-belt-gate h3 { margin: 0 0 10px; font: 700 1em/1.2 var(--font-pixel), monospace; text-transform: uppercase; }
 .pf .pf-belt-gate .pf-checks li { flex-wrap: wrap; }
 .pf .pf-belt-gate-text { flex: 1 1 220px; min-width: 0; }
@@ -72,12 +151,10 @@
   opacity: 0.7;
 }
 .pf .pf-belt-gate > .pf-hint { margin: 0; }
-
-/* ---- Rewards note ---- */
-.pf .pf-belt-note { margin: 16px 0 0; max-width: 72ch; line-height: 1.6; }
+.pf .pf-belt-note { margin: 0; max-width: 72ch; line-height: 1.6; }
 .pf .pf-belt-note .pf-tag { margin-right: 6px; }
 
-/* ---- Toolbelt users ---- */
+/* ---- Toolbelt users (the maker view) ---- */
 .pf .pf-belt-users { list-style: none; margin: 0; padding: 0; }
 .pf .pf-belt-user { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
 .pf .pf-belt-user:first-child { border-top: 0; padding-top: 0; }
@@ -85,38 +162,14 @@
 .pf .pf-belt-user-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font: 700 1em var(--font-pixel), monospace; }
 .pf .pf-belt-user .pf-btn { flex: none; }
 .pf .pf-belt-users + .pf-hint, .pf .pf-belt > .pf-hint { margin: 8px 0 0; }
+.pf .pf-belt > .pf-box-head .pf-hint { margin: 0; }
 
-/* Summary line on the project header. */
-.pf .pf-belt-summary { margin: -8px 0 0; }
-
-/* ---- Dialogs ---- */
+/* ---- Confirm dialog (Remove and Block) ---- */
 .pf .pf-confirm { width: min(440px, calc(100vw - 32px)); }
 .pf .pf-confirm-form { display: grid; gap: 14px; padding: 18px 22px 0; }
 .pf .pf-confirm-body p { margin: 0; line-height: 1.6; }
 .pf .pf-confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 0 18px; border-top: 1px solid var(--pf-rule); }
 
-.pf .pf-belt-alert { margin-bottom: 12px; }
-.pf .pf-belt-results { margin: 0; min-height: 1.4em; }
-.pf .pf-belt-counter { display: inline-block; margin-left: 4px; white-space: nowrap; }
-.pf .pf-belt-toollist {
-  display: grid;
-  grid-auto-rows: max-content;
-  align-content: start;
-  gap: 10px;
-  max-height: min(280px, 34vh);
-  overflow-y: auto;
-  padding: 2px 4px 4px 2px;
-}
-.pf .pf-belt-choice { min-height: 44px; min-width: 0; }
-.pf .pf-belt-desc { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-.pf .pf-belt-by { margin: 0; }
-.pf .pf-belt-tools { margin-bottom: 16px; }
-.pf .pf-belt-empty-wrap { padding: 20px 22px 0; }
-.pf .pf-belt-empty-wrap .pf-dialog-actions { grid-template-columns: 1fr; }
-
 html[data-larger-controls="true"] .pf .pf-belt-slots .pf-btn,
-html[data-larger-controls="true"] .pf .pf-belt-user .pf-btn { min-height: 52px; }
-html[data-larger-controls="true"] .pf .pf-belt-choice { min-height: 52px; }
-
-/* The dialog action bar is sticky, so an error scrolled into view must stop above it. */
-.pf .pf-dialog-form .pf-error { scroll-margin-bottom: 96px; }
+html[data-larger-controls="true"] .pf .pf-belt-user .pf-btn,
+html[data-larger-controls="true"] .pf .pf-belt-step .pf-btn { min-height: 52px; }

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ShopPhoto, ShopTags } from "@/app/_components/platform/ShopCard";
+import { OrePrice, ShopCard, ShopPhoto, ShopTags } from "@/app/_components/platform/ShopCard";
+import { ShopRail } from "@/app/_components/platform/ShopRails";
+import { WishlistStar } from "@/app/_components/platform/WishlistStar";
 import { formatDiscount } from "@/lib/platform/progress";
 import { requireViewer } from "@/lib/platform/session";
 import {
@@ -11,17 +13,21 @@ import {
   priceFor,
   REQUISITION_MIN_ORE,
   REQUISITION_PERCENT,
+  relatedItems,
   requisitionPreview,
   sampleApprovedHours,
   shopItemById,
 } from "@/lib/platform/shop";
+import "@/app/_components/platform/shop.css";
 
 export const metadata: Metadata = { title: "Item - LOADOUT" };
 
 const ore = (value: number) => `${value.toLocaleString("en-GB")} Ore`;
+const NOTE_ID = "shop-wish-note";
 
-// One proposed item: the photo, what it is, its tags, and how the price is worked out from your level (plan 02 section
-// 26.10: base price, level discount, final price, and what a Field Requisition would add). There is nothing to buy yet.
+// One proposed item. The photo, what it is and what else is like it on the left; on the right a price box that stays in view
+// (plan 02 section 26.10: base price, level discount, final price, and what a Field Requisition would add). There is nothing to
+// buy yet, so the call to action is a button that says so and why.
 export default async function ShopItemPage({ params }: { params: Promise<{ id: string }> }) {
   await requireViewer();
   const { id } = await params;
@@ -32,6 +38,7 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
   const price = priceFor(item, approved);
   const lock = lockFor(item, approved);
   const requisition = requisitionPreview(item, price);
+  const related = relatedItems(item, 4);
 
   return (
     <>
@@ -42,11 +49,12 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
           </svg>
           Back to Shop
         </Link>
+        <WishlistStar item={item} variant="button" describedBy={NOTE_ID} />
       </div>
 
-      <div className="pf-shop-detail">
-        <div className="pf-shop-detail-side">
-          <div className="pf-shop-detail-photo">
+      <div className="pf-shop-item">
+        <div className="pf-shop-item-photo">
+          <div className="pf-shop-frame">
             <ShopPhoto item={item} large />
           </div>
           {item.credit ? (
@@ -59,16 +67,16 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
           ) : null}
         </div>
 
-        <div className="pf-shop-detail-main">
-          <span className="pf-shop-kind">
-            {item.kind}
-            {item.limited ? " / Limited" : ""}
-          </span>
-          <h1>{item.name}</h1>
-          <p className="pf-project-lead">{item.blurb}</p>
-          <ShopTags item={item} />
+        <div className="pf-shop-item-side">
+          <section className="pf-box pf-shop-buy" aria-labelledby="price-heading">
+            <span className="pf-shop-kind">
+              {item.kind}
+              {item.limited ? " / Limited" : ""}
+            </span>
+            <h1>{item.name}</h1>
+            <OrePrice base={price.base} final={price.final} large />
+            <p className="pf-hint">That is about {hoursOfWork(price.final)} approved hours of work.</p>
 
-          <section className="pf-box" aria-labelledby="price-heading">
             <h2 id="price-heading">Your price</h2>
             <dl className="pf-shop-lines">
               <div>
@@ -84,7 +92,6 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
                 <dd>{ore(price.final)}</dd>
               </div>
             </dl>
-            <p className="pf-hint">That is about {hoursOfWork(price.final)} approved hours of work.</p>
 
             {requisition.eligible ? (
               <p className="pf-shop-requisition">
@@ -103,11 +110,45 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
               </p>
             ) : null}
 
-            <p className="pf-shop-closed">
-              Ordering opens in a later release. This is a proposed item at a draft price.{" "}
-              <Link href="/docs/pricing">How prices are worked out</Link>
+            <button type="button" className="pf-btn pri pf-shop-order" aria-disabled="true" aria-describedby="shop-order-why">
+              Order opens later
+            </button>
+            <p className="pf-shop-closed" id="shop-order-why">
+              Ordering opens in a later release. This is a proposed item at a draft price. <Link href="/docs/pricing">How prices are worked out</Link>
+            </p>
+            <p className="pf-hint" id={NOTE_ID}>
+              Wishlists open with the Shop release. Nothing is saved yet.
             </p>
           </section>
+        </div>
+
+        <div className="pf-shop-item-more">
+          <section className="pf-box pf-shop-about" aria-labelledby="about-heading">
+            <h2 id="about-heading">About</h2>
+            <p className="pf-project-lead">{item.blurb}</p>
+            <dl className="pf-shop-facts">
+              <div>
+                <dt>Kind</dt>
+                <dd>{item.kind}</dd>
+              </div>
+              <div>
+                <dt>Tags</dt>
+                <dd>
+                  <ShopTags item={item} />
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          {related.length > 0 ? (
+            <ShopRail title="Related">
+              {related.map((entry) => (
+                <li key={entry.id}>
+                  <ShopCard item={entry} approved={approved} noteId={NOTE_ID} />
+                </li>
+              ))}
+            </ShopRail>
+          ) : null}
         </div>
       </div>
     </>

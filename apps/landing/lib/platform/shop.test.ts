@@ -2,7 +2,17 @@ import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import {
+  categoryCount,
+  categoryThumbs,
   filterShopItems,
+  hasTag,
+  isNewItem,
+  matchesShopText,
+  parseShopPage,
+  recentlyAdded,
+  relatedItems,
+  visibleItems,
+  withinReach,
   hoursOfWork,
   lockFor,
   parseShopQuery,
@@ -247,5 +257,75 @@ describe("catalog photos", () => {
     for (const entry of SHOP_ITEMS.filter((candidate) => candidate.tracks.length === 0)) {
       expect(entry.need).toBeUndefined();
     }
+  });
+});
+
+describe("hub helpers", () => {
+  test("the last eight catalog entries are new, newest first", () => {
+    const fresh = recentlyAdded();
+    expect(fresh).toHaveLength(8);
+    expect(fresh.map((entry) => entry.id)).toEqual(SHOP_ITEMS.slice(-8).map((entry) => entry.id).reverse());
+    expect(isNewItem(item("blahaj"))).toBe(true);
+    expect(isNewItem(item("pico-w"))).toBe(false);
+  });
+
+  test("related items share a track, never include the item and prefer more shared tracks", () => {
+    const pi = item("raspberry-pi-5");
+    const related = relatedItems(pi, 4);
+    expect(related).toHaveLength(4);
+    expect(related.map((entry) => entry.id)).not.toContain(pi.id);
+    for (const entry of related) expect(entry.tracks.some((track) => pi.tracks.includes(track))).toBe(true);
+    expect(related[0].tracks.filter((track) => pi.tracks.includes(track))).toHaveLength(2);
+  });
+
+  test("a General item is related to other General items only", () => {
+    for (const entry of relatedItems(item("ipad"), 6)) expect(entry.tracks).toHaveLength(0);
+  });
+
+  test("category thumbs are items under the tag, without theme-flipped logos", () => {
+    for (const tag of SHOP_TAGS) {
+      const thumbs = categoryThumbs(tag);
+      expect(thumbs.length).toBeGreaterThan(0);
+      expect(thumbs.length).toBeLessThanOrEqual(3);
+      for (const entry of thumbs) {
+        expect(hasTag(entry, tag)).toBe(true);
+        expect(entry.logo).toBeUndefined();
+      }
+    }
+    expect(categoryCount("General")).toBe(SHOP_ITEMS.filter((entry) => entry.tracks.length === 0).length);
+  });
+
+  test("within reach lists only what the balance covers", () => {
+    expect(withinReach(SHOP_ITEMS, approved, 0)).toEqual([]);
+    const reach = withinReach(SHOP_ITEMS, approved, 40);
+    expect(reach.length).toBeGreaterThan(0);
+    for (const entry of reach) expect(priceFor(entry, approved).final).toBeLessThanOrEqual(40);
+  });
+
+  test("pages keep everything already shown and link to the next", () => {
+    const first = visibleItems(SHOP_ITEMS, 1);
+    expect(first.shown).toHaveLength(24);
+    expect(first.next).toBe(2);
+    expect(visibleItems(SHOP_ITEMS, 2).shown).toHaveLength(48);
+    const last = visibleItems(SHOP_ITEMS, 3);
+    expect(last.shown).toHaveLength(SHOP_ITEMS.length);
+    expect(last.next).toBeNull();
+    expect(visibleItems(SHOP_ITEMS, 0).shown).toHaveLength(24);
+  });
+
+  test("the page and the search text are read safely from the address", () => {
+    expect(parseShopPage({})).toBe(1);
+    expect(parseShopPage({ page: "3" })).toBe(3);
+    expect(parseShopPage({ page: ["2", "9"] })).toBe(2);
+    expect(parseShopPage({ page: "-4" })).toBe(1);
+    expect(parseShopPage({ page: "abc" })).toBe(1);
+    expect(matchesShopText(item("pico-w"), "  WI-FI ")).toBe(true);
+    expect(matchesShopText(item("pico-w"), "zzzz")).toBe(false);
+    expect(matchesShopText(item("pico-w"), "")).toBe(true);
+  });
+
+  test("the address carries the page only past the first", () => {
+    expect(shopHref(all, 1)).toBe("/dashboard/shop");
+    expect(shopHref({ ...all, tag: "Tools" }, 2)).toBe("/dashboard/shop?tag=tools&page=2");
   });
 });

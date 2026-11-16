@@ -165,7 +165,7 @@ test("the account control opens, lists Profile and Settings, and closes on Escap
 
 test("Explore shows handles, never display names, searches by handle and counts confirmed uses", async ({ page }) => {
   await page.goto("/dashboard/explore");
-  const card = page.getByRole("link", { name: /Tinyparse/ });
+  const card = page.getByRole("link", { name: /Tinyparse/ }).first();
   await expect(card).toContainText("by juniper_dev", { timeout: 30000 });
   await expect(card).toContainText("Used by 1");
   await expect(page.getByText("Sample Juniper")).toHaveCount(0);
@@ -180,8 +180,8 @@ test("the Explore detail links the builder, lists users and the tools a project 
   await page.goto("/dashboard/explore/seed-tinyparse");
   await expect(page.getByRole("heading", { level: 1, name: "Tinyparse" })).toBeVisible({ timeout: 30000 });
   await expect(page.getByRole("link", { name: "juniper_dev" })).toHaveAttribute("href", "/dashboard/builders/juniper_dev");
-  await expect(page.locator(".pf-meta-box")).toContainText("Used by");
-  await expect(page.getByRole("link", { name: "github.com/example-handle/tinyparse" })).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(page.locator(".pf-explore-stats")).toContainText("Used by");
+  await expect(page.getByRole("link", { name: /github\.com\/example-handle\/tinyparse/ })).toHaveAttribute("rel", "noopener noreferrer");
   await expect(page.getByRole("heading", { level: 2, name: "Used by" }).locator("..").getByRole("link", { name: "kestrel" })).toBeVisible();
   await page.goto("/dashboard/explore/seed-orbit-sim");
   const tools = page.getByRole("heading", { level: 2, name: "Tools in this project" }).locator("..");
@@ -191,7 +191,7 @@ test("the Explore detail links the builder, lists users and the tools a project 
   // a project that equips nothing says so, and a project with no source address has no Used by cell
   await page.goto("/dashboard/explore/seed-lamp-bus");
   await expect(page.getByText("This project does not equip any tools.")).toBeVisible();
-  await expect(page.locator(".pf-meta-box")).not.toContainText("Used by");
+  await expect(page.locator(".pf-explore-stats")).not.toContainText("Used by");
 });
 
 test("Settings shows the handle and links to the profile", async ({ page }) => {

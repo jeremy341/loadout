@@ -20,11 +20,69 @@ export function parseExploreQuery(raw: { q?: string | string[]; track?: string |
   };
 }
 
+export const EXPLORE_RESULTS_SIZE = 24;
+export const EXPLORE_LIVE_SIZE = 12;
+
+export type ExploreParams = { q: string; track: Track | null; saved: boolean; page: number };
+
+const flag = (value: string): boolean => value === "1" || value === "true";
+
+// Everything the Explore address can carry: ?q=&track=&saved=1&page=. A bad page number is page 1; saved reads "1" or "true".
+export function parseExploreParams(raw: { q?: string | string[]; track?: string | string[]; saved?: string | string[]; page?: string | string[] }): ExploreParams {
+  const base = parseExploreQuery(raw);
+  const page = Number.parseInt(first(raw.page).trim(), 10);
+  return { ...base, saved: flag(first(raw.saved).trim().toLowerCase()), page: Number.isFinite(page) && page >= 1 ? Math.min(page, 1000) : 1 };
+}
+
+// True when the page shows the result grid (a search, a track or the Saved filter) instead of the rails.
+export function isFiltered(params: { q: string; track: unknown; saved: boolean }): boolean {
+  return params.q !== "" || params.track !== null || params.saved;
+}
+
 // The address for a filter, keeping the search text. The default view has no query at all.
-export function exploreHref(query: { q: string; track: string | null }): string {
+export function exploreHref(query: { q: string; track: string | null; saved?: boolean; page?: number }): string {
   const params = new URLSearchParams();
   if (query.q) params.set("q", query.q);
   if (query.track) params.set("track", query.track.toLowerCase());
+  if (query.saved) params.set("saved", "1");
+  if (query.page && query.page > 1) params.set("page", String(query.page));
   const text = params.toString();
   return text ? `/dashboard/explore?${text}` : "/dashboard/explore";
+}
+
+// The live search address on /platform-search, built from the same parts.
+export function liveSearchUrl(query: { q: string; track: string | null; saved: boolean }, limit = EXPLORE_LIVE_SIZE): string {
+  const params = new URLSearchParams({ scope: "explore", q: query.q, limit: String(limit) });
+  if (query.track) params.set("track", query.track.toLowerCase());
+  if (query.saved) params.set("saved", "1");
+  return `/platform-search?${params.toString()}`;
+}
+
+// Paging for the result grid. A page past the end is clamped to the last page.
+export function pageWindow(total: number, page: number, size = EXPLORE_RESULTS_SIZE): { page: number; pages: number; offset: number; hasPrev: boolean; hasNext: boolean } {
+  const count = Number.isFinite(total) ? Math.max(0, Math.floor(total)) : 0;
+  const pages = Math.max(1, Math.ceil(count / size));
+  const current = Math.min(Math.max(1, Math.floor(page) || 1), pages);
+  return { page: current, pages, offset: (current - 1) * size, hasPrev: current > 1, hasNext: current < pages };
+}
+
+// "12 projects." / "1 project." / "0 projects."
+export function projectCountLine(total: number): string {
+  return `${total} ${total === 1 ? "project" : "projects"}.`;
+}
+
+// Rail rules. "Used most" stays hidden until some project has a confirmed use. A rail is shown only when it has rows.
+export function usedMostRows<T extends { usedBy: number }>(rows: readonly T[]): T[] {
+  return rows.filter((row) => row.usedBy > 0);
+}
+
+export function railsToShow<T>(rails: readonly { key: string; rows: readonly T[] }[]): string[] {
+  return rails.filter((rail) => rail.rows.length > 0).map((rail) => rail.key);
+}
+
+// The text under the empty result grid.
+export function emptyResultsKind(params: { q: string; saved: boolean }, anySaved: boolean): "saved-none" | "saved-no-match" | "no-match" {
+  if (params.saved && params.q === "" && !anySaved) return "saved-none";
+  if (params.saved) return "saved-no-match";
+  return "no-match";
 }

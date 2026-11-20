@@ -11,13 +11,13 @@
 | Launch and operating gates | [05 Launch and operations](05-launch-and-operations.md) | Planning controls; not a live order or fulfillment system. |
 | Public homepage | [06 Public homepage](06-public-homepage.md) | Current public-site wording, structure and approved scope. |
 | Community Eras | [11 Eras and community progression](11-eras-and-community-progression.md) | Shared community progression; separate from personal XP and Ore. |
-| LOADOUT IRL concept | [15 LOADOUT IRL Düsseldorf](15-loadout-irl-ruhr.md) | Future concept only; no event, venue or dates are confirmed. |
+| LOADOUT IRL concept | [15 LOADOUT IRL Düsseldorf](15-loadout-irl-ruhr.md) | Parked: we have decided not to make it happen for now; the plan is kept if we revisit it. |
 | Locked visual system | [Design system](../docs/design/system/design-system.md) | Visual authority; design briefs do not override later owner decisions. |
 | Contribution and release workflow | [Contributor workflow](../docs/development/WORKFLOW.md) | Repository process; it is not participant-facing program content. |
 
 ## Current public page
 
-Plan 06 owns the homepage sequence and the approved public explanations. The page gives a quick program overview and preserves the four tracks, Research Mode as a modifier, the existing build/review flow, progression and prizes, Requisitions, Custom Orders, Community Eras, the future-concept IRL section, FAQ, and organizer context. Owner-approved draft or working prices and thresholds may appear when clearly labelled provisional; unresolved values must not be presented as final. Dates, registration, live stock, ordering availability and fulfillment claims require confirmation.
+Plan 06 owns the homepage sequence and the approved public explanations. The page gives a quick program overview and preserves the four tracks, Research Mode as a modifier, the existing build/review flow, progression and prizes, Requisitions, Custom Orders, Community Eras, FAQ, and organizer context. Owner-approved draft or working prices and thresholds may appear when clearly labelled provisional; unresolved values must not be presented as final. Dates, registration, live stock, ordering availability and fulfillment claims require confirmation.
 
 Internal and public age wording is 13–18. Hack Club teen verification is required; the account integration and operating approval remain open. Public Docs are edited in a separate copy PR from the internal policy/source update.
 
@@ -28,12 +28,13 @@ Internal and public age wording is 13–18. Hack Club teen verification is requi
 - `05-launch-and-operations.md` — launch readiness and operational planning.
 - `06-public-homepage.md` — approved public homepage.
 - `11-eras-and-community-progression.md` — Era policy.
-- `15-loadout-irl-ruhr.md` — future IRL concept.
+- `15-loadout-irl-ruhr.md` — parked IRL concept, kept in case we revisit it.
 - `master-plan-history.md` — short history of the retired master plan and completed proposals.
 
 ## Future proposals
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
+- [`proposals/participant-platform-milestones.md`](proposals/participant-platform-milestones.md) orders that approved scope into gated milestones M0–M5, records the gates (teen verification, data store and auth, peer-review removal, UI briefs, per-service privacy reviews), and lists the admin surfaces kept, dropped and deferred. Planning only; nothing is built.
 
 ## Removed on 25 Oct 2026
 

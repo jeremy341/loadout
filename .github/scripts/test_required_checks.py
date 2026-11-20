@@ -16,8 +16,6 @@ jobs:
     name: Repository integrity
   landing-quality:
     name: Landing quality
-  promotion-lane:
-    name: Promotion lane
   landing-browser:
     name: {browser_name}
     needs: {browser_needs}
@@ -61,14 +59,14 @@ class RequiredChecksTests(unittest.TestCase):
         contract = load_contract()
         contract["lanes"][0]["checks"].extend(["missing-check", "landing-quality"])
         errors = validate_contract(contract, workflow_source(), docs_source(contract))
-        self.assertIn("Lane 'development' references unknown check 'missing-check'.", errors)
-        self.assertIn("Lane 'development' lists 'landing-quality' more than once.", errors)
+        self.assertIn("Lane 'main' references unknown check 'missing-check'.", errors)
+        self.assertIn("Lane 'main' lists 'landing-quality' more than once.", errors)
 
     def test_rejects_a_lane_with_no_required_checks(self):
         contract = load_contract()
         contract["lanes"][0]["checks"] = []
         errors = validate_contract(contract, workflow_source(), docs_source(contract))
-        self.assertIn("Lane 'development' must require at least one status check.", errors)
+        self.assertIn("Lane 'main' must require at least one status check.", errors)
 
 
 if __name__ == "__main__":

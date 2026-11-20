@@ -182,7 +182,7 @@ Three lifetime records grow with approved work:
 
 Community Eras add a separate, non-spendable Era Points progress counter. Era Points do not replace or mix with those three records, do not change the four tracks, and do not change the four quality dimensions. Era behavior and the separate 10% qualifying-project Ore bonus are defined in `11_LOADOUT_ERAS_AND_COMMUNITY_PROGRESSION.md`.
 
-The future `LOADOUT IRL // Düsseldorf` concept uses the same four tracks and global Community Era. It creates no IRL-only progression or attendance advantage; event projects follow the ordinary online project/review/economy rules. See [Plan 15](15-loadout-irl-ruhr.md); this concept does not authorize building or announcing an event.
+The parked `LOADOUT IRL // Düsseldorf` concept (see Plan 15) would use the same four tracks and global Community Era. It creates no IRL-only progression or attendance advantage; event projects follow the ordinary online project/review/economy rules. See [Plan 15](15-loadout-irl-ruhr.md); this concept does not authorize building or announcing an event.
 
 A user should immediately understand:
 
@@ -220,7 +220,7 @@ Each project stores:
 - Review history
 - Earned Ore
 - Track XP earned
-- Signal/usage metrics
+- usage metrics
 - AI declaration
 - Digital Loadout artifact type
 
@@ -292,10 +292,10 @@ Every approved ship grows the participant's persistent **Builder Profile** and a
 A profile has four lifetime technical tracks:
 
 ```text
-Tools      LV.7 / 15
-Systems    LV.4 / 15
-Compute    LV.9 / 15
-Hardware   LV.3 / 15
+Tools      LV.7 / 20
+Systems    LV.4 / 20
+Compute    LV.9 / 20
+Hardware   LV.3 / 20
 ```
 
 **Track levels cap at 15.** They persist across seasons. Seasonal leaderboards may reset, but track progression never does.
@@ -534,7 +534,7 @@ Recommended:
 - Larger or stronger ships award more Track XP.
 - Track XP is lifetime and cannot be spent.
 - Levels persist across seasons.
-- Each track caps at **LV.15**.
+- Each track caps at **LV.20**.
 - XP thresholds are config-driven and should be tuned after the pilot rather than hard-coded into product logic.
 - Research Mode may award a small rigor/documentation bonus, not a separate Research XP track.
 - Track levels affect:
@@ -806,7 +806,6 @@ The ship page includes:
 - AI declaration
 - Known limitations
 - What the builder learned
-- Optional Signal links
 - Optional usage metrics
 
 ---
@@ -1030,11 +1029,12 @@ APPROVED
 AI DECLARED
 18%
 
-QUALITY MEDIANS
-Originality       8.5
-Technical Depth   9.0
-Execution         8.0
-Documentation     7.5
+REASON GUIDED BY
+Originality
+Technical Depth
+Execution
+Documentation
+(no scores)
 
 TEAM DECISION
 Accepted with reason
@@ -1119,7 +1119,6 @@ Filters:
 - season
 - newest
 - highest technical depth
-- most Signal
 - most used by other builders
 - beginner-friendly
 - benchmarks
@@ -1242,7 +1241,7 @@ Main catchphrase:
 
 # 71. Final One-Paragraph Pitch
 
-> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, the team allocates its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 15% permanent discount at LV.15, and four Field Requisitions per track, at LV.5, LV.8, LV.11 and LV.15, each add 10% off one eligible purchase. Combined savings are capped at 25% of the base price. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
+> **LOADOUT is a technical YSWS where you build your own stack. Ship developer tools, systems, compute infrastructure, or hardware that expands what you or other builders can do. Every accepted ship becomes part of your permanent Digital Loadout, the team allocates its XP across the technical fields it actually uses, and you earn one global currency: Ore. Your track levels shape shop access and pricing: most cross-track equipment stays buyable, specialists get better prices, and only the most important mastery gear is level-gated. Track levels reach a 15% permanent discount at LV.15 and 20% at LV.20, and six Field Requisitions per track, at LV.5, LV.8, LV.11, LV.15, LV.18 and LV.20, each add 10% off one eligible purchase. Combined savings are capped at 40% of the base price. Keep building and you can access Custom Orders for specialized tech outside the normal shop. Your projects upgrade your digital loadout; your rewards upgrade your physical one.**
 
 ---
 
@@ -1258,7 +1257,7 @@ Main catchphrase:
 >
 > Your track levels give better pricing and specialist unlocks. Most cross-track gear is still buyable, while mastery gear rewards real specialization.
 >
-> **Field Requisitions** at levels 5, 8, 11 and 15 each add 10% off one eligible purchase, alongside your track discount.
+> **Field Requisitions** at levels 5, 8, 11, 15, 18 and 20 each add 10% off one eligible purchase, alongside your track discount.
 >
 > **Build projects. Level up your profile. Upgrade your loadout. Build harder stuff.**
 

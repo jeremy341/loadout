@@ -104,7 +104,7 @@ Use illustrative sequence copy until live Era configuration exists. Do not show 
 
 ### Physical event continuity
 
-A future LOADOUT IRL event uses the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Ore, or attendance-gated progression is created. The detailed event concept is in [Plan 15](15-loadout-irl-ruhr.md). Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
+A parked LOADOUT IRL event, if it is ever revisited, would use the same online Community Era and global Era Points. Its approved project contributions enter the ordinary shared total; no local event meter, immediate Sunday transition, event-only XP/Ore, or attendance-gated progression is created. The detailed event concept is in [Plan 15](15-loadout-irl-ruhr.md). Do not announce it or expose sample event counts until its operational/public-readiness gates are met.
 
 ### Builder dashboard
 

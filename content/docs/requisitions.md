@@ -10,7 +10,7 @@ As you level up a track, you'll earn **Field Requisitions**: one-use tickets tha
 
 ## How do I get one? {#how-you-earn-one}
 
-Each track awards a Requisition at **LV.5, LV.8, LV.11 and LV.15**. That's four per track. They all give the same **extra 10% discount**.
+Each track awards a Requisition at **LV.5, LV.8, LV.11, LV.15, LV.18 and LV.20**. That's six per track. They all give the same **extra 10% discount**.
 
 You get them by earning [Track XP](/docs/progress#levels) from your projects. When your level reaches one of those milestones, you earn the ticket. It doesn't cost Ore, and we don't subtract XP from your track to give it to you.
 
@@ -24,7 +24,7 @@ Let's see what that ticket saves. It takes **10% of the item's base Ore price** 
 | Requisition (10%) | −100 |
 | **Before your level discount** | **900** |
 
-Your level discount then comes off the same base price. Together, the two savings can reach at most **25%** of the base price. There's no Ore savings cap beyond that. The item's base price must be **400 Ore or more** for a ticket to apply.
+Your level discount then comes off the same base price. Together, the two savings can reach at most **30%** of the base price. With a General Requisition as well, the cap is **40%**. There's no Ore savings cap beyond that. The item's base price must be **400 Ore or more** for a ticket to apply.
 
 ## Using one
 

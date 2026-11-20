@@ -3,29 +3,15 @@
 # app=false when it only touches documentation or reference pin entries.
 # When in doubt it answers true.
 #
-# The comparison base is always a commit that was already verified:
-#   pull request            the base branch tip
-#   development/testing/main  the lane's previous tip (a lane only receives checked commits)
-#   any other branch        where the branch left development
+# The comparison base is the tip of main that the pull request targets, so only what the pull request
+# adds is looked at. Anything else (a manual run, a missing base) runs every check.
 set -euo pipefail
 
 zero='^0+$'
 base=""
-case "${EVENT_NAME:-}" in
-  pull_request)
-    base="${PR_BASE_SHA:-}"
-    ;;
-  push)
-    case "${REF:-}" in
-      refs/heads/development | refs/heads/testing | refs/heads/main)
-        base="${BEFORE_SHA:-}"
-        ;;
-      *)
-        base="$(git merge-base HEAD origin/development 2>/dev/null || true)"
-        ;;
-    esac
-    ;;
-esac
+if [[ "${EVENT_NAME:-}" == "pull_request" ]]; then
+  base="${PR_BASE_SHA:-}"
+fi
 
 if [[ -z "$base" || "$base" =~ $zero ]] || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
   echo "No verified base commit; every check runs."

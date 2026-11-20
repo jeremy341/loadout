@@ -16,13 +16,25 @@ export function AsciiField({ html, side = "right", top }: { html: string; side?:
     const field = ref.current;
     if (!field) return;
     if (paused || hideAscii) return;
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
     const onPointerMove = (event: PointerEvent) => {
-      const rect = field.getBoundingClientRect();
-      field.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-      field.style.setProperty("--my", `${event.clientY - rect.top}px`);
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const rect = field.getBoundingClientRect();
+        field.style.setProperty("--mx", `${pointerX - rect.left}px`);
+        field.style.setProperty("--my", `${pointerY - rect.top}px`);
+      });
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onPointerMove);
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      cancelAnimationFrame(frame);
+    };
   }, [paused, hideAscii]);
 
   if (hideAscii) return null;

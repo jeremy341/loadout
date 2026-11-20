@@ -24,7 +24,7 @@ git clone https://github.com/jeremy341/loadout.git
 cd loadout
 git submodule update --init
 git submodule status
-git fetch origin development testing main
+git fetch origin main
 bun install --frozen-lockfile
 bun run dev
 ```
@@ -38,7 +38,7 @@ Keep `loadout/` on `development` and do task work in a separate worktree. One br
 ```powershell
 cd loadout
 git fetch origin
-git worktree add ..\worktrees\fix-nav-20261021 -b fix/nav origin/development
+git worktree add ..\worktrees\fix-nav-20261021 -b fix/nav origin/main
 cd ..\worktrees\fix-nav-20261021
 git submodule update --init
 bun install --frozen-lockfile
@@ -64,7 +64,7 @@ git pull --ff-only
 
 If the checkout is dirty, classify tracked and untracked deltas against the live base before touching anything. Do not reset, stash or delete someone else's files. See the preservation rule in [WORKFLOW.md](WORKFLOW.md).
 
-If local branches show commits that `origin` no longer has (the history rewrite of 2026-10-11), save any unique work, switch away, then run `git fetch origin && git branch -f development origin/development`.
+If local branches show commits that `origin` no longer has (the history rewrite of 2026-10-11), save any unique work, switch away, then run `git fetch origin && git branch -f main origin/main`.
 
 ## Companion projects
 

@@ -16,14 +16,24 @@ export function FooterWordmark() {
     const mark = ref.current;
     if (!mark) return;
     if (paused || hideMarkings) return;
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
     const onPointerMove = (event: PointerEvent) => {
-      const rect = mark.getBoundingClientRect();
-      mark.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-      mark.style.setProperty("--my", `${event.clientY - rect.top}px`);
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const rect = mark.getBoundingClientRect();
+        mark.style.setProperty("--mx", `${pointerX - rect.left}px`);
+        mark.style.setProperty("--my", `${pointerY - rect.top}px`);
+      });
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
+      cancelAnimationFrame(frame);
       mark.style.removeProperty("--mx");
       mark.style.removeProperty("--my");
     };

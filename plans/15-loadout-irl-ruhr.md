@@ -1,12 +1,12 @@
 # LOADOUT IRL // Düsseldorf — Future Germany Build Weekend
 
-**Status:** LOADOUT IRL is a selected future program feature. This plan remains concept/readiness work, not an event announcement, booking, funding commitment, or launch authorization.
+**Status: parked (decided 2026-11-13).** We have decided not to make LOADOUT IRL happen for now. We will keep these plans in case we decide to revisit the idea. Nothing here is scheduled, booked, funded, announced, or authorized for launch.
 
-**Homepage wording decision, 2026-10-06:** The user approved displaying this as a clearly labelled future concept with no dates, venue promises, or registration. That passes the public-content gate for concept copy only; the event readiness gates remain unresolved.
+**Public site, 2026-11-13:** The concept was removed from the homepage, the Docs, and the participant platform with the parked decision. Nothing public should mention it until the plan is revisited and approved again.
 
 **Working identity:** **LOADOUT IRL // Düsseldorf**
 
-**Current concept:** a proposed three-day Friday–Sunday build weekend in Düsseldorf, Germany. The event date, selected city and venue, and all launch, safety, funding and fulfillment details remain open.
+**Parked concept:** a three-day Friday–Sunday build weekend in Düsseldorf, Germany. The event date, selected city and venue, and all launch, safety, funding and fulfillment details remain open.
 **Line:** **Build the next Era.**
 
 **Owner:** This plan owns the physical-event concept and its operations/readiness gates. Plan 05 owns the concise launch roadmap; Plan 11 owns Era mechanics; Plans 01 and 02 own program and economy rules; Plan 06 owns any eventual public-homepage treatment.

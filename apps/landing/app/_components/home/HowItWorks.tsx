@@ -80,7 +80,7 @@ export function HowItWorks() {
             <i>=</i>
             <span><b>500 Ore</b>earned</span>
             <i>→</i>
-            <span><b>Raspberry Pi 5</b>500 Ore</span>
+            <span><b>Raspberry Pi 5</b>490 Ore</span>
           </div>
           <p className="we-cap">Every approved hour earns the same 10 Ore.</p>
           <i className="fc" aria-hidden="true"></i>

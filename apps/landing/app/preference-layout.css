@@ -352,11 +352,6 @@ html[data-more-spacing="true"] .docs-inline-toc :is(summary, a) {
     max-width: 760px;
   }
 
-  html[data-more-spacing="true"] .home .days,
-  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .days {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 28px;
-  }
 }
 
 @media (min-width: 701px) and (max-width: 1200px) {
@@ -375,12 +370,6 @@ html[data-more-spacing="true"] .docs-inline-toc :is(summary, a) {
   html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .hc {
     grid-template-columns: minmax(0, 1fr);
     max-width: 760px;
-  }
-
-  html[data-more-spacing="true"] .home .days,
-  html:is([data-reading-size="150"], [data-reading-size="200"]) .home .days {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 24px;
   }
 
   html[data-more-spacing="true"] .home .era,
@@ -416,12 +405,6 @@ html[data-more-spacing="true"] .docs-inline-toc :is(summary, a) {
   html[data-more-spacing="true"] .home .row.r3,
   html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .row.r3 {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  html[data-more-spacing="true"] .home .days,
-  html:is([data-reading-size="125"], [data-reading-size="150"], [data-reading-size="200"]) .home .days {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
   }
 
   html[data-more-spacing="true"] .home .facts > div,

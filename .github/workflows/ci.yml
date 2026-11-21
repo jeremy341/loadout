@@ -212,6 +212,7 @@ jobs:
         run: |
           bunx prisma migrate deploy
           bun run scripts/seed-local-accounts.ts
+          bun run scripts/seed-local-explore.ts
       - name: Confirm Chromium is present
         if: steps.changed.outputs.app == 'true'
         working-directory: apps/landing

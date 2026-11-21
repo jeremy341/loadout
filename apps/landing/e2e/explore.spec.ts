@@ -46,16 +46,16 @@ test("one title, one paragraph, one search and one grid with no rails", async ({
   // No rails: a rail would bring a section heading, and the page has only the one grid of cards.
   await expect(page.locator("#platform-main").getByRole("heading", { level: 2 })).toHaveCount(0);
   await expect(grid(page)).toHaveCount(1);
-  await expect(cards(page)).toHaveCount(14);
+  await expect(cards(page)).toHaveCount(21);
   await expect(page.getByRole("link", { name: /^Saved \d+$/ })).toHaveText("Saved 3");
   await expect(page.locator(".pf-explore-count")).toContainText(/^\d+ projects\./);
   // a card: check badge, kudos heart with its count, two line text, author chip, entries and the time of the last entry
   const tinyparse = cards(page).filter({ hasText: "Tinyparse" });
   await expect(tinyparse.getByText("Approved")).toHaveCount(1);
-  await expect(tinyparse.getByRole("button", { name: /^Kudos for Tinyparse, No kudos yet$/ })).toBeVisible();
+  await expect(tinyparse.getByRole("button", { name: /^Kudos for Tinyparse, 3 kudos$/ })).toBeVisible();
   await expect(tinyparse.getByRole("link", { name: "juniper_dev" })).toHaveAttribute("href", "/dashboard/builders/juniper_dev");
-  await expect(tinyparse).toContainText("0 entries");
-  await expect(tinyparse.locator("time")).toHaveCount(0);
+  await expect(tinyparse).toContainText("3 entries");
+  await expect(tinyparse.locator("time")).toHaveCount(1);
   await expect(tinyparse.getByRole("link", { name: "Tinyparse" })).toHaveAttribute("href", "/dashboard/explore/seed-tinyparse");
   // open source first: Lamp Bus (no source link) comes after the projects that have one, so Tinyparse leads
   await expect(cards(page).first()).toContainText("Tinyparse");
@@ -148,7 +148,7 @@ test("typing searches the grid: a title, a builder, by:handle and track:", async
 
   await box.fill("");
   await expect(page).toHaveURL(/\/dashboard\/explore$/, { timeout: 15000 });
-  await expect(cards(page)).toHaveCount(14);
+  await expect(cards(page)).toHaveCount(21);
 });
 
 test("no results: the message and the Clear link", async ({ page }) => {
@@ -354,3 +354,4 @@ for (const [width, height] of [[390, 844], [1440, 900]] as const) {
     });
   }
 }
+

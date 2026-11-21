@@ -56,7 +56,8 @@ set +a
 
 (
   cd "$CURRENT_LINK"
-  bunx prisma migrate deploy
+  # Use the Prisma CLI pinned in the release. bunx resolves the latest release, which is a different major version.
+  ./node_modules/.bin/prisma migrate deploy
   pm2 startOrReload ecosystem.config.cjs --update-env
 )
 pm2 save

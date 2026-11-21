@@ -240,7 +240,9 @@ test("shipping locks the draft journal controls and taking it back opens them ag
 
     await openProjectTab(page, "ship");
     const submit = page.getByRole("button", { name: "Submit for review" }).first();
-    await expect(submit).toBeEnabled({ timeout: 15000 });
+    const describedBy = await submit.getAttribute("aria-describedby");
+    const reason = describedBy ? await page.locator(`#${describedBy}`).textContent() : "";
+    await expect(submit, `ship button blocked by: ${reason}`).toBeEnabled({ timeout: 15000 });
     await submit.click();
     const dialog = page.getByRole("dialog", { name: "Submit for review" });
     await expect(dialog).toBeVisible();

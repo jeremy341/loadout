@@ -200,10 +200,10 @@ test("saving and unsaving from a card updates the count and survives a reload", 
     await expect(star).toBeFocused();
     await expect(page.locator(".pf-saved-status")).toHaveText("Saved.", { timeout: 10000 });
     await expect(page.getByRole("link", { name: /^Saved \d+$/ })).toHaveText("Saved 4", { timeout: 10000 });
-    await expect(star).toHaveAccessibleName("Save Lamp Bus");
+    await expect(star).toHaveAccessibleName("Save Lamp Bus, saved");
     await page.reload();
-    await expect(grid(page).getByRole("button", { name: "Save Lamp Bus" })).toHaveAttribute("aria-pressed", "true");
-    await grid(page).getByRole("button", { name: "Save Lamp Bus" }).click();
+    await expect(grid(page).getByRole("button", { name: /^Save Lamp Bus/ })).toHaveAttribute("aria-pressed", "true");
+    await grid(page).getByRole("button", { name: /^Save Lamp Bus/ }).click();
     await expect(page.locator(".pf-saved-status")).toHaveText("Removed from Saved.", { timeout: 10000 });
     await expect(page.getByRole("link", { name: /^Saved \d+$/ })).toHaveText("Saved 3", { timeout: 10000 });
   } finally {

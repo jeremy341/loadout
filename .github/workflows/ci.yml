@@ -105,19 +105,38 @@ jobs:
   browser-shard:
     name: Browser ${{ matrix.name }}
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 10
     # The browser jobs read these to pick their slice of the suite: the two Orry files get their
     # own runners, and everything else is sharded six ways. An empty value falls back to the
     # config default, so one spec can never be dropped from every job.
     env:
       LOADOUT_E2E_MATCH: ${{ matrix.match }}
       LOADOUT_E2E_IGNORE: ${{ matrix.ignore }}
+      DATABASE_URL: postgresql://loadout:loadout-local@postgres:5432/loadout_dev
+      LOADOUT_LOCAL_TEST_ACCOUNTS: "true"
+      LOADOUT_UPLOADS: "true"
     # The pinned Playwright image already carries Chromium and its system libraries, so a shard
     # skips the download and the apt install that used to cost about twenty seconds each. The
     # image tag must match the locked @playwright/test version in bun.lock.
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --user root
+    # The participant specs sign in as local test accounts and read a real database. Each shard gets
+    # its own empty Postgres, migrated and seeded before Playwright starts its web server.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: loadout
+          POSTGRES_PASSWORD: loadout-local
+          POSTGRES_DB: loadout_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       fail-fast: false
       # Eight jobs cover the suite exactly once: one per Orry file, plus six shards of the rest.
@@ -186,6 +205,12 @@ jobs:
         if: steps.changed.outputs.app == 'true'
         working-directory: apps/landing
         run: bunx prisma generate
+      - name: Migrate and seed the browser database
+        if: steps.changed.outputs.app == 'true'
+        working-directory: apps/landing
+        run: |
+          bunx prisma migrate deploy
+          bun run scripts/seed-local-accounts.ts
       - name: Confirm Chromium is present
         if: steps.changed.outputs.app == 'true'
         working-directory: apps/landing

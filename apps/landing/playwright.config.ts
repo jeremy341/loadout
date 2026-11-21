@@ -11,7 +11,9 @@ const requestedWorkers = Number(process.env.LOADOUT_E2E_WORKERS ?? 2);
 const workers = Number.isFinite(requestedWorkers) && requestedWorkers > 0 ? Math.floor(requestedWorkers) : 2;
 // next dev compiles a route the first time a test opens it. A full local verification run can use the same built server as
 // CI instead: LOADOUT_TEST_PROD=true builds once and serves the build, at the cost of the build step up front.
-const prodServer = !!process.env.CI || process.env.LOADOUT_TEST_PROD === "true";
+// CI keeps the dev server: the participant and reviewer suites sign in as local test accounts, which the app disables
+// under NODE_ENV=production. The CI job migrates and seeds its own database before Playwright starts this server.
+const prodServer = process.env.LOADOUT_TEST_PROD === "true";
 
 export default defineConfig({
   testDir: "./e2e",

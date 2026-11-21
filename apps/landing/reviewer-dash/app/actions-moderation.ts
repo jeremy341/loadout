@@ -28,7 +28,8 @@ async function decideProposal(formData: FormData, decision: "confirm" | "overtur
   if (!viewer) redirect(withNotice(PROPOSED, "error", "Sign in again to decide this."));
   // A proposal on a sample builder has no Person row, so the database data layer cannot see it. Decide it in the same
   // in-memory store the Bans page reads, keeping the two-person rule: the proposer withdraws, someone else decides.
-  const sample = allProposals().find((p) => p.id === id && p.status === "pending");
+  // Sample rows only exist in development (usesSampleRows), so the branch is limited to it as well.
+  const sample = process.env.NODE_ENV === "development" ? allProposals().find((p) => p.id === id && p.status === "pending") : undefined;
   if (sample) {
     const me = access.session.slackId;
     if (decision === "confirm" && !canDecide({ proposedBy: sample.proposed_by }, me)) {
@@ -57,17 +58,19 @@ async function decideProposal(formData: FormData, decision: "confirm" | "overtur
       patch.ban_id = banId;
     }
     changes.proposals.set(id, patch);
-    changes.log.unshift({
-      id: nextModerationId(),
-      user_id: sample.user_id,
-      action: decision === "confirm" ? "ban" : "ban_rejected",
-      detail: decision === "confirm"
-        ? `${sample.days > 0 ? `${sample.days} days` : "Permanent"}, ${sample.reason} (proposed by ${sample.proposed_by})`
-        : `proposed by ${sample.proposed_by}`,
-      actor: by,
-      created_at: at,
-      player_name: sample.users?.display_name ?? sample.user_id,
-    });
+    // The ban row added above prints itself in the ban log (baseLog), so only a withdrawn or overturned proposal adds an
+    // action row here, using the database path's vocabulary.
+    if (decision === "overturn") {
+      changes.log.unshift({
+        id: nextModerationId(),
+        user_id: sample.user_id,
+        action: me === sample.proposed_by ? "withdraw" : "overturn",
+        detail: `proposed by ${sample.proposed_by}`,
+        actor: by,
+        created_at: at,
+        player_name: sample.users?.display_name ?? sample.user_id,
+      });
+    }
     revalidatePath("/", "layout");
     revalidatePath("/bans");
     return;

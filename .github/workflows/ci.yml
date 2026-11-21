@@ -59,7 +59,7 @@ jobs:
   # step. Public Docs and app changes get the full set (lint, typecheck, unit tests, production
   # build, browser suite), so one green commit is good enough for every lane.
   #
-  # The browser suite is the long pole, so it is spread across eight runners that run at the same
+  # The browser suite is the long pole, so it is spread across twelve runners that run at the same
   # time as the quality job. Shards are separate runners rather than more Playwright workers on one
   # runner on purpose: Orry's tests read a real pointer in real time, so piling workers onto one
   # machine makes them flaky. A single aggregator job keeps the required check name
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # The browser jobs read these to pick their slice of the suite: the two Orry files get their
-    # own runners, and everything else is sharded six ways. An empty value falls back to the
+    # own runners, and everything else is sharded ten ways. An empty value falls back to the
     # config default, so one spec can never be dropped from every job.
     env:
       LOADOUT_E2E_MATCH: ${{ matrix.match }}
@@ -142,7 +142,7 @@ jobs:
           --health-retries 5
     strategy:
       fail-fast: false
-      # Eight jobs cover the suite exactly once: one per Orry file, plus six shards of the rest.
+      # Twelve jobs cover the suite exactly once: one per Orry file, plus ten shards of the rest.
       matrix:
         include:
           - name: Orry mood
@@ -153,30 +153,46 @@ jobs:
             match: mole-body.spec.ts
             ignore: ""
             shard: "1/1"
-          - name: checks 1/6
+          - name: checks 1/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "1/6"
-          - name: checks 2/6
+            shard: "1/10"
+          - name: checks 2/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "2/6"
-          - name: checks 3/6
+            shard: "2/10"
+          - name: checks 3/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "3/6"
-          - name: checks 4/6
+            shard: "3/10"
+          - name: checks 4/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "4/6"
-          - name: checks 5/6
+            shard: "4/10"
+          - name: checks 5/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "5/6"
-          - name: checks 6/6
+            shard: "5/10"
+          - name: checks 6/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "6/6"
+            shard: "6/10"
+          - name: checks 7/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "7/10"
+          - name: checks 8/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "8/10"
+          - name: checks 9/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "9/10"
+          - name: checks 10/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "10/10"
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -251,7 +267,7 @@ jobs:
           retention-days: 7
 
   landing-browser:
-    # The one required check for the browser suite. It reports all five shards as a single name, so
+    # The one required check for the browser suite. It reports every browser job as a single name, so
     # branch protection needs no change, and it pads nothing: it fails unless every
     # shard that ran passed.
     name: Landing browser

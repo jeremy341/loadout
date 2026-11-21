@@ -27,8 +27,8 @@ const DESCRIPTIONS = {
   logs: "Every ban proposal, ban, lift and warning with who did it, newest first.",
 };
 
-const LOG_LABEL: Record<string, string> = { ban: "Banned", unban: "Lifted", propose: "Proposed", warn: "Warned" };
-const LOG_TONE: Record<string, "danger" | "success" | "warning"> = { ban: "danger", unban: "success", propose: "warning", warn: "warning" };
+const LOG_LABEL: Record<string, string> = { ban: "Banned", unban: "Lifted", propose: "Proposed", warn: "Warned", overturn: "Overturned", withdraw: "Withdrawn" };
+const LOG_TONE: Record<string, "danger" | "success" | "warning"> = { ban: "danger", unban: "success", propose: "warning", warn: "warning", overturn: "success", withdraw: "success" };
 
 export default async function BansPage({
   searchParams,

@@ -34,6 +34,13 @@ export function parseGithubRepo(url: string | null | undefined): GithubRepo | nu
   return { owner, repo };
 }
 
+const README_CACHE_MS = 10 * 60 * 1000;
+const README_CACHE_MAX = 500;
+const readmeCache = new Map<string, { text: string; expires: number }>();
+
+// Successful answers (a README, or "" for none) are kept for ten minutes, so a reload or a test run does not spend the
+// unauthenticated GitHub allowance (60 calls an hour) again. Transient failures (null) are never cached. Only the default
+// fetch is cached; injected fetchers always run.
 export async function fetchGithubReadme(
   repoUrl: string | null | undefined,
   fetchImpl: typeof fetch = fetch,
@@ -41,10 +48,33 @@ export async function fetchGithubReadme(
   const repo = parseGithubRepo(repoUrl);
   // A source that is not a recognizable GitHub repo has no README we can check. Fail closed rather than wait forever.
   if (!repo) return "";
+  const cacheable = fetchImpl === fetch;
+  const key = `${repo.owner}/${repo.repo}`.toLowerCase();
+  if (cacheable) {
+    const hit = readmeCache.get(key);
+    if (hit && hit.expires > Date.now()) return hit.text;
+  }
+  const text = await readFromGithub(repo, fetchImpl);
+  if (cacheable && text !== null) {
+    if (readmeCache.size >= README_CACHE_MAX) {
+      const oldest = readmeCache.keys().next().value;
+      if (oldest !== undefined) readmeCache.delete(oldest);
+    }
+    readmeCache.set(key, { text, expires: Date.now() + README_CACHE_MS });
+  }
+  return text;
+}
+
+async function readFromGithub(repo: GithubRepo, fetchImpl: typeof fetch): Promise<string | null> {
   try {
     // The readme endpoint returns the default branch's README in raw form, whatever its file name.
     const response = await fetchImpl(`https://api.github.com/repos/${repo.owner}/${repo.repo}/readme`, {
-      headers: { Accept: "application/vnd.github.raw", "User-Agent": "loadout-readme-check" },
+      headers: {
+        Accept: "application/vnd.github.raw",
+        "User-Agent": "loadout-readme-check",
+        // LOADOUT_GITHUB_TOKEN raises the limit from 60 calls an hour. It only ever goes to api.github.com.
+        ...(process.env.LOADOUT_GITHUB_TOKEN?.trim() ? { Authorization: `Bearer ${process.env.LOADOUT_GITHUB_TOKEN.trim()}` } : {}),
+      },
       signal: AbortSignal.timeout(TIMEOUT_MS),
       redirect: "error",
     });

@@ -47,7 +47,8 @@ test("a draft with gaps shows its blockers, ships once complete, locks, and can 
     // Fill the gaps in the Settings tab.
     await saveProjectSettings(page, {
       description: "A small tool that turns a messy log file into a tidy table for quick reading.",
-      repoUrl: "https://codeberg.org/example-handle/log-table",
+      // A real GitHub source with a README: other hosts fail closed in the README gate and would keep the button off.
+      repoUrl: "https://github.com/jeremy341/loadout",
       track: "Tools",
     });
     await openProjectTab(page, "ship");
@@ -103,7 +104,9 @@ test("a draft with gaps shows its blockers, ships once complete, locks, and can 
 
 // Edge cases around the same gate. Each makes its own draft, removes it in a finally, and never touches seeded accounts.
 const EDGE_DESCRIPTION = "A small tool that turns a messy log file into a tidy table for quick reading.";
-const EDGE_REPO = "https://codeberg.org/example-handle/log-table";
+// The README gate only reads GitHub sources: any other host fails closed as "no README" and blocks the button. Use a real
+// public repo with a README so a draft can be genuinely ready here (the same source project-journal.spec.ts uses).
+const EDGE_REPO = "https://github.com/jeremy341/loadout";
 const EDGE_ENTRY = {
   title: "Parsed the first file",
   body: "Read the log format, wrote a parser for the header lines and checked it against three sample files. The table now prints with aligned columns.",

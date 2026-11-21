@@ -116,6 +116,8 @@ jobs:
       NODE_ENV: development
       LOADOUT_LOCAL_TEST_ACCOUNTS: "true"
       LOADOUT_E2E_WORKERS: "1"
+      # The README gate reads GitHub's API. The workflow token lifts that limit above the shared 60-an-hour anonymous allowance.
+      LOADOUT_GITHUB_TOKEN: ${{ github.token }}
     # The pinned Playwright image already carries Chromium and its system libraries, so a shard
     # skips the download and the apt install that used to cost about twenty seconds each. The
     # image tag must match the locked @playwright/test version in bun.lock.

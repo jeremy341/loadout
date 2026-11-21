@@ -221,7 +221,7 @@ test("shipping locks the draft journal controls and taking it back opens them ag
     // Fill the ship gaps the same way the builder ship test does, then add one entry that covers its own hour.
     await saveProjectSettings(page, {
       description: "A small tool that turns a messy log file into a tidy table for quick reading.",
-      repoUrl: "https://codeberg.org/example-handle/log-table",
+      repoUrl: "https://github.com/jeremy341/loadout",
       track: "Tools",
     });
     await addJournalEntryViaPage(page, {

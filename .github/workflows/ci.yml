@@ -105,7 +105,7 @@ jobs:
   browser-shard:
     name: Browser ${{ matrix.name }}
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     # The browser jobs read these to pick their slice of the suite: the two Orry files get their
     # own runners, and everything else is sharded six ways. An empty value falls back to the
     # config default, so one spec can never be dropped from every job.

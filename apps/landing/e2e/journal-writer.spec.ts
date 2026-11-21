@@ -350,7 +350,7 @@ for (const scheme of ["dark", "light"] as const) {
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.evaluate(() => document.fonts.ready);
       const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
-      expect(result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => `${n.target.join(" ")} ${n.html}`).join(" | ")}`), `${width}px`).toEqual([]);
+      expect(result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => `${n.target.join(" ")} ${n.failureSummary ?? ""} ${n.html}`).join(" | ")}`), `${width}px`).toEqual([]);
     }
 
     // Keyboard: Shift+Tab from the writing box reaches the Preview toggle, and Space presses it.

@@ -20,8 +20,8 @@
 .pf .pf-jw-time { display: flex; flex-wrap: wrap; gap: 12px; }
 .pf .pf-jw-unit { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; letter-spacing: 0; text-transform: none; }
 .pf .pf-jw-card .pf-jw-unit .pf-input { width: 96px; }
-/* Keep the native number spinner out of the touch target; it is smaller than the 24px WCAG minimum. */
-.pf .pf-jw-card .pf-jw-unit .pf-input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+/* A larger target for the number field: WCAG 2.2 asks for at least 24x24 and the native spinner is smaller. */
+.pf .pf-jw-card .pf-jw-unit .pf-input[type="number"] { width: 120px; min-height: 56px; appearance: textfield; -moz-appearance: textfield; }
 .pf .pf-jw-card .pf-jw-unit .pf-input[type="number"]::-webkit-inner-spin-button,
 .pf .pf-jw-card .pf-jw-unit .pf-input[type="number"]::-webkit-outer-spin-button { appearance: none; -webkit-appearance: none; margin: 0; }
 .pf .pf-jw-note { margin: 0; font-size: 0.875em; }

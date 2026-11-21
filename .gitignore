@@ -26,3 +26,7 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 .idea/
+
+# Local media store for journal photos and covers (apps/landing/lib/platform/media-store.ts)
+.uploads/
+**/.uploads/

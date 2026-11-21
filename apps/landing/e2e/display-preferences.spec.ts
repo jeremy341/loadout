@@ -22,6 +22,14 @@ async function openSettingsGroup(dialog: Locator, title: string) {
   if (await group.getAttribute("open") === null) await group.locator("summary").click();
 }
 
+// A signed-in builder reads the Docs inside the platform, where the light switch is a role="switch"; the public layout keeps
+// the hidden #theme checkbox. Both write the same saved preference.
+async function expectLightMode(page: Page, light: boolean) {
+  const checkbox = page.locator("#theme");
+  if (await checkbox.count()) await expect(checkbox).toBeChecked({ checked: light });
+  else await expect(page.getByRole("switch", { name: "Light mode" })).toHaveAttribute("aria-checked", String(light));
+}
+
 test("footer settings contain keyboard focus and return it on Escape", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
@@ -82,7 +90,7 @@ test("display choices persist across reloads, Docs and error routes", async ({ p
 
   for (const route of ["/", "/docs/pricing", "/accessibility-missing-page"]) {
     await page.goto(route);
-    await expect(page.locator("#theme")).toBeChecked();
+    await expectLightMode(page, true);
     await expect(page.locator("html")).toHaveAttribute("data-color-vision", "deuteranopia");
     await expect(page.locator("html")).toHaveAttribute("data-motion-paused", "true");
     const settings = (await openSettings(page)).dialog;
@@ -165,7 +173,7 @@ test("changes synchronize to another open tab", async ({ page, context }) => {
   await dialog.getByLabel("Color vision palette").selectOption("deuteranopia");
   await openSettingsGroup(dialog, "Effects");
   await dialog.getByRole("checkbox", { name: /^Reduce motion/ }).check();
-  await expect(other.locator("#theme")).toBeChecked();
+  await expectLightMode(other, true);
   await expect(other.locator("html")).toHaveAttribute("data-color-vision", "deuteranopia");
   await expect(other.locator("html")).toHaveAttribute("data-motion-paused", "true");
   await other.close();

@@ -428,8 +428,8 @@ Explain:
 
 - every accepted ship becomes a permanent Digital Loadout artifact
 - track levels persist across seasons
-- multi-track work can grow several fields
-- reviewers decide the final XP allocation
+- each project has one track, and its Track XP goes there
+- builders grow several fields by shipping several projects
 
 Do not turn this into a full dashboard mockup. It is a marketing preview.
 
@@ -623,7 +623,7 @@ Recommended questions:
 
 1. What is LOADOUT?
 2. What projects count?
-3. Can one project use multiple tracks?
+3. Can one project use multiple tracks? (No: one track per project.)
 4. What is Research Mode?
 5. What is Ore?
 6. What are Requisitions?

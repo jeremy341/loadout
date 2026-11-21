@@ -1,0 +1,46 @@
+import { NextResponse } from "next/server";
+import { clientIp, UNKNOWN_IP } from "@/lib/platform/client-ip";
+import { databaseConfigured } from "@/lib/platform/db";
+import { startAttempt } from "@/lib/platform/hca-actions";
+import { buildAuthorizeUrl, hcaConfig, NONCE_COOKIE, SIGN_IN_PATH, signInErrorPath } from "@/lib/platform/hca";
+import { hasPlatformUnlock } from "@/lib/platform/platform-gate";
+import { checkLimit, rateLimitHeaders } from "@/lib/platform/rate-limit-db";
+
+export const dynamic = "force-dynamic";
+
+// Starting a sign-in writes a LoginAttempt row, so throttle it like any other public write. Known addresses get their own bucket;
+// when no proxy is trusted every caller shares one larger "unknown" bucket (lib/platform/client-ip.ts).
+const START_PER_MINUTE = { limit: 10, windowMs: 60_000 } as const;
+const SHARED_PER_MINUTE = { limit: 200, windowMs: 60_000 } as const;
+
+// Begins a Hack Club Auth sign-in. Without the app keys nothing is sent anywhere: the person lands on the sign-in page,
+// which says sign-in is not set up.
+export async function GET(request: Request) {
+  // A direct call to this route must not skip the shared-password step shown on the sign-in page.
+  if (!(await hasPlatformUnlock())) return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url), 303);
+  const config = hcaConfig();
+  if (!config) return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url), 303);
+  if (!databaseConfigured()) return NextResponse.redirect(new URL(signInErrorPath("server_error"), request.url), 303);
+  try {
+    const ip = clientIp(request);
+    const limit = await checkLimit({ key: `hca-start:${ip}:minute`, ...(ip === UNKNOWN_IP ? SHARED_PER_MINUTE : START_PER_MINUTE) });
+    if (!limit.ok) {
+      return NextResponse.redirect(new URL(signInErrorPath("throttled"), request.url), {
+        status: 303,
+        headers: { ...rateLimitHeaders(limit), "Cache-Control": "no-store" },
+      });
+    }
+    const { state, nonce, expiresAt } = await startAttempt();
+    const response = NextResponse.redirect(buildAuthorizeUrl(config, state), 303);
+    response.cookies.set(NONCE_COOKIE, nonce, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/api/auth/hackclub",
+      expires: expiresAt,
+    });
+    return response;
+  } catch {
+    return NextResponse.redirect(new URL(signInErrorPath("server_error"), request.url), 303);
+  }
+}

@@ -114,7 +114,7 @@ The earlier verification sections above apply to the previous homepage revision,
 
 Pixl's MIT notice and all reference repository pins are retained. YSWS Template/Stardance remain reference-only for this public UI work; no Rails code or specialist scoring policy was introduced.
 
-Implemented: clearer program/track/review copy; lifetime progression and five Requisition milestones; Community Eras and separate Season distinction; pricing/Requisition/Custom Order explanation; removal of redundant review/award rows; wider vertical spacing and 16px essential text; larger footer; larger clouds with farther X-only motion. The hero headline, fullscreen behavior, RSVP URL, Lenis/navigation/FAQ baseline, and backend scope remain unchanged.
+Implemented: clearer program/track/review copy; lifetime progression and six Requisition milestones; Community Eras and separate Season distinction; pricing/Requisition/Custom Order explanation; removal of redundant review/award rows; wider vertical spacing and 16px essential text; larger footer; larger clouds with farther X-only motion. The hero headline, fullscreen behavior, RSVP URL, Lenis/navigation/FAQ baseline, and backend scope remain unchanged.
 
 ESLint, TypeScript, and production build pass through the host runner. Manual responsive/browser inspection is pending because the old error tab was rejected by browser URL policy; a replacement preview opening was requested. This is local, uncommitted work on feature/homepage-clarity-flow-eras. No publication or pipeline completion is claimed.
 
@@ -308,7 +308,7 @@ Conclusion: the essential scroll experience is present. Fullscreen behavior is a
 | Digital vs Physical Loadout / permanent artifacts | Brief overview card and progression note | Add a compact labeled two-part explanation, no fake participant profile/level stats. |
 | Work tracking and journals | Short process line; no tracking FAQ | Add planned Hackatime/software, Lapse/hardware/non-code, attributable journals, and evidence explanation. No integration wiring. |
 | Global Bolts vs non-spendable lifetime Track XP | Mentioned, but distinction brief | Strengthen the two-concept explanation; include multi-track reviewer allocation in FAQ. No numeric payout formula. |
-| Requisition milestones and limitations | Combined general panel/FAQ | Add canonical LV.3/6/9/12/15 as a concise text line and non-expiry/one-per-order/no-mastery-bypass summary. Keep fulfillment conditional. |
+| Requisition milestones and limitations | Combined general panel/FAQ | Add canonical LV.5/8/11/15/18/20 as a concise text line and non-expiry/one-per-order/no-mastery-bypass summary. Keep fulfillment conditional. |
 | AI policy / multi-track FAQ / how to join | Missing specific answers | Add plain-language FAQ. AI disclosure/authorship is canonical; the draft40% ceiling is tunable before launch and must not become a live public promise without confirmation. |
 | Final CTA after FAQ | Missing | Add concise “Equip your next build” closing RSVP block before footer. |
 | Real project proof | No published verified LOADOUT examples | Keep deferred; conceptual examples explicitly describe eligible project types. No invented builders/testimonials/metrics. |
@@ -333,3 +333,39 @@ Build, lint, TypeScript, four unit tests and 24 production-browser cases pass. D
 The baseline evidence above belongs to the earlier revision. The current local refinement preserves hero/Lenis/nav/FAQ behavior and adds individually revealed vertical process nodes, with a 180ms, 1px hover offset and crisp 4px→5px shadow. Decorative connectors are static. This ADAPT comes from pinned Pixl Flow.tsx's Node/Down/Fork topology; no source-specific progress meter or media was added.
 
 LOADOUT-owned clouds now render up to 560px desktop/260px mobile, using ±112px/±48px viewport-relative X parallax and smooth 48s ±12px inner drift. There is still no vertical parallax and no added cloud count. Reduced motion disables the layers. New rendered evidence is pending the reopened local preview; prior automated test results do not validate this new diff. Automated tests and CI were not touched.
+
+## Workstream copies, 2026-11-19 (fraud automation and admin ops)
+
+Two ports landed as part of the participant-platform workstreams. Neither copies upstream styling, branding, fonts or media; only behavior and logic were adapted, with upstream explanatory comments kept where they still describe the behavior. Files were uncommitted working-tree additions at implementation time; this section records the mapping.
+
+### Fraud automation from Pixl (SHA 1468ba6942b13add1ac50e1319541a033ee1df38)
+
+LOADOUT files in [apps/landing](../../apps/landing) unless noted; Pixl sources relative to `references/pixl/`.
+
+| LOADOUT file | Pixl source |
+|---|---|
+| lib/platform/fraud/double-dip.ts | apps/server/src/ysws/doubleDip.ts, ysws/archive.ts (modified) |
+| lib/platform/fraud/double-dip-data.ts | apps/server/src/ysws/archive.ts (cache and timeouts) |
+| lib/platform/fraud/precheck-rules.ts | apps/server/src/precheck/rules.ts (all but the send-back wording) |
+| lib/platform/fraud/precheck-sources.ts | apps/server/src/precheck/sources.ts |
+| lib/platform/fraud/precheck-data.ts | apps/server/src/precheck/run.ts (behavior, not the send-back) |
+| lib/platform/fraud/robert.ts | apps/internal-dashboard/lib/robert.ts |
+| lib/platform/fraud/robert-outcome.ts | apps/internal-dashboard/lib/robertOutcome.ts |
+| lib/platform/fraud/robert-sync.ts | apps/internal-dashboard/app/api/cron/robert-sync/route.ts and lib/robertSync.ts |
+| lib/platform/fraud/fraudy.ts | apps/internal-dashboard/lib/fraudy.ts |
+
+Deliberately not ported: Robert's recordOutcome write-back, the fraud-range alert DM, the note backfill, the pre-check send-back/DM/notification, and the 100-word README gate.
+
+### Admin ops from Stasis (SHA 7a230ced9ad793f0ad4cda30a7d71c02a58da6b6)
+
+Stasis sources relative to `references/stasis/`.
+
+| LOADOUT file | Stasis source |
+|---|---|
+| lib/platform/impersonation.ts (start/end/read lifecycle, guards) | app/api/admin/impersonate/route.ts |
+| app/_components/platform/ImpersonationBanner.tsx and its mount | app/components/ImpersonationBanner.tsx, and the mount in app/dashboard/layout.tsx |
+| app/(reviewer)/reviewer/players/[id]/ImpersonateCard.tsx and impersonate.ts | app/admin/users/page.tsx (impersonate button) |
+| app/(reviewer)/reviewer/superadmin/* | app/superadmin/page.tsx, app/api/superadmin/route.ts |
+| Audit action naming | prisma/schema.prisma AuditAction (ADMIN_IMPERSONATE, SUPERADMIN_GRANT) |
+
+Stasis has no feature-flag UI; the reviewer settings Flags tab is LOADOUT's own design. Stasis's impersonation has no "other admins" guard and no reason prompt; both were added. Cookie design also differs: the staff session stays intact and the impersonation lives in its own cookie (see the comments in lib/platform/session.ts).

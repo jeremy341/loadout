@@ -1,0 +1,113 @@
+/* The project page copied from Stasis (discover/[id] and the Timeline component): the back link, one flat header box (cover, title,
+   byline, description, facts, links), the Toolbelt box, and the journal as a timeline with a line down the left, a square mark per
+   item and a flat card per entry. Our tokens (--pf-*, --tk), pixel fonts and square corners. Both themes follow the tokens. */
+
+.pf .pf-spp { display: flex; flex-direction: column; gap: 24px; max-width: 960px; margin-inline: auto; min-width: 0; }
+.pf .pf-spp > .pf-back { align-self: flex-start; margin: 0 0 -8px; }
+.pf .pf-spp > .pf-explore-notice,
+.pf .pf-spp > .pf-explore-saved-status { margin: 0; }
+.pf .pf-spp-muted { color: var(--pf-mut); }
+
+/* Header box: 2 px border, 24 px padding, like Stasis's cream box. */
+.pf .pf-spp-head { display: grid; gap: 16px; min-width: 0; padding: 24px; border: 2px solid var(--pf-rule); background: var(--pf-panel); }
+.pf .pf-spp-cover { min-width: 0; overflow: hidden; border: 1px solid var(--pf-rule); max-height: 256px; }
+.pf .pf-spp-cover > .pf-project-cover { min-height: 0; aspect-ratio: 16 / 5; border: 0; }
+.pf .pf-spp-cover .pf-ph { margin: 12px; }
+.pf .pf-spp-top { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 16px; min-width: 0; }
+.pf .pf-spp-id { display: grid; gap: 8px; min-width: 0; flex: 1 1 260px; }
+.pf .pf-spp-title { margin: 0; font: 700 clamp(1.5rem, 1rem + 2vw, 2rem)/1.15 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); overflow-wrap: anywhere; }
+.pf .pf-spp-by { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0; font-size: 0.875em; }
+.pf .pf-spp-by a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -10px; color: var(--pf-fg); }
+.pf .pf-spp-by a:hover { color: var(--pf-link); }
+.pf .pf-spp-dot { color: var(--pf-mut); }
+.pf .pf-spp-avatar { display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; border: 2px solid var(--tk, var(--pf-link)); background: var(--pf-bg); font: 400 12px/1 var(--font-display), monospace; color: var(--pf-fg); }
+.pf .pf-spp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.pf .pf-spp-tag { display: inline-flex; align-items: center; gap: 8px; padding: 2px 10px; border: 1px solid var(--pf-fg); background: var(--pf-bg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .pf-spp-tag .pf-swatch { width: 12px; height: 12px; }
+.pf .pf-spp-tools { display: flex; flex-wrap: wrap; gap: 8px; flex: none; }
+.pf .pf-spp-desc { margin: 0; max-width: 70ch; font-size: 0.9375em; line-height: 1.6; overflow-wrap: anywhere; }
+
+/* Facts: a flat row of label and value, divided by a rule. */
+.pf .pf-spp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; margin: 0; border-top: 1px solid var(--pf-rule); }
+.pf .pf-spp-facts > div { display: grid; gap: 4px; padding: 12px 12px 0 0; min-width: 0; }
+.pf .pf-spp-facts dt { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-spp-facts dd { margin: 0; font: 700 1em var(--font-pixel), monospace; color: var(--pf-fg); overflow-wrap: anywhere; }
+
+/* Links: text links with the host beside them, under a rule. */
+.pf .pf-spp-links { display: flex; flex-wrap: wrap; gap: 4px 24px; padding-top: 12px; border-top: 1px solid var(--pf-rule); }
+.pf .pf-spp-links:empty { display: none; }
+.pf .pf-spp-link { display: inline-flex; align-items: baseline; gap: 10px; min-height: 44px; padding-block: 10px; max-width: 100%; color: var(--pf-link); font-size: 0.9375em; }
+.pf .pf-spp-link > span:first-child { text-decoration: underline; text-underline-offset: 3px; }
+.pf .pf-spp-link-plain { color: var(--pf-fg); }
+.pf .pf-spp-link-plain > span:first-child { text-decoration: none; }
+.pf .pf-spp-link:hover > span:first-child { color: var(--pf-fg); }
+.pf .pf-spp-link:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-spp-link-host { min-width: 0; overflow-wrap: anywhere; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.04em; text-transform: none; color: var(--pf-mut); }
+
+/* Boxes under the header (Toolbelt, Journal). */
+.pf .pf-spp-box { min-width: 0; padding: 24px; border: 2px solid var(--pf-rule); background: var(--pf-panel); }
+.pf .pf-spp-box > h2 { margin: 0 0 16px; font: 700 1.5em/1.1 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .pf-spp-box .pf-prof-handles { margin: 16px 0 0; }
+.pf .pf-spp-box .pf-prof-tools + .pf-prof-handles { padding-top: 12px; border-top: 1px solid var(--pf-rule); }
+
+/* Timeline: the line sits 16 px from the left; each item is indented 48 px; the mark is a 32 px square. */
+.pf .pf-spp-timeline { position: relative; }
+.pf .pf-spp-line { position: absolute; left: 16px; top: 0; bottom: 0; width: 1px; background: var(--pf-rule); }
+.pf .pf-spp-items { position: relative; display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.pf .pf-spp-item { position: relative; min-width: 0; padding-left: 48px; }
+.pf .pf-spp-icon { position: absolute; left: 0; top: 0; display: inline-grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--tk, var(--pf-link)); background: var(--pf-bg); color: var(--tk, var(--pf-link)); }
+.pf .pf-spp-icon[data-kind="start"] { color: var(--pf-fg); border-color: var(--pf-fg); }
+.pf .pf-spp-entry { display: grid; gap: 8px; min-width: 0; padding: 16px; border: 1px solid var(--pf-rule); background: var(--pf-bg); }
+.pf .pf-spp-entry-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.pf .pf-spp-entry-who { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; min-width: 0; font-size: 0.875em; }
+.pf .pf-spp-entry-who a { display: inline-flex; align-items: center; min-height: 24px; color: var(--pf-fg); font-weight: 700; }
+.pf .pf-spp-entry-who a:hover { color: var(--pf-link); }
+.pf .pf-spp-hours { padding: 2px 8px; border: 1px solid var(--pf-rule); background: var(--pf-panel); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+.pf .pf-spp-entry-when { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 0; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .pf-spp-entry-title { margin: 0; font: 700 1.125em/1.3 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-fg); overflow-wrap: anywhere; }
+.pf .pf-spp-entry-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 4px; }
+.pf .pf-spp-entry-actions .pf-btn { min-height: 44px; padding: 0 14px; }
+.pf .pf-spp-entry-start { gap: 6px; }
+.pf .pf-spp-entry-start .pf-spp-entry-who { font-size: 0.875em; }
+@media (max-width: 559px) {
+  .pf .pf-spp-head,
+  .pf .pf-spp-box { padding: 16px; }
+  .pf .pf-spp-entry { padding: 12px; }
+  .pf .pf-spp-entry-actions .pf-btn { flex: 1; }
+}
+
+/* Markdown inside an entry. Headings are small (they are shifted below the entry title), images stay inside the card. */
+.pf .pf-md { min-width: 0; max-width: 70ch; font-size: 0.9375em; line-height: 1.7; overflow-wrap: anywhere; }
+.pf .pf-md > :first-child { margin-top: 0; }
+.pf .pf-md > :last-child { margin-bottom: 0; }
+.pf .pf-md p { margin: 0 0 8px; white-space: pre-line; }
+.pf .pf-md h4,
+.pf .pf-md h5,
+.pf .pf-md h6 { margin: 12px 0 6px; font: 700 1em/1.3 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-fg); }
+.pf .pf-md ul,
+.pf .pf-md ol { margin: 0 0 8px; padding-left: 22px; }
+.pf .pf-md li { margin: 2px 0; }
+.pf .pf-md a { color: var(--pf-link); text-decoration: underline; text-underline-offset: 3px; }
+.pf .pf-md blockquote { margin: 0 0 8px; padding: 2px 0 2px 12px; border-left: 3px solid var(--pf-rule); color: var(--pf-mut); }
+.pf .pf-md code { padding: 1px 4px; border: 1px solid var(--pf-rule); background: var(--pf-panel); font-family: ui-monospace, monospace; font-size: 0.9em; }
+.pf .pf-md pre { margin: 0 0 8px; padding: 10px 12px; overflow-x: auto; border: 1px solid var(--pf-rule); background: var(--pf-panel); }
+.pf .pf-md pre code { padding: 0; border: 0; background: none; }
+.pf .pf-md hr { margin: 12px 0; border: 0; border-top: 1px solid var(--pf-rule); }
+.pf .pf-md img { display: block; max-width: 100%; max-height: 256px; margin: 8px 0; border: 1px solid var(--pf-rule); }
+
+/* The owner page: the Visitor view tab hosts the public page. */
+.pf .pf-column-preview { display: grid; gap: 16px; }
+.pf .pf-column-preview .pf-panel-lead { margin: 0; max-width: 70ch; }
+.pf .pf-column-preview .pf-spp { max-width: none; }
+
+/* Journal write form: Preview button and preview box. */
+.pf .pf-journal-bodyhead { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pf .pf-journal-preview-btn { min-height: 44px; padding: 0 14px; }
+.pf .pf-journal-preview { min-height: 140px; padding: 12px; border: 1px solid var(--pf-rule); background: var(--pf-bg); }
+.pf .pf-journal-body[hidden] { display: none; }
+
+/* A cover image fills the cover box; photos on an entry sit in a wrapping row under the text, each inside its card. */
+.pf .pf-project-cover-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; image-rendering: auto; }
+.pf .pf-spp-photos { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.pf .pf-spp-photos li { min-width: 0; max-width: 100%; }
+.pf .pf-spp-photos img { display: block; width: auto; max-width: 100%; height: auto; max-height: 320px; border: 1px solid var(--pf-rule); background: var(--pf-panel); }

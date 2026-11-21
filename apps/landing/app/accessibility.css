@@ -35,16 +35,27 @@ html[data-display-theme="light"] :is(.a11y-dialog, .a11y-shortcut) {
   padding: 10px 6px; color: var(--a11y-button-ink); background: var(--a11y-accent);
   border: solid var(--a11y-edge); border-width: 2px 4px 4px 2px;
   font: 400 16px/1.5 var(--font-pixel), monospace; text-decoration: none;
-  transition: border-left-width .15s ease-out;
+  transition: border-left-width .15s cubic-bezier(.22, 1, .36, 1);
 }
 .a11y-tab:hover { border-left-width: 4px; }
 .a11y-tab:active { border-left-width: 2px; }
 .a11y-tab:focus-visible { outline: 3px solid var(--a11y-ink); outline-offset: -5px; }
 body:has(.docs) .a11y-shortcut { top: auto; bottom: 0; }
-@media (min-width: 821px) { .docs .docs-nav { padding-bottom: 180px; } }
+/* Docs on wide screens: the tab docks in the directory header, under the brand, instead of floating over the lower guide links. */
+@media (min-width: 821px) {
+  .docs .docs-nav-head { flex-wrap: wrap; }
+  .docs .a11y-shortcut { position: static; flex: 0 0 100%; order: 3; max-width: none; transform: none; }
+  .docs .a11y-tab { writing-mode: horizontal-tb; width: 100%; min-height: 44px; padding: 6px 12px; font-size: 14px; }
+  .docs .a11y-tab:hover { border-left-width: 2px; }
+}
 body:has(.nav-toggle[aria-expanded="true"]) .a11y-shortcut,
 body:has(.docs-guides[data-open="true"]) .a11y-shortcut { visibility: hidden; }
 body:has(.a11y-dialog[open]) .a11y-shortcut { visibility: visible; transform: none; }
+/* Docs on phones and tablets: the Guides drawer, the page footer and keyboard focus all reach Accessibility, so the edge tab waits
+   off-screen instead of covering the reading column. Enlarged reading docks it in the directory header instead (preference-layout.css). */
+@media (max-width: 820px) {
+  html:not([data-reading-layout="true"]) body:has(.docs) .a11y-shortcut:not(:focus-within) { transform: translateX(calc(-100% - 12px)); }
+}
 
 .a11y-dialog {
   box-sizing: border-box; margin: auto; width: min(720px, calc(100vw - 32px)); max-width: none;
@@ -94,7 +105,7 @@ html[data-display-theme="light"] .a11y-settings-group[open] > summary { color: v
 .a11y-option small { color: var(--a11y-muted, var(--mut)); font-size: 13px; line-height: 1.6; }
 .a11y-switch { display: flex; align-items: center; gap: 10px; flex: none; }
 .a11y-switch input { appearance: none; box-sizing: border-box; width: 50px; height: 30px; margin: 0; border: 2px solid currentColor; box-shadow: 2px 2px 0 currentColor; color: var(--a11y-ink, var(--fg)); background: var(--a11y-paper, var(--bg)); cursor: pointer; }
-.a11y-switch input::before { content: ""; display: block; width: 16px; height: 16px; margin: 5px 4px; background: currentColor; transition: transform .15s ease-out; }
+.a11y-switch input::before { content: ""; display: block; width: 16px; height: 16px; margin: 5px 4px; background: currentColor; transition: transform .15s cubic-bezier(.22, 1, .36, 1); }
 .a11y-switch input:checked { color: var(--a11y-button-ink, var(--acf)); background: var(--a11y-accent, var(--ac)); border-color: var(--a11y-ink, var(--fg)); box-shadow: 2px 2px 0 var(--a11y-ink, var(--fg)); }
 .a11y-switch input:checked::before { transform: translateX(22px); }
 .a11y-switch > span { width: 22px; font: 600 10px/1 var(--font-ui), monospace; }
@@ -169,6 +180,7 @@ html:is([data-strong-contrast="true"], [data-system-contrast="true"]) .a11y-page
 html:is([data-strong-contrast="true"], [data-system-contrast="true"])[data-display-theme="light"] .a11y-page { --a11y-link: #6F2516; }
 .doc-sign .doc-accessibility-link { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .home.rb-page .rb-foot a { color: var(--ac); text-decoration: underline; text-underline-offset: 3px; }
+.home.rb-page:has(#theme:checked) .rb-foot a { color: #842F12; }
 html[data-underline-links="true"] :is(.doc-content a, .home main a:not(.btn), .home footer a, .a11y-page a) { text-decoration-line: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
 .a11y-dialog :is(a, button, input, select, summary), .docs-main a { scroll-margin-block: 24px 80px; }
 .home .skip-link:focus { z-index: 100; }

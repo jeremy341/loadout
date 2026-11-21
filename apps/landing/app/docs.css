@@ -219,9 +219,16 @@ body:has(.docs #theme:checked) { background: #DDD3BF; }
   .doc h1 { font-size: 38px; }
   .doc-content h2 { font-size: 26px; }
   .doc .lead { font-size: 17px; }
-  .doc-content table, .doc-content thead, .doc-content tbody, .doc-content tr, .doc-content th, .doc-content td { display: revert; }
-  .doc-content table { table-layout: fixed; width: 100%; }
-  .doc-content th, .doc-content td { overflow-wrap: anywhere; font-size: 15px; padding: 9px 10px; }
+  /* Tables become one labelled block per row, so no word is broken inside a narrow cell. The roles are set by the renderer. */
+  .doc-content table { position: relative; display: block; margin: 24px 0; background: none; border: 0; box-shadow: none; }
+  .doc-content thead { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .doc-content tbody { display: block; }
+  .doc-content tr { display: block; margin: 0 0 14px; background: var(--panel); border: 2px solid var(--stroke); box-shadow: var(--drop); }
+  .doc-content td { display: block; padding: 9px 12px; font-size: 1em; overflow-wrap: break-word; border-bottom: 2px solid var(--stroke); }
+  .doc-content tr:last-child td { border-bottom: 2px solid var(--stroke); }
+  .doc-content td:last-child, .doc-content tr:last-child td:last-child { border-bottom: 0; }
+  .doc-content td:first-child { font-family: var(--font-pixel), monospace; font-weight: 600; color: var(--ink); background: var(--panel-2); }
+  .doc-content td[data-label]:not(:first-child)::before { content: attr(data-label); display: block; margin-bottom: 2px; font: 600 calc(12px * var(--reading-scale, 1))/1.4 var(--font-pixel), monospace; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
   .docs-search-results { max-height: 30dvh; }
   .doc-foot { grid-template-columns: 1fr; }
   .doc-foot .next { text-align: left; }

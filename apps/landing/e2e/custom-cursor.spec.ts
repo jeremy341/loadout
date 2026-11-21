@@ -40,7 +40,9 @@ test("the cursor images are 32px and 64px pixel PNGs, in both themes", async ({ 
   }
 });
 
-test("the docs and the 404 page keep the system cursor", async ({ page }) => {
+test("the docs and the 404 page keep the system cursor", async ({ page, context, baseURL }) => {
+  // Ask for the public docs layout, as accessibility.spec.ts does: the platform around a signed-in reader has its own pixel cursors.
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/docs/start");
   expect(await cursorOf(page, ".docs")).not.toMatch(/arrow-|hand-/);

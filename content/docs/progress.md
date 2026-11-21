@@ -6,14 +6,14 @@ order: 100
 status: draft
 ---
 
-Once we've accepted your ship, you get two rewards: **Ore** to spend in the shop and **Track XP** that levels up the fields you worked in. You spend the Ore when you buy something, but the XP stays. As your level goes up, your discount on gear in that track grows, including on gear you buy later.
+Once we've accepted your ship, you get two rewards: **Ore** to spend in the shop and **Track XP** that levels up your project's track. You spend the Ore when you buy something, but the XP stays. As your level goes up, your discount on gear in that track grows, including on gear you buy later.
 
 ## What's the difference between Ore and XP? {#balances}
 
 | What you earn | What happens to it |
 | --- | --- |
 | Ore | Goes into your balance. Buying a prize spends some of it. |
-| Track XP | Goes into the tracks your work used. It stays when you buy something. |
+| Track XP | Goes into the track of the project you shipped. It stays when you buy something. |
 
 There's also [Era Points](/docs/eras), which track the community's shared progress toward the next theme. They don't go into your shop balance or personal levels.
 
@@ -29,7 +29,7 @@ So ten approved hours earn 100 Ore, and twenty earn 200. There's no multiplier, 
 
 ## How an hour becomes Track XP {#xp}
 
-The team splits Track XP between the tracks your ship declares and uses. Designing a board and building a substantial service for it can contribute to Hardware and Systems, but the two tracks share one award. Listing both doesn't double your XP.
+A project has exactly one track. You pick it when you create the project, and all the Track XP from a ship goes to that track. A board and the service that runs on it are two different projects if you want both fields to count, each with its own track.
 
 Each approved hour gives **10 Track XP**, split across the tracks your ship uses. XP is a straight count of your approved hours, so the hours you've logged tell you your XP. Your level depends on your approved hours in one track, not on XP.
 

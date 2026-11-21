@@ -1,0 +1,10 @@
+/* Not-connected blocks for outside services. Tokens come from platform.css. */
+.pf .pf-conn { display: grid; gap: 10px; min-width: 0; padding: 14px 16px; border: 1px dashed var(--pf-mut); background: var(--pf-ln); }
+.pf .pf-conn + .pf-conn { margin-top: 12px; }
+.pf .pf-conn-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.pf .pf-conn-name { font: 700 1em var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-conn-status { padding: 2px 8px; border: 1px solid var(--pf-mut); color: var(--pf-mut); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-conn-reason { margin: 0; max-width: 62ch; font-size: 0.8125em; line-height: 1.6; color: var(--pf-mut); }
+.pf .pf-conn-body { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.pf .pf-conn-body .pf-btn { max-width: 100%; }
+.pf .pf-conn-body .pf-btn[disabled] { cursor: not-allowed; }

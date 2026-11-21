@@ -86,7 +86,7 @@ bun run test:e2e
 git diff --check
 ```
 
-Review the actual diff and stage explicit paths if unrelated work exists. Docs source/link tests are included in the unit command. Website work also requires viewport, keyboard and reduced-motion evidence; follow [the UI skill guide](ui-skills.md).
+Review the actual diff and stage explicit paths if unrelated work exists. Docs source/link tests are included in the unit command. Website work also requires viewport, keyboard and reduced-motion evidence; follow [the UI skill guide](ui-skills.md). Any UI change needs a scoped design brief in `.ulpi/design/` before code and an axe accessibility check on the changed pages, with the result recorded in the handoff (working rule, 20 Nov 2026; the UI skill guide and design system own the detail).
 
 Open a PR into `main` from your branch, wait for the required checks, and squash-merge it (or turn on auto-merge). Do not bypass a failed check.
 

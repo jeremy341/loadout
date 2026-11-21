@@ -1,0 +1,542 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { requirePage } from "@/reviewer-dash/lib/guard";
+import {
+  listShopOrders,
+  listFulfillers,
+  buyerDetailsByUserId,
+  buyerCountriesByUserId,
+  fulfillerStatsBySlackId,
+  shopEconomySummary,
+  shopOrderStatusCounts,
+  type ShopOrderRow,
+  type BuyerDetails,
+  type ShopEconomySummary,
+} from "@/reviewer-dash/lib/db";
+import { canOpenFulfillmentTab, canSeeBuyerDetails, isOwnOrder } from "@/reviewer-dash/lib/fulfillmentAccess";
+import { evaluateOrders } from "@/reviewer-dash/lib/eligibility/evidence";
+import type { EligibilityResult, EligibilityStatus } from "@/reviewer-dash/lib/eligibility/engine";
+import {
+  ELIGIBILITY_FILTERS,
+  ELIGIBILITY_LABEL,
+  SORT_KEYS,
+  SORT_LABEL,
+  VERIFICATION_FILTERS,
+  VERIFICATION_LABEL,
+  parseEligibilityFilter,
+  parseSort,
+  parseVerificationFilter,
+  sortKeyValue,
+  type SortKey,
+} from "@/reviewer-dash/lib/eligibility/format";
+import type { VerificationLabel } from "@/reviewer-dash/lib/eligibility/engine";
+import { addFulfillerAction, removeFulfillerAction } from "@/reviewer-dash/app/actions";
+import { config } from "@/reviewer-dash/app/_generated/config";
+import {
+  ActionButton,
+  ButtonLink,
+  Card,
+  CardHeader,
+  EmptyRow,
+  EmptyState,
+  Field,
+  Input,
+  Icon,
+  Mono,
+  PageHeader,
+  Table,
+  TextLink,
+  buttonClass,
+  formatDate,
+} from "@/reviewer-dash/app/_ui/ui";
+import { SlackHandle } from "./SlackHandle";
+import { OrderList } from "./OrderList";
+import { OrderDetail } from "./OrderDetail";
+
+export const dynamic = "force-dynamic";
+
+// LOADOUT's stages: New (pending), Claimed, Packed, Shipped, Delivered, Cancelled. The address uses these keys.
+const TAB_KEYS = ["pending", "claimed", "packed", "shipped", "delivered", "cancelled", "flagged", "all", "leaderboard", "fulfillers"] as const;
+type TabKey = (typeof TAB_KEYS)[number];
+
+// Lifetime shop P&L, fulfilled orders only. Both sides are scoped to the same
+// cohort (orders with an actual_cost_usd on file, i.e. packed or later), so
+// it compares fulfilled against fulfilled. New and Claimed orders aren't counted.
+function ShopEconomy({ economy }: { economy: ShopEconomySummary }) {
+  const redeemedUsd = economy.totalOre * config.economy.oreValueUsd;
+  const net = redeemedUsd - economy.totalActualCostUsd;
+  return (
+    <div className="fw-menu-economy">
+      <dl>
+        <div><dt>Redeemed by builders</dt><dd>{economy.totalOre.toLocaleString("en-GB")} Ore</dd></div>
+        <div><dt>Redeemed value</dt><dd>{"$"}{redeemedUsd.toFixed(2)}</dd></div>
+        <div><dt>Spent fulfilling</dt><dd>{"$"}{economy.totalActualCostUsd.toFixed(2)}</dd></div>
+        <div className="fw-menu-economy-net" data-positive={net >= 0}>
+          <dt>Net of these orders</dt>
+          <dd>{net >= 0 ? "+" : "-"}{"$"}{Math.abs(net).toFixed(2)}</dd>
+        </div>
+      </dl>
+      <p className="hc-muted">Across {economy.ordersWithCost.toLocaleString("en-GB")} orders with recorded costs, at the internal rate. Not overall program cost.</p>
+    </div>
+  );
+}
+
+// Who's actually fulfilling orders, ranked by orders fulfilled. LOADOUT pays nobody in Ore for fulfilling, so there is no earnings column.
+async function FulfillmentLeaderboard() {
+  const stats = await fulfillerStatsBySlackId();
+  const rows = [...stats.entries()].sort((a, b) => b[1].shipped - a[1].shipped);
+  return (
+    <Card padding="flush">
+      <CardHeader title="Leaderboard" icon="leader" count={rows.length} />
+      <Table headers={["Fulfiller", "Orders fulfilled", "Last active"]}>
+        {rows.length === 0 && <EmptyRow colSpan={3} title="No fulfilments yet" icon="package" />}
+        {rows.map(([slack, s]) => (
+          <tr key={slack}>
+            <td>
+              <TextLink href={`/fulfillers/${slack}`} className="font-bold">
+                <SlackHandle id={slack} fallback={`@${slack}`} />
+              </TextLink>
+            </td>
+            <td className="tabular-nums">{s.shipped}</td>
+            <td className="hc-muted">{formatDate(s.lastActivity)}</td>
+          </tr>
+        ))}
+      </Table>
+    </Card>
+  );
+}
+
+async function FulfillerManager() {
+  const fulfillers = await listFulfillers();
+  return (
+    <Card padding="flush">
+      <CardHeader title="Fulfillers" icon="person" count={fulfillers.length} />
+      <div className="flex flex-col gap-3 px-4 py-4">
+        <p className="hc-caption text-sm">
+          Fulfillers (and owners) can claim orders and mark them packed or shipped. Nobody fulfils their own order, owners included.
+          Marking an order delivered, reassigning it, and cancel &amp; refund stay owner-only.
+        </p>
+        <form action={addFulfillerAction} className="flex flex-wrap items-end gap-2">
+          <Field label="Handle" className="w-full max-w-60">
+            <Input name="slackId" placeholder="handle" className="font-mono" required />
+          </Field>
+          <ActionButton pendingLabel="Adding..." icon="member-add">
+            Add fulfiller
+          </ActionButton>
+        </form>
+      </div>
+      <Table headers={["Fulfiller", "Handle", ""]}>
+        {fulfillers.length === 0 && <EmptyRow colSpan={3} title="No fulfillers yet" icon="person" />}
+        {fulfillers.map((f) => (
+          <tr key={f.slack_user_id}>
+            <td>
+              <TextLink href={`/fulfillers/${f.slack_user_id}`} className="font-bold">
+                <SlackHandle id={f.slack_user_id} fallback={`@${f.slack_user_id}`} />
+              </TextLink>
+            </td>
+            <td>
+              <Mono>{f.slack_user_id}</Mono>
+            </td>
+            <td className="text-right">
+              <form action={removeFulfillerAction}>
+                <input type="hidden" name="slackId" value={f.slack_user_id} />
+                <ActionButton variant="danger" size="sm" pendingLabel="Removing...">
+                  Remove
+                </ActionButton>
+              </form>
+            </td>
+          </tr>
+        ))}
+      </Table>
+    </Card>
+  );
+}
+
+export default async function FulfillmentPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string; mine?: string; q?: string; order?: string; elig?: string; verify?: string; sort?: string; page?: string }>;
+}) {
+  const access = await requirePage("fulfiller");
+  const me = access.session.slackId;
+  const { status, mine, q, order: orderParam, elig, verify, sort, page } = await searchParams;
+  const pageNumber = Number(page ?? 1);
+  const pageIndex = Number.isSafeInteger(pageNumber) && pageNumber > 0
+    ? Math.min(pageNumber - 1, 10000) : 0;
+  const pageSize = 200;
+  const eligFilter = parseEligibilityFilter(elig);
+  const verifyFilter = parseVerificationFilter(verify);
+  const sortKey = parseSort(sort);
+  const active: TabKey = TAB_KEYS.includes(status as TabKey) ? (status as TabKey) : "pending";
+  if (!canOpenFulfillmentTab(active, access)) redirect("/fulfillment");
+  const keepMine = mine === "1";
+  const query = (q ?? "").trim().slice(0, 100);
+  const showingFulfillers = active === "fulfillers";
+  const showingLeaderboard = active === "leaderboard";
+  const showingQueue = !showingFulfillers && !showingLeaderboard;
+  const mineOnly = keepMine && showingQueue;
+
+  // "My queue" is a fixed cross-stage view, not a filter on the selected tab:
+  // every order this fulfiller has claimed that isn't done yet. Filtering the
+  // default New tab instead would always be empty, since claimed orders
+  // move to their own stage.
+  const loaded = !showingQueue ? [] : await listShopOrders(
+    mineOnly ? undefined : active === "all" ? undefined : active,
+    pageSize + 1,
+    {
+      ...(mineOnly ? { claimedBySlack: me, stages: ["claimed", "ordered", "credited", "shipped"] } : {}),
+      search: query,
+      offset: pageIndex * pageSize,
+      viewerSlack: me,
+      allowPrivateNames: access.isOwner,
+    },
+  );
+  const hasNext = loaded.length > pageSize;
+  if (hasNext) loaded.pop();
+
+  const nameFor = (o: ShopOrderRow) => (canSeeBuyerDetails(o, access) ? o.player_name : o.player_display_name);
+  let eligibility = new Map<number, EligibilityResult>();
+  if (showingQueue && loaded.length > 0) {
+    try {
+      eligibility = await evaluateOrders(loaded, { liveAirtable: false });
+    } catch (e) {
+      console.error("fulfilment eligibility", (e as Error).message);
+    }
+  }
+  const searched = loaded;
+  const filtered = searched
+    .filter((o) => !eligFilter || (eligibility.get(Number(o.id))?.status ?? "unverified") === eligFilter)
+    .filter((o) => !verifyFilter || eligibility.get(Number(o.id))?.verification === verifyFilter);
+  const orders =
+    sortKey === "newest"
+      ? filtered
+      : [...filtered].sort(
+          (a, b) =>
+            sortKeyValue(eligibility.get(Number(b.id)), sortKey) - sortKeyValue(eligibility.get(Number(a.id)), sortKey),
+        );
+
+  const requestedId = Number(orderParam);
+  const selected = orders.find((o) => Number(o.id) === requestedId) ?? orders[0] ?? null;
+  const explicitSelection = selected !== null && Number(selected.id) === requestedId;
+
+  const counts = showingQueue ? await shopOrderStatusCounts() : null;
+
+  // Buyer PII is decrypted only for the selected order, gated by canSeeBuyerDetails.
+  const selectedCanSee = selected ? canSeeBuyerDetails(selected, access) : false;
+  const [buyerDetails, buyerCountries] = await Promise.all([
+    selected && selectedCanSee ? buyerDetailsByUserId([selected.user_id]) : Promise.resolve(new Map<string, BuyerDetails>()),
+    selected && !selectedCanSee ? buyerCountriesByUserId([selected.user_id]) : Promise.resolve(new Map<string, string>()),
+  ]);
+  // Owner-only: a financial rollup, not something a fulfiller needs to do the job.
+  const economy = access.isOwner ? await shopEconomySummary() : null;
+
+  const pipelineStages = counts ? [
+    { key: "pending" as const, label: "New", count: counts.pending },
+    { key: "claimed" as const, label: "Claimed", count: counts.claimed },
+    { key: "packed" as const, label: "Packed", count: counts.packed },
+    { key: "shipped" as const, label: "Shipped", count: counts.shipped },
+    { key: "delivered" as const, label: "Delivered", count: counts.delivered },
+    { key: "cancelled" as const, label: "Cancelled", count: counts.cancelled },
+  ] : [];
+
+  const hrefFor = (next: {
+    status?: TabKey;
+    mine?: boolean;
+    q?: string;
+    order?: number;
+    elig?: EligibilityStatus | null;
+    verify?: VerificationLabel | null;
+    sort?: SortKey;
+    page?: number;
+  }) => {
+    const params = new URLSearchParams();
+    const st = next.status ?? active;
+    if (st !== "pending") params.set("status", st);
+    if (next.mine ?? keepMine) params.set("mine", "1");
+    const qv = next.q ?? query;
+    if (qv) params.set("q", qv);
+    const ev = next.elig === undefined ? eligFilter : next.elig;
+    if (ev) params.set("elig", ev);
+    const vv = next.verify === undefined ? verifyFilter : next.verify;
+    if (vv) params.set("verify", vv);
+    const sv = next.sort ?? sortKey;
+    if (sv !== "newest") params.set("sort", sv);
+    if (next.order !== undefined) params.set("order", String(next.order));
+    const pn = next.page ?? (next.order !== undefined ? pageIndex + 1 : 1);
+    if (pn > 1) params.set("page", String(pn));
+    const qs = params.toString();
+    return qs ? `/fulfillment?${qs}` : "/fulfillment";
+  };
+
+  const emptyTitle = query
+    ? `No requests match "${query}"`
+    : verifyFilter
+      ? `No "${VERIFICATION_LABEL[verifyFilter].toLowerCase()}" orders in this view`
+    : eligFilter
+      ? `No ${ELIGIBILITY_LABEL[eligFilter].toLowerCase()} orders in this view`
+      : mineOnly
+      ? "Nothing in your queue"
+      : active === "pending"
+        ? "No orders waiting to be claimed"
+        : active === "flagged"
+          ? "Nothing over budget right now"
+          : "Nothing here yet";
+
+  return (
+    <div className="fw-page flex flex-col gap-5" data-explicit={showingQueue && explicitSelection ? "true" : undefined}>
+      <PageHeader
+        title={mineOnly ? "My queue" : "Fulfillment"}
+        description="Find what needs attention, source within budget, and track each request through delivery. Nobody fulfils their own order."
+        actions={
+          <div className="fw-header-actions">
+            <ButtonLink href="/fulfillment/airbridge-preview" variant="outline" size="sm">Airbridge preview</ButtonLink>
+            {showingQueue ? (
+              <ButtonLink href={hrefFor({ mine: !mineOnly })} variant={mineOnly ? "primary" : "outline"} size="sm" icon="list">
+                {mineOnly ? "Back to all orders" : "My queue"}
+              </ButtonLink>
+            ) : (
+              <ButtonLink href={hrefFor({ status: "pending" })} variant="primary" size="sm" icon="list">
+                Back to requests
+              </ButtonLink>
+            )}
+            {!showingLeaderboard && (
+              <ButtonLink href={hrefFor({ status: "leaderboard" })} variant="outline" size="sm" icon="leader">
+                Leaderboard
+              </ButtonLink>
+            )}
+            {access.isOwner && !showingFulfillers && (
+              <ButtonLink href={hrefFor({ status: "fulfillers" })} variant="outline" size="sm" icon="person">
+                Fulfillers
+              </ButtonLink>
+            )}
+
+            <span className="fw-header-divider" aria-hidden="true" />
+            <details className="fw-header-menu" name="fulfillment-tools">
+              <summary className={buttonClass("outline", "sm") + " fw-header-menu-trigger"}>
+                <Icon glyph="payment" size={16} />
+                Budget rules
+                <span className="fw-header-chevron" aria-hidden="true">⌄</span>
+              </summary>
+              <div className="fw-header-menu-popover" role="group" aria-label="Spending guide">
+                <p className="fw-header-menu-title">Spending guide</p>
+                <p className="fw-header-rate">{"$"}{config.economy.oreValueUsd.toFixed(3)} per Ore</p>
+                <p>Each order has a budget equal to its Ore price multiplied by this internal rate (10 Ore = {"$"}{(config.economy.oreValueUsd * 10).toFixed(2)}).</p>
+                <p>Buy at or below that amount. If the lowest available price is higher, <strong>do not order</strong>: flag the order with the supplier and price for an owner.</p>
+              </div>
+            </details>
+            {economy && (
+              <details className="fw-header-menu" name="fulfillment-tools">
+                <summary className={buttonClass("outline", "sm") + " fw-header-menu-trigger"}>
+                  <Icon glyph="analytics" size={16} />
+                  Shop economy
+                  <span className="fw-header-chevron" aria-hidden="true">⌄</span>
+                </summary>
+                <div className="fw-header-menu-popover" role="group" aria-label="Shop economy">
+                  <p className="fw-header-menu-title">Shop economy</p>
+                  <ShopEconomy economy={economy} />
+                </div>
+              </details>
+            )}
+          </div>
+        }
+      />
+
+      {showingQueue && counts && !mineOnly && (
+        <section className="fw-pipeline" aria-label="Fulfilment pipeline">
+          <div className="fw-pipeline-heading">
+            <div>
+              <h2 className="hc-heading text-lg">Fulfilment at a glance</h2>
+              <p className="hc-caption text-xs">All {counts.all.toLocaleString()} orders, not just this page or filter.</p>
+            </div>
+            <Link
+              href={hrefFor({ status: "flagged", q: "", elig: null, verify: null, sort: "newest" })}
+              className="fw-pipeline-flags"
+            >
+              Over budget <strong>{counts.flagged.toLocaleString()}</strong>
+            </Link>
+          </div>
+          <nav className="fw-pipeline-stages" aria-label="Jump to an order stage">
+            {pipelineStages.map((stage) => (
+              <Link
+                key={stage.key}
+                href={hrefFor({ status: stage.key, q: "", elig: null, verify: null, sort: "newest" })}
+                className="fw-pipeline-stage"
+                data-stage={stage.key}
+                aria-current={active === stage.key ? "page" : undefined}
+              >
+                <span>{stage.label}</span>
+                <strong className="tabular-nums">{stage.count.toLocaleString()}</strong>
+              </Link>
+            ))}
+          </nav>
+          <div className="fw-pipeline-track" role="img" aria-label="Distribution of all orders by fulfillment stage">
+            {pipelineStages.map((stage) => stage.count > 0 ? (
+              <span
+                key={stage.key}
+                data-stage={stage.key}
+                style={{ width: `${(stage.count / Math.max(1, counts.all)) * 100}%` }}
+                title={`${stage.label}: ${stage.count}`}
+              />
+            ) : null)}
+          </div>
+          <p className="fw-pipeline-note">
+            Select a stage to work on its orders. The over-budget queue is a flag, not an additional stage.
+          </p>
+        </section>
+      )}
+
+      {showingFulfillers ? (
+        <FulfillerManager />
+      ) : showingLeaderboard ? (
+        <FulfillmentLeaderboard />
+      ) : (
+        <div className="fw-grid" data-explicit={explicitSelection ? "true" : undefined}>
+          <section className="fw-list" id="fw-requests" aria-label="Requests">
+            <div className="fw-list-head">
+              <div className="fw-list-heading">
+                <h2 className="hc-heading text-lg">Requests</h2>
+                <span className="hc-muted text-xs">{orders.length.toLocaleString()} shown{hasNext ? " on this page" : ""}</span>
+              </div>
+              <div className="fw-list-tools">
+                <form action="/fulfillment" method="get" role="search" className="fw-search">
+                  {active !== "pending" && <input type="hidden" name="status" value={active} />}
+                  {mineOnly && <input type="hidden" name="mine" value="1" />}
+                  {eligFilter && <input type="hidden" name="elig" value={eligFilter} />}
+                  {verifyFilter && <input type="hidden" name="verify" value={verifyFilter} />}
+                  {sortKey !== "newest" && <input type="hidden" name="sort" value={sortKey} />}
+                  <Input name="q" type="search" defaultValue={query} maxLength={100} placeholder="Search requests..." aria-label="Search requests" />
+                  <button type="submit" className={buttonClass("outline", "sm")} aria-label="Search requests" title="Search requests">
+                    <Icon glyph="search" size={17} />
+                  </button>
+                </form>
+                {showingQueue && (
+                  <div className="fw-filters-shell">
+                    <details className="fw-filters">
+                      <summary className="fw-filter-toggle">
+                        <Icon glyph="settings" size={16} />
+                        <span>Filters</span>
+                        {(Number(Boolean(eligFilter)) + Number(Boolean(verifyFilter)) + Number(sortKey !== "newest")) > 0 && (
+                          <span className="fw-filter-count">
+                            {Number(Boolean(eligFilter)) + Number(Boolean(verifyFilter)) + Number(sortKey !== "newest")} active
+                          </span>
+                        )}
+                      </summary>
+                      <div className="fw-filter-body">
+                        <div className="fw-filter-group">
+                          <div className="fw-filter-group-title">
+                            <strong>Ore</strong>
+                            <span>Do the builder's Ore cover the order?</span>
+                          </div>
+                          <nav className="fw-chips" aria-label="Filter by Ore">
+                            <Link href={hrefFor({ elig: null, order: undefined })} className="fw-chip" aria-current={eligFilter ? undefined : "page"}>
+                              All
+                            </Link>
+                            {ELIGIBILITY_FILTERS.map((f) => (
+                              <Link
+                                key={f}
+                                href={hrefFor({ elig: f, order: undefined })}
+                                className="fw-chip"
+                                aria-current={f === eligFilter ? "page" : undefined}
+                              >
+                                {ELIGIBILITY_LABEL[f]}
+                              </Link>
+                            ))}
+                          </nav>
+                        </div>
+                        <div className="fw-filter-group">
+                          <div className="fw-filter-group-title">
+                            <strong>Approval check</strong>
+                            <span>Is the builder's approved ship confirmed?</span>
+                          </div>
+                          <nav className="fw-chips" aria-label="Filter by approval check">
+                            <Link href={hrefFor({ verify: null, order: undefined })} className="fw-chip" aria-current={verifyFilter ? undefined : "page"}>
+                              All
+                            </Link>
+                            {VERIFICATION_FILTERS.map((f) => (
+                              <Link
+                                key={f}
+                                href={hrefFor({ verify: f, order: undefined })}
+                                className="fw-chip"
+                                aria-current={f === verifyFilter ? "page" : undefined}
+                              >
+                                {VERIFICATION_LABEL[f]}
+                              </Link>
+                            ))}
+                          </nav>
+                        </div>
+                        <div className="fw-filter-group">
+                          <div className="fw-filter-group-title">
+                            <strong>Sort requests</strong>
+                            <span>Choose which requests appear first</span>
+                          </div>
+                          <nav className="fw-chips" aria-label="Sort">
+                            {SORT_KEYS.map((k) => (
+                              <Link
+                                key={k}
+                                href={hrefFor({ sort: k, order: undefined })}
+                                className="fw-chip"
+                                aria-current={k === sortKey ? "page" : undefined}
+                              >
+                                {SORT_LABEL[k]}
+                              </Link>
+                            ))}
+                          </nav>
+                        </div>
+                        {(eligFilter || verifyFilter || sortKey !== "newest") && (
+                          <Link className="fw-filter-reset" href={hrefFor({ elig: null, verify: null, sort: "newest", order: undefined })}>
+                            Clear extra filters
+                          </Link>
+                        )}
+                      </div>
+                    </details>
+                  </div>
+                )}
+              </div>
+            </div>
+            {orders.length === 0 ? (
+              <EmptyState title={emptyTitle} icon="package" />
+            ) : (
+              <OrderList
+                orders={orders}
+                selectedId={selected?.id ?? null}
+                hrefFor={(id) => hrefFor({ order: id })}
+                nameFor={nameFor}
+                canSee={(o) => canSeeBuyerDetails(o, access)}
+                now={Date.now()}
+                eligibility={eligibility}
+              />
+            )}
+            {(hasNext || pageIndex > 0) && (
+              <div className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
+                <span className="hc-muted">Page {pageIndex + 1}</span>
+                <div className="flex gap-2">
+                  {pageIndex > 0 && <Link href={hrefFor({ page: pageIndex })} className={buttonClass("outline")}>Previous</Link>}
+                  {hasNext && <Link href={hrefFor({ page: pageIndex + 2 })} className={buttonClass("outline")}>Next</Link>}
+                </div>
+              </div>
+            )}
+          </section>
+          <section className="fw-pane" aria-label="Selected request">
+            {explicitSelection && <a href="#fw-requests" className={buttonClass("outline", "sm") + " fw-back-to-list"}>Back to the requests list</a>}
+            {selected ? (
+              <OrderDetail
+                key={selected.id}
+                order={selected}
+                buyer={selectedCanSee ? buyerDetails.get(selected.user_id) : undefined}
+                country={selectedCanSee ? undefined : (buyerCountries.get(selected.user_id) ?? "")}
+                requesterName={nameFor(selected)}
+                canSee={selectedCanSee}
+                ownOrder={isOwnOrder(selected, me, access.isOwner)}
+                mine={selected.claimed_by_slack === me}
+                canManage={access.isOwner}
+                eligibility={eligibility.get(Number(selected.id)) ?? null}
+              />
+            ) : (
+              <EmptyState title="No request selected" icon="package" />
+            )}
+          </section>
+        </div>
+      )}
+    </div>
+  );
+}

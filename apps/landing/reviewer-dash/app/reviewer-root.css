@@ -1,0 +1,240 @@
+/* Pixl's app/globals.css, minus its `@import "tailwindcss"`: the landing app already loads Tailwind once (app/loadout.css), and a second
+   import would load the reset twice. The rules below are Pixl's, scoped to the reviewer root so the public site and the participant
+   platform are not touched. The dashboard's look is in app/_ui/admin.css (the hc-* classes); Tailwind is used for layout utilities. */
+
+.reviewer-root {
+  /* Pixl's code font is JetBrains Mono; the landing app loads it as --font-mono-art. */
+  --font-jetbrains-mono: var(--font-mono-art);
+}
+
+html:has(.reviewer-root) {
+  color-scheme: dark light;
+  /* Always reserve the scrollbar's space, so pages don't shift sideways when one page scrolls and the next doesn't. */
+  scrollbar-gutter: stable;
+}
+
+/* Loading bar in app/_components/Loading.tsx */
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reviewer-root *,
+  .reviewer-root *::before,
+  .reviewer-root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* One quiet line on every page: nothing here is saved. */
+.reviewer-sample-note {
+  margin: 0 auto;
+  max-width: 1840px;
+  padding: 6px 24px 0;
+  /* --muted is 3.0:1 on the light page; --secondary changes with the theme and passes in both. */
+  color: var(--secondary);
+  font-size: 12px;
+}
+
+.reviewer-theme-switch {
+  color: var(--secondary);
+}
+.reviewer-theme-switch:hover:not(:disabled) {
+  color: var(--text);
+}
+
+/* The landing app's element rules (app/loadout.css: headings in the pixel faces, a focus ring on every button and link) would reach the
+   dashboard. These put Pixl's Tailwind reset back for the reviewer root. They sit at the specificity of the element rules they undo and
+   load after them, and every hc-* class (one class) still wins over them, as it does in Pixl. */
+:where(.reviewer-root) :is(h1, h2, h3, h4, h5, h6) {
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+:where(.reviewer-root) :is(button, a):focus-visible {
+  outline: revert;
+  outline-offset: revert;
+  box-shadow: none;
+}
+
+/* The landing app also sets every svg to 100% by 100% (app/loadout.css), which overrides the width and height attributes that size
+   Pixl's icons. The icon sizes in use are put back from those attributes. */
+:where(.reviewer-root) svg:where([width="10"]) { width: 10px; height: 10px; }
+:where(.reviewer-root) svg:where([width="12"]) { width: 12px; height: 12px; }
+:where(.reviewer-root) svg:where([width="14"]) { width: 14px; height: 14px; }
+:where(.reviewer-root) svg:where([width="16"]) { width: 16px; height: 16px; }
+:where(.reviewer-root) svg:where([width="18"]) { width: 18px; height: 18px; }
+:where(.reviewer-root) svg:where([width="20"]) { width: 20px; height: 20px; }
+:where(.reviewer-root) svg:where([width="22"]) { width: 22px; height: 22px; }
+:where(.reviewer-root) svg:where([width="24"]) { width: 24px; height: 24px; }
+:where(.reviewer-root) svg:where([width="26"]) { width: 26px; height: 26px; }
+:where(.reviewer-root) svg:where([width="28"]) { width: 28px; height: 28px; }
+:where(.reviewer-root) svg:where([width="30"]) { width: 30px; height: 30px; }
+:where(.reviewer-root) svg:where([width="32"]) { width: 32px; height: 32px; }
+:where(.reviewer-root) svg:where([width="36"]) { width: 36px; height: 36px; }
+:where(.reviewer-root) svg:where([width="40"]) { width: 40px; height: 40px; }
+:where(.reviewer-root) svg:where([width="44"]) { width: 44px; height: 44px; }
+:where(.reviewer-root) svg:where([width="48"]) { width: 48px; height: 48px; }
+:where(.reviewer-root) svg:where([width="56"]) { width: 56px; height: 56px; }
+:where(.reviewer-root) svg:where([width="64"]) { width: 64px; height: 64px; }
+
+/* ---- Phones and narrow windows ----
+   The audit measured the Overview at about 1,040px inside a 390px viewport. A Tailwind "grid" with no column template has one
+   implicit auto track, and a grid item's default min-width is its min-content width, so a chart or a wide table inside the track
+   stretches the track (and the page) instead of scrolling or shrinking. Grid items may shrink; anything wider than its card scrolls
+   inside its own region (.hc-table-wrap) rather than widening the page. An item that sets its own min-w-* keeps it. */
+.reviewer-root .hc-main {
+  min-width: 0;
+  overflow-x: clip;
+}
+.reviewer-root .hc-main .grid > :not([class*="min-w-"]) {
+  min-width: 0;
+}
+
+/* A page's data-scope line (app/_ui/DataScopeNote.tsx): where this page's data lives, in words. */
+.rv-data-scope {
+  max-width: 72ch;
+  margin: 8px 0 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--border-strong);
+  color: var(--secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.rv-data-scope strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* A count's own words (the tooltip does not exist on a phone): shown inside menus only. */
+.hc-nav-count-note {
+  display: none;
+}
+.hc-nav-menu-panel .hc-nav-link {
+  flex-wrap: wrap;
+}
+.hc-nav-menu-panel .hc-nav-count-note {
+  display: block;
+  flex-basis: 100%;
+  padding-left: 28px;
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+@media (max-width: 1023.98px) {
+  /* The menu panel is wider than the space to the right of its button, so it opened past the screen edge. Hang it off the top bar
+     (which is sticky, so it is the containing block) with a 16px gutter each side, and let it scroll if it is taller than the screen. */
+  .hc-topbar .hc-nav-menu {
+    position: static;
+  }
+  .hc-topbar .hc-nav-menu-panel.hc-nav-mega {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: calc(100dvh - 88px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Tabs wrap onto more rows instead of scrolling sideways with the scrollbar hidden, where the later tabs were unreachable. */
+  .hc-tabs.hc-tabs-wrap {
+    flex-wrap: wrap;
+    gap: 0 4px;
+    padding: 0;
+    overflow: visible;
+  }
+  .hc-tabs-wrap .hc-tab {
+    flex: 1 1 auto;
+    height: 44px;
+  }
+}
+
+/* Navigation tabs and queue switches are links with aria-current (no tab roles), so they take the selected look from it. */
+.hc-tab[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--primary);
+}
+.hc-segmented-item[aria-current="page"],
+.hc-segmented-item[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+@media (max-width: 760px) {
+  /* Primary controls reach the 44px touch target on a phone. The desktop density (28 to 34px) is unchanged above this width. */
+  .reviewer-root .hc-btn,
+  .reviewer-root .hc-btn-sm,
+  .reviewer-root .hc-btn-lg {
+    min-height: 44px;
+    height: auto;
+    padding-block: 0;
+  }
+  .reviewer-root .hc-input,
+  .reviewer-root .hc-select-trigger,
+  .reviewer-root .hc-nav-link {
+    min-height: 44px;
+  }
+  .reviewer-root .hc-check {
+    min-height: 44px;
+  }
+  .reviewer-root .hc-segmented-item {
+    min-height: 44px;
+  }
+  .reviewer-root .hc-table input[type="checkbox"],
+  .reviewer-root .hc-check input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Segmented controls (queue, chart range) reflow into rows rather than forcing one row wider than the screen. */
+  .hc-segmented:not(.hc-tabs-sticky) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
+    max-width: 100%;
+  }
+  .hc-segmented:not(.hc-tabs-sticky) .hc-segmented-item {
+    height: auto;
+    min-height: 44px;
+    padding-block: 4px;
+    text-align: center;
+  }
+}
+
+/* Fulfillment on a phone: once a request is selected (?order=), it comes first, straight under the page title, ahead of the pipeline
+   and the list. Only the visual order moves; the document order is unchanged, and "Back to the requests list" jumps to the list. */
+.fw-page > header {
+  order: -2;
+}
+.fw-back-to-list {
+  display: none;
+}
+@media (max-width: 1179.98px) {
+  .fw-page[data-explicit="true"] > .fw-grid {
+    display: contents;
+  }
+  .fw-page[data-explicit="true"] .fw-pane {
+    order: -1;
+  }
+  .fw-page[data-explicit="true"] .fw-back-to-list {
+    display: inline-flex;
+    margin: 10px 14px 0;
+  }
+  .fw-list {
+    scroll-margin-top: 72px;
+  }
+}

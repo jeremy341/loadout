@@ -8,7 +8,7 @@ test("each of the six prizes shows a photo that stays on its plate", async ({ pa
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.locator("#shop h2")).toHaveText(/^Prices$/);
+  await expect(page.locator("#shop h2")).toHaveText(/Prizes/);
   const cards = page.locator(".pb-half").first().locator("li");
   await expect(cards).toHaveCount(6);
   for (let index = 0; index < 6; index++) {
@@ -32,7 +32,7 @@ test("each of the six prizes shows a photo that stays on its plate", async ({ pa
 test("every prize has a category and an example name, and the prices are examples", async ({ page }) => {
   await page.goto("/");
   const section = page.locator("#shop");
-  await expect(section).toContainText("What your Ore can buy");
+  await expect(section).toContainText("Examples of what Ore could buy");
   for (const text of ["Developer hardware", "Framework 16 laptop", "Embedded boards", "ESP32 starter kit", "Compute", "Raspberry Pi 5", "Tools", "Soldering iron kit", "Fabrication", "Bambu Lab A1 Mini 3D printer", "Domains"]) {
     await expect(section.locator(".pb-half").first()).toContainText(text);
   }

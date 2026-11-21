@@ -26,7 +26,7 @@ As for using any dependencies, try to credit the original authors of code, desig
 
 Yes, you can build together in the same repository. but each person keeps their own hours and journal, describing the contribution they made. 
 
-Suppose one person designs the board and another writes the firmware. They can submit work on the same device, with different evidence and Track XP splits. The board designer should show the circuit decisions and measurements; the firmware developer should explain the code and its tests. Neither person gets paid for the other's hours.
+Suppose one person designs the board and another writes the firmware. They can submit work on the same device, with different evidence. The ship shares one track, and all its Track XP goes to it. The board designer should show the circuit decisions and measurements; the firmware developer should explain the code and its tests. Neither person gets paid for the other's hours.
 
 When you work on the same task together, explain the collaboration. Describe who investigated, implemented or tested each part instead of claiming the whole implementation independently.
 

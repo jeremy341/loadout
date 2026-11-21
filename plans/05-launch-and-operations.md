@@ -289,7 +289,7 @@ Priority:
 - tracking
 - shipping
 - fit review
-- multi-track XP allocation
+- one track per project, with Track XP going to it
 - Ore
 - track level-up
 - one field-aware shop item

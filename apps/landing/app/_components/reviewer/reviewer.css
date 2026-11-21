@@ -1,0 +1,281 @@
+/* The reviewer site's own marks (staff side, separate from the participant dashboard). It reuses the platform's --pf-* tokens and
+   top-bar styles, loaded globally from platform.css, and adds only what tells the two sites apart: a thin accent rule above the
+   header and the "Reviewer site" tag beside the wordmark. No second accent colour: everything here is a token. Classes are
+   prefixed rs-. Nothing animates. */
+
+/* The rule above the header: the one accent, drawn once, so the staff side is recognisable at a glance. */
+.pf .rs-top { border-top: 4px solid var(--pf-ac); }
+
+/* Wordmark: LOADOUT in the display face, then "Review" muted, then the tag. On phones the tag sits under the wordmark so the
+   Menu button keeps the first row; from 900px everything is one line. */
+.pf .rs-brand { flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; min-width: 0; padding: 2px 0; }
+.pf .rs-mark { display: inline-flex; align-items: baseline; gap: 10px; }
+.pf .rs-word { font-family: var(--font-display), monospace; font-size: 31px; line-height: 1; letter-spacing: -0.02em; color: var(--pf-mut); }
+.pf .rs-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 7px;
+  border: 1px solid var(--pf-rule);
+  color: var(--pf-fg);
+  font: 400 12px var(--font-dot), monospace;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+/* One title size across the whole site: the queue pages (rv) and the Users, Audit and Flags pages share it. */
+.pf.rs .pf-main h1 { margin: 0 0 12px; font-size: clamp(1.75em, 6vw, 2.5em); }
+.pf.rs .pf-main > .pf-lead { max-width: 68ch; margin: 0 0 18px; }
+/* Sections on Users, Flags: the same rhythm and heading size as the sections on a ship page. */
+.pf.rs .pf-main .pf-section { padding: 20px 0 22px; }
+.pf.rs .pf-main .pf-section h2 { margin: 0 0 12px; font-size: 1.25em; line-height: 1.15; }
+
+/* Who is signed in: a plain chip with the name, ruled like the Ore chip on the participant bar. Phones show the name in the
+   menu instead (rs-nav-who), so the top bar keeps one row. */
+.pf .rs-nav-who { margin: 12px 0 0; font-size: 0.9286em; color: var(--pf-mut); overflow-wrap: anywhere; }
+.pf .rs-nav-who strong { color: var(--pf-fg); font-weight: 600; }
+.pf .rs-who {
+  display: none;
+  align-items: center;
+  min-height: 44px;
+  max-width: 12rem;
+  padding: 0 12px;
+  border: 1px solid var(--pf-rule);
+  background: var(--pf-panel);
+  box-shadow: none;
+  color: var(--pf-fg);
+  font-size: 0.9286em;
+  text-decoration: none;
+}
+.pf .rs-who:hover { color: var(--pf-link); }
+.pf .rs-who-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+@media (min-width: 900px) {
+  .pf .rs-brand { flex-direction: row; align-items: center; gap: 12px; }
+  .pf .rs-word { font-size: 36px; }
+  .pf .rs-who { display: inline-flex; max-width: 16rem; }
+  .pf .rs-nav-who { display: none; }
+}
+
+@media (forced-colors: active) {
+  .pf .rs-top { border-top-color: Highlight; }
+  .pf .rs-who { box-shadow: none; }
+}
+
+/* ---- The top bar: primary links, the More menu, the search and the palette (after Pixl's TopNav and CommandPalette) ---- */
+/* The header is the anchor for the full-width More panel. */
+.pf .rs-top { position: relative; }
+
+/* Count badges: a visible gap from the label, tabular figures, a hard rule instead of a colour fill so they read on both themes. */
+.pf .rs-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5em;
+  height: 1.5em;
+  margin-left: 0.6em;
+  padding: 0 0.4em;
+  border: 1px solid currentColor;
+  font: 700 0.8572rem/1 var(--font-ui), monospace;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Phones: the list is vertical inside the opened menu, the More menu is an accordion section inside it. */
+.pf .rs-bar > li { list-style: none; }
+.pf .rs-nav { order: 6; }
+.pf .rs-nav .rs-bar > li > a { display: flex; align-items: center; }
+.pf .rs-more > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-left: 15px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  list-style: none;
+  color: var(--pf-fg);
+}
+.pf .rs-more > summary::-webkit-details-marker { display: none; }
+.pf .rs-more[data-active="true"] > summary { color: var(--pf-link); font-weight: 600; }
+.pf .rs-caret {
+  width: 7px;
+  height: 7px;
+  margin: -3px 0 0 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+.pf .rs-more[open] .rs-caret { margin-top: 3px; transform: rotate(-135deg); }
+.pf .rs-more-panel { display: grid; gap: 14px; padding: 6px 0 10px 15px; }
+.pf .rs-more-panel h2 {
+  margin: 0 0 4px;
+  font: 600 0.8572em var(--font-ui), monospace;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--pf-mut);
+}
+.pf .rs-more-panel a { display: flex; align-items: center; }
+.pf .pf-nav a.rs-nav-settings {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 6px;
+  color: var(--pf-fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* The search field. Phones: its own full-width row under the wordmark. */
+.pf .rs-search {
+  order: 5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--pf-rule);
+  border-radius: 0;
+  background: var(--pf-panel);
+  color: var(--pf-mut);
+  font: 400 0.9286em var(--font-ui), monospace;
+  text-align: left;
+  cursor: pointer;
+}
+.pf .rs-search:hover { color: var(--pf-fg); }
+.pf .rs-search-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf .rs-keys { display: none; gap: 4px; flex: none; }
+.pf kbd {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 6px;
+  border: 1px solid var(--pf-rule);
+  background: var(--pf-bg);
+  color: var(--pf-mut);
+  font: 400 0.8572rem var(--font-dot), monospace;
+  letter-spacing: 0;
+}
+
+@media (min-width: 900px) {
+  /* One row: wordmark, links, a search that takes the spare width, then the switch and the name. Narrower than ~1300px the
+     search wraps to its own row under them, still full width. */
+  .pf .rs-nav { order: 2; flex: 0 1 auto; }
+  .pf .rs-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 0 2px; }
+  .pf .rs-nav .rs-bar > li > a { display: inline-flex; }
+  .pf .rs-search { order: 3; flex: 1 1 16rem; width: auto; min-width: 14rem; }
+  .pf .rs-keys { display: inline-flex; }
+  .pf .pf-top .pf-top-end { order: 4; }
+
+  .pf .rs-more > summary {
+    display: inline-flex;
+    padding: 0 10px;
+    border-left: 0;
+    color: var(--pf-mut);
+    font: 400 0.9286em var(--font-ui), monospace;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .pf .rs-more > summary:hover, .pf .rs-more[open] > summary { color: var(--pf-fg); }
+  .pf .rs-more[data-active="true"] > summary { color: var(--pf-link); }
+  /* A full-width panel under the header: one column per section. */
+  .pf .rs-more-panel {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    z-index: 20;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 8px 28px;
+    padding: 18px 24px 22px;
+    border-bottom: 1px solid var(--pf-rule);
+    background: var(--pf-bg);
+    box-shadow: none;
+  }
+  .pf .rs-more-panel a {
+    min-height: 40px;
+    padding: 0 8px;
+    border-left: 3px solid transparent;
+    color: var(--pf-fg);
+    font: 400 1em var(--font-ui), monospace;
+    letter-spacing: 0;
+    text-transform: none;
+    white-space: normal;
+  }
+  .pf .rs-more-panel h2 { padding-left: 11px; }
+  .pf .rs-more-panel a:hover { color: var(--pf-link); }
+  .pf .rs-more-panel a[aria-current="page"] { border-left-color: var(--pf-fg); background: var(--pf-cur-bg); color: var(--pf-cur-fg); font-weight: 600; }
+  .pf .rs-more-panel a[aria-current="page"]::before, .pf .rs-more-panel a[aria-current="page"]::after { content: none; }
+  .pf .rs-more-panel ul { display: block; }
+  .pf .pf-nav a.rs-nav-settings { display: none; }
+}
+
+/* ---- The command palette: a modal <dialog>, hard rule and offset shadow, no animation ---- */
+.pf .rs-palette {
+  width: min(40rem, calc(100vw - 24px));
+  max-height: min(34rem, calc(100dvh - 24px));
+  margin: 12vh auto auto;
+  padding: 0;
+  border: 1px solid var(--pf-rule);
+  border-radius: 0;
+  background: var(--pf-bg);
+  color: var(--pf-fg);
+  box-shadow: none;
+  overflow: hidden;
+}
+.pf .rs-palette[open] { display: flex; flex-direction: column; }
+.rs-palette::backdrop { background: rgba(12, 14, 14, 0.6); }
+.pf .rs-pal-head { display: flex; gap: 8px; padding: 10px; border-bottom: 1px solid var(--pf-rule); }
+.pf .rs-pal-head input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--pf-rule);
+  border-radius: 0;
+  background: var(--pf-panel);
+  color: var(--pf-fg);
+  font: 400 1em var(--font-ui), monospace;
+}
+.pf .rs-pal-head input:focus { border-color: var(--pf-fg); }
+.pf .rs-pal-close {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--pf-rule);
+  border-radius: 0;
+  background: transparent;
+  color: var(--pf-fg);
+  font: 400 12px var(--font-dot), monospace;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+.pf .rs-pal-close:hover { border-color: var(--pf-fg); }
+.pf .rs-pal-results { flex: 1 1 auto; margin: 0; padding: 4px 0 8px; list-style: none; overflow-y: auto; overscroll-behavior: contain; }
+.pf .rs-pal-group { margin: 0; padding: 10px 14px 4px; font: 600 0.8572em var(--font-ui), monospace; letter-spacing: 0; text-transform: none; color: var(--pf-mut); }
+.pf .rs-pal-results a {
+  display: flex;
+  align-items: baseline;
+  gap: 4px 14px;
+  flex-wrap: wrap;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-left: 3px solid transparent;
+  color: var(--pf-fg);
+  text-decoration: none;
+}
+.pf .rs-pal-results a:hover, .pf .rs-pal-results a:focus-visible { border-left-color: var(--pf-fg); background: var(--pf-cur-bg); color: var(--pf-cur-fg); }
+.pf .rs-pal-label { min-width: 0; overflow-wrap: anywhere; }
+.pf .rs-pal-sub { margin-left: auto; font-size: 0.9286em; color: var(--pf-mut); overflow-wrap: anywhere; }
+.pf .rs-pal-results a:hover .rs-pal-sub, .pf .rs-pal-results a:focus-visible .rs-pal-sub { color: inherit; }
+.pf .rs-pal-empty { margin: 0; padding: 28px 14px; text-align: center; color: var(--pf-mut); }
+.pf .rs-pal-foot { display: none; margin: 0; padding: 8px 14px; border-top: 1px solid var(--pf-rule); gap: 18px; color: var(--pf-mut); font-size: 0.8572em; }
+@media (min-width: 900px) {
+  .pf .rs-pal-foot { display: flex; flex-wrap: wrap; }
+}
+html[data-larger-controls="true"] .pf :is(.rs-search, .rs-pal-head input, .rs-pal-close) { min-height: 48px; }
+
+@media (forced-colors: active) {
+  .pf .rs-palette, .pf .rs-search, .pf .rs-more-panel { border: 1px solid CanvasText; box-shadow: none; }
+  .pf .rs-more-panel a[aria-current="page"], .pf .rs-pal-results a:hover, .pf .rs-pal-results a:focus-visible { border-left-color: Highlight; }
+}

@@ -10,7 +10,7 @@ The shop is where your projects can help you get equipment for the next build. M
 
 ## Prize examples {#catalog}
 
-Here's the same working prize list you'll find on the homepage. Ore prices are easier to understand when you can compare them with a project, so we've included the hours each would take at **10 Ore per approved hour**. That's before any discount you might have.
+This is the working prize list. The homepage shows one example from each category at these same provisional prices, and nothing here can be ordered yet. Ore prices are easier to understand when you can compare them with a project, so we've included the hours each would take at **10 Ore per approved hour**. That's before any discount you might have.
 
 | Prize | Base price | About how many approved hours |
 | --- | --- | --- |

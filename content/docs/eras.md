@@ -26,7 +26,7 @@ The project needs to meet the actual objective, not just mention the theme in it
 
 A qualifying project earns **10% extra Ore** on its base award. If its approved hours earn 720 Ore, the bonus adds 72, for a total of 792 Ore.
 
-The bonus doesn't add Track XP or change the four quality dimensions. How it would combine with future Ore bonuses remains undecided, but we will soon open a vote for the community so be ready for the results.
+The bonus doesn't add Track XP or change the four quality dimensions. How it would combine with future Ore bonuses remains undecided.
 
 ## How the community moves on {#advance}
 

@@ -1,6 +1,11 @@
 import { devices, expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+// These specs read the public docs. Local development is signed in, which shows the docs in the platform, so ask for the public layout.
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
+});
+
 const rsvpUrl = "https://rsvp.soon.it/loadout";
 
 test("homepage shows the four tracks, Research Mode, and working section anchors", async ({ page }) => {
@@ -117,7 +122,6 @@ for (const width of [390, 1440]) {
       }).length
     );
     expect(incomplete).toBe(0);
-    // four steps, three outcomes of review, then the upgrade and build-again steps
     await expect(page.locator("#process .fn")).toHaveCount(9);
   });
 }
@@ -642,7 +646,7 @@ test("the docs sidebar groups fold with their chevron and the back button lifts 
   await expect.poll(() => back.evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe("8px");
 });
 
-test("each track shows one example and a tag, and How it works shows one worked example", async ({ page }) => {
+test("each track shows one short line and a tag, and How it works has four steps", async ({ page }) => {
   await page.goto("/");
   const cards = page.locator("#tracks .card.t");
   await expect(cards).toHaveCount(4);
@@ -650,16 +654,8 @@ test("each track shows one example and a tag, and How it works shows one worked 
   await expect(cards.nth(0)).toContainText("command-line tool");
   await expect(cards.nth(3)).toContainText("robot");
   const process = page.locator("#process");
-  await expect(process.locator(".we-calc")).toHaveCount(1);
-  await expect(process.locator(".we-calc")).toHaveAttribute("aria-label", /50 approved hours at 10 Ore per hour earn 500 Ore/);
-  await expect(process).toContainText("Every approved hour earns the same 10 Ore.");
-  // the example sits between the review outcomes and the spend step
-  const order = await process.locator(".fl > *").evaluateAll((nodes) => nodes.map((n) => n.className + "|" + (n.textContent ?? "").slice(0, 24)));
-  const calc = order.findIndex((entry) => entry.startsWith("we-calc"));
-  const outcomes = order.findIndex((entry) => entry.startsWith("br2"));
-  const spend = order.findIndex((entry) => entry.includes("SPEND YOUR ORE") || entry.includes("Spend your Ore") || entry.includes("STEP 05"));
-  expect(outcomes).toBeLessThan(calc);
-  expect(calc).toBeLessThan(spend);
+  await expect(process).toContainText("Every approved hour earns the same 10 Ore");
+  await expect(process).toContainText("Digital Loadout");
   await expect(process).not.toContainText("Joining late");
   await expect(page.locator("#faq")).not.toContainText("Joining late");
 });
@@ -858,11 +854,11 @@ test("homepage review copy matches the team acceptance rule", async ({ page }) =
 
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("What your Ore can buy");
+  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
   await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 
-test("Track XP and levels follow main: four stops, requisition markers and arrows between them", async ({ page }) => {
+test("Track XP and levels follow main: six stops, requisition markers and arrows between them", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -924,9 +920,8 @@ test("the page advertises the share image, the touch icon and the favicon", asyn
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", "https://loadout.dino.icu");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
   const imageBodies: Buffer[] = [];
-  const expectedImageOrigin = process.env.CI
-    ? "https://loadout.dino.icu"
-    : new URL(process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${process.env.LOADOUT_TEST_PORT ?? "3001"}`).origin;
+  // CI starts a dev server, so the static share images are served from its own origin.
+  const expectedImageOrigin = new URL(process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${process.env.LOADOUT_TEST_PORT ?? "3001"}`).origin;
   for (const [attribute, name] of [["property", "og:image"], ["name", "twitter:image"]]) {
     const url = await page.locator(`meta[${attribute}="${name}"]`).first().getAttribute("content");
     expect(url, name).toBeTruthy();

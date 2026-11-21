@@ -1,5 +1,17 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { mkdirSync } from "node:fs";
+
+// The specs below check the public documentation, which is what a visitor sees. Local development opens as a signed-in test
+// account, which shows the docs inside the platform instead, so the "visitor" preview cookie asks for the public layout.
+// The cookie does nothing when the local test accounts are off. The signed-in specs are at the end of this file.
+const SHOTS = process.env.LOADOUT_SHOT_DIR ?? "C:\\Users\\jerem\\AppData\\Local\\Temp\\loadout-shots";
+mkdirSync(SHOTS, { recursive: true });
+const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
+});
 
 test("docs pages render the approved Markdown guide and stable heading links", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -304,4 +316,149 @@ test("documentation routes meet serious automated accessibility checks", async (
   for (const route of ["/docs/contributing", "/docs/architecture", "/docs/references", "/docs/library", "/docs/source-plans-plan-02-loadout-economy-and-rewards"]) {
     expect((await page.request.get(route)).status()).toBe(404);
   }
+});
+
+// ---- Signed in: the docs open inside the participant platform ----
+
+async function openSignedIn(page: Page, path: string, width: number, height: number, scheme: "dark" | "light" = "dark") {
+  await page.context().clearCookies();
+  await page.setViewportSize({ width, height });
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: scheme });
+  await page.addInitScript((theme) => localStorage.setItem("loadout-theme", theme), scheme);
+  await page.goto(path);
+  await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible({ timeout: 30000 });
+}
+
+test.describe("signed in", () => {
+  test("a signed-in visit swaps the sidebar for the docs sections, with one top bar, Back to projects and one main landmark", async ({ page }) => {
+    await openSignedIn(page, "/docs/start", 1440, 900);
+    const side = page.getByRole("complementary", { name: "Site" });
+    await expect(side).toBeVisible();
+    // The docs sections take the place of the participant links.
+    await expect(side.getByRole("navigation", { name: "Participant" })).toHaveCount(0);
+    await expect(side.getByRole("navigation", { name: "Documentation sections" })).toBeVisible();
+    await expect(side.getByRole("link", { name: "Back to projects" })).toHaveAttribute("href", "/dashboard/projects");
+    await expect(side.getByRole("searchbox", { name: "Search documentation" })).toBeVisible();
+    // The top bar keeps only the Ore chip and the account menu. The public docs top bar and footer are not there.
+    await expect(page.locator("a.pf-ore")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Account" })).toBeVisible();
+    await expect(page.locator(".docs-nav, .docs-brand, .docs-back-button, .docs-guides-toggle")).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Back to LOADOUT" })).toHaveCount(0);
+    await expect(page.getByRole("main")).toHaveCount(1);
+    await expect(page.getByRole("region", { name: "Documentation content" })).toBeVisible();
+    // The platform accessibility tab is the only one.
+    await expect(page.locator(".a11y-shortcut")).toHaveCount(1);
+    await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
+  });
+
+  test("the section list marks the open guide on every docs page, and following a guide keeps the shell", async ({ page }) => {
+    for (const slug of ["pricing", "tracks", "faq"]) {
+      await openSignedIn(page, `/docs/${slug}`, 1440, 900);
+      await expect(page.getByRole("navigation", { name: "Documentation sections" }).locator(`a[href="/docs/${slug}"]`)).toHaveAttribute("aria-current", "page");
+    }
+    await page.getByRole("navigation", { name: "Documentation sections" }).getByRole("link", { name: "What can I build?", exact: true }).click();
+    await expect(page).toHaveURL(/\/docs\/projects$/);
+    await expect(page.getByRole("complementary", { name: "Site" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Back to projects" }).first()).toBeVisible();
+  });
+
+  test("search and the FAQ work inside the platform", async ({ page }) => {
+    await openSignedIn(page, "/docs/start", 1440, 900);
+    const input = page.getByRole("searchbox", { name: "Search documentation" });
+    await input.fill("track xp");
+    const result = page.locator("#docs-search-result-0");
+    await expect(result).toBeVisible();
+    await expect(result).toHaveAttribute("href", /\/docs\//);
+    await input.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/docs\//);
+    await expect(page.getByRole("complementary", { name: "Site" })).toBeVisible();
+    await page.getByRole("navigation", { name: "Documentation sections" }).locator('a[href="/docs/faq"]').click();
+    await expect(page).toHaveURL(/\/docs\/faq$/);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    // "On this page" still moves to a heading inside the article.
+    const toc = page.getByRole("navigation", { name: "On this page" });
+    await toc.getByRole("link").nth(1).click();
+    await expect(page).toHaveURL(/#/);
+    await expect.poll(() => page.locator(".docs-main").evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  });
+
+  test("the accessibility tab is one control and does not sit over the section list or the contents", async ({ page }) => {
+    for (const [width, height] of [[1440, 900], [390, 844]] as const) {
+      await openSignedIn(page, "/docs/start", width, height);
+      const tab = await page.locator(".a11y-tab").boundingBox();
+      expect(tab).not.toBeNull();
+      for (const selector of [".docs-search input", ".docs-back-link", ".docs-toc a"]) {
+        const box = await page.locator(selector).first().boundingBox().catch(() => null);
+        if (!box || !tab) continue;
+        const overlap = box.x < tab.x + tab.width && box.x + box.width > tab.x && box.y < tab.y + tab.height && box.y + box.height > tab.y;
+        expect(overlap, `${selector} at ${width}`).toBe(false);
+      }
+    }
+    // The reading size still applies to the docs inside the platform.
+    await openSignedIn(page, "/docs/start", 1440, 900);
+    // The app applies the saved preferences after it loads, so set the attribute again until the page keeps it.
+    await expect(async () => {
+      await page.evaluate(() => document.documentElement.setAttribute("data-reading-size", "150"));
+      await expect(page.locator(".docs-embedded .docs-inline-toc")).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+    await expect(page.locator(".docs-embedded .docs-toc")).toBeHidden();
+  });
+
+  test("the guide fits with no sideways scroll at 320, 390, 720 and 1440", async ({ page }) => {
+    for (const [width, height] of [[320, 640], [390, 844], [720, 900], [1440, 900]] as const) {
+      await openSignedIn(page, "/docs/pricing", width, height);
+      const sizes = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, view: innerWidth, body: document.body.scrollWidth, page: document.documentElement.scrollHeight, high: innerHeight }));
+      expect(sizes.doc, `document at ${width}`).toBeLessThanOrEqual(sizes.view);
+      expect(sizes.body, `body at ${width}`).toBeLessThanOrEqual(sizes.view);
+      expect(sizes.page, `height at ${width}`).toBeLessThanOrEqual(sizes.high + 1);
+      const article = await page.locator(".docs-main").evaluate((node) => ({ client: node.clientWidth, scroll: node.scrollWidth }));
+      expect(article.scroll, `article at ${width}`).toBeLessThanOrEqual(article.client);
+    }
+  });
+
+  test("on a phone the docs sections are inside the platform drawer, and choosing a guide closes it", async ({ page }) => {
+    await openSignedIn(page, "/docs/start", 390, 844);
+    const side = page.getByRole("complementary", { name: "Site" });
+    await expect(side).toBeHidden();
+    await page.getByRole("button", { name: "Menu" }).click();
+    await expect(side).toBeVisible();
+    await expect(side.getByRole("navigation", { name: "Documentation sections" })).toBeVisible();
+    await expect(side.getByRole("link", { name: "Back to projects" })).toBeVisible();
+    await expect(side.getByRole("navigation", { name: "Participant" })).toHaveCount(0);
+    await side.getByRole("navigation", { name: "Documentation sections" }).getByRole("link", { name: "What can I build?", exact: true }).click();
+    await expect(page).toHaveURL(/\/docs\/projects$/);
+    await expect(side).toBeHidden();
+  });
+
+  test("the docs inside the platform have no serious accessibility violations in both themes", async ({ page }) => {
+    for (const scheme of ["dark", "light"] as const) {
+      for (const [path, width, height] of [["/docs/start", 1440, 900], ["/docs/pricing", 390, 844]] as const) {
+        await openSignedIn(page, path, width, height, scheme);
+        const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
+        expect(result.violations.filter((violation) => ["serious", "critical"].includes(violation.impact ?? "")), `${path} ${scheme}`).toEqual([]);
+      }
+    }
+  });
+
+  test("screenshots: signed in and visitor, 1440 and 390, dark and light", async ({ browser, baseURL }) => {
+    const url = baseURL ?? "http://localhost:3001";
+    for (const who of ["signedin", "visitor"] as const) {
+      for (const [width, height] of [[1440, 900], [390, 844]] as const) {
+        for (const scheme of ["dark", "light"] as const) {
+          // A fresh browser context for each picture, so the theme and the cookie of one never leak into the next.
+          const context = await browser.newContext({ viewport: { width, height }, colorScheme: scheme, reducedMotion: "reduce" });
+          await context.addInitScript((theme) => localStorage.setItem("loadout-theme", theme), scheme);
+          if (who === "visitor") await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url }]);
+          const page = await context.newPage();
+          await page.goto(`${url}/docs/start`);
+          await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible({ timeout: 30000 });
+          await expect(page.locator(who === "visitor" ? ".docs-nav" : ".pf-side")).toHaveCount(1);
+          await page.waitForTimeout(400);
+          await page.screenshot({ path: `${SHOTS}\\docs-platform-${who}-${width}-${scheme}.png` });
+          await context.close();
+        }
+      }
+    }
+  });
 });

@@ -1,0 +1,24 @@
+/* Empty and loading states. Existing tokens only. The dither is the cell-off tint on a 4px checker, the same quiet grey the
+   level cells use. The shimmer is a stepped opacity pulse (opacity only) and is off under reduced motion. */
+.pf .pf-empty { max-width: 640px; margin: 24px 0 0; padding: 22px 24px; border: 1px dashed var(--pf-fg); background: var(--pf-panel); }
+.pf .pf-empty h3 { margin: 0 0 8px; font: 700 1.375em/1.2 var(--font-pixel), monospace; }
+.pf .pf-empty p { margin: 0; color: var(--pf-mut); max-width: 60ch; }
+.pf .pf-empty .pf-empty-action { margin-top: 14px; }
+.pf .pf-empty .pf-empty-action a { display: inline-flex; align-items: center; min-height: 44px; }
+.pf .pf-skel {
+  display: block;
+  background-color: var(--pf-cell-off);
+  background-image: repeating-conic-gradient(var(--pf-ln) 0 25%, transparent 0 50%);
+  background-size: 8px 8px;
+}
+.pf .pf-skel-line { height: 14px; width: 100%; margin: 0 0 10px; }
+.pf .pf-skel-short { width: 60%; }
+.pf .pf-skel-block { min-height: 64px; width: 100%; }
+.pf .pf-skel-card { padding: 0 0 16px; border: 1px solid var(--pf-rule); background-color: var(--pf-panel); background-image: none; }
+.pf .pf-skel-card .pf-skel-line { margin: 0 16px 10px; width: calc(100% - 32px); }
+.pf .pf-skel-card .pf-skel-short { width: 60%; }
+.pf .pf-skel-cover { display: block; height: 132px; margin-bottom: 14px; background-color: var(--pf-cell-off); background-image: repeating-conic-gradient(var(--pf-ln) 0 25%, transparent 0 50%); background-size: 8px 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-skel, html:not([data-motion-paused="true"]) .pf .pf-skel-cover, html:not([data-motion-paused="true"]) .pf .pf-skel-line { animation: pf-skel 1.4s steps(4, end) infinite; }
+}
+@keyframes pf-skel { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }

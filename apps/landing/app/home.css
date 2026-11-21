@@ -195,6 +195,8 @@ html:has(.home) { scroll-behavior:smooth }
 /* ---- Additions for the live site (not in the reference export) ---- */
 .home .skip-link { position: absolute; left: 16px; top: -80px; z-index: 20; padding: 10px 14px; background: var(--ac); color: var(--acf); font-size: 14px; text-decoration: none; }
 .home .skip-link:focus { top: 16px; }
+/* Light mode: cream on rust is 4.4:1, so the link takes the yellow button's ink pair (10.4:1) and an ink edge. */
+.home:has(#theme:checked) .skip-link { background: #E3C26B; color: #1A1714; border: 2px solid #1A1714; }
 
 .home .nav-toggle { display: none; width: 44px; height: 40px; padding: 0; border: 1px solid var(--fg); background: transparent; color: var(--fg); cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
 .home .nav-toggle span { display: block; width: 18px; height: 2px; background: var(--fg); }
@@ -218,9 +220,6 @@ html:has(.home) { scroll-behavior:smooth }
 /* Floating docs tab, bottom right, themed with the homepage tokens. */
 .home .docs-tab { position: fixed; right: 24px; bottom: 0; z-index: 20; display: flex; align-items: center; min-height: 44px; padding: 12px 18px; color: var(--acf); background: var(--ac); border: 2px solid var(--fg); border-bottom: 0; box-shadow: 4px 0 0 var(--fg); font-family: var(--font-dot), monospace; font-size: 16px; line-height: 1; letter-spacing: .1em; text-decoration: none; transition: background-color 140ms ease, color 140ms ease; }
 .home .docs-tab:hover { background: var(--fg); color: var(--bg); }
-.home:has(#theme:checked) .docs-tab { background: #E3C26B; color: #1A1714; border-color: #1A1714; box-shadow: 4px 0 0 #1A1714; }
-.home:has(#theme:checked) .docs-tab:hover { background: #1A1714; color: #E3C26B; }
-.home .docs-tab:focus-visible { outline: 2px solid var(--ac); outline-offset: 3px; }
 @media (max-width: 560px) { .home .docs-tab { right: 12px; font-size: 14px; } }
 @media (prefers-reduced-motion: reduce) { .home .docs-tab { transition: none; } }
 
@@ -535,7 +534,7 @@ html:has(.home) { scroll-behavior:smooth }
 .home .pit + .sect { padding-top: 72px; }
 .home #process, .home #progression { padding-block: 88px; }
 .home #eras { padding-block: 104px; }
-.home #shop, .home #custom-orders { padding-block: 40px; }
+.home #shop { padding-block: 40px; }
 
 /* Section heading block: 12px label, 44px title, 16px lead (main: .section-heading). */
 .home .lab { font-size: 12px; margin-bottom: 10px; }
@@ -594,10 +593,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home .row.g2 { gap: 10px; }
 .home .card.sm { min-height: 180px; padding: 24px 16px; }
 .home .card.sm .cn, .home .card.sm .cn span { font-size: 24px !important; }
-.home #custom-orders .row { gap: 0; }
-.home #custom-orders .card.sm { min-height: 174px; padding: 20px 24px 18px; }
-.home #custom-orders .card:not(:last-child) { border-right: 0; }
-.home #custom-orders .card .cn { font-size: 21px !important; }
 
 /* Eras (main: .era-concept-rail and .era-facts, 900px, joined, 22px and 24px titles). */
 .home .era { max-width: 900px; margin-inline: auto; flex-wrap: nowrap; }
@@ -626,7 +621,7 @@ html:has(.home) { scroll-behavior:smooth }
   .home #process, .home #progression { padding-block: 64px; }
   .home #eras { padding-block: 76px; }
   .home #hack-club { padding-block: 64px; }
-  .home #shop, .home #custom-orders { padding-block: 32px; }
+  .home #shop { padding-block: 32px; }
   .home #tracks .row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
   .home .card.t { min-height: 0; }
 }
@@ -635,7 +630,7 @@ html:has(.home) { scroll-behavior:smooth }
   .home #process, .home #progression { padding-block: 44px; }
   .home #eras { padding-block: 56px; }
   .home #hack-club { padding-block: 44px; }
-  .home #shop, .home #custom-orders { padding-block: 28px; }
+  .home #shop { padding-block: 28px; }
   .home .sect > .h2 { font-size: 38px; line-height: 1; }
   .home .sect > .lead { margin-bottom: 28px; }
   .home .sect > .h2 + :not(.lead) { margin-top: 28px; }
@@ -924,8 +919,6 @@ html:has(.home) { scroll-behavior:smooth }
 .home #progression .asd { border: 0; padding: 0; background: none; max-width: 760px; margin: 32px auto 0 !important; }
 .home #progression .asd .cn { display: block; font-family: var(--font-ui), monospace; font-size: 16px !important; font-weight: 700; line-height: 1.65; text-transform: none; margin-bottom: 8px; }
 
-.home #custom-orders .card.sm { padding-bottom: 13px; }
-
 /* Era steps and facts at main's heights (78px steps, 112px facts). */
 .home .era > div { font-size: 20px; padding: 22px 12px; line-height: 1.45; }
 .home #eras .row.r2 .card { padding: 14px 16px; gap: 4px; }
@@ -974,6 +967,8 @@ body:has(.home):not(:has(#theme:checked)) { background: #222627; }
     box-shadow: inset 0 0 0 1px var(--ac);
   }
   .home:not(:has(#theme:checked)) .era > div:hover small { color: var(--ac); }
+  /* Light: the darker rust above would sit on the rust hover plate, so the hovered step's label takes the plate's text colour. */
+  .home:has(#theme:checked) .era > div:hover small { color: var(--acf); }
 }
 
 /* Amber for small highlights only. */
@@ -1169,7 +1164,7 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .fq2-q:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
 @media (prefers-reduced-motion: no-preference) {
   .home { interpolate-size: allow-keywords; }
-  .home .fq2::details-content { block-size: 0; overflow: hidden; transition: block-size 250ms cubic-bezier(0.23, 1, 0.32, 1), content-visibility 250ms allow-discrete; }
+  .home .fq2::details-content { block-size: 0; overflow: hidden; transition: block-size 250ms var(--ease), content-visibility 250ms allow-discrete; }
   .home .fq2[open]::details-content { block-size: auto; }
 }
 
@@ -1240,7 +1235,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
 .home .pit:not(.rb-rock) { min-height: 160px; height: auto; gap: 16px; flex-wrap: wrap; padding-block: 20px; }
 .home .pit:not(.rb-rock) b { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 .home .pit:not(.rb-rock) > span { max-width: 100%; overflow-wrap: anywhere; }
-.home:has(#theme:checked) :is(.lnks a, .era small, .hero-credit a) { color: #903516; }
+/* Rust accent text is 3.3:1 on the paper, so every light-mode text use of the accent takes the darker rust (5.5:1 on cards, 5.9:1 on the page). */
+.home:has(#theme:checked) :is(.lnks a, .era small, .hero-credit a, .asd a, .card li:before, .fq2-icon, .sn, .facts dt, .we-calc i, .ft-bottom a, .ft-column a:hover) { color: #842F12; }
 .home.rb-page .hero.rb { min-height: calc(100svh - 100px); }
 .home.rb-page .rb-foot { position: relative; bottom: auto; padding: 12px 20px 24px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
 .home.rb-page .rb-foot p { margin: 0; }
@@ -1272,3 +1268,8 @@ html:has(#theme:checked) { scrollbar-color: #6B6354 #DDD3BF; }
   .home .lad.l6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 .home .st, .home .st .cn, .home .st .dsc { min-width: 0; overflow-wrap: anywhere; }
+
+/* Hero markings stay clear of the fixed Accessibility tab (44px wide, left edge) and of the badge and title on small or short screens.
+   They are decoration; Hide extra markings still removes them everywhere. */
+@media (max-width: 1119px) { .home .hero .meta-left { left: 56px; } }
+@media (max-width: 380px), (max-height: 500px) { .home .hero .meta { display: none; } }

@@ -32,7 +32,7 @@ Multiply your approved hours by **10 Ore**. The rate is fixed, so ten approved h
 
 ### Is Ore the same as XP?
 
-No, you spend Ore on gear and Track XP stays in the fields you worked in and builds your levels, even after you buy something. [The progress guide](/docs/progress) explains both and the separate community Era Points.
+No, you spend Ore on gear and Track XP stays in the track you shipped in and builds your levels, even after you buy something. [The progress guide](/docs/progress) explains both and the separate community Era Points.
 
 ### What can I buy, and what does it cost?
 
@@ -56,7 +56,7 @@ Fraud means a permanent ban from this event, with everything earned or bought ta
 
 ### Is Research Mode a fifth track?
 
-No. Your research belongs in one or more of the four tracks. [Research Mode](/docs/research) explains how to submit an experiment, benchmark or finding other people can reproduce.
+No. Your research belongs in the one track of its project. [Research Mode](/docs/research) explains how to submit an experiment, benchmark or finding other people can reproduce.
 
 ### Can I ask for something that isn't in the catalog?
 

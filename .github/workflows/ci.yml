@@ -59,7 +59,7 @@ jobs:
   # step. Public Docs and app changes get the full set (lint, typecheck, unit tests, production
   # build, browser suite), so one green commit is good enough for every lane.
   #
-  # The browser suite is the long pole, so it is spread across eight runners that run at the same
+  # The browser suite is the long pole, so it is spread across twelve runners that run at the same
   # time as the quality job. Shards are separate runners rather than more Playwright workers on one
   # runner on purpose: Orry's tests read a real pointer in real time, so piling workers onto one
   # machine makes them flaky. A single aggregator job keeps the required check name
@@ -85,6 +85,10 @@ jobs:
       - name: Install Bun and the locked dependencies
         if: steps.changed.outputs.app == 'true'
         uses: ./.github/actions/install-landing
+      - name: Generate the Prisma client
+        if: steps.changed.outputs.app == 'true'
+        working-directory: apps/landing
+        run: bunx prisma generate
       - name: Lint
         if: steps.changed.outputs.app == 'true'
         run: bun run lint
@@ -101,22 +105,44 @@ jobs:
   browser-shard:
     name: Browser ${{ matrix.name }}
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 20
     # The browser jobs read these to pick their slice of the suite: the two Orry files get their
-    # own runners, and everything else is sharded six ways. An empty value falls back to the
+    # own runners, and everything else is sharded ten ways. An empty value falls back to the
     # config default, so one spec can never be dropped from every job.
     env:
       LOADOUT_E2E_MATCH: ${{ matrix.match }}
       LOADOUT_E2E_IGNORE: ${{ matrix.ignore }}
+      DATABASE_URL: postgresql://loadout:loadout-local@postgres:5432/loadout_dev
+      NODE_ENV: development
+      LOADOUT_LOCAL_TEST_ACCOUNTS: "true"
+      LOADOUT_E2E_WORKERS: "1"
+      # The README gate reads GitHub's API. The workflow token lifts that limit above the shared 60-an-hour anonymous allowance.
+      LOADOUT_GITHUB_TOKEN: ${{ github.token }}
     # The pinned Playwright image already carries Chromium and its system libraries, so a shard
     # skips the download and the apt install that used to cost about twenty seconds each. The
     # image tag must match the locked @playwright/test version in bun.lock.
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --user root
+    # The participant specs sign in as local test accounts and read a real database. Each shard gets
+    # its own empty Postgres, migrated and seeded before Playwright starts its web server.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: loadout
+          POSTGRES_PASSWORD: loadout-local
+          POSTGRES_DB: loadout_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U loadout -d loadout_dev"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       fail-fast: false
-      # Eight jobs cover the suite exactly once: one per Orry file, plus six shards of the rest.
+      # Twelve jobs cover the suite exactly once: one per Orry file, plus ten shards of the rest.
       matrix:
         include:
           - name: Orry mood
@@ -127,30 +153,46 @@ jobs:
             match: mole-body.spec.ts
             ignore: ""
             shard: "1/1"
-          - name: checks 1/6
+          - name: checks 1/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "1/6"
-          - name: checks 2/6
+            shard: "1/10"
+          - name: checks 2/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "2/6"
-          - name: checks 3/6
+            shard: "2/10"
+          - name: checks 3/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "3/6"
-          - name: checks 4/6
+            shard: "3/10"
+          - name: checks 4/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "4/6"
-          - name: checks 5/6
+            shard: "4/10"
+          - name: checks 5/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "5/6"
-          - name: checks 6/6
+            shard: "5/10"
+          - name: checks 6/10
             match: ""
             ignore: mole-mood.spec.ts,mole-body.spec.ts
-            shard: "6/6"
+            shard: "6/10"
+          - name: checks 7/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "7/10"
+          - name: checks 8/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "8/10"
+          - name: checks 9/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "9/10"
+          - name: checks 10/10
+            match: ""
+            ignore: mole-mood.spec.ts,mole-body.spec.ts
+            shard: "10/10"
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -178,6 +220,17 @@ jobs:
       - name: Install Bun and the locked dependencies
         if: steps.changed.outputs.app == 'true'
         uses: ./.github/actions/install-landing
+      - name: Generate the Prisma client
+        if: steps.changed.outputs.app == 'true'
+        working-directory: apps/landing
+        run: bunx prisma generate
+      - name: Migrate and seed the browser database
+        if: steps.changed.outputs.app == 'true'
+        working-directory: apps/landing
+        run: |
+          bunx prisma migrate deploy
+          bun run scripts/seed-local-accounts.ts
+          bun run scripts/seed-local-explore.ts
       - name: Confirm Chromium is present
         if: steps.changed.outputs.app == 'true'
         working-directory: apps/landing
@@ -214,7 +267,7 @@ jobs:
           retention-days: 7
 
   landing-browser:
-    # The one required check for the browser suite. It reports all five shards as a single name, so
+    # The one required check for the browser suite. It reports every browser job as a single name, so
     # branch protection needs no change, and it pads nothing: it fails unless every
     # shard that ran passed.
     name: Landing browser

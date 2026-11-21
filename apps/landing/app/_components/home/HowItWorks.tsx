@@ -73,12 +73,12 @@ export function HowItWorks() {
             {OUTCOMES.map((outcome) => <StepCard step={outcome} key={outcome.title} />)}
           </div>
           <i className="fc" aria-hidden="true"></i>
-          <div className="we-calc" role="img" aria-label="Example: 50 approved hours at 10 Ore per hour earn 500 Ore, enough for a Raspberry Pi 5.">
-            <span><b>50 h</b>approved</span>
+          <div className="we-calc" role="img" aria-label="Example: 49 approved hours at 10 Ore per hour earn 490 Ore, enough for a Raspberry Pi 5.">
+            <span><b>49 h</b>approved</span>
             <i>×</i>
             <span><b>10 Ore</b>per hour</span>
             <i>=</i>
-            <span><b>500 Ore</b>earned</span>
+            <span><b>490 Ore</b>earned</span>
             <i>→</i>
             <span><b>Raspberry Pi 5</b>490 Ore</span>
           </div>

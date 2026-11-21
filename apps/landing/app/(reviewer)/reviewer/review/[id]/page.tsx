@@ -1,0 +1,1464 @@
+/* eslint-disable @next/next/no-img-element */
+import { Suspense, type ReactNode } from "react";
+import { precheckView, type PrecheckView } from "@/reviewer-dash/lib/precheck";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { requirePage, requireGuidelinesAck } from "@/reviewer-dash/lib/guard";
+import { decryptPII } from "@/reviewer-dash/lib/crypto";
+import { builderDetailsView, builderNameFor, canSeeBuilderPII } from "@/reviewer-dash/lib/reviewAccess";
+import {
+  getProject,
+  listShippedQueueCached,
+  listSecondReviewProjects,
+  REVIEW_LOCK_MS,
+  firstPassAccess,
+  turnedNineteenSinceShipping,
+  listCollaboratorsForProject,
+  getFirstPassAuditNote,
+  listProjectNotes,
+} from "@/reviewer-dash/lib/db";
+import { parseAuditNote } from "@/reviewer-dash/lib/auditNote";
+import { fetchCommits, attachCommitStats } from "@/reviewer-dash/lib/commits";
+import { fetchBomRows } from "@/reviewer-dash/lib/bom";
+import {
+  fetchUserSpans,
+  attachTrackedTime,
+  fetchTrustFactor,
+  fetchHackatimeReport,
+  type HackatimePersonReport,
+} from "@/reviewer-dash/lib/hackatime";
+import { yswsShipsForReview } from "@/reviewer-dash/lib/ysws";
+import { renderMarkdown } from "@/reviewer-dash/lib/markdown";
+import { computeClaimedHours, round1 } from "@/reviewer-dash/lib/hours";
+import { isAllowedImageSrc, isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
+import { githubRepoOwnerProfile } from "@/reviewer-dash/lib/githubRepoOwner";
+import { db } from "@/reviewer-dash/lib/db";
+import { ReviewForm } from "@/reviewer-dash/app/_components/ReviewForm";
+import {
+  banProject,
+  beginReviewClaim,
+  endReviewClaim,
+  extendHoursCutoff,
+  sendBackToFirstPass,
+  unshipProject,
+  toggleProjectPeak,
+  holdReview,
+  releaseReviewHold,
+  recordSecondPassTriage,
+} from "@/reviewer-dash/app/actions";
+import { isRealId } from "@/reviewer-dash/lib/real";
+import { DoubleDipBanner } from "@/reviewer-dash/app/_components/DoubleDipBanner";
+import { FraudChecksPanel } from "@/reviewer-dash/app/_components/FraudChecksPanel";
+import { ReviewPipelineSteps } from "@/reviewer-dash/app/_components/ReviewPipelineSteps";
+import { SecondPassChecklist } from "@/reviewer-dash/app/_components/SecondPassChecklist";
+import { hackatimeCutoffUnix } from "@/reviewer-dash/app/_generated/config";
+import { ORE_PER_HOUR, TRACK_XP_PER_HOUR } from "@/lib/platform/review";
+import type { Track } from "@/lib/platform/progress";
+import { ReviewDetailTabs } from "@/reviewer-dash/app/_components/ReviewDetailTabs";
+import { ReviewSplit } from "./ReviewSplit";
+import { ReviewShortcuts } from "./ReviewShortcuts";
+import { getStaffSettings } from "@/reviewer-dash/lib/db";
+import { ReviewHeartbeat } from "@/reviewer-dash/app/_components/ReviewHeartbeat";
+import { activeReviewClaim } from "@/reviewer-dash/lib/reviewClaimState";
+import { ProjectNotes } from "@/reviewer-dash/app/_components/ProjectNotes";
+import { TrackBadge, TypeBadge, ShipBadges, StatusBadge } from "@/reviewer-dash/app/_components/ProjectBadges";
+import { CardSkeleton } from "@/reviewer-dash/app/_components/Loading";
+import { slackHandle } from "@/reviewer-dash/lib/slack";
+import { staffName } from "@/reviewer-dash/lib/staffName";
+import { unshipWarning } from "@/reviewer-dash/lib/unship";
+import {
+  ActionButton,
+  Avatar,
+  Badge,
+  ButtonLink,
+  Callout,
+  Card,
+  CardHeader,
+  CountBadge,
+  DescriptionList,
+  Details,
+  EmptyState,
+  Flash,
+  Icon,
+  Input,
+  Mono,
+  Muted,
+  Table,
+  TextLink,
+  Textarea,
+  buttonClass,
+  formatDate,
+  formatDateTime,
+  type GlyphName,
+  type Tone,
+} from "@/reviewer-dash/app/_ui/ui";
+import Tabs from "@/reviewer-dash/app/_ui/Tabs";
+import { Await } from "./Await";
+
+export const metadata = { title: "Review desk" };
+export const dynamic = "force-dynamic";
+
+function ageFrom(bday: string | null | undefined): number | null {
+  if (!bday) return null;
+  const b = new Date(bday);
+  if (isNaN(b.getTime())) return null;
+  const now = new Date();
+  let a = now.getFullYear() - b.getFullYear();
+  const m = now.getMonth() - b.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < b.getDate())) a--;
+  return a;
+}
+
+function fmtHM(hours: number): string {
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+  return m > 0 ? `${h}h ${m}m` : `${h}h`;
+}
+
+function ago(iso: string | null): string {
+  if (!iso) return "unknown";
+  const d = Math.max(0, Date.now() - new Date(iso).getTime());
+  const days = Math.floor(d / 86_400_000);
+  if (days >= 1) return `${days}d ago`;
+  const hrs = Math.floor(d / 3_600_000);
+  if (hrs >= 1) return `${hrs}h ago`;
+  return `${Math.floor(d / 60_000)}m ago`;
+}
+
+function trustTone(level: string): Tone {
+  if (level === "green") return "success";
+  if (level === "red" || level === "convicted") return "danger";
+  if (level === "yellow" || level === "suspected") return "warning";
+  return "neutral";
+}
+
+function trustText(level: string): string {
+  if (level === "green") return "No integrity flags on this account.";
+  if (level === "red" || level === "convicted")
+    return "Hackatime has flagged this account for fraud. Do not credit without digging.";
+  if (level === "yellow" || level === "suspected") return "Hackatime suspects this account. Verify carefully.";
+  return "Not scored yet.";
+}
+
+// A titled block of free text the builder (or the system) attached to the ship.
+function NoteCallout({
+  tone,
+  icon,
+  title,
+  children,
+}: {
+  tone: "warning" | "danger" | "info" | "success" | "neutral";
+  icon: GlyphName;
+  title: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <Callout tone={tone} icon={icon}>
+      <p className="font-bold">{title}</p>
+      <div className="mt-1 whitespace-pre-wrap break-words">{children}</div>
+    </Callout>
+  );
+}
+
+const HOURS_COLOR = { hackatime: "var(--hc-blue)", journals: "#e0701f" };
+
+export default async function ReviewDetail({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const access = await requirePage("reviewer");
+  // Await the gate before the ship is read or the page streams. The actions re-check it on their own too.
+  await requireGuidelinesAck(access);
+  const viewer = access.session.slackId;
+  const canSecondPass = access.canSecondPass;
+  // Only admins (ban perm) may permanently ban a project from the review page.
+  const canModerate = access.isOwner;
+  // Gates the "AI time" tab: owner or second-pass reviewer, either stage.
+  const canViewAiTime = access.isOwner || canSecondPass;
+  const { id } = await params;
+  const { error } = await searchParams;
+  const projectId = Number(id);
+  if (!Number.isFinite(projectId)) notFound();
+
+  const [staffSettings, data, allCollaborators, notes] = await Promise.all([
+    getStaffSettings(access.session.slackId),
+    getProject(projectId),
+    listCollaboratorsForProject(projectId),
+    listProjectNotes(projectId),
+  ]);
+  if (!data) notFound();
+  const { project: p, journals, reviewAudits } = data;
+  // A reviewer restricted to one queue can't open a project from the other.
+  // Treat it the same as a missing project rather than exposing that it exists.
+  if (access.reviewQueues !== "both" && p.kind !== access.reviewQueues) notFound();
+  // Second pass (second pass) belongs to final reviewers, integrity reviewers and owners. A normal reviewer gets the same
+  // "not found" as a missing project, so the first-pass triage notes never reach them.
+  if (p.status === "second_review" && !access.canFraudReview) notFound();
+  // First pass: a project reserved for another reviewer can't be opened (owners
+  // and full_queue reviewers exempt). The queue greys it out, this covers
+  // someone typing the URL. See lib/reviewAssignment.ts.
+  if (p.status === "shipped" && !access.canOpenFullQueue) {
+    const gate = await firstPassAccess(projectId, viewer, false);
+    if (!gate.ok) redirect(`/review?error=${encodeURIComponent(gate.message)}`);
+  }
+  const isFinalStage = p.status === "second_review";
+  // A first-pass reviewer proposing a ban goes straight to a full ReviewForm confirm/overturn by a different
+  // canSecondPass reviewer (see the isProposedBan gate in reviewProject).
+  const isProposedBan = isFinalStage && p.first_pass_verdict === "banned";
+  // A ship in second_review is either a proposed ban or waiting for a second pass. A sample ship waits there once its triage says
+  // not fraud. A real ship waits there from its first-pass approval and needs the triage recorded here (needsTriage) before any verdict.
+  const isReal = isRealId(p.id);
+  const secondPassStage = isFinalStage && !isProposedBan && (isReal ? p.second_pass_verdict !== null : p.second_pass_verdict === "not_fraud");
+  const needsTriage = isReal && isFinalStage && !isProposedBan && p.second_pass_verdict === null;
+  // The project owner may review their own work; collaborators still cannot.
+  // Mirrors isOwnProject / isCollaboratorProject in app/actions.ts.
+  const isProjectOwner = !!p.users?.slack_id && p.users.slack_id === viewer;
+  const isCollaborator = !isProjectOwner && allCollaborators.some(
+    (c) => (c.status === "accepted" || c.status === "pending") && !!c.users?.slack_id && c.users.slack_id === viewer,
+  );
+  const isOwn = isProjectOwner || isCollaborator;
+  const isHeld = !!p.hold_at;
+  // hold_by is stored as "Name (handle)" (see holdReview in app/actions.ts).
+  // Only the reviewer who set it (or an owner) may release it.
+  const heldByMe = isHeld && p.hold_by?.match(/\(([^)]+)\)\s*$/)?.[1] === viewer;
+  const canReview =
+    !isHeld &&
+    !p.banned_at &&
+    ((p.status === "shipped" && !isCollaborator) ||
+      (isProposedBan && canSecondPass && !isCollaborator) ||
+      (secondPassStage && (access.isOwner || canSecondPass) && !isCollaborator));
+  // Reviewer-side unship (see unshipProject): available to final reviewers at
+  // second pass or fraud review regardless of who could submit a verdict, and
+  // never on your own project or while a hold is set.
+  // A real approved ship can be unshipped by an owner (the core action checks it again).
+  const unshipNote =
+    canSecondPass && !isCollaborator && !isHeld
+      ? isReal && p.status === "approved"
+        ? access.isOwner && !isOwn
+          ? "This project is approved. Unshipping sends it back to draft, takes back the Ore it earned and clears the review, so it starts again from the first pass."
+          : null
+        : unshipWarning(p.status)
+      : null;
+  const shippedAt = (p as { shipped_at?: string | null }).shipped_at ?? null;
+  // Viewing must never reserve a project; only an explicit POST may claim it.
+  const currentClaim = activeReviewClaim(p, Date.now(), REVIEW_LOCK_MS);
+  const hasActiveClaim = currentClaim === viewer;
+  const claimedByOther = currentClaim && currentClaim !== viewer ? currentClaim : null;
+
+  // So the final reviewer starts from what the first reviewer already wrote instead of a blank form. They can still edit or
+  // overturn any of it.
+  const firstPassAuditNote = isFinalStage && p.first_pass_by ? await getFirstPassAuditNote(projectId) : null;
+
+  // ---- Slow external lookups. Started here, never awaited by the page itself:
+  // each one streams into its own <Suspense> boundary below, so GitHub,
+  // Hackatime, Lapse and the YSWS archive can't hold up the reviewer's view.
+  const hackatimeProjects = p.hackatime_projects ?? [];
+  // Everyone who tracked time on this ship: the owner plus each accepted
+  // collaborator, each with their own handle and linked Hackatime projects.
+  // Collaborators log against their own Hackatime account, so every lookup
+  // below runs once per person, never just for the owner.
+  const hackatimeSources = [
+    { userId: p.user_id, slackId: p.users?.slack_id, projects: hackatimeProjects },
+    ...allCollaborators
+      .filter((c) => c.status === "accepted")
+      .map((c) => ({ userId: c.user_id, slackId: c.users?.slack_id, projects: c.hackatime_projects ?? [] })),
+  ].filter((s) => s.projects.length > 0);
+  // Promise.resolve turns the query builder's thenable into a real promise,
+  // so the token query runs once even though several lookups await it.
+  const tokensPromise: Promise<Map<string, string | null>> = hackatimeSources.length
+    ? Promise.resolve(
+        db
+          .from("users")
+          .select("id, hackatime_token")
+          .in(
+            "id",
+            hackatimeSources.map((s) => s.userId),
+          )
+          .then((r) => {
+            const rows = (r.data ?? []) as { id: string; hackatime_token?: string | null }[];
+            return new Map(rows.map((u) => [u.id, u.hackatime_token ?? null] as const));
+          }),
+      )
+    : Promise.resolve(new Map<string, string | null>());
+  // Commit stats and tracked time fill independent fields. Start both once
+  // the commit list arrives rather than waiting for one before the other.
+  const commitsPromise = (async () => {
+    const commits = await fetchCommits(p.repo_url);
+    const spansPromise = (async () => {
+      if (commits.commits.length === 0 || hackatimeSources.length === 0) return;
+      const tokens = await tokensPromise;
+      const spanSets = await Promise.all(
+        hackatimeSources.map((s) => fetchUserSpans(s.slackId, tokens.get(s.userId) ?? null, s.projects)),
+      );
+      const spans = spanSets.flatMap((set) => set ?? []).sort((a, b) => a.start - b.start);
+      if (spans.length > 0) attachTrackedTime(commits.commits, spans);
+    })();
+    await Promise.all([attachCommitStats(commits), spansPromise]);
+    return commits;
+  })();
+  const hackatimeReportsPromise: Promise<HackatimePersonReport[]> = tokensPromise.then((tokens) =>
+    Promise.all(
+      hackatimeSources.map(async (s) => ({
+        userId: s.userId,
+        report: await fetchHackatimeReport(s.slackId, tokens.get(s.userId) ?? null, s.projects),
+      })),
+    ),
+  );
+  const trustPromise = fetchTrustFactor(p.users?.slack_id);
+  const yswsPromise = yswsShipsForReview(p.users?.slack_id, p.repo_url, p.demo_url);
+  const ownerHandlePromise = slackHandle(p.users?.slack_id);
+  // Hardware ships carry a bill of materials; it is reviewed against the Lapse recordings.
+  const bomPromise = p.kind === "hardware" && p.bom_url ? fetchBomRows(p.bom_url) : null;
+  const claimHandlePromise = claimedByOther ? slackHandle(claimedByOther) : null;
+  // includeClaimed so prev/next and the "Submission N of M" counter walk the
+  // same queue the list page shows. nextReviewId (the auto-advance after a
+  // verdict) deliberately keeps excluding them, since it picks work for you.
+  const queuePromise = isFinalStage
+    ? listSecondReviewProjects(viewer, undefined, { includeClaimed: true })
+    : listShippedQueueCached(viewer, undefined);
+
+  // approved_hours is a reviewer's per-entry deflation set from the Journals
+  // tab (see setJournalHours in app/actions.ts). null means "use the builder's
+  // own claimed hours for this entry". Every total below derives from it, so
+  // deflating one entry changes the whole page's totals.
+  const sumHours = (rows: typeof journals, approved: boolean) =>
+    round1(rows.reduce((s, j) => s + (Number(approved ? (j.approved_hours ?? j.hours) : j.hours) || 0), 0));
+  const ownerJournals = journals.filter((j) => j.user_id === p.user_id);
+  const journalHours = sumHours(journals, true);
+  const rawTrackedHours = round1((p.hackatime_seconds ?? 0) / 3600);
+  // For a hardware ship, hackatime_seconds is never pure Hackatime time: the
+  // ship route folds the owner's raw journal hours into that column (see
+  // 0130_project_kind.sql). Subtract that RAW owner-only sum back out, not the
+  // live possibly-deflated journalHours, or a deflation edit would cancel out.
+  const rawOwnerJournalHours = sumHours(ownerJournals, false);
+  // The gap between raw and approved journal hours is exactly how much
+  // per-entry deflation has taken off the credited total.
+  const rawJournalHours = sumHours(journals, false);
+  const journalDeflatedHours = Math.max(0, round1(rawJournalHours - journalHours));
+  const hackatimeHours =
+    p.kind === "hardware" ? Math.max(0, round1(rawTrackedHours - rawOwnerJournalHours)) : rawTrackedHours;
+  // Shared claimed-hours calculator (lib/hours.ts), matching claimedHoursFor() in actions.ts.
+  const hours = computeClaimedHours({
+    hackatimeSeconds: p.hackatime_seconds,
+    kind: p.kind,
+    ownerUserId: p.user_id,
+    journals,
+  });
+  const htPct = hours > 0 ? Math.round((hackatimeHours / hours) * 100) : 0;
+  const payoutHours = hours;
+  // The owner's own journal hours only, so a collaborator's time stays visible
+  // on a multi-person ship.
+  const ownerJournalHoursOnly = sumHours(ownerJournals, true);
+
+  const acceptedCollaborators = allCollaborators.filter((c) => c.status === "accepted");
+  const collaboratorHours = acceptedCollaborators.map((c) => {
+    const cJournalHours = sumHours(
+      journals.filter((j) => j.user_id === c.user_id),
+      true,
+    );
+    const cHackatimeHours = round1((c.hackatime_seconds ?? 0) / 3600);
+    return {
+      id: c.id,
+      userId: c.user_id,
+      name: builderNameFor(access, c.users, { fallback: c.user_id }),
+      hackatimeHours: cHackatimeHours,
+      journalHours: cJournalHours,
+      claimedHours: cHackatimeHours > 0 ? cHackatimeHours : cJournalHours,
+    };
+  });
+  // Legal name for owners/final reviewers only (builderNameFor); a first-pass
+  // reviewer sees the Slack handle or display name.
+  const ownerNameFor = (handle: string | null) => builderNameFor(access, p.users, { handle, fallback: p.user_id });
+  const contributorsFor = (ownerName: string) => [
+    { userId: p.user_id, name: ownerName, hackatimeHours, journalHours: ownerJournalHoursOnly },
+    ...collaboratorHours,
+  ];
+
+  // first_pass_hours is a Postgres numeric column the driver returns as a
+  // string, so it has to go through Number() before any hours math.
+  const formDefaultHours =
+    secondPassStage && p.second_pass_hours != null
+      ? Number(p.second_pass_hours)
+      : isFinalStage && p.first_pass_hours != null
+        ? Number(p.first_pass_hours)
+        : payoutHours;
+  const firstPassAudit = firstPassAuditNote ? parseAuditNote(firstPassAuditNote) : null;
+  const firstPassDeflated = p.first_pass_hours != null ? round1(hours - p.first_pass_hours) : 0;
+  const firstPassCutPct =
+    p.first_pass_hours != null && hours > 0 ? Math.round(((hours - p.first_pass_hours) / hours) * 100) : 0;
+
+  const ageFlag = turnedNineteenSinceShipping(p.users?.birthday, shippedAt);
+
+  // ---- Builder details for the eligibility check.
+  // PII is encrypted at rest; decryptPII also passes legacy plaintext through.
+  // Name/email/birth date/address are for final reviewers and owners only
+  // (canSeeBuilderPII); a first-pass reviewer gets the age plus "on file" /
+  // "missing" per field, and for them only the birthday is even decrypted.
+  const u = p.users as
+    | {
+        first_name?: string | null;
+        last_name?: string | null;
+        real_name?: string | null;
+        email?: string | null;
+        birthday?: string | null;
+        address_line1?: string | null;
+        address_line2?: string | null;
+        address_city?: string | null;
+        address_state?: string | null;
+        address_country?: string | null;
+        address_postal?: string | null;
+      }
+    | null
+    | undefined;
+  const privileged = canSeeBuilderPII(access);
+  const dec = (v: string | null | undefined) => decryptPII(v) || "";
+  const present = (v: string | null | undefined) => (v ? "x" : "");
+  const pii = privileged ? dec : present;
+  const birthday = dec(u?.birthday);
+  const country = pii(u?.address_country);
+  const builderView = builderDetailsView(access, isFinalStage, {
+    fullName:
+      [pii(u?.first_name), pii(u?.last_name)].filter(Boolean).join(" ") ||
+      (privileged ? (u?.real_name ?? "") : present(u?.real_name)),
+    email: pii(u?.email),
+    birthday: privileged ? birthday : "",
+    age: ageFrom(birthday),
+    country,
+    address: [pii(u?.address_line1), pii(u?.address_line2), pii(u?.address_city), pii(u?.address_state), pii(u?.address_postal), country]
+      .filter(Boolean)
+      .join(", "),
+  });
+
+  // One day before the global cutoff, for the extend-hours date input's max.
+  const maxExtendDateStr = new Date((hackatimeCutoffUnix - 86_400) * 1000).toISOString().slice(0, 10);
+  const repoUrl = isSafeUrl(p.repo_url) ? p.repo_url : null;
+  const githubOwnerProfile = githubRepoOwnerProfile(repoUrl);
+  const demoUrl = isSafeUrl(p.demo_url) ? p.demo_url : null;
+  // Hardware reviews read Lapse recordings in place of Hackatime time.
+  const trackedLabel = p.kind === "hardware" ? "Lapse" : "Hackatime";
+  const track = (p.track ?? "Tools") as Track;
+  const returnTo = `/review/${p.id}`;
+
+  const claimCallout = (handle: string | null) => (
+    <Callout tone="warning" icon="private">
+      Heads up: <span className="break-all">{handle ?? claimedByOther ?? "another reviewer"}</span> is already reviewing this submission.
+      Avoid double-grading it.
+    </Callout>
+  );
+
+  // Repo, README and demo sit right under the
+  // project description, so a reviewer reads what it is before opening it.
+  const projectLinks = (
+    <div className="flex flex-wrap gap-2">
+      {repoUrl ? (
+        <>
+          {/* data-review-link lets ReviewForm record that the repo/demo was
+              opened (repo_opened/demo_opened on the review audit). */}
+          <span data-review-link="repo" className="contents">
+            <ButtonLink href={repoUrl} external variant="outline" icon="github">
+              Repo
+            </ButtonLink>
+            {githubOwnerProfile && (
+              <ButtonLink href={githubOwnerProfile} external variant="outline" icon="view">
+                GitHub profile
+              </ButtonLink>
+            )}
+            <ButtonLink href={`${repoUrl.replace(/\/$/, "")}#readme`} external variant="outline" icon="docs">
+              README
+            </ButtonLink>
+          </span>
+        </>
+      ) : (
+        <Badge tone="danger">No repo</Badge>
+      )}
+      {demoUrl ? (
+        <span data-review-link="demo" className="contents">
+          <ButtonLink href={demoUrl} external variant="outline" icon="link">
+            Live demo
+          </ButtonLink>
+          <TypeBadge type={p.project_type} />
+        </span>
+      ) : (
+        <Badge tone="danger">No demo</Badge>
+      )}
+      {/* The AI-usage check is a stub: it opens with the review service. */}
+      {isFinalStage && (
+        <p className="hc-caption w-full text-xs">AI-usage check: opens with the review service. Nothing here is saved.</p>
+      )}
+    </div>
+  );
+
+  const ownerCard = (ownerName: string) => {
+    const contributors = contributorsFor(ownerName);
+    return (
+      <Card padding="compact">
+        <div className="flex flex-wrap items-center gap-3">
+          <Avatar src={null} size={40} />
+          <div className="min-w-0 flex-1">
+            <TextLink href={`/players/${p.user_id}`} className="block truncate font-bold">
+              {ownerName}
+            </TextLink>
+            <div className="text-sm">
+              {p.users?.slack_id && <Mono>{p.users.slack_id}</Mono>}
+              {acceptedCollaborators.length > 0 && (
+                <Muted>
+                  {p.users?.slack_id ? " · " : ""}with {collaboratorHours.map((c) => c.name).join(", ")}
+                </Muted>
+              )}
+            </div>
+            <p className="hc-caption mt-1 text-sm">
+              Submitted {ago(p.shipped_at)} · {fmtHM(hours)} logged
+              {hackatimeSources.length > 0 && (
+                <>
+                  {" · "}
+                  <a href="#hackatime" className="hc-link">
+                    Hackatime: {[...new Set(hackatimeSources.flatMap((s) => s.projects))].join(", ")}
+                  </a>
+                </>
+              )}
+            </p>
+          </div>
+        </div>
+        {acceptedCollaborators.length > 0 && (
+          <div className="mt-4 border-t border-[var(--border)] pt-4">
+            <p className="hc-eyebrow mb-2">Time by contributor</p>
+            <DescriptionList
+              items={contributors.map((c) => [
+                c.name,
+                <Mono key={c.userId}>
+                  {fmtHM(c.hackatimeHours)} {trackedLabel} · {fmtHM(c.journalHours)} journals
+                </Mono>,
+              ])}
+            />
+            <p className="hc-caption mt-2 text-xs">
+              Journal entries are labelled by who wrote them, and each commit in the Commits tab shows its own author.
+            </p>
+          </div>
+        )}
+        <details className="mt-3 border-t border-[var(--border)] pt-3">
+          <summary className="hc-caption inline-flex cursor-pointer items-center gap-1 text-sm">
+            <Icon glyph="checkmark" size={16} />
+            Eligibility check and builder details
+          </summary>
+          <ul className="hc-caption mt-2 flex list-disc flex-col gap-1 pl-5 text-sm">
+            <li>
+              <strong>Not</strong> a school assignment, and <strong>not</strong> built as paid work. Both are
+              ineligible.
+            </li>
+            <li>Repo has a usable README and the live demo actually works.</li>
+            <li>The builder is aged 13 to 18.</li>
+          </ul>
+          <p className="hc-eyebrow mb-2 mt-4">
+            {builderView.privileged ? "Builder details (name, email, age, shipping)" : "Builder details (age, fields on file)"}
+          </p>
+          <DescriptionList
+            items={[
+              ["Name", builderView.fullName],
+              ["Email", builderView.email],
+              ["Age", builderView.ageLabel],
+              ["Country", builderView.country],
+              ...(builderView.address !== null
+                ? ([["Address", builderView.address]] as [ReactNode, ReactNode][])
+                : []),
+            ]}
+          />
+        </details>
+      </Card>
+    );
+  };
+
+  // ---- Right column tabs.
+
+  // The Flagship award (Pixl's Beacon) sits next to the verdict: reviewers decide it while grading.
+  // toggleProjectPeak re-checks the reviewer role and own-project rule.
+  const flagshipCard = !isOwn && access.isReviewer && (
+    <Card
+      padding="compact"
+      className="border-[color-mix(in_srgb,var(--hc-yellow)_45%,var(--border))] bg-[color-mix(in_srgb,var(--hc-yellow)_7%,var(--surface))]"
+    >
+      <div className="flex items-start gap-3">
+        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[color-mix(in_srgb,var(--hc-yellow)_18%,transparent)] text-[var(--hc-yellow)]">
+          <Icon glyph="rep" size={20} />
+        </span>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="hc-heading text-sm">Flagship award</p>
+            {p.is_peak ? <Badge tone="yellow">Active</Badge> : <Badge>Not nominated</Badge>}
+          </div>
+          <form action={toggleProjectPeak}>
+            <input type="hidden" name="projectId" value={p.id} />
+            {!p.is_peak && <input type="hidden" name="isPeak" value="1" />}
+            <ActionButton
+              size="sm"
+              variant={p.is_peak ? "outline" : "cream"}
+              icon={p.is_peak ? undefined : "rep"}
+              pendingLabel={p.is_peak ? "Removing..." : "Marking..."}
+            >
+              {p.is_peak ? "Remove" : "Nominate"}
+            </ActionButton>
+          </form>
+        </div>
+      </div>
+      <p className="hc-caption mt-2 text-xs">
+        A standout project. The mark is cosmetic: it never changes the Ore or Track XP credited.
+      </p>
+    </Card>
+  );
+
+  const reviewTab = (
+    <div className="flex flex-col gap-4 pt-4">
+      {canReview ? (
+        <>
+          <Card>
+            <h3 className="hc-heading text-base">
+              {isProposedBan ? "Final pass" : secondPassStage ? "Second pass" : "First pass"}
+            </h3>
+            <p className="hc-caption mt-1 mb-4 text-sm">
+              {isProposedBan
+                ? `A first-pass reviewer proposed banning this. Confirm it, or approve to overturn. Approving credits ${ORE_PER_HOUR} Ore and ${TRACK_XP_PER_HOUR} Track XP for each approved hour. Every verdict needs a note. You can only lower the credited hours.`
+                : secondPassStage
+                  ? `The final verdict, after the first pass. Approving credits ${ORE_PER_HOUR} Ore and ${TRACK_XP_PER_HOUR} Track XP for each approved hour. Every verdict needs a note. You can only lower the credited hours.`
+                  : "Every verdict needs a note. Approving sends this to Second pass, where an owner or a final reviewer gives the verdict, so even with final-reviewer rights your first look is still a proposal. You can only lower the credited hours."}
+            </p>
+            {isReal && (
+              <p className="hc-caption mb-3 text-sm">
+                Hours credited come from your decision on each journal entry (the Journals tab). Set every entry before the verdict.
+                {p.second_pass_verdict === "fraud" ? " The triage says Fraud, so this can only be sent back or banned." : ""}
+              </p>
+            )}
+            {hasActiveClaim ? (
+              <>
+                <form action={endReviewClaim} className="mb-3 flex items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+                  <input type="hidden" name="projectId" value={p.id} />
+                  <p className="hc-caption text-xs">Review claimed by you · saved notes are retained if you stop.</p>
+                  <ActionButton variant="outline" size="sm" pendingLabel="Releasing...">Stop reviewing</ActionButton>
+                </form>
+                <ReviewForm
+              projectId={p.id}
+              repoUrl={p.repo_url}
+              demoUrl={p.demo_url}
+              claimedHours={payoutHours}
+              defaultHours={formDefaultHours}
+              journalDeflatedHours={journalDeflatedHours}
+              isSuper={access.isOwner}
+              canAiDraft={access.canAiDraft}
+              canEditSubmission={access.canEditSubmission}
+              secondPass={secondPassStage || isProposedBan}
+              track={track}
+              researchMode={Boolean(p.research_mode)}
+              kind={p.kind === "hardware" ? "hardware" : "software"}
+              ageFlag={ageFlag}
+              collaborators={collaboratorHours}
+              currentName={p.name}
+              currentDescription={p.description}
+              currentImageUrl={p.image_url}
+              defaultRevealName={staffSettings.reviewRevealName}
+              defaultNotifyOnResubmit={staffSettings.reviewNotifyOnResubmit}
+              initialReviewMacros={staffSettings.reviewMacros}
+              initialMacroPromptDismissed={staffSettings.reviewMacroPromptDismissed}
+              firstPass={
+                firstPassAudit
+                  ? {
+                      technicalFeatures: firstPassAudit["TECHNICAL FEATURES"],
+                      deflationReason: firstPassAudit["DEFLATION REASON"],
+                      ageJustification: firstPassAudit["AGE JUSTIFICATION"],
+                      notes: firstPassAudit["NOTES"],
+                      note: p.first_pass_note,
+                    }
+                  : undefined
+              }
+              serverDraft={
+                p.review_draft ? { draft: p.review_draft, by: p.review_draft_by, at: p.review_draft_at } : undefined
+              }
+                />
+              </>
+            ) : (
+              <div className="flex flex-col items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--sunken)] p-4">
+                <p className="font-bold text-sm">Preview mode: you're not reviewing this yet</p>
+                <p className="hc-caption text-sm">
+                  You can inspect the project and its evidence without claiming it. Start reviewing only when you're ready
+                  to write a verdict; that reserves this project for 30 minutes and keeps the claim alive while you work.
+                </p>
+                <form action={beginReviewClaim}>
+                  <input type="hidden" name="projectId" value={p.id} />
+                  <ActionButton icon="view" pendingLabel="Claiming...">Start reviewing</ActionButton>
+                </form>
+                {claimedByOther && (
+                  <p className="hc-caption text-xs">Another reviewer currently has the claim. You'll be able to claim it when they finish or it expires.</p>
+                )}
+              </div>
+            )}
+          </Card>
+        </>
+      ) : needsTriage && !isHeld && !isOwn && (access.isOwner || canSecondPass) ? (
+        <Card>
+          <h3 className="hc-heading text-base">Fraud triage</h3>
+          <p className="hc-caption mt-1 mb-4 text-sm">
+            The first pass approved this. Before the final verdict, record whether it looks like fraud, with a note. Not fraud opens
+            the verdict. Fraud closes the approval: you can ask for changes or ban it.
+          </p>
+          {hasActiveClaim ? (
+            <form action={recordSecondPassTriage} className="flex flex-col gap-3">
+              <input type="hidden" name="projectId" value={p.id} />
+              <Textarea name="note" required rows={3} maxLength={500} placeholder="What did you check, and what did you find?" />
+              <div className="flex flex-wrap gap-2">
+                <ActionButton name="decision" value="not-fraud" icon="checkmark" pendingLabel="Saving...">Not fraud</ActionButton>
+                <ActionButton name="decision" value="fraud" variant="danger" pendingLabel="Saving...">Fraud</ActionButton>
+              </div>
+            </form>
+          ) : (
+            <div className="flex flex-col items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--sunken)] p-4">
+              <p className="hc-caption text-sm">Start reviewing to reserve this ship for 30 minutes, then record the triage.</p>
+              <form action={beginReviewClaim}>
+                <input type="hidden" name="projectId" value={p.id} />
+                <ActionButton icon="view" pendingLabel="Claiming...">Start reviewing</ActionButton>
+              </form>
+              {claimedByOther && <p className="hc-caption text-xs">Another reviewer currently has the claim.</p>}
+            </div>
+          )}
+        </Card>
+      ) : p.banned_at ? (
+        <Callout tone="danger" icon="important">
+          <strong>This project was banned{p.ban_by ? ` by ${p.ban_by}` : ""} on {formatDateTime(p.banned_at)}.</strong>{" "}
+          It can't be reviewed anymore and can never be shipped again.
+          {p.ban_reason && <span className="mt-1 block whitespace-pre-wrap break-words">Reason: {p.ban_reason}</span>}
+        </Callout>
+      ) : isOwn ? (
+        <EmptyState title="Your own submission" icon="private">
+          Someone else has to review it.
+        </EmptyState>
+      ) : !access.isReviewer ? (
+        <EmptyState title="You are not reviewing" icon="private">
+          Your account is set to not review, so this page is read-only for you.
+        </EmptyState>
+      ) : isFinalStage ? (
+        <Callout tone="neutral" icon="clock">
+          Passed the first review. Waiting on a final reviewer to sign off before Ore is credited.
+        </Callout>
+      ) : (
+        <Callout tone="neutral" icon="checkmark">
+          <span className="inline-flex flex-wrap items-center gap-2">
+            Already reviewed <StatusBadge status={p.status} />
+          </span>
+          <p className="mt-1">
+            See the{" "}
+            <TextLink href={`/projects/${p.id}`} className="font-bold">
+              project page
+            </TextLink>{" "}
+            to revert or take further action.
+          </p>
+        </Callout>
+      )}
+      {flagshipCard}
+    </div>
+  );
+
+  const actionsTab = (
+    <div className="flex flex-col gap-4 pt-4">
+      {!isHeld && (
+        <Details summary="Put this review on hold">
+          <form action={holdReview} className="flex flex-col gap-3">
+            <input type="hidden" name="projectId" value={p.id} />
+            <input type="hidden" name="returnTo" value={returnTo} />
+            <p className="hc-caption text-sm">
+              Blocks any verdict on this project until you or an admin releases it, e.g. mid-investigation. It stays
+              visible in the queue.
+            </p>
+            <Textarea name="reason" required rows={2} placeholder="Why hold this (internal, not shown to the builder)..." />
+            <ActionButton
+              variant="outline"
+              pendingLabel="Holding..."
+              confirm="Hold this review? Nobody can submit a verdict on it until you or another owner releases it."
+            >
+              Hold this review
+            </ActionButton>
+          </form>
+        </Details>
+      )}
+
+
+      {canReview && (
+        <Details summary="Extend hours cutoff">
+          <form action={extendHoursCutoff} className="flex flex-col gap-3">
+            <input type="hidden" name="projectId" value={p.id} />
+            <p className="hc-caption text-sm">
+              Normally only hours from the program start onward count. If this project genuinely started earlier
+              and paused (verify against Hackatime&apos;s first-activity date), pick how far back to count from. This
+              raises the credited total, it never lowers it. Opens with the review service. Nothing here is saved.
+            </p>
+            <Input
+              type="date"
+              name="since"
+              required
+              max={maxExtendDateStr}
+              defaultValue={
+                p.hours_extended_since ? new Date(p.hours_extended_since).toISOString().slice(0, 10) : undefined
+              }
+            />
+            <Textarea
+              name="note"
+              required
+              rows={2}
+              placeholder="Why count from this date (the builder will see this)..."
+            />
+            <ActionButton
+              variant="outline"
+              pendingLabel="Extending..."
+              confirm="Recount this project's hours from that date? This only ever raises the credited total."
+              disabled
+            >
+              Extend cutoff
+            </ActionButton>
+          </form>
+        </Details>
+      )}
+
+      {canReview && isFinalStage && !isReal && (
+        <Details summary="Send back to first pass">
+          <form action={sendBackToFirstPass} className="flex flex-col gap-3">
+            <input type="hidden" name="projectId" value={p.id} />
+            <p className="hc-caption text-sm">
+              Not confident enough to confirm or overturn the first pass yourself? Send it back to the front of the
+              queue for a fresh first-pass look instead. No verdict, no Ore credited yet.
+            </p>
+            <Textarea
+              name="reason"
+              required
+              rows={2}
+              placeholder="Why send this back (internal, not shown to the builder)..."
+            />
+            <ActionButton variant="cream" pendingLabel="Sending back..." confirm="Send this back to first pass?">
+              Send back to first pass
+            </ActionButton>
+          </form>
+        </Details>
+      )}
+
+      {unshipNote && (
+        <Details summary="Unship to draft">
+          <form action={unshipProject} className="flex flex-col gap-3">
+            <input type="hidden" name="projectId" value={p.id} />
+            <p className="hc-caption text-sm">
+              Takes this out of the queue and hands it back to the builder as an editable draft. They fix it and
+              reship, and review starts from scratch: the first-pass verdict (including a ban proposal), notes and
+              second-pass checklist are all cleared. The builder and any collaborators are notified with your reason.
+            </p>
+            <Callout tone="warning" icon="important">
+              {unshipNote}
+            </Callout>
+            <Textarea name="reason" required rows={2} placeholder="Why unship this (shown to the builder)..." />
+            <ActionButton
+              variant="danger"
+              pendingLabel="Unshipping..."
+              confirm={`${unshipNote}\n\nUnship this project back to a draft? The owner is notified and it leaves the queue.`}
+            >
+              Unship to draft
+            </ActionButton>
+          </form>
+        </Details>
+      )}
+
+      {canReview && canModerate && (
+        <Details summary="Ban project (permanent)">
+          <form action={banProject} className="flex flex-col gap-3">
+            <input type="hidden" name="projectId" value={p.id} />
+            <input type="hidden" name="returnTo" value={returnTo} />
+            <p className="hc-caption text-sm">
+              Permanently bans this project. It can never be shipped again and is hidden everywhere. Different from
+              requesting changes. Reversible by staff only.
+            </p>
+            <Textarea name="reason" required rows={2} placeholder="Reason for the ban (shown to the builder)..." />
+            <ActionButton
+              variant="danger"
+              pendingLabel="Banning..."
+              confirm="Permanently ban this project? It can never be shipped again."
+            >
+              Ban project
+            </ActionButton>
+          </form>
+        </Details>
+      )}
+    </div>
+  );
+
+  const overviewTab = (
+    <div className="flex flex-col gap-4 pt-4">
+      <Card>
+        <p className="hc-eyebrow">Logged hours</p>
+        <p className="mt-1 mb-3">
+          <span className="hc-stat-value">{fmtHM(hours)}</span> <Muted className="text-sm">logged</Muted>
+        </p>
+        {/* Blue vs a deepened orange: checked for colorblind
+            separation and contrast on both themes (blue/purple wasn't). */}
+        <div className="flex h-2 gap-0.5 rounded-full bg-[var(--sunken)]">
+          {htPct > 0 && (
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${htPct}%`, background: HOURS_COLOR.hackatime }}
+              title={`${trackedLabel}: ${fmtHM(hackatimeHours)}`}
+            />
+          )}
+          {htPct < 100 && hours > 0 && (
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${100 - htPct}%`, background: HOURS_COLOR.journals }}
+              title={`Journals: ${fmtHM(journalHours)}`}
+            />
+          )}
+        </div>
+        <div className="mt-4 flex flex-col gap-2 text-sm">
+          <a href="#hackatime" className="hc-link flex items-center gap-2" title={`See the full ${trackedLabel} breakdown`}>
+            <span className="hc-dot" style={{ background: HOURS_COLOR.hackatime }} />
+            {trackedLabel}
+            <span className="hc-mono ml-auto">{fmtHM(hackatimeHours)}</span>
+          </a>
+          <div className="flex items-center gap-2">
+            <span className="hc-dot" style={{ background: HOURS_COLOR.journals }} />
+            Journals
+            <span className="hc-mono ml-auto">{fmtHM(journalHours)}</span>
+          </div>
+        </div>
+        {p.hours_extended_since && (
+          <p className="hc-caption mt-3 border-t border-[var(--border)] pt-3 text-xs">
+            Counting hours from <strong>{formatDate(p.hours_extended_since)}</strong> (before the program start), set by <strong>{p.hours_extended_by}</strong>: {p.hours_extended_note}
+          </p>
+        )}
+      </Card>
+
+      <Suspense fallback={null}>
+        <Await promise={trustPromise}>
+          {(trust) =>
+            trust && (
+              <Card padding="compact">
+                <div className="flex items-center gap-3">
+                  <Badge tone={trustTone(trust.level)}>{trust.level === "blue" ? "unscored" : trust.level}</Badge>
+                  <span className="hc-caption text-sm">Hackatime trust factor. {trustText(trust.level)}</span>
+                </div>
+              </Card>
+            )
+          }
+        </Await>
+      </Suspense>
+
+      {isFinalStage && (
+        <Card>
+          <CardHeader title="First pass" icon="history" />
+          {p.first_pass_verdict && p.first_pass_verdict !== "approved" && (
+            <div className="mb-3">
+              <Callout tone="danger" icon="important">
+                First reviewer proposed {p.first_pass_verdict === "banned" ? "a BAN" : "changes"}. Confirm it, or
+                approve to overturn.
+                {p.first_pass_verdict === "banned" && !access.isOwner && (
+                  <p className="mt-1">
+                    Only an owner can confirm a ban. Approving sends it to the owner&apos;s second pass.
+                  </p>
+                )}
+              </Callout>
+            </div>
+          )}
+          <p className="text-sm">
+            {p.first_pass_verdict === "banned"
+              ? "Ban proposed by "
+              : p.first_pass_verdict === "needs_changes"
+                ? "Changes proposed by "
+                : "Passed by "}
+            <strong>{staffName(p.first_pass_by, "a reviewer")}</strong>
+            {p.first_pass_at && (
+              <>
+                {" "}
+                on{" "}
+                <span title={new Date(p.first_pass_at).toUTCString()}>
+                  {new Date(p.first_pass_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })}
+                </span>
+              </>
+            )}
+            {p.first_pass_hours != null && (
+              <>
+                {" "}
+                · credited <Mono>{p.first_pass_hours}h</Mono> of <Mono>{hours}h</Mono> claimed
+              </>
+            )}
+          </p>
+          {firstPassDeflated > 0 && (
+            <p className="mt-1 text-sm text-[var(--hc-red)]">
+              Deflated {firstPassDeflated}h{firstPassCutPct > 0 ? ` (-${firstPassCutPct}%)` : ""}
+            </p>
+          )}
+          {p.first_pass_note && (
+            <div className="mt-3">
+              <p className="hc-eyebrow mb-1">Their note</p>
+              <p className="whitespace-pre-wrap break-words text-sm">{p.first_pass_note}</p>
+            </div>
+          )}
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader title="Pipeline" icon="list-checked" />
+        <div className="flex flex-col gap-4">
+          <ReviewPipelineSteps
+            shippedAt={p.shipped_at}
+            firstPassAt={p.first_pass_at}
+            status={p.status}
+          />
+          {isFinalStage && canSecondPass && (
+            <SecondPassChecklist
+              projectId={p.id}
+              values={{
+                second_pass_telescreen_checked: Boolean(p.second_pass_telescreen_checked),
+                second_pass_hours_deflated: Boolean(p.second_pass_hours_deflated),
+                second_pass_heartbeats_added: Boolean(p.second_pass_heartbeats_added),
+              }}
+            />
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+
+  const rightTabs = [
+    { key: "review", label: "Review", content: reviewTab },
+    { key: "actions", label: "Actions", content: actionsTab },
+    { key: "overview", label: "Overview", content: overviewTab },
+    {
+      key: "notes",
+      label: (
+        <>
+          Notes {notes.length > 0 && <CountBadge>{notes.length}</CountBadge>}
+        </>
+      ),
+      content: (
+        <div className="pt-4">
+          <ProjectNotes projectId={p.id} notes={notes} />
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="hc-review flex flex-col gap-6">
+      {hasActiveClaim && canReview && <ReviewHeartbeat projectId={projectId} />}
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <ButtonLink href="/review" variant="ghost" size="sm" icon="view-back">
+          Review queue
+        </ButtonLink>
+        <div className="flex flex-wrap items-center gap-3">
+          <ButtonLink href={`/projects/${p.id}`} variant="outline" size="sm">
+            Open in project view
+          </ButtonLink>
+        </div>
+      </div>
+
+      {(error || claimedByOther) && (
+        <div className="flex flex-col gap-3">
+          <Flash error={error} />
+          {claimedByOther &&
+            (claimHandlePromise ? (
+              <Suspense fallback={claimCallout(null)}>
+                <Await promise={claimHandlePromise}>{(handle) => claimCallout(handle)}</Await>
+              </Suspense>
+            ) : (
+              claimCallout(null)
+            ))}
+        </div>
+      )}
+
+      <ReviewSplit initialWidth={staffSettings.reviewPanelWidth}>
+        <div className="flex min-w-0 flex-col gap-6">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <StatusBadge status={p.status} />
+              <span title="One track per project. It locks when the builder submits.">
+                <TrackBadge track={track} />
+              </span>
+              <TypeBadge type={p.project_type} />
+              <ShipBadges project={p} />
+              {p.is_peak && <Badge tone="yellow" icon="rep">Flagship</Badge>}
+              {isHeld && (
+                <Badge tone="warning" icon="private">
+                  On hold
+                </Badge>
+              )}
+              <Muted className="ml-auto text-sm">
+                <Mono>#{p.id}</Mono>
+              </Muted>
+            </div>
+            <h1 className="hc-title mt-2 break-words">{p.name}</h1>
+          </div>
+
+          {/* Who built it, when and how long: first thing a reviewer needs, so
+              it sits right under the title. */}
+          <Suspense fallback={ownerCard(ownerNameFor(null))}>
+            <Await promise={ownerHandlePromise}>{(handle) => ownerCard(ownerNameFor(handle))}</Await>
+          </Suspense>
+
+          {isAllowedImageSrc(p.image_url) && (
+            <img
+              src={p.image_url}
+              alt=""
+              referrerPolicy="no-referrer"
+              className="max-h-96 w-full rounded-lg border border-[var(--border)] bg-[var(--sunken)] object-contain"
+            />
+          )}
+
+          {p.description && (
+            <Card>
+              <div className="hc-markdown" dangerouslySetInnerHTML={{ __html: renderMarkdown(p.description) }} />
+            </Card>
+          )}
+
+          {projectLinks}
+
+          <DoubleDipBanner systemNote={p.system_note} />
+          <PrecheckCallout view={precheckView(p)} />
+          {/* The automated checks LOADOUT runs itself (lib/platform/fraud): pre-check, double dip, Telescreen and Fraudy. Read-only. */}
+          <Suspense fallback={null}>
+            <FraudChecksPanel projectId={p.id} showScores={canViewAiTime || access.canFraudReview} />
+          </Suspense>
+          {!p.used_ai && (
+            <Suspense fallback={null}>
+              <Await promise={commitsPromise}>
+                {(commits) => {
+                  const aiCommits = commits.commits.filter((c) => c.ai).length;
+                  if (aiCommits === 0) return null;
+                  return (
+                    <Callout tone="danger" icon="important">
+                      {aiCommits} commit{aiCommits === 1 ? "" : "s"} in this repo {aiCommits === 1 ? "is" : "are"}{" "}
+                      signed by an AI tool, but the builder did not tick &ldquo;AI used&rdquo;. Undisclosed AI: verify
+                      before crediting.
+                    </Callout>
+                  );
+                }}
+              </Await>
+            </Suspense>
+          )}
+          {p.is_update && Number(p.prior_approved_hours) > 0 && (
+            <NoteCallout tone="warning" icon="important" title="Update ship: hours are cumulative">
+              Last approval credited {round1(Number(p.prior_approved_hours))}h (with any deflation already applied). The{" "}
+              {hours}h above is the whole project, so about {Math.max(round1(hours - Number(p.prior_approved_hours)), 0)}h is
+              new. Enter the credited TOTAL, deflating only the new work: Ore is credited as the difference from what this
+              project already earned.
+            </NoteCallout>
+          )}
+          {p.is_update && p.update_notes && (
+            <NoteCallout tone="info" icon="view-reload" title="What changed since last approval">
+              {p.update_notes}
+            </NoteCallout>
+          )}
+          {p.other_ysws_notes && (
+            <NoteCallout tone="warning" icon="important" title="What changed since their other YSWS submission">
+              {p.other_ysws_notes}
+            </NoteCallout>
+          )}
+          {p.ship_note && (
+            <Details
+              open
+              summary={
+                <>
+                  <Icon glyph="message" size={18} className="hc-muted" />
+                  Note from the builder
+                </>
+              }
+            >
+              <div className="whitespace-pre-wrap break-words text-sm">{p.ship_note}</div>
+            </Details>
+          )}
+          {p.used_ai && (
+            <Details
+              open
+              summary={
+                <>
+                  <Icon glyph="code" size={18} className="hc-muted" />
+                  AI declaration
+                </>
+              }
+            >
+              <div className="whitespace-pre-wrap break-words text-sm">
+                {p.ai_notes || "The builder ticked “AI used” but gave no details."}
+              </div>
+            </Details>
+          )}
+
+          {p.kind === "hardware" && (
+            <Card>
+              <CardHeader title="Bill of materials" icon="bank-account" />
+              <div className="flex flex-col gap-2">
+                <p className="hc-caption text-sm">
+                  Read the parts against the Lapse recordings. Every part needs a quantity and a source.
+                </p>
+                {p.bom_url && bomPromise ? (
+                  <>
+                    <Suspense fallback={<Muted className="text-sm"><span role="status">Loading BOM preview...</span></Muted>}>
+                      <Await promise={bomPromise}>
+                        {(bomRows) =>
+                          bomRows ? (
+                            <Details
+                              open
+                              summary={`View BOM (${bomRows.length - 1} item${bomRows.length - 1 === 1 ? "" : "s"})`}
+                            >
+                              <Table headers={bomRows[0]}>
+                                {bomRows.slice(1).map((row, i) => (
+                                  <tr key={i}>
+                                    {row.map((cell, j) => (
+                                      <td key={j} className="whitespace-nowrap">
+                                        {cell}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </Table>
+                            </Details>
+                          ) : (
+                            <Muted className="text-sm">Couldn&apos;t load a preview, download it instead.</Muted>
+                          )
+                        }
+                      </Await>
+                    </Suspense>
+                    <TextLink href={p.bom_url} external className="text-sm">
+                      Download BOM (.csv)
+                    </TextLink>
+                  </>
+                ) : (
+                  <Muted className="text-sm">Not uploaded.</Muted>
+                )}
+              </div>
+            </Card>
+          )}
+
+          <Suspense fallback={<CardSkeleton lines={6} />}>
+            <Await
+              promise={Promise.all([
+                commitsPromise,
+                yswsPromise,
+                hackatimeReportsPromise,
+                ownerHandlePromise,
+              ])}
+            >
+              {([commits, yswsArchive, hackatimeReports, ownerHandle]) => (
+                <ReviewDetailTabs
+                  projectId={p.id}
+                  commits={commits}
+                  journals={journals}
+                  contributorNames={Object.fromEntries(
+                    contributorsFor(ownerNameFor(ownerHandle)).map((c) => [c.userId, c.name]),
+                  )}
+                  reviewAudits={reviewAudits}
+                  yswsShips={yswsArchive.ships}
+                  yswsArchiveStatus={yswsArchive.status}
+                  yswsImport={
+                    p.imported_from_ysws
+                      ? {
+                          ysws: String(p.imported_from_ysws),
+                          hours: Number(p.imported_ysws_hours) || 0,
+                          approvedAt: p.imported_ysws_approved_at ? String(p.imported_ysws_approved_at) : null,
+                        }
+                      : null
+                  }
+                  hackatimeReports={hackatimeReports}
+                  repoUrl={p.repo_url ?? null}
+                  usedAi={!!p.used_ai}
+                  aiNotes={p.ai_notes ?? null}
+                  canViewAiTime={canViewAiTime}
+                />
+              )}
+            </Await>
+          </Suspense>
+        </div>
+
+        <aside className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-10rem)] lg:self-start lg:overflow-y-auto lg:pr-1">
+          {/* Pinned above the tabs, never behind a click: the "stop and look
+              at this before you decide" states. */}
+          {isHeld && (
+            <Callout tone="warning" icon="private">
+              <p className="font-bold">On hold, can&apos;t be reviewed right now</p>
+              <p className="mt-1">{p.hold_reason || "No reason given."}</p>
+              <p className="hc-caption mt-1 text-xs">
+                Held by {staffName(p.hold_by, "an owner")}
+                {p.hold_at ? ` on ${formatDateTime(p.hold_at)}` : ""}.
+              </p>
+              {(access.isOwner || heldByMe) && (
+                <form action={releaseReviewHold} className="mt-2">
+                  <input type="hidden" name="projectId" value={p.id} />
+                  <input type="hidden" name="returnTo" value={returnTo} />
+                  <ActionButton
+                    variant="outline"
+                    size="sm"
+                    pendingLabel="Releasing..."
+                    confirm="Release the hold on this project? It goes back to normal review."
+                  >
+                    Release hold
+                  </ActionButton>
+                </form>
+              )}
+            </Callout>
+          )}
+
+          {secondPassStage && p.second_pass_note && (
+            <Card padding="compact">
+              <p className="hc-heading text-sm">Triage note ({staffName(p.second_pass_by, "a reviewer")})</p>
+              <p className="hc-caption mt-1 whitespace-pre-wrap text-sm">{p.second_pass_note}</p>
+            </Card>
+          )}
+
+          {ageFlag && (
+            <Callout tone="warning" icon="important">
+              <p className="font-bold">Age eligibility</p>
+              <p className="mt-1">
+                This builder turned 19 between shipping this project and now. LOADOUT is for ages 13 to 18, so write what
+                you checked in the age justification before deciding, and leave any age exception to an owner.
+              </p>
+            </Callout>
+          )}
+
+          {isCollaborator && p.status === "shipped" && (
+            <Callout tone="warning" icon="private">
+              This is your own submission. Another reviewer has to do the first pass.
+            </Callout>
+          )}
+          {isCollaborator && isFinalStage && (
+            <Callout tone="warning" icon="private">
+              Your own submission. Another owner has to give the final verdict.
+            </Callout>
+          )}
+
+          <Tabs variant="segmented" sticky tabs={rightTabs} />
+        </aside>
+      </ReviewSplit>
+
+      <nav className="sticky bottom-0 z-10 -mx-6 flex items-center gap-4 border-t border-[var(--border)] bg-[var(--background)] px-6 py-3">
+        <ReviewShortcuts />
+        <Suspense fallback={<QueueNav prevId={null} nextId={null} index={-1} total={0} />}>
+          <Await promise={queuePromise}>
+            {(queue) => {
+              // projects.id is a Postgres bigint; compare numerically so a
+              // bigint serialized as a string doesn't miss the match.
+              const idx = queue.findIndex((q) => Number(q.id) === projectId);
+              return (
+                <QueueNav
+                  prevId={idx > 0 ? queue[idx - 1].id : null}
+                  nextId={idx >= 0 && idx < queue.length - 1 ? queue[idx + 1].id : null}
+                  index={idx}
+                  total={queue.length}
+                />
+              );
+            }}
+          </Await>
+        </Suspense>
+      </nav>
+    </div>
+  );
+}
+
+function QueueNav({
+  prevId,
+  nextId,
+  index,
+  total,
+}: {
+  prevId: number | string | null;
+  nextId: number | string | null;
+  /** This submission's position in the queue, -1 when it isn't in it. */
+  index: number;
+  total: number;
+}) {
+  // The position goes on the buttons ("Next · 4/21") so it's readable at a
+  // glance; the middle of the bar lists the keyboard shortcuts instead.
+  const position = (i: number) => (index >= 0 ? ` · ${i + 1}/${total}` : "");
+  const step = (id: number | string | null, prev: boolean) => {
+    const body = prev ? (
+      <>
+        <Icon glyph="view-back" size={18} /> Prev{id != null && position(index - 1)}
+      </>
+    ) : (
+      <>
+        Next{id != null && position(index + 1)} <Icon glyph="view-forward" size={18} />
+      </>
+    );
+    return id != null ? (
+      <Link
+        href={`/review/${id}`}
+        prefetch={false}
+        data-shortcut={prev ? "prev" : "next"}
+        className={buttonClass("outline", "md")}
+      >
+        {body}
+      </Link>
+    ) : (
+      <span className={`${buttonClass("outline", "md")} pointer-events-none opacity-40`} aria-disabled>
+        {body}
+      </span>
+    );
+  };
+  return (
+    <>
+      {step(prevId, true)}
+      <span className="hc-caption flex-1 text-center text-xs">
+        {index < 0 && total > 0 ? "Not in queue · " : ""}
+        <kbd className="hc-mono">←</kbd> <kbd className="hc-mono">→</kbd> move · <kbd className="hc-mono">R</kbd> repo ·{" "}
+        <kbd className="hc-mono">D</kbd> demo ·{" "}
+        <kbd className="hc-mono">1</kbd>-<kbd className="hc-mono">6</kbd> tabs
+      </span>
+      {step(nextId, false)}
+    </>
+  );
+}
+
+// What the server's AI pre-check found on the latest ship (apps/server/src/
+// precheck/). Missing items are the clear-cut requirements; notes are the
+// model's read and never decided anything on their own. Model text renders as
+// plain text.
+function PrecheckCallout({ view }: { view: PrecheckView | null }) {
+  if (!view) return null;
+  if (view.status === "pending")
+    return (
+      <Callout tone="neutral" icon="clock">
+        AI pre-check is still running on this ship.
+      </Callout>
+    );
+  if (view.status === "error")
+    return (
+      <Callout tone="neutral" icon="info">
+        AI pre-check couldn&apos;t run on this ship{view.skipped ? `: ${view.skipped}` : "."}
+      </Callout>
+    );
+  const missing = view.findings.length > 0;
+  return (
+    <Callout tone={missing ? "warning" : "info"} icon={missing ? "important" : "info"}>
+      <div className="flex flex-col gap-2">
+        <strong>
+          {view.status === "sent_back"
+            ? "AI pre-check sent this back to the maker"
+            : missing
+              ? "AI pre-check: required items look missing"
+              : "AI pre-check: nothing required is missing"}
+        </strong>
+        {view.summary && <span>{view.summary}</span>}
+        {missing && (
+          <ul className="list-disc pl-5">
+            {view.findings.map((f) => (
+              <li key={f.id}>
+                {f.label}
+                {f.evidence && <span className="hc-caption"> ({f.evidence})</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+        {view.notes.length > 0 && (
+          <div>
+            <span className="hc-caption">Notes for you (never sent anything back):</span>
+            <ul className="list-disc pl-5">
+              {view.notes.map((n, i) => (
+                <li key={i}>{n}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {view.skipped && <span className="hc-caption">Skipped: {view.skipped}</span>}
+      </div>
+    </Callout>
+  );
+}

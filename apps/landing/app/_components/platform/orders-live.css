@@ -1,0 +1,20 @@
+/* Real ordering on the Shop item page and the Orders pages (prefix ol-). Flat and minimal: text actions, no boxes, square corners. */
+html .pf .ol-act { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 6px; cursor: pointer; box-shadow: none; border-radius: 0; }
+html .pf .ol-act:hover, html .pf .ol-act[aria-pressed="true"] { color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+html .pf .ol-act:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+html .pf .ol-act:disabled { opacity: 0.6; cursor: progress; }
+html .pf .ol-act[data-danger] { color: var(--pf-err); }
+
+html .pf .ol-order { display: grid; gap: 10px; }
+html .pf .ol-qty { display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .ol-qty select { min-height: 44px; min-width: 72px; padding: 0 8px; border: 0; border-bottom: 1px solid var(--pf-rule); border-radius: 0; background: transparent; color: var(--pf-fg); font: inherit; letter-spacing: 0.1em; }
+html .pf .ol-live { min-height: 0; font-size: 0.875em; color: var(--pf-mut); }
+html .pf .ol-live .pf-error, html .pf .ol-live:empty { margin: 0; }
+html .pf .ol-save { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 4px; }
+
+html .pf .ol-row-actions { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; }
+html .pf .ol-meta-actions { display: flex; gap: 4px 16px; margin-top: 12px; }
+html .pf .pf-chip[data-status="cancelled"] { color: var(--pf-mut); border-style: dashed; text-decoration: line-through; width: fit-content; }
+html .pf .ol-cancelled-note { margin: 20px 0 28px; font-size: 0.875em; color: var(--pf-mut); }
+html .pf .ex-wish-action form { display: contents; }
+html .pf .ex-wish-action .ol-act { width: auto; }

@@ -1,7 +1,12 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { readdirSync } from "node:fs";
 import { resolve } from "node:path";
+
+// These specs read the public docs. Local development is signed in, which shows the docs in the platform, so ask for the public layout.
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
+});
 
 // The standard: WCAG 2.2 level AA, the bar GOV.UK Design System works to. Checked automatically here on every page of the
 // homepage and the Docs, at phone and desktop width, in light and dark. Automated checks catch only part of WCAG, so the
@@ -12,6 +17,12 @@ const PUBLIC_GUIDES = readdirSync(resolve(__dirname, "../../../content/docs"))
   .map((name) => `/docs/${name.slice(0, -3)}`);
 const PAGES = ["/", "/docs", "/accessibility", ...PUBLIC_GUIDES, "/accessibility-missing-page", "/docs/accessibility-missing-page"];
 
+// The public Docs have no theme control at all, so read the preference the page applied rather than a checkbox that may not
+// exist. A cold route can take well over 5 s to hydrate on a loaded runner.
+async function expectTheme(page: Page, theme: "light" | "dark") {
+  await expect(page.locator("html")).toHaveAttribute("data-display-theme", theme, { timeout: 30000 });
+}
+
 for (const path of PAGES) {
   for (const [width, height, scheme] of [[375, 812, "dark"], [375, 812, "light"], [1440, 900, "dark"], [1440, 900, "light"]] as const) {
     test(`${path} has no WCAG 2.2 AA violations at ${width}px, ${scheme}`, async ({ page }) => {
@@ -20,8 +31,7 @@ for (const path of PAGES) {
       await page.addInitScript((theme) => localStorage.setItem("loadout-theme", theme), scheme);
       await page.goto(path);
       // A cold route on the dev server can take well over 5 s to hydrate on a loaded runner, so allow for that.
-      if (scheme === "light") await expect(page.locator("#theme")).toBeChecked({ timeout: 30000 });
-      else await expect(page.locator("#theme")).not.toBeChecked({ timeout: 30000 });
+      await expectTheme(page, scheme);
       await page.evaluate(() => document.fonts.ready);
       const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
       expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);

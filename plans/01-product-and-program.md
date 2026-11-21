@@ -302,7 +302,7 @@ Hardware   LV.3 / 20
 
 Eras are a different progression layer from Seasons. They advance the shared technical-era theme from approved community work; they never create a fifth Track or reset lifetime Track XP. See Plan 11 for the approved cadence and boundaries.
 
-Projects may span several tracks. The builder proposes a primary track and any secondary tracks, but the **reviewer makes the final XP allocation based on the work actually shipped**.
+A project has exactly one track (owner, 15 Nov 2026). The builder picks it when the project is created. All Track XP from a ship goes to that track. See section 4.7.
 
 ## 4.1 TOOLS
 > Build tools that help people design, debug, automate, understand, test, or ship technical work.
@@ -479,9 +479,11 @@ HARDWARE
 
 The Digital Loadout makes the profile more than four XP bars. It shows what the builder has actually created.
 
-## 4.7 Multi-Track XP Allocation
+What a builder ships becomes part of their own loadout, and through **Toolbelt** it can become part of other builders' loadouts too. This is why Toolbelt exists: an accepted, open-source tool/project can be equipped into another builder's project, and both builders are rewarded (see [Toolbelt](proposals/toolbelt.md)). Announcement copy states it this way: what you ship becomes part of your loadout, and Toolbelt lets others use it.
 
-A project can meaningfully span multiple fields.
+## 4.7 One Track Per Project
+
+A project has exactly one track (owner, 15 Nov 2026).
 
 Example:
 
@@ -489,22 +491,14 @@ Example:
 PROJECT
 Custom FPGA inference accelerator
 
-FINAL REVIEW ALLOCATION
-
-Hardware    50%
-Compute     35%
-Systems     15%
-Tools        0%
-            ───
-            100%
+TRACK
+Hardware
 ```
 
-If the ship earns `1,000 Track XP` before allocation:
+If the ship earns `1,000 Track XP`:
 
 ```text
-Hardware   +500 XP
-Compute    +350 XP
-Systems    +150 XP
+Hardware   +1,000 XP
 ```
 
 The **Ore reward does not split into track wallets**:
@@ -515,17 +509,16 @@ Project reward
 ```
 
 Rules:
-- the builder proposes the track mix at submission;
-- reviewers can change it;
-- percentages must total **100%**;
-- use 5% increments in the normal UI;
-- usually no more than **three tracks** should receive XP from one ship;
-- allocation reflects meaningful technical contribution, not marketing labels;
-- reviewers may assign 100% to one track when appropriate;
-- Research Mode changes review expectations but does not receive its own XP;
-- for team projects, each member can receive a different track allocation based on that member's approved contribution.
+- the builder picks the track when the project is created;
+- the builder can change it while the project is a draft or in "needs changes", and it locks on submit;
+- all Track XP from a ship goes to that track;
+- a team ship shares one track;
+- if the work does not fit the track, the reviewer sends it back (needs changes) with the reason "Does not fit the track"; the builder adds more work in that track or changes the track, and ships again;
+- "Does not fit the track" is a needs-changes reason, not a new verdict;
+- a builder who wants progress in two fields makes two projects, each with its own track;
+- Research Mode changes review expectations but does not receive its own XP.
 
-This prevents a project from being forced into one arbitrary category while still preventing builders from self-awarding XP everywhere.
+This keeps the track a builder's own choice and removes any track mix for reviewers to set or argue over.
 
 ## 4.8 Track Level Rules
 
@@ -1040,43 +1033,32 @@ TEAM DECISION
 Accepted with reason
 Reason visible to builder
 
-TRACK XP ALLOCATION
-Compute           70%
-Systems           30%
-Hardware           0%
-Tools              0%
-                  100%
+TRACK
+Compute
 
 ORE
 +589 Ore
 
 TRACK XP
-+820 total
-→ +574 Compute
-→ +246 Systems
++820 to Compute
 ```
 
 Team actions:
 - approve / reject LOADOUT fit;
 - narrow eligible scope;
 - approve all/partial time;
-- adjust final track allocation;
 - check the ship against the four quality dimensions and leave a short written reason;
-- request changes;
+- request changes (including the reason "Does not fit the track");
 - reject;
 - flag AI;
 - flag fraud;
 - leave note.
 
-Track allocation rules:
-- builder proposal is visible but not binding;
-- team percentages total 100%;
-- normal UI uses 5% steps;
-- usually allocate to no more than three fields;
-- only approved technical contribution counts;
-- do not award token XP to unrelated fields merely because a technology appears in the stack.
-
-For team projects, the team may set per-member allocation when contributions differ.
+Track rules:
+- the track is the builder's pick and the reviewer does not change it;
+- if the work does not fit the track, request changes with the reason "Does not fit the track";
+- the track locks on submit and is open again once the ship is in "needs changes";
+- a team ship shares one track.
 
 ---
 
@@ -1167,9 +1149,9 @@ TECHNICAL CAPABILITY GAP
 → BUILD A TOOL / SYSTEM / COMPUTE / HARDWARE ARTIFACT
 → PROVE THE WORK
 → SHIP
-→ TEAM ALLOCATES TRACK XP
+→ TRACK XP GOES TO THE PROJECT'S ONE TRACK
 → ADD IT TO YOUR DIGITAL LOADOUT
-→ LEVEL THE RELEVANT TRACKS
+→ LEVEL THAT TRACK
 → EARN GLOBAL ORE
 → GET BETTER FIELD PRICING / UNLOCKS
 → SAVE OR USE RARE REQUISITIONS
@@ -1195,8 +1177,8 @@ QUALITY
 DIGITAL LOADOUT
 → make shipped capability visible
 
-MULTI-TRACK XP
-→ recognize real cross-domain work
+ONE TRACK PER PROJECT
+→ keep XP honest and simple; cross-domain work is several projects
 
 TRACK LEVELS
 → develop specialization

@@ -1,12 +1,12 @@
 ---
 title: "Tracks"
-description: "Tools, Systems, Compute and Hardware: choose the tracks you actually build in."
+description: "Tools, Systems, Compute and Hardware: pick the one track that fits your project."
 group: "START HERE"
 order: 40
 status: draft
 ---
 
-Which track should you pick? Look at what you're actually building. Designing a board gives you Hardware work to show, and building a substantial service to collect its readings could add Systems work too. Tell us about both when you ship, so we can put your Track XP into the fields you've worked in.
+Which track should you pick? Look at the work you're actually building and choose the one track that fits it best. Say you design a sensor board and also write a service that collects its readings. The board is Hardware work and the service is Systems work, so ship them as two projects, each with its own track.
 
 ## The four fields
 
@@ -17,7 +17,7 @@ Which track should you pick? Look at what you're actually building. Designing a 
 | Compute | A renderer, inference engine, GPU workload or numerical optimization. | Correctness checks, measurements and the conditions behind them. |
 | Hardware | A PCB, embedded device, robot component, FPGA design or instrument. | The design files, the choices you made and evidence of the device working. |
 
-Choosing a track doesn't lock you into it forever, either. You can work on a profiler for one project and a circuit for the next. Each track has its own level, so you'll keep the progress you made in the first while you try the second.
+Choosing a track doesn't lock you into it forever. You can work on a profiler for one project and a circuit for the next. Each track has its own level, so you'll keep the progress you made in the first while you try the second.
 
 ## One project, one track
 

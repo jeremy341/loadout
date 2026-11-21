@@ -24,7 +24,7 @@ Let's see what that ticket saves. It takes **10% of the item's base Ore price** 
 | Requisition (10%) | −100 |
 | **Before your level discount** | **900** |
 
-Your level discount then comes off the same base price. Together, the two savings can reach at most **30%** of the base price. With a General Requisition as well, the cap is **40%**. There's no Ore savings cap beyond that. The item's base price must be **400 Ore or more** for a ticket to apply.
+Your level discount then comes off the same base price. Together, your savings can reach at most **40%** of the base price: your level discount, a Field Requisition and a General Requisition. There's no Ore savings cap beyond that. The item's base price must be **400 Ore or more** for a ticket to apply.
 
 ## Using one
 

@@ -3,8 +3,9 @@ import { notFound, redirect } from "next/navigation";
 import { DocsDocument } from "../DocsDocument";
 import { docsAliases } from "../docs-data";
 import { getDocs } from '../docs-source';
+import { docsViewer } from "../docs-viewer";
 
-export const dynamic = "force-static";
+// Not force-static: the layout reads the session to choose the platform frame or the public one.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -23,5 +24,6 @@ export default async function DocsSlugPage({ params }: { params: Promise<{ slug:
   const pages = getDocs();
   const index = pages.findIndex((item) => item.slug === slug);
   if (index < 0) notFound();
-  return <DocsDocument page={pages[index]} previous={pages[index - 1]} next={pages[index + 1]} />;
+  const embedded = (await docsViewer()) !== null;
+  return <DocsDocument page={pages[index]} previous={pages[index - 1]} next={pages[index + 1]} embedded={embedded} />;
 }

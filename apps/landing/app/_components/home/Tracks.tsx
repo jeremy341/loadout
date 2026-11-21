@@ -23,7 +23,7 @@ export function Tracks() {
           four tracks
         </h2>
         <p className="lead">
-          Pick the fields your project touches. One project can sit in more than one.
+          Pick the one track your project fits. A project has one track, and all its Track XP goes there.
         </p>
         <div className="row">
           {TRACK_BUILDS.map((track, index) => (

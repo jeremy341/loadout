@@ -27,7 +27,7 @@ test.describe("the queue", () => {
   test("shows the review tabs and a table of ships", async ({ page }) => {
     await page.goto("/review");
     await expect(page).toHaveTitle(/LOADOUT Review/);
-    for (const name of [/^Needs review/, /^Reviewed/, /^Stats/, /^Integrity reviews/, /^Proposed bans/, /^Spot check/, /^Reviewer log/, /^Audit notes/, /^Guidelines/]) {
+    for (const name of [/^Needs review/, /^Reviewed/, /^Stats/, /^Integrity reviews/, /^Proposed bans/, /^Second pass/, /^Reviewer log/, /^Audit notes/, /^Guidelines/]) {
       await expect(page.getByRole("tab", { name }).first()).toBeVisible();
     }
     await expect(page.getByRole("tab", { name: /^Needs review/ }).first()).toHaveAttribute("aria-selected", "true");
@@ -235,6 +235,18 @@ for (const scheme of ["dark", "light"] as const) {
     expect(result.violations.map((v) => `${v.id} (${v.impact})`)).toEqual([]);
   });
 }
+
+test.describe("a 320 px screen", () => {
+  test.use({ viewport: { width: 320, height: 640 } });
+  for (const [name, path] of [["queue", "/review"], ["desk", DESK]] as const) {
+    test(`the ${name} does not scroll sideways`, async ({ page }) => {
+      await page.goto(path);
+      await page.evaluate(() => document.fonts.ready);
+      const over = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      expect(over).toBeLessThanOrEqual(0);
+    });
+  }
+});
 
 test.describe("a 390 px screen", () => {
   test.use({ viewport: { width: 390, height: 844 } });

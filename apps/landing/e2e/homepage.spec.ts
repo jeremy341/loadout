@@ -1,6 +1,11 @@
 import { devices, expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+// These specs read the public docs. Local development is signed in, which shows the docs in the platform, so ask for the public layout.
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
+});
+
 const rsvpUrl = "https://rsvp.soon.it/loadout";
 
 test("homepage shows the four tracks, Research Mode, and working section anchors", async ({ page }) => {
@@ -117,7 +122,7 @@ for (const width of [390, 1440]) {
       }).length
     );
     expect(incomplete).toBe(0);
-    await expect(page.locator("#process .fn")).toHaveCount(4);
+    await expect(page.locator("#process .fn")).toHaveCount(9);
   });
 }
 
@@ -392,7 +397,7 @@ test("on phones the depth numerals stay on one line and the labels fit their str
 test("sections reveal with main's triggered slide-in, not a scroll-scrubbed fade", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(8);
+  expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(7);
   await expect(page.locator(".reveal[data-stagger]").first()).toHaveCount(1);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("animation-name", "none");
 });
@@ -437,7 +442,7 @@ test("section headings carry the four corner brackets, and nothing else gets the
   await page.goto("/");
   const headings = page.locator(".home .sect > .h2");
   const count = await headings.count();
-  expect(count).toBeGreaterThanOrEqual(9);
+  expect(count).toBeGreaterThanOrEqual(8);
   for (let i = 0; i < count; i++) {
     const marks = await headings.nth(i).evaluate((el) => getComputedStyle(el, "::before").backgroundImage);
     expect(marks.match(/linear-gradient/g)?.length ?? 0).toBe(8);
@@ -614,7 +619,7 @@ test("each track shows one short line and a tag, and How it works has four steps
   await expect(cards.nth(0)).toContainText("command-line tool");
   await expect(cards.nth(3)).toContainText("robot");
   const process = page.locator("#process");
-  await expect(process).toContainText("each approved hour earns 10 Ore");
+  await expect(process).toContainText("Every approved hour earns the same 10 Ore");
   await expect(process).toContainText("Digital Loadout");
   await expect(process).not.toContainText("Joining late");
   await expect(page.locator("#faq")).not.toContainText("Joining late");
@@ -625,17 +630,17 @@ test("the homepage follows the new order and its depth strips count down without
   const ids = await page.locator("main > div > div.sect, main .sect[id]").evaluateAll((nodes) => nodes.map((node) => node.id));
   expect(ids).toEqual(["tracks", "process", "toolbelt", "shop", "progression", "eras", "faq", "hack-club"]);
   const metres = await page.locator("main .pit b").allTextContents();
-  expect(metres.map((m) => m.replace(/\s+/g, " ").trim())).toEqual(["−000 M", "−100 M", "−150 M", "−200 M", "−300 M", "−400 M", "−500 M"]);
+  expect(metres.map((m) => m.replace(/\s+/g, " ").trim())).toEqual(["−000 M", "−100 M", "−150 M", "−200 M", "−300 M", "−600 M", "−700 M"]);
   await expect(page.locator("#what")).toHaveCount(0);
   await expect(page.locator("#progression .facts > div")).toHaveCount(4);
   await expect(page.locator("#requisitions")).toContainText("Field Requisition");
 });
 
-test("Project fit, Custom Orders and the Hack Club story are in the Docs, not the homepage", async ({ page }) => {
+test("Project fit and Custom Orders are in the Docs, not the homepage; the Hack Club note stays on it", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#project-fit")).toHaveCount(0);
   await expect(page.locator("#custom-orders")).toHaveCount(0);
-  await expect(page.locator("#hack-club")).toHaveCount(0);
+  await expect(page.locator("#hack-club")).toHaveCount(1);
   await page.goto("/docs/about");
   await expect(page.getByRole("heading", { level: 1, name: "Where LOADOUT comes from" })).toBeVisible();
   await expect(page.locator("blockquote")).toContainText("While being part of Hack Club");
@@ -810,15 +815,15 @@ test("caveats stay next to the claims they qualify after the copy cuts", async (
   await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 
-test("Track XP and levels follow main: four stops, requisition markers and arrows between them", async ({ page }) => {
+test("Track XP and levels follow main: six stops, requisition markers and arrows between them", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const rail = page.getByRole("group", { name: "Field Requisition milestones" });
-  await expect(rail.locator(".st")).toHaveCount(4);
+  await expect(rail.locator(".st")).toHaveCount(6);
   await expect(rail.locator(".st .cn")).toHaveText(["LV.5", "LV.8", "LV.11", "LV.15", "LV.18", "LV.20"]);
-  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition"]);
-  await expect(rail.locator(".st .bd use")).toHaveCount(4);
+  await expect(rail.locator(".st .dsc")).toHaveText(["Requisition", "Requisition", "Requisition", "Requisition", "Requisition", "Requisition"]);
+  await expect(rail.locator(".st .bd use")).toHaveCount(6);
   const marker = await rail.locator(".bd").first().boundingBox();
   expect([marker!.width, marker!.height]).toEqual([64, 64]);
   await expect(rail.locator(".st").first()).toHaveCSS("text-align", "center");

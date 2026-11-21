@@ -8,7 +8,7 @@ test("each of the six prizes shows a photo that stays on its plate", async ({ pa
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.locator("#shop h2")).toHaveText(/Proposed\s+prizes/);
+  await expect(page.locator("#shop h2")).toHaveText(/Prizes/);
   const cards = page.locator(".pb-half").first().locator("li");
   await expect(cards).toHaveCount(6);
   for (let index = 0; index < 6; index++) {

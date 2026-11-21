@@ -1,4 +1,3 @@
-import { siteConfig } from "./site-config";
 import { AccessibilityTab } from "./_components/Accessibility";
 import { NoiseGrain } from "./_components/NoiseGrain";
 import { DocsTab } from "./_components/home/DocsTab";

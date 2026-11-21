@@ -6,14 +6,14 @@ order: 100
 status: draft
 ---
 
-Once we've accepted your ship, you get two rewards: **Ore** to spend in the shop and **Track XP** that levels up the fields you worked in. You spend the Ore when you buy something, but the XP stays. As your level goes up, your discount on gear in that track grows, including on gear you buy later.
+Once we've accepted your ship, you get two rewards: **Ore** to spend in the shop and **Track XP** that levels up your project's track. You spend the Ore when you buy something, but the XP stays. As your level goes up, your discount on gear in that track grows, including on gear you buy later.
 
 ## What's the difference between Ore and XP? {#balances}
 
 | What you earn | What happens to it |
 | --- | --- |
 | Ore | Goes into your balance. Buying a prize spends some of it. |
-| Track XP | Goes into the tracks your work used. It stays when you buy something. |
+| Track XP | Goes into the track of the project you shipped. It stays when you buy something. |
 
 There's also [Era Points](/docs/eras), which track the community's shared progress toward the next theme. They don't go into your shop balance or personal levels.
 

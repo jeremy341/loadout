@@ -31,6 +31,10 @@ test.describe("the route matrix", () => {
         expect(response.status(), where).toBeGreaterThanOrEqual(300);
         expect(response.status(), where).toBeLessThan(400);
         expect(response.headers().location ?? "", where).toContain(route.redirectsTo);
+      } else if (route.path === "/superadmin") {
+        // Nothing to find while LOADOUT_SUPERADMIN_BOOTSTRAP_SECRET is unset: the page is a deliberate 404, which local
+        // development is. With the secret set it renders for a reviewer.
+        expect([200, 404], where).toContain(response.status());
       } else {
         expect(response.status(), where).toBe(200);
       }
@@ -72,13 +76,13 @@ test.describe("roles with a landing page", () => {
     }
   });
 
-  test("a reviewer who is not a final reviewer is sent from Spot check to the queue; a final reviewer opens it", async ({ context, page }) => {
+  test("a reviewer who is not a final reviewer is sent from Second pass to the queue; a final reviewer opens it", async ({ context, page }) => {
     await actAs(context, "reviewer");
-    await page.goto("/review/spot-check");
+    await page.goto("/review/second-pass");
     await expect(page).toHaveURL(/\/review$/);
     await actAs(context, "final-reviewer");
-    expect((await page.goto("/review/spot-check"))?.status()).toBe(200);
-    await expect(page).toHaveURL(/\/review\/spot-check$/);
+    expect((await page.goto("/review/second-pass"))?.status()).toBe(200);
+    await expect(page).toHaveURL(/\/review\/second-pass$/);
   });
 
   test("a helper lands on Tickets and a fulfiller on Fulfillment", async ({ context, page }) => {

@@ -34,6 +34,26 @@ function assignHeadings(tree: Root): DocsHeading[] {
 export function remarkDocsHeadings() {
   return (tree: Root) => { assignHeadings(tree); };
 }
+// Phone layout: each body cell carries its column header as data-label, so narrow screens can show a labelled block per row
+// instead of crushing three columns. The roles keep the table readable as a table when the rows stop displaying as table parts.
+type TableNode = { type: string; children?: TableNode[]; data?: { hProperties?: Record<string, unknown> } };
+function labelTables(node: TableNode) {
+  if (node.type === 'table' && node.children?.length) {
+    const labels = node.children[0].children?.map((cell) => toString(cell as never).trim()) ?? [];
+    node.data = { ...node.data, hProperties: { ...node.data?.hProperties, role: 'table' } };
+    node.children.forEach((row, rowIndex) => {
+      row.data = { ...row.data, hProperties: { ...row.data?.hProperties, role: 'row' } };
+      row.children?.forEach((cell, index) => {
+        const props = rowIndex === 0 ? { role: 'columnheader' } : { role: 'cell', 'data-label': labels[index] ?? '' };
+        cell.data = { ...cell.data, hProperties: { ...cell.data?.hProperties, ...props } };
+      });
+    });
+  }
+  node.children?.forEach(labelTables);
+}
+export function remarkDocsTables() {
+  return (tree: Root) => { labelTables(tree as unknown as TableNode); };
+}
 export function parseDocsMarkdown(body: string) {
   const tree = unified().use(remarkParse).use(remarkGfm).parse(body);
   const headings = assignHeadings(tree);

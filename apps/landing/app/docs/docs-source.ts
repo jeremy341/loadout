@@ -43,7 +43,14 @@ export function parsePublicDoc(slug: string, source: string): DocsPage {
   if (!body || !headings.length) throw new Error(`${slug}: body and headings required`);
   return { slug, ...details, body, headings };
 }
+// Parsed once per server process: dynamic Docs rendering calls getDocs() for every request, and the files only change on deploy.
+// Development skips the cache so edits to content/docs show up on refresh.
+let cachedDocs: DocsPage[] | undefined;
 export function getDocs(): DocsPage[] {
+  if (process.env.NODE_ENV === 'production') return (cachedDocs ??= loadDocs());
+  return loadDocs();
+}
+function loadDocs(): DocsPage[] {
   const directory = publicDocsDirectory();
   const pages = readdirSync(directory).filter((file) => file.endsWith('.md')).map((file) => parsePublicDoc(file.slice(0, -3), readFileSync(join(directory, file), 'utf8')));
   const orders = new Set<number>();

@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { createProjectViaWizard, openProjectTab, saveProjectSettings } from "./new-project-helper";
 import { expect, test, type Page } from "@playwright/test";
 
 // M1 participant platform. Local development opens without sign-in as the builder test account; the server reads
@@ -13,14 +14,15 @@ const VIEWPORTS = [
 ] as const;
 const SCHEMES = ["dark", "light"] as const;
 const PARTICIPANT_PAGES = [
-  "/dashboard",
   "/dashboard/projects",
   "/dashboard/settings",
   "/dashboard/shop",
   "/dashboard/shop/raspberry-pi-5",
   "/dashboard/explore",
   "/dashboard/community",
-  "/dashboard/expeditions",
+  "/dashboard/ideas",
+  "/dashboard/notifications",
+  "/dashboard/shop/expeditions",
   "/dashboard/tracks/tools",
   "/dashboard/tracks/compute",
 ];
@@ -32,52 +34,54 @@ async function setTheme(page: Page, width: number, height: number, scheme: (type
   await page.addInitScript((theme) => localStorage.setItem("loadout-theme", theme), scheme);
 }
 
-test("the dashboard opens without sign-in locally", async ({ page }) => {
+test("the dashboard home is gone: /dashboard redirects to Projects with a permanent redirect", async ({ page, request }) => {
+  const response = await request.get("/dashboard", { maxRedirects: 0 });
+  expect(response.status()).toBe(308);
+  expect(response.headers().location).toMatch(/\/dashboard\/projects$/);
   await page.goto("/dashboard");
-  await expect(page.getByRole("heading", { level: 1, name: "Overview" })).toBeVisible({ timeout: 30000 });
+  await expect(page).toHaveURL(/\/dashboard\/projects$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Projects" })).toBeVisible({ timeout: 30000 });
 });
 
-test("the Overview is the next step, three numbers and the four tracks", async ({ page }) => {
-  await page.goto("/dashboard");
-  const next = page.getByRole("region", { name: /./ }).filter({ has: page.getByText("Next up") });
-  await expect(next).toBeVisible({ timeout: 30000 });
-  await expect(next.getByRole("link", { name: /^(Open project|New project)$/ })).toHaveAttribute("href", /^\/dashboard\/projects/);
-  await expect(page.getByRole("img", { name: /^Depth -74 M/ })).toBeVisible();
-  await expect(page.locator(".pf-stats dt")).toHaveText(["Depth", "Ore"]);
-  await expect(page.getByText("Next event: dates coming soon.")).toBeVisible();
-  await expect(page.locator(".pf-track-list li")).toHaveCount(4);
-  await expect(page.getByRole("heading", { level: 2, name: "Recent" })).toBeVisible();
-  await expect(page.locator(".pf-recent-text").first()).toHaveAttribute("href", /^\/dashboard\/projects\//);
+test("Projects is the Stasis grid: no Next up box and no track levels, the Docs link is in the sidebar", async ({ page }) => {
+  await page.goto("/dashboard/projects");
+  await expect(page.getByRole("heading", { level: 1, name: "Projects" })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByText("Next up")).toHaveCount(0);
+  await expect(page.locator(".pf-track-list")).toHaveCount(0);
+  await expect(page.getByTestId("new-project")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Participant" }).getByRole("link", { name: "Docs" })).toHaveAttribute("href", "/docs/start");
-  await expect(page.getByRole("link", { name: /^Systems, level 3 of 15, 0\.7% off Systems prizes/ })).toContainText("0.7% off / 10 H to LV.4");
-  await expect(page.getByRole("heading", { name: /^(Your projects|Milestone map|Start here)$/ })).toHaveCount(0);
-  await expect(page.getByText(/sample/i)).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: /^(Overview|Recent|Milestone map|Start here)$/ })).toHaveCount(0);
 });
 
-test("pressing a track card opens its levels", async ({ page }) => {
-  await page.goto("/dashboard");
-  const card = page.getByRole("link", { name: /^Tools, level/ });
-  await expect(card).toBeVisible({ timeout: 30000 });
-  await card.click();
+test("a track page opens its levels", async ({ page }) => {
+  await page.goto("/dashboard/tracks/tools");
   await expect(page.getByRole("heading", { level: 1, name: "Tools" })).toBeVisible({ timeout: 30000 });
-  await expect(page.getByRole("img", { name: /^3\.1% off Tools prizes, at level 6/ })).toHaveText("3.1%");
-  await expect(page.locator(".pf-strip-n")).toHaveText("LV.6");
-  await expect(page.locator(".pf-strip-next")).toHaveText("12 H to LV.7");
+  // The Tools sample is 58 approved hours: level 8 of 20 (LV.8 starts at 58 H), 14 H short of LV.9 (72 H).
+  await expect(page.getByRole("img", { name: /^4\.8% off Tools prizes, at level 8/ })).toHaveText("4.8%");
+  await expect(page.locator(".pf-strip-n")).toHaveText("LV.8");
+  await expect(page.locator(".pf-strip-next")).toHaveText("14 H to LV.9");
   await expect(page.locator(".pf-strip-hint")).toHaveText("6 H waiting for review");
   const cells = page.locator(".pf-strip-cells li");
-  await expect(cells).toHaveCount(15);
-  await expect(page.locator('.pf-strip-cells li[data-state="done"]')).toHaveCount(6);
-  await expect(cells.nth(6)).toHaveAttribute("data-state", "next");
+  await expect(cells).toHaveCount(20);
+  await expect(page.locator('.pf-strip-cells li[data-state="done"]')).toHaveCount(8);
+  await expect(cells.nth(8)).toHaveAttribute("data-state", "next");
   await expect(page.locator(".pf-strip-pending")).toHaveCount(1);
-  const flags = page.locator(".pf-strip-flags li");
-  await expect(flags).toHaveCount(4);
+  const flags = page.locator(".pf-strip-rewards li");
+  // Reward flags at LV.5, 8, 11, 15, 18 and 20. LV.5 and LV.8 are reached at 58 H; LV.11 is not.
+  await expect(flags).toHaveCount(6);
   await expect(flags.first()).toContainText("LV.5 / 23 H");
   await expect(flags.first()).toHaveAttribute("data-reached", "true");
-  await expect(flags.nth(1)).toHaveAttribute("data-reached", "false");
-  await expect(flags.last()).toContainText("Max level");
-  // No level cell carries a percentage; only the reward flags below the cells name a coupon.
+  await expect(flags.nth(1)).toContainText("LV.8 / 58 H");
+  await expect(flags.nth(1)).toHaveAttribute("data-reached", "true");
+  await expect(flags.nth(2)).toContainText("LV.11 / 104 H");
+  await expect(flags.nth(2)).toHaveAttribute("data-reached", "false");
+  await expect(flags.last()).toContainText("LV.20 / 275 H");
+  await expect(flags.last()).toContainText("10% coupon");
+  await expect(page.locator(".pf-strip-max")).toHaveCount(0);
+  // No level cell carries a percentage; only the coupon list below the cells name a coupon.
   await expect(page.locator(".pf-strip-cells").getByText(/%/)).toHaveCount(0);
-  await expect(page.locator(".pf-track-page h2")).toHaveText(["Level and discount", "Tools projects"]);
+  // The page ends with the Docs links; the builder's projects live on Projects, not here.
+  await expect(page.locator(".pf-track-page h2")).toHaveText(["Level and discount"]);
   const switcher = page.getByRole("navigation", { name: "Switch track" }).getByRole("link");
   await expect(switcher).toHaveText(["Tools", "Systems", "Compute", "Hardware"]);
   await expect(switcher.first()).toHaveAttribute("aria-current", "page");
@@ -88,24 +92,26 @@ test("pressing a track card opens its levels", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1, name: "Tools" })).toBeVisible({ timeout: 30000 });
   await expect(page.getByRole("link", { name: "How levels work" })).toHaveAttribute("href", "/docs/progress#levels");
   await expect(page.getByRole("link", { name: "What counts in Tools" })).toHaveAttribute("href", "/docs/tracks");
-  await expect(page.getByRole("link", { name: "Overview", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("navigation", { name: "Participant" }).getByRole("link", { name: "Projects", exact: true })).toHaveAttribute("aria-current", "page");
 });
 
 test("a level cell gives its hours by keyboard and by tap, and the row is one tab stop", async ({ page }) => {
   await page.goto("/dashboard/tracks/tools");
   const cells = page.locator(".pf-strip-cell");
-  await expect(cells).toHaveCount(15, { timeout: 30000 });
-  await expect(cells.nth(8)).toHaveAttribute("aria-label", "Level 9, 112 hours, locked");
+  await expect(cells).toHaveCount(20, { timeout: 30000 });
+  // At 58 H the Tools level is 8, so the next cell (LV.9, 72 H) is the one tab stop and LV.13 (140 H) is locked.
+  await expect(cells.nth(12)).toHaveAttribute("aria-label", "Level 13, 140 hours, locked");
+  await expect(cells.nth(8)).toHaveAttribute("aria-label", "Level 9, 72 hours, next level");
   await expect(page.locator('.pf-strip-cell[tabindex="0"]')).toHaveCount(1);
-  await expect(cells.nth(6)).toHaveAttribute("tabindex", "0");
+  await expect(cells.nth(8)).toHaveAttribute("tabindex", "0");
 
   const tip = page.locator(".pf-strip-tip");
-  await cells.nth(6).focus();
+  await cells.nth(8).focus();
   await page.keyboard.press("ArrowRight");
-  await expect(tip).toHaveText("LV.8 / 58 H");
-  await expect(cells.nth(7)).toBeFocused();
+  await expect(tip).toHaveText("LV.10 / 87 H");
+  await expect(cells.nth(9)).toBeFocused();
   await page.keyboard.press("End");
-  await expect(tip).toHaveText("LV.15 / 178 H");
+  await expect(tip).toHaveText("LV.20 / 275 H");
   await page.keyboard.press("Escape");
   await expect(tip).toHaveCount(0);
 
@@ -124,7 +130,7 @@ test.describe("on a touch screen", () => {
   test("tapping a level cell shows its hours, a second tap or a tap elsewhere hides them", async ({ page }) => {
     await page.goto("/dashboard/tracks/tools");
     const cells = page.locator(".pf-strip-cell");
-    await expect(cells).toHaveCount(15, { timeout: 30000 });
+    await expect(cells).toHaveCount(20, { timeout: 30000 });
     const tip = page.locator(".pf-strip-tip");
     await cells.nth(8).tap();
     await expect(tip).toHaveText("LV.9 / 72 H");
@@ -139,20 +145,21 @@ test.describe("on a touch screen", () => {
 
 test("the Shop lists the proposed items with track tags, discounts and a plain notice that nothing can be ordered", async ({ page }) => {
   await page.goto("/dashboard/shop");
-  await expect(page.getByText("Ordering opens in a later release. These are proposed items at draft prices.")).toBeVisible({ timeout: 30000 });
+  await expect(page.getByText("Ordering opens in a later release.")).toHaveCount(0, { timeout: 30000 });
   // The hub lists 24 items at a time; the rest come with Show more. The layout is covered in e2e/shop.spec.ts.
   const cards = page.locator(".pf-shop-grid .pf-shop-card");
   await expect(cards).toHaveCount(24);
   await expect(page.getByRole("button", { name: /buy|order now|checkout/i })).toHaveCount(0);
 
-  // Your Ore and the discount earned in each track.
-  await expect(page.getByLabel("Your Ore")).toContainText("10 Ore per approved hour");
+  // The discount earned in each track. The Your Ore panel was removed on purpose: the Ore chip in the top bar is the one place.
+  await expect(page.getByLabel("Your Ore")).toHaveCount(0);
   const discounts = page.getByRole("list", { name: "Your level discount by track" });
   await expect(discounts.getByRole("link", { name: /Tools.*\d(\.\d)?% off/ })).toHaveAttribute("href", "/dashboard/tracks/tools");
   await expect(discounts.getByRole("link", { name: /Hardware.*\d(\.\d)?% off/ })).toBeVisible();
 
-  // The category tiles link to a tag; the tag chips follow once a tag is chosen.
-  await page.getByRole("navigation", { name: "Shop categories" }).getByRole("link", { name: /Systems/ }).click();
+  // The category tiles were removed on purpose; the tag chips filter by tag.
+  await expect(page.getByRole("navigation", { name: "Shop categories" })).toHaveCount(0);
+  await page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link", { name: "Systems" }).click();
   await expect(page).toHaveURL(/\/dashboard\/shop\?tag=systems$/);
   const tags = page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link");
   await expect(tags).toHaveText(["All items", "Tools", "Systems", "Compute", "Hardware", "General"]);
@@ -193,8 +200,8 @@ test("a Shop item shows how its price is worked out and nothing to buy, and an u
   await expect(price).toContainText("Base price1,020 Ore");
   await expect(price).toContainText(/Hardware level discount−\d+(\.\d)?%/);
   await expect(price).toContainText(/You pay[\d,]+ Ore/);
-  await expect(price).toContainText("With a Field Requisition this would be");
-  await expect(price).toContainText("Ordering opens in a later release");
+  await expect(price.getByRole("checkbox", { name: /Field Requisition/ })).toBeVisible();
+  await expect(price).toContainText("How prices are worked out");
   // The only order control is closed, with its reason.
   await expect(page.getByRole("button", { name: "Order opens later" })).toHaveAttribute("aria-disabled", "true");
   await expect(page.getByRole("button", { name: /buy|checkout/i })).toHaveCount(0);
@@ -245,12 +252,13 @@ test("Explore has a search box, the track filters and a message when nothing is 
   await expect(page).toHaveURL(/\/dashboard\/explore$/);
 });
 
-test("a draft is not public: its Explore page is a 404, and so is an unknown id", async ({ page }) => {
+test("a draft is public: its Explore page opens with a draft notice, and an unknown id is a 404", async ({ page }) => {
   test.skip(STAFF_MODE, "participant pages are checked in builder mode");
   await openFirstProject(page);
   const id = new URL(page.url()).pathname.split("/").pop();
   const draft = await page.goto(`/dashboard/explore/${id}`);
-  expect(draft?.status()).toBe(404);
+  expect(draft?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30000 });
   const unknown = await page.goto("/dashboard/explore/not-a-project");
   expect(unknown?.status()).toBe(404);
 });
@@ -289,14 +297,14 @@ for (const path of ["/dashboard/staff/users", "/dashboard/review", "/dashboard/r
   });
 }
 
-// The top bar has seven tabs and no staff group, whoever is signed in. A staff person sees what a builder sees.
-test("the top bar has the seven participant tabs and no staff tabs", async ({ page }) => {
+// The top bar has four tabs and the account menu, and no staff group, whoever is signed in. A staff person sees what a builder sees.
+test("the sidebar has the grouped participant links and no staff links", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/dashboard");
+  await page.goto("/dashboard/projects");
   const nav = page.getByRole("navigation", { name: "Participant" });
   await expect(nav).toBeVisible({ timeout: 30000 });
-  await expect(nav.getByRole("link")).toHaveText(["Overview", "Projects", "Shop", "Explore", "Community", "Expeditions", "Docs"]);
-  for (const name of ["Users", "Review", "Reviewers", "Audit log", "Feature flags", "Flags", "Events", "Referrals"]) {
+  await expect(nav.getByRole("link")).toHaveText(["Projects", "Review Queue", "Explore", "Ideas", "Community", "Docs", "Shop", "Expeditions", "Orders", "Profile", "Ledger", "Settings"]);
+  for (const name of ["Referrals", "Events", "Users", "Review", "Reviewers", "Audit log", "Feature flags", "Flags"]) {
     await expect(nav.getByRole("link", { name, exact: true })).toHaveCount(0);
   }
   await expect(page.getByText("Staff", { exact: true })).toHaveCount(0);
@@ -317,26 +325,46 @@ for (const path of PARTICIPANT_PAGES) {
   }
 }
 
-// The project page and the New project dialog need a project. These tests make one through the dialog when the
-// test account has none, so they work on a fresh database too.
-async function openNewProjectDialog(page: Page) {
-  await page.goto("/dashboard/projects");
-  await expect(page.getByRole("heading", { level: 1, name: "Projects" })).toBeVisible({ timeout: 30000 });
-  await expect(async () => {
-    await page.getByTestId("new-project").click();
-    await expect(page.getByRole("dialog", { name: "New project" })).toBeVisible({ timeout: 1000 });
-  }).toPass({ timeout: 15000 });
+// An idea's page needs an idea. Open the first one on the list; when the list is empty, share one first (the form is the page's own).
+async function openFirstIdea(page: Page) {
+  await page.goto("/dashboard/ideas");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30000 });
+  const links = page.locator("h2.pf-id-title a");
+  if ((await links.count()) === 0) {
+    await page.getByRole("button", { name: "Share an idea" }).click();
+    await page.getByLabel("Title").fill(`Axe check idea ${Date.now()}`);
+    await page.getByLabel(/What do you want to build/).fill("A small tool that checks the page for accessibility problems, written so that anyone on the team can run it. ".repeat(3));
+    await page.getByRole("button", { name: "Share idea" }).click();
+    await page.goto("/dashboard/ideas");
+    await expect(links.first()).toBeVisible({ timeout: 30000 });
+  }
+  await links.first().click();
+  await expect(page).toHaveURL(/\/dashboard\/ideas\/[^/?]+$/, { timeout: 30000 });
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30000 });
 }
 
+for (const [width, height] of VIEWPORTS) {
+  for (const scheme of SCHEMES) {
+    test(`an idea page has no WCAG 2.2 AA violations at ${width}px, ${scheme}`, async ({ page }) => {
+      test.skip(STAFF_MODE, "participant pages are checked in builder mode");
+      await setTheme(page, width, height, scheme);
+      await openFirstIdea(page);
+      const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
+      expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+    });
+  }
+}
+
+// The project page needs a project. This test makes one through the creation wizard when the test account has none, so it works on a fresh database too.
 async function openFirstProject(page: Page) {
   await page.goto("/dashboard/projects");
   await expect(page.getByRole("heading", { level: 1, name: "Projects" })).toBeVisible({ timeout: 30000 });
-  const cards = page.locator("a.pf-project-card");
+  const cards = page.locator("a.pf-sg-card");
   if ((await cards.count()) === 0) {
-    await openNewProjectDialog(page);
-    await page.getByLabel("Project name").fill("Axe check project");
-    await page.getByRole("button", { name: "Next" }).click();
-    await page.getByRole("button", { name: "Create project" }).click();
+    await createProjectViaWizard(page, "Axe check project");
+    await page.goto("/dashboard/projects");
     await expect(cards.first()).toBeVisible({ timeout: 30000 });
   }
   // The oldest project: the edit and delete test works on a new one in parallel, so this one is never deleted under us.
@@ -357,19 +385,6 @@ for (const [width, height] of VIEWPORTS) {
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow).toBeLessThanOrEqual(0);
     });
-
-    test(`the New project dialog has no WCAG 2.2 AA violations at ${width}px, ${scheme}, both steps`, async ({ page }) => {
-      test.skip(STAFF_MODE, "participant pages are checked in builder mode");
-      await setTheme(page, width, height, scheme);
-      await openNewProjectDialog(page);
-      let result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
-      expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);
-      await page.getByLabel("Project name").fill("Dialog check");
-      await page.getByRole("button", { name: "Next" }).click();
-      await expect(page.getByText("Which track is this build in?")).toBeVisible();
-      result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
-      expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);
-    });
   }
 }
 
@@ -379,27 +394,17 @@ test("a builder can edit a project and then delete it", async ({ page }) => {
   const first = `Edit check ${stamp}`;
   const renamed = `Edited ${stamp}`;
 
-  await openNewProjectDialog(page);
-  await page.getByLabel("Project name").fill(first);
-  await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("button", { name: "Create project" }).click();
-  await page.getByRole("link", { name: new RegExp(first) }).click();
-  await expect(page.getByRole("heading", { level: 1, name: first })).toBeVisible({ timeout: 30000 });
+  await createProjectViaWizard(page, first);
 
-  // Edit: new name, a description and the Tools track.
-  await page.getByRole("button", { name: "Edit project" }).click();
-  const dialog = page.getByRole("dialog", { name: "Edit project" });
-  await expect(dialog).toBeVisible();
-  await dialog.getByLabel("Project name").fill(renamed);
-  await dialog.getByLabel("Description").fill("A short note.");
-  await dialog.getByRole("radio", { name: /^Tools/ }).check();
-  await dialog.getByRole("button", { name: "Save changes" }).click();
-  await expect(dialog).toBeHidden({ timeout: 15000 });
-  await expect(page.getByRole("heading", { level: 1, name: renamed })).toBeVisible();
+  // Edit in the Settings tab: new name, a description and the Tools track. There is no Edit project dialog any more.
+  await expect(page.getByRole("button", { name: "Edit project" })).toHaveCount(0);
+  await saveProjectSettings(page, { name: renamed, description: "A short note.", track: "Tools" });
+  await expect(page.getByRole("heading", { level: 1, name: renamed })).toBeVisible({ timeout: 15000 });
   await expect(page.locator(".pf-project-lead")).toHaveText("A short note.");
-  await expect(page.locator(".pf-proj-track")).toHaveText("Tools");
+  await expect(page.locator(".pf-column-tag")).toHaveText("Tools");
 
   // Delete: the button stays off until the name is typed back, and the project is gone afterwards.
+  await openProjectTab(page, "settings");
   await page.getByRole("button", { name: "Delete project..." }).click();
   const confirm = page.getByRole("button", { name: "Permanently delete project" });
   await expect(confirm).toBeDisabled();

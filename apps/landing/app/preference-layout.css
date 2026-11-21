@@ -609,3 +609,15 @@ html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-close {
   html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-option:not(.a11y-palette-option) .a11y-option-copy > small { grid-row: 3; }
   html:is([data-reading-size="150"], [data-reading-size="200"]) .a11y-category-title { min-width: 0; overflow-wrap: normal; }
 }
+
+/* Docs tables use the phone blocks at 150% and 200% reading size on any width, where three columns of enlarged text break words. */
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content table { position: relative; display: block; margin: 24px 0; background: none; border: 0; box-shadow: none; }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content thead { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content tbody { display: block; }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content tr { display: block; margin: 0 0 14px; background: var(--panel); border: 2px solid var(--stroke); box-shadow: var(--drop); }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content td { display: block; padding: 9px 12px; font-size: 1em; overflow-wrap: break-word; border-bottom: 2px solid var(--stroke); }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content tr:last-child td { border-bottom: 2px solid var(--stroke); }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content td:last-child,
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content tr:last-child td:last-child { border-bottom: 0; }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content td:first-child { font-family: var(--font-pixel), monospace; font-weight: 600; color: var(--ink); background: var(--panel-2); }
+html:is([data-reading-size="150"], [data-reading-size="200"]) .doc-content td[data-label]:not(:first-child)::before { content: attr(data-label); display: block; margin-bottom: 2px; font: 600 calc(12px * var(--reading-scale, 1))/1.4 var(--font-pixel), monospace; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }

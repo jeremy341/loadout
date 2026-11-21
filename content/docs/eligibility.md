@@ -23,7 +23,7 @@ Some rules are settled, while others still need a decision:
 | Topic | Decided | Still to finish |
 | --- | --- | --- |
 | Progress | Four lifetime tracks. LV.15 is about 178 hours of solid work in one track, and LV.20 is about 275. | The XP equation, intermediate level thresholds and Research bonus. |
-| Discounts | Your track level gives a permanent discount. Six Requisitions per track, at levels 5, 8, 11, 15, 18 and 20, each add 10% on one eligible prize. Eligible prizes start at 400 Ore, and combined savings cap at 40%. | The maximum permanent discount, intermediate discounts and Custom Order tiers. |
+| Discounts | Your track level gives a permanent discount, reaching 15% at LV.15 and 20% at LV.20. Six Requisitions per track, at levels 5, 8, 11, 15, 18 and 20, each add 10% on one eligible prize. Eligible prizes start at 400 Ore, and combined savings cap at 40%. | Intermediate discounts and Custom Order tiers. |
 | Building | Any number of real projects. A repeat ship needs at least five new approved hours. | Account, tracking and submission integrations. |
 | Prizes | Eight examples with working Ore prices. | Final catalog, stock, delivery and tax terms. |
 | Eras | 10% extra Ore for qualifying projects. | Era Points rules, themes and targets. |

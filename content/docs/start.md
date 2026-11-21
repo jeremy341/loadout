@@ -6,7 +6,7 @@ order: 10
 status: draft
 ---
 
-Got a tool you wish existed, a server you want to run, or a board you want to build? That's the sort of project you can bring to LOADOUT. As you build it, keep a journal of what you're doing, then ship a version other people can try. Once it passes review, we'll award **Ore** you can spend on gear and **Track XP** in the fields you worked in. So the project you've just finished can help you get what you need for the next one.
+Got a tool you wish existed, a server you want to run, or a board you want to build? That's the sort of project you can bring to LOADOUT. As you build it, keep a journal of what you're doing, then ship a version other people can try. Once it passes review, we'll award **Ore** you can spend on gear and **Track XP** in your project's track. So the project you've just finished can help you get what you need for the next one.
 
 ## Who it's for {#program}
 

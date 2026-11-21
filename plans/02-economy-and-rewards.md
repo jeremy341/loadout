@@ -25,7 +25,7 @@ This table is the current decision summary and supersedes conflicting legacy pro
 | Toolbelt rewards (owner, 14 Nov 2026) | Equipping builder: 50 Ore once per tool/project after the significant-use gate (the equipping project needs 25 approved hours). Maker: 10 Ore per verified user who passes the gate, capped at 500 Ore per tool/project per season. No Usage Milestones, no badges, no checkpoints, no seasonal pool. No Track XP from equipping. Detail in section 19 and [toolbelt.md](proposals/toolbelt.md). |
 | General Requisition stacking (owner, 14 Nov 2026) | A General Requisition is a second ticket that works in any track (not track-bound) and stacks with the track discount and one Field Requisition. Combined cap 40%. It is earned only through a Flagship (reviewer-decided standout award), one per Flagship. One General Requisition per order; the 400 Ore minimum applies to both tickets. |
 | Ore value (owner, 14 Nov 2026) | 10 Ore = $4.35 internal, up from $4.25. Shop Ore prices were repriced by 4.25 ÷ 4.35, rounded to 5 Ore, with items already at 400 or more held at 400 or more so Requisition eligibility is kept. This replaces the 15 Oct price values in the catalogue. |
-| Levels 16–20 and discount cap (owner, 14 Nov 2026) | Max level is now LV.20. The whole curve was rescaled on 14 Nov 2026 so LV.20 is 275 approved hours: LV.5 23, LV.8 58, LV.11 104, LV.15 178, LV.18 236, LV.20 275 (replacing the owner's 35/90/160/275 set levels). The permanent discount is 15% at LV.15, rising one point per level to 20% at LV.20. The combined cap (permanent plus Requisition) is 30%, which equals LV.20 plus one Requisition. These values replace the 25% cap and LV.15 maximum. Field Requisitions now sit at LV.5, 8, 11, 15, 18 and 20 (six per track, 10% each; no larger size, because above 10 points the 30% cap would cut it). LV.18 and LV.20 were added 14 Nov 2026. |
+| Levels 16–20 and discount cap (owner, 14 Nov 2026) | Max level is now LV.20. The whole curve was rescaled on 14 Nov 2026 so LV.20 is 275 approved hours: LV.5 23, LV.8 58, LV.11 104, LV.15 178, LV.18 236, LV.20 275 (replacing the owner's 35/90/160/275 set levels). The permanent discount is 15% at LV.15, rising one point per level to 20% at LV.20. The combined cap (permanent plus Requisitions) is 40%, which equals LV.20 plus one Field Requisition and one General Requisition (30% with only a Field Requisition). These values replace the 25% cap and LV.15 maximum. Field Requisitions now sit at LV.5, 8, 11, 15, 18 and 20 (six per track, 10% each; no larger size, because above 10 points the 30% cap would cut it). LV.18 and LV.20 were added 14 Nov 2026. |
 | External contributors | Open source is required. The first meaningful external contribution earns a separate achievement and +50 Ore. |
 | Referrals | A referral counts only after the invited builder verifies, tracks and journals real work, and earns a first approved ship. Referral reward amounts and milestone ladder remain open. |
 | Seasons and community rewards | Include achievements, seasons, seasonal quests, leaderboards, Community Eras, missions, and community rewards. Exact season cadence, quest values, and reward triggers remain open where not already fixed below. |
@@ -510,7 +510,9 @@ Normally out of scope:
 
 An item records its base Ore price, related tracks, access requirements, Requisition eligibility, availability and region. The best matching track discount applies; track discounts are never added together.
 
-The agreed sample price for a Raspberry Pi 5 is 200 Ore. Hardware and Systems are relevant fields. Do not retain the older 700-Ore illustration as its current price. A cross-track surcharge is still a candidate, so no automatic +10% markup is implied.
+**Historical (superseded 20 Nov 2026):** an earlier version of this plan recorded 200 Ore as the agreed sample price for a Raspberry Pi 5, replacing a still older 700-Ore illustration. Neither figure is the current working price. Treat 200 Ore as a historical illustration only.
+
+**Working entry, 20 Nov 2026:** the working-catalog price for a Raspberry Pi 5 is 490 Ore, aligned with the public Docs ([Prizes & requests](../content/docs/prizes.md)) and the homepage planned-prizes block. It is provisional until the shop opens; no owner approval of a final price is implied. Hardware and Systems are relevant fields. A cross-track surcharge is still a candidate, so no automatic +10% markup is implied.
 
 There is no `normal_discount_cap_ore` field in the current product rule: the owner removed savings caps in Ore. Future platform design can choose its schema after the remaining rules are settled.
 
@@ -1049,18 +1051,22 @@ A Custom Order uses its final approved base quote. Show eligibility, each saving
 
 These sample prices are working examples for planning copy, not final price promises, current stock or fulfillment commitments. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
 
+**Working catalog, 20 Nov 2026.** This table matches the public Docs ([Prizes & requests](../content/docs/prizes.md)) and the homepage planned-prizes block. All prices are provisional working values until the shop opens; this entry records alignment with the public copy and does not claim a new owner price approval.
+
 | Item | Base Ore | Solid-work hours |
 |---|---:|---:|
-| ESP32 starter kit | 50 | 5 |
-| Soldering iron kit | 60 | 6 |
-| Raspberry Pi 5 | 200 | 20 |
-| Samsung T7 SSD | 160 | 16 |
-| Domain | 24 | 2.4 |
-| A1 Mini printer | 500 | 50 |
-| Enclosed printer | 1,000 | 100 |
-| Framework 16 | 5,000 | 500 |
+| ESP32 starter kit | 30 | 3 |
+| Soldering iron kit | 80 | 8 |
+| Raspberry Pi 5 | 490 | 49 |
+| Samsung T7 SSD | 460 | 46 |
+| Domain | 25 | 2.5 |
+| A1 Mini printer | 615 | 61.5 |
+| Enclosed printer | 1,020 | 102 |
+| Framework 16 | 2,915 | 291.5 |
 
 The enclosed printer and Framework 16 have no level requirement in this working catalog. Other specialist equipment gates and additional item prices remain undecided. The calibration worksheet keeps additional candidate items for internal comparison.
+
+**Historical sample catalog (superseded 20 Nov 2026, kept for the record).** The earlier illustration read: ESP32 starter kit 50, soldering iron kit 60, Raspberry Pi 5 200, Samsung T7 SSD 160, domain 24, A1 Mini printer 500, enclosed printer 1,000, Framework 16 5,000 Ore. Do not use these as current prices.
 
 ---
 

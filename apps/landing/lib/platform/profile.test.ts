@@ -12,16 +12,13 @@ import {
   pinnedProjects,
   publicProjects,
   statusTabs,
-  visibilityPatch,
   type ProfileProject,
 } from "./profile";
 
 const project = (id: string, status: string, extra: Partial<ProfileProject> = {}): ProfileProject => ({
   id,
   status,
-  hidden: false,
   pinned: false,
-  showBuilding: false,
   ...extra,
 });
 
@@ -123,6 +120,25 @@ describe("checkLinkUrl", () => {
       expect(checkLinkUrl(raw).ok).toBe(false);
     }
   });
+  test("refuses wildcard DNS names that point at an address", () => {
+    for (const raw of [
+      "https://127.0.0.1.nip.io/x", "https://192.168.1.1.nip.io/x", "https://app.10.0.0.1.sslip.io", "https://8.8.8.8.nip.io",
+      "https://127-0-0-1.nip.io", "https://a.xip.io", "https://app.traefik.me", "https://foo.localtest.me", "https://bar.lvh.me", "https://lvh.me",
+      "https://1.2.3.4.example.com", "https://169.254.169.254.example.org/latest",
+    ]) {
+      expect(checkLinkUrl(raw).ok).toBe(false);
+    }
+  });
+  test("refuses internal suffixes", () => {
+    for (const raw of ["https://a.localhost", "https://printer.local", "https://db.internal", "https://site.test", "https://x.y.test/p"]) {
+      expect(checkLinkUrl(raw).ok).toBe(false);
+    }
+  });
+  test("a look-alike of a wildcard domain, or a short number run, is not refused", () => {
+    expect(checkLinkUrl("https://notnip.io/x").ok).toBe(true);
+    expect(checkLinkUrl("https://v1.2.3.example.com/x").ok).toBe(true);
+    expect(checkLinkUrl("https://github.com/a/b").ok).toBe(true);
+  });
   test("refuses spaces and over-long input", () => {
     expect(checkLinkUrl("https://example.com/a b").ok).toBe(false);
     expect(checkLinkUrl("https://example.com/" + "a".repeat(400)).ok).toBe(false);
@@ -134,29 +150,17 @@ describe("visibility", () => {
     expect(normalizeStatus("needs_changes")).toBe("needs-changes");
     expect(normalizeStatus(" Approved ")).toBe("approved");
   });
-  test("approved shows, hidden never", () => {
-    expect(isPublicProject(project("a", "approved"))).toBe(true);
-    expect(isPublicProject(project("a", "approved", { hidden: true }))).toBe(false);
-  });
-  test("logging shows only when chosen", () => {
-    expect(isPublicProject(project("a", "logging"))).toBe(false);
-    expect(isPublicProject(project("a", "logging", { showBuilding: true }))).toBe(true);
-    expect(isPublicProject(project("a", "logging", { showBuilding: true, hidden: true }))).toBe(false);
-  });
-  test("drafts, submitted, in review and needs changes never show, even with the flag", () => {
-    for (const status of ["draft", "submitted", "in-review", "needs-changes", "needs_changes", "rejected"]) {
-      expect(isPublicProject(project("a", status, { showBuilding: true }))).toBe(false);
+  test("every project is public, drafts included", () => {
+    for (const status of ["draft", "logging", "submitted", "in-review", "needs-changes", "needs_changes", "approved", "rejected"]) {
+      expect(isPublicProject(project("a", status))).toBe(true);
     }
   });
-  test("publicProjects filters a list", () => {
-    const list = [
-      project("1", "approved"),
-      project("2", "draft"),
-      project("3", "logging", { showBuilding: true }),
-      project("4", "approved", { hidden: true }),
-      project("5", "in-review"),
-    ];
-    expect(publicProjects(list).map((p) => p.id)).toEqual(["1", "3"]);
+  test("a banned project is withheld", () => {
+    expect(isPublicProject(project("a", "banned"))).toBe(false);
+  });
+  test("publicProjects keeps everything except banned ones", () => {
+    const list = [project("1", "approved"), project("2", "draft"), project("3", "logging"), project("4", "banned"), project("5", "in-review")];
+    expect(publicProjects(list).map((p) => p.id)).toEqual(["1", "2", "3", "5"]);
   });
 });
 
@@ -164,8 +168,8 @@ describe("pins and tabs", () => {
   test("pinnedProjects: approved public pinned only, capped", () => {
     const list = [
       project("1", "approved", { pinned: true }),
-      project("2", "approved", { pinned: true, hidden: true }),
-      project("3", "logging", { pinned: true, showBuilding: true }),
+      project("2", "draft", { pinned: true }),
+      project("3", "logging", { pinned: true }),
       project("4", "approved", { pinned: true }),
       project("5", "approved", { pinned: true }),
       project("6", "approved", { pinned: true }),
@@ -189,22 +193,10 @@ describe("pins and tabs", () => {
     expect(tabs.length).toBe(7);
   });
   test("checkPin", () => {
-    expect(checkPin({ status: "approved", hidden: false }, 0).ok).toBe(true);
-    expect(checkPin({ status: "approved", hidden: false }, 2).ok).toBe(true);
-    expect(checkPin({ status: "approved", hidden: false }, 3).ok).toBe(false);
-    expect(checkPin({ status: "draft", hidden: false }, 0).ok).toBe(false);
-    expect(checkPin({ status: "logging", hidden: false }, 0).ok).toBe(false);
-    expect(checkPin({ status: "approved", hidden: true }, 0).ok).toBe(false);
-  });
-});
-
-describe("visibilityPatch", () => {
-  test("hiding also unpins", () => {
-    expect(visibilityPatch({ hidden: true })).toEqual({ hidden: true, pinned: false });
-  });
-  test("showing and building flags pass through", () => {
-    expect(visibilityPatch({ hidden: false })).toEqual({ hidden: false });
-    expect(visibilityPatch({ showBuilding: true })).toEqual({ showBuilding: true });
-    expect(visibilityPatch({})).toEqual({});
+    expect(checkPin({ status: "approved" }, 0).ok).toBe(true);
+    expect(checkPin({ status: "approved" }, 2).ok).toBe(true);
+    expect(checkPin({ status: "approved" }, 3).ok).toBe(false);
+    expect(checkPin({ status: "draft" }, 0).ok).toBe(false);
+    expect(checkPin({ status: "logging" }, 0).ok).toBe(false);
   });
 });

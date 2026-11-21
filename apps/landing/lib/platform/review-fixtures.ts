@@ -414,7 +414,7 @@ const HAND_SHIPS: readonly ReviewShip[] = [
     kind: "software",
     projectType: "web",
     track: "Systems",
-    status: "spot-check",
+    status: "second-pass",
     submittedHoursAgo: 150,
     capability: "A live dashboard that reads a network capture, groups flows and flags slow handshakes.",
     evidence: hackatime([["TypeScript", 71], ["CSS", 17], ["Rust", 12]], "yellow", ["pcap-dash", 1200]),
@@ -450,7 +450,7 @@ const HAND_SHIPS: readonly ReviewShip[] = [
     ),
     notes: [
       note("n-2049-1", "tamsin", 50, "The capture reader is the builder's own. The chart commit is one 3,000 line file with almost no tracked time, and the declaration says 35 percent AI. I cut two hours from the styling entry."),
-      note("n-2049-2", "lintel", 6, "Taking this for the spot check. Will compare the chart commit with the declaration before I decide."),
+      note("n-2049-2", "lintel", 6, "Taking this for the second pass. Will compare the chart commit with the declaration before I decide."),
     ],
     builderAge: 18,
     builderCountry: "Germany",
@@ -461,7 +461,7 @@ const HAND_SHIPS: readonly ReviewShip[] = [
     builder: "brindle",
     kind: "hardware",
     track: "Hardware",
-    status: "spot-check",
+    status: "second-pass",
     submittedHoursAgo: 170,
     capability: "A dual H-bridge motor driver with shunt-based current sensing and a stall detector, on a board the builder laid out.",
     evidence: lapse(
@@ -818,7 +818,7 @@ const HAND_AUDITS: readonly ReviewAudit[] = [
   audit("au-20", 2, "bellwether", "sh-2053", "approved", 900, 840, 420, 150, null, "Approved again after the hours were corrected. Nothing else changed.", {
     notes: "Re-approved after the revert below. The credited hours are the same as before; the correction was to the record, not to the work.",
   }),
-  audit("au-19", 7, "bellwether", "sh-2053", "reverted", 900, null, 240, null, null, "Reverted so the hours could be corrected. The ship returns to Spot check.", {
+  audit("au-19", 7, "bellwether", "sh-2053", "reverted", 900, null, 240, null, null, "Reverted so the hours could be corrected. The ship returns to Second pass.", {
     notes: "Owner revert. The audit log keeps the original verdict.",
   }),
   audit("au-18", 26, "orrery", "sh-2050", "first_pass_approved", 1440, 1260, 1320, 540, null, "Good board and real measurements. I credited 21 of the 24 hours because two recordings are mostly a static bench. A final reviewer will look at the footage.", {

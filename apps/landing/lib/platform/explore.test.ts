@@ -3,6 +3,7 @@ import {
   EXPLORE_QUERY_MAX,
   emptyResultsKind,
   exploreHref,
+  feedUrl,
   isFiltered,
   liveSearchUrl,
   pageWindow,
@@ -45,6 +46,16 @@ describe("explore href", () => {
   test("keeps the search text and the track", () => {
     expect(exploreHref({ q: "pen plotter", track: "Hardware" })).toBe("/dashboard/explore?q=pen+plotter&track=hardware");
     expect(exploreHref({ q: "", track: "Tools" })).toBe("/dashboard/explore?track=tools");
+  });
+
+  test("carries the feed cursor last", () => {
+    expect(exploreHref({ q: "a", track: null, saved: true, cursor: "c21" })).toBe("/dashboard/explore?q=a&saved=1&cursor=c21");
+    expect(exploreHref({ q: "", track: null, cursor: null })).toBe("/dashboard/explore");
+  });
+
+  test("the feed address mirrors the same parts", () => {
+    expect(feedUrl({ q: "", track: null, saved: false }, null)).toBe("/platform-explore");
+    expect(feedUrl({ q: "a b", track: "Tools", saved: true }, "c21")).toBe("/platform-explore?q=a+b&track=tools&saved=1&cursor=c21");
   });
 });
 

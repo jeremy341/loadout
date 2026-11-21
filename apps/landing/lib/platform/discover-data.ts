@@ -1,5 +1,5 @@
 // Reads for Saved projects, project search and the Explore rails. Server only (uses the database). Rows carry handles, never an
-// email or a display name, and only projects the viewer may see (public: approved, not hidden, owner not banned; plus the viewer's
+// email or a display name, and only projects the viewer may see (public: approved, owner not banned; plus the viewer's
 // own projects in listBookmarks). The pure rules are in search.ts, bookmarks.ts and toolbelt.ts; this file only fetches.
 //
 // API:
@@ -10,11 +10,14 @@
 //       q goes through parseSearchQuery: words must all match title, description or owner handle (case-blind); "track:tools" and
 //       "by:handle" work inside q. opts.track wins over a track typed in q. Rows are ranked with rankResults over the newest
 //       SEARCH_WINDOW matches (so ordering is exact inside that window); total is the exact count of matches.
+//       openSourceFirst: with no search words, projects that have a source address come first (stable).
 //   listBookmarks(viewerId, { limit? = 50, offset? }) -> BookmarkRow[]     SearchRow + savedAt (ISO), newest saved first; drops
-//       anything the viewer may no longer see (hidden, unapproved, banned owner); the viewer's own projects stay
+//       anything the viewer may no longer see (unapproved, banned owner); the viewer's own projects stay
 //   isBookmarked(viewerId, projectId) -> boolean
 //   bookmarkedIds(viewerId, ids) -> Record<id, boolean>                     every requested id is present (for card stars)
 //   countBookmarks(viewerId) -> number
+//   kudosCounts(ids) -> Record<id, number>                                  one grouped count query; banned givers are not counted
+//   kudosGivenIds(viewerId, ids) -> Record<id, boolean>                     which of these the viewer gave kudos to
 //   discoverRails(viewerId) -> { newest, mostUsed, savedByTrack }          newest / mostUsed: up to 6 SearchRow each (mostUsed only
 //       projects with at least one confirmed use); savedByTrack: [{ track, rows }] for tracks where the viewer saved something
 //   searchEquippableTools(viewerId, projectId, q, { includeBlocked? = false, limit?, offset? }) -> { rows: EquipRow[], total, unavailable }
@@ -25,6 +28,7 @@
 //       can't equip right now ("not-your-project" | "project-status" | "limit") or null.
 import { db } from "./db";
 import { canBookmark } from "./bookmarks";
+import { openSourceFirst } from "./explore-feed";
 import { normalizeStatus } from "./profile";
 import { usedByCounts } from "./profile-data";
 import { TRACKS, type Track } from "./progress";
@@ -60,18 +64,20 @@ export type SearchOptions = {
   openSourceOnly?: boolean;
   savedOnly?: boolean;
   excludeProjectId?: string;
+  // Browse order (no search words): projects with a source address come before the rest. Search keeps its relevance order.
+  openSourceFirst?: boolean;
   limit?: number;
   offset?: number;
 };
 
 const select = {
-  id: true, title: true, description: true, track: true, status: true, repoUrl: true, createdAt: true, ownerId: true, hidden: true,
+  id: true, title: true, description: true, track: true, status: true, repoUrl: true, createdAt: true, ownerId: true,
   owner: { select: { handle: true } },
 } as const;
 
 type Candidate = {
   id: string; title: string; description: string | null; track: string | null; status: string; repoUrl: string | null;
-  createdAt: Date; ownerId: string; hidden: boolean; owner: { handle: string | null };
+  createdAt: Date; ownerId: string; owner: { handle: string | null };
 };
 
 const clampInt = (value: unknown, fallback: number, min: number, max: number): number => {
@@ -106,12 +112,31 @@ export async function isBookmarked(viewerId: string, projectId: string): Promise
   return row !== null;
 }
 
+// Kudos: how many each project has (one grouped query for the whole page) and which of them the viewer gave.
+// Every requested id is present in both results.
+export async function kudosCounts(ids: readonly string[]): Promise<Record<string, number>> {
+  const out: Record<string, number> = Object.fromEntries(ids.map((id) => [id, 0]));
+  if (ids.length === 0) return out;
+  const groups = await db().projectKudos.groupBy({ by: ["projectId"], where: { projectId: { in: [...ids] }, person: { bannedAt: null } }, _count: { _all: true } });
+  for (const g of groups) out[g.projectId] = g._count._all;
+  return out;
+}
+
+export async function kudosGivenIds(viewerId: string, ids: readonly string[]): Promise<Record<string, boolean>> {
+  const out: Record<string, boolean> = Object.fromEntries(ids.map((id) => [id, false]));
+  if (ids.length === 0) return out;
+  const rows = await db().projectKudos.findMany({ where: { personId: viewerId, projectId: { in: [...ids] } }, select: { projectId: true } });
+  for (const row of rows) out[row.projectId] = true;
+  return out;
+}
+
 export async function countBookmarks(viewerId: string): Promise<number> {
   return db().projectBookmark.count({ where: { personId: viewerId } });
 }
 
-// The shared "what may a stranger see" filter.
-const publicWhere = { status: "approved", hidden: false, owner: { bannedAt: null } } as const;
+// The shared "what may a stranger see" filter. Every project is public, drafts included (owner, 16 Nov 2026); only a banned
+// project or a banned owner is left out.
+const publicWhere = { status: { not: "banned" }, owner: { bannedAt: null } } as const;
 
 type Where = NonNullable<Parameters<ReturnType<typeof db>["project"]["findMany"]>[0]>["where"];
 
@@ -155,7 +180,8 @@ export async function searchProjects(viewerId: string, opts: SearchOptions = {})
   const { where, tokens } = matchWhere(viewerId, opts);
   const window = await fetchWindow(where);
   const total = window.length < SEARCH_WINDOW ? window.length : await db().project.count({ where });
-  const ranked = rankResults(await decorate(viewerId, window), tokens);
+  const relevant = rankResults(await decorate(viewerId, window), tokens);
+  const ranked = opts.openSourceFirst && tokens.length === 0 ? openSourceFirst(relevant) : relevant;
   return { rows: ranked.slice(offset, offset + limit), total };
 }
 
@@ -227,7 +253,8 @@ export async function searchEquippableTools(
       : null;
 
   const includeBlocked = opts.includeBlocked === true;
-  const extra: Where[] = [{ ownerId: { not: viewerId } }];
+  // Only an approved project can be equipped, so a draft is not offered here even though it is public.
+  const extra: Where[] = [{ ownerId: { not: viewerId } }, { status: "approved" }];
   if (!includeBlocked) {
     extra.push({ owner: { blocksMade: { none: { blockedId: viewerId } } } });
     if (active.length > 0) extra.push({ id: { notIn: active.map((u) => u.toolId) } });
@@ -239,7 +266,7 @@ export async function searchEquippableTools(
     const equip = canEquip({
       equipper: { id: viewerId },
       project,
-      tool: { id: c.id, ownerId: c.ownerId, status: c.status, hidden: c.hidden, repoUrl: c.repoUrl },
+      tool: { id: c.id, ownerId: c.ownerId, status: c.status, repoUrl: c.repoUrl },
       existingUses,
       blocks,
     });
@@ -255,11 +282,11 @@ export async function searchEquippableTools(
 export async function bookmarkVerdict(viewerId: string, projectId: string) {
   const project = await db().project.findUnique({
     where: { id: projectId },
-    select: { ownerId: true, status: true, hidden: true, owner: { select: { bannedAt: true } } },
+    select: { ownerId: true, status: true, owner: { select: { bannedAt: true } } },
   });
   if (!project) return null;
   return canBookmark({
     viewer: { id: viewerId },
-    project: { ownerId: project.ownerId, status: project.status, hidden: project.hidden, ownerBanned: project.owner.bannedAt !== null },
+    project: { ownerId: project.ownerId, status: project.status, ownerBanned: project.owner.bannedAt !== null },
   });
 }

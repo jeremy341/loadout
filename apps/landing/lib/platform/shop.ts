@@ -35,7 +35,6 @@ export type ShopItem = {
 
 export const ORE_PER_HOUR = 10;
 export const REQUISITION_PERCENT = 10;
-export const GENERAL_REQUISITION_PERCENT = 10;
 export const REQUISITION_MIN_ORE = 400;
 // The most two discounts can give together, with a General Requisition on top: LV.20's 20%, one Field Requisition's 10%
 // and one General Requisition's 10% make 40% (owner decision, 14 Nov 2026). It was 25%, then 30%.
@@ -95,7 +94,7 @@ export const SHOP_ITEMS: readonly ShopItem[] = [
   { id: "rx-9060", name: "AMD Radeon RX 9060 XT graphics card", kind: "Upgrades", blurb: "A modern graphics card for training models, rendering and testing games at home.", tracks: ["Compute"], baseOre: 805, need: { track: "Compute", level: 8 }, photo: "/loadout/shop/rx-9060.0852d55e.webp", width: 285, height: 172 },
   { id: "framework-12", name: "Framework 12 laptop", kind: "Laptops", blurb: "A compact convertible laptop you can open, repair and upgrade.", tracks: ["Tools", "Systems", "Compute"], baseOre: 1260, photo: "/loadout/shop/framework-12.2b1fc3d1.webp", width: 737, height: 634 },
   { id: "framework-16", name: "Framework 16 laptop", kind: "Laptops", blurb: "A laptop you can open, repair and upgrade, for serious developer work.", tracks: ["Tools", "Systems", "Compute"], baseOre: 2915, photo: "/loadout/shop/framework-16.97b12534.webp", width: 601, height: 503 },
-  { id: "laptop-grant", name: "$500 laptop grant", kind: "Laptops", blurb: "Toward a laptop of your choice for serious developer work.", tracks: ["Tools", "Systems", "Compute"], baseOre: 1150, ...sprite("laptop") },
+  { id: "laptop-grant", name: "$50 laptop grant", kind: "Laptops", blurb: "Toward a laptop of your choice for serious developer work.", tracks: ["Tools", "Systems", "Compute"], baseOre: 115, ...sprite("laptop") },
   // Hardware: boards and modules
   { id: "pico-w", name: "Raspberry Pi Pico W", kind: "Boards", blurb: "A tiny, cheap microcontroller with Wi-Fi. Good for a first sensor or a sixth one.", tracks: ["Hardware"], baseOre: 15, photo: "/loadout/shop/pico-w.d04e511d.webp", width: 427, height: 266, credit: commons("RPI_PICO_W_1.jpg", "SparkFun Electronics", "CC BY 2.0") },
   { id: "esp32-starter-kit", name: "ESP32 starter kit", kind: "Boards", blurb: "A Wi-Fi and Bluetooth microcontroller with the parts to start a first build.", tracks: ["Hardware"], baseOre: 30, photo: "/loadout/shop/esp32-starter-kit.108629be.webp", width: 496, height: 475 },
@@ -163,23 +162,6 @@ export function priceFor(item: ShopItem, approved: TrackHours): ShopPrice {
   return { base: item.baseOre, track, percent, final: Math.round(item.baseOre * (1 - percent / 100)) };
 }
 
-// What a Field Requisition would add (plan 02 section 26.8): another 10% of the base price, on an item of 400 Ore or more
-// with a matching track. A General Requisition (owner, 14 Nov 2026) is a second ticket: another 10%, on any item of 400 Ore
-// or more, in any track, stacking with the track discount and one Field Requisition. The two together are capped at 40%.
-// It is only earned through a Flagship, one per Flagship, and one General Requisition per order.
-export function requisitionPreview(
-  item: ShopItem,
-  price: ShopPrice,
-  { general = false }: { general?: boolean } = {},
-): { eligible: boolean; percent: number; final: number } {
-  const field = item.tracks.length > 0 && item.baseOre >= REQUISITION_MIN_ORE;
-  const generalOk = general && item.baseOre >= REQUISITION_MIN_ORE;
-  const extra = (field ? REQUISITION_PERCENT : 0) + (generalOk ? GENERAL_REQUISITION_PERCENT : 0);
-  const eligible = field || generalOk;
-  const percent = eligible ? Math.min(DISCOUNT_CAP_PERCENT, price.percent + extra) : price.percent;
-  return { eligible, percent, final: Math.round(item.baseOre * (1 - percent / 100)) };
-}
-
 // A level still missing for the item, or null when it can be bought.
 export function lockFor(item: ShopItem, approved: TrackHours): { track: Track; level: number; hoursToGo: number } | null {
   if (!item.need) return null;
@@ -191,6 +173,14 @@ export function lockFor(item: ShopItem, approved: TrackHours): { track: Track; l
 // Approved hours of work the price comes to, at 10 Ore an hour: 497 Ore is 49.7 H.
 export function hoursOfWork(ore: number): number {
   return Number((ore / ORE_PER_HOUR).toFixed(1));
+}
+
+// How many cards the shop grid puts in a row at a viewport width (shop.css uses the same breakpoints): four from 1280 px, three
+// from 700 px, two below.
+export function shopGridColumns(viewportWidth: number): 2 | 3 | 4 {
+  if (viewportWidth >= 1280) return 4;
+  if (viewportWidth >= 700) return 3;
+  return 2;
 }
 
 export const SHOP_SORTS = ["featured", "low", "high"] as const;

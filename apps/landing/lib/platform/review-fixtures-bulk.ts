@@ -53,7 +53,7 @@ const MIX: readonly Mix[] = [
   { status: "waiting", count: 30 },
   { status: "needs-changes", count: 14 },
   { status: "approved", count: 20 },
-  { status: "spot-check", count: 3 },
+  { status: "second-pass", count: 3 },
   { status: "proposed-ban", count: 1 },
   { status: "banned", count: 2 },
 ];
@@ -150,7 +150,7 @@ function buildShip(plan: Plan): ReviewShip {
   const base = plan.submittedHoursAgo + 24 * 9;
   const minutesEach = [0, 1, 2].map(() => 240 + 60 * Math.floor(next() * 5));
   const days = [0, 1, 2].map((n) => dayLabel(base - n * 72));
-  const judged = plan.status === "approved" || plan.status === "spot-check";
+  const judged = plan.status === "approved" || plan.status === "second-pass";
   const rejected = plan.status === "needs-changes";
   const journals = minutesEach.map((minutes, n): ReviewJournal => {
     const text = `Worked on part ${n + 1} of ${plan.title}: ${n === 0 ? "the core loop and a first test" : n === 1 ? "the second part and the edge cases" : "cleanup, the README and a demo"}.`;
@@ -218,7 +218,7 @@ function buildShip(plan: Plan): ReviewShip {
   } else if (plan.status === "needs-changes") {
     const reasonCode = REASONS[plan.index % REASONS.length];
     ship.decision = { outcome: "needs-changes", by: plan.firstPass, hoursAgo: plan.verdictHoursAgo, reason: REASON_TEXT[reasonCode], reasonCode };
-  } else if (plan.status === "spot-check") {
+  } else if (plan.status === "second-pass") {
     ship.firstPass = { by: plan.firstPass, hoursAgo: plan.verdictHoursAgo, verdict: "approved", minutes: kept, note };
   } else if (plan.status === "proposed-ban") {
     ship.firstPass = { by: plan.firstPass, hoursAgo: plan.verdictHoursAgo, verdict: "banned", minutes: null, note: "Proposing a ban. The history does not support the hours, and the first commit is one large import." };
@@ -279,7 +279,7 @@ function buildAudits(): AuditSeed[] {
     } else if (ship.status === "needs-changes" && ship.decision) {
       add(ship, plan.firstPass, "needs_changes", ship.decision.hoursAgo, 0, ship.decision.reason);
       if (plan.index % 3 === 0) add(ship, plan.firstPass, "needs_changes", ship.decision.hoursAgo + 200, 0, "A first look: the demo did not open. Asked for a fix.", false);
-    } else if (ship.status === "spot-check" && ship.firstPass) {
+    } else if (ship.status === "second-pass" && ship.firstPass) {
       add(ship, plan.firstPass, "first_pass_approved", ship.firstPass.hoursAgo, credit, ship.firstPass.note);
     } else if (ship.status === "proposed-ban" && ship.firstPass) {
       add(ship, plan.firstPass, "first_pass_banned", ship.firstPass.hoursAgo, null, ship.firstPass.note);

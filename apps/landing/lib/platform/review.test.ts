@@ -108,8 +108,8 @@ describe("status model", () => {
     expect(nextStatuses("waiting")).toEqual(["claimed"]);
   });
 
-  test("a first pass passes a ship to Spot check, proposes a ban, or sends it back to the builder", () => {
-    expect(canMove("claimed", "spot-check")).toBe(true);
+  test("a first pass passes a ship to Second pass, proposes a ban, or sends it back to the builder", () => {
+    expect(canMove("claimed", "second-pass")).toBe(true);
     expect(canMove("claimed", "proposed-ban")).toBe(true);
     expect(canMove("claimed", "needs-changes")).toBe(true);
     // A first pass never approves or bans outright.
@@ -117,9 +117,9 @@ describe("status model", () => {
     expect(canMove("claimed", "banned")).toBe(false);
   });
 
-  test("a final reviewer decides in Spot check and in Proposed ban; only the builder reopens needs changes", () => {
+  test("a final reviewer decides in Second pass and in Proposed ban; only the builder reopens needs changes", () => {
     for (const to of ["approved", "needs-changes", "banned"] as const) {
-      expect(canMove("spot-check", to)).toBe(true);
+      expect(canMove("second-pass", to)).toBe(true);
       expect(canMove("proposed-ban", to)).toBe(true);
     }
     expect(nextStatuses("needs-changes")).toEqual(["waiting"]);
@@ -130,8 +130,9 @@ describe("status model", () => {
     expect(nextStatuses("banned")).toEqual([]);
   });
 
-  test("there is no second pass stage", () => {
-    expect(REVIEW_STATUSES as readonly string[]).not.toContain("second-pass");
+  test("the second pass is a status and there is no other final stage", () => {
+    expect(REVIEW_STATUSES as readonly string[]).toContain("second-pass");
+    expect(REVIEW_STATUSES as readonly string[]).not.toContain("spot-check");
     expect(REVIEW_STATUSES).toHaveLength(7);
   });
 
@@ -144,16 +145,16 @@ describe("status model", () => {
     }
   });
 
-  test("the queue is waiting and claimed; the final stages are Spot check and Proposed ban; verdicts are approved and needs changes", () => {
+  test("the queue is waiting and claimed; the final stages are Second pass and Proposed ban; verdicts are approved and needs changes", () => {
     expect(REVIEW_STATUSES.filter(inQueue)).toEqual(["waiting", "claimed"]);
-    expect(REVIEW_STATUSES.filter(inFinalStage)).toEqual(["spot-check", "proposed-ban"]);
+    expect(REVIEW_STATUSES.filter(inFinalStage)).toEqual(["second-pass", "proposed-ban"]);
     expect(REVIEW_STATUSES.filter(isDecided)).toEqual(["approved", "needs-changes"]);
     expect(STATUS_LABELS["proposed-ban"]).toBe("Ban proposed");
   });
 
   test("the desk stage follows the status", () => {
     expect(deskStage({ status: "waiting" })).toBe("first-pass");
-    expect(deskStage({ status: "spot-check" })).toBe("spot-check");
+    expect(deskStage({ status: "second-pass" })).toBe("second-pass");
     expect(deskStage({ status: "proposed-ban" })).toBe("final-pass");
   });
 });
@@ -296,7 +297,7 @@ describe("the queue", () => {
   test("the tab counts follow the stages", () => {
     const counts = tabCounts(REVIEW_SHIPS);
     expect(counts.pending).toBe(filterShips(REVIEW_SHIPS, { statuses: ["waiting", "claimed"] }).length);
-    expect(counts.spotCheck).toBe(stageRows(REVIEW_SHIPS, "spot-check").length);
+    expect(counts.secondPass).toBe(stageRows(REVIEW_SHIPS, "second-pass").length);
     expect(counts.proposedBans).toBe(stageRows(REVIEW_SHIPS, "proposed-ban").length);
     expect(counts.proposedBans).toBeGreaterThan(0);
   });
@@ -327,7 +328,7 @@ describe("locks, claims and the viewer", () => {
 
   test("an expired reservation is not a lock, and a lock only applies in the first pass", () => {
     expect(lockFor({ status: "waiting", reserved: { reviewer: "saltmarsh", hoursLeft: 0 } }, viewer())).toBeNull();
-    expect(lockFor({ status: "spot-check", reserved: { reviewer: "saltmarsh", hoursLeft: 10 } }, viewer())).toBeNull();
+    expect(lockFor({ status: "second-pass", reserved: { reviewer: "saltmarsh", hoursLeft: 10 } }, viewer())).toBeNull();
   });
 
   test("another reviewer's claim is named, your own is not", () => {
@@ -359,7 +360,7 @@ describe("locks, claims and the viewer", () => {
     expect(canReview(ship("sh-2042"), viewer({ reviewQueues: "hardware" }))).toBe(true);
   });
 
-  test("Spot check needs an owner or a final reviewer, and never your own project", () => {
+  test("Second pass needs an owner or a final reviewer, and never your own project", () => {
     const spot = ship("sh-2049");
     expect(canReview(spot, viewer())).toBe(false);
     expect(canReview(spot, viewer({ canSecondPass: true }))).toBe(true);
@@ -383,7 +384,7 @@ describe("desk lists", () => {
   test("each status goes back to the list it came from", () => {
     expect(listFor({ status: "waiting", kind: "software" })).toEqual({ href: "/review", label: "Review queue" });
     expect(listFor({ status: "claimed", kind: "hardware" }).href).toBe("/review?kind=hardware");
-    expect(listFor({ status: "spot-check", kind: "software" }).href).toBe("/review/spot-check");
+    expect(listFor({ status: "second-pass", kind: "software" }).href).toBe("/review/second-pass");
     expect(listFor({ status: "proposed-ban", kind: "software" }).href).toBe("/review/proposed-bans");
     expect(listFor({ status: "approved", kind: "software" }).href).toBe("/review/reviewed");
     expect(listFor({ status: "needs-changes", kind: "hardware" }).href).toBe("/review/reviewed");
@@ -406,7 +407,7 @@ describe("desk lists", () => {
   test("a ship outside the list is not in it", () => {
     expect(neighbours(REVIEW_SHIPS, ship("sh-2051"), viewer({ isOwner: true })).index).toBe(-1);
     const near = neighbours(REVIEW_SHIPS, ship("sh-2049"), viewer({ canSecondPass: true }));
-    expect(near.total).toBe(stageRows(REVIEW_SHIPS, "spot-check").length);
+    expect(near.total).toBe(stageRows(REVIEW_SHIPS, "second-pass").length);
   });
 });
 
@@ -473,13 +474,22 @@ describe("time", () => {
     expect(creditFor(600)).toEqual({ hours: 10, ore: 100, usd: 43.5, depth: 10 });
     expect(creditFor(0)).toEqual({ hours: 0, ore: 0, usd: 0, depth: 0 });
   });
+
+  test("credit uses the one rules version: hours to 0.1, then Ore rounded up", () => {
+    expect(creditFor(100)).toMatchObject({ hours: 1.7, ore: 17, depth: 1.7 });
+    expect(creditFor(2)).toMatchObject({ hours: 0, ore: 0 });
+    expect(creditFor(3)).toMatchObject({ hours: 0.1, ore: 1 });
+    // hours * 60 float noise must not change the answer
+    expect(creditFor(0.7 * 60).ore).toBe(7);
+    expect(creditFor(Number.NaN)).toEqual({ hours: 0, ore: 0, usd: 0, depth: 0 });
+  });
 });
 
 describe("the one track", () => {
   test("a ship is locked unless the builder was asked for changes", () => {
     expect(trackLockedFor("waiting")).toBe(true);
     expect(trackLockedFor("claimed")).toBe(true);
-    expect(trackLockedFor("spot-check")).toBe(true);
+    expect(trackLockedFor("second-pass")).toBe(true);
     expect(trackLockedFor("approved")).toBe(true);
     expect(trackLockedFor("banned")).toBe(true);
     expect(trackLockedFor("needs-changes")).toBe(false);
@@ -635,7 +645,7 @@ describe("stats", () => {
     expect(reviewersFor("hardware").every((item) => item.access !== "software")).toBe(true);
   });
 
-  test("a final reviewer can open Spot check and Proposed ban ships; a plain one cannot", () => {
+  test("a final reviewer can open Second pass and Proposed ban ships; a plain one cannot", () => {
     const final = REVIEWERS.find((item) => item.id === "orrery")!;
     const plain = REVIEWERS.find((item) => item.id === "fenwick")!;
     expect(openFor(final, REVIEW_SHIPS).some((item) => inFinalStage(item.status))).toBe(true);

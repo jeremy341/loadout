@@ -5,8 +5,9 @@
 //   checkBio(raw)               -> { ok, bio: string | null } | { ok: false, message }   max 160, control characters removed
 //   checkLinkUrl(raw, label)    -> { ok, url: string | null } | { ok: false, message }   https only, no credentials, ports or private hosts
 //   normalizeStatus(status)     -> project status with "_" turned into "-" (the app writes "needs-changes", some fixtures "needs_changes")
-//   isPublicProject(p)          -> approved and not hidden, or logging, shown as building and not hidden
-//   publicProjects(list)        -> the projects a visitor may see; drafts, in review, needs changes and hidden never
+//   isPublicProject(p)          -> true for every project except a banned one (owner, 16 Nov 2026: every project is public,
+//                                  drafts included, and there is no Hidden option)
+//   publicProjects(list)        -> the projects a visitor may see: all of them except banned ones
 //   pinnedProjects(list)        -> up to MAX_PINNED pinned approved public projects
 //   pinnedFirst(list)           -> the same list with pinned ones first; stable otherwise
 //   statusTabs(list)            -> [{ key, label, count }] for All plus each status, counts over the list given
@@ -46,7 +47,6 @@ export function checkBio(raw: unknown): BioResult {
   if (raw !== null && raw !== undefined && typeof raw !== "string") return { ok: false, message: "The bio has to be text." };
   const text = (typeof raw === "string" ? raw : "")
     .replace(/[\r\n\t]+/g, " ")
-    // eslint-disable-next-line no-control-regex
     .replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩﻿]/g, "")
     .replace(/ {2,}/g, " ")
     .trim();
@@ -68,13 +68,35 @@ function privateIpv4(host: string): boolean {
   );
 }
 
+// Public wildcard DNS services: any name under them can resolve to an address the caller picks (127.0.0.1.nip.io is 127.0.0.1).
+const WILDCARD_DNS = ["nip.io", "sslip.io", "xip.io", "traefik.me", "localtest.me", "lvh.me", "vcap.me", "lacolhost.com", "localhost.direct", "local.gd"];
+// Names that never belong to a public website.
+const INTERNAL_SUFFIXES = [".localhost", ".local", ".internal", ".test", ".lan", ".home.arpa"];
+
+// A host whose labels spell out a dotted IPv4 address anywhere (1.2.3.4.example.com, app.10.0.0.1.nip.io). Such a name is how a
+// wildcard DNS name points at an address, so it is refused whether or not the address is private.
+function embedsIpv4(host: string): boolean {
+  const labels = host.split(".");
+  for (let i = 0; i + 4 <= labels.length; i++) {
+    const four = labels.slice(i, i + 4);
+    if (four.every((label) => /^\d{1,3}$/.test(label) && Number(label) <= 255)) return true;
+  }
+  return false;
+}
+
+// Exported for its tests. True for a host that is a wildcard DNS name, an internal suffix, or embeds an IPv4 address.
+export function isDisguisedInternalHost(host: string): boolean {
+  if (WILDCARD_DNS.some((domain) => host === domain || host.endsWith(`.${domain}`))) return true;
+  if (INTERNAL_SUFFIXES.some((suffix) => host.endsWith(suffix))) return true;
+  return embedsIpv4(host);
+}
+
 // A small local guard: it parses the address and refuses anything that is not a plain public https link. It resolves nothing.
 // Empty input is allowed and means "no link". The host is lower-cased and the address is returned as the parser writes it.
 export function checkLinkUrl(raw: unknown, label = "link"): LinkResult {
   const text = typeof raw === "string" ? raw.trim() : "";
   if (text === "") return { ok: true, url: null };
   if (text.length > LINK_MAX) return { ok: false, message: `Keep the ${label} under ${LINK_MAX} characters.` };
-  // eslint-disable-next-line no-control-regex
   if (/[\u0000- \u007f-\u009f\\]/.test(text)) return { ok: false, message: `The ${label} has a space or an unusual character.` };
   let url: URL;
   try {
@@ -92,7 +114,7 @@ export function checkLinkUrl(raw: unknown, label = "link"): LinkResult {
   const internal =
     host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local") || host.endsWith(".internal") ||
     host.endsWith(".lan") || host.endsWith(".home.arpa") || host.startsWith("[") || /^[\d.]+$/.test(host) || /^0x[0-9a-f]+$/.test(host) ||
-    privateIpv4(host) || !host.includes(".");
+    privateIpv4(host) || isDisguisedInternalHost(host) || !host.includes(".");
   if (internal) return { ok: false, message: `The ${label} has to point at a public website, not a local or numeric address.` };
   return { ok: true, url: url.toString() };
 }
@@ -102,29 +124,25 @@ export function checkLinkUrl(raw: unknown, label = "link"): LinkResult {
 export type ProfileProject = {
   id: string;
   status: string;
-  hidden: boolean;
   pinned: boolean;
-  showBuilding: boolean;
 };
 
 export function normalizeStatus(status: string): string {
   return status.trim().toLowerCase().replace(/_/g, "-");
 }
 
-// What a visitor may see: an approved project, or a logging project its owner chose to show as "currently building". The owner
-// hiding a project removes it either way. Drafts, submitted, in review and needs changes are never public.
-export function isPublicProject(project: Pick<ProfileProject, "status" | "hidden" | "showBuilding">): boolean {
-  if (project.hidden) return false;
-  const status = normalizeStatus(project.status);
-  return status === "approved" || (status === "logging" && project.showBuilding);
+// What a visitor may see: every project, whatever its stage. Drafts, logging, submitted, in review, needs changes and approved
+// projects are all public (owner decision, 16 Nov 2026). Only a banned project is withheld.
+export function isPublicProject(project: Pick<ProfileProject, "status">): boolean {
+  return normalizeStatus(project.status) !== "banned";
 }
 
-export function publicProjects<T extends Pick<ProfileProject, "status" | "hidden" | "showBuilding">>(projects: readonly T[]): T[] {
+export function publicProjects<T extends Pick<ProfileProject, "status">>(projects: readonly T[]): T[] {
   return projects.filter(isPublicProject);
 }
 
 // The pinned strip: pinned, approved and public, at most MAX_PINNED, in the order given.
-export function pinnedProjects<T extends ProfileProject>(projects: readonly T[]): T[] {
+export function pinnedProjects<T extends Pick<ProfileProject, "status" | "pinned">>(projects: readonly T[]): T[] {
   return projects.filter((p) => p.pinned && normalizeStatus(p.status) === "approved" && isPublicProject(p)).slice(0, MAX_PINNED);
 }
 
@@ -153,21 +171,9 @@ export function statusTabs(projects: readonly Pick<ProfileProject, "status">[]):
 
 export type PinCheck = { ok: true } | { ok: false; message: string };
 
-// Pinning wants an approved, visible project and a free slot. pinnedElsewhere is the number of OTHER projects the owner pinned.
-export function checkPin(project: Pick<ProfileProject, "status" | "hidden">, pinnedElsewhere: number): PinCheck {
+// Pinning wants an approved project and a free slot. pinnedElsewhere is the number of OTHER projects the owner pinned.
+export function checkPin(project: Pick<ProfileProject, "status">, pinnedElsewhere: number): PinCheck {
   if (normalizeStatus(project.status) !== "approved") return { ok: false, message: "Only an approved project can be pinned." };
-  if (project.hidden) return { ok: false, message: "Show the project on your profile before pinning it." };
   if (pinnedElsewhere >= MAX_PINNED) return { ok: false, message: `You can pin up to ${MAX_PINNED} projects. Unpin one first.` };
   return { ok: true };
-}
-
-// The columns a visibility change writes. Hiding a project also unpins it, so a hidden project never holds a pin slot.
-export function visibilityPatch(change: { hidden?: boolean; showBuilding?: boolean }): { hidden?: boolean; pinned?: false; showBuilding?: boolean } {
-  const patch: { hidden?: boolean; pinned?: false; showBuilding?: boolean } = {};
-  if (change.hidden !== undefined) {
-    patch.hidden = change.hidden;
-    if (change.hidden) patch.pinned = false;
-  }
-  if (change.showBuilding !== undefined) patch.showBuilding = change.showBuilding;
-  return patch;
 }

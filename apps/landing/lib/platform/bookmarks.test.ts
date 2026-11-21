@@ -2,25 +2,24 @@ import { describe, expect, test } from "bun:test";
 import { canBookmark, checkBookmarkLimit, MAX_BOOKMARKS, toggleOutcome } from "./bookmarks";
 
 const viewer = { id: "me" };
-const project = (over: Partial<{ ownerId: string; status: string; hidden: boolean; ownerBanned: boolean }> = {}) => ({
-  ownerId: "maker", status: "approved", hidden: false, ...over,
+const project = (over: Partial<{ ownerId: string; status: string; ownerBanned: boolean }> = {}) => ({
+  ownerId: "maker", status: "approved", ...over,
 });
 
 describe("canBookmark", () => {
-  test("an approved visible project of someone else", () => {
+  test("a project of someone else", () => {
     expect(canBookmark({ viewer, project: project() })).toEqual({ ok: true });
   });
   test("status spelling is normalised", () => {
     expect(canBookmark({ viewer, project: project({ status: " Approved " }) }).ok).toBe(true);
   });
-  test("drafts, logging, review states are not visible", () => {
+  test("drafts, logging and review states can be saved too", () => {
     for (const status of ["draft", "logging", "submitted", "in-review", "needs_changes"]) {
-      const r = canBookmark({ viewer, project: project({ status }) });
-      expect(r.ok ? "ok" : r.code).toBe("not-visible");
+      expect(canBookmark({ viewer, project: project({ status }) }).ok).toBe(true);
     }
   });
-  test("hidden is not visible", () => {
-    const r = canBookmark({ viewer, project: project({ hidden: true }) });
+  test("a banned project is not visible", () => {
+    const r = canBookmark({ viewer, project: project({ status: "banned" }) });
     expect(r.ok ? "ok" : r.code).toBe("not-visible");
   });
   test("a banned owner", () => {
@@ -28,10 +27,10 @@ describe("canBookmark", () => {
     expect(r.ok ? "ok" : r.code).toBe("banned-owner");
   });
   test("your own project is allowed in any state", () => {
-    expect(canBookmark({ viewer, project: project({ ownerId: "me", status: "draft", hidden: true }) }).ok).toBe(true);
+    expect(canBookmark({ viewer, project: project({ ownerId: "me", status: "draft" }) }).ok).toBe(true);
   });
   test("reasons never reveal why", () => {
-    const r = canBookmark({ viewer, project: project({ hidden: true }) });
+    const r = canBookmark({ viewer, project: project({ status: "banned" }) });
     expect(r.ok ? "" : r.reason).toBe("That project was not found.");
   });
 });

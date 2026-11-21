@@ -11,12 +11,13 @@ export const POST = guardedRoute<Ctx>("api.tickets.reply", "helper", async (acce
   const { ts } = await params;
   if (!isValidTicketTs(ts)) return NextResponse.json({ error: "invalid ticket id" }, { status: 400 });
   const body = (await req.json().catch(() => ({}))) as { text?: string };
-  const text = body.text?.trim();
+  const text = typeof body.text === "string" ? body.text.trim().slice(0, 4000) : "";
   if (!text) return NextResponse.json({ error: "Text is required" }, { status: 400 });
   try {
     await ticketReply(ts, text, { slackId: access.session.slackId, username: access.session.name });
     return NextResponse.json({ ok: true });
-  } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 502 });
+  } catch {
+    // An upstream error can contain internal addresses or tokens. Never echo it to the browser.
+    return NextResponse.json({ error: "Could not post the reply. Try again shortly." }, { status: 502 });
   }
 });

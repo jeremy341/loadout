@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   discountForHours,
+  depthMetres,
   formatDepth,
   formatDiscount,
   hoursForLevel,
@@ -37,14 +38,24 @@ describe("track progress", () => {
 describe("depth", () => {
   test("one metre is one approved hour", () => {
     expect(formatDepth(0)).toBe("0 M");
-    expect(formatDepth(1)).toBe("-1 M");
-    expect(formatDepth(222)).toBe("-222 M");
+    expect(formatDepth(1)).toBe("1 M");
+    expect(formatDepth(222)).toBe("222 M");
   });
 
   test("part hours do not round up and negative hours stay at the surface", () => {
-    expect(formatDepth(7.9)).toBe("-7 M");
+    expect(formatDepth(7.9)).toBe("7 M");
     expect(formatDepth(0.5)).toBe("0 M");
     expect(formatDepth(-3)).toBe("0 M");
+  });
+
+  test("depth is never negative and equals the approved hours of the builder", () => {
+    for (const hours of [-74, -0.5, 0, 0.9, 74, Number.NaN, -Infinity]) {
+      expect(depthMetres(hours)).toBeGreaterThanOrEqual(0);
+      expect(formatDepth(hours).startsWith("-")).toBe(false);
+    }
+    const total = sumHours([{ approved: 58, pending: 6 }, { approved: 14, pending: 0 }, { approved: 0, pending: 0 }, { approved: 2, pending: 0 }]);
+    expect(depthMetres(total.approved)).toBe(74);
+    expect(formatDepth(total.approved)).toBe("74 M");
   });
 
   test("hours are zero until they are recorded, and they add up per account", () => {

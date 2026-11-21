@@ -1,9 +1,12 @@
-import { formatDepth, TRACKS, type Track } from "./progress";
-import { trackBySlug } from "./tracks";
+// The Community section: the pure rules and fixtures for the pages under /dashboard/community. The parts that are stored read
+// the database through lib/platform/community-data.ts: goals (CommunityGoal rows, staff-written figures), news (News rows,
+// staff-authored), events (Event rows, with a live RSVP count from EventRsvp) and the leaderboard (the same nightly snapshot
+// the /api/v1 leaderboards/hours endpoint serves). The era strip and the idea board and Show & Tell are still proposed
+// content, and their fixtures stay here and say so on the pages. The reviewer fulfilment fixture (lib/reviewer/fulfilment.ts)
+// still borrows BUILDERS, the invented team. The rules come from plans/11 (Community Eras), plans/02 (no shop suggestions or
+// voting, no permanent discounts for rank) and plans/proposals/future-platform-ui.md (no endless feed, no reposts).
 
-// The Community section. Nothing here is stored: every list is a typed fixture of invented builders and proposed content,
-// and the pages say so. The rules come from plans/11 (Community Eras), plans/02 (no shop suggestions or voting, no
-// permanent discounts for rank) and plans/proposals/future-platform-ui.md (no endless feed, no reposts).
+import { formatDepth, type Track } from "./progress";
 
 const first = (value: string | string[] | undefined): string => (Array.isArray(value) ? (value[0] ?? "") : (value ?? "")).trim().toLowerCase();
 
@@ -41,7 +44,8 @@ export function eraStages(currentIndex: number = ERA_PREVIEW_INDEX): EraStage[] 
 }
 
 // ---- Builders ----
-// Invented handles. Hours are approved hours per track: this week and in total.
+// Invented handles for the reviewer fulfilment fixtures (lib/reviewer/fulfilment.ts maps a signed-in staff member onto one
+// of these people). The participant pages no longer read them: the leaderboard is real (community-data.ts).
 export type HoursByTrack = Record<Track, number>;
 export type CommunityBuilder = { handle: string; weekly: HoursByTrack; allTime: HoursByTrack };
 
@@ -59,26 +63,22 @@ export const BUILDERS: readonly CommunityBuilder[] = [
 ];
 
 // ---- Leaderboard ----
-export const LEADERBOARD_RANGES = ["weekly", "all-time"] as const;
+// The two windows the nightly snapshot keeps (lib/platform/stats.ts snapshot kinds leaderboard-week and leaderboard-all).
+// The same totals serve /api/v1/leaderboards/hours; the math is not duplicated here, only the display rules.
+export const LEADERBOARD_RANGES = ["week", "all"] as const;
 export type LeaderboardRange = (typeof LEADERBOARD_RANGES)[number];
-export const LEADERBOARD_RANGE_LABELS: Record<LeaderboardRange, string> = { weekly: "This week", "all-time": "All time" };
+export const LEADERBOARD_RANGE_LABELS: Record<LeaderboardRange, string> = { week: "This week", all: "All time" };
 
-export type LeaderboardQuery = { range: LeaderboardRange; track: Track | null };
+// An unknown window falls back to the week, so a bad address shows the default view rather than an error.
+export function parseLeaderboardRange(raw: string | string[] | undefined): LeaderboardRange {
+  return first(raw) === "all" ? "all" : "week";
+}
+
+export function leaderboardHref(range: LeaderboardRange): string {
+  return range === "week" ? `${COMMUNITY_HOME}/leaderboard` : `${COMMUNITY_HOME}/leaderboard?range=all`;
+}
+
 export type LeaderRow = { handle: string; hours: number; rank: number; tied: boolean };
-
-// An unknown range or track is ignored, so a bad address shows the default view rather than an error.
-export function parseLeaderboardQuery(raw: { range?: string | string[]; track?: string | string[] }): LeaderboardQuery {
-  const range = first(raw.range);
-  return { range: range === "all-time" ? "all-time" : "weekly", track: trackBySlug(first(raw.track)) };
-}
-
-export function leaderboardHref(query: LeaderboardQuery): string {
-  const params = new URLSearchParams();
-  if (query.track) params.set("track", query.track.toLowerCase());
-  if (query.range !== "weekly") params.set("range", query.range);
-  const text = params.toString();
-  return text ? `${COMMUNITY_HOME}/leaderboard?${text}` : `${COMMUNITY_HOME}/leaderboard`;
-}
 
 // Most hours first, equal hours share a rank and the next rank is skipped (1, 2, 2, 4). Equal hours are listed by handle so
 // the order is stable. Builders with no hours are left out.
@@ -97,18 +97,26 @@ export function rankRows(entries: readonly { handle: string; hours: number }[]):
   return rows;
 }
 
-export function builderHours(builder: CommunityBuilder, range: LeaderboardRange, track: Track | null): number {
-  const source = range === "weekly" ? builder.weekly : builder.allTime;
-  return track ? source[track] : TRACKS.reduce((sum, name) => sum + source[name], 0);
-}
-
-export function leaderboardRows(query: LeaderboardQuery, builders: readonly CommunityBuilder[] = BUILDERS): LeaderRow[] {
-  return rankRows(builders.map((builder) => ({ handle: builder.handle, hours: builderHours(builder, query.range, query.track) })));
+// A stored snapshot keeps more rows than are served, so people who turned stats off since the nightly write can be in it.
+// Filter to the people still visible first, then take the served size, then rank: a hidden person must not take a place.
+export function visibleSnapshotRows(
+  stored: readonly { personId: string; hours: number }[],
+  visible: ReadonlyMap<string, string>,
+  limit: number,
+): LeaderRow[] {
+  return rankRows(
+    stored
+      .flatMap((entry) => {
+        const handle = visible.get(entry.personId);
+        return handle ? [{ handle, hours: entry.hours }] : [];
+      })
+      .slice(0, limit),
+  );
 }
 
 // Depth is 1 m per approved hour. All time it is the depth reached; in a week it is the depth gained.
 export function depthLabel(range: LeaderboardRange, approvedHours: number): string {
-  return range === "weekly" ? `${Math.max(0, Math.floor(approvedHours))} M deeper` : formatDepth(approvedHours);
+  return range === "week" ? `${Math.max(0, Math.floor(approvedHours))} M deeper` : formatDepth(approvedHours);
 }
 
 // ---- Ideas ----
@@ -196,7 +204,7 @@ export const IDEAS: readonly Idea[] = [
     status: "Built",
     votes: 17,
     recency: 6,
-    note: "Depth is approved hours in metres, one metre for each hour. It is on the Overview.",
+    note: "Depth is approved hours in metres, one metre for each hour. It is on your profile.",
   },
 ];
 
@@ -239,52 +247,6 @@ export function topIdeas(count: number, ideas: readonly Idea[] = IDEAS): Idea[] 
 
 export function findIdea(id: string): Idea | undefined {
   return IDEAS.find((idea) => idea.id === id);
-}
-
-// ---- News ----
-// Fictional program notes that state nothing unconfirmed: no dates, no event details, no prices.
-export type NewsItem = { id: string; kind: "Program" | "Platform" | "Community" | "Docs"; title: string; summary: string; order: number };
-
-export const NEWS: readonly NewsItem[] = [
-  {
-    id: "eras-in-plain-words",
-    kind: "Community",
-    title: "How Community Eras are meant to work",
-    summary: "An Era is a shared stage. It advances only when the community threshold is met and a minimum length has passed. The values are still being decided.",
-    order: 1,
-  },
-  {
-    id: "explore-lists-approved",
-    kind: "Platform",
-    title: "Explore lists approved projects",
-    summary: "Approved projects can be searched by title or builder. Drafts and work in review stay private to their owner.",
-    order: 2,
-  },
-  {
-    id: "no-peer-rating",
-    kind: "Program",
-    title: "Review has no scores and no peer rating",
-    summary: "Approval is a written decision against Originality, Technical Depth, Execution and Documentation. Nothing is scored.",
-    order: 3,
-  },
-  {
-    id: "show-and-tell-planned",
-    kind: "Community",
-    title: "Show & Tell is planned",
-    summary: "Short sessions where builders present a project. The format and the first session are not confirmed.",
-    order: 4,
-  },
-  {
-    id: "level-hours-are-drafts",
-    kind: "Docs",
-    title: "Level hours between the set levels are drafts",
-    summary: "Only the hours at LV.5, 8, 11, 15 and 20 are set. The hours for the levels in between may change.",
-    order: 5,
-  },
-];
-
-export function latestNews(count: number, items: readonly NewsItem[] = NEWS): NewsItem[] {
-  return [...items].sort((a, b) => a.order - b.order).slice(0, count);
 }
 
 // ---- Show & Tell ----
@@ -367,9 +329,38 @@ export function findSession(id: string): Session | undefined {
 
 export const NEXT_SESSION_LINE = "Next session: date to be announced.";
 
-// ---- Goals ----
-// Community goals count the whole community's approved work toward one shared reward. Plan 11 fixes none of the values, so
-// every target and every current figure here is provisional, and so is each reward.
+// ---- Goals (CommunityGoal rows; the figures are staff-written) ----
+// A goal counts the whole community's work toward one shared reward. The current figure and the target are written by staff
+// (the reviewer site or the seed script); nothing counts up on its own, so a goal always reads as it was written.
+export type CommunityGoalView = {
+  id: string;
+  key: string;
+  title: string;
+  body: string;
+  current: number;
+  target: number;
+  // null means no end is set yet.
+  endsAt: Date | null;
+  closedAt: Date | null;
+};
+
+// Whole percent, rounded down so a goal never reads 100% before it is met. Clamped to 0..100; a target of zero or less is 0.
+export function goalPercent(value: number, target: number): number {
+  if (!(target > 0) || !(value > 0)) return 0;
+  // A whole percentage can land just below its integer in binary floating point (29 / 100 * 100 is 28.999...), so nudge
+  // the floor by a tiny epsilon. A goal that is not yet met still never reads 100%.
+  if (value >= target) return 100;
+  return Math.min(99, Math.floor((value * 100) / target + 1e-9));
+}
+
+// A goal states its figures in words; the bar beside them is decoration.
+export function goalValueText(goal: Pick<CommunityGoalView, "current" | "target">): string {
+  return `${goal.current.toLocaleString("en-GB")} of ${goal.target.toLocaleString("en-GB")}`;
+}
+
+// The fixture goals, kept only because reviewer-dash/lib/sample/content-data.ts (Pixl's sample store, owned by the reviewer
+// site stream) reads its Era blurb from the first one. The participant pages read CommunityGoal rows now; this list is not
+// shown to builders anywhere.
 export type Goal = { id: string; title: string; text: string; unit: string; value: number; target: number; reward: string };
 
 export const GOALS: readonly Goal[] = [
@@ -389,7 +380,7 @@ export const GOALS: readonly Goal[] = [
     unit: "tracks",
     value: 3,
     target: 4,
-    reward: "A one-use General Requisition for each builder who contributed. Proposed; the triggers are not decided.",
+    reward: "A one-use General Requisition for each builder who contributed.",
   },
   {
     id: "show-and-tell-reach",
@@ -398,16 +389,39 @@ export const GOALS: readonly Goal[] = [
     unit: "builders",
     value: 14,
     target: 20,
-    reward: "A shared collectible. Proposed; nothing is designed yet.",
+    reward: "A shared collectible.",
   },
 ];
 
-// Whole percent, rounded down so a goal never reads 100% before it is met. Clamped to 0..100; a target of zero or less is 0.
-export function goalPercent(value: number, target: number): number {
-  if (!(target > 0) || !(value > 0)) return 0;
-  return Math.min(100, Math.floor((value / target) * 100));
+// ---- Events (Event rows; RSVP is a row in EventRsvp) ----
+// An event's own words decide its window: RSVP is open from when it is announced until it ends. A stopped event never takes
+// an RSVP (a stop is staff closing it early), and an event with no end time keeps taking them until it is stopped.
+export type EventWindow = { startsAt: Date; endsAt: Date | null; stoppedAt: Date | null };
+
+export type EventStatus = "upcoming" | "live" | "ended" | "stopped";
+
+export const EVENT_STATUS_LABELS: Record<EventStatus, string> = {
+  upcoming: "Upcoming",
+  live: "Happens now",
+  ended: "Ended",
+  stopped: "Stopped",
+};
+
+export function eventStatus(event: EventWindow, now: Date = new Date()): EventStatus {
+  if (event.stoppedAt) return "stopped";
+  if (now < event.startsAt) return "upcoming";
+  if (event.endsAt && now > event.endsAt) return "ended";
+  return "live";
 }
 
-export function goalValueText(goal: Goal): string {
-  return `${goal.value.toLocaleString("en-GB")} of ${goal.target.toLocaleString("en-GB")} ${goal.unit}`;
+// RSVP is open until the end (an upcoming event takes them too), and only while the event is not stopped. The action checks
+// this again before it writes, so a stale page cannot RSVP into a closed event.
+export function isRsvpOpen(event: EventWindow, now: Date = new Date()): boolean {
+  const status = eventStatus(event, now);
+  return status === "live" || status === "upcoming";
+}
+
+export function rsvpCountText(count: number): string {
+  if (count === 0) return "No builders going yet";
+  return count === 1 ? "1 builder going" : `${count.toLocaleString("en-GB")} builders going`;
 }

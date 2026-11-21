@@ -10,6 +10,12 @@ export const KNOWN_FLAGS = {
 
 export type FlagName = keyof typeof KNOWN_FLAGS;
 
+// `name in KNOWN_FLAGS` also matches Object.prototype keys such as "toString", which would pass a form field straight into
+// writeFlag as a description. Check own keys only, at every boundary that accepts a flag name.
+export function isKnownFlag(name: string): name is FlagName {
+  return Object.hasOwn(KNOWN_FLAGS, name);
+}
+
 export const FLAG_CACHE_MS = 30_000;
 
 type Loader = (name: string) => Promise<boolean>;

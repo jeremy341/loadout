@@ -17,9 +17,9 @@ import {
   lockFor,
   parseShopQuery,
   priceFor,
-  requisitionPreview,
   SHOP_ITEMS,
   SHOP_TAGS,
+  shopGridColumns,
   shopHref,
   shopItemById,
   type ShopItem,
@@ -90,45 +90,6 @@ describe("price", () => {
   test("hours of work is the price at 10 Ore an hour", () => {
     expect(hoursOfWork(487)).toBe(48.7);
     expect(hoursOfWork(25)).toBe(2.5);
-  });
-});
-
-describe("requisition preview", () => {
-  test("it adds 10% of the base price on a matching item of 400 Ore or more", () => {
-    const entry = item("enclosed-printer");
-    const preview = requisitionPreview(entry, priceFor(entry, approved));
-    expect(preview.eligible).toBe(true);
-    expect(preview.percent).toBe(10.1);
-    expect(preview.final).toBe(917);
-  });
-
-  test("the two discounts together stop at 30%: LV.20 plus a Requisition", () => {
-    const entry = item("enclosed-printer");
-    const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 275 };
-    const preview = requisitionPreview(entry, priceFor(entry, maxed));
-    expect(preview.percent).toBe(30);
-    expect(preview.final).toBe(714);
-  });
-
-  test("a General Requisition stacks on the track discount and a Field Requisition, up to 40%", () => {
-    const entry = item("enclosed-printer");
-    const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 275 };
-    const preview = requisitionPreview(entry, priceFor(entry, maxed), { general: true });
-    expect(preview.eligible).toBe(true);
-    expect(preview.percent).toBe(40);
-    expect(preview.final).toBe(612);
-  });
-
-  test("a General Requisition works on a General item of 400 Ore or more, in any track", () => {
-    const entry = item("ipad");
-    const preview = requisitionPreview(entry, priceFor(entry, approved), { general: true });
-    expect(preview.eligible).toBe(true);
-    expect(preview.percent).toBe(10);
-  });
-
-  test("a cheap item or a General item is not eligible", () => {
-    expect(requisitionPreview(item("esp32-starter-kit"), priceFor(item("esp32-starter-kit"), approved)).eligible).toBe(false);
-    expect(requisitionPreview(item("conference-grant"), priceFor(item("conference-grant"), approved)).eligible).toBe(false);
   });
 });
 
@@ -220,13 +181,6 @@ describe("the proposed catalog", () => {
     expect(lockFor(gated[1], approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 56 });
   });
 
-  test("items at 400 Ore or more with a track can use a Requisition, the rest cannot", () => {
-    const eligible = SHOP_ITEMS.filter((entry) => requisitionPreview(entry, priceFor(entry, approved)).eligible).map((entry) => entry.id);
-    expect(eligible).toContain("flipper-zero");
-    for (const entry of SHOP_ITEMS.filter((candidate) => candidate.baseOre < 400)) {
-      expect(eligible).not.toContain(entry.id);
-    }
-  });
 });
 
 describe("catalog photos", () => {
@@ -327,5 +281,13 @@ describe("hub helpers", () => {
   test("the address carries the page only past the first", () => {
     expect(shopHref(all, 1)).toBe("/dashboard/shop");
     expect(shopHref({ ...all, tag: "Tools" }, 2)).toBe("/dashboard/shop?tag=tools&page=2");
+  });
+});
+
+describe("the grid column count", () => {
+  test("is four from 1280, three from 700 and two below", () => {
+    expect([320, 390, 471, 699].map(shopGridColumns)).toEqual([2, 2, 2, 2]);
+    expect([700, 900, 1100, 1279].map(shopGridColumns)).toEqual([3, 3, 3, 3]);
+    expect([1280, 1440, 1920].map(shopGridColumns)).toEqual([4, 4, 4]);
   });
 });

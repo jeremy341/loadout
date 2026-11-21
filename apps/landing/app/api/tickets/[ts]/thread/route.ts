@@ -13,6 +13,7 @@ export const GET = guardedRoute<Ctx>("api.tickets.thread", "helper", async (_acc
     return NextResponse.json({ messages: await ticketThread(ts) });
   } catch (e) {
     if (isMissingThread(e)) return NextResponse.json({ error: "thread_not_found" }, { status: 404 });
-    return NextResponse.json({ error: (e as Error).message }, { status: 502 });
+    // Keep upstream details (URLs, tokens or stack text) out of the response.
+    return NextResponse.json({ error: "Could not load the thread. Try again shortly." }, { status: 502 });
   }
 });

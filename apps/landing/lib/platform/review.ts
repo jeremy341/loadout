@@ -1,4 +1,5 @@
 import type { ReviewQueueScope, ReviewerAccess } from "../reviewer/access";
+import { oreForMinutes, tenthsOfHour } from "./ledger";
 import type { Track } from "./progress";
 import { REVIEW_AUDITS, REVIEW_LOG, REVIEW_SHIPS, REVIEWERS } from "./review-fixtures";
 
@@ -7,10 +8,10 @@ export { REVIEW_AUDITS, REVIEW_LOG, REVIEW_SHIPS, REVIEWERS };
 // The reviewer site's types and pure helpers. There are no ship or review tables yet, so every ship, builder, reviewer and
 // audit entry (in review-fixtures.ts) is invented and nothing can be saved. The shape follows Pixl's review area
 // (references/pixl/apps/internal-dashboard: app/review, lib/db.ts, lib/reviewAssignment.ts, app/actions.ts reviewProject):
-//   first pass (the queue)  ->  spot check, where an owner or final reviewer gives the verdict  ->  approved
+//   first pass (the queue)  ->  second pass, where an owner or final reviewer gives the verdict  ->  approved
 //   a first-pass "request changes" goes straight back to the builder; a first-pass "ban" is only a proposal that an owner
 //   confirms or overturns in Proposed bans.
-// Pixl's fraud-review stage (Robert) is not ported, so a first-pass approval parks in Spot check directly. There are no scores,
+// Pixl's fraud-review stage (Robert) is not ported, so a first-pass approval parks in Second pass directly. There are no scores,
 // no multipliers and no peer review: the four quality dimensions guide a written reason (plans/01 sections 6.4, 8 and 35).
 
 export type ReviewKind = "software" | "hardware";
@@ -18,14 +19,14 @@ export const REVIEW_KINDS: readonly ReviewKind[] = ["software", "hardware"];
 export const KIND_LABELS: Record<ReviewKind, string> = { software: "Software", hardware: "Hardware" };
 
 // Where a ship is. Waiting and Claimed are the first-pass queue (Pixl: status "shipped", Claimed is a reviewer holding it).
-// Spot check and Proposed ban are Pixl's "second_review": the first pass passed it, or proposed banning it, and a final
+// Second pass and Proposed ban are Pixl's "second_review": the first pass passed it, or proposed banning it, and a final
 // reviewer decides. Approved, Needs changes and Banned are the verdicts.
-export type ReviewStatus = "waiting" | "claimed" | "spot-check" | "proposed-ban" | "approved" | "needs-changes" | "banned";
-export const REVIEW_STATUSES: readonly ReviewStatus[] = ["waiting", "claimed", "spot-check", "proposed-ban", "approved", "needs-changes", "banned"];
+export type ReviewStatus = "waiting" | "claimed" | "second-pass" | "proposed-ban" | "approved" | "needs-changes" | "banned";
+export const REVIEW_STATUSES: readonly ReviewStatus[] = ["waiting", "claimed", "second-pass", "proposed-ban", "approved", "needs-changes", "banned"];
 export const STATUS_LABELS: Record<ReviewStatus, string> = {
   waiting: "Waiting",
   claimed: "Claimed",
-  "spot-check": "Spot check",
+  "second-pass": "Second pass",
   "proposed-ban": "Ban proposed",
   approved: "Approved",
   "needs-changes": "Needs changes",
@@ -34,7 +35,7 @@ export const STATUS_LABELS: Record<ReviewStatus, string> = {
 export const STATUS_MEANING: Record<ReviewStatus, string> = {
   waiting: "Submitted and in the first-pass queue. Nobody has taken it.",
   claimed: "A reviewer opened it for the first pass and is working on it.",
-  "spot-check": "Passed the first pass. An owner or a final reviewer gives the verdict.",
+  "second-pass": "Passed the first pass. An owner or a final reviewer gives the verdict.",
   "proposed-ban": "A first-pass reviewer proposed banning it. An owner confirms or overturns the proposal.",
   approved: "Approved. The builder sees the written reason and the approved hours count.",
   "needs-changes": "Sent back to the builder with a written reason. They fix it and ship again.",
@@ -42,12 +43,12 @@ export const STATUS_MEANING: Record<ReviewStatus, string> = {
 };
 
 // The moves a ship can make. A builder who ships again after changes puts it back in the queue; a final reviewer who is not sure
-// can send a ship in Spot check back to the first pass.
+// can send a ship in Second pass back to the first pass.
 export const STATUS_TRANSITIONS: Record<ReviewStatus, readonly ReviewStatus[]> = {
   waiting: ["claimed"],
-  claimed: ["waiting", "spot-check", "proposed-ban", "needs-changes"],
-  "spot-check": ["approved", "needs-changes", "banned", "waiting"],
-  "proposed-ban": ["banned", "approved", "needs-changes", "spot-check", "waiting"],
+  claimed: ["waiting", "second-pass", "proposed-ban", "needs-changes"],
+  "second-pass": ["approved", "needs-changes", "banned", "waiting"],
+  "proposed-ban": ["banned", "approved", "needs-changes", "second-pass", "waiting"],
   approved: [],
   "needs-changes": ["waiting"],
   banned: [],
@@ -66,9 +67,9 @@ export function inQueue(status: ReviewStatus): boolean {
   return status === "waiting" || status === "claimed";
 }
 
-// Spot check and Proposed ban hold a final reviewer's decision (Pixl: status second_review).
+// Second pass and Proposed ban hold a final reviewer's decision (Pixl: status second_review).
 export function inFinalStage(status: ReviewStatus): boolean {
-  return status === "spot-check" || status === "proposed-ban";
+  return status === "second-pass" || status === "proposed-ban";
 }
 
 // A verdict has been given. Needs changes counts: it sits in Reviewed until the builder ships again. Banned does not (Pixl's
@@ -302,7 +303,7 @@ export const LOG_ACTION_LABELS: Record<LogAction, string> = {
   claimed: "Claimed",
   released: "Released",
   approved: "Approved",
-  "first-pass-approved": "Passed to spot check",
+  "first-pass-approved": "Passed to second pass",
   "needs-changes": "Needs changes",
   "ban-proposed": "Ban proposed",
   banned: "Banned",
@@ -437,8 +438,10 @@ export const USD_PER_TEN_ORE = 4.35;
 // Track XP per approved hour, all to the project's one track (plans/02, owner 14 Nov 2026). Not spendable.
 export const TRACK_XP_PER_HOUR = 10;
 export function creditFor(minutes: number): { hours: number; ore: number; usd: number; depth: number } {
-  const hours = Math.round((Math.max(0, minutes) / 60) * 10) / 10;
-  const ore = Math.round(hours * ORE_PER_HOUR);
+  // The single rules version (ledger.ts): hours to 0.1, then the Ore rounds up. Callers pass hours * 60, so float noise is rounded off.
+  const whole = Number.isFinite(minutes) ? Math.round(Math.max(0, minutes)) : 0;
+  const hours = tenthsOfHour(whole) / 10;
+  const ore = oreForMinutes(whole, ORE_PER_HOUR);
   return { hours, ore, usd: Math.round(((ore * USD_PER_TEN_ORE) / 10) * 100) / 100, depth: hours };
 }
 
@@ -691,7 +694,7 @@ const SAMPLE_PEOPLE: Record<string, { reviewer: string; builder: string }> = {
 };
 
 export function deskViewer(access: Pick<ReviewerAccess, "isOwner" | "canSecondPass" | "reviewQueues">, displayName: string): DeskViewer {
-  const person = SAMPLE_PEOPLE[displayName] ?? { reviewer: "", builder: "" };
+  const person = Object.hasOwn(SAMPLE_PEOPLE, displayName) ? SAMPLE_PEOPLE[displayName as keyof typeof SAMPLE_PEOPLE] : { reviewer: "", builder: "" };
   return { isOwner: access.isOwner, canSecondPass: access.canSecondPass, reviewQueues: access.reviewQueues, ...person };
 }
 
@@ -724,7 +727,7 @@ export function claimedByOther(ship: Pick<ReviewShip, "claimedBy">, viewer: Pick
 export function canReview(ship: ReviewShip, viewer: DeskViewer): boolean {
   if (ship.hold || ship.ban || ship.status === "banned" || isOwnShip(ship, viewer)) return false;
   if (inQueue(ship.status)) return queueAllowsKind(viewer.reviewQueues, ship.kind);
-  if (ship.status === "spot-check") return viewer.isOwner || viewer.canSecondPass;
+  if (ship.status === "second-pass") return viewer.isOwner || viewer.canSecondPass;
   if (ship.status === "proposed-ban") return viewer.canSecondPass || viewer.isOwner;
   return false;
 }
@@ -733,20 +736,20 @@ function queueAllowsKind(scope: ReviewQueueScope, kind: ReviewKind): boolean {
   return scope === "both" || scope === kind;
 }
 
-export type DeskStage = "first-pass" | "spot-check" | "final-pass";
-export const DESK_STAGE_LABELS: Record<DeskStage, string> = { "first-pass": "First pass", "spot-check": "Spot check", "final-pass": "Final pass" };
+export type DeskStage = "first-pass" | "second-pass" | "final-pass";
+export const DESK_STAGE_LABELS: Record<DeskStage, string> = { "first-pass": "First pass", "second-pass": "Second pass", "final-pass": "Final pass" };
 
 export function deskStage(ship: Pick<ReviewShip, "status">): DeskStage {
   if (ship.status === "proposed-ban") return "final-pass";
-  if (ship.status === "spot-check") return "spot-check";
+  if (ship.status === "second-pass") return "second-pass";
   return "first-pass";
 }
 
 // The list a ship belongs to, for the desk's "back" link and its previous and next buttons.
 export function listFor(ship: Pick<ReviewShip, "status" | "kind">): { href: string; label: string } {
   switch (ship.status) {
-    case "spot-check":
-      return { href: "/review/spot-check", label: "Spot check" };
+    case "second-pass":
+      return { href: "/review/second-pass", label: "Second pass" };
     case "proposed-ban":
       return { href: "/review/proposed-bans", label: "Proposed bans" };
     case "approved":
@@ -775,13 +778,13 @@ export function neighbours(ships: readonly ReviewShip[], ship: ReviewShip, viewe
   };
 }
 
-// Counts for the tab row: the first-pass queue (both kinds), Spot check and Proposed bans.
-export function tabCounts(ships: readonly ReviewShip[]): { pending: number; spotCheck: number; proposedBans: number } {
+// Counts for the tab row: the first-pass queue (both kinds), Second pass and Proposed bans.
+export function tabCounts(ships: readonly ReviewShip[]): { pending: number; secondPass: number; proposedBans: number } {
   const count = (statuses: readonly ReviewStatus[]) => filterShips(ships, { statuses }).length;
-  return { pending: count(["waiting", "claimed"]), spotCheck: count(["spot-check"]), proposedBans: count(["proposed-ban"]) };
+  return { pending: count(["waiting", "claimed"]), secondPass: count(["second-pass"]), proposedBans: count(["proposed-ban"]) };
 }
 
-// The Spot check list and the Proposed bans list: oldest wait first.
+// The Second pass list and the Proposed bans list: oldest wait first.
 export function stageRows(ships: readonly ReviewShip[], status: ReviewStatus): ReviewShip[] {
   return sortShips(filterShips(ships, { statuses: [status] }));
 }
@@ -855,7 +858,7 @@ export function filterAudits(audits: readonly ReviewAudit[], reviewer: string | 
   return reviewer ? audits.filter((item) => item.reviewer === reviewer) : [...audits];
 }
 
-// A reviewer's decisions, newest first: approved, passed to spot check, sent back, or a ban step.
+// A reviewer's decisions, newest first: approved, passed to second pass, sent back, or a ban step.
 export function decisionsBy(entries: readonly LogEntry[], reviewer: string): LogEntry[] {
   return entries.filter((item) => item.reviewer === reviewer && DECISION_ACTIONS.includes(item.action));
 }
@@ -959,7 +962,7 @@ export function reviewersFor(kind: ReviewKind, reviewers: readonly Reviewer[] = 
   return reviewers.filter((reviewer) => canAccessKind(reviewer, kind));
 }
 
-// Ships a reviewer could take or finish right now: the first-pass queue for the kinds they can see, plus Spot check and
+// Ships a reviewer could take or finish right now: the first-pass queue for the kinds they can see, plus Second pass and
 // Proposed ban ships when they are a final reviewer.
 export function openFor(reviewer: Reviewer, ships: readonly ReviewShip[]): ReviewShip[] {
   return ships.filter((ship) => {
@@ -1061,7 +1064,7 @@ export function pipelineSteps(ship: Pick<ReviewShip, "status" | "firstPass">): {
   return [
     { label: "Initial submission", state: "done" },
     { label: "First pass", state: firstDone ? "done" : "current" },
-    { label: "Spot check", state: decided ? "done" : inFinalStage(ship.status) ? "current" : "upcoming" },
+    { label: "Second pass", state: decided ? "done" : inFinalStage(ship.status) ? "current" : "upcoming" },
     { label: "Approved", state: decided ? "done" : "upcoming" },
   ];
 }
@@ -1069,6 +1072,6 @@ export function pipelineSteps(ship: Pick<ReviewShip, "status" | "firstPass">): {
 export const FINAL_CHECKS: readonly string[] = ["Checked the Hackatime or Lapse record", "Hours cut where needed", "Evidence added to the justification"];
 
 export const UNSHIP_WARNINGS: Partial<Record<ReviewStatus, string>> = {
-  "spot-check": "The first-pass verdict, its notes and the final checks are cleared, and the review starts again from scratch.",
+  "second-pass": "The first-pass verdict, its notes and the final checks are cleared, and the review starts again from scratch.",
   "proposed-ban": "The ban proposal, its notes and the final checks are cleared, and the review starts again from scratch.",
 };

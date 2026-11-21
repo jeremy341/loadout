@@ -21,7 +21,7 @@ export function trackProgress(): TrackProgress[] {
 export const LEVEL_HOURS = [1, 4, 9, 16, 23, 34, 45, 58, 72, 87, 104, 122, 140, 159, 178, 197, 217, 236, 256, 275] as const;
 
 // Rewards at the set levels. A draft, like the hours: the discount plan is provisional.
-export const LEVEL_REWARDS: Record<number, string> = { 5: "10% coupon", 8: "10% coupon", 11: "10% coupon", 15: "10% coupon", 18: "10% coupon", 20: "Max level, 10% coupon" };
+export const LEVEL_REWARDS: Record<number, string> = { 5: "10% coupon", 8: "10% coupon", 11: "10% coupon", 15: "10% coupon", 18: "10% coupon", 20: "10% coupon" };
 
 // The level a number of approved hours reaches: how many levels' hours it has met.
 export function levelForHours(hours: number): number {
@@ -102,10 +102,14 @@ export function sumHours(list: Hours[]): Hours {
   return list.reduce((sum, hours) => ({ approved: sum.approved + hours.approved, pending: sum.pending + hours.pending }), { approved: 0, pending: 0 });
 }
 
-// "0 M" at the surface, then "-12 M", "-222 M". Part hours do not round up into a metre.
+// Whole metres of depth: one per approved hour, never below zero. Part hours do not round up into a metre.
+export function depthMetres(approvedHours: number): number {
+  return Number.isFinite(approvedHours) ? Math.max(0, Math.floor(approvedHours)) : 0;
+}
+
+// "0 M", "12 M", "222 M". Never negative: depth only counts approved hours.
 export function formatDepth(approvedHours: number): string {
-  const metres = Math.max(0, Math.floor(approvedHours));
-  return metres === 0 ? "0 M" : `-${metres} M`;
+  return `${depthMetres(approvedHours)} M`;
 }
 
 // One cell per level. Cells up to the current level are filled.

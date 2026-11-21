@@ -247,10 +247,11 @@ export const SAMPLE_PROGRESS: Readonly<Record<string, number>> = {
 
 export type Progress = Readonly<Record<string, number>>;
 
-// Steps done, kept inside 0 to the mission's step count so a bad number cannot overflow a meter.
+// Steps done, kept inside 0 to the mission's step count so a bad number cannot overflow a meter. A non-finite count is
+// treated as zero: NaN survives the clamp and would otherwise print "NaN of n steps" and crash the next-action lookup.
 export function stepsDone(mission: Mission, progress: Progress): number {
   const done = progress[mission.id] ?? 0;
-  return Math.min(mission.steps.length, Math.max(0, Math.trunc(done)));
+  return Number.isFinite(done) ? Math.min(mission.steps.length, Math.max(0, Math.trunc(done))) : 0;
 }
 
 export function stepsLabel(mission: Mission, progress: Progress): string {
@@ -287,45 +288,88 @@ export function stepState(mission: Mission, progress: Progress, index: number, m
   return "todo";
 }
 
-export type ExpeditionsQuery = { track: Track | null; status: MissionStatus | null };
+export const EXPEDITIONS_PAGE_SIZE = 6;
+export const EXPEDITIONS_QUERY_MAX = 80;
+
+export type ExpeditionsQuery = { q: string; track: Track | null; page: number };
 
 const first = (value: string | string[] | undefined): string => (Array.isArray(value) ? (value[0] ?? "") : (value ?? ""));
 
-// Reads the track and status filters from the address. Anything unknown is ignored, so the page shows everything.
-export function parseExpeditionsQuery(raw: { track?: string | string[]; status?: string | string[] }): ExpeditionsQuery {
-  const statusText = first(raw.status).trim().toLowerCase();
+// Reads the search, track and page from the address. Anything unknown is ignored, so the page shows everything. The old
+// ?status= filter no longer exists; the page sends an address that still carries it back to the list.
+export function parseExpeditionsQuery(raw: { q?: string | string[]; track?: string | string[]; page?: string | string[] }): ExpeditionsQuery {
+  const q = first(raw.q).replace(/\s+/g, " ").trim().slice(0, EXPEDITIONS_QUERY_MAX);
+  const page = Number.parseInt(first(raw.page), 10);
   return {
+    q,
     track: trackBySlug(first(raw.track).trim().toLowerCase()),
-    status: MISSION_STATUSES.find((status) => status === statusText) ?? null,
+    page: Number.isFinite(page) && page > 1 ? page : 1,
   };
 }
 
-// The address for a view. The default view has no query at all.
-export function expeditionsHref(query: ExpeditionsQuery): string {
+// The address for a view. The default view has no query at all, and page 1 is never written.
+export function expeditionsHref(query: Partial<ExpeditionsQuery> = {}): string {
   const params = new URLSearchParams();
+  if (query.q) params.set("q", query.q);
   if (query.track) params.set("track", query.track.toLowerCase());
-  if (query.status) params.set("status", query.status);
+  if (query.page && query.page > 1) params.set("page", String(query.page));
   const text = params.toString();
-  return text ? `/dashboard/expeditions?${text}` : "/dashboard/expeditions";
+  return text ? `/dashboard/shop/expeditions?${text}` : "/dashboard/shop/expeditions";
 }
 
-// The missions a view shows, in catalog order.
-export function filterMissions(missions: readonly Mission[], query: ExpeditionsQuery, progress: Progress): Mission[] {
+// The missions a view shows: every word of the search must appear in the name, the line, the track, the level or a step
+// title, and the track must match when one is chosen. Catalog order is kept.
+export function filterMissions(missions: readonly Mission[], query: Pick<ExpeditionsQuery, "q" | "track">): Mission[] {
+  const words = query.q.toLowerCase().split(" ").filter(Boolean);
   return missions.filter((mission) => {
     if (query.track && mission.track !== query.track) return false;
-    if (query.status && missionStatus(mission, progress, missions) !== query.status) return false;
-    return true;
+    if (words.length === 0) return true;
+    const haystack = [mission.name, mission.summary, mission.track, mission.difficulty, ...mission.steps.map((step) => step.title)].join(" ").toLowerCase();
+    return words.every((word) => haystack.includes(word));
   });
 }
 
-export type MissionGroup = { status: MissionStatus; missions: Mission[] };
+// Open work first: in progress, then available, locked and done. Catalog order holds inside each state, so the list reads
+// the same way every time. This replaces the old group headings and the status filter.
+export function sortByState(missions: readonly Mission[], progress: Progress, all: readonly Mission[] = MISSIONS): Mission[] {
+  const rank = (mission: Mission) => MISSION_STATUSES.indexOf(missionStatus(mission, progress, all));
+  return missions
+    .map((mission, index) => ({ mission, index, rank: rank(mission) }))
+    .sort((a, b) => a.rank - b.rank || a.index - b.index)
+    .map((entry) => entry.mission);
+}
 
-// The shown missions in their status groups. An empty group is left out, so a heading always has something under it.
-export function groupByStatus(missions: readonly Mission[], progress: Progress, all: readonly Mission[] = MISSIONS): MissionGroup[] {
-  return MISSION_STATUSES.map((status) => ({
-    status,
-    missions: missions.filter((mission) => missionStatus(mission, progress, all) === status),
-  })).filter((group) => group.missions.length > 0);
+export type MissionPage = { items: Mission[]; page: number; pages: number; total: number };
+
+// One page of the list. A page past the end shows the last page, and an empty list is one empty page.
+export function pageMissions(missions: readonly Mission[], page: number, size: number = EXPEDITIONS_PAGE_SIZE): MissionPage {
+  const pages = Math.max(1, Math.ceil(missions.length / size));
+  const current = Math.min(Math.max(1, Math.trunc(page) || 1), pages);
+  return { items: missions.slice((current - 1) * size, current * size), page: current, pages, total: missions.length };
+}
+
+// How many missions are in each state, for the one summary line above the list.
+export function statusCounts(missions: readonly Mission[], progress: Progress, all: readonly Mission[] = MISSIONS): Record<MissionStatus, number> {
+  const counts: Record<MissionStatus, number> = { "in-progress": 0, available: 0, locked: 0, done: 0 };
+  for (const mission of missions) counts[missionStatus(mission, progress, all)] += 1;
+  return counts;
+}
+
+// What to do next on one mission: the step to work on, the missions to finish first, or nothing (it is done).
+export type NextAction =
+  | { kind: "step"; number: number; total: number; title: string; detail: string; started: boolean }
+  | { kind: "locked"; blockers: { id: string; name: string }[] }
+  | { kind: "done" };
+
+export function nextAction(mission: Mission, progress: Progress, all: readonly Mission[] = MISSIONS): NextAction {
+  const status = missionStatus(mission, progress, all);
+  if (status === "done") return { kind: "done" };
+  if (status === "locked") {
+    return { kind: "locked", blockers: unmetPrerequisites(mission, progress, all).map((id) => ({ id, name: all.find((entry) => entry.id === id)?.name ?? id })) };
+  }
+  const index = stepsDone(mission, progress);
+  const step = mission.steps[index] as MissionStep;
+  return { kind: "step", number: index + 1, total: mission.steps.length, title: step.title, detail: step.detail, started: index > 0 };
 }
 
 // One count per track for the filter chips and the page's own summary.
@@ -339,4 +383,81 @@ export function rewardLine(reward: MissionReward): string {
   if (reward.ore !== undefined) parts.push(`${reward.ore.toLocaleString("en-GB")} Ore`);
   if (reward.achievement) parts.push(reward.achievement);
   return parts.length > 0 ? parts.join(" and ") : "No reward set";
+}
+
+// ---- Equipping (plans/proposals/trials-as-expeditions.md) ----
+//
+// Expeditions are LOADOUT's version of Pixl's Trials. A builder equips one expedition on one of their projects, and that
+// project's approved hours count toward it, the way a project's tracked hours count toward a Pixl Trial's minimum. The mission's
+// "hours" figure is the minimum: the steps share it evenly, so a four step mission over 8 hours opens a step every 2 hours, and
+// the mission is finished at the full figure. Approved hours only; pending hours never count. The rewards stay drafts.
+
+// Whole approved hours from the minutes the reviewers approved. Part hours do not round up, and a bad number is zero.
+export function approvedHoursFromMinutes(minutes: number): number {
+  return Number.isFinite(minutes) ? Math.max(0, Math.floor(minutes / 60)) : 0;
+}
+
+// Steps done after this many approved hours: one per (mission hours / step count), never past the last step.
+export function stepsFromHours(mission: Pick<Mission, "hours" | "steps">, hours: number): number {
+  const total = mission.steps.length;
+  if (total === 0 || !(mission.hours > 0) || !Number.isFinite(hours) || hours <= 0) return 0;
+  return Math.min(total, Math.floor((hours * total) / mission.hours));
+}
+
+// Approved hours still needed to finish, for the line on the detail page.
+export function hoursToFinish(mission: Pick<Mission, "hours" | "steps">, hours: number): number {
+  return Math.max(0, mission.hours - Math.max(0, Math.floor(hours)));
+}
+
+export type EquippedRow = { expeditionId: string; projectTrack: string | null; approvedMinutes: number };
+
+// The builder's progress: the sample baseline with the equipped projects laid over it. An equipped project counts only for
+// its own track and never lowers a number the baseline or another project already reached. Unequipped rows are passed in
+// too, so taking an expedition off a project does not undo what it earned.
+export function progressWithEquips(base: Progress, rows: readonly EquippedRow[], missions: readonly Mission[] = MISSIONS): Progress {
+  const next: Record<string, number> = { ...base };
+  for (const row of rows) {
+    const mission = missions.find((entry) => entry.id === row.expeditionId);
+    if (!mission || row.projectTrack !== mission.track) continue;
+    const steps = stepsFromHours(mission, approvedHoursFromMinutes(row.approvedMinutes));
+    next[mission.id] = Math.max(next[mission.id] ?? 0, steps);
+  }
+  return next;
+}
+
+export type EquipCode = "not-your-project" | "wrong-track" | "no-expedition" | "finished" | "locked" | "project-busy" | "elsewhere";
+export type EquipVerdict = { ok: true } | { ok: false; code: EquipCode; reason: string };
+
+export type EquipCheck = {
+  viewerId: string;
+  project: { id: string; ownerId: string; track: string | null };
+  mission: Mission | null;
+  progress: Progress;
+  // Expedition ids equipped now (not taken off) on this project, and on the builder's other projects.
+  onProject: readonly string[];
+  elsewhere: readonly string[];
+  missions?: readonly Mission[];
+};
+
+const refuse = (code: EquipCode, reason: string): EquipVerdict => ({ ok: false, code, reason });
+
+// The rules, in the order a builder meets them: your project, the right track, not finished, not locked, one at a time.
+export function canEquipExpedition(input: EquipCheck): EquipVerdict {
+  const { viewerId, project, mission, progress, onProject, elsewhere } = input;
+  const all = input.missions ?? MISSIONS;
+  if (project.ownerId !== viewerId) return refuse("not-your-project", "You can only equip an expedition on your own project.");
+  if (!mission) return refuse("no-expedition", "That expedition was not found.");
+  if (project.track !== mission.track) {
+    return refuse("wrong-track", `${mission.name} is a ${mission.track} expedition. Pick a ${mission.track} project.`);
+  }
+  if (isDone(mission, progress)) return refuse("finished", `${mission.name} is finished, so it can't be equipped again.`);
+  const unmet = unmetPrerequisites(mission, progress, all);
+  if (unmet.length > 0) {
+    const names = unmet.map((id) => all.find((entry) => entry.id === id)?.name ?? id).join(", ");
+    return refuse("locked", `Finish ${names} first.`);
+  }
+  const busy = onProject.map((id) => all.find((entry) => entry.id === id)).find((entry) => entry && !isDone(entry, progress));
+  if (busy) return refuse("project-busy", `This project already has ${busy.name} equipped. A project carries one expedition at a time.`);
+  if (elsewhere.includes(mission.id)) return refuse("elsewhere", `${mission.name} is already equipped on another of your projects.`);
+  return { ok: true };
 }

@@ -34,7 +34,7 @@ export type EquipInput = {
   // The builder's own project that would equip the tool.
   project: { id: string; ownerId: string; status: string };
   // The approved project that would be equipped.
-  tool: { id: string; ownerId: string; status: string; hidden: boolean; repoUrl: string | null };
+  tool: { id: string; ownerId: string; status: string; repoUrl: string | null };
   existingUses: readonly ToolbeltUseLike[];
   blocks: readonly ToolbeltBlockLike[];
 };
@@ -44,7 +44,6 @@ export type EquipCode =
   | "project-status"
   | "own-tool"
   | "not-approved"
-  | "hidden"
   | "not-open-source"
   | "blocked"
   | "duplicate"
@@ -65,7 +64,6 @@ export function canEquip(input: EquipInput): EquipResult {
   }
   if (tool.ownerId === equipper.id || tool.id === project.id) return no("own-tool", "You can't equip your own project.");
   if (normalizeStatus(tool.status) !== "approved") return no("not-approved", "Only an approved project can be equipped.");
-  if (tool.hidden) return no("hidden", "That project is not available to equip.");
   if (!tool.repoUrl) return no("not-open-source", "Only open-source projects with a public source link can be equipped.");
   if (blocks.some((block) => block.makerId === tool.ownerId && block.blockedId === equipper.id)) {
     return no("blocked", "The maker of that project is not accepting new users.");
@@ -163,9 +161,9 @@ export function checkBlockTarget(makerId: string, blockedId: string): { ok: true
   return { ok: true };
 }
 
-type Visible = { status: string; hidden: boolean; showBuilding: boolean };
+type Visible = { status: string };
 // Public Toolbelt rows (the "Toolbelt" section of a profile and the "used by" list on Explore): confirmed uses where the equipping
-// project and the tool are both public. A hidden project or a draft never leaks through a use.
+// project and the tool are both public. Every project is public, drafts included; only a banned project is left out.
 export function publicToolUses<T extends { status: string; project: Visible; tool: Visible }>(uses: readonly T[]): T[] {
   return uses.filter((use) => use.status === "confirmed" && isPublicProject(use.project) && isPublicProject(use.tool));
 }

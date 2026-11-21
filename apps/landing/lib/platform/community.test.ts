@@ -3,27 +3,29 @@ import {
   BUILDERS,
   COMMUNITY_TABS,
   depthLabel,
-  eraStages,
-  filterIdeas,
-  findIdea,
-  findSession,
+  EVENT_STATUS_LABELS,
+  eventStatus,
   goalPercent,
-  GOALS,
+  goalValueText,
   IDEAS,
   ideasHref,
   isCommunityTabCurrent,
-  latestNews,
+  isRsvpOpen,
   leaderboardHref,
-  leaderboardRows,
-  NEWS,
+  parseLeaderboardRange,
   parseIdeasQuery,
-  parseLeaderboardQuery,
   pastSessions,
   rankRows,
+  rsvpCountText,
   SESSIONS,
   sortIdeas,
   topIdeas,
   upcomingSessions,
+  visibleSnapshotRows,
+  eraStages,
+  filterIdeas,
+  findIdea,
+  findSession,
 } from "./community";
 import { TRACKS } from "./progress";
 
@@ -38,7 +40,7 @@ describe("tabs", () => {
     expect(isCommunityTabCurrent("/dashboard/community/ideas-extra", "/dashboard/community/ideas")).toBe(false);
   });
 
-  test("the six tabs are in order", () => {
+  test("the seven tabs are in order", () => {
     expect(COMMUNITY_TABS.map((tab) => tab.label)).toEqual(["Overview", "Show & Tell", "Ideas", "News", "Leaderboard", "Goals", "Events"]);
   });
 });
@@ -79,49 +81,86 @@ describe("rankRows", () => {
 });
 
 describe("leaderboard", () => {
-  test("the fixtures never report fewer hours all time than in a week", () => {
+  // The hours themselves come from the nightly snapshot; these tests are the display rules only.
+  test("the two windows are week and all, and an unknown one reads as the week", () => {
+    expect(parseLeaderboardRange(undefined)).toBe("week");
+    expect(parseLeaderboardRange("all")).toBe("all");
+    expect(parseLeaderboardRange("week")).toBe("week");
+    expect(parseLeaderboardRange("forever")).toBe("week");
+    expect(parseLeaderboardRange(["all", "week"])).toBe("all");
+  });
+
+  test("the address leaves the default window out", () => {
+    expect(leaderboardHref("week")).toBe("/dashboard/community/leaderboard");
+    expect(leaderboardHref("all")).toBe("/dashboard/community/leaderboard?range=all");
+  });
+
+  test("depth is one metre for each approved hour", () => {
+    expect(depthLabel("all", 96)).toBe("96 M");
+    expect(depthLabel("week", 7)).toBe("7 M deeper");
+  });
+
+  test("the reviewer fulfilment fixtures never report fewer hours all time than in a week", () => {
     for (const builder of BUILDERS) {
       for (const track of TRACKS) expect(builder.allTime[track]).toBeGreaterThanOrEqual(builder.weekly[track]);
     }
   });
 
-  test("overall adds the four tracks", () => {
-    const rows = leaderboardRows({ range: "weekly", track: null });
-    expect(rows[0]).toMatchObject({ handle: "mothvector", hours: 16, rank: 1 });
-    expect(rows.map((row) => row.rank)).toEqual([1, 2, 2, 4, 4, 6, 6, 8]);
+  test("a hidden person in the stored snapshot does not take a served place", () => {
+    // The snapshot is written nightly; someone in it may have turned stats off since. The snapshot stores more rows
+    // than are served precisely so the served list stays full.
+    const stored = [
+      { personId: "hidden", hours: 10 },
+      { personId: "a", hours: 9 },
+      { personId: "b", hours: 8 },
+    ];
+    const visible = new Map([["a", "Ada"], ["b", "Bo"]]);
+    expect(visibleSnapshotRows(stored, visible, 2).map((row) => row.handle)).toEqual(["Ada", "Bo"]);
   });
 
-  test("a single track ranks only that track, with ties", () => {
-    const rows = leaderboardRows({ range: "weekly", track: "Hardware" });
-    expect(rows.map((row) => [row.handle, row.hours, row.rank])).toEqual([
-      ["brasskettle", 9, 1],
-      ["picopilgrim", 9, 1],
-      ["tinwren", 3, 3],
-      ["lathelark", 2, 4],
-    ]);
+  test("the served list is capped after hidden people are removed", () => {
+    const stored = [
+      { personId: "hidden", hours: 10 },
+      { personId: "a", hours: 9 },
+      { personId: "b", hours: 8 },
+      { personId: "c", hours: 7 },
+    ];
+    const visible = new Map([["a", "Ada"], ["b", "Bo"], ["c", "Cy"]]);
+    expect(visibleSnapshotRows(stored, visible, 2).map((row) => row.handle)).toEqual(["Ada", "Bo"]);
+  });
+});
+
+describe("events", () => {
+  const base = { startsAt: new Date("2027-03-10T18:00:00.000Z"), endsAt: new Date("2027-03-10T20:00:00.000Z"), stoppedAt: null } as const;
+  const before = new Date("2027-03-09T12:00:00.000Z");
+  const during = new Date("2027-03-10T19:00:00.000Z");
+  const after = new Date("2027-03-11T12:00:00.000Z");
+
+  test("an event is upcoming, then live, then ended", () => {
+    expect(eventStatus(base, before)).toBe("upcoming");
+    expect(eventStatus(base, during)).toBe("live");
+    expect(eventStatus(base, after)).toBe("ended");
   });
 
-  test("every track has rows in both ranges", () => {
-    for (const range of ["weekly", "all-time"] as const) {
-      for (const track of TRACKS) expect(leaderboardRows({ range, track }).length).toBeGreaterThan(0);
-    }
+  test("a stopped event reads as stopped whatever the clock says, and never takes an RSVP", () => {
+    const stopped = { ...base, stoppedAt: new Date("2027-03-09T00:00:00.000Z") };
+    expect(eventStatus(stopped, during)).toBe("stopped");
+    expect(isRsvpOpen(stopped, during)).toBe(false);
+    expect(EVENT_STATUS_LABELS.stopped).toBe("Stopped");
   });
 
-  test("the query reads a range and a track, and ignores anything unknown", () => {
-    expect(parseLeaderboardQuery({})).toEqual({ range: "weekly", track: null });
-    expect(parseLeaderboardQuery({ range: "all-time", track: "Systems" })).toEqual({ range: "all-time", track: "Systems" });
-    expect(parseLeaderboardQuery({ range: "forever", track: "art" })).toEqual({ range: "weekly", track: null });
-    expect(parseLeaderboardQuery({ range: ["all-time", "weekly"], track: ["tools"] })).toEqual({ range: "all-time", track: "Tools" });
+  test("RSVP is open from the start until the end, and an event with no end stays open until stopped", () => {
+    expect(isRsvpOpen(base, before)).toBe(true);
+    expect(isRsvpOpen(base, during)).toBe(true);
+    expect(isRsvpOpen(base, after)).toBe(false);
+    const endless = { ...base, endsAt: null };
+    expect(isRsvpOpen(endless, after)).toBe(true);
   });
 
-  test("the address leaves out the defaults", () => {
-    expect(leaderboardHref({ range: "weekly", track: null })).toBe("/dashboard/community/leaderboard");
-    expect(leaderboardHref({ range: "all-time", track: "Compute" })).toBe("/dashboard/community/leaderboard?track=compute&range=all-time");
-  });
-
-  test("depth is one metre for each approved hour", () => {
-    expect(depthLabel("all-time", 96)).toBe("-96 M");
-    expect(depthLabel("weekly", 7)).toBe("7 M deeper");
+  test("the count reads honestly at every number", () => {
+    expect(rsvpCountText(0)).toBe("No builders going yet");
+    expect(rsvpCountText(1)).toBe("1 builder going");
+    expect(rsvpCountText(12)).toBe("12 builders going");
   });
 });
 
@@ -175,18 +214,7 @@ describe("ideas", () => {
   });
 });
 
-describe("news and sessions", () => {
-  test("news is newest first and a preview is cut to the count", () => {
-    expect(latestNews(3)).toHaveLength(3);
-    expect(latestNews(3)[0].order).toBe(1);
-    expect(latestNews(99)).toHaveLength(NEWS.length);
-  });
-
-  test("no news item states a date or a price", () => {
-    const text = NEWS.map((item) => `${item.title} ${item.summary}`).join(" ");
-    expect(/[$€£]|\b(20\d\d|January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text)).toBe(false);
-  });
-
+describe("sessions", () => {
   test("past sessions run newest first and upcoming ones run in order", () => {
     expect(pastSessions().map((session) => session.number)).toEqual([3, 2, 1]);
     expect(upcomingSessions().map((session) => session.number)).toEqual([4, 5]);
@@ -199,25 +227,29 @@ describe("news and sessions", () => {
   });
 });
 
-describe("goalPercent", () => {
+describe("goal figures", () => {
   test("rounds down so a goal is never shown complete early", () => {
     expect(goalPercent(1999, 2000)).toBe(99);
     expect(goalPercent(1240, 2000)).toBe(62);
     expect(goalPercent(2000, 2000)).toBe(100);
   });
 
-  test("is clamped and safe for a missing target", () => {
+  test("a whole-number percentage is not rounded down by floating point", () => {
+    // 29 / 100 * 100 is 28.999999999999996 in binary floating point; the bar must still read 29%.
+    expect(goalPercent(29, 100)).toBe(29);
+    expect(goalPercent(57, 100)).toBe(57);
+    expect(goalPercent(58, 100)).toBe(58);
+  });
+
+  test("is clamped and safe for a missing target or a bad figure", () => {
     expect(goalPercent(5000, 2000)).toBe(100);
     expect(goalPercent(-3, 10)).toBe(0);
     expect(goalPercent(4, 0)).toBe(0);
     expect(goalPercent(Number.NaN, 10)).toBe(0);
   });
 
-  test("every goal fixture sits between zero and its target", () => {
-    for (const goal of GOALS) {
-      expect(goal.target).toBeGreaterThan(0);
-      expect(goal.value).toBeGreaterThanOrEqual(0);
-      expect(goal.value).toBeLessThanOrEqual(goal.target);
-    }
+  test("the words carry the staff-written figures, formatted for reading", () => {
+    expect(goalValueText({ current: 1240, target: 2000 })).toBe("1,240 of 2,000");
+    expect(goalValueText({ current: 3, target: 4 })).toBe("3 of 4");
   });
 });

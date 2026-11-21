@@ -12,24 +12,81 @@ datasource db {
 }
 
 model Person {
-  id          String     @id @default(cuid())
-  email       String     @unique
-  displayName String
+  id                 String                  @id @default(cuid())
+  email              String                  @unique
+  displayName        String
   // Staff-only reason for a ban. Never shown to the banned person.
-  bannedAt    DateTime?
-  banReason   String?
-  createdAt   DateTime   @default(now())
+  bannedAt           DateTime?
+  banReason          String?
+  createdAt          DateTime                @default(now())
   // Public profile (lib/platform/profile.ts). Lower-case handle, unique; null until the builder picks one.
-  handle      String?    @unique
-  bio         String?
-  roles       RoleGrant[]
-  sessions    Session[]
-  projects    Project[]
+  handle             String?                 @unique
+  bio                String?
+  // Profile picture settings (JSON). Column added by an earlier applied migration.
+  avatar             Json?                   @db.JsonB
+  // Hack Club Auth (lib/platform/hca.ts). The id is bound to one Person for good. Birthday is a date with no time.
+  hcaId              String?                 @unique
+  birthday           DateTime?               @db.Date
+  // Text as HCA gave it (verified, pending, needs_submission ...). Never trusted on its own.
+  verificationStatus String?
+  hcaSyncedAt        DateTime?
+  roles              RoleGrant[]
+  sessions           Session[]
+  projects           Project[]
   // Toolbelt: builders this person has blocked from equipping their tools, and people who blocked this person.
-  blocksMade     ToolbeltBlock[] @relation("ToolbeltMaker")
-  blocksReceived ToolbeltBlock[] @relation("ToolbeltBlocked")
+  blocksMade         ToolbeltBlock[]         @relation("ToolbeltMaker")
+  blocksReceived     ToolbeltBlock[]         @relation("ToolbeltBlocked")
   // Saved projects (lib/platform/bookmarks.ts).
-  bookmarks      ProjectBookmark[]
+  bookmarks          ProjectBookmark[]
+  // Kudos this person gave (lib/platform/kudos.ts).
+  kudosGiven         ProjectKudos[]
+  // Ore ledger and journal (lib/platform/ledger.ts, journal.ts).
+  ledger             LedgerEntry[]
+  journal            JournalEntry[]
+  // Public stats (lib/platform/stats.ts). Hidden from leaderboards and public stats until the person turns this on.
+  statsVisible       Boolean                 @default(false)
+  // The Slack member id from Hack Club Auth (slack_id). Used for DMs, the bot and the profile picture; never shown to other builders.
+  slackId            String?                 @unique
+  // Backend plan tables.
+  hackatimeLink      HackatimeLink?
+  hackatimeProjects  HackatimeProject[]
+  hoursDays          HoursDay[]
+  shopSaves          ShopSave[]
+  shopOrders         ShopOrder[]
+  requisitionUses    RequisitionUse[]
+  fulfiller          Fulfiller?
+  blocksSent         Block[]                 @relation("BlockMaker")
+  blocksGot          Block[]                 @relation("BlockTarget")
+  pollVotes          PollVote[]
+  notifications      Notification[]
+  notificationPrefs  NotificationPref[]
+  following          Follow[]                @relation("Follower")
+  followers          Follow[]                @relation("Followee")
+  ideas              Idea[]
+  ideaVotes          IdeaVote[]
+  ideaApplications   IdeaCollabApplication[]
+  collaborations     ProjectCollaborator[]
+  referralsMade      Referral[]              @relation("Referrer")
+  referredBy         Referral?               @relation("Referred")
+  apiKeys            ApiKey[]
+  // Community band (lib/platform/community-data.ts). RSVPs to events the person joined.
+  eventRsvps         EventRsvp[]
+  // Project comments the person wrote (lib/platform/comments.ts).
+  commentsGiven      ProjectComment[]       @relation("CommentAuthor")
+  // Admin impersonation sessions this person started, and sessions in which this person was impersonated (lib/platform/impersonation.ts).
+  impersonationsActed   Impersonation[]      @relation("ImpersonationActor")
+  impersonationsSubject Impersonation[]     @relation("ImpersonationSubject")
+}
+
+// One row per sign-in in flight. Only a hash of the state is kept; rows expire and are cleaned up.
+model LoginAttempt {
+  id        String   @id
+  state     String   @unique
+  nonceHash String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
 }
 
 model RoleGrant {
@@ -55,27 +112,78 @@ model Session {
 }
 
 model Project {
-  id        String   @id @default(cuid())
-  ownerId   String
-  owner     Person   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  title       String
-  description String?
+  id                   String                @id @default(cuid())
+  ownerId              String
+  owner                Person                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title                String
+  description          String?
   // One of the track names in lib/platform/progress.ts. Null until the builder picks one.
-  track       String?
-  status      String   @default("draft")
-  createdAt   DateTime @default(now())
+  track                String?
+  status               String                @default("draft")
+  // Ship state (lib/platform/ship.ts): draft, logging, submitted, in-review, second-pass, needs-changes, approved, banned.
+  submittedAt          DateTime?
+  resubmitCount        Int                   @default(0)
+  // The reviewer's reason, shown to the builder. At most 1000 characters. Written by the review desk, never by the builder.
+  reviewNote           String?
+  // A hold is a flag, not a status (plans/proposals/review-rules.md). Reviewers only; the builder never sees it.
+  heldAt               DateTime?
+  statusChangedAt      DateTime?
+  // True while an approved project is open again for an update ship.
+  isUpdate             Boolean               @default(false)
+  // What the builder says changed, for a resubmit or an update ship (at least 100 characters).
+  changeNote           String?
+  // Review desk (lib/platform/review-actions.ts). seq is the number the reviewer desk shows and uses in its addresses.
+  seq                  Int                   @unique @default(autoincrement())
+  firstShippedAt       DateTime?
+  // Cumulative minutes the reviewers have approved over every approved cycle. The prior total for an update ship.
+  approvedMinutes      Int                   @default(0)
+  // The reviewer who has the ship open: a 30 minute lock kept alive by a heartbeat.
+  claimedBy            String?
+  claimedAt            DateTime?
+  claimHeartbeatAt     DateTime?
+  // First-pass recommendation, read by the second pass.
+  firstPassBy          String?
+  firstPassAt          DateTime?
+  firstPassNote        String?
+  firstPassMinutes     Int?
+  // Fraud triage before a second-pass verdict: "not-fraud" or "fraud".
+  triage               String?
+  triageBy             String?
+  triageNote           String?
+  triageAt             DateTime?
+  // Hold: heldAt is the flag, these say who and why. Reviewers only.
+  heldBy               String?
+  holdReason           String?
+  // The reviewer who first asked for changes keeps the ship for 72 hours after the builder ships again.
+  assignedTo           String?
+  reshippedAt          DateTime?
+  assignmentRemindedAt DateTime?
+  // The reason code of the last needs-changes (track, readme, hours, ai, other).
+  reviewReason         String?
+  // A first-pass reviewer proposed a ban; an owner confirms or overturns it.
+  proposedBanBy        String?
+  proposedBanReason    String?
+  bannedAt             DateTime?
+  createdAt            DateTime              @default(now())
   // Public source and demo addresses (https only, checked in lib/platform/profile.ts).
-  repoUrl     String?
-  demoUrl     String?
-  pinned      Boolean  @default(false)
-  // Owner hides the project from the public profile and Explore.
-  hidden      Boolean  @default(false)
-  // Show a logging project as "currently building" on the profile.
-  showBuilding Boolean @default(false)
+  repoUrl              String?
+  demoUrl              String?
+  pinned               Boolean               @default(false)
   // Toolbelt: tools this project equips, and projects that equip this one.
-  equips      ToolbeltUse[] @relation("ToolbeltEquipper")
-  usedBy      ToolbeltUse[] @relation("ToolbeltTool")
-  bookmarks   ProjectBookmark[]
+  equips               ToolbeltUse[]         @relation("ToolbeltEquipper")
+  usedBy               ToolbeltUse[]         @relation("ToolbeltTool")
+  bookmarks            ProjectBookmark[]
+  kudos                ProjectKudos[]
+  ledger               LedgerEntry[]
+  journal              JournalEntry[]
+  media                JournalMedia[]
+  expeditions          ProjectExpedition[]
+  hackatimeProjects    HackatimeProject[]
+  collaborators        ProjectCollaborator[]
+  // Fraud & verification evidence rows shown on the review desk (lib/platform/fraud/*).
+  checks               FraudCheck[]
+  // Builder comments on a public project (lib/platform/comments.ts).
+  comments             ProjectComment[]
 
   @@index([ownerId])
 }
@@ -91,6 +199,20 @@ model ProjectBookmark {
 
   @@unique([personId, projectId])
   @@index([personId])
+  @@index([projectId])
+}
+
+// Kudos: one per person per project, never on your own project (canGiveKudos in lib/platform/kudos.ts). The count is public;
+// who gave it is not shown.
+model ProjectKudos {
+  id        String   @id @default(cuid())
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([personId, projectId])
   @@index([projectId])
 }
 
@@ -110,6 +232,20 @@ model ToolbeltUse {
   @@unique([projectId, toolId])
   @@index([projectId])
   @@index([toolId])
+}
+
+// An expedition equipped on a project (lib/platform/expeditions.ts, trials-as-expeditions.md). expeditionId is a fixture id, so
+// it has no foreign key. A row with unequippedAt set is history: it is kept so a finished expedition cannot be taken again.
+model ProjectExpedition {
+  id           String    @id @default(cuid())
+  projectId    String
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  expeditionId String
+  equippedAt   DateTime  @default(now())
+  unequippedAt DateTime?
+
+  @@index([projectId])
+  @@index([expeditionId])
 }
 
 // A maker stops a builder from equipping their tools.
@@ -145,4 +281,815 @@ model FeatureFlag {
   description String
   enabled     Boolean  @default(false)
   updatedAt   DateTime @updatedAt
+}
+
+// Ore ledger (lib/platform/ledger.ts). Append-only: the app never updates or deletes a row; a correction is a new "adjustment" row.
+// amountOre is signed (positive earned, negative spent). status is "pending" | "confirmed". kind is one of LEDGER_KINDS.
+model LedgerEntry {
+  id          String    @id @default(cuid())
+  personId    String
+  person      Person    @relation(fields: [personId], references: [id], onDelete: Cascade)
+  amountOre   Int
+  status      String    @default("confirmed")
+  kind        String
+  reason      String
+  projectId   String?
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  confirmedAt DateTime?
+
+  @@index([personId])
+  @@index([createdAt])
+}
+
+// A builder's journal entry on a project (lib/platform/journal.ts). Hours are self-reported ("logged"), never approved here.
+model JournalEntry {
+  id           String         @id @default(cuid())
+  projectId    String
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  authorId     String
+  author       Person         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title        String
+  body         String
+  hours        Float
+  status       String         @default("logged")
+  // Review desk: seq is the number the desk shows. reviewAction is approve-all, partial, clarify or reject; keptMinutes is what
+  // the decision keeps; reviewReason says why time was cut or what is unclear.
+  seq          Int            @unique @default(autoincrement())
+  reviewAction String?
+  keptMinutes  Int?
+  reviewReason String?
+  // Hardware entries only: a Lapse timelapse address. Reviewer only; never read by a public page.
+  lapseUrl     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  media        JournalMedia[]
+
+  @@index([projectId])
+}
+
+// A photo on a journal entry, or a project's cover (lib/platform/uploads.ts). The bytes live in the local store (.uploads/) or,
+// later, in an S3 compatible bucket; path says where. A deleted row keeps its record (deletedAt) and loses its file. entryId is
+// null for a cover and for a photo that is uploaded but not saved with an entry yet.
+model JournalMedia {
+  id        String        @id @default(cuid())
+  projectId String
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  entryId   String?
+  entry     JournalEntry? @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  kind      String
+  alt       String        @default("")
+  path      String
+  width     Int
+  height    Int
+  byteSize  Int
+  createdAt DateTime      @default(now())
+  deletedAt DateTime?
+
+  @@index([projectId, kind])
+  @@index([entryId])
+}
+
+// ===================================================================================================================================
+// Backend plan (plans/proposals/backend-and-api-plan.md). Every table below is new and additive. A Person FK cascades so an
+// erasure request removes the person's rows; actor and reviewer columns are plain ids so history survives an actor's removal.
+// ===================================================================================================================================
+
+// ---- P0: foundations ----------------------------------------------------------------------------------------------------------
+
+// Fixed-window request counter shared by every server process (lib/platform/rate-limit-db.ts). key is "scope:subject".
+model RateLimitHit {
+  key         String
+  windowStart DateTime
+  count       Int      @default(1)
+
+  @@id([key, windowStart])
+  @@index([windowStart])
+}
+
+// ---- P1: Hackatime and real hours ---------------------------------------------------------------------------------------------
+
+model HackatimeLink {
+  personId        String    @id
+  person          Person    @relation(fields: [personId], references: [id], onDelete: Cascade)
+  hackatimeUserId String
+  linkedAt        DateTime  @default(now())
+  lastSyncAt      DateTime?
+  // "ok" | "error" | "rate-limited". lastError is a short code, never a response body.
+  lastStatus      String?
+  lastError       String?
+}
+
+// A Hackatime project name seen for a person, optionally mapped to one LOADOUT project. totalSeconds is what Hackatime reported at the last sync.
+model HackatimeProject {
+  id           String   @id @default(cuid())
+  personId     String
+  person       Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  name         String
+  projectId    String?
+  project      Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  totalSeconds Int      @default(0)
+  updatedAt    DateTime @updatedAt
+
+  @@unique([personId, name])
+  @@index([projectId])
+}
+
+// Seconds coded on one day in one Hackatime project. hackatimeName is the Hackatime project name ("" for hours not tied to a project).
+model HoursDay {
+  id            String   @id @default(cuid())
+  personId      String
+  person        Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  hackatimeName String   @default("")
+  day           DateTime @db.Date
+  seconds       Int
+  source        String   @default("hackatime")
+  updatedAt     DateTime @updatedAt
+
+  @@unique([personId, hackatimeName, day])
+  @@index([day])
+}
+
+// ---- P2: Shop, orders, requisitions ---------------------------------------------------------------------------------------------
+
+model ShopItem {
+  id        String            @id
+  name      String
+  kind      String
+  baseOre   Int
+  tracks    String[]
+  blurb     String            @default("")
+  limited   Boolean           @default(false)
+  active    Boolean           @default(true)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  stock     ShopOptionStock[]
+  saves     ShopSave[]
+  lines     ShopOrderLine[]
+}
+
+// Stock per option ("" for an item with no options). stock is units left; the order transaction decrements it and fails at zero.
+model ShopOptionStock {
+  id     String   @id @default(cuid())
+  itemId String
+  item   ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  option String   @default("")
+  stock  Int
+
+  @@unique([itemId, option])
+}
+
+// The wishlist. Reserves nothing and locks no price.
+model ShopSave {
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  itemId    String
+  item      ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([personId, itemId])
+}
+
+model ShopOrder {
+  id           String                  @id @default(cuid())
+  // The number shown to people ("LO-1042"); the address uses it in lower case.
+  number       String                  @unique
+  personId     String
+  person       Person                  @relation(fields: [personId], references: [id], onDelete: Cascade)
+  // placed | packed | shipped | delivered | cancelled
+  status       String                  @default("placed")
+  totalOre     Int
+  region       String?
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  lines        ShopOrderLine[]
+  events       OrderStatusEvent[]
+  requisitions RequisitionUse[]
+  commitments  FulfillmentCommitment[]
+
+  @@index([personId])
+  @@index([status])
+}
+
+model ShopOrderLine {
+  id       String    @id @default(cuid())
+  orderId  String
+  order    ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  itemId   String
+  item     ShopItem  @relation(fields: [itemId], references: [id])
+  option   String    @default("")
+  quantity Int
+  // The price paid per unit when the order was placed, so a later price change never rewrites history.
+  unitOre  Int
+
+  @@index([orderId])
+}
+
+model OrderStatusEvent {
+  id      String    @id @default(cuid())
+  orderId String
+  order   ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status  String
+  at      DateTime  @default(now())
+  actorId String?
+
+  @@index([orderId])
+}
+
+model RequisitionUse {
+  id       String     @id @default(cuid())
+  personId String
+  person   Person     @relation(fields: [personId], references: [id], onDelete: Cascade)
+  orderId  String?
+  order    ShopOrder? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  track    String
+  usedAt   DateTime   @default(now())
+
+  @@index([personId])
+}
+
+model Fulfiller {
+  personId    String                  @id
+  person      Person                  @relation(fields: [personId], references: [id], onDelete: Cascade)
+  addedById   String
+  addedAt     DateTime                @default(now())
+  commitments FulfillmentCommitment[]
+}
+
+model FulfillmentCommitment {
+  id          String    @id @default(cuid())
+  orderId     String
+  order       ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  fulfillerId String
+  fulfiller   Fulfiller @relation(fields: [fulfillerId], references: [personId], onDelete: Cascade)
+  committedAt DateTime  @default(now())
+  doneAt      DateTime?
+
+  @@index([orderId])
+  @@index([fulfillerId])
+}
+
+// ---- P3: reviewer back end ------------------------------------------------------------------------------------------------------
+
+model ReviewPayout {
+  id         String    @id @default(cuid())
+  reviewerId String
+  projectId  String?
+  kind       String
+  amountOre  Int
+  // pending | paid | cancelled
+  status     String    @default("pending")
+  createdAt  DateTime  @default(now())
+  paidAt     DateTime?
+
+  @@index([reviewerId])
+  @@index([status])
+}
+
+model GuidelinesAck {
+  personId String
+  version  String
+  ackedAt  DateTime @default(now())
+
+  @@id([personId, version])
+}
+
+// A time-limited permission for a reviewer to review their own ship. expiresAt is required: there is no open-ended exception.
+model SelfReviewException {
+  id          String   @id @default(cuid())
+  personId    String
+  projectId   String?
+  grantedById String
+  reason      String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([personId])
+}
+
+model ShipsSnapshot {
+  id      String   @id @default(cuid())
+  takenAt DateTime @default(now())
+  counts  Json     @db.JsonB
+}
+
+model Ban {
+  id         String    @id @default(cuid())
+  personId   String
+  bannedById String
+  reason     String
+  createdAt  DateTime  @default(now())
+  liftedAt   DateTime?
+  liftedById String?
+  // A temporary ban ends here (null = until lifted). Enforced by lib/platform/moderation-data.ts.
+  expiresAt  DateTime?
+
+  @@index([personId])
+}
+
+model BanProposal {
+  id           String    @id @default(cuid())
+  personId     String
+  projectId    String?
+  proposedById String
+  reason       String
+  // The proposed length in days (null = open ended).
+  days         Int?
+  // open | confirmed | overturned
+  status       String    @default("open")
+  decidedById  String?
+  decidedAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([status])
+}
+
+model Report {
+  id           String         @id @default(cuid())
+  reporterId   String?
+  targetType   String
+  targetId     String
+  reason       String
+  detail       String         @default("")
+  // The reporter asked not to be named to the person reported. Staff still see who reported.
+  anonymous    Boolean        @default(false)
+  // open | actioned | dismissed
+  status       String         @default("open")
+  resolvedById String?
+  resolvedAt   DateTime?
+  createdAt    DateTime       @default(now())
+  viewers      ReportViewer[]
+
+  @@index([status])
+  @@index([targetType, targetId])
+}
+
+model ReportViewer {
+  reportId String
+  report   Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  viewerId String
+  viewedAt DateTime @default(now())
+
+  @@id([reportId, viewerId])
+}
+
+model Violation {
+  id          String   @id @default(cuid())
+  personId    String
+  kind        String
+  note        String   @default("")
+  createdById String
+  createdAt   DateTime @default(now())
+
+  @@index([personId])
+}
+
+model ModAction {
+  id        String   @id @default(cuid())
+  actorId   String
+  personId  String?
+  action    String
+  detail    String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([personId])
+  @@index([createdAt])
+}
+
+// A person blocking another: follows, collaborator invites and idea applications between them are refused.
+model Block {
+  blockerId String
+  blocker   Person   @relation("BlockMaker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   Person   @relation("BlockTarget", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([blockerId, blockedId])
+}
+
+model ErasureRequest {
+  id           String    @id @default(cuid())
+  personId     String
+  // requested | cancelled | done
+  status       String    @default("requested")
+  requestedAt  DateTime  @default(now())
+  // Deletion runs after this time, so a request can be cancelled.
+  scheduledFor DateTime
+  completedAt  DateTime?
+
+  @@index([status, scheduledFor])
+}
+
+model AgeException {
+  id          String   @id @default(cuid())
+  personId    String
+  grantedById String
+  reason      String
+  projectId   String?
+  createdAt   DateTime @default(now())
+
+  @@index([personId])
+}
+
+model FormConfig {
+  id          String           @id
+  name        String
+  fields      Json             @db.JsonB
+  open        Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  submissions FormSubmission[]
+}
+
+model FormSubmission {
+  id        String     @id @default(cuid())
+  formId    String
+  form      FormConfig @relation(fields: [formId], references: [id], onDelete: Cascade)
+  personId  String?
+  data      Json       @db.JsonB
+  createdAt DateTime   @default(now())
+
+  @@index([formId])
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  authorId    String
+  publishedAt DateTime @default(now())
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  body        String    @default("")
+  startsAt    DateTime
+  endsAt      DateTime?
+  url         String?
+  kind        String    @default("show_and_tell")
+  stoppedAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+  rsvps       EventRsvp[]
+
+  @@index([startsAt])
+}
+
+model Poll {
+  id        String     @id @default(cuid())
+  question  String
+  options   Json       @db.JsonB
+  closesAt  DateTime?
+  createdAt DateTime   @default(now())
+  votes     PollVote[]
+}
+
+model PollVote {
+  pollId   String
+  poll     Poll     @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  personId String
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  option   Int
+  votedAt  DateTime @default(now())
+
+  @@id([pollId, personId])
+}
+
+// ---- P4: a bit of social -------------------------------------------------------------------------------------------------------
+
+model Notification {
+  id        String    @id @default(cuid())
+  personId  String
+  person    Person    @relation(fields: [personId], references: [id], onDelete: Cascade)
+  kind      String
+  title     String
+  body      String    @default("")
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([personId, readAt])
+}
+
+model NotificationPref {
+  personId String
+  person   Person  @relation(fields: [personId], references: [id], onDelete: Cascade)
+  kind     String
+  enabled  Boolean @default(true)
+
+  @@id([personId, kind])
+}
+
+// A follows B. Two follows in both directions are friends.
+model Follow {
+  followerId String
+  follower   Person   @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followeeId String
+  followee   Person   @relation("Followee", fields: [followeeId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@id([followerId, followeeId])
+  @@index([followeeId])
+}
+
+model Idea {
+  id           String                  @id @default(cuid())
+  authorId     String
+  author       Person                  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title        String
+  body         String
+  // open | taken | closed
+  status       String                  @default("open")
+  createdAt    DateTime                @default(now())
+  votes        IdeaVote[]
+  applications IdeaCollabApplication[]
+}
+
+model IdeaVote {
+  ideaId   String
+  idea     Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  personId String
+  person   Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  // 1 or -1
+  value    Int
+  votedAt  DateTime @default(now())
+
+  @@id([ideaId, personId])
+}
+
+model IdeaCollabApplication {
+  id        String   @id @default(cuid())
+  ideaId    String
+  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  message   String
+  // pending | accepted | declined
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  @@unique([ideaId, personId])
+}
+
+model ProjectCollaborator {
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  personId    String
+  person      Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  // invited | accepted | declined
+  status      String   @default("invited")
+  invitedById String
+  createdAt   DateTime @default(now())
+
+  @@id([projectId, personId])
+}
+
+// Counted once the referred builder has an approved ship (qualifiedAt).
+model Referral {
+  id          String    @id @default(cuid())
+  referrerId  String
+  referrer    Person    @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referredId  String    @unique
+  referred    Person    @relation("Referred", fields: [referredId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  qualifiedAt DateTime?
+}
+
+// ---- P5: public API ------------------------------------------------------------------------------------------------------------
+
+// A personal API key (lib/platform/api-keys.ts). Only the SHA-256 hash is stored; prefix is the first characters, for display.
+// scopes is a list of API_SCOPES. Read only: a key can never write.
+model ApiKey {
+  id         String    @id @default(cuid())
+  personId   String
+  person     Person    @relation(fields: [personId], references: [id], onDelete: Cascade)
+  name       String
+  prefix     String
+  hash       String    @unique
+  scopes     String[]
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+  expiresAt  DateTime?
+  revokedAt  DateTime?
+
+  @@index([personId])
+}
+
+// One row per day and kind of statistic (lib/platform/stats.ts), written by a nightly job so every stat has a history.
+model StatSnapshot {
+  day  DateTime @db.Date
+  kind String
+  data Json     @db.JsonB
+
+  @@id([day, kind])
+}
+
+// ---- Slack bot (plans/proposals/slack-bot-spec.md) -----------------------------------------------------------------------------
+// Ids here are plain text on purpose: a ticket outlives its author's account, and the erasure job scrubs authorSlackId and text.
+
+model Ticket {
+  id             String          @id @default(cuid())
+  // The Slack channel and the message timestamp of the question; together they are unique.
+  channelId      String
+  messageTs      String
+  authorSlackId  String
+  authorPersonId String?
+  title          String?
+  text           String
+  // open | closed
+  status         String          @default("open")
+  claimedBy      String?
+  closedBy       String?
+  closedAt       DateTime?
+  keepOpen       Boolean         @default(false)
+  lastMessageAt  DateTime        @default(now())
+  createdAt      DateTime        @default(now())
+  messages       TicketMessage[]
+
+  @@unique([channelId, messageTs])
+  @@index([status, lastMessageAt])
+}
+
+model TicketMessage {
+  id            String   @id @default(cuid())
+  ticketId      String
+  ticket        Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  slackTs       String?
+  // person | helper | bot
+  authorKind    String
+  authorSlackId String?
+  text          String
+  createdAt     DateTime @default(now())
+
+  @@index([ticketId])
+}
+
+// Answered docs questions, so a repeat question is answered at once (lib/platform/bot-qa.ts).
+model BotQaCache {
+  id          String   @id @default(cuid())
+  question    String   @unique
+  answer      String
+  links       String[]
+  hits        Int      @default(0)
+  confirmedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+}
+
+// A reminder, countdown or poll the bot must run later. Survives a restart.
+model BotJob {
+  id           String    @id @default(cuid())
+  // reminder | countdown | poll
+  kind         String
+  ownerSlackId String
+  runAt        DateTime
+  payload      Json      @db.JsonB
+  doneAt       DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([doneAt, runAt])
+  @@index([ownerSlackId])
+}
+
+// What the site wants said to people; the bot polls it, sends, and acknowledges.
+model BotOutbox {
+  id            String    @id @default(cuid())
+  kind          String
+  slackId       String
+  text          String
+  href          String?
+  dedupeKey     String    @unique
+  // pending | sent | failed
+  status        String    @default("pending")
+  attempts      Int       @default(0)
+  nextAttemptAt DateTime  @default(now())
+  lastError     String?
+  sentAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([status, nextAttemptAt])
+}
+
+model BotHelper {
+  slackId String   @id
+  addedBy String
+  addedAt DateTime @default(now())
+}
+
+// ---- Scheduled work (lib/platform/jobs/*) --------------------------------------------------------------------------------------
+// One row per run of a cron job. The scheduler never updates or deletes rows: a run that fails is
+// finished with status "error" and its detail says why, and the next badge is examined, not edited.
+model JobRun {
+  id         String    @id @default(cuid())
+  job        String
+  // What started it: "cron" (the /api/cron endpoints) or "manual" (a staff member clicking run).
+  trigger    String    @default("cron")
+  // running | ok | error. A row may legitimately stay "running" forever if the process died mid-run.
+  status     String    @default("running")
+  detail     Json?     @db.JsonB
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+
+  @@index([job, startedAt])
+  @@index([job, status, finishedAt])
+}
+
+// ---- Fraud automation (lib/platform/fraud/*) ---------------------------------------------------------------------------------
+// Evidence rows produced by the automated checks (kind: precheck | robert | fraudy | double-dip).
+// Reviewers read these on the review desk; the desk's verdict is still a human decision written to
+// the project itself (triage, heldAt), never to this table.
+model FraudCheck {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  kind      String
+  // pending | cleared | flagged | error | dismissed.
+  status    String   @default("pending")
+  // Whatever number the check produces: a trust score, an estimated share of human minutes. Null if the kind has none.
+  score     Int?
+  // One-line machine judgment shown to reviewers; fixed labels, never raw model output.
+  summary   String?
+  detail    Json?    @db.JsonB
+  checkedAt DateTime @default(now())
+
+  @@index([projectId, kind, checkedAt])
+}
+
+// ---- Community band, real (lib/platform/community-data.ts) --------------------------------------------------------------------
+// A staff-authored community progress bar (an Era goal): current climbs as builders qualify,
+// the app raises the level when current reaches target. Rows are written by staff tooling only.
+model CommunityGoal {
+  id        String    @id @default(cuid())
+  key       String    @unique
+  title     String
+  body      String
+  current   Int       @default(0)
+  target    Int
+  endsAt    DateTime?
+  closedAt  DateTime?
+  createdAt DateTime  @default(now())
+}
+
+// One person per event; the RSVP count on the events page is the live count of rows.
+model EventRsvp {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  personId  String
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, personId])
+  @@index([eventId])
+}
+
+// A builder comment on a project (public projects only; reviews happen on the review desk, not here).
+model ProjectComment {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    Person   @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([projectId, createdAt])
+}
+
+// ---- Admin impersonation (lib/platform/impersonation.ts, after Stasis) --------------------------------------------------------
+// A staff member acting as a builder for support. Every impersonation is one row, is written before
+// the session works, and is closed by writing endedAt. The audit event beside it carries the reason.
+model Impersonation {
+  id        String    @id @default(cuid())
+  actorId   String
+  actor     Person    @relation("ImpersonationActor", fields: [actorId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Person    @relation("ImpersonationSubject", fields: [subjectId], references: [id], onDelete: Cascade)
+  // SHA-256 of the impersonation session's cookie value, same scheme as Session.tokenHash.
+  tokenHash String    @unique
+  reason    String
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+}
+
+model ProgramOperation {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  name      String
+  startsAt  DateTime
+  endsAt    DateTime
+  pausedAt  DateTime?
+  endedAt   DateTime?
+  version   Int       @default(0)
+  createdAt DateTime  @default(now())
+}
+
+model AirbridgePreviewCheck {
+  projectNumber Int      @id
+  unifiedId     String
+  program       String
+  repository    String?
+  state         String
+  hours         Float?
+  attemptedAt   DateTime
+  verifiedAt    DateTime?
 }

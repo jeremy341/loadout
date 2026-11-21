@@ -13,8 +13,6 @@ type SeedProject = {
   repoUrl: string | null;
   demoUrl?: string;
   pinned?: boolean;
-  showBuilding?: boolean;
-  hidden?: boolean;
 };
 
 export const SEED_BUILDERS = [
@@ -35,14 +33,14 @@ export const SEED_PROJECTS: SeedProject[] = [
   { id: "seed-notebook-sync", owner: "juniper@loadout.test", title: "Notebook Sync", description: "Draft: sync notes between two machines.", track: "Tools", status: "draft", repoUrl: null },
   { id: "seed-orbit-sim", owner: "kestrel@loadout.test", title: "Orbit Sim", description: "A two-body orbit simulator with a replayable timeline.", track: "Compute", status: "approved", repoUrl: `${EXAMPLE}/orbit-sim`, pinned: true },
   { id: "seed-gridlock", owner: "kestrel@loadout.test", title: "Gridlock", description: "A tiny job scheduler that never double-runs a task.", track: "Systems", status: "approved", repoUrl: `${EXAMPLE}/gridlock` },
-  { id: "seed-ray-marcher", owner: "kestrel@loadout.test", title: "Ray Marcher", description: "Currently building: a software ray marcher.", track: "Compute", status: "logging", repoUrl: `${EXAMPLE}/ray-marcher`, showBuilding: true },
+  { id: "seed-ray-marcher", owner: "kestrel@loadout.test", title: "Ray Marcher", description: "Currently building: a software ray marcher.", track: "Compute", status: "logging", repoUrl: `${EXAMPLE}/ray-marcher` },
   { id: "seed-pocket-synth", owner: "pixelfox@loadout.test", title: "Pocket Synth", description: "A battery-powered synth with a handmade keyboard.", track: "Hardware", status: "approved", repoUrl: "https://git.example/pixel-fox/pocket-synth", pinned: true },
   { id: "seed-lamp-bus", owner: "pixelfox@loadout.test", title: "Lamp Bus", description: "A closed-source lamp controller. Approved, but no source link.", track: "Hardware", status: "approved", repoUrl: null },
   { id: "seed-tape-deck", owner: "bolt@loadout.test", title: "Tape Deck", description: "An append-only log store with a command line viewer.", track: "Systems", status: "approved", repoUrl: `${EXAMPLE}/tape-deck` },
   { id: "seed-fan-curve", owner: "bolt@loadout.test", title: "Fan Curve", description: "In review: a quiet fan controller.", track: "Hardware", status: "in-review", repoUrl: `${EXAMPLE}/fan-curve` },
   { id: "seed-cable-tidy", owner: "builder@loadout.test", title: "Cable Tidy", description: "A cable label maker that prints from a text list.", track: "Tools", status: "approved", repoUrl: `${EXAMPLE}/cable-tidy`, pinned: true },
   { id: "seed-draft-radio", owner: "builder@loadout.test", title: "Draft Radio", description: "A draft: a small radio receiver.", track: "Hardware", status: "draft", repoUrl: null },
-  { id: "seed-mini-router", owner: "builder@loadout.test", title: "Mini Router", description: "Currently building: a small packet router.", track: "Systems", status: "logging", repoUrl: `${EXAMPLE}/mini-router`, showBuilding: true },
+  { id: "seed-mini-router", owner: "builder@loadout.test", title: "Mini Router", description: "Currently building: a small packet router.", track: "Systems", status: "logging", repoUrl: `${EXAMPLE}/mini-router` },
   { id: "seed-private-wiki", owner: "builder@loadout.test", title: "Private Wiki", description: "A logging project kept off the public profile.", track: "Tools", status: "logging", repoUrl: null },
 ];
 
@@ -92,8 +90,6 @@ export async function seedLocalProfiles(): Promise<{ builders: number; projects:
       repoUrl: p.repoUrl,
       demoUrl: p.demoUrl ?? null,
       pinned: p.pinned ?? false,
-      showBuilding: p.showBuilding ?? false,
-      hidden: p.hidden ?? false,
     };
     await prisma.project.upsert({ where: { id: p.id }, create: { id: p.id, ...data }, update: data });
   }

@@ -3,11 +3,11 @@
 // API:
 //   MAX_BOOKMARKS = 200
 //   canBookmark({ viewer, project }) -> { ok: true } | { ok: false, code, reason }
-//       a person may save a project they may see: their own (any state), or one that is approved, not hidden, and whose owner is
-//       not banned. code is "not-visible" | "banned-owner".
+//       a person may save a project they may see: their own, or any other project (every project is public, drafts included)
+//       whose owner is not banned. code is "not-visible" | "banned-owner".
 //   checkBookmarkLimit(count) -> { ok: true } | { ok: false, reason }    count is how many the person already saved
 //   toggleOutcome(saved, count) -> "add" | "remove" | "limit"            what a toggle does given the current state
-import { normalizeStatus } from "./profile";
+import { isPublicProject } from "./profile";
 
 export const MAX_BOOKMARKS = 200;
 
@@ -16,13 +16,13 @@ export type BookmarkResult = { ok: true } | { ok: false; code: BookmarkCode; rea
 
 export type BookmarkInput = {
   viewer: { id: string };
-  project: { ownerId: string; status: string; hidden: boolean; ownerBanned?: boolean };
+  project: { ownerId: string; status: string; ownerBanned?: boolean };
 };
 
 export function canBookmark({ viewer, project }: BookmarkInput): BookmarkResult {
   if (project.ownerId === viewer.id) return { ok: true };
   if (project.ownerBanned) return { ok: false, code: "banned-owner", reason: "That project was not found." };
-  if (project.hidden || normalizeStatus(project.status) !== "approved") {
+  if (!isPublicProject(project)) {
     return { ok: false, code: "not-visible", reason: "That project was not found." };
   }
   return { ok: true };

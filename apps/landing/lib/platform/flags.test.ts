@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createFlagReader, FLAG_CACHE_MS, KNOWN_FLAGS } from "./flags";
+import { createFlagReader, FLAG_CACHE_MS, isKnownFlag, KNOWN_FLAGS } from "./flags";
 
 describe("createFlagReader", () => {
   test("reads through the cache within the TTL", async () => {
@@ -39,5 +39,17 @@ describe("KNOWN_FLAGS", () => {
       expect(name).toMatch(/^[a-z][a-z_]*$/);
       expect(label.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("isKnownFlag", () => {
+  test("accepts declared flags and refuses unknown names", () => {
+    for (const name of Object.keys(KNOWN_FLAGS)) expect(isKnownFlag(name)).toBe(true);
+    expect(isKnownFlag("not_a_flag")).toBe(false);
+    expect(isKnownFlag("")).toBe(false);
+  });
+
+  test("inherited Object.prototype keys are not flags", () => {
+    for (const name of ["toString", "constructor", "hasOwnProperty", "__proto__"]) expect(isKnownFlag(name)).toBe(false);
   });
 });

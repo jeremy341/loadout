@@ -5,7 +5,9 @@ import {
   itemCount,
   nextStatus,
   nextStepText,
+  formatOrderDay,
   orderById,
+  statusDay,
   orderLines,
   orderSummary,
   ORDER_STATUSES,
@@ -26,6 +28,27 @@ const approved: TrackHours = { Tools: 58, Systems: 14, Compute: 0, Hardware: 2 }
 const order = (id: string) => orderById(id) as Order;
 
 describe("fixtures", () => {
+  test("every order has a day for each status it has reached and none after", () => {
+    for (const entry of ORDERS) {
+      const reached = ORDER_STATUSES.slice(0, statusIndex(entry.status) + 1);
+      for (const status of ORDER_STATUSES) expect(statusDay(entry, status) !== null).toBe(reached.includes(status));
+    }
+  });
+
+  test("writes a day without a time zone", () => {
+    expect(formatOrderDay("2026-10-02")).toBe("2 Oct 2026");
+    expect(formatOrderDay("2026-13-02")).toBeNull();
+    expect(formatOrderDay(undefined)).toBeNull();
+  });
+
+  test("a day that is not on the calendar is not a day", () => {
+    expect(formatOrderDay("2026-10-00")).toBeNull();
+    expect(formatOrderDay("2026-10-32")).toBeNull();
+    expect(formatOrderDay("2026-02-30")).toBeNull();
+    expect(formatOrderDay("2026-02-29")).toBeNull();
+    expect(formatOrderDay("2024-02-29")).toBe("29 Feb 2024");
+  });
+
   test("three orders with unique ids and numbers, and five wishlist items", () => {
     expect(ORDERS).toHaveLength(3);
     expect(new Set(ORDERS.map((entry) => entry.id)).size).toBe(3);
@@ -99,12 +122,12 @@ describe("order lines and totals", () => {
   });
 
   test("a line for an item that is gone is left out", () => {
-    const broken: Order = { id: "x", number: "X", status: "placed", lines: [{ itemId: "gone", quantity: 1 }, { itemId: "pico-w", quantity: 1 }] };
+    const broken: Order = { id: "x", number: "X", status: "placed", dates: {}, lines: [{ itemId: "gone", quantity: 1 }, { itemId: "pico-w", quantity: 1 }] };
     expect(orderLines(broken, approved).map((line) => line.item.id)).toEqual(["pico-w"]);
   });
 
   test("a quantity below one counts as one", () => {
-    const odd: Order = { id: "x", number: "X", status: "placed", lines: [{ itemId: "pico-w", quantity: 0 }] };
+    const odd: Order = { id: "x", number: "X", status: "placed", dates: {}, lines: [{ itemId: "pico-w", quantity: 0 }] };
     expect(itemCount(odd, approved)).toBe(1);
   });
 });

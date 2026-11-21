@@ -37,8 +37,39 @@ export const PREVIEW_ACCOUNTS = [
 // Owners are never granted in the database. Locally the staff test account counts as one, in addition to LOADOUT_OWNER_EMAILS.
 export const LOCAL_OWNER_EMAILS: string[] = ["staff@loadout.test", "owner-norev@loadout.test"];
 
-export function localTestAccountsEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  return env.LOADOUT_LOCAL_TEST_ACCOUNTS === "true" && env.NODE_ENV !== "production";
+// True for a host a developer reaches their own machine by: localhost, 127.x, ::1, anything under .localhost (review.localhost), and
+// the private LAN ranges (10.x, 192.168.x, 172.16-31.x, 169.254.x) used to open the dev server from a phone. The port is ignored.
+// A public name (staging.example.com) is false, so a forged or real public Host never gets the preview accounts.
+export function isLoopbackHost(host: string | null | undefined): boolean {
+  if (!host) return false;
+  const bare = host.trim().toLowerCase();
+  // "[::1]:3000" and "[::1]" lose their brackets and port; a bare "::1" has several colons and no port to strip.
+  const name = bare.replace(/^\[([^\]]+)\](:\d+)?$/, "$1").replace(/^([^:]*):\d+$/, "$1");
+  if (name === "localhost" || name.endsWith(".localhost") || name === "::1") return true;
+  const octets = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(name);
+  if (!octets) return false;
+  const [a, b, c, d] = octets.slice(1).map(Number);
+  if ([a, b, c, d].some((n) => n > 255)) return false;
+  return a === 127 || a === 10 || (a === 192 && b === 168) || (a === 172 && b >= 16 && b <= 31) || (a === 169 && b === 254);
+}
+
+let warned = false;
+
+// The preview roles (owner, reviewer, ...) sign anyone in as a test account without a password, so they are development only:
+// the flag must be on, NODE_ENV must be development or test (a production or unset environment never qualifies), and, when the
+// caller knows the request's Host header, it must be a local one. Pass the host wherever a request is at hand (lib/platform/session.ts
+// readViewer); with no host (scripts, build time) only the first two checks apply. A loud one-time warning marks the mode.
+export function localTestAccountsEnabled(env: NodeJS.ProcessEnv = process.env, host?: string | null): boolean {
+  if (env.LOADOUT_LOCAL_TEST_ACCOUNTS !== "true") return false;
+  if (env.NODE_ENV !== "development" && env.NODE_ENV !== "test") return false;
+  if (host !== undefined && host !== null && !isLoopbackHost(host)) return false;
+  if (!warned && env.NODE_ENV !== "test") {
+    warned = true;
+    console.warn(
+      "[loadout] LOADOUT_LOCAL_TEST_ACCOUNTS is ON: preview roles sign in without a password. Development only; never enable this on a shared or public host.",
+    );
+  }
+  return true;
 }
 
 export async function seedLocalTestAccounts(): Promise<number> {

@@ -1,0 +1,335 @@
+// Pure rules for the shop, orders, wishlist and fulfilment. No database: the *-data.ts files read and write rows and call these.
+// Money is whole Ore. A refusal has a code (for a form to switch on) and a plain-words message.
+//
+// API:
+//   nextOrderNumber(existing)                 "LO-1101" style, numeric max plus one, never below the floor
+//   checkAdvance(from, to) / checkCancel      placed -> packed -> shipped -> delivered only; cancel only while placed
+//   mergeRequestLines(lines)                  checks and merges one order's lines (same item and option add up)
+//   priceOrder(...)                           re-prices lines with priceFor and the Field Requisition, one unit at most
+//   stockNeeds(lines)                         units per item and option, in a fixed order for the stock updates
+//   hasStock(stock, quantity)                 the check the guarded stock update repeats in the database
+//   canSave(count, alreadySaved)              wishlist limit
+//   canCommit(check) / canRemoveFulfiller(n)  fulfilment rules
+//   datesFromEvents(events) / orderRowFromDb  the order rows the Orders pages read
+//   shopItemFromRow(row, base)                a ShopItem row merged with its static catalog entry (photo, need, credit)
+
+import { formatOre, dayKey } from "./ledger";
+import { isOrderStatus, nextStatus, ORDER_STATUSES, type Order, type OrderLine, type OrderStatus } from "./orders";
+import { TRACKS, type Track } from "./progress";
+import { priceFor, lockFor, type ShopItem, type TrackHours } from "./shop";
+import { requisitionOffer, requisitionReasonText, type RequisitionCounts, type UsedRequisition } from "./requisitions";
+
+export type OrderRefusalCode =
+  | "empty"
+  | "too_many_lines"
+  | "bad_quantity"
+  | "bad_region"
+  | "person_unavailable"
+  | "unknown_item"
+  | "inactive"
+  | "locked"
+  | "out_of_stock"
+  | "requisition"
+  | "insufficient_ore"
+  | "bad_total";
+
+export type OrderRefusal = { code: OrderRefusalCode; message: string; itemId?: string };
+export type Checked<T> = { ok: true; value: T } | { ok: false; refusal: OrderRefusal };
+export type Verdict = { ok: true } | { ok: false; message: string };
+
+const refuse = (code: OrderRefusalCode, message: string, itemId?: string): { ok: false; refusal: OrderRefusal } => ({
+  ok: false,
+  refusal: itemId ? { code, message, itemId } : { code, message },
+});
+const pass = <T>(value: T): { ok: true; value: T } => ({ ok: true, value });
+
+// ---- Numbers and statuses ----
+
+// The first number issued is LO-1101. The fixture orders stop at LO-1063, so real numbers do not look like them.
+export const ORDER_NUMBER_FLOOR = 1100;
+const NUMBER_PATTERN = /^LO-(\d+)$/;
+
+export function nextOrderNumber(existing: readonly string[]): string {
+  let top = ORDER_NUMBER_FLOOR;
+  for (const number of existing) {
+    const match = NUMBER_PATTERN.exec(number);
+    if (match) top = Math.max(top, Number(match[1]));
+  }
+  return `LO-${top + 1}`;
+}
+
+// One step forward only. Cancelled is not on the chain: an order that is cancelled cannot move on.
+export function checkAdvance(from: string, to: string): Verdict {
+  if (from === "cancelled") return { ok: false, message: "A cancelled order cannot move on." };
+  if (!isOrderStatus(from) || !isOrderStatus(to)) return { ok: false, message: "That is not a status an order can have." };
+  if (from === to) return { ok: false, message: `The order is already ${to}.` };
+  if (ORDER_STATUSES.indexOf(to) < ORDER_STATUSES.indexOf(from)) return { ok: false, message: "Orders only move forward." };
+  const next = nextStatus(from);
+  if (next === to) return { ok: true };
+  return { ok: false, message: `Move the order to ${next ?? "delivered"} first, one step at a time.` };
+}
+
+export function checkCancel(status: string): Verdict {
+  if (status === "placed") return { ok: true };
+  return { ok: false, message: `Only a placed order can be cancelled. This one is ${status}.` };
+}
+
+// ---- Order requests ----
+
+export const ORDER_MAX_LINES = 20;
+export const ORDER_MAX_QUANTITY = 10;
+export const ORDER_REGION_MAX = 80;
+
+export type OrderRequestLine = { itemId: string; option?: string; quantity: number };
+export type MergedLine = { itemId: string; option: string; quantity: number };
+
+// Checks each line and merges repeats of the same item and option. A builder can ask for at most ORDER_MAX_QUANTITY of one.
+export function mergeRequestLines(lines: readonly OrderRequestLine[]): Checked<MergedLine[]> {
+  if (lines.length === 0) return refuse("empty", "Add something to the order first.");
+  const merged = new Map<string, MergedLine>();
+  for (const line of lines) {
+    if (typeof line.itemId !== "string" || line.itemId.trim() === "") return refuse("unknown_item", "That item is not in the shop.");
+    const option = line.option ?? "";
+    const quantity = (merged.get(`${line.itemId}\u0000${option}`)?.quantity ?? 0) + line.quantity;
+    if (!Number.isInteger(line.quantity) || line.quantity < 1 || quantity > ORDER_MAX_QUANTITY) {
+      return refuse("bad_quantity", `Quantities are whole numbers from 1 to ${ORDER_MAX_QUANTITY}.`, line.itemId);
+    }
+    merged.set(`${line.itemId}\u0000${option}`, { itemId: line.itemId, option, quantity });
+  }
+  if (merged.size > ORDER_MAX_LINES) return refuse("too_many_lines", `An order holds at most ${ORDER_MAX_LINES} different items.`);
+  return pass([...merged.values()]);
+}
+
+// An empty region is fine (no delivery region chosen yet). Stored trimmed.
+export function checkRegion(raw: string | null | undefined): Checked<string | null> {
+  const text = (raw ?? "").trim();
+  if (text === "") return pass(null);
+  if (text.length > ORDER_REGION_MAX) return refuse("bad_region", `Keep the region under ${ORDER_REGION_MAX} characters.`);
+  return pass(text);
+}
+
+// ---- Stock ----
+
+export const STOCK_DEFAULT = 25;
+export const STOCK_LIMITED = 5;
+
+export function stockForNewItem(limited: boolean): number {
+  return limited ? STOCK_LIMITED : STOCK_DEFAULT;
+}
+
+// No stock row (null) means the item is not on sale in that option.
+export function hasStock(stock: number | null, quantity: number): boolean {
+  return stock !== null && Number.isInteger(quantity) && quantity > 0 && stock >= quantity;
+}
+
+export type StockNeed = { itemId: string; option: string; quantity: number };
+
+// Units per item and option, summed, in a fixed order so every order locks the stock rows in the same sequence.
+export function stockNeeds(lines: readonly StockNeed[]): StockNeed[] {
+  const totals = new Map<string, StockNeed>();
+  for (const line of lines) {
+    const key = `${line.itemId}\u0000${line.option}`;
+    const seen = totals.get(key);
+    totals.set(key, { itemId: line.itemId, option: line.option, quantity: (seen?.quantity ?? 0) + line.quantity });
+  }
+  return [...totals.values()].sort((a, b) => (a.itemId < b.itemId ? -1 : a.itemId > b.itemId ? 1 : a.option < b.option ? -1 : a.option > b.option ? 1 : 0));
+}
+
+// ---- Pricing ----
+
+export type PricingItem = { item: ShopItem; option: string; quantity: number; stock: number | null; active: boolean };
+export type PricedLine = { itemId: string; option: string; quantity: number; unitOre: number; requisition: boolean };
+export type PricedOrder = { lines: PricedLine[]; totalOre: number; requisitionTrack: Track | null };
+
+// Counts for one track only, so an offer cannot pick a different track from the one the builder chose.
+function onlyTrack(available: RequisitionCounts, track: Track): RequisitionCounts {
+  return Object.fromEntries(TRACKS.map((entry) => [entry, entry === track ? available[entry] : 0])) as RequisitionCounts;
+}
+
+// Prices every line from the approved hours. A Field Requisition covers one unit of one line: the first line that is in the
+// chosen track and eligible, which is split so that unit pays the requisition price and the rest pay the level price.
+export function priceOrder(input: {
+  items: readonly PricingItem[];
+  approved: TrackHours;
+  available: RequisitionCounts;
+  requisitionTrack: Track | null;
+  confirmedOre: number;
+}): Checked<PricedOrder> {
+  const priced: PricedLine[] = [];
+  const track = input.requisitionTrack;
+  let usedOn: { index: number; priceWith: number } | null = null;
+  let firstReason: string | null = null;
+
+  for (const [index, line] of input.items.entries()) {
+    if (!line.active) return refuse("inactive", `${line.item.name} is not on sale.`, line.item.id);
+    const lock = lockFor(line.item, input.approved);
+    if (lock) return refuse("locked", `${line.item.name} unlocks at level ${lock.level} in ${lock.track}.`, line.item.id);
+    if (!hasStock(line.stock, line.quantity)) return refuse("out_of_stock", `${line.item.name} is out of stock.`, line.item.id);
+
+    const price = priceFor(line.item, input.approved);
+    if (track && !usedOn && line.item.tracks.includes(track)) {
+      const offer = requisitionOffer(line.item, price, onlyTrack(input.available, track));
+      if (offer.eligible) usedOn = { index, priceWith: offer.priceWith };
+      else firstReason ??= requisitionReasonText(offer.reason);
+    }
+    priced.push({ itemId: line.item.id, option: line.option, quantity: line.quantity, unitOre: price.final, requisition: false });
+  }
+
+  if (track) {
+    if (!usedOn) {
+      const message = firstReason ?? `No item in this order is in ${track}.`;
+      return refuse("requisition", message);
+    }
+    // Split the chosen line so only one unit gets the requisition price.
+    const original = priced[usedOn.index];
+    const rest: PricedLine[] = original.quantity > 1 ? [{ ...original, quantity: original.quantity - 1 }] : [];
+    priced.splice(usedOn.index, 1, { ...original, quantity: 1, unitOre: usedOn.priceWith, requisition: true }, ...rest);
+  }
+
+  const totalOre = priced.reduce((sum, line) => sum + line.unitOre * line.quantity, 0);
+  if (totalOre <= 0) return refuse("bad_total", "This order has no price to pay.");
+  if (totalOre > input.confirmedOre) {
+    return refuse("insufficient_ore", `This order costs ${formatOre(totalOre)} and you have ${formatOre(input.confirmedOre)}.`);
+  }
+  return pass({ lines: priced, totalOre, requisitionTrack: usedOn ? track : null });
+}
+
+// Spent requisitions for the availability check: the RequisitionUse rows the database returns, with unknown tracks dropped.
+export function usedFromRows(rows: readonly { track: string }[]): UsedRequisition[] {
+  return rows.filter((row) => (TRACKS as readonly string[]).includes(row.track)).map((row) => ({ track: row.track as Track }));
+}
+
+// ---- Wishlist ----
+
+export const WISHLIST_MAX = 100;
+
+export function canSave(savedCount: number, alreadySaved: boolean): Verdict {
+  if (alreadySaved) return { ok: true };
+  if (savedCount >= WISHLIST_MAX) return { ok: false, message: `A wishlist holds ${WISHLIST_MAX} items. Take one off to add another.` };
+  return { ok: true };
+}
+
+// ---- Fulfilment ----
+
+export type CommitCheck = {
+  fulfillerId: string;
+  isFulfiller: boolean;
+  fulfillerBanned: boolean;
+  orderPersonId: string;
+  orderStatus: string;
+  openCommitments: number;
+};
+
+// A fulfiller takes an order that is not yet delivered or cancelled, never their own, and only one fulfiller at a time.
+export function canCommit(check: CommitCheck): Verdict {
+  if (!check.isFulfiller) return { ok: false, message: "Only a fulfiller can take an order." };
+  if (check.fulfillerBanned) return { ok: false, message: "This account cannot take orders." };
+  if (check.fulfillerId === check.orderPersonId) return { ok: false, message: "You cannot fulfil your own order." };
+  if (check.orderStatus === "delivered" || check.orderStatus === "cancelled") {
+    return { ok: false, message: `This order is ${check.orderStatus}, so nobody can take it.` };
+  }
+  if (check.openCommitments > 0) return { ok: false, message: "Someone is already fulfilling this order." };
+  return { ok: true };
+}
+
+// Removing a fulfiller would cascade-delete their commitments, so it is refused while any exist.
+export function canRemoveFulfiller(commitments: number): Verdict {
+  if (commitments > 0) {
+    return { ok: false, message: "This fulfiller has worked on orders. Their history is kept, so they cannot be removed yet." };
+  }
+  return { ok: true };
+}
+
+// ---- Order rows for the pages ----
+
+export type OrderEventRow = { status: string; at: Date };
+
+// The day each status was first reached (UTC day, as the ledger groups days), for the statuses reached so far.
+export function datesFromEvents(events: readonly OrderEventRow[]): Partial<Record<OrderStatus, string>> {
+  const earliest: Partial<Record<OrderStatus, Date>> = {};
+  for (const event of events) {
+    if (!isOrderStatus(event.status)) continue;
+    const seen = earliest[event.status];
+    if (!seen || event.at.getTime() < seen.getTime()) earliest[event.status] = event.at;
+  }
+  const dates: Partial<Record<OrderStatus, string>> = {};
+  for (const status of ORDER_STATUSES) {
+    const at = earliest[status];
+    if (at) dates[status] = dayKey(at);
+  }
+  return dates;
+}
+
+export type OrderDbLine = { itemId: string; option: string; quantity: number; unitOre: number };
+export type OrderDbRow = {
+  number: string;
+  status: string;
+  totalOre: number;
+  region: string | null;
+  createdAt: Date;
+  lines: readonly OrderDbLine[];
+  events: readonly OrderEventRow[];
+};
+
+// The Order type from orders.ts, plus what a row adds: the total paid, the region, whether it was cancelled, and the lines as paid
+// (option and unit price). A cancelled order keeps status "placed" so the tracker still reads, and sets cancelled.
+export type OrderRow = Order & {
+  totalOre: number;
+  region: string | null;
+  placedAt: Date;
+  cancelled: boolean;
+  paid: readonly OrderDbLine[];
+};
+
+export function orderRowFromDb(row: OrderDbRow): OrderRow {
+  const cancelled = row.status === "cancelled";
+  const status: OrderStatus = isOrderStatus(row.status) ? row.status : "placed";
+  const quantities = new Map<string, number>();
+  for (const line of row.lines) quantities.set(line.itemId, (quantities.get(line.itemId) ?? 0) + line.quantity);
+  const lines: OrderLine[] = [...quantities].map(([itemId, quantity]) => ({ itemId, quantity }));
+  return {
+    id: row.number.toLowerCase(),
+    number: row.number,
+    status,
+    dates: datesFromEvents(row.events),
+    lines,
+    totalOre: row.totalOre,
+    region: row.region,
+    placedAt: row.createdAt,
+    cancelled,
+    paid: row.lines,
+  };
+}
+
+// ---- Catalog rows ----
+
+export function isTrack(value: string): value is Track {
+  return (TRACKS as readonly string[]).includes(value);
+}
+
+export type ShopItemRow = { id: string; name: string; kind: string; baseOre: number; tracks: readonly string[]; blurb: string; limited: boolean };
+
+// A stand-in photo for a row that has no static catalog entry (a sprite from the homepage set).
+export const SPRITE_FALLBACK = "/loadout/sprites/ore.png";
+
+// The database holds the fields staff change (name, price, tracks, blurb, limited). The photo, the level lock and the credit stay in
+// the static catalog, matched by id.
+export function shopItemFromRow(row: ShopItemRow, base: ShopItem | null): ShopItem {
+  const tracks = row.tracks.filter(isTrack);
+  if (base) {
+    return { ...base, name: row.name, kind: row.kind, baseOre: row.baseOre, blurb: row.blurb, tracks, limited: row.limited };
+  }
+  return {
+    id: row.id,
+    name: row.name,
+    kind: row.kind,
+    blurb: row.blurb,
+    tracks,
+    baseOre: row.baseOre,
+    limited: row.limited,
+    photo: SPRITE_FALLBACK,
+    width: 32,
+    height: 32,
+    icon: true,
+  };
+}

@@ -1,3 +1,6 @@
+import { recordAudit } from "@/lib/platform/audit";
+import { db } from "@/lib/platform/db";
+import { readViewer } from "@/lib/platform/session";
 import { reviewApi } from "@/reviewer-dash/lib/apiGuard";
 import { listProjects } from "@/reviewer-dash/lib/db";
 
@@ -13,11 +16,21 @@ const cell = (value: unknown): string => {
 };
 
 export const GET = reviewApi("api.projects.export", "owner", async () => {
-  const rows = (await listProjects(undefined, { includeArchived: false })).filter((p) => p.status === "approved" && !p.banned_at && !p.rejected_at);
+  const [viewer, projects] = await Promise.all([readViewer(), listProjects(undefined, { includeArchived: false })]);
+  const rows = projects.filter((p) => p.status === "approved" && !p.banned_at && !p.rejected_at);
   const header = ["Project number", "Name", "Code URL", "Playable URL", "Description", "Hours"];
   const lines = [header.map(cell).join(",")];
   for (const p of rows.sort((a, b) => a.id - b.id))
     lines.push([p.id, p.name, p.repo_url, p.demo_url, p.description, p.approved_hours].map(cell).join(","));
+  // The owner who pulled the CSV is recorded; the file itself stays sample data with no personal fields.
+  await recordAudit(db(), {
+    actorId: viewer?.id ?? "anonymous",
+    action: "api.projects.export",
+    targetType: "Project",
+    targetId: "approved-projects-sample",
+    reason: "Owner downloaded the approved projects CSV.",
+    after: { rowCount: rows.length },
+  });
   return new Response(`${lines.join("\n")}\n`, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",

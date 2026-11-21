@@ -1,9 +1,8 @@
 import type { Track } from "./progress";
 import { trackBySlug } from "./tracks";
 
-// Explore lists projects other builders can see. Only an approved project is public; drafts and work in review stay with
-// their owner.
-export const EXPLORE_STATUS = "approved";
+// Explore lists projects other builders can see. Every project is public, drafts included (owner, 16 Nov 2026); the data
+// layer (discover-data.ts) leaves out only banned projects and banned owners.
 export const EXPLORE_QUERY_MAX = 80;
 export const EXPLORE_PAGE_SIZE = 60;
 
@@ -40,12 +39,13 @@ export function isFiltered(params: { q: string; track: unknown; saved: boolean }
 }
 
 // The address for a filter, keeping the search text. The default view has no query at all.
-export function exploreHref(query: { q: string; track: string | null; saved?: boolean; page?: number }): string {
+export function exploreHref(query: { q: string; track: string | null; saved?: boolean; page?: number; cursor?: string | null }): string {
   const params = new URLSearchParams();
   if (query.q) params.set("q", query.q);
   if (query.track) params.set("track", query.track.toLowerCase());
   if (query.saved) params.set("saved", "1");
   if (query.page && query.page > 1) params.set("page", String(query.page));
+  if (query.cursor) params.set("cursor", query.cursor);
   const text = params.toString();
   return text ? `/dashboard/explore?${text}` : "/dashboard/explore";
 }
@@ -56,6 +56,17 @@ export function liveSearchUrl(query: { q: string; track: string | null; saved: b
   if (query.track) params.set("track", query.track.toLowerCase());
   if (query.saved) params.set("saved", "1");
   return `/platform-search?${params.toString()}`;
+}
+
+// The feed address on /platform-explore (the next 21 cards as JSON), built from the same parts.
+export function feedUrl(query: { q: string; track: string | null; saved: boolean }, cursor: string | null): string {
+  const params = new URLSearchParams();
+  if (query.q) params.set("q", query.q);
+  if (query.track) params.set("track", query.track.toLowerCase());
+  if (query.saved) params.set("saved", "1");
+  if (cursor) params.set("cursor", cursor);
+  const text = params.toString();
+  return text ? `/platform-explore?${text}` : "/platform-explore";
 }
 
 // Paging for the result grid. A page past the end is clamped to the last page.

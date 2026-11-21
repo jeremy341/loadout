@@ -18,7 +18,7 @@ import {
 const base = (): EquipInput => ({
   equipper: { id: "me" },
   project: { id: "mine", ownerId: "me", status: "logging" },
-  tool: { id: "tool1", ownerId: "maker", status: "approved", hidden: false, repoUrl: "https://github.com/example-handle/tool" },
+  tool: { id: "tool1", ownerId: "maker", status: "approved", repoUrl: "https://github.com/example-handle/tool" },
   existingUses: [],
   blocks: [],
 });
@@ -55,9 +55,6 @@ describe("canEquip", () => {
     const a = base();
     a.tool.status = "draft";
     expect(code(a)).toBe("not-approved");
-    const b = base();
-    b.tool.hidden = true;
-    expect(code(b)).toBe("hidden");
     const c = base();
     c.tool.repoUrl = null;
     expect(code(c)).toBe("not-open-source");
@@ -161,19 +158,17 @@ describe("removal, blocks and public rows", () => {
     expect(checkBlockTarget("a", "a").ok).toBe(false);
     expect(checkBlockTarget("a", "").ok).toBe(false);
   });
-  test("publicToolUses needs confirmed and both sides public", () => {
-    const vis = { status: "approved", hidden: false, showBuilding: false };
+  test("publicToolUses needs a confirmed use; every project is public, drafts included", () => {
+    const vis = { status: "approved" };
     const row = (id: string, status: string, project = vis, tool = vis) => ({ id, status, project, tool });
     const rows = [
       row("ok", "confirmed"),
       row("pending", "pending"),
       row("declined", "declined"),
-      row("hidden-tool", "confirmed", vis, { ...vis, hidden: true }),
-      row("hidden-project", "confirmed", { ...vis, hidden: true }),
       row("draft-project", "confirmed", { ...vis, status: "draft" }),
-      row("building", "confirmed", { status: "logging", hidden: false, showBuilding: true }),
-      row("logging-private", "confirmed", { status: "logging", hidden: false, showBuilding: false }),
+      row("logging", "confirmed", { status: "logging" }),
+      row("banned-project", "confirmed", { ...vis, status: "banned" }),
     ];
-    expect(publicToolUses(rows).map((r) => r.id)).toEqual(["ok", "building"]);
+    expect(publicToolUses(rows).map((r) => r.id)).toEqual(["ok", "draft-project", "logging"]);
   });
 });

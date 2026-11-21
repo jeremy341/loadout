@@ -5,7 +5,6 @@
 // A signed-in, active builder is required (a banned person has no viewer and gets the 404). Owner checks are part of every query.
 // Form fields:
 //   saveProfile         handle, bio
-//   setProjectVisibility  id, hidden ("true"|"false", optional), showBuilding ("true"|"false", optional)
 //   pinProject          id, pinned ("true"|"false")
 //   setProjectLinks     id, repoUrl, demoUrl (empty clears)
 //   equipTool           projectId, toolId, note
@@ -17,8 +16,9 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "../generated/prisma/client";
 import type { FormState } from "./actions";
 import { db } from "./db";
-import { checkBio, checkHandle, checkLinkUrl, checkPin, visibilityPatch } from "./profile";
+import { checkBio, checkHandle, checkLinkUrl, checkPin } from "./profile";
 import { requireViewer } from "./session";
+import { isLocked, lockedReason, OPEN_STATUSES } from "./ship";
 import { canEquip, canRemoveUse, checkBlockTarget, checkUseNote, pendingToDecline } from "./toolbelt";
 
 const text = (value: FormDataEntryValue | null): string => (typeof value === "string" ? value : "");
@@ -63,32 +63,35 @@ export async function saveProfile(_prev: FormState, formData: FormData): Promise
   return { status: "saved", message: "Profile saved." };
 }
 
-export async function setProjectVisibility(_prev: FormState, formData: FormData): Promise<FormState> {
-  const viewer = await requireViewer();
-  const id = text(formData.get("id"));
-  const patch = visibilityPatch({ hidden: flag(formData.get("hidden")), showBuilding: flag(formData.get("showBuilding")) });
-  if (Object.keys(patch).length === 0) return error("Nothing to change.");
-  const result = await db().project.updateMany({ where: { id, ownerId: viewer.id }, data: patch });
-  if (result.count === 0) return error(NOT_FOUND);
-  refresh(null, id);
-  return { status: "saved", message: patch.hidden ? "Hidden from your profile and Explore." : "Visibility saved." };
-}
-
 export async function pinProject(_prev: FormState, formData: FormData): Promise<FormState> {
   const viewer = await requireViewer();
   const id = text(formData.get("id"));
   const pinned = flag(formData.get("pinned"));
   if (pinned === undefined) return error("Nothing to change.");
-  const project = await db().project.findFirst({ where: { id, ownerId: viewer.id }, select: { status: true, hidden: true } });
-  if (!project) return error(NOT_FOUND);
-  if (pinned) {
-    const elsewhere = await db().project.count({ where: { ownerId: viewer.id, pinned: true, id: { not: id } } });
-    const check = checkPin(project, elsewhere);
-    if (!check.ok) return error(check.message);
+  // Count and write run in one Serializable transaction, like equipTool, so two quick pins can't both pass the limit of three.
+  // The write is scoped to the owner.
+  try {
+    const result = await db().$transaction(
+      async (tx): Promise<FormState> => {
+        const project = await tx.project.findFirst({ where: { id, ownerId: viewer.id }, select: { status: true } });
+        if (!project) return error(NOT_FOUND);
+        if (pinned) {
+          const elsewhere = await tx.project.count({ where: { ownerId: viewer.id, pinned: true, id: { not: id } } });
+          const check = checkPin(project, elsewhere);
+          if (!check.ok) return error(check.message);
+        }
+        const written = await tx.project.updateMany({ where: { id, ownerId: viewer.id }, data: { pinned } });
+        if (written.count === 0) return error(NOT_FOUND);
+        return { status: "saved", message: pinned ? "Pinned to your profile." : "Unpinned." };
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
+    if (result.status === "saved") refresh(null, id);
+    return result;
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2034") return error("That changed while you were saving. Try again.");
+    throw e;
   }
-  await db().project.update({ where: { id }, data: { pinned } });
-  refresh(null, id);
-  return { status: "saved", message: pinned ? "Pinned to your profile." : "Unpinned." };
 }
 
 export async function setProjectLinks(_prev: FormState, formData: FormData): Promise<FormState> {
@@ -98,7 +101,12 @@ export async function setProjectLinks(_prev: FormState, formData: FormData): Pro
   if (!repo.ok) return error(repo.message, "repoUrl");
   const demo = checkLinkUrl(formData.get("demoUrl"), "demo link");
   if (!demo.ok) return error(demo.message, "demoUrl");
-  const result = await db().project.updateMany({ where: { id, ownerId: viewer.id }, data: { repoUrl: repo.url, demoUrl: demo.url } });
+  const current = await db().project.findFirst({ where: { id, ownerId: viewer.id }, select: { status: true } });
+  if (current && isLocked(current.status)) return error(lockedReason(current.status) ?? "This project can't change right now.");
+  const result = await db().project.updateMany({
+    where: { id, ownerId: viewer.id, status: { in: [...OPEN_STATUSES] } },
+    data: { repoUrl: repo.url, demoUrl: demo.url },
+  });
   if (result.count === 0) return error(NOT_FOUND);
   refresh(null, id);
   return { status: "saved", message: "Links saved." };
@@ -119,7 +127,7 @@ export async function equipTool(_prev: FormState, formData: FormData): Promise<F
         if (!project) return error(NOT_FOUND);
         const tool = await tx.project.findUnique({
           where: { id: toolId },
-          select: { id: true, ownerId: true, status: true, hidden: true, repoUrl: true, owner: { select: { bannedAt: true } } },
+          select: { id: true, ownerId: true, status: true, repoUrl: true, owner: { select: { bannedAt: true } } },
         });
         if (!tool || tool.owner.bannedAt) return error("That tool was not found.", "toolId");
         const [existingUses, blocks] = await Promise.all([
@@ -165,8 +173,12 @@ export async function blockBuilder(_prev: FormState, formData: FormData): Promis
   const blockedId = text(formData.get("blockedId"));
   const check = checkBlockTarget(viewer.id, blockedId);
   if (!check.ok) return error(check.reason);
+  // The answer is the same whether or not the target exists, so a block can't be used to find out which ids are real people.
   const target = await db().person.findUnique({ where: { id: blockedId }, select: { id: true } });
-  if (!target) return error("That builder was not found.");
+  if (!target) {
+    refresh();
+    return { status: "saved", message: "Builder blocked. They can't equip your projects." };
+  }
 
   await db().$transaction(async (tx) => {
     await tx.toolbeltBlock.upsert({

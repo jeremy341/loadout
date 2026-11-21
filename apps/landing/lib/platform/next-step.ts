@@ -1,3 +1,5 @@
+import { canonicalStatus } from "./ship";
+
 export type StepProject = { id: string; title: string; status: string; track: string | null };
 
 export type NextStep = { title: string; text: string; label: string; href: string };
@@ -7,7 +9,7 @@ const open = (project: StepProject) => `/dashboard/projects/${project.id}`;
 // The one thing to do next, read top-down so the first match wins (the same idea as Pixl's Next up card). Projects come
 // newest first. Only drafts exist in M1; the review states are here so the card is right once submitting opens.
 export function nextStep(projects: StepProject[]): NextStep {
-  const sentBack = projects.find((project) => project.status === "needs_changes");
+  const sentBack = projects.find((project) => canonicalStatus(project.status) === "needs-changes");
   if (sentBack) {
     return {
       title: `Fix up ${sentBack.title}`,
@@ -36,7 +38,7 @@ export function nextStep(projects: StepProject[]): NextStep {
     };
   }
 
-  if (projects.some((project) => project.status === "submitted" || project.status === "in_review")) {
+  if (projects.some((project) => ["submitted", "in-review", "second-pass"].includes(canonicalStatus(project.status)))) {
     return {
       title: "You're in the review queue",
       text: "Nothing to do but wait. Start the next one while you're here.",

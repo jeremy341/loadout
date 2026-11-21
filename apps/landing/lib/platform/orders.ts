@@ -24,13 +24,14 @@ const NEXT: Record<OrderStatus, string> = {
 };
 
 export type OrderLine = { itemId: string; quantity: number };
-export type Order = { id: string; number: string; status: OrderStatus; lines: readonly OrderLine[] };
+// `dates` holds the day each status was reached (YYYY-MM-DD), for the statuses reached so far and no others.
+export type Order = { id: string; number: string; status: OrderStatus; dates: Partial<Record<OrderStatus, string>>; lines: readonly OrderLine[] };
 
 // Fictional order numbers. The ids are the numbers in lower case, for the address.
 export const ORDERS: readonly Order[] = [
-  { id: "lo-1042", number: "LO-1042", status: "delivered", lines: [{ itemId: "pico-w", quantity: 1 }, { itemId: "breadboard-kit", quantity: 1 }] },
-  { id: "lo-1057", number: "LO-1057", status: "shipped", lines: [{ itemId: "mechanical-keyboard", quantity: 1 }] },
-  { id: "lo-1063", number: "LO-1063", status: "packed", lines: [{ itemId: "multimeter", quantity: 1 }, { itemId: "pico-w", quantity: 2 }] },
+  { id: "lo-1042", number: "LO-1042", status: "delivered", dates: { placed: "2026-10-02", packed: "2026-10-04", shipped: "2026-10-06", delivered: "2026-10-12" }, lines: [{ itemId: "pico-w", quantity: 1 }, { itemId: "breadboard-kit", quantity: 1 }] },
+  { id: "lo-1057", number: "LO-1057", status: "shipped", dates: { placed: "2026-10-28", packed: "2026-10-30", shipped: "2026-11-03" }, lines: [{ itemId: "mechanical-keyboard", quantity: 1 }] },
+  { id: "lo-1063", number: "LO-1063", status: "packed", dates: { placed: "2026-11-09", packed: "2026-11-12" }, lines: [{ itemId: "multimeter", quantity: 1 }, { itemId: "pico-w", quantity: 2 }] },
 ];
 
 // Catalog ids on the sample builder's wishlist, in the order they were saved.
@@ -68,6 +69,27 @@ export function orderById(id: string): Order | null {
 // An order is open until it is delivered.
 export function isOpen(order: Order): boolean {
   return order.status !== "delivered";
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// "2 Oct 2026" from a YYYY-MM-DD day, or null when the text is not one. Read as plain parts, so no time zone can move it.
+export function formatOrderDay(day: string | undefined): string | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day ?? "");
+  if (!match) return null;
+  const month = Number(match[2]);
+  const date = Number(match[3]);
+  if (month < 1 || month > 12) return null;
+  // Day 0 of the next month is the last day of this one, so leap years need no special case.
+  const last = new Date(0);
+  last.setUTCFullYear(Number(match[1]), month, 0);
+  if (date < 1 || date > last.getUTCDate()) return null;
+  return `${date} ${MONTHS[month - 1]} ${match[1]}`;
+}
+
+// The day an order reached a status, written out, or null if it has not got there.
+export function statusDay(order: Order, status: OrderStatus): string | null {
+  return formatOrderDay(order.dates[status]);
 }
 
 export type ResolvedLine = { item: ShopItem; quantity: number; unit: number; total: number };

@@ -246,7 +246,8 @@ export function ToolFinder({
         }
         return;
       // Tab does not close the list: the Clear button, the Save stars and Try again follow the field in Tab order, so they stay
-      // reachable from the keyboard. The list closes when focus leaves the whole finder (onBlur on the root) or on Escape.
+      // reachable from the keyboard. The list closes on Escape, when focus leaves the finder (onBlur on the root), or on a
+      // click outside it (document mousedown below), which also covers a click on a non-focusable element that does not move focus.
     }
   };
 
@@ -257,6 +258,18 @@ export function ToolFinder({
     // optionId is derived from uid, which does not change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeRow?.id]);
+
+  // A click outside the finder closes the list even when the click lands on a non-focusable element (the Toolbelt heading) and
+  // focus therefore stays on a Save button inside the pop, where onBlur cannot see it. Only mouse clicks trigger this: Tab and
+  // the arrow keys must leave the list open while focus is still inside the finder.
+  useEffect(() => {
+    if (!list.open) return;
+    const onOutsideClick = (event: MouseEvent) => {
+      if (!root.current?.contains(event.target as Node)) dispatch({ type: "close" });
+    };
+    document.addEventListener("mousedown", onOutsideClick);
+    return () => document.removeEventListener("mousedown", onOutsideClick);
+  }, [list.open]);
 
   const tokensQuery = empty ? "" : query;
   const showSkeleton = list.open && phase === "loading" && !loaded;

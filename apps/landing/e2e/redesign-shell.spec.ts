@@ -126,7 +126,6 @@ for (const [width, height] of [[1440, 900], [390, 800]] as const) {
     });
     expect(order.skipIndex).toBe(0);
     expect(order.tabIndex).toBeGreaterThan(order.skipIndex);
-    await page.locator("body").click({ position: { x: 1, y: 1 } });
     await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
     await page.keyboard.press("Tab");
     await expect(skip).toBeFocused();

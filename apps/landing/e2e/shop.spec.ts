@@ -153,7 +153,7 @@ test("an item page shows the price box, how the price is worked out, the closed 
   expect(response?.status()).toBe(404);
 });
 
-test("the tag chips are not sticky, and scroll inside their own row on a phone", async ({ page }) => {
+test("the tag chips are not sticky, and wrap inside their own row on a phone", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(SHOP);
   const nav = page.getByRole("navigation", { name: "Filter by tag" });
@@ -165,7 +165,17 @@ test("the tag chips are not sticky, and scroll inside their own row on a phone",
   await page.goto(SHOP);
   await expect(nav).toBeVisible();
   await noSideScroll(page, "chips at 320");
-  expect(await nav.evaluate((node) => node.scrollWidth > node.clientWidth)).toBe(true);
+  // The redesign made the tag chips wrap onto several rows instead of scrolling sideways in a single row, so the old
+  // scrollWidth > clientWidth assertion described an outdated layout. Check the behaviour that shipped instead: all six
+  // chips are present, they occupy more than one row at 320, and the nav never overflows its own box.
+  const chips = await nav.evaluate((node) => {
+    const links = [...node.querySelectorAll("a")];
+    const rows = new Set(links.map((link) => Math.round(link.getBoundingClientRect().top)));
+    return { count: links.length, rows: rows.size, overflows: node.scrollWidth > node.clientWidth };
+  });
+  expect(chips.count).toBe(6);
+  expect(chips.rows, "tag chips wrap onto more than one row at 320").toBeGreaterThan(1);
+  expect(chips.overflows, "the chip row does not scroll sideways").toBe(false);
 });
 
 // The cards in the first row of a grid, counted by their top offsets.

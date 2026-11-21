@@ -82,11 +82,12 @@ test("a visitor preview role still reaches the public sign-in page", async ({ pa
   });
 });
 
-test("an unknown preview role falls back to the builder test account", async ({ page, context, baseURL }) => {
+test("an unknown preview role is treated as signed out, not as the builder test account", async ({ page, context, baseURL }) => {
   await withPreviewRole(context, baseURL, "not-a-real-role", async () => {
+    // An unrecognised cookie value must not sign anyone in: the platform sends the visitor to the sign-in page.
     await page.goto("/dashboard/settings");
-    await expect(page.getByRole("heading", { level: 1, name: "Settings" })).toBeVisible({ timeout: 30000 });
-    await expect(page.getByText("Your account is eligible.")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Sign in" })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByRole("heading", { level: 1, name: "Settings" })).toHaveCount(0);
   });
 });
 

@@ -1,0 +1,50 @@
+/* Ideas: a ranked flat list, an inline apply form and a share form. Square corners, words for controls, one rule under each small
+   grey title. Nothing animates. The text control (.pf-tl) is in notifications.css. */
+.pf .pf-id { max-width: 820px; }
+.pf .pf-id-head { margin: 0 0 20px; }
+.pf .pf-id-head h1 { margin: 0 0 8px; overflow-wrap: anywhere; }
+.pf .pf-id-lead { margin: 0; color: var(--pf-mut); }
+.pf .pf-id-share { display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; margin: 0 0 12px; }
+.pf .pf-id-note { margin: 0; color: var(--pf-mut); font-size: 13px; }
+.pf .pf-id-filters { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 0 0 8px; border-bottom: 1px solid var(--pf-fg); }
+.pf .pf-id-filters a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px 0 0; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+.pf .pf-id-filters a:hover { color: var(--pf-link); text-decoration-color: var(--pf-link); }
+.pf .pf-id-filters a[aria-current="page"] { color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+.pf .pf-id-filters a:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+
+.pf .pf-id-list, .pf .pf-id-apps { list-style: none; margin: 0; padding: 0; }
+.pf .pf-id-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-id-vote { display: grid; justify-items: start; align-content: start; gap: 0; }
+.pf .pf-id-score { font: 400 28px var(--font-pixel), var(--font-dot), monospace; line-height: 1.1; }
+.pf .pf-id-vote-btns { display: flex; flex-wrap: wrap; }
+.pf .pf-id-vote-btns .pf-tl { min-height: 32px; padding-right: 10px; font-size: 13px; }
+.pf .pf-id-vote-msg { color: var(--pf-err); font-size: 13px; }
+.pf .pf-id-main { min-width: 0; }
+.pf .pf-id-title { margin: 0 0 4px; font-size: 1.1em; overflow-wrap: anywhere; }
+.pf .pf-id-title a { color: var(--pf-fg); text-decoration: none; }
+.pf .pf-id-title a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.pf .pf-id-body, .pf .pf-id-full { margin: 0 0 8px; color: var(--pf-mut); overflow-wrap: anywhere; }
+.pf .pf-id-full { color: var(--pf-fg); white-space: pre-line; max-width: 66ch; }
+.pf .pf-id-meta { display: flex; flex-wrap: wrap; gap: 0 14px; margin: 0 0 6px; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.06em; }
+.pf .pf-id-applied { margin: 0; color: var(--pf-mut); font-size: 13px; }
+
+.pf .pf-id-form { display: grid; gap: 6px; max-width: 560px; margin: 8px 0 16px; }
+.pf .pf-id-form label { font: 400 13px var(--font-dot), monospace; letter-spacing: 0.1em; color: var(--pf-mut); }
+.pf .pf-id-form .pf-input, .pf .pf-id-form .pf-textarea { width: 100%; min-width: 0; border-radius: 0; }
+.pf .pf-id-form .pf-input { min-height: 48px; }
+.pf .pf-id-count { margin: 0; color: var(--pf-mut); font-size: 13px; }
+.pf .pf-id-form-row { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.pf .pf-id-share-form { margin-top: 12px; }
+.pf .pf-id-decide { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; }
+.pf .pf-id-decide .pf-inline-msg { flex-basis: 100%; }
+
+.pf .pf-id-sec { margin: 32px 0 0; }
+.pf .pf-id-h { margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-id-apps li { padding: 12px 0; border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-id-detail .pf-id-vote { grid-template-columns: auto 1fr; align-items: center; gap: 0 16px; }
+.pf .pf-id-detail .pf-id-vote-btns { grid-column: 2; }
+
+@media (max-width: 520px) {
+  .pf .pf-id-row { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
+  .pf .pf-id-score { font-size: 22px; }
+}

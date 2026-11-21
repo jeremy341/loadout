@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 // The pixel tick the stage strip uses.
 export function CheckGlyph() {
   return (
-    <svg viewBox="0 0 12 12" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+    <svg viewBox="0 1 12 12" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
       <path d="M1 6h2v2h2v2H3V8H1zM5 8h2V6h2V4h2v2H9v2H7v2H5z" />
     </svg>
   );

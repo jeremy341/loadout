@@ -3,11 +3,11 @@
    are single bordered sheets divided by rules, never cards inside cards. Nothing here animates. */
 
 /* ---- Shared parts ---- */
-.pf .ex-label { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .ex-tag { display: inline-flex; align-items: center; gap: 8px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .pf .ex-tag::before { content: ""; flex: none; width: 10px; height: 10px; background: var(--tk, var(--pf-mut)); }
 .pf .ex-num { font-variant-numeric: tabular-nums; }
-.pf .ex-closed { margin: 10px 0 0; font-size: 0.8125em; line-height: 1.5; color: var(--pf-mut); }
+.pf .ex-closed { margin: 10px 0 0; font-size: 0.875em; line-height: 1.5; color: var(--pf-mut); }
 .pf .ex-section { margin: 0 0 32px; }
 .pf .ex-section > h2 { margin: 0 0 12px; font: 700 1.25em/1.2 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
 .pf .ex-section > .ex-lead { margin: -4px 0 14px; max-width: 64ch; font-size: 0.875em; color: var(--pf-mut); }
@@ -24,7 +24,7 @@
 .pf .ex-row:has(a.ex-stretch):hover .ex-name { color: var(--pf-link); text-decoration: underline; text-underline-offset: 4px; }
 .pf .ex-name { margin: 0; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
 .pf .ex-name a { color: inherit; text-decoration: none; }
-.pf .ex-summary { margin: 4px 0 0; font-size: 0.8125em; line-height: 1.55; color: var(--pf-mut); max-width: 62ch; }
+.pf .ex-summary { margin: 4px 0 0; font-size: 0.875em; line-height: 1.55; color: var(--pf-mut); max-width: 62ch; }
 .pf .ex-main { min-width: 0; }
 
 /* The step meter: one hard cell per step, filled in the track colour (or the accent where there is no track). */
@@ -34,21 +34,56 @@
 .pf .ex-progress { display: grid; gap: 6px; min-width: 0; }
 .pf .ex-progress-text { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
 
-/* ---- Filters ---- */
-.pf .ex-filters { display: grid; gap: 4px; margin: 0 0 22px; }
-.pf .ex-filter { display: grid; gap: 6px; }
-.pf .ex-filters .pf-explore-filters { margin: 0 0 8px; }
-.pf .ex-count { margin: 0 0 18px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
-
-/* ---- Expedition rows ---- */
-.pf .ex-mission { grid-template-columns: minmax(0, 1fr); }
-.pf .ex-mission-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
-.pf .ex-lock { margin: 8px 0 0; font-size: 0.8125em; line-height: 1.5; color: var(--pf-fg); }
-.pf .ex-lock::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border: 2px solid var(--pf-fg); box-sizing: border-box; vertical-align: 0; }
-.pf .ex-reward { display: grid; gap: 2px; font-size: 0.8125em; line-height: 1.45; }
-@media (min-width: 900px) {
-  .pf .ex-mission { grid-template-columns: 110px minmax(0, 1fr) 160px 190px; padding: 16px 20px; }
+/* ---- Expedition list: search, one select, one grid, pages ---- */
+.pf .ex-form { display: grid; gap: 12px; align-items: end; margin: 0 0 18px; }
+.pf .ex-field { display: grid; gap: 6px; min-width: 0; }
+.pf .ex-field label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-field .pf-input { width: 100%; min-width: 0; min-height: 48px; }
+.pf .ex-submit-search { min-height: 48px; }
+@media (min-width: 720px) {
+  .pf .ex-form { grid-template-columns: minmax(0, 1fr) 220px auto; }
 }
+.pf .ex-count { margin: 0 0 18px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; list-style: none; margin: 0; padding: 0; }
+@media (min-width: 720px) {
+  .pf .ex-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1200px) {
+  .pf .ex-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.pf .ex-grid > li { display: flex; min-width: 0; }
+.pf .ex-card { position: relative; display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 10px; width: 100%; min-width: 0; padding: 16px 18px; border: 1px solid var(--pf-fg); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); box-sizing: border-box; }
+.pf .ex-card a.ex-stretch { color: inherit; text-decoration: none; }
+.pf .ex-card a.ex-stretch::after { content: ""; position: absolute; inset: 0; }
+.pf .ex-card:has(a.ex-stretch:focus-visible) { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .ex-card a.ex-stretch:focus-visible { outline: none; }
+.pf .ex-card:hover .ex-card-name { color: var(--pf-link); text-decoration: underline; text-underline-offset: 4px; }
+.pf .ex-card[data-state="locked"] .ex-card-name { color: var(--pf-mut); }
+.pf .ex-card-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin: 0; }
+.pf .ex-state { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-card[data-state="in-progress"] .ex-state { color: var(--pf-link); }
+.pf .ex-card-name { margin: 0; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .ex-card-line { margin: 0; font-size: 0.875em; line-height: 1.55; color: var(--pf-mut); }
+.pf .ex-card-next { display: grid; gap: 2px; margin: 0; padding: 10px 0 0; border-top: 1px solid var(--pf-rule); font-size: 0.875em; line-height: 1.4; overflow-wrap: anywhere; }
+.pf .ex-card-foot { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 16px; }
+.pf .ex-card-facts { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-pager { justify-content: space-between; flex-wrap: wrap; margin-top: 24px; }
+.pf .ex-pager a, .pf .ex-pager-off { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 88px; padding: 0 14px; border: 1px solid var(--pf-fg); background: var(--pf-panel); box-sizing: border-box; }
+.pf .ex-pager a { color: var(--pf-fg); text-decoration: none; }
+.pf .ex-pager a:hover { color: var(--pf-link); }
+.pf .ex-pager-off { visibility: hidden; }
+.pf .ex-pager-count { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* ---- Expedition page: head, next step ---- */
+.pf .ex-head { grid-template-columns: minmax(0, 1fr); }
+.pf .ex-head-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0; }
+.pf .ex-facts { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-next { display: grid; gap: 6px; margin: 0 0 28px; padding: 18px 20px; border: 1px solid var(--pf-fg); border-left: 8px solid var(--tk, var(--pf-ac)); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); }
+.pf .ex-next h2 { margin: 0; font: 700 1em/1.2 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-next p { margin: 0; }
+.pf .ex-next-title { font: 700 1.375em/1.25 var(--font-pixel), monospace; overflow-wrap: anywhere; }
+.pf .ex-next-detail { max-width: 64ch; line-height: 1.55; color: var(--pf-mut); }
+.pf .ex-next .ex-plain { margin-top: 4px; }
 
 /* ---- Expedition page ---- */
 .pf .ex-detail { display: grid; gap: 24px; align-items: start; }
@@ -57,7 +92,7 @@
 @media (min-width: 900px) {
   .pf .ex-detail { grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; }
 }
-.pf .ex-status { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding: 4px 10px; border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+.pf .ex-status { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding: 4px 10px; border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
 .pf .ex-steps { list-style: none; margin: 0; padding: 0; }
 .pf .ex-step { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 2px 14px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
 .pf .ex-step:first-child { padding-top: 0; border-top: 0; }
@@ -75,8 +110,8 @@
 .pf .pf-box .ex-lock { margin: 0 0 16px; }
 .pf .ex-step-title { margin: 0; font: 600 1em/1.35 var(--font-ui), monospace; align-self: center; }
 .pf .ex-step[data-state="todo"] .ex-step-title { color: var(--pf-mut); }
-.pf .ex-step-detail { margin: 0; font-size: 0.8125em; line-height: 1.55; color: var(--pf-mut); }
-.pf .ex-step-flag { margin-left: 8px; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-link); }
+.pf .ex-step-detail { margin: 0; font-size: 0.875em; line-height: 1.55; color: var(--pf-mut); }
+.pf .ex-step-flag { margin-left: 8px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-link); }
 .pf .ex-plain { list-style: none; margin: 0; padding: 0; }
 .pf .ex-plain li { padding: 9px 0; border-top: 1px solid var(--pf-rule); font-size: 0.875em; line-height: 1.5; }
 .pf .ex-plain li:first-child { padding-top: 0; border-top: 0; }
@@ -97,7 +132,7 @@
 .pf .ex-flow-label { align-self: center; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .ex-flow-step[data-state="done"] .ex-flow-label { color: var(--pf-link); }
 .pf .ex-flow-step[data-state="active"] .ex-flow-label { color: var(--pf-fg); }
-.pf .ex-flow-note { margin: 0; font-size: 0.8125em; line-height: 1.5; color: var(--pf-mut); max-width: 34ch; }
+.pf .ex-flow-note { margin: 0; font-size: 0.875em; line-height: 1.5; color: var(--pf-mut); max-width: 34ch; }
 @media (min-width: 720px) {
   .pf .ex-flow { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
   .pf .ex-flow-step { grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 10px; padding: 0 14px 0 0; }
@@ -184,7 +219,7 @@
   .pf .ex-wish-action { grid-column: auto; }
   .pf .ex-wish-action .pf-btn { width: auto; }
 }
-.pf .ex-wish-lock { margin: 6px 0 0; font-size: 0.8125em; color: var(--pf-fg); }
+.pf .ex-wish-lock { margin: 6px 0 0; font-size: 0.875em; color: var(--pf-fg); }
 .pf .ex-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 0 0 16px; }
 .pf .ex-tools p { margin: 0; }
 .pf .ex-tools .pf-btn { min-height: 44px; }
@@ -197,11 +232,39 @@
 .pf .ex-lines tbody th { border-bottom-color: var(--pf-rule); }
 .pf .ex-lines tbody tr:last-child th { border-bottom: 0; }
 .pf .ex-right { white-space: nowrap; }
-/* Tablet (600 to 899px): the row is two columns, name and line beside the steps and reward, instead of one long stack. */
-@media (min-width: 600px) and (max-width: 899px) {
-  .pf .ex-mission { grid-template-columns: minmax(0, 1fr) 190px; grid-template-areas: "tag progress" "main reward"; align-items: start; }
-  .pf .ex-mission > .ex-tag { grid-area: tag; }
-  .pf .ex-mission > .ex-main { grid-area: main; }
-  .pf .ex-mission > .ex-progress { grid-area: progress; }
-  .pf .ex-mission > .ex-reward { grid-area: reward; margin: 0; }
+
+/* Equipping and the one-column expedition page (trials-as-expeditions.md) */
+.pf .ex-equip-line { margin: 6px 0 0; }
+.pf .ex-equip-line > p { margin: 0; line-height: 1.55; }
+.pf .ex-equip-line a { color: var(--pf-link); }
+.pf .ex-equip { display: grid; gap: 8px; justify-items: start; }
+.pf .ex-equip .pf-saved { margin: 0; min-height: 0; }
+.pf .ex-steps-box { margin: 24px 0 0; }
+.pf .ex-steps-box > .pf-box-head { align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+.pf .ex-steps-box .ex-progress { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.pf .ex-steps-box .ex-meter { width: 120px; }
+.pf .ex-terms { display: grid; gap: 0; margin: 20px 0 0; padding: 0; border-top: 1px solid var(--pf-rule); }
+.pf .ex-terms > div { display: grid; gap: 4px 24px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
+.pf .ex-terms > div:first-child { border-top: 0; }
+.pf .ex-terms dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-terms dd { margin: 0; font-size: 0.9375em; line-height: 1.55; min-width: 0; overflow-wrap: anywhere; }
+.pf .ex-terms dd a { color: var(--pf-link); }
+.pf .ex-terms .ex-plain { margin: 0 0 6px; }
+.pf .ex-mut { color: var(--pf-mut); font-size: 0.875em; }
+@media (min-width: 720px) {
+  .pf .ex-terms > div { grid-template-columns: 160px minmax(0, 1fr); }
 }
+.pf .ex-card-on { display: block; margin-top: 2px; color: var(--pf-link); }
+.pf .ex-choose { margin: 0 0 16px; padding: 0; border: 0; display: grid; gap: 8px; min-width: 0; }
+.pf .ex-choice[data-off="true"] { border-color: var(--pf-rule); }
+.pf .ex-choice-title { font-weight: 600; overflow-wrap: anywhere; }
+.pf .ex-choice-why { font-size: 0.875em; line-height: 1.5; color: var(--pf-mut); }
+.pf .ex-project .ex-opts { list-style: none; margin: 8px 0 0; padding: 0; }
+.pf .ex-opt { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 12px 0; border-top: 1px solid var(--pf-rule); }
+.pf .ex-opts > .ex-opt:first-child { border-top: 0; }
+.pf .ex-opt-main { display: grid; gap: 4px; min-width: 0; flex: 1 1 260px; }
+.pf .ex-opt-name { font: 700 1em/1.25 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-fg); overflow-wrap: anywhere; }
+.pf .ex-opt-name:hover { color: var(--pf-link); }
+.pf .ex-opt-line { margin: 0; font-size: 0.875em; line-height: 1.5; color: var(--pf-mut); }
+.pf .ex-opt-facts { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .ex-opt[data-off="true"] .ex-opt-name { color: var(--pf-mut); }

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { toggleBookmark } from "@/lib/platform/bookmark-actions";
 import "./discover.css";
 
-// Save (bookmark) a project. Native button, aria-pressed carries the state; the accessible name is always "Save {title}"
-// and never changes with the state (visible text "Save" / "Saved" only in the `button` variant).
+// Save (bookmark) a project. Native button, aria-pressed carries the state; the accessible name is "Save {title}" and gains
+// ", saved" while it is saved, so the name still holds the visible "Saved" word (visible text only in the `button` variant).
 //
 // Optimistic: flips at once, calls toggleBookmark, rolls back and reports the message if the action fails or returns an error.
 // A press while a save is in flight is ignored (aria-disabled, focus stays on the button).
@@ -171,7 +171,7 @@ export function SaveButton({
           {value ? "Saved" : "Save"}
         </span>
       ) : null}
-      <span className="pf-sr">Save {title}</span>
+      <span className="pf-sr">Save {title}{value ? ", saved" : ""}</span>
     </button>
   );
 }

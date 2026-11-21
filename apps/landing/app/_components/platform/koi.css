@@ -1,0 +1,14 @@
+/* The koi: one pond behind the whole platform page, sidebar included. Decoration only, never takes input. */
+.pf { isolation: isolate; }
+.pf .pf-koi { position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.92; }
+.pf .pf-koi canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+/* From 900px the sidebar is always there. It keeps its grey panel, border and edge, but they are drawn by .pf-koi-side under the fish,
+   so the fish swim over the grey from the sidebar to the page without a break, and the sidebar words stay on top of them. */
+.pf .pf-koi-side { display: none; }
+@media (min-width: 900px) {
+  .pf .pf-koi-side { display: block; position: absolute; inset: 0 auto 0 0; width: 232px; background: var(--pf-panel); border-right: 1px solid var(--pf-fg); box-shadow: 4px 0 0 var(--pf-edge); }
+  html .pf .pf-side { background: transparent; box-shadow: none; border-right-color: transparent; }
+}
+html[data-hide-ascii="true"] .pf .pf-koi { display: none; }
+@media (forced-colors: active) { .pf .pf-koi { display: none; } }
+@media print { .pf .pf-koi { display: none; } }

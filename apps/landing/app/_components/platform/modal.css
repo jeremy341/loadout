@@ -1,0 +1,84 @@
+/* PfModal: the one modal. Native dialog, square panel, 1px outline, hard offset shadow, no blur. The 4px top edge carries the variant. */
+.pf .pf-modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--pf-fg);
+  border-top: 4px solid var(--pf-ac);
+  background: var(--pf-bg);
+  color: var(--pf-fg);
+  box-shadow: 6px 6px 0 var(--pf-edge);
+  overflow: hidden;
+}
+.pf .pf-modal[data-size="confirm"] { width: min(440px, calc(100vw - 32px)); }
+.pf .pf-modal[data-size="wide"] { width: min(600px, calc(100vw - 32px)); }
+.pf .pf-modal[data-variant="danger"] { border-top-color: var(--pf-err); }
+.pf .pf-modal[data-variant="notice"] { border-top-color: var(--pf-ok); }
+/* Header stays put; the form scrolls and its buttons stay pinned, so the main action is always reachable. */
+.pf .pf-modal[open] { display: flex; flex-direction: column; }
+.pf .pf-modal { border-radius: 0; background-image: linear-gradient(var(--pf-ln) 1px, transparent 1px), linear-gradient(90deg, var(--pf-ln) 1px, transparent 1px); background-size: 32px 32px; background-color: var(--pf-bg); }
+/* The page stays visible behind, dimmed, with the same 32px grid as the page. The grain canvas (NoiseGrain) is drawn inside the dialog so it sits above both. */
+.pf .pf-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.55);
+  background-image: linear-gradient(var(--pf-ln, rgba(233, 235, 231, 0.06)) 1px, transparent 1px), linear-gradient(90deg, var(--pf-ln, rgba(233, 235, 231, 0.06)) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+html[data-hide-grid="true"] .pf .pf-modal, html[data-hide-grid="true"] .pf .pf-modal::backdrop { background-image: none; }
+.pf .pf-modal > .grain { z-index: 5; }
+.pf .pf-modal-head, .pf .pf-modal-form, .pf .pf-confirm-form { position: relative; z-index: 1; }
+.pf .pf-modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 22px; border-bottom: 1px solid var(--pf-fg); background: var(--pf-panel); flex: none; }
+.pf .pf-modal-head h2 { margin: 0; min-width: 0; overflow-wrap: anywhere; font: 700 1.375em/1.1 var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-modal-form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 20px 22px 0; }
+.pf .pf-modal-form .pf-field > label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-modal-form .pf-field { margin-bottom: 16px; gap: 6px; }
+.pf .pf-modal-form .pf-input { width: 100%; min-height: 48px; }
+.pf .pf-modal-form .pf-textarea { min-height: 88px; }
+.pf .pf-modal-actions {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 12px;
+  margin-top: auto;
+  padding: 12px 0 18px;
+  border-top: 1px solid var(--pf-rule);
+  background: var(--pf-bg);
+}
+@media (max-width: 479px) {
+  .pf .pf-modal-head { padding: 10px 16px; }
+  .pf .pf-modal-form { padding: 16px 16px 0; }
+}
+/* The panel fades in and rises 8px; the page behind stays still. Nothing moves under reduced motion (platform.css). */
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-modal[open] { animation: pf-modal-in 180ms var(--pf-ease); }
+  html:not([data-motion-paused="true"]) .pf .pf-modal[open]::backdrop { animation: pf-modal-fade 180ms var(--pf-ease); }
+}
+@keyframes pf-modal-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pf-modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (forced-colors: active) {
+  .pf .pf-modal { border-color: CanvasText; box-shadow: none; }
+}
+
+/* The confirm body (Remove, Block, Delete entry): text, then Cancel and the confirming button side by side. */
+.pf .pf-confirm-form { display: grid; gap: 14px; padding: 18px 22px 0; }
+.pf .pf-confirm-body p { margin: 0; line-height: 1.6; }
+.pf .pf-confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 0 18px; border-top: 1px solid var(--pf-rule); }
+
+/* One square choice for every radio and checkbox inside a modal: a square box, a filled square when chosen, a 44px row. */
+.pf .pf-pick { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 2px 12px; align-items: start; min-height: 44px; padding: 10px 14px; box-sizing: border-box; border: 1px solid var(--pf-fg); border-radius: 0; background: var(--pf-panel); cursor: pointer; }
+.pf .pf-pick input { grid-row: span 2; flex: none; appearance: none; -webkit-appearance: none; width: 24px; height: 24px; margin: 0; box-sizing: border-box; border: 2px solid var(--pf-fg); border-radius: 0; background: var(--pf-bg); display: grid; place-items: center; cursor: inherit; }
+.pf .pf-pick input::after { content: ""; width: 12px; height: 12px; background: var(--pf-ac); transform: scale(0); }
+.pf .pf-pick input:checked::after { transform: scale(1); }
+.pf .pf-pick input:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-pick input:disabled { border-color: var(--pf-rule); }
+.pf .pf-pick:has(input:checked) { outline: 2px solid var(--pf-ac); outline-offset: -2px; }
+.pf .pf-pick:has(input:disabled) { cursor: not-allowed; }
+.pf .pf-pick.pf-pick-plain { border-color: transparent; background: transparent; padding-left: 0; padding-right: 0; }
+.pf .pf-pick.pf-pick-plain:has(input:checked) { outline: 0; }
+@media (forced-colors: active) { .pf .pf-pick input:checked::after { background: Highlight; } }
+.pf .pf-modal-form .ex-choose .ex-label { display: block; margin-bottom: 8px; }

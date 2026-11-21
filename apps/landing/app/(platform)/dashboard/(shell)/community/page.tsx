@@ -2,28 +2,50 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EraStrip } from "@/app/_components/platform/community/EraStrip";
 import { CommunityHead } from "@/app/_components/platform/community/CommunityHead";
-import { PreviewHead, SampleNote } from "@/app/_components/platform/community/Parts";
-import { COMMUNITY_HOME, latestNews, leaderboardRows, NEXT_SESSION_LINE, pastSessions, topIdeas, upcomingSessions } from "@/lib/platform/community";
+import { PreviewHead } from "@/app/_components/platform/community/Parts";
+import { GoalBar } from "@/app/_components/platform/community/GoalBar";
+import { COMMUNITY_HOME, NEXT_SESSION_LINE, pastSessions, topIdeas, upcomingSessions } from "@/lib/platform/community";
+import { leaderboard, listNews, openGoals } from "@/lib/platform/community-data";
+import { relativeTime } from "@/lib/platform/explore-feed";
 import { requireViewer } from "@/lib/platform/session";
 
 export const metadata: Metadata = { title: "Community - LOADOUT" };
 
 // The Community hub: the Era, then a short look at each page that owns a full list. Three rows at most in each preview, no
-// feed and no reposts. Everything is a fixture of invented builders and proposed content.
+// feed and no reposts. Goals, news and the leaderboard are read from the database; the Era strip and the idea board and
+// Show & Tell are still proposed content, and each says so where it appears.
 export default async function CommunityPage() {
   await requireViewer();
-  const next = upcomingSessions()[0];
+  const [board, news, goals] = await Promise.all([leaderboard("week"), listNews(3), openGoals()]);
+  const boards = board.rows.slice(0, 3);
   const recent = pastSessions().slice(0, 2);
   const ideas = topIdeas(3);
-  const news = latestNews(3);
-  const leaders = leaderboardRows({ range: "weekly", track: null }).slice(0, 3);
+  const next = upcomingSessions()[0];
 
   return (
     <>
       <CommunityHead title="Community">Where builders meet: the Era, Show &amp; Tell, the idea board, news, the leaderboard and shared goals.</CommunityHead>
-      <SampleNote>This section is proposed. The builders, hours, votes and sessions on these pages are invented samples and nothing is saved.</SampleNote>
 
       <EraStrip />
+
+      {goals.length > 0 ? (
+        <section className="pf-box cm-refer" aria-labelledby="cm-goals-title">
+          <PreviewHead id="cm-goals-title" title="Community goals" href={`${COMMUNITY_HOME}/goals`} />
+          <ul className="cm-mini">
+            {goals.slice(0, 2).map((goal) => (
+              <li key={goal.id}>
+                <span className="cm-mini-kind">Goal</span>
+                <div>
+                  <p className="cm-mini-text">
+                    <Link href={`${COMMUNITY_HOME}/goals`}>{goal.title}</Link>
+                  </p>
+                  <GoalBar goal={goal} compact />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <div className="cm-grid cm-grid-even">
         <section className="pf-box" aria-labelledby="cm-st-title">
@@ -42,12 +64,13 @@ export default async function CommunityPage() {
               </li>
             ))}
           </ul>
+          <p className="pf-muted pf-box-note">Show &amp; Tell is still a proposal: these sessions are samples.</p>
         </section>
 
         <section className="pf-box" aria-labelledby="cm-lb-title">
           <PreviewHead id="cm-lb-title" title="Leaderboard" href={`${COMMUNITY_HOME}/leaderboard`} />
           <ol className="cm-mini" aria-label="Top builders this week by approved hours, all tracks">
-            {leaders.map((row) => (
+            {boards.map((row) => (
               <li key={row.handle}>
                 <span className="cm-mini-kind">
                   Rank {row.rank}
@@ -59,6 +82,7 @@ export default async function CommunityPage() {
                 </span>
               </li>
             ))}
+            {boards.length === 0 ? <li className="cm-mini-kind">No builder has approved hours on the board yet.</li> : null}
           </ol>
         </section>
       </div>
@@ -76,6 +100,7 @@ export default async function CommunityPage() {
               </li>
             ))}
           </ul>
+          <p className="pf-muted pf-box-note">The idea board is still a proposal: these ideas and votes are samples.</p>
         </section>
 
         <section className="pf-box" aria-labelledby="cm-news-title">
@@ -83,10 +108,11 @@ export default async function CommunityPage() {
           <ul className="cm-mini">
             {news.map((item) => (
               <li key={item.id}>
-                <span className="cm-mini-kind">{item.kind}</span>
+                <span className="cm-mini-kind">{relativeTime(item.publishedAt)}</span>
                 <Link href={`${COMMUNITY_HOME}/news`}>{item.title}</Link>
               </li>
             ))}
+            {news.length === 0 ? <li className="cm-mini-kind">No news yet.</li> : null}
           </ul>
         </section>
       </div>

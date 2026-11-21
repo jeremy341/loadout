@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { AccessibilityTab } from "@/app/_components/Accessibility";
+import { ImpersonationBanner } from "@/app/_components/platform/ImpersonationBanner";
 import { PlatformShell } from "@/app/_components/platform/PlatformShell";
-import { PlatformNotice } from "@/app/_components/platform/PlatformNotice";
+import { PlatformNotice, PlatformPlain } from "@/app/_components/platform/PlatformNotice";
 import { databaseConfigured } from "@/lib/platform/db";
+import { ledgerBalances } from "@/lib/platform/ledger-data";
+import { getOwnProfile } from "@/lib/platform/profile-data";
 import { readViewer } from "@/lib/platform/session";
 
 // Participant pages are private and never indexed.
@@ -17,12 +22,23 @@ export default async function PlatformShellLayout({ children }: { children: Reac
       </PlatformNotice>
     );
   }
-  if (!(await readViewer())) {
+  const viewer = await readViewer();
+  if (!viewer) {
     return (
-      <PlatformNotice title="Opening soon">
-        The participant platform opens once Hack Club Auth is connected.
-      </PlatformNotice>
+      <PlatformPlain accessibility={<AccessibilityTab />}>
+        <h1>Sign in to continue</h1>
+        <p className="pf-lead">The participant platform uses your Hack Club account.</p>
+        <Link className="pf-btn pri" href="/dashboard/sign-in">
+          Go to sign-in
+        </Link>
+      </PlatformPlain>
     );
   }
-  return <PlatformShell>{children}</PlatformShell>;
+  const [{ confirmed, pending }, profile] = await Promise.all([ledgerBalances(viewer.id), getOwnProfile(viewer.id)]);
+  return (
+    <PlatformShell ore={confirmed} orePending={pending} handle={profile?.handle ?? null}>
+      <ImpersonationBanner />
+      {children}
+    </PlatformShell>
+  );
 }

@@ -1,39 +1,22 @@
-import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { PARTICIPANT_NAV } from "@/lib/platform/nav";
-import { oreBalance } from "@/lib/platform/progress";
-import { PlatformAccountMenu } from "./PlatformAccountMenu";
-import { PlatformNav } from "./PlatformNav";
-import { PlatformThemeToggle } from "./PlatformThemeToggle";
+import { oreChipTitle } from "@/lib/platform/ledger-view";
+import { AccessibilityTab } from "@/app/_components/Accessibility";
 import { PlatformBackdrop } from "./PlatformBackdrop";
+import { PlatformFrame } from "./PlatformFrame";
+import { PlatformSidebar } from "./PlatformSidebar";
+import "./ledger.css";
+import "./shell.css";
+import "./minimal.css";
 
-export function PlatformShell({ children }: { children: ReactNode }) {
+// `ore` is the confirmed balance and `orePending` the Ore still waiting for review, both from the Ore ledger.
+// `docsSide` replaces the participant links in the sidebar (the documentation pages pass their own section list).
+export function PlatformShell({ children, ore, orePending, handle, docsSide }: { children: ReactNode; ore: number; orePending: number; handle: string | null; docsSide?: ReactNode }) {
   return (
     <div className="pf">
       <PlatformBackdrop />
       <a className="pf-skip" href="#platform-main">Skip to content</a>
-      <div className="pf-frame">
-        <header className="pf-top">
-          <Link className="pf-brand" href="/"><span className="lg-text">LOADOUT</span></Link>
-          <PlatformNav groups={PARTICIPANT_NAV} />
-          <div className="pf-top-end">
-            {/* The homepage's light and dark switch. On phones it moves into the menu, where there is room for it. */}
-            <PlatformThemeToggle className="pf-theme-top" />
-            {/* Ore is shown on every page, as Pixl and Stardance show their balance. It stays at zero until approved hours exist. */}
-            <span className="pf-ore">
-              <Image className="pf-ore-icon" src="/loadout/sprites/ore.png" alt="" width={32} height={32} unoptimized />
-              <span className="pf-ore-label">Ore</span>
-              <span className="pf-ore-value">{oreBalance().toLocaleString("en-GB")}</span>
-            </span>
-            {/* The account control: Profile and Settings behind one square icon. */}
-            <PlatformAccountMenu />
-          </div>
-        </header>
-        <main id="platform-main" className="pf-main" tabIndex={-1}>
-          {children}
-        </main>
-      </div>
+      <AccessibilityTab />
+      <PlatformFrame side={<PlatformSidebar ore={ore} oreTitle={oreChipTitle(orePending)} handle={handle} docs={docsSide} />}>{children}</PlatformFrame>
     </div>
   );
 }

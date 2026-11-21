@@ -1,44 +1,55 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { OrePrice, ShopCard, ShopPhoto, ShopTags } from "@/app/_components/platform/ShopCard";
-import { ShopRail } from "@/app/_components/platform/ShopRails";
-import { WishlistStar } from "@/app/_components/platform/WishlistStar";
+import { OrePrice, ShopPhoto, ShopTags } from "@/app/_components/platform/ShopCard";
+import { RequisitionChoice } from "@/app/_components/platform/RequisitionChoice";
+import { SaveToggle } from "@/app/_components/platform/expeditions/SaveToggle";
+import { ShopOrderForm } from "@/app/_components/platform/expeditions/ShopOrderForm";
+import "@/app/_components/platform/orders-live.css";
 import { formatDiscount } from "@/lib/platform/progress";
+import { COUPON_LEVELS, requisitionOffer, requisitionReasonText, requisitionsAvailable, requisitionsEarned } from "@/lib/platform/requisitions";
 import { requireViewer } from "@/lib/platform/session";
-import {
-  DISCOUNT_CAP_PERCENT,
-  hoursOfWork,
-  lockFor,
-  priceFor,
-  REQUISITION_MIN_ORE,
-  REQUISITION_PERCENT,
-  relatedItems,
-  requisitionPreview,
-  sampleApprovedHours,
-  shopItemById,
-} from "@/lib/platform/shop";
+import { hoursOfWork, lockFor, priceFor, sampleApprovedHours, shopItemById } from "@/lib/platform/shop";
+import { shopOrderingOn } from "@/lib/platform/shop-ordering";
+import { listSaved } from "@/lib/platform/wishlist-data";
+import { placeOrderAction, toggleSaveAction } from "./actions";
 import "@/app/_components/platform/shop.css";
 
 export const metadata: Metadata = { title: "Item - LOADOUT" };
 
 const ore = (value: number) => `${value.toLocaleString("en-GB")} Ore`;
-const NOTE_ID = "shop-wish-note";
 
 // One proposed item. The photo, what it is and what else is like it on the left; on the right a price box that stays in view
-// (plan 02 section 26.10: base price, level discount, final price, and what a Field Requisition would add). There is nothing to
-// buy yet, so the call to action is a button that says so and why.
-export default async function ShopItemPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireViewer();
+// (plan 02 section 26.10: base price, level discount, final price, and what a Field Requisition would add). There is no Related
+// rail: it was removed on purpose, so nothing below the About box points at other items. While the
+// shop-ordering flag is off there is nothing to buy, so the call to action is a button that says so and why. With it on, the
+// one filled button is Order (quantity 1 to 10, the chosen requisition) and a Save/Saved text toggle keeps the item on the wishlist.
+export default async function ShopItemPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const viewer = await requireViewer();
   const { id } = await params;
+  const raw = await searchParams;
   const item = shopItemById(id);
   if (!item) notFound();
 
+  const ordering = await shopOrderingOn();
+  const saved = ordering ? (await listSaved(viewer.id)).includes(item.id) : false;
   const approved = sampleApprovedHours();
   const price = priceFor(item, approved);
   const lock = lockFor(item, approved);
-  const requisition = requisitionPreview(item, price);
-  const related = relatedItems(item, 4);
+  // Requisitions are worked out from approved hours. No order has used one yet, so the used list is empty.
+  const offer = requisitionOffer(item, price, requisitionsAvailable(requisitionsEarned(approved), []));
+  const wanted = (Array.isArray(raw.requisition) ? raw.requisition[0] : raw.requisition) === "1";
+  const using = offer.eligible && wanted;
+  const final = using ? offer.priceWith : price.final;
+  const reason = requisitionReasonText(offer.reason);
+  // Only when the builder simply has none yet: say how one is earned, from the same level table the offer uses.
+  const unlock = offer.reason === "no_requisition_available" ? `You earn one at each coupon level in a track: LV.${COUPON_LEVELS.join(", ")}.` : null;
 
   return (
     <>
@@ -49,10 +60,9 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
           </svg>
           Back to Shop
         </Link>
-        <WishlistStar item={item} variant="button" describedBy={NOTE_ID} />
       </div>
 
-      <div className="pf-shop-item">
+      <div className="pf-shop-item pf-flat">
         <div className="pf-shop-item-photo">
           <div className="pf-shop-frame">
             <ShopPhoto item={item} large />
@@ -74,8 +84,14 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
               {item.limited ? " / Limited" : ""}
             </span>
             <h1>{item.name}</h1>
-            <OrePrice base={price.base} final={price.final} large />
-            <p className="pf-hint">That is about {hoursOfWork(price.final)} approved hours of work.</p>
+            <OrePrice base={price.base} final={final} large />
+            <p className="pf-hint">That is about {hoursOfWork(final)} approved hours of work.</p>
+
+            {lock ? (
+              <p className="pf-shop-lock" role="note">
+                Needs {lock.track} LV.{lock.level}. {lock.hoursToGo} more approved hours in {lock.track} to unlock it.
+              </p>
+            ) : null}
 
             <h2 id="price-heading">Your price</h2>
             <dl className="pf-shop-lines">
@@ -87,37 +103,34 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
                 <dt>{price.track ? `${price.track} level discount` : item.tracks.length === 0 ? "General item" : "Level discount"}</dt>
                 <dd>{price.track ? `−${formatDiscount(price.percent)}` : item.tracks.length === 0 ? "No discount" : "None yet"}</dd>
               </div>
+              {using ? (
+                <div>
+                  <dt>Field Requisition</dt>
+                  <dd>−{formatDiscount(offer.percentWith - price.percent)}</dd>
+                </div>
+              ) : null}
               <div className="pf-shop-total">
                 <dt>You pay</dt>
-                <dd>{ore(price.final)}</dd>
+                <dd>{ore(final)}</dd>
               </div>
             </dl>
+            {using ? <p className="pf-hint">You save {ore(price.final - offer.priceWith)} more with the requisition.</p> : null}
 
-            {requisition.eligible ? (
-              <p className="pf-shop-requisition">
-                With a Field Requisition this would be <strong>{ore(requisition.final)}</strong>: another {REQUISITION_PERCENT}% of the base price, up to {DISCOUNT_CAP_PERCENT}% off in
-                total. It needs a matching track and a base price of {REQUISITION_MIN_ORE} Ore or more.
-              </p>
-            ) : item.tracks.length === 0 ? (
-              <p className="pf-hint">General items are open to everyone at the full price. Level discounts and Field Requisitions need a matching track.</p>
+            <RequisitionChoice useRequisition={using} available={offer.available} reason={offer.eligible ? null : reason} unlock={unlock} ordering={ordering} />
+
+            {ordering ? (
+              <>
+                <ShopOrderForm itemId={item.id} requisition={using} action={placeOrderAction} />
+                <SaveToggle itemId={item.id} saved={saved} action={toggleSaveAction} />
+              </>
             ) : (
-              <p className="pf-hint">A Field Requisition needs a base price of {REQUISITION_MIN_ORE} Ore or more.</p>
+              <button type="button" className="pf-btn pri pf-shop-order" aria-disabled="true" aria-describedby="shop-order-why">
+                Order opens later
+              </button>
             )}
-
-            {lock ? (
-              <p className="pf-shop-lock" role="note">
-                Needs {lock.track} LV.{lock.level}. {lock.hoursToGo} more approved hours in {lock.track} to unlock it.
-              </p>
-            ) : null}
-
-            <button type="button" className="pf-btn pri pf-shop-order" aria-disabled="true" aria-describedby="shop-order-why">
-              Order opens later
-            </button>
-            <p className="pf-shop-closed" id="shop-order-why">
-              Ordering opens in a later release. This is a proposed item at a draft price. <Link href="/docs/pricing">How prices are worked out</Link>
-            </p>
-            <p className="pf-hint" id={NOTE_ID}>
-              Wishlists open with the Shop release. Nothing is saved yet.
+            <p className="pf-shop-closed" id={ordering ? undefined : "shop-order-why"}>
+              {ordering ? null : <>Ordering opens in a later release. This is a proposed item at a draft price. </>}
+              <Link href="/docs/pricing">How prices are worked out</Link>
             </p>
           </section>
         </div>
@@ -139,16 +152,6 @@ export default async function ShopItemPage({ params }: { params: Promise<{ id: s
               </div>
             </dl>
           </section>
-
-          {related.length > 0 ? (
-            <ShopRail title="Related">
-              {related.map((entry) => (
-                <li key={entry.id}>
-                  <ShopCard item={entry} approved={approved} noteId={NOTE_ID} />
-                </li>
-              ))}
-            </ShopRail>
-          ) : null}
         </div>
       </div>
     </>

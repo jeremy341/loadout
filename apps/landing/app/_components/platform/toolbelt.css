@@ -1,10 +1,10 @@
 /* The Toolbelt on the project page (stardance-layout.md F, profile-and-toolbelt.md 3.16 and 3.17): the finder, the inline step, two
-   compact slots, the gate card and the confirm dialog. Existing platform tokens only; both themes follow the --pf-* values.
+   compact slots and the gate card. Existing platform tokens only; both themes follow the --pf-* values.
    Motion: a 120 ms fade on result rows (discover.css) and a 160 ms fade and 4 px rise on the step, both off under reduced motion. */
 
 /* ---- Find a tool ---- */
 .pf .pf-finder { position: relative; display: grid; gap: 6px; margin: 0 0 14px; }
-.pf .pf-finder-label { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-finder-label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-finder-field { position: relative; display: flex; align-items: center; }
 .pf .pf-finder-glass { position: absolute; left: 14px; width: 20px; height: 20px; fill: currentColor; color: var(--pf-mut); pointer-events: none; }
 .pf .pf-finder-input {
@@ -37,7 +37,7 @@
   .pf .pf-finder-scroll { max-height: 312px; }
 }
 .pf .pf-finder-cols { display: grid; grid-template-columns: minmax(0, 1fr) 52px; }
-.pf .pf-finder-group, .pf .pf-finder-group-gap { box-sizing: border-box; height: 32px; padding: 9px 12px 0; border-bottom: 1px solid var(--pf-rule); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-finder-group, .pf .pf-finder-group-gap { box-sizing: border-box; height: 32px; padding: 9px 12px 0; border-bottom: 1px solid var(--pf-rule); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-finder-option { box-sizing: border-box; height: var(--pf-row-h); padding-left: 10px; overflow: hidden; cursor: pointer; }
 .pf .pf-finder-option .pf-result { height: 100%; box-sizing: border-box; }
 .pf .pf-finder-option:hover { background: var(--pf-ln); }
@@ -89,7 +89,7 @@
 .pf .pf-belt-slot-head .pf-belt-remove { margin-left: auto; min-height: 44px; padding: 0 16px; }
 .pf .pf-belt-slot-empty { display: flex; align-items: center; min-height: 44px; padding-block: 0; border-style: dashed; border-color: var(--pf-rule); background: transparent; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-belt-title { font: 700 1.125em/1.2 var(--font-pixel), monospace; overflow-wrap: anywhere; color: var(--pf-fg); }
-.pf .pf-belt-by { font-size: 0.8125em; color: var(--pf-mut); }
+.pf .pf-belt-by { font-size: 0.875em; color: var(--pf-mut); }
 .pf .pf-belt-note-text { margin: 0; font-size: 0.875em; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-line; }
 .pf .pf-belt-slot > .pf-hint { margin: 0; }
 .pf .pf-belt > .pf-hint.pf-belt-reason { margin: 0 0 12px; }
@@ -101,7 +101,7 @@
 /* Saved tools: up to three result rows with an Equip button each. */
 .pf .pf-belt-saved { margin: 0 0 14px; }
 .pf .pf-belt-saved-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
-.pf .pf-belt-saved-head h3 { margin: 0; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-belt-saved-head h3 { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-belt-saved-head a { display: inline-flex; align-items: center; min-height: 44px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
 .pf .pf-belt-saved-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--pf-rule); }
 .pf .pf-belt-saved-list .pf-result-save { padding-right: 4px; }
@@ -115,7 +115,7 @@
   padding: 3px 10px;
   border: 1px solid var(--pf-fg);
   color: var(--pf-fg);
-  font: 400 11px var(--font-dot), monospace;
+  font: 400 12px var(--font-dot), monospace;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -164,11 +164,6 @@
 .pf .pf-belt-users + .pf-hint, .pf .pf-belt > .pf-hint { margin: 8px 0 0; }
 .pf .pf-belt > .pf-box-head .pf-hint { margin: 0; }
 
-/* ---- Confirm dialog (Remove and Block) ---- */
-.pf .pf-confirm { width: min(440px, calc(100vw - 32px)); }
-.pf .pf-confirm-form { display: grid; gap: 14px; padding: 18px 22px 0; }
-.pf .pf-confirm-body p { margin: 0; line-height: 1.6; }
-.pf .pf-confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px 0 18px; border-top: 1px solid var(--pf-rule); }
 
 html[data-larger-controls="true"] .pf .pf-belt-slots .pf-btn,
 html[data-larger-controls="true"] .pf .pf-belt-user .pf-btn,

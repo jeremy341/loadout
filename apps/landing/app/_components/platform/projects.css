@@ -1,0 +1,45 @@
+/* The own projects page (Stasis layout): header, stage and track rows, the grid with the dashed New project tile first.
+   Uses the --pf-* tokens and the shared card, badge and button classes from platform.css, so both themes follow. No motion
+   beyond the shared button transitions. */
+.pf .pf-projects-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px; margin: 0 0 24px; }
+.pf .pf-projects-head h1 { margin: 0 0 10px; }
+.pf .pf-projects-head .pf-lead { margin: 0; }
+.pf .pf-projects-filters { margin-bottom: 12px; }
+.pf .pf-projects-filters + .pf-projects-grid { margin-top: 12px; }
+.pf .pf-projects-filters a[data-zero="true"]:not([aria-current="page"]) { color: var(--pf-mut); border-color: var(--pf-rule); }
+.pf .pf-projects-n { margin-left: 8px; }
+
+/* Three across on a desktop, two on a tablet, one on a phone. */
+.pf .pf-projects-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 560px) {
+  .pf .pf-projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .pf .pf-projects-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* The card is one link made of spans, so its text is block level here. */
+.pf .pf-projects-card { display: flex; flex-direction: column; }
+.pf .pf-projects-card .pf-project-cover { aspect-ratio: 16 / 9; min-height: 0; }
+.pf .pf-projects-card .pf-project-body > span { display: block; }
+.pf .pf-projects-title {
+  overflow: hidden;
+  font: 700 1.375em/1.2 var(--font-pixel), monospace;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--pf-fg);
+}
+.pf .pf-projects-card .pf-project-body > .pf-clamp { display: -webkit-box; }
+.pf .pf-projects-private { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-projects-foot { flex-wrap: wrap; justify-content: flex-start; gap: 4px 16px; }
+.pf .pf-projects-pager { justify-content: center; margin-top: 28px; }
+.pf .pf-projects-pager a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
+
+/* The Filter button and its modal. */
+.pf .pf-projects-bar { display: flex; justify-content: flex-end; margin: 0 0 12px; }
+.pf .pf-filter-body .pf-explore-filters { margin: 0 0 16px; }
+.pf .pf-filter-body .pf-explore-filters:last-child { margin-bottom: 0; }
+.pf .pf-filter-body a[data-zero="true"]:not([aria-current="page"]) { color: var(--pf-mut); border-color: var(--pf-rule); }
+.pf .pf-projects-bar { margin-top: 20px; }
+.pf .pf-filter-body { padding: 20px 24px 24px; }

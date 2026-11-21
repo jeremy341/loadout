@@ -1,0 +1,56 @@
+/* Settings: API keys and privacy. Flat text, square corners, one filled button (Create key). */
+html .pf .sa-link { display: inline-flex; align-items: center; min-height: 40px; padding: 0 4px; border: 0; border-radius: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 6px; cursor: pointer; box-shadow: none; }
+html .pf .sa-link:hover:not(:disabled) { color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+html .pf .sa-link:focus-visible, html .pf .sa-switch:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+html .pf .sa-link:disabled { opacity: 0.55; cursor: not-allowed; }
+html .pf .sa-danger { color: var(--pf-err); }
+html .pf .sa-limits, html .pf .sa-hint, html .pf .sa-empty { margin: 0 0 16px; max-width: 65ch; color: var(--pf-mut); line-height: 1.6; }
+html .pf .sa-limits a { color: var(--pf-link); }
+html .pf .sa-warn { margin: 0 0 8px; color: var(--pf-err); }
+html .pf .sa-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+html .pf .sa-status { color: var(--pf-mut); font-size: 13px; }
+html .pf .sa-sub { margin: 0 0 10px; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-fg); }
+html .pf .sa-block + .sa-block { margin-top: 28px; }
+
+html .pf .sa-keys { list-style: none; margin: 0 0 32px; padding: 0; border-top: 1px solid var(--pf-rule); }
+html .pf .sa-key { padding: 14px 0; border-bottom: 1px solid var(--pf-rule); }
+/* A revoked or expired key is named by its tag, not dimmed with opacity: opacity also dimmed the key prefix below
+   4.5:1 against the panel in both themes. */
+html .pf .sa-key[data-state="revoked"] .sa-key-tag, html .pf .sa-key[data-state="expired"] .sa-key-tag { border: 1px solid currentColor; padding: 1px 6px; }
+html .pf .sa-key-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+html .pf .sa-key-name { font-weight: 600; }
+html .pf .sa-key-prefix { font: 400 14px var(--font-dot), monospace; color: var(--pf-mut); }
+html .pf .sa-key-tag { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .sa-key-head .sa-link { margin-left: auto; min-height: 32px; }
+html .pf .sa-key-scopes { margin: 4px 0 8px; color: var(--pf-mut); }
+html .pf .sa-key-dates { display: flex; flex-wrap: wrap; gap: 4px 28px; margin: 0; }
+html .pf .sa-key-dates div { display: flex; gap: 8px; }
+html .pf .sa-key-dates dt { color: var(--pf-mut); }
+html .pf .sa-key-dates dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+html .pf .sa-reveal { margin: 0 0 24px; padding: 14px 16px; border: 1px solid var(--pf-fg); border-radius: 0; }
+html .pf .sa-reveal-title { margin: 0 0 8px; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .sa-reveal-key { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--pf-rule); border-radius: 0; background: var(--pf-field); color: var(--pf-fg); font: 400 14px var(--font-dot), monospace; }
+html .pf .sa-reveal-note { margin: 8px 0 4px; font-weight: 600; }
+
+html .pf .sa-form { max-width: 560px; }
+html .pf .sa-form .pf-field { margin-bottom: 16px; }
+html .pf .sa-fieldset { margin: 0 0 16px; padding: 0; border: 0; min-width: 0; }
+html .pf .sa-fieldset legend { padding: 0; margin-bottom: 6px; font-size: 13px; color: var(--pf-mut); }
+html .pf .sa-check { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; cursor: pointer; }
+html .pf .sa-check input, html .pf .sa-radio input { margin-top: 4px; accent-color: var(--pf-fg); }
+html .pf .sa-meaning { color: var(--pf-mut); }
+html .pf .sa-inline { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+html .pf .sa-inline legend { width: 100%; }
+html .pf .sa-radio { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; cursor: pointer; }
+html .pf .sa-radio input { margin: 0; }
+
+html .pf .sa-switch { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--pf-fg); font: inherit; text-align: left; cursor: pointer; }
+html .pf .sa-switch:disabled { cursor: progress; }
+html .pf .sa-switch-track { position: relative; flex: none; width: 34px; height: 18px; border: 1px solid var(--pf-fg); border-radius: 0; background: transparent; }
+html .pf .sa-switch-knob { position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: var(--pf-mut); }
+html .pf .sa-switch[aria-checked="true"] .sa-switch-track { background: var(--pf-fg); }
+html .pf .sa-switch[aria-checked="true"] .sa-switch-knob { left: 18px; background: var(--pf-bg); }
+html .pf .sa-switch-state { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+@media (prefers-reduced-motion: no-preference) { html:not([data-motion-paused="true"]) .pf .sa-switch-knob { transition: left 120ms var(--pf-ease); } }
+@media (max-width: 560px) { html .pf .sa-key-head .sa-link { margin-left: 0; } }

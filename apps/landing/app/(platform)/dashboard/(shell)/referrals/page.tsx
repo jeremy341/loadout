@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "@/app/_components/platform/expeditions.css";
 import { ExFlow } from "@/app/_components/platform/expeditions/Flow";
 import { PageHead } from "@/app/_components/platform/PageHead";
-import { EmptyState } from "@/app/_components/platform/PlatformNotice";
+import { EmptyState } from "@/app/_components/platform/EmptyState";
 import { nextStep, NO_REWARD_SENTENCE, REFERRAL_LINK_SENTENCE, REFERRAL_STEPS, REFERRED_BUILDERS, referralStatus, referralTotals, stepsReached } from "@/lib/platform/referrals";
 import { requireViewer } from "@/lib/platform/session";
 
@@ -16,7 +16,7 @@ export default async function ReferralsPage() {
   const totals = referralTotals(REFERRED_BUILDERS);
 
   return (
-    <>
+    <div className="pf-flat">
       <PageHead title="Referrals">Invite other builders. A referral counts once the builder you invited has an approved ship.</PageHead>
 
       <p className="pf-event-line">
@@ -80,6 +80,6 @@ export default async function ReferralsPage() {
           </div>
         )}
       </section>
-    </>
+    </div>
   );
 }

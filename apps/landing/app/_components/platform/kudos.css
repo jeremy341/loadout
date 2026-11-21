@@ -1,0 +1,21 @@
+/* Kudos: the pixel heart and its count. Tokens only (--pf-*), square corners, the same 160 ms press as the Save star.
+   Given kudos fill the heart AND change its shape from outline to solid, so the state is never colour alone. */
+.pf .pf-kudos {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: none; min-width: 44px; min-height: 44px; padding: 0 10px;
+  border: 0; background: transparent; color: var(--pf-fg); cursor: pointer;
+  font: 400 13px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.pf .pf-kudos-own { cursor: default; color: var(--pf-mut); }
+.pf .pf-kudos-heart { display: block; flex: none; width: 20px; height: 17px; }
+.pf .pf-kudos-label { white-space: nowrap; }
+.pf .pf-kudos-count { font-variant-numeric: tabular-nums; min-width: 1ch; }
+.pf .pf-kudos[data-given="true"] { color: var(--pf-link); }
+.pf .pf-kudos-button { border: 1px solid var(--pf-fg); background: var(--pf-bg); min-height: 44px; padding: 0 14px; }
+.pf .pf-kudos-button[data-given="true"] { background: var(--pf-ac); border-color: var(--pf-ac); color: var(--pf-acf); }
+.pf .pf-kudos[aria-disabled="true"] { cursor: wait; }
+.pf .pf-kudos:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf button.pf-kudos:hover:not([data-given="true"]) { color: var(--pf-link); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf button.pf-kudos { transition: transform 80ms var(--pf-ease); }
+  html:not([data-motion-paused="true"]) .pf button.pf-kudos:active { transform: scale(0.97); transition-duration: 160ms; }
+}

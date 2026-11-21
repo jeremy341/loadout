@@ -1,13 +1,14 @@
-/* Explore (design spec .ulpi/design/stardance-layout.md, section E): a search-first header whose live rows sit in the page flow,
-   track and Saved chips, short rails as scroll-snap strips, a paged grid of compact cards, and the read-only project page
-   (hero cover, plate, stats). Existing --pf-* and --tk-* tokens only, square corners, hard shadows, pixel headings.
-   Motion: the 120 ms row fade lives in discover.css; the strip arrows scroll natively (instant under reduced motion, see
-   ExploreRails.tsx); the Save star uses the shared 160 ms press. Nothing else moves. */
+/* Explore, after Stasis's Discover: a title and one paragraph, one search, a single row of chips, ONE grid of cards with infinite
+   scroll, and the read-only project page (hero, journal timeline). Existing --pf-* and --tk-* tokens only, square corners, hard
+   shadows, pixel headings, both themes. Motion: only the 160 ms press on the Save star and the kudos heart (shared files); the grid
+   and the feed do not move, so reduced motion changes nothing here. */
 
-/* ---- Search-first header ---- */
-.pf .pf-explore-head { margin: 0 0 16px; }
+/* ---- Title, paragraph, search ---- */
+.pf .pf-explore-intro { margin: 0 0 18px; }
+.pf .pf-explore-intro h1 { margin: 0 0 8px; }
+.pf .pf-explore-intro p { margin: 0; max-width: 65ch; line-height: 1.6; }
+.pf .pf-explore-head { margin: 0 0 4px; }
 .pf .pf-explore-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; align-items: end; }
-.pf .pf-explore-label { grid-column: 1 / -1; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-explore-field { position: relative; min-width: 0; }
 .pf .pf-explore-field .pf-explore-input { display: block; width: 100%; box-sizing: border-box; min-height: 52px; padding: 0 14px 0 46px; }
 .pf .pf-explore-field .pf-explore-input:not(:placeholder-shown) { padding-right: 92px; }
@@ -16,30 +17,19 @@
 .pf .pf-explore-glass { position: absolute; left: 14px; top: 16px; width: 20px; height: 20px; fill: var(--pf-fg); pointer-events: none; }
 .pf .pf-explore-clear {
   position: absolute; right: 4px; top: 4px; display: inline-flex; align-items: center; justify-content: center;
-  min-width: 44px; min-height: 44px; padding: 0 12px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--pf-link);
+  min-width: 44px; min-height: 44px; padding: 0 12px; border: 0; background: transparent; cursor: pointer;
+  font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link);
 }
+.pf .pf-explore-clear:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
 .pf .pf-explore-submit { min-height: 52px; }
 .pf .pf-explore-hint { margin: 8px 0 0; }
-
-/* Live rows: a ruled panel under the field that pushes the page down. Nothing overlays, nothing traps focus. */
-.pf .pf-explore-live { margin: 0; }
-.pf .pf-explore-status { margin: 8px 0 0; min-height: 1.4em; }
-.pf .pf-explore-status:empty { min-height: 0; margin: 0; }
-.pf .pf-explore-status[data-error="true"] { color: var(--pf-err); }
-.pf .pf-explore-live[data-open="true"] { margin: 0 0 8px; }
-.pf .pf-explore-results { list-style: none; margin: 4px 0 0; padding: 0 12px; border: 1px solid var(--pf-fg); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); }
-.pf .pf-explore-results > li:last-child { border-bottom: 0; }
-.pf .pf-explore-all { margin: 8px 0 0; }
-.pf .pf-explore-all a { display: inline-flex; align-items: center; min-height: 44px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
 @media (max-width: 599px) {
-  .pf .pf-explore-results > li:nth-child(n + 7) { display: none; }
   .pf .pf-explore-form { grid-template-columns: minmax(0, 1fr); }
   .pf .pf-explore-submit { display: none; }
 }
 
-/* ---- Chips: tracks and Saved ---- */
-.pf .pf-explore-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+/* ---- One row of chips: tracks and Saved ---- */
+.pf .pf-explore-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
 .pf .pf-explore-chips a {
   display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--pf-fg);
   background: var(--pf-panel); color: var(--pf-fg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em;
@@ -50,87 +40,86 @@
 .pf .pf-explore-chips a:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
 .pf .pf-explore-chip-saved { margin-left: auto; }
 .pf .pf-explore-chip-count { font-variant-numeric: tabular-nums; }
-.pf .pf-explore-saved-status { margin: 0 0 12px; }
-
-/* ---- Rails ---- */
-.pf .pf-explore-rail { margin: 0 0 30px; }
-.pf .pf-explore-rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin: 0 0 14px; padding: 0 0 8px; border-bottom: 1px solid var(--pf-rule); }
-.pf .pf-explore-rail-title { min-width: 0; }
-.pf .pf-explore-rail-title h2 { margin: 0; font: 700 1.25em/1.1 var(--font-pixel), monospace; text-transform: uppercase; }
-.pf .pf-explore-rail-note { margin: 4px 0 0; font-size: 0.8125em; color: var(--pf-mut); }
-.pf .pf-explore-rail-tools { display: flex; align-items: center; gap: 8px; flex: none; }
-.pf .pf-explore-seeall { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
-.pf .pf-explore-arrow {
-  display: none; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--pf-fg); border-radius: 0;
-  background: var(--pf-panel); color: var(--pf-fg); cursor: pointer;
-}
-.pf .pf-explore-arrow svg { fill: currentColor; }
-.pf .pf-explore-arrow:hover:not(:disabled) { border-color: var(--pf-link); color: var(--pf-link); }
-.pf .pf-explore-arrow:disabled { opacity: 0.35; cursor: default; }
-.pf .pf-explore-arrow:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
-@media (min-width: 900px) {
-  .pf .pf-explore-arrow { display: grid; }
-}
-.pf .pf-explore-strip {
-  display: flex; gap: 16px; margin: 0; padding: 0 6px 12px 0; list-style: none; overflow-x: auto; overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-}
-.pf .pf-explore-strip > li { flex: 0 0 min(232px, 78%); min-width: 0; display: flex; scroll-snap-align: start; }
-.pf .pf-explore-strip > li > * { flex: 1; min-width: 0; }
-
-/* ---- Results grid ---- */
-.pf .pf-explore-results-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; margin: 0 0 12px; padding: 0 0 8px; border-bottom: 1px solid var(--pf-rule); }
-.pf .pf-explore-results-head h2 { margin: 0; font: 700 1.25em/1.1 var(--font-pixel), monospace; text-transform: uppercase; }
-.pf .pf-explore-count { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-explore-saved-status { margin: 0 0 8px; }
+.pf .pf-explore-count { margin: 0 0 12px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-explore-count a { margin-left: 10px; color: var(--pf-link); }
 .pf .pf-explore-private { margin: 0 0 14px; }
-.pf .pf-explore-grid { display: grid; grid-template-columns: 1fr; gap: 16px; list-style: none; margin: 0; padding: 0; }
-@media (min-width: 560px) {
+
+/* ---- The grid: 1, 2 or 3 columns ---- */
+.pf .pf-explore-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; list-style: none; margin: 0; padding: 0; }
+@media (min-width: 640px) {
   .pf .pf-explore-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (min-width: 900px) {
+@media (min-width: 1000px) {
   .pf .pf-explore-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 .pf .pf-explore-grid > li { display: flex; min-width: 0; }
 .pf .pf-explore-grid > li > * { flex: 1; min-width: 0; }
-.pf .pf-explore-pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 24px; margin: 24px 0 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
-.pf .pf-explore-pages a, .pf .pf-explore-pages span[aria-disabled] { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--pf-fg); background: var(--pf-panel); }
-.pf .pf-explore-pages a { color: var(--pf-fg); text-decoration: none; }
-.pf .pf-explore-pages a:hover { color: var(--pf-link); }
-.pf .pf-explore-pages span[aria-disabled] { color: var(--pf-mut); border-color: var(--pf-rule); }
 
-/* ---- Compact card ---- */
+/* End of the grid: how many are shown, then Load more. The sentinel is this block, so it needs no height of its own. */
+.pf .pf-explore-more { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 24px 0 8px; text-align: center; }
+.pf .pf-explore-shown { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-explore-more-error { margin: 0; color: var(--pf-err); }
+.pf .pf-explore-more-btn { min-height: 52px; min-width: 200px; text-decoration: none; }
+.pf .pf-explore-more-btn[aria-disabled="true"] { cursor: wait; }
+.pf .pf-explore-prev { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
+
+/* ---- Card ---- */
 .pf .pf-explore-card {
   position: relative; display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--pf-fg); background: var(--pf-panel);
   box-shadow: inset 0 0 0 1px var(--pf-ln), 4px 4px 0 var(--pf-edge);
 }
-.pf .pf-explore-card:hover { border-color: var(--pf-link); }
-.pf .pf-explore-card-link { position: relative; display: flex; flex-direction: column; flex: 1; min-width: 0; color: inherit; text-decoration: none; }
-.pf .pf-explore-card-link:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-explore-card:hover, .pf .pf-explore-card:focus-within { border-color: var(--pf-link); }
+.pf .pf-explore-media { position: relative; }
 .pf .pf-explore-cover {
-  display: block; height: 96px; border-bottom: 1px solid var(--pf-rule); background-color: var(--tk-deep, var(--pf-bg));
+  display: block; height: 124px; border-bottom: 1px solid var(--pf-rule); background-color: var(--tk-deep, var(--pf-bg));
   background-image: repeating-conic-gradient(var(--tk-dither, var(--pf-rule)) 0 25%, transparent 0 50%); background-size: 8px 8px;
   image-rendering: pixelated;
 }
+/* top left: the approved check */
+.pf .pf-explore-check {
+  position: absolute; left: 8px; top: 8px; display: inline-grid; place-items: center; width: 28px; height: 28px;
+  border: 1px solid var(--pf-fg); background: var(--pf-ok); color: var(--pf-bg);
+}
+.pf .pf-explore-check svg { display: block; }
+/* top right: the kudos heart and count */
+.pf .pf-explore-kudos { position: absolute; right: 6px; top: 6px; z-index: 1; display: inline-flex; border: 1px solid var(--pf-fg); background: var(--pf-panel); }
+/* bottom: the track name on the left, the Save star on the right */
 .pf .pf-explore-track {
-  position: absolute; left: 8px; top: 8px; display: inline-flex; align-items: center; gap: 6px; max-width: calc(100% - 72px); padding: 2px 8px;
-  border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase;
+  position: absolute; left: 8px; bottom: 8px; display: inline-flex; align-items: center; gap: 6px; max-width: calc(100% - 72px); padding: 2px 8px;
+  border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase;
   overflow: hidden; white-space: nowrap;
 }
 .pf .pf-explore-track .pf-swatch, .pf .pf-explore-tag .pf-swatch { width: 12px; height: 12px; }
-.pf .pf-explore-star { position: absolute; right: 6px; top: 6px; display: inline-flex; border: 1px solid var(--pf-fg); background: var(--pf-panel); }
+.pf .pf-explore-star { position: absolute; right: 6px; bottom: 6px; z-index: 1; display: inline-flex; border: 1px solid var(--pf-fg); background: var(--pf-panel); }
 .pf .pf-explore-star .pf-save[data-saved="true"] { color: var(--pf-link); }
-.pf .pf-explore-card-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; padding: 12px 14px 12px; }
-.pf .pf-explore-card-title { overflow: hidden; font: 700 1rem/1.25 var(--font-pixel), monospace; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; color: var(--pf-fg); }
-.pf .pf-explore-card-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.8125em; line-height: 1.5; }
+.pf .pf-explore-card-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; padding: 12px 14px; }
+.pf .pf-explore-card-title { margin: 0; min-width: 0; font: 700 1rem/1.25 var(--font-pixel), monospace; text-transform: uppercase; }
+/* the title link covers the whole card; the controls above it have z-index 1 */
+.pf .pf-explore-card-link { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--pf-fg); text-decoration: none; }
+.pf .pf-explore-card-link::after { content: ""; position: absolute; inset: 0; }
+.pf .pf-explore-card-link:focus-visible { outline: none; }
+.pf .pf-explore-card-link:focus-visible::after { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-explore-card-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0; font-size: 0.875em; line-height: 1.5; min-height: 3em; }
 .pf .pf-explore-foot {
-  display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-top: 1px solid var(--pf-rule);
-  font: 400 11px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut);
+  position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 14px;
+  min-height: 48px; border-top: 1px solid var(--pf-rule); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--pf-mut); pointer-events: none;
 }
-.pf .pf-explore-foot > span:last-child { flex: none; }
+.pf .pf-explore-author { display: inline-flex; align-items: center; gap: 8px; min-width: 0; min-height: 44px; color: var(--pf-fg); text-decoration: none; pointer-events: auto; }
+.pf a.pf-explore-author:hover .pf-explore-author-name { color: var(--pf-link); text-decoration: underline; }
+.pf a.pf-explore-author:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-explore-author-plain { color: var(--pf-mut); pointer-events: none; }
+.pf .pf-explore-avatar {
+  display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px; border: 1px solid var(--pf-fg);
+  background: var(--tk-deep, var(--pf-bg)); color: var(--pf-fg); font: 700 11px var(--font-pixel), monospace;
+}
+.pf .pf-explore-author-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf .pf-explore-activity { display: inline-flex; flex: none; gap: 10px; white-space: nowrap; }
 
-/* ---- Project page: hero cover, plate, stats ---- */
+/* ---- Project page: hero cover, plate, stats, journal ---- */
 .pf .pf-crumbs .pf-save-button { min-height: 44px; }
+.pf .pf-explore-crumb-tools { display: flex; flex-wrap: wrap; gap: 8px; }
 .pf .pf-explore-hero { margin: 0 0 28px; border: 1px solid var(--pf-fg); background: var(--pf-panel); box-shadow: 4px 4px 0 var(--pf-edge); }
 .pf .pf-explore-hero .pf-project-cover-lg { min-height: 120px; aspect-ratio: 3 / 1; border: 0; border-bottom: 1px solid var(--pf-fg); }
 @media (min-width: 900px) {
@@ -148,7 +137,7 @@
 .pf .pf-explore-tag { display: inline-flex; align-items: center; gap: 8px; padding: 2px 10px; border: 1px solid var(--pf-fg); background: var(--pf-bg); }
 .pf .pf-explore-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .pf .pf-explore-action { display: inline-flex; align-items: center; gap: 12px; min-height: 52px; max-width: 100%; }
-.pf .pf-explore-action-host { min-width: 0; overflow-wrap: anywhere; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.04em; text-transform: none; }
+.pf .pf-explore-action-host { min-width: 0; overflow-wrap: anywhere; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.04em; text-transform: none; }
 .pf .pf-explore-action-plain { padding: 0 4px; }
 @media (max-width: 559px) {
   .pf .pf-explore-action { width: 100%; justify-content: space-between; min-height: 44px; }
@@ -157,5 +146,20 @@
 .pf .pf-explore-stats > div { display: grid; gap: 4px; align-content: center; min-height: 72px; padding: 10px 14px; border-right: 1px solid var(--pf-rule); border-bottom: 1px solid var(--pf-rule); }
 .pf .pf-explore-stats > div:nth-child(2n) { border-right: 0; }
 .pf .pf-explore-stats > div:nth-child(n + 3) { border-bottom: 0; }
-.pf .pf-explore-stats dt { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-explore-stats dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-explore-stats dd { margin: 0; font: 400 1.75em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
+
+/* The public journal: newest first, a square marker in the track colour on a thin rule. */
+.pf .pf-explore-journal { list-style: none; margin: 0; padding: 0; }
+.pf .pf-explore-entry { position: relative; padding: 0 0 24px 28px; }
+.pf .pf-explore-entry:last-child { padding-bottom: 0; }
+.pf .pf-explore-entry::before { content: ""; position: absolute; left: 0; top: 5px; width: 11px; height: 11px; background: var(--tk, var(--pf-mut)); border: 1px solid var(--pf-fg); }
+.pf .pf-explore-entry::after { content: ""; position: absolute; left: 5px; top: 22px; bottom: 6px; width: 1px; background: var(--pf-rule); }
+.pf .pf-explore-entry:last-child::after { display: none; }
+.pf .pf-explore-entry-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin: 0 0 6px; }
+.pf .pf-explore-entry-head h3 { margin: 0; min-width: 0; overflow-wrap: anywhere; font: 700 1rem/1.3 var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-explore-entry-meta { display: flex; gap: 14px; margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-explore-entry-body { margin: 0; max-width: 70ch; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* The one plain line above a project that is not approved yet. Every project is public, so a draft says what stage it is at. */
+.pf .pf-explore-notice { margin: 0 0 16px; padding: 10px 14px; border: 1px solid var(--pf-rule); border-left: 3px solid var(--pf-mut); font: 400 13px/1.5 var(--font-dot), monospace; letter-spacing: 0.04em; }

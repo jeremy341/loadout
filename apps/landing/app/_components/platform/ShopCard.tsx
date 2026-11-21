@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { hoursOfWork, lockFor, priceFor, type ShopItem, type TrackHours } from "@/lib/platform/shop";
+import { formatDiscount } from "@/lib/platform/progress";
 import { trackSlug } from "@/lib/platform/tracks";
-import { WishlistStar } from "./WishlistStar";
 import "./shop.css";
 
 // The product photo, or a pixel sprite for items that have none, on a quiet panel. The name sits beside it, so it is decoration.
@@ -23,19 +23,22 @@ export function ShopPhoto({ item, large = false }: Readonly<{ item: ShopItem; la
 }
 
 // An item's tags: the tracks it relates to, each with the track's colour, or General for everyone.
-export function ShopTags({ item }: Readonly<{ item: ShopItem }>) {
+export function ShopTags({ item, max }: Readonly<{ item: ShopItem; max?: number }>) {
+  const shown = max ? item.tracks.slice(0, max) : item.tracks;
+  const more = item.tracks.length - shown.length;
   return (
-    <ul className="pf-shop-tags" aria-label="Tags">
+    <ul className={max ? "pf-shop-tags pf-shop-tags-one" : "pf-shop-tags"} aria-label="Tags">
       {item.tracks.length === 0 ? (
         <li className="pf-shop-tag">General</li>
       ) : (
-        item.tracks.map((track) => (
+        shown.map((track) => (
           <li key={track} className="pf-shop-tag" data-track={trackSlug(track)}>
             <span className="pf-shop-swatch" aria-hidden="true" />
             {track}
           </li>
         ))
       )}
+      {more > 0 ? <li className="pf-shop-tag pf-shop-tag-more">+{more}</li> : null}
     </ul>
   );
 }
@@ -64,14 +67,14 @@ export function OrePrice({ base, final, large = false }: Readonly<{ base: number
   );
 }
 
-// One item as a compact card: the photo with its badges and the wishlist star, the kind, the name, the tags, and a foot with
-// the Ore price chip and the hours of work it comes to. The star is a sibling of the link, not inside it. At phone width the
-// grid turns the card into a row (a small photo at the left) so a screen holds several items.
-export function ShopCard({ item, approved, noteId }: Readonly<{ item: ShopItem; approved: TrackHours; noteId: string }>) {
+// One item as a card with one anatomy and one height: the photo with its Limited and lock badges, the kind, the name (two lines
+// reserved), one line of tags, the price row (Ore price chip and the level discount) and the hours of work. The whole card is the
+// link. The grid stretches every card in a row to the same height.
+export function ShopCard({ item, approved }: Readonly<{ item: ShopItem; approved: TrackHours }>) {
   const price = priceFor(item, approved);
   const lock = lockFor(item, approved);
   return (
-    <div className="pf-card pf-shop-card">
+    <div className="pf-card pf-shop-card" data-locked={lock ? "true" : undefined}>
       <Link className="pf-shop-link" href={`/dashboard/shop/${item.id}`}>
         <div className="pf-shop-cover">
           <ShopPhoto item={item} />
@@ -89,14 +92,14 @@ export function ShopCard({ item, approved, noteId }: Readonly<{ item: ShopItem; 
         <div className="pf-shop-body">
           <span className="pf-shop-kind">{item.kind}</span>
           <h3 className="pf-shop-name">{item.name}</h3>
-          <ShopTags item={item} />
-          <span className="pf-shop-foot">
+          <ShopTags item={item} max={2} />
+          <span className="pf-shop-price-row">
             <OrePrice base={price.base} final={price.final} />
-            <span className="pf-shop-hours">{hoursOfWork(price.final)} H of work</span>
+            {price.final < price.base ? <span className="pf-shop-off">−{formatDiscount(price.percent)}</span> : null}
           </span>
+          <span className="pf-shop-hours">{hoursOfWork(price.final)} H of work</span>
         </div>
       </Link>
-      <WishlistStar item={item} describedBy={noteId} />
     </div>
   );
 }

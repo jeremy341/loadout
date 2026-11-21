@@ -245,9 +245,8 @@ export function ToolFinder({
           if (chosen) onEdit();
         }
         return;
-      case "Tab":
-        if (!event.shiftKey) dispatch({ type: "close" });
-        return;
+      // Tab does not close the list: the Clear button, the Save stars and Try again follow the field in Tab order, so they stay
+      // reachable from the keyboard. The list closes when focus leaves the whole finder (onBlur on the root) or on Escape.
     }
   };
 
@@ -309,7 +308,19 @@ export function ToolFinder({
       <p className="pf-hint pf-finder-hint" id={hintId}>{HINT}</p>
 
       {list.open && (expanded || showSkeleton || noTools || phase === "error") ? (
-        <div className="pf-finder-pop" onMouseDown={(event) => event.preventDefault()}>
+        <div
+          className="pf-finder-pop"
+          onMouseDown={(event) => event.preventDefault()}
+          onKeyDown={(event) => {
+            // Escape from a button in the list (a star, Clear, Try again) closes it and hands focus back to the field.
+            if (event.key === "Escape") {
+              event.preventDefault();
+              event.stopPropagation();
+              dispatch({ type: "close" });
+              inputRef.current?.focus();
+            }
+          }}
+        >
           {expanded ? (
             <div className="pf-finder-scroll">
               <div className="pf-finder-cols">

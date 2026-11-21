@@ -2,68 +2,28 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useState } from "react";
-import type { NavGroup } from "@/lib/platform/nav";
-import { CLOSE_ACCOUNT_EVENT, CLOSE_MENU_EVENT } from "./PlatformAccountMenu";
-import { PlatformThemeToggle } from "./PlatformThemeToggle";
+import { isLinkCurrent, type NavGroup } from "@/lib/platform/nav";
 
-// A tab is current on its own page and below it: a project belongs to Projects, and a track page to Overview.
-function isCurrent(pathname: string, href: string): boolean {
-  if (pathname === href) return true;
-  if (href === "/dashboard") return pathname.startsWith("/dashboard/tracks/");
-  return pathname.startsWith(href + "/");
-}
-
-// Phone: a labelled button opens a vertical list. Desktop: the pages sit in the top bar as tokens, the current one
-// in brackets. The group headings stay for screen readers.
-export function PlatformNav({ groups }: { groups: NavGroup[] }) {
+// The sidebar links in small groups, each with a plain heading. The current link has aria-current, a square marker and a bar. Under
+// 900px the drawer shows the same groups as one list. Following a link tells the drawer to close.
+export function PlatformNav({ groups, onNavigate }: Readonly<{ groups: readonly NavGroup[]; onNavigate?: () => void }>) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const listId = useId();
-
-  // The account panel and this menu close each other.
-  useEffect(() => {
-    const close = () => setOpen(false);
-    window.addEventListener(CLOSE_MENU_EVENT, close);
-    return () => window.removeEventListener(CLOSE_MENU_EVENT, close);
-  }, []);
-
   return (
-    <>
-      <button
-        type="button"
-        className="pf-btn pf-nav-toggle"
-        aria-expanded={open}
-        aria-controls={listId}
-        onClick={() => {
-          if (!open) window.dispatchEvent(new Event(CLOSE_ACCOUNT_EVENT));
-          setOpen((value) => !value);
-        }}
-      >
-        {open ? "Close" : "Menu"}
-      </button>
-      <nav aria-label="Participant" className="pf-nav" id={listId} data-open={open}>
-        {groups.map((group) => (
-          <div className="pf-nav-group" data-group={group.label.toLowerCase()} key={group.label}>
-            <h2>{group.label}</h2>
-            <ul>
-              {group.items.map((item) => {
-                const current = isCurrent(pathname, item.href);
-                return (
-                  <li key={item.href}>
-                    <Link href={item.href} aria-current={current ? "page" : undefined} onClick={() => setOpen(false)}>
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-        <div className="pf-nav-theme">
-          <PlatformThemeToggle showLabel />
+    <nav aria-label="Participant" className="pf-tabs">
+      {groups.map((group) => (
+        <div key={group.label} className="pf-tab-group">
+          <p className="pf-tab-heading" aria-hidden="true">{group.label}</p>
+          <ul aria-label={group.label}>
+            {group.links.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} aria-current={isLinkCurrent(pathname, link.href) ? "page" : undefined} onClick={onNavigate}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-      </nav>
-    </>
+      ))}
+    </nav>
   );
 }

@@ -7,6 +7,7 @@ import { canRemoveUse, TOOLBELT_MAKER_CAP_ORE, TOOLBELT_MAKER_ORE, TOOLBELT_MAX_
 import { handleLabel, SLOTS_CLOSED_TEXT, SLOTS_FULL_TEXT, slotsView } from "@/lib/platform/toolbelt-ui";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { ProjectResultRow } from "./ProjectResultRow";
+import { ProjectExpedition } from "./expeditions/ProjectExpedition";
 import { ToolbeltGate } from "./ToolbeltGate";
 import { ToolFinder, type FinderTool } from "./ToolFinder";
 import { ToolStep } from "./ToolStep";
@@ -117,6 +118,7 @@ export function ToolbeltSection({
   const savedLeft = canEquip ? savedTools.filter((tool) => !view.active.some((use) => use.tool.id === tool.id)) : [];
 
   return (
+    <>
     <section className="pf-box pf-belt" aria-labelledby="toolbelt-heading" ref={root} id="toolbelt">
       <div className="pf-box-head">
         <h2 id="toolbelt-heading" tabIndex={-1} data-focus="heading">Toolbelt</h2>
@@ -207,7 +209,7 @@ export function ToolbeltSection({
       <div className="pf-belt-foot">
         <ToolbeltGate projectId={projectId} hours={hours} />
         <p className="pf-belt-note pf-hint">
-          <span className="pf-tag">Provisional</span> Provisional rewards, not paid yet: {TOOLBELT_USER_ORE} Ore once per tool for the builder who uses it,{" "}
+          Rewards: {TOOLBELT_USER_ORE} Ore once per tool for the builder who uses it,{" "}
           {TOOLBELT_MAKER_ORE} Ore for the maker for each verified user, up to {TOOLBELT_MAKER_CAP_ORE} Ore per tool each season. Equipping gives no Track XP.
         </p>
       </div>
@@ -223,5 +225,7 @@ export function ToolbeltSection({
         fields={{ useId: removing?.id ?? "" }}
       />
     </section>
+    <ProjectExpedition projectId={projectId} />
+    </>
   );
 }

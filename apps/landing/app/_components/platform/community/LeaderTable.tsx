@@ -12,7 +12,7 @@ export function LeaderTable({ rows, range, caption }: { rows: LeaderRow[]; range
             <th scope="col">Rank</th>
             <th scope="col">Builder</th>
             <th scope="col">Approved hours</th>
-            <th scope="col">{range === "weekly" ? "Depth gained" : "Depth"}</th>
+            <th scope="col">{range === "week" ? "Depth gained" : "Depth"}</th>
           </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@ export function LeaderTable({ rows, range, caption }: { rows: LeaderRow[]; range
               <td className="cm-num">{row.hours} H</td>
               <td className="cm-num">
                 {depthLabel(range, row.hours).replace(/ deeper$/, "")}
-                {range === "weekly" ? <span className="cm-deeper"> deeper</span> : null}
+                {range === "week" ? <span className="cm-deeper"> deeper</span> : null}
               </td>
             </tr>
           ))}

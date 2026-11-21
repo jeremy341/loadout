@@ -20,7 +20,8 @@ export function PlatformThemeToggle({ className = "", showLabel = false }: Reado
     >
       <span className="pxw mo" aria-hidden="true"><i className="b" /></span>
       <span className="pxw su" aria-hidden="true"><i className="a" /></span>
-      {showLabel ? <span className="pf-theme-label" aria-hidden="true">{light ? "Light mode" : "Dark mode"}</span> : null}
+      {/* The visible label is the accessible name ("Light mode"); aria-checked says whether it is on, so the two never disagree. */}
+      {showLabel ? <span className="pf-theme-label" aria-hidden="true">Light mode</span> : null}
     </button>
   );
 }

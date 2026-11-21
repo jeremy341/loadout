@@ -4,64 +4,16 @@
    reduced motion. The older .pf-shop-* rules in platform.css (photo, tags, lines, requisition, lock, credit, logos, discount
    row, sort row) are still used; the names defined here are new. */
 
-/* ---- Top bar: search left, your Ore right ---- */
-.pf .pf-shop-top { display: grid; gap: 14px 24px; margin: 0 0 16px; }
-@media (min-width: 720px) {
-  .pf .pf-shop-top { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
-}
+/* ---- Top bar: the search ---- */
+.pf .pf-shop-top { margin: 0 0 16px; }
 .pf .pf-shop-search { min-width: 0; }
-.pf .pf-shop-label { display: block; margin: 0 0 6px; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-shop-label { display: block; margin: 0 0 6px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-shop-search-row { display: flex; gap: 10px; }
-.pf .pf-shop-input { flex: 1 1 auto; }
-.pf .pf-shop-ore {
-  display: grid;
-  grid-template-columns: auto auto 1fr;
-  align-items: center;
-  gap: 0 10px;
-  padding: 10px 18px 10px 14px;
-  border: 1px solid var(--pf-fg);
-  background: var(--pf-panel);
-  box-shadow: 4px 4px 0 var(--pf-edge);
-}
-.pf .pf-shop-ore .pf-ore-icon { grid-row: 1 / span 2; width: 32px; height: 32px; }
-.pf .pf-shop-ore-value { font: 400 2.25em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
-.pf .pf-shop-ore-unit { font: 700 1.125em var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
-.pf .pf-shop-ore-note { grid-column: 2 / -1; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-shop-input { flex: 1 1 auto; min-width: 0; }
 
 .pf .pf-shop-top + .pf-shop-discounts { margin: 0 0 14px; }
 .pf .pf-shop-closed-line { margin: 0 0 26px; font-size: 0.875em; line-height: 1.5; color: var(--pf-mut); }
 .pf .pf-shop-closed-line a { color: var(--pf-link); }
-
-/* ---- Category tiles ---- */
-.pf .pf-shop-tiles { margin: 0 0 30px; }
-.pf .pf-shop-tiles ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
-.pf .pf-shop-tiles li:last-child:nth-child(odd) { grid-column: 1 / -1; }
-@media (min-width: 720px) {
-  .pf .pf-shop-tiles ul { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
-  .pf .pf-shop-tiles li:last-child:nth-child(odd) { grid-column: auto; }
-}
-.pf .pf-shop-tiles a {
-  display: grid;
-  gap: 8px;
-  align-content: start;
-  min-height: 96px;
-  padding: 12px 12px 10px;
-  border: 1px solid var(--pf-fg);
-  border-top: 4px solid var(--tk, var(--pf-fg));
-  background: var(--pf-panel);
-  box-shadow: 4px 4px 0 var(--pf-edge);
-  color: var(--pf-fg);
-  text-decoration: none;
-}
-.pf .pf-shop-tiles a:hover .pf-shop-tile-name { color: var(--pf-link); }
-.pf .pf-shop-tile-thumbs { display: flex; gap: 6px; }
-.pf .pf-shop-tile-thumb { display: grid; place-items: center; flex: 0 1 44px; min-width: 0; aspect-ratio: 1; padding: 3px; border: 1px solid var(--pf-rule); background: var(--pf-bg); }
-.pf .pf-shop-tile-thumb img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
-.pf .pf-shop-tile-thumb .pf-shop-sprite { width: 32px; height: 32px; image-rendering: pixelated; }
-.pf .pf-shop-tiles li { display: flex; }
-.pf .pf-shop-tiles li > a { flex: 1; }
-.pf .pf-shop-tile-name { height: 24px; display: inline-flex; align-items: center; gap: 8px; font: 700 1.125em var(--font-pixel), monospace; text-transform: uppercase; }
-.pf .pf-shop-tile-count { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
 
 /* ---- Rails: a ruled head and a strip of cards ---- */
 .pf .pf-shop-rail { margin: 0 0 30px; }
@@ -98,9 +50,14 @@
   scroll-snap-type: x proximity;
   scroll-padding-left: 0;
 }
-.pf .pf-shop-strip > li { flex: 0 0 min(232px, 78%); min-width: 0; scroll-snap-align: start; }
-@media (min-width: 560px) {
-  .pf .pf-shop-strip > li { flex-basis: 232px; }
+.pf .pf-shop-strip { gap: 12px; }
+.pf .pf-shop-strip > li { flex: 0 0 calc((100% - 12px) / 2.25); min-width: 0; scroll-snap-align: start; }
+@media (min-width: 700px) {
+  .pf .pf-shop-strip { gap: 16px; }
+  .pf .pf-shop-strip > li { flex-basis: calc((100% - 32px) / 3); }
+}
+@media (min-width: 1280px) {
+  .pf .pf-shop-strip > li { flex-basis: calc((100% - 48px) / 4); }
 }
 
 /* ---- The item card ---- */
@@ -113,21 +70,27 @@
 .pf .pf-shop-cover .pf-shop-photo .pf-shop-sprite { width: 64px; height: 64px; justify-self: center; align-self: center; }
 .pf .pf-shop-logo img { max-width: 78%; }
 .pf .pf-shop-badges { position: absolute; left: 8px; bottom: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 16px); }
-.pf .pf-shop-badge { padding: 2px 8px; border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
-.pf .pf-shop-body { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; flex: 1; min-width: 0; padding: 12px 14px 14px; }
+.pf .pf-shop-badge { padding: 2px 8px; border: 1px solid var(--pf-fg); background: var(--pf-panel); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .pf-shop-body { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: 1; min-width: 0; padding: 12px 12px 14px; }
+.pf .pf-shop-card[data-locked="true"] .pf-shop-cover .pf-shop-photo { opacity: 0.7; }
 .pf .pf-shop-card h3.pf-shop-name {
   margin: 0;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
+  min-height: 2.5em;
   font: 700 1rem/1.25 var(--font-pixel), monospace;
   text-transform: uppercase;
   color: var(--pf-fg);
   overflow-wrap: anywhere;
 }
-.pf .pf-shop-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin-top: auto; padding-top: 4px; }
-.pf .pf-shop-hours { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-shop-tags-one { flex-wrap: nowrap; overflow: hidden; width: 100%; min-height: 16px; gap: 4px 12px; }
+.pf .pf-shop-tags-one .pf-shop-tag { white-space: nowrap; flex: 0 1 auto; min-width: 0; }
+.pf .pf-shop-tag-more { color: var(--pf-mut); }
+.pf .pf-shop-price-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-top: auto; padding-top: 4px; min-height: 34px; }
+.pf .pf-shop-off { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-link); }
+.pf .pf-shop-hours { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); }
 
 /* The Ore price chip: a bordered box with the gem, the price after your discount, and the price before it struck through. */
 .pf .pf-shop-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 6px; border: 1px solid var(--pf-fg); background: var(--pf-bg); }
@@ -140,48 +103,29 @@
 .pf .pf-shop-chip-lg .pf-shop-amount { font: 400 2.5rem/1 var(--font-display), monospace; }
 .pf .pf-shop-chip-lg .pf-shop-was { font-size: 14px; }
 
-/* The wishlist star: a sibling of the card link, over the photo corner. It is aria-disabled until the Shop release. */
-.pf .pf-shop-star {
-  display: inline-grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid var(--pf-fg);
-  border-radius: 0;
-  background: var(--pf-panel);
-  color: var(--pf-fg);
-  cursor: not-allowed;
-}
-.pf .pf-shop-card .pf-shop-star { position: absolute; top: 8px; right: 8px; z-index: 1; width: 36px; height: 36px; }
-.pf .pf-shop-star-glyph { display: block; width: 22px; height: 22px; fill: currentColor; }
-.pf .pf-shop-star[aria-pressed="true"] .pf-shop-star-glyph { fill: var(--pf-ac); }
-.pf .pf-shop-star-text { display: inline-flex; width: auto; gap: 8px; padding: 0 14px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; background: var(--pf-panel); color: var(--pf-fg); border-color: var(--pf-fg); }
-
 /* ---- All items ---- */
 .pf .pf-shop-all-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 20px; margin: 0 0 8px; padding: 0 0 8px; border-bottom: 1px solid var(--pf-rule); }
 .pf .pf-shop-all .pf-shop-count { margin: 0 0 14px; }
-.pf .pf-shop-chips { margin: 0 0 12px; }
-.pf .pf-shop-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.pf .pf-shop-chips { display: flex; flex-wrap: nowrap; gap: 8px; margin: 0 0 14px; padding: 8px 0; overflow-x: auto; overscroll-behavior-x: contain; background: var(--pf-bg); }
+.pf .pf-shop-chips a { flex: 0 0 auto; white-space: nowrap; }
+.pf .pf-shop-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
 .pf .pf-shop-grid > li { min-width: 0; }
-@media (min-width: 560px) {
-  .pf .pf-shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 700px) {
+  .pf .pf-shop-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 }
-@media (min-width: 900px) {
-  .pf .pf-shop-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (min-width: 1280px) {
+  .pf .pf-shop-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 .pf .pf-shop-more { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 28px 0 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 
-/* On a phone the grid cards turn into rows: a small photo at the left, the text at the right, so one screen holds several items. */
-@media (max-width: 559px) {
-  .pf .pf-shop-grid .pf-shop-link { display: grid; grid-template-columns: 96px minmax(0, 1fr); }
-  .pf .pf-shop-grid .pf-shop-cover { aspect-ratio: auto; min-height: 96px; border-bottom: 0; border-right: 1px solid var(--pf-rule); }
-  .pf .pf-shop-grid .pf-shop-cover .pf-shop-photo { padding: 8px; }
-  .pf .pf-shop-grid .pf-shop-cover .pf-shop-photo .pf-shop-sprite { width: 48px; height: 48px; }
-  .pf .pf-shop-grid .pf-shop-badges { left: 4px; bottom: 4px; max-width: calc(100% - 8px); }
-  .pf .pf-shop-grid .pf-shop-body { padding: 10px 48px 10px 12px; gap: 6px; }
-  .pf .pf-shop-grid .pf-shop-card .pf-shop-star { top: 4px; right: 4px; width: 40px; height: 40px; background: var(--pf-panel); }
-  .pf .pf-shop-grid .pf-shop-foot { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+/* Phone: two cards across, so the cover, text and chip are tightened. */
+@media (max-width: 699px) {
+  .pf .pf-shop-cover .pf-shop-photo { padding: 8px; }
+  .pf .pf-shop-cover .pf-shop-photo .pf-shop-sprite { width: 48px; height: 48px; }
+  .pf .pf-shop-body { padding: 10px 10px 12px; gap: 5px; }
+  .pf .pf-shop-card h3.pf-shop-name { font-size: 0.875rem; }
+  .pf .pf-shop-chip { padding: 2px 6px 2px 4px; gap: 4px; }
+  .pf .pf-shop-badge { font-size: 10px; padding: 1px 6px; letter-spacing: 0.06em; }
 }
 
 /* ---- Item page ---- */
@@ -200,34 +144,37 @@
 .pf .pf-shop-buy h1 { margin: 0; font-size: 1.75em; line-height: 1.1; overflow-wrap: anywhere; }
 .pf .pf-shop-buy h2 { margin: 6px 0 -4px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .pf-shop-buy .pf-hint, .pf .pf-shop-buy .pf-shop-requisition, .pf .pf-shop-buy .pf-shop-lock, .pf .pf-shop-buy .pf-shop-closed { margin: 0; }
+.pf .pf-shop-choice { display: grid; gap: 8px; margin: 0; }
+.pf .pf-shop-choice fieldset { display: grid; gap: 6px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.pf .pf-shop-option { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--pf-field-bd); border-radius: 0; overflow-wrap: anywhere; cursor: pointer; }
+.pf .pf-shop-option:has(input:checked) { border-color: var(--pf-fg); }
+.pf .pf-shop-option:has(input:focus-visible) { outline: 2px solid var(--pf-link); outline-offset: 2px; }
+.pf .pf-shop-option input { flex: none; width: 18px; height: 18px; margin: 0; border-radius: 0; accent-color: var(--pf-link); }
+.pf .pf-shop-choice .pf-hint { margin: 0; }
 .pf .pf-shop-order { width: 100%; justify-content: center; min-height: 52px; }
 .pf .pf-shop-order[aria-disabled="true"] { cursor: not-allowed; opacity: 0.75; }
 .pf .pf-shop-order[aria-disabled="true"]:hover { opacity: 0.75; }
 @media (min-width: 900px) {
-  .pf .pf-shop-item { grid-template-columns: minmax(0, 1fr) 400px; grid-template-rows: auto 1fr; column-gap: 32px; row-gap: 24px; }
+  .pf .pf-shop-item { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); grid-template-rows: auto 1fr; column-gap: 24px; row-gap: 24px; }
   .pf .pf-shop-item-photo { grid-column: 1; grid-row: 1; }
   .pf .pf-shop-item-more { grid-column: 1; grid-row: 2; }
   .pf .pf-shop-item-side { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+}
+@media (min-width: 1100px) {
+  .pf .pf-shop-item { grid-template-columns: minmax(0, 1fr) 400px; column-gap: 32px; }
 }
 @media (min-width: 900px) and (min-height: 760px) {
   .pf .pf-shop-item-side { position: sticky; top: 88px; }
 }
 
-/* Phone: the top bar, the discount row and the tiles are tightened so the first items start within about two screens. */
+/* Phone: the discount row and the tiles are tightened so the first items start within about two screens. */
 @media (max-width: 559px) {
-  .pf .pf-shop-top { gap: 10px; margin-bottom: 10px; }
-  .pf .pf-shop-ore { padding: 8px 12px; }
-  .pf .pf-shop-ore-value { font-size: 1.75em; }
+  .pf .pf-shop-top { margin-bottom: 10px; }
   .pf .pf-shop-top + .pf-shop-discounts { margin-bottom: 10px; }
   .pf .pf-shop-top + .pf-shop-discounts a { padding: 6px 0; }
   .pf .pf-shop-closed-line { margin-bottom: 18px; }
-  .pf .pf-shop-tiles { margin-bottom: 22px; }
-  .pf .pf-shop-tiles ul { gap: 10px; }
-  .pf .pf-shop-tiles a { min-height: 0; gap: 6px; padding: 8px 10px 8px; }
-  .pf .pf-shop-tile-thumb { flex: 0 1 34px; padding: 2px; }
-  .pf .pf-shop-tile-thumb .pf-shop-sprite { width: 24px; height: 24px; }
   .pf .pf-shop-rail, .pf .pf-shop-rail-head { margin-bottom: 18px; }
 }
-@media (min-width: 560px) {
-  .pf .pf-shop-grid .pf-shop-cover .pf-shop-photo .pf-shop-sprite { width: 88px; height: 88px; }
+@media (min-width: 700px) {
+  .pf .pf-shop-cover .pf-shop-photo .pf-shop-sprite { width: 88px; height: 88px; }
 }

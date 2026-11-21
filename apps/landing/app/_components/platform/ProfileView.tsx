@@ -1,114 +1,90 @@
 import Link from "next/link";
-import { listProfileProjects, listToolsUsedBy, listUsersOfTool } from "@/lib/platform/profile-data";
-import { MAX_PINNED, normalizeStatus, pinnedProjects, publicProjects } from "@/lib/platform/profile";
-import { joinedLabel, PUBLIC_LEVELS_ENABLED, topTrack, type ProfileQuery } from "@/lib/platform/profile-view";
-import { sampleTrackHours, sampleTrackProgress, sumHours, TRACKS } from "@/lib/platform/progress";
-import { CoreGauge } from "./CoreGauge";
-import { DepthValue } from "./DepthValue";
+import type { Avatar } from "@/lib/platform/avatar";
+import { dayTotals } from "@/lib/platform/activity";
+import { listActivity } from "@/lib/platform/activity-data";
+import { db } from "@/lib/platform/db";
+import { followCounts } from "@/lib/platform/follows-data";
+import { ledgerBalances } from "@/lib/platform/ledger-data";
+import { listProfileProjects } from "@/lib/platform/profile-data";
+import { PUBLIC_LEVELS_ENABLED, topTrack } from "@/lib/platform/profile-view";
+import { readViewer } from "@/lib/platform/session";
+import { sampleTrackProgress } from "@/lib/platform/progress";
+import { ActivityHeatmap } from "./ActivityHeatmap";
+import { BuilderRelation } from "./BuilderRelation";
 import { ChooseHandle, ProfileIdentity } from "./ProfileIdentity";
-import { ProfileEditDialog, OpenProfileEditButton } from "./ProfileEditDialog";
-import { ProfilePins } from "./ProfilePins";
+import { ProfileEditDialog } from "./ProfileEditDialog";
+import { ProfileBadges } from "./ProfileBadges";
 import { ProfileProjects } from "./ProfileProjects";
-import { ProfileToolbelt } from "./ProfileToolbelt";
 import "./profile.css";
 
-type Person = { id: string; handle: string | null; bio: string | null; joinedAt: Date };
+type Person = { id: string; handle: string | null; bio: string | null; joinedAt: Date; avatar?: Avatar | null };
 
-// One profile page, own or public. The own view shows every project with controls, the Loadout block and the choose-a-handle
-// prompt; the public view shows what the owner chose to show. Everything another builder sees is a handle, never a name.
-export async function ProfileView({
-  person,
-  viewerId,
-  query,
-  own,
-  base,
-}: Readonly<{ person: Person; viewerId: string; query: ProfileQuery; own: boolean; base: string }>) {
-  const rows = await listProfileProjects(person.id, own ? "own" : "public");
-  const publicRows = publicProjects(rows);
-  const pins = pinnedProjects(rows);
-  const approvedUnpinned = rows.filter((row) => normalizeStatus(row.status) === "approved" && !row.hidden && !row.pinned).length;
-
-  const [equipped, userLists] = await Promise.all([
-    listToolsUsedBy(person.id),
-    // Builders who use this builder's tools: confirmed uses of their public open-source projects, one entry per builder.
-    Promise.all(publicRows.filter((row) => row.repoUrl && normalizeStatus(row.status) === "approved").map((row) => listUsersOfTool(row.id, viewerId))),
+// One profile page, own or public, copied from Stasis's profile: a back link, then two columns. The left column has the profile
+// card and the Activity heatmap card; the right column has the Track levels card (in the place of Stasis's Badges) and the Projects card. There are no tabs. Every
+// project is public, so a visitor sees the same cards except banned projects; the own view adds Edit profile and the pending Ore line;
+// the Ore balance is public.
+// Journals and the Toolbelt live on each project's page. Everything another builder sees is a handle, never a name.
+export async function ProfileView({ person, own }: Readonly<{ person: Person; own: boolean }>) {
+  const now = new Date();
+  const [rows, activity, balance, counts] = await Promise.all([
+    listProfileProjects(person.id, own ? "all" : "public"),
+    listActivity(person.id, now, "all"),
+    ledgerBalances(person.id),
+    followCounts(person.id),
   ]);
-  const users = new Map<string, { id: string; handle: string | null }>();
-  for (const list of userLists) {
-    for (const use of list) if (use.status === "confirmed" && use.userId !== person.id) users.set(use.userId, { id: use.userId, handle: use.userHandle });
+
+  // The follow and block controls are for a visitor only: whether they follow this builder and whether they have blocked them.
+  let relation: React.ReactNode = null;
+  if (!own && person.handle) {
+    const viewer = await readViewer();
+    if (viewer) {
+      const [follow, block] = await Promise.all([
+        db().follow.findUnique({ where: { followerId_followeeId: { followerId: viewer.id, followeeId: person.id } }, select: { followerId: true } }),
+        db().block.findUnique({ where: { blockerId_blockedId: { blockerId: viewer.id, blockedId: person.id } }, select: { blockerId: true } }),
+      ]);
+      relation = <BuilderRelation handle={person.handle} following={follow !== null} blocked={block !== null} />;
+    }
   }
 
   const levels = sampleTrackProgress();
   const top = own || PUBLIC_LEVELS_ENABLED ? topTrack(levels) : null;
-  const hours = sumHours(TRACKS.map((track) => sampleTrackHours(track)));
-  const showLoadout = own || PUBLIC_LEVELS_ENABLED;
+  const totals = dayTotals(activity.entries);
 
   return (
     <>
+      {own ? <ProfileEditDialog handle={person.handle} bio={person.bio} /> : null}
       <div className="pf-crumbs">
-        {own ? (
-          <>
-            <ProfileEditDialog handle={person.handle} bio={person.bio} />
-            {person.handle ? <OpenProfileEditButton>Edit profile</OpenProfileEditButton> : null}
-          </>
-        ) : (
-          <Link className="pf-back" href="/dashboard/explore">
-            <svg viewBox="0 0 12 12" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-              <path d="M1 5h10v2H1zM3 3h2v2H3zM3 7h2v2H3z" />
-            </svg>
-            Back to Explore
-          </Link>
-        )}
+        <Link className="pf-back" href={own ? "/dashboard/projects" : "/dashboard/explore"}>
+          <svg viewBox="0 0 12 12" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+            <path d="M1 5h10v2H1zM3 3h2v2H3zM3 7h2v2H3z" />
+          </svg>
+          {own ? "Back to Projects" : "Back to Explore"}
+        </Link>
       </div>
 
       {person.handle ? (
-        <ProfileIdentity
-          handle={person.handle}
-          bio={person.bio}
-          joined={joinedLabel(person.joinedAt)}
-          top={top}
-          projectCount={publicRows.length}
-          toolbeltCount={equipped.length}
-          own={own}
-        />
+        <div className="pf-sp">
+          <div className="pf-sp-left">
+            <ProfileIdentity
+              handle={person.handle}
+              bio={person.bio}
+              top={top}
+              own={own}
+              balance={balance}
+              avatar={person.avatar ?? null}
+              counts={counts}
+              relation={relation}
+            />
+            <ActivityHeatmap totals={totals} now={now} own={own} />
+          </div>
+          <div className="pf-sp-right">
+            <ProfileBadges />
+            <ProfileProjects rows={rows} own={own} />
+          </div>
+        </div>
       ) : (
         <ChooseHandle />
       )}
-
-      <ProfilePins
-        pins={pins.map((row) => ({ id: row.id, title: row.title, track: row.track, usedBy: row.usedBy, openSource: Boolean(row.repoUrl) }))}
-        freeSlots={own ? Math.min(MAX_PINNED - pins.length, approvedUnpinned) : 0}
-      />
-
-      {showLoadout ? (
-        <div className="pf-prof-loadout">
-          <CoreGauge title="Loadout" headingId="loadout-heading" />
-          <div className="pf-stats">
-            <dl className="pf-stat-list">
-              <div>
-                <dt>Depth</dt>
-                <dd>
-                  <DepthValue hours={hours} />
-                </dd>
-              </div>
-              <div>
-                <dt>Approved hours</dt>
-                <dd>{hours.approved} H</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
-      ) : null}
-
-      <ProfileProjects rows={rows} query={query} base={base} own={own} />
-
-      <div className="pf-split pf-prof-lower">
-        <ProfileToolbelt equipped={equipped} users={[...users.values()]} own={own} />
-        <section className="pf-plain-panel" aria-labelledby="activity-heading">
-          <h2 id="activity-heading">Recent activity</h2>
-          <p>No journal entries yet. Journals open in a later release.</p>
-        </section>
-      </div>
     </>
   );
 }

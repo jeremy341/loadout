@@ -1,0 +1,32 @@
+/* The project journal and its New journal entry dialog. Existing platform tokens only. Both themes follow the tokens. */
+
+.pf .pf-journal .pf-box-head { flex-wrap: wrap; }
+.pf .pf-journal-total { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-journal-note { margin: 0 0 12px; max-width: 70ch; }
+.pf .pf-journal-due { margin: 0 0 14px; padding: 10px 12px; border: 1px solid var(--pf-link); font-size: 0.875em; }
+.pf .pf-journal-locked { margin: 0 0 14px; padding: 10px 12px; border: 1px dashed var(--pf-mut); font-size: 0.875em; color: var(--pf-fg); }
+
+.pf .pf-journal-empty { display: grid; justify-items: start; gap: 12px; padding: 16px 0 4px; border-top: 1px solid var(--pf-rule); }
+.pf .pf-journal-empty p { margin: 0; max-width: 60ch; color: var(--pf-mut); }
+
+.pf .pf-journal-list { list-style: none; margin: 0; padding: 0; }
+.pf .pf-journal-entry { display: grid; gap: 6px; padding: 16px 0; border-top: 1px solid var(--pf-rule); min-width: 0; }
+.pf .pf-journal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; min-width: 0; }
+.pf .pf-journal-head h3 { margin: 0; min-width: 0; font: 700 1.125em/1.3 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-fg); overflow-wrap: anywhere; }
+.pf .pf-journal-delete { flex: none; min-height: 44px; padding: 0 14px; }
+.pf .pf-journal-meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+/* Plain text: line breaks kept, nothing interpreted. */
+.pf .pf-journal-text { margin: 4px 0 0; max-width: 70ch; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; font-size: 0.9375em; }
+
+/* The dialog. */
+.pf .pf-journal-body { min-height: 140px; resize: vertical; }
+.pf .pf-journal-count { margin: 0; }
+.pf .pf-journal-hours { max-width: 160px; }
+.pf .pf-journal-advice { margin: 0; padding: 8px 10px; border: 1px solid var(--pf-link); font-size: 0.875em; }
+.pf .pf-journal-form .pf-journal-due { margin: 0 0 16px; }
+
+@media (max-width: 559px) {
+  .pf .pf-journal-head { flex-direction: column; }
+  .pf .pf-journal-delete { width: 100%; }
+}
+.pf .pf-journal-form .pf-error { scroll-margin-bottom: 96px; }

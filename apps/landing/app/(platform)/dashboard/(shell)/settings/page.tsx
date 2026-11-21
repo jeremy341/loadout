@@ -1,15 +1,61 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AccessibilitySettings } from "@/app/_components/Accessibility";
+import { ConnectionPlaceholder } from "@/app/_components/platform/ConnectionPlaceholder";
+import { ApiKeysSection, type KeyRowView, type ScopeInfo } from "@/app/_components/platform/ApiKeysSection";
 import { PageHead } from "@/app/_components/platform/PageHead";
+import { PrivacySection } from "@/app/_components/platform/PrivacySection";
+import { API_SCOPES, MAX_ACTIVE_KEYS } from "@/lib/platform/api-keys";
+import { listApiKeys } from "@/lib/platform/api-keys-data";
+import { db } from "@/lib/platform/db";
+import { erasureStatus } from "@/lib/platform/privacy-data";
+import { eligibilityFor } from "@/lib/platform/eligibility-gate";
+import { eligibilityMessage } from "@/lib/platform/eligibility";
+import { hcaConfig } from "@/lib/platform/hca";
 import { getOwnProfile } from "@/lib/platform/profile-data";
 import { requireViewer } from "@/lib/platform/session";
 
 export const metadata: Metadata = { title: "Settings - LOADOUT" };
 
+const SCOPE_INFO: Record<string, { label: string; meaning: string }> = {
+  profile: { label: "Profile", meaning: "Your name, handle and bio." },
+  projects: { label: "Projects", meaning: "Your projects and their status." },
+  journal: { label: "Journal", meaning: "Your journal entries." },
+  hours: { label: "Hours", meaning: "Your tracked and approved hours." },
+  ledger: { label: "Ledger", meaning: "Your Ore balance and what moved it." },
+  activity: { label: "Activity", meaning: "Your day by day activity." },
+  export: { label: "Export", meaning: "Everything above as one file." },
+  stats: { label: "Stats", meaning: "Your totals, levels and streaks." },
+};
+
+const date = (d: Date) => d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+
 export default async function SettingsPage() {
   const viewer = await requireViewer();
   const profile = await getOwnProfile(viewer.id);
+  const eligibility = await eligibilityFor(viewer);
+  const connected = hcaConfig() !== null;
+  const now = new Date();
+  const [keyList, person, erasure] = await Promise.all([
+    listApiKeys(viewer.id, now),
+    db().person.findUnique({ where: { id: viewer.id }, select: { statsVisible: true } }),
+    erasureStatus(viewer.id),
+  ]);
+  const keys: KeyRowView[] = [
+    ...keyList.filter((k) => k.status === "active"),
+    ...keyList.filter((k) => k.status === "expired"),
+    ...keyList.filter((k) => k.status === "revoked"),
+  ].map((k) => ({
+    id: k.id,
+    name: k.name,
+    prefix: k.prefix,
+    scopes: k.scopes,
+    created: date(k.createdAt),
+    lastUsed: k.lastUsedAt ? date(k.lastUsedAt) : "never",
+    expires: k.expiresAt ? date(k.expiresAt) : "never",
+    state: k.status,
+  }));
+  const scopes: ScopeInfo[] = API_SCOPES.map((scope) => ({ scope, ...SCOPE_INFO[scope] }));
 
   return (
     <>
@@ -37,23 +83,41 @@ export default async function SettingsPage() {
               )}
             </dd>
           </div>
+          <div className="pf-fact-wide">
+            <dt>Eligibility</dt>
+            <dd>{eligibilityMessage(eligibility)}</dd>
+          </div>
         </dl>
-      </section>
-      <section className="pf-section" aria-labelledby="profile-heading">
-        <h2 id="profile-heading">Profile</h2>
         <p className="pf-lead">
-          Your handle and bio. Other builders see them. <Link href="/dashboard/profile">Open Profile</Link>
+          <Link href="/dashboard/profile">Edit profile</Link> to change your handle and bio. Other builders see them.
         </p>
-      </section>
-      <section className="pf-section" aria-labelledby="referrals-heading">
-        <h2 id="referrals-heading">Referrals</h2>
-        <p className="pf-lead">
-          Invite other builders and see how a referral counts. <Link href="/dashboard/referrals">Open Referrals</Link>
-        </p>
+        {connected ? (
+          <p className="pf-lead">
+            <a className="pf-fact-link" href="/api/auth/hackclub/start">Sign in again with Hack Club Auth</a> to refresh your birthday and verification.
+          </p>
+        ) : (
+        <ConnectionPlaceholder
+          name="Hack Club Auth"
+          status="Not connected"
+          reason="Your name and email come from a local test account. Signing in with your Hack Club account is not connected yet."
+        >
+          <button type="button" className="pf-btn pri" disabled>
+            Sign in with Hack Club Auth
+          </button>
+        </ConnectionPlaceholder>
+        )}
       </section>
       <section className="pf-section" aria-labelledby="display-heading">
         <h2 id="display-heading">Display</h2>
         <AccessibilitySettings layout="page" />
+      </section>
+      <section className="pf-section" aria-labelledby="keys-heading">
+        <h2 id="keys-heading">API keys</h2>
+        <ApiKeysSection keys={keys} scopes={scopes} activeCount={keyList.filter((k) => k.status === "active").length} max={MAX_ACTIVE_KEYS} />
+      </section>
+      <section className="pf-section" aria-labelledby="privacy-heading">
+        <h2 id="privacy-heading">Privacy</h2>
+        <PrivacySection statsVisible={person?.statsVisible ?? false} handle={profile?.handle ?? ""} scheduledFor={erasure ? date(erasure.scheduledFor) : null} />
       </section>
     </>
   );

@@ -1,14 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-// The one quiet line every Community page carries: what is on it is proposed or sample content.
-export function SampleNote({ children }: { children: ReactNode }) {
-  return (
-    <p className="pf-event-line">
-      <span className="pf-event-dot" aria-hidden="true" />
-      <span>{children}</span>
-    </p>
-  );
+// The "proposed or sample content" line is not shown any more: nothing is labelled as a demo until release.
+export function SampleNote(props: { children: ReactNode }) {
+  void props;
+  return null;
 }
 
 // A section title with a link to the page that owns the full list.

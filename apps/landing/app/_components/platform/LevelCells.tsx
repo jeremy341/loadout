@@ -98,7 +98,7 @@ export function LevelCells({ cells, start }: Readonly<{ cells: LevelCell[]; star
             {cell.level}
           </span>
           {shown === index ? (
-            <span className="pf-strip-tip" data-edge={index < 2 ? "start" : index > cells.length - 3 ? "end" : undefined} aria-hidden="true">
+            <span className="pf-strip-tip" data-edge={index < 2 ? "start" : index > cells.length - 3 ? "end" : undefined} data-edge-m={index % 10 < 2 ? "start" : index % 10 > 7 ? "end" : undefined} aria-hidden="true">
               LV.{cell.level} / {cell.hours} H
             </span>
           ) : null}

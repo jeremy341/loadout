@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useId, useState } from "react";
 import { setFlagState, type FormState } from "@/lib/platform/actions";
 
 const idle: FormState = { status: "idle" };
@@ -20,7 +20,9 @@ export function FlagForm({ name, enabled }: { name: string; enabled: boolean }) 
   const reasonId = useId();
   const hintId = useId();
   const errorId = useId();
-  const reasonError = errorFor(state, "reason");
+  // The reason error goes once the reason is edited; the next submit brings a fresh result.
+  const [dismissed, setDismissed] = useState<FormState | null>(null);
+  const reasonError = state === dismissed ? undefined : errorFor(state, "reason");
   return (
     <form action={action} className="pf-panel" aria-label={`Change ${name}`}>
       <input type="hidden" name="name" value={name} />
@@ -37,13 +39,15 @@ export function FlagForm({ name, enabled }: { name: string; enabled: boolean }) 
           maxLength={500}
           aria-describedby={reasonError ? `${hintId} ${errorId}` : hintId}
           aria-invalid={reasonError ? true : undefined}
+          onChange={() => setDismissed(state)}
         />
-        {reasonError ? <p className="pf-error" id={errorId}>{reasonError}</p> : null}
+        {reasonError ? <p className="pf-error" id={errorId} role="alert">{reasonError}</p> : null}
       </div>
       <button className="pf-btn pri" type="submit" disabled={pending}>
         {pending ? "Saving" : enabled ? "Turn off" : "Turn on"}
       </button>
-      <div aria-live="polite"><FormStatus state={state} /></div>
+      {/* A field error is announced by its own alert above, so only an error with no field (and a save) is announced here, by the role on FormStatus, so the wrapper is not a second live region. */}
+      <div>{state.status === "error" && state.field ? null : <FormStatus state={state} />}</div>
     </form>
   );
 }

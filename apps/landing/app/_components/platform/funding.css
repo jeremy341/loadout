@@ -1,0 +1,14 @@
+/* Hardware funding card (Pixl's form). Tokens come from platform.css. Nothing here is saved. */
+.pf .pf-fund { display: grid; gap: 14px; }
+.pf .pf-fund p { margin: 0; }
+.pf .pf-fund-check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; }
+.pf .pf-fund-check input { flex: none; width: 22px; height: 22px; accent-color: var(--pf-link); }
+.pf .pf-fund-field { display: grid; gap: 6px; }
+.pf .pf-fund-field label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-fund-money { display: flex; align-items: center; gap: 8px; }
+.pf .pf-fund-money > span { font-weight: 700; }
+.pf .pf-fund-money .pf-input { width: 100%; max-width: 220px; }
+.pf .pf-fund-input:disabled, .pf .pf-fund-check input:disabled { cursor: not-allowed; opacity: 0.7; }
+.pf .pf-fund-ore { font-size: 0.875em; color: var(--pf-mut); }
+.pf .pf-fund-rules { font-size: 0.8125em; line-height: 1.6; color: var(--pf-mut); max-width: 62ch; }
+.pf .pf-fund-status { padding-top: 12px; border-top: 1px solid var(--pf-rule); font-size: 0.8125em; line-height: 1.6; }

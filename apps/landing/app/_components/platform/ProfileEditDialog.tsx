@@ -4,6 +4,7 @@ import { useActionState, useCallback, useEffect, useId, useRef, useState } from 
 import type { FormState } from "@/lib/platform/actions";
 import { BIO_MAX, HANDLE_MAX } from "@/lib/platform/profile";
 import { saveProfile } from "@/lib/platform/profile-actions";
+import { PfModal } from "./PfModal";
 import "./profile.css";
 
 const idle: FormState = { status: "idle" };
@@ -12,9 +13,9 @@ const idle: FormState = { status: "idle" };
 export const OPEN_PROFILE_EDIT_EVENT = "loadout:open-profile-edit";
 export const PROFILE_HEADING_ID = "profile-h1";
 
-export function OpenProfileEditButton({ children, primary = false }: Readonly<{ children: React.ReactNode; primary?: boolean }>) {
+export function OpenProfileEditButton({ children, primary = false, className }: Readonly<{ children: React.ReactNode; primary?: boolean; className?: string }>) {
   return (
-    <button type="button" className={primary ? "pf-btn pri" : "pf-btn"} onClick={() => window.dispatchEvent(new Event(OPEN_PROFILE_EDIT_EVENT))}>
+    <button type="button" className={className ?? (primary ? "pf-btn pri" : "pf-btn")} onClick={() => window.dispatchEvent(new Event(OPEN_PROFILE_EDIT_EVENT))}>
       {children}
     </button>
   );
@@ -50,7 +51,7 @@ function ProfileForm({ saved, onSaved, onCancel }: { saved: Saved; onSaved: () =
   }, [state]);
 
   return (
-    <form ref={form} action={action} className="pf-dialog-form" noValidate>
+    <form ref={form} action={action} className="pf-modal-form" noValidate>
       <div className="pf-field">
         <label htmlFor={handleId}>Handle</label>
         <span className="pf-hint" id={handleHint}>
@@ -93,7 +94,7 @@ function ProfileForm({ saved, onSaved, onCancel }: { saved: Saved; onSaved: () =
       <div aria-live="polite">
         {state.status === "error" && !state.field ? <p className="pf-error" role="alert">Could not save. Try again.</p> : null}
       </div>
-      <div className="pf-dialog-actions">
+      <div className="pf-modal-actions">
         <button type="button" className="pf-btn" onClick={onCancel}>Cancel</button>
         <button type="submit" className="pf-btn pri pf-wide" disabled={pending}>
           {pending ? "Saving" : "Save changes"}
@@ -106,17 +107,15 @@ function ProfileForm({ saved, onSaved, onCancel }: { saved: Saved; onSaved: () =
 // The profile dialog (handle and bio) and the "Profile saved." line. It stays mounted while the page refreshes, so the line
 // and the focus move survive the save. The form is remounted each time the dialog closes, so it opens on the saved values.
 export function ProfileEditDialog({ handle, bio }: Readonly<{ handle: string | null; bio: string | null }>) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const headingId = useId();
+  const [isOpen, setIsOpen] = useState(false);
   const [openCount, setOpenCount] = useState(0);
   const [saved, setSaved] = useState(false);
 
   const open = useCallback(() => {
     setSaved(false);
-    dialog.current?.showModal();
-    dialog.current?.querySelector<HTMLInputElement>('input[name="handle"]')?.focus();
+    setIsOpen(true);
   }, []);
-  const close = useCallback(() => dialog.current?.close(), []);
+  const close = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
     window.addEventListener(OPEN_PROFILE_EDIT_EVENT, open);
@@ -126,20 +125,24 @@ export function ProfileEditDialog({ handle, bio }: Readonly<{ handle: string | n
   // After a save the button that opened the dialog may be gone (the choose-a-handle block), so focus goes to the page h1.
   const onSaved = useCallback(() => {
     setSaved(true);
-    dialog.current?.close();
+    setIsOpen(false);
     window.setTimeout(() => document.getElementById(PROFILE_HEADING_ID)?.focus(), 60);
   }, []);
 
   return (
     <>
       <p className="pf-saved pf-prof-saved" role="status">{saved ? "Profile saved." : ""}</p>
-      <dialog ref={dialog} className="pf-dialog" aria-labelledby={headingId} onClose={() => setOpenCount((count) => count + 1)}>
-        <div className="pf-dialog-head">
-          <h2 id={headingId}>{handle ? "Edit profile" : "Choose a handle"}</h2>
-          <button type="button" className="pf-btn" onClick={close}>Close</button>
-        </div>
+      <PfModal
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+          setOpenCount((count) => count + 1);
+        }}
+        title={handle ? "Edit profile" : "Choose a handle"}
+        initialFocus='input[name="handle"]'
+      >
         <ProfileForm key={openCount} saved={{ handle, bio }} onSaved={onSaved} onCancel={close} />
-      </dialog>
+      </PfModal>
     </>
   );
 }

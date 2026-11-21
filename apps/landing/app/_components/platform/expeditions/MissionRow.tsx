@@ -12,7 +12,7 @@ export function MissionRow({ mission, status, progress }: Readonly<{ mission: Mi
       <span className="ex-tag">{mission.track}</span>
       <div className="ex-main">
         <h3 className="ex-name">
-          <Link className="ex-stretch" href={`/dashboard/expeditions/${mission.id}`}>
+          <Link className="ex-stretch" href={`/dashboard/shop/expeditions/${mission.id}`}>
             {mission.name}
           </Link>
         </h3>

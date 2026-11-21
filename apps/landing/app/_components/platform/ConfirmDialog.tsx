@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useId, useRef } from "react";
+import { useActionState, useEffect, useId, useState } from "react";
 import type { FormState } from "@/lib/platform/actions";
+import { PfModal } from "./PfModal";
 import "./toolbelt.css";
 
 const idle: FormState = { status: "idle" };
@@ -21,8 +22,13 @@ type Props = {
   fields: Record<string, string>;
 };
 
-function ConfirmForm({ body, confirmLabel, action, fields, onClose, onDone, bodyId }: Omit<Props, "open" | "title"> & { bodyId: string }) {
+function ConfirmForm({ body, confirmLabel, action, fields, onClose, onDone, bodyId, onBusy }: Omit<Props, "open" | "title"> & { bodyId: string; onBusy: (busy: boolean) => void }) {
   const [state, run, pending] = useActionState(action, idle);
+  // The modal around this form blocks Escape, the backdrop and Close while the action runs.
+  useEffect(() => {
+    onBusy(pending);
+    return () => onBusy(false);
+  }, [pending, onBusy]);
   useEffect(() => {
     if (state.status === "saved") onDone();
   }, [state, onDone]);
@@ -34,7 +40,7 @@ function ConfirmForm({ body, confirmLabel, action, fields, onClose, onDone, body
       <div className="pf-confirm-body" id={bodyId}>{body}</div>
       <div aria-live="polite">{state.status === "error" ? <p className="pf-error" role="alert">{state.message}</p> : null}</div>
       <div className="pf-confirm-actions">
-        <button type="button" className="pf-btn" data-cancel onClick={onClose}>Cancel</button>
+        <button type="button" className="pf-btn" data-cancel onClick={onClose} disabled={pending}>Cancel</button>
         <button type="submit" className="pf-btn pf-btn-danger" disabled={pending}>
           {pending ? "Saving" : confirmLabel}
         </button>
@@ -43,31 +49,16 @@ function ConfirmForm({ body, confirmLabel, action, fields, onClose, onDone, body
   );
 }
 
-// A native confirmation dialog (design spec 3.17): the title and the body text, Cancel focused first, Escape cancels, the confirm button
+// The confirmation modal (design spec 3.17): the title and the body text, Cancel focused first, Escape cancels (not while the action runs, when Cancel is disabled too), the confirm button
 // reads "Saving" while the action runs. The form exists only while open, so it is fresh every time. There is no Close button; Cancel is the close. Used for Remove and Block.
 export function ConfirmDialog(props: Readonly<Props>) {
   const { open, onClose, title } = props;
-  const dialog = useRef<HTMLDialogElement>(null);
-  const headingId = useId();
   const bodyId = useId();
-
-  useEffect(() => {
-    const element = dialog.current;
-    if (!element) return;
-    if (open && !element.open) {
-      element.showModal();
-      element.querySelector<HTMLButtonElement>("button[data-cancel]")?.focus();
-    } else if (!open && element.open) {
-      element.close();
-    }
-  }, [open]);
+  const [busy, setBusy] = useState(false);
 
   return (
-    <dialog ref={dialog} className="pf-dialog pf-confirm" aria-labelledby={headingId} aria-describedby={bodyId} onClose={onClose}>
-      <div className="pf-dialog-head">
-        <h2 id={headingId}>{title}</h2>
-      </div>
-      {open ? <ConfirmForm {...props} bodyId={bodyId} /> : null}
-    </dialog>
+    <PfModal open={open} onClose={onClose} title={title} size="confirm" variant="danger" closeButton={false} initialFocus="button[data-cancel]" describedBy={bodyId} busy={busy}>
+      {open ? <ConfirmForm {...props} bodyId={bodyId} onBusy={setBusy} /> : null}
+    </PfModal>
   );
 }

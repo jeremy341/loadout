@@ -26,11 +26,11 @@
 }
 
 /* ---- Small shared parts ---- */
-.pf .cm-tag { flex: none; border: 1px solid var(--pf-fg); padding: 3px 10px; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .cm-tag { flex: none; border: 1px solid var(--pf-fg); padding: 3px 10px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
 .pf .cm-closed { margin: 0 0 18px; max-width: 65ch; color: var(--pf-mut); font-size: 0.875em; }
 .pf .cm-h2 { margin: 0 0 12px; font: 700 1.25em/1.2 var(--font-pixel), monospace; text-transform: uppercase; }
 .pf .cm-plain { margin-top: 8px; }
-.pf .cm-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 0; color: var(--pf-mut); font-size: 0.8125em; }
+.pf .cm-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 0; color: var(--pf-mut); font-size: 0.875em; }
 .pf .cm-frame, .pf .cm-ideas-board, .pf .cm-sessions-ruled, .pf .cm-showcases, .pf .cm-news, .pf .cm-goals {
   margin: 0 0 24px;
   padding: 0 20px;
@@ -61,7 +61,7 @@
 .pf .cm-era-stages li[data-state="current"] .cm-era-bar { background: var(--pf-ac); }
 .pf .cm-era-name { font: 700 1em var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-mut); overflow-wrap: anywhere; }
 .pf .cm-era-stages li[data-state="current"] .cm-era-name { color: var(--pf-fg); }
-.pf .cm-era-state { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-era-state { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .cm-era-stages li[data-state="current"] .cm-era-state { color: var(--pf-link); }
 /* Five columns only from 900px: ELECTRIFICATION needs about 150px, so on a tablet the stages stay a list. */
 @media (min-width: 900px) {
@@ -71,17 +71,17 @@
 }
 .pf .cm-facts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 24px; margin: 0; }
 .pf .cm-facts > div { padding: 10px 0; border-top: 1px dashed var(--pf-rule); }
-.pf .cm-facts dt { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-facts dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .cm-facts dd { margin: 4px 0 0; }
 @media (min-width: 720px) {
   .pf .cm-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-.pf .cm-era-foot { margin: 8px 0 0; font-size: 0.8125em; color: var(--pf-mut); max-width: 70ch; }
+.pf .cm-era-foot { margin: 8px 0 0; font-size: 0.875em; color: var(--pf-mut); max-width: 70ch; }
 
 /* Two-column preview rows: a small label, then a link. */
 .pf .cm-mini { margin: 0; padding: 0; list-style: none; }
 .pf .cm-mini li { display: grid; grid-template-columns: minmax(84px, auto) minmax(0, 1fr); align-items: center; gap: 4px 14px; min-height: 48px; padding: 6px 0; border-top: 1px solid var(--pf-rule); }
-.pf .cm-mini-kind { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-mini-kind { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .cm-mini a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
 
 /* ---- Ideas ---- */
@@ -91,8 +91,8 @@
 .pf .cm-ideas-board > .cm-idea:first-child { border-top: 0; }
 .pf .cm-vote { display: grid; justify-items: start; align-content: start; gap: 2px; }
 .pf .cm-vote-n { font: 400 2.25em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
-.pf .cm-vote-l { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
-.pf .cm-upvote { width: 100%; min-height: 44px; margin-top: 8px; padding: 0 8px; font-size: 0.75em; }
+.pf .cm-vote-l { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-upvote { width: 100%; min-height: 44px; margin-top: 8px; padding: 0 8px; font-size: 0.8125em; }
 .pf .cm-idea-main { min-width: 0; }
 .pf .cm-idea-main h2, .pf .cm-idea-main h3 { margin: 0 0 6px; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
 .pf .cm-idea-main h2 a, .pf .cm-idea-main h3 a { color: var(--pf-fg); text-decoration: none; }
@@ -100,7 +100,7 @@
 .pf .cm-idea-summary { margin: 0 0 8px; max-width: 60ch; }
 
 /* The status is always a word; the small mark beside it is a second cue that differs by shape. */
-.pf .cm-status { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border: 1px solid var(--pf-fg); color: var(--pf-fg); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .cm-status { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border: 1px solid var(--pf-fg); color: var(--pf-fg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .pf .cm-status::before { content: ""; flex: none; width: 8px; height: 8px; border: 1px solid currentColor; }
 .pf .cm-status[data-status="planned"]::before { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
 .pf .cm-status[data-status="built"]::before { background: currentColor; }
@@ -119,7 +119,7 @@
 .pf .cm-sessions-ruled { margin: 0 0 24px; }
 .pf .cm-session { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px 16px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
 .pf .cm-sessions-ruled > .cm-session:first-child { border-top: 0; }
-.pf .cm-session-no, .pf .cm-session-meta { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-session-no, .pf .cm-session-meta { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .cm-session-main { min-width: 0; }
 .pf .cm-session-main h3 { margin: 0; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
 .pf .cm-session-main h3 a { color: var(--pf-fg); text-decoration: none; }
@@ -133,13 +133,13 @@
 .pf .cm-showcases h3 { margin: 0 0 4px; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
 .pf .cm-showcases p { margin: 0 0 8px; max-width: 60ch; }
 .pf .cm-showcases .cm-meta { margin: 0; }
-.pf .cm-track { display: inline-flex; align-items: center; gap: 6px; color: var(--pf-fg); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .cm-track { display: inline-flex; align-items: center; gap: 6px; color: var(--pf-fg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
 .pf .cm-track::before { content: ""; width: 10px; height: 10px; background: var(--tk, var(--pf-mut)); }
 
 /* ---- News ---- */
 .pf .cm-news > li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px 16px; padding: 16px 0; border-top: 1px solid var(--pf-rule); }
 .pf .cm-news > li:first-child { border-top: 0; }
-.pf .cm-news-kind { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
+.pf .cm-news-kind { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
 .pf .cm-news h2 { margin: 0 0 6px; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
 .pf .cm-news p { margin: 0; max-width: 65ch; }
 @media (min-width: 720px) {
@@ -150,7 +150,7 @@
 .pf .cm-leader th.cm-handle { font: 700 1em var(--font-pixel), monospace; letter-spacing: 0; text-transform: none; color: var(--pf-fg); border-bottom-color: var(--pf-rule); }
 .pf .cm-leader tbody tr:last-child th.cm-handle { border-bottom: 0; }
 .pf .cm-rank { font: 400 1.5em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.pf .cm-tie { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-tie { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
 .pf .cm-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* ---- Goals ---- */
@@ -171,7 +171,7 @@
 .pf .cm-goal-value { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
 .pf .cm-goal-pct { font: 400 1.75em/1 var(--font-display), monospace; color: var(--pf-link); }
 .pf .cm-goal-reward { margin: 14px 0 0; max-width: 65ch; font-size: 0.875em; }
-.pf .cm-goal-reward-label { display: block; margin-bottom: 2px; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-goal-reward-label { display: block; margin-bottom: 2px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 
 @media (max-width: 559px) {
   .pf .cm-frame, .pf .cm-ideas-board, .pf .cm-sessions-ruled, .pf .cm-showcases, .pf .cm-news, .pf .cm-goals { padding: 0 14px; }

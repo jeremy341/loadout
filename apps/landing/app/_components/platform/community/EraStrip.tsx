@@ -11,7 +11,6 @@ export function EraStrip() {
     <section className="pf-box cm-era" aria-labelledby="cm-era-title">
       <div className="pf-box-head">
         <h2 id="cm-era-title">Community Era</h2>
-        <span className="cm-tag">Proposed</span>
       </div>
       <p className="cm-era-lead">LOADOUT advances when builders do. The stages are an example sequence, not a schedule.</p>
       <ol className="cm-era-stages" aria-label="Example Era sequence">

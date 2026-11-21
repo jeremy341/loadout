@@ -3,29 +3,39 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "@/app/_components/platform/expeditions.css";
 import { ExFlow } from "@/app/_components/platform/expeditions/Flow";
+import { StatusChip } from "@/app/_components/platform/expeditions/StatusChip";
 import { ShopPhoto } from "@/app/_components/platform/ShopCard";
-import { itemCount, nextStepText, ORDER_STATUSES, orderById, orderLines, orderStatusLabel, orderTotal, statusIndex } from "@/lib/platform/orders";
+import "@/app/_components/platform/orders-live.css";
+import { CancelOrder } from "@/app/_components/platform/expeditions/CancelOrder";
+import { nextStepText, ORDER_STATUSES, orderStatusLabel, statusDay, statusIndex } from "@/lib/platform/orders";
+import { viewCount, viewLines, viewTotal } from "@/lib/platform/orders-view";
 import { requireViewer } from "@/lib/platform/session";
 import { sampleApprovedHours } from "@/lib/platform/shop";
+import { orderForViewer, shopOrderingOn } from "@/lib/platform/shop-ordering";
+import { cancelOrderAction } from "../actions";
 
 export const metadata: Metadata = { title: "Order - LOADOUT" };
 
 const ore = (value: number) => `${value.toLocaleString("en-GB")} Ore`;
 
-// One sample order: where it is on the Placed, Packed, Shipped, Delivered strip, what happens next, and its lines at the
-// shop's prices. Nothing can be cancelled or changed. An unknown id is a plain 404.
+// One order of the signed-in person (the address is the order number in lower case, as in /dashboard/orders/lo-1101): where it
+// is on the Placed, Packed, Shipped, Delivered strip, what happens next, and its lines as paid. A cancelled order shows a
+// Cancelled chip and no strip. Cancel order is offered only while it is placed and the shop-ordering flag is on. An unknown id,
+// or someone else's order, is a plain 404. Local development shows fixture orders for a person with no real ones.
 export default async function OrderPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireViewer();
+  const viewer = await requireViewer();
   const { id } = await params;
-  const order = orderById(id);
+  const order = await orderForViewer(viewer.id, id);
   if (!order) notFound();
+  const cancelled = order.cancelled === true;
+  const canCancel = !cancelled && order.status === "placed" && order.paid !== undefined && (await shopOrderingOn());
 
   const approved = sampleApprovedHours();
-  const lines = orderLines(order, approved);
+  const lines = viewLines(order, approved);
   const delivered = order.status === "delivered";
 
   return (
-    <>
+    <div className="pf-flat">
       <div className="pf-crumbs">
         <Link className="pf-back" href="/dashboard/orders">
           <svg viewBox="0 0 12 12" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
@@ -41,25 +51,40 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
           <dl className="pf-meta-box">
             <div>
               <dt>Status</dt>
-              <dd>{orderStatusLabel(order.status)}</dd>
+              <dd>
+                <StatusChip status={order.status} cancelled={cancelled} />
+              </dd>
+            </div>
+            <div>
+              <dt>Placed</dt>
+              <dd className="ex-num">{statusDay(order, "placed") ?? "-"}</dd>
             </div>
             <div>
               <dt>Items</dt>
-              <dd className="ex-num">{itemCount(order, approved)}</dd>
+              <dd className="ex-num">{viewCount(order, approved)}</dd>
             </div>
             <div>
               <dt>Total</dt>
-              <dd className="ex-num">{ore(orderTotal(order, approved))}</dd>
+              <dd className="ex-num">{ore(viewTotal(order, approved))}</dd>
             </div>
           </dl>
         </div>
       </div>
 
-      <section className="pf-box" aria-labelledby="progress-heading">
-        <h2 id="progress-heading">Progress</h2>
-        <ExFlow steps={ORDER_STATUSES.map((status) => ({ label: orderStatusLabel(status) }))} current={statusIndex(order.status)} complete={delivered} label="Order progress" />
-        <p className="ex-closed">{nextStepText(order.status)}</p>
-      </section>
+      {cancelled ? (
+        <p className="ol-cancelled-note">This order was cancelled. The Ore you paid went back to your balance.</p>
+      ) : (
+        <section className="pf-box" aria-labelledby="progress-heading">
+          <h2 id="progress-heading">Progress</h2>
+          <ExFlow steps={ORDER_STATUSES.map((status) => ({ label: orderStatusLabel(status), note: statusDay(order, status) ?? "Not yet" }))} current={statusIndex(order.status)} complete={delivered} label="Order progress" />
+          <p className="ex-closed">{nextStepText(order.status)}</p>
+          {canCancel ? (
+            <div className="ol-meta-actions">
+              <CancelOrder number={order.number} action={cancelOrderAction} />
+            </div>
+          ) : null}
+        </section>
+      )}
 
       <section className="pf-box" aria-labelledby="items-heading">
         <h2 id="items-heading">Items</h2>
@@ -93,8 +118,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
             ))}
           </tbody>
         </table>
-        <p className="ex-closed">This is a sample order over the proposed catalog. Prices follow the shop&apos;s rules at your level. Nothing was bought and nothing here can be changed.</p>
       </section>
-    </>
+    </div>
   );
 }

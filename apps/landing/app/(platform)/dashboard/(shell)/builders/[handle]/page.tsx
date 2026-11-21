@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { ProfileView } from "@/app/_components/platform/ProfileView";
 import { getProfileByHandle } from "@/lib/platform/profile-data";
-import { builderRedirect, parseProfileQuery } from "@/lib/platform/profile-view";
+import { builderRedirect, isLegacyProfileTab } from "@/lib/platform/profile-view";
 import { requireViewer } from "@/lib/platform/session";
 
 export const metadata: Metadata = { title: "Builder - LOADOUT" };
@@ -27,10 +27,12 @@ export default async function BuilderPage({
   const person = await getProfileByHandle(raw.toLowerCase());
   if (!person) notFound();
 
-  const query = parseProfileQuery(await searchParams, false);
+  const rawTab = (await searchParams).tab;
   const redirectTo = builderRedirect(viewer.id, person.id, raw, person.handle);
   if (redirectTo === "own") redirect("/dashboard/profile");
   if (redirectTo === "lower") redirect(`/dashboard/builders/${person.handle}`);
+  // The Journal and Toolbelt tabs are gone; their old links go to the bare profile.
+  if (isLegacyProfileTab(rawTab)) redirect(`/dashboard/builders/${person.handle}`);
 
-  return <ProfileView person={person} viewerId={viewer.id} query={query} own={false} base={`/dashboard/builders/${person.handle}`} />;
+  return <ProfileView person={person} own={false} />;
 }

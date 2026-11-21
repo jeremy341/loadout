@@ -49,7 +49,9 @@ export async function fetchGithubReadme(
       redirect: "error",
     });
     if (response.status === 404) return "";
-    if (!response.ok) return isTransientStatus(response.status) ? null : "";
+    // GitHub answers 403 with an exhausted rate limit; that is temporary, not a missing README.
+    const rateLimited = response.status === 403 && response.headers.get("x-ratelimit-remaining") === "0";
+    if (!response.ok) return isTransientStatus(response.status) || rateLimited ? null : "";
     return await response.text();
   } catch {
     // Network errors and timeouts are transient: keep waiting.

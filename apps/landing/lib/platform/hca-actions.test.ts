@@ -97,6 +97,13 @@ afterAll(() => {
   else globalForDb.loadoutDbClientReview = savedClient;
 });
 
+// Re-establish the fake client before every case: the runner shares globalThis across test files,
+// and another file can replace the cached client between this file's cases.
+beforeEach(() => {
+  process.env.DATABASE_URL = "postgres://unused@localhost/loadout";
+  globalForDb.loadoutDbClientReview = fakePrisma;
+});
+
 const startRequest = (ip: string) =>
   new Request("https://loadout.test/api/auth/hackclub/start", { headers: { "x-forwarded-for": ip } });
 

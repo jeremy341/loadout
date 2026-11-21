@@ -113,6 +113,7 @@ jobs:
       LOADOUT_E2E_MATCH: ${{ matrix.match }}
       LOADOUT_E2E_IGNORE: ${{ matrix.ignore }}
       DATABASE_URL: postgresql://loadout:loadout-local@postgres:5432/loadout_dev
+      NODE_ENV: development
       LOADOUT_LOCAL_TEST_ACCOUNTS: "true"
       LOADOUT_UPLOADS: "true"
     # The pinned Playwright image already carries Chromium and its system libraries, so a shard
@@ -133,7 +134,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U loadout"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5

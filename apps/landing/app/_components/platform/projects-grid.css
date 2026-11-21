@@ -1,0 +1,38 @@
+/* The Projects page after the Stasis dashboard: a stats row with the action on the right, then one grid (1, 2, 3 and 4 across at
+   640, 1024 and 1280 px, 16 px gap) with the dashed New project tile first. Tokens only (--pf-*), so both themes follow. */
+.pf .pf-sg-head { display: flex; flex-direction: column; gap: 16px; margin: 0 0 24px; }
+@media (min-width: 640px) {
+  .pf .pf-sg-head { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+.pf .pf-sg-head h1 { margin: 0 0 8px; }
+.pf .pf-sg-head .pf-lead { margin: 0 0 16px; }
+.pf .pf-sg-stats { display: flex; gap: 16px 24px; margin: 0; }
+.pf .pf-sg-stats div { margin: 0; }
+.pf .pf-sg-stats dt { font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-sg-stats dd { margin: 2px 0 0; font: 700 1.5em/1.2 var(--font-pixel), monospace; }
+.pf .pf-sg-stats .pf-sg-stat-ac { color: var(--pf-link); }
+.pf .pf-sg-head .pf-btn { text-decoration: none; }
+
+.pf .pf-sg-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 640px) { .pf .pf-sg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .pf .pf-sg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .pf .pf-sg-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.pf .pf-sg-grid > li { display: flex; min-width: 0; }
+.pf .pf-sg-grid > li > * { flex: 1; min-width: 0; }
+/* Stasis's New Project tile has the plus and the words only. */
+.pf .pf-sg-grid .pf-new-sub { display: none; }
+.pf .pf-sg-grid .pf-new-card { border-width: 2px; }
+
+.pf .pf-sg-card { display: flex; flex-direction: column; border: 1px solid var(--pf-rule); background: var(--pf-bg); color: var(--pf-fg); text-decoration: none; overflow: hidden; }
+.pf .pf-sg-card:hover, .pf .pf-sg-card:focus-visible { border-color: var(--pf-link); background: var(--pf-panel); }
+.pf .pf-sg-card .pf-project-cover { aspect-ratio: 16 / 9; min-height: 0; }
+.pf .pf-sg-body { display: flex; flex-direction: column; gap: 4px; padding: 16px; }
+.pf .pf-sg-title { display: flex; align-items: center; gap: 8px; color: var(--pf-link); font: 700 1.125em/1.3 var(--font-pixel), monospace; text-transform: uppercase; letter-spacing: 0.04em; }
+.pf .pf-sg-title-text { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.pf .pf-sg-pin { display: inline-flex; flex: none; }
+.pf .pf-sg-hours { display: block; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.02em; color: var(--pf-fg); }
+.pf .pf-sg-desc { display: -webkit-box; margin-top: 4px; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 0.8125em; line-height: 1.6; color: var(--pf-mut); }
+
+.pf .pf-sg-empty { padding: 32px; text-align: center; color: var(--pf-fg); }
+.pf .pf-sg-pager { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 28px; font-size: 0.875em; }
+.pf .pf-sg-pager a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }

@@ -1,0 +1,227 @@
+/* Editor themes for the internal dashboard (picked on /settings, ids in
+   lib/staffSettings.ts THEMES). Each one sets the same tokens the built-in
+   dark/light themes do, so every hc-* component follows. --theme-primary is
+   the theme's own accent: it shows when the accent setting is "theme", and
+   any other accent choice overrides it (see the accent rules in admin.css). */
+
+html[data-theme="jetbrains"] {
+  color-scheme: dark;
+}
+html[data-theme="jetbrains"]:has(.admin-shell) {
+  background: #1e1f22;
+  scrollbar-color: #4e5157 #1e1f22;
+}
+html[data-theme="jetbrains"] .admin-shell {
+  --background: #1e1f22;
+  --surface: #2b2d30;
+  --surface-hover: #393b40;
+  --sunken: #191a1c;
+  --border: #393b40;
+  --border-strong: #4e5157;
+  --text: #dfe1e5;
+  --secondary: #bcbec4;
+  --muted: #868a91;
+  --placeholder: #6f737a;
+  --theme-primary: #3574f0;
+  --accent: #56a8f5;
+}
+
+html[data-theme="cursor"] {
+  color-scheme: dark;
+}
+html[data-theme="cursor"]:has(.admin-shell) {
+  background: #141414;
+  scrollbar-color: #3a3a3a #141414;
+}
+html[data-theme="cursor"] .admin-shell {
+  --background: #141414;
+  --surface: #1c1c1c;
+  --surface-hover: #262626;
+  --sunken: #0f0f0f;
+  --border: #2a2a2a;
+  --border-strong: #3a3a3a;
+  --text: #e4e4e4;
+  --secondary: #b4b4b4;
+  --muted: #8a8a8a;
+  --placeholder: #5f5f5f;
+  --theme-primary: #3c9cfc;
+  --accent: #88c0d0;
+}
+
+html[data-theme="tokyo-night"] {
+  color-scheme: dark;
+}
+html[data-theme="tokyo-night"]:has(.admin-shell) {
+  background: #1a1b26;
+  scrollbar-color: #3b4261 #1a1b26;
+}
+html[data-theme="tokyo-night"] .admin-shell {
+  --background: #1a1b26;
+  --surface: #1f2335;
+  --surface-hover: #292e42;
+  --sunken: #16161e;
+  --border: #292e42;
+  --border-strong: #3b4261;
+  --text: #c0caf5;
+  --secondary: #a9b1d6;
+  --muted: #737aa2;
+  --placeholder: #565f89;
+  --theme-primary: #7aa2f7;
+  --accent: #7dcfff;
+}
+
+html[data-theme="dracula"] {
+  color-scheme: dark;
+}
+html[data-theme="dracula"]:has(.admin-shell) {
+  background: #282a36;
+  scrollbar-color: #565970 #282a36;
+}
+html[data-theme="dracula"] .admin-shell {
+  --background: #282a36;
+  --surface: #303241;
+  --surface-hover: #383a4a;
+  --sunken: #21222c;
+  --border: #44475a;
+  --border-strong: #565970;
+  --text: #f8f8f2;
+  --secondary: #d6d6e0;
+  --muted: #8b93b8;
+  --placeholder: #6272a4;
+  --theme-primary: #bd93f9;
+  --accent: #8be9fd;
+}
+
+html[data-theme="catppuccin"] {
+  color-scheme: dark;
+}
+html[data-theme="catppuccin"]:has(.admin-shell) {
+  background: #181825;
+  scrollbar-color: #45475a #181825;
+}
+html[data-theme="catppuccin"] .admin-shell {
+  --background: #181825;
+  --surface: #1e1e2e;
+  --surface-hover: #313244;
+  --sunken: #11111b;
+  --border: #313244;
+  --border-strong: #45475a;
+  --text: #cdd6f4;
+  --secondary: #bac2de;
+  --muted: #7f849c;
+  --placeholder: #6c7086;
+  --theme-primary: #cba6f7;
+  --accent: #89dceb;
+}
+
+html[data-theme="nord"] {
+  color-scheme: dark;
+}
+html[data-theme="nord"]:has(.admin-shell) {
+  background: #2e3440;
+  scrollbar-color: #4c566a #2e3440;
+}
+html[data-theme="nord"] .admin-shell {
+  --background: #2e3440;
+  --surface: #3b4252;
+  --surface-hover: #434c5e;
+  --sunken: #272c36;
+  --border: #434c5e;
+  --border-strong: #4c566a;
+  --text: #eceff4;
+  --secondary: #d8dee9;
+  --muted: #9aa5b8;
+  --placeholder: #616e88;
+  --theme-primary: #88c0d0;
+  --accent: #81a1c1;
+}
+
+html[data-theme="gruvbox"] {
+  color-scheme: dark;
+}
+html[data-theme="gruvbox"]:has(.admin-shell) {
+  background: #282828;
+  scrollbar-color: #504945 #282828;
+}
+html[data-theme="gruvbox"] .admin-shell {
+  --background: #282828;
+  --surface: #32302f;
+  --surface-hover: #3c3836;
+  --sunken: #1d2021;
+  --border: #3c3836;
+  --border-strong: #504945;
+  --text: #ebdbb2;
+  --secondary: #d5c4a1;
+  --muted: #a89984;
+  --placeholder: #7c6f64;
+  --theme-primary: #fe8019;
+  --accent: #83a598;
+}
+
+html[data-theme="one-dark"] {
+  color-scheme: dark;
+}
+html[data-theme="one-dark"]:has(.admin-shell) {
+  background: #21252b;
+  scrollbar-color: #4b5263 #21252b;
+}
+html[data-theme="one-dark"] .admin-shell {
+  --background: #21252b;
+  --surface: #282c34;
+  --surface-hover: #2c313a;
+  --sunken: #1b1f23;
+  --border: #3a3f4b;
+  --border-strong: #4b5263;
+  --text: #d7dae0;
+  --secondary: #abb2bf;
+  --muted: #7f848e;
+  --placeholder: #5c6370;
+  --theme-primary: #61afef;
+  --accent: #56b6c2;
+}
+
+html[data-theme="rose-pine"] {
+  color-scheme: dark;
+}
+html[data-theme="rose-pine"]:has(.admin-shell) {
+  background: #191724;
+  scrollbar-color: #403d52 #191724;
+}
+html[data-theme="rose-pine"] .admin-shell {
+  --background: #191724;
+  --surface: #1f1d2e;
+  --surface-hover: #26233a;
+  --sunken: #13111e;
+  --border: #26233a;
+  --border-strong: #403d52;
+  --text: #e0def4;
+  --secondary: #c4c0dc;
+  --muted: #908caa;
+  --placeholder: #6e6a86;
+  --theme-primary: #ebbcba;
+  --accent: #9ccfd8;
+}
+
+html[data-theme="solarized-light"] {
+  color-scheme: light;
+}
+html[data-theme="solarized-light"]:has(.admin-shell) {
+  background: #fdf6e3;
+  scrollbar-color: #d3cbb0 #fdf6e3;
+}
+html[data-theme="solarized-light"] .admin-shell {
+  --background: #fdf6e3;
+  --surface: #fffdf6;
+  --surface-hover: #f5efdc;
+  --sunken: #eee8d5;
+  --border: #e4dcc4;
+  --border-strong: #d3cbb0;
+  --text: #073642;
+  --secondary: #586e75;
+  --muted: #839496;
+  --placeholder: #93a1a1;
+  --theme-primary: #268bd2;
+  --accent: #2aa198;
+  --hc-cream: #073642;
+  --on-cream: #fdf6e3;
+}

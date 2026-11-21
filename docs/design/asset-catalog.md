@@ -29,6 +29,10 @@ The optional Phantom Sans setting uses the Regular, Bold and Italic WOFF2 files 
 
 `apps/landing/public/loadout/prizes/` holds eight product photos for the proposed-prizes belt: `framework-16`, `esp32`, `rpi`, `soldering-iron`, `samsung-t7-ssd`, `a1-mini`, `domain-grant` and `centauri-carbon`, all `.webp`, about 310 KB together. They come from Pixl's shop and are used under the Pixl owner's permission and MIT licence; each source path is in `docs/source-audit/ATTRIBUTION.md`. They show products made by other companies as examples, not as promises. `PlannedPrizes.tsx` lists them.
 
+### Shop photos
+
+`apps/landing/public/loadout/shop/` holds the 60 cut-out product pictures for the proposed shop catalog (`apps/landing/lib/platform/shop.ts`), all `.webp`, about 2.2 MB together. File names carry an eight-character content hash (`name.<hash>.webp`) so a changed picture is never served from a stale cache. The pictures come from Pixl, Stardance and Wikimedia Commons; each source, author and licence is in `docs/source-audit/ATTRIBUTION.md`, and Commons photos show their credit on the item page. Items without a suitable photo use the owner sprites in `public/loadout/sprites/`.
+
 ### Logo and share image
 
 The miner's helmet mark is drawn in `apps/landing/app/_components/home/Logo.tsx`. `apps/landing/app/icon.svg` and `apple-icon.png` are the favicon and touch icon. `opengraph-image.jpg` and `twitter-image.jpg` in `apps/landing/app` are identical 1200 by 630 share images (under 300 KB), each with its `.alt.txt`. They preserve main's original background and details; its blue label is centered above the wordmark, the helmet is removed, and the enlarged bottom logo variant—with dirt-colored details—sits above centered Jersey 10 tagline and track names. The depth-strip readout is softened. `assets/editable/logo/build-share-preview.ps1` reproduces the exports from `share-preview-main-base.jpg`. The owner's 2304 by 768 presentation of both variants is `assets/editable/logo/wordmark-composite-2304.png`; the 192 by 64 PNGs remain the pixel masters. Exact source revisions and unused logo alternatives are recorded in that folder's README.

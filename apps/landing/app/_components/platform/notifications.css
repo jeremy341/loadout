@@ -1,0 +1,85 @@
+/* Notifications, the follow and block controls and the shared text control (.pf-tl). Flat and square: words, not boxes; one
+   rule under each small grey title. Only colour changes on hover, so nothing animates and reduced motion needs no case. */
+
+/* ---- The text control: a word that acts. Underlined on hover and when pressed. ---- */
+.pf .pf-tl {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--pf-link);
+  font: inherit;
+  font-size: 15px;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  cursor: pointer;
+}
+.pf .pf-tl:hover, .pf .pf-tl[aria-pressed="true"] { text-decoration-color: currentColor; }
+.pf .pf-tl[aria-pressed="true"] { color: var(--pf-fg); }
+.pf .pf-tl:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-tl:disabled, .pf .pf-tl[aria-disabled="true"] { color: var(--pf-mut); cursor: default; text-decoration-color: transparent; }
+.pf .pf-tl-quiet { color: var(--pf-mut); }
+.pf .pf-tl-quiet:hover { color: var(--pf-fg); }
+
+/* ---- Notifications page ---- */
+.pf .pf-nt { max-width: 760px; }
+.pf .pf-nt-head { margin: 0 0 20px; }
+.pf .pf-nt-head h1 { margin: 0; }
+.pf .pf-nt-sec { margin: 0 0 40px; }
+.pf .pf-nt-h { margin: 0; padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-nt-bar { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--pf-fg); }
+.pf .pf-nt-bar .pf-nt-h { flex: 1; border: 0; }
+.pf .pf-nt-bar .pf-tl { padding-right: 0; }
+.pf .pf-nt-list, .pf .pf-nt-prefs { list-style: none; margin: 0; padding: 0; }
+.pf .pf-nt-row { border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-nt-link { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px 0; color: var(--pf-fg); text-decoration: none; }
+.pf a.pf-nt-link:hover .pf-nt-title { text-decoration: underline; text-underline-offset: 4px; }
+.pf a.pf-nt-link:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-nt-dot { width: 8px; height: 8px; margin-top: 8px; border: 1px solid var(--pf-rule); }
+.pf .pf-nt-dot[data-unread="true"] { background: var(--pf-link); border-color: var(--pf-link); }
+.pf .pf-nt-main { display: grid; gap: 2px; min-width: 0; }
+.pf .pf-nt-row[data-unread="false"] .pf-nt-title { color: var(--pf-mut); }
+.pf .pf-nt-body { color: var(--pf-mut); overflow-wrap: anywhere; white-space: pre-line; }
+.pf .pf-nt-title { overflow-wrap: anywhere; }
+.pf .pf-nt-when { color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.06em; white-space: nowrap; padding-top: 2px; }
+.pf .pf-nt-status { margin: 8px 0 0; min-height: 1.4em; color: var(--pf-mut); font-size: 13px; }
+.pf .pf-nt-more { margin: 0; }
+.pf .pf-nt-prefs { margin-top: 4px; }
+.pf .pf-nt-pref { display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+.pf .pf-nt-pref input { width: 18px; height: 18px; margin: 0; border-radius: 0; accent-color: var(--pf-link); flex: none; }
+.pf .pf-nt-pref input:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+
+/* ---- Unread count beside Notifications in the account menu ---- */
+.pf .pf-account-menu .pf-unread { margin-left: 8px; padding: 0 6px; background: var(--pf-link); color: var(--pf-bg); font: 400 12px var(--font-dot), monospace; line-height: 18px; display: inline-block; min-width: 18px; text-align: center; }
+
+/* ---- Follow and block on a builder's profile ---- */
+.pf .pf-rel { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; }
+.pf .pf-sp-counts { margin: 8px 0 0; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.06em; }
+.pf .pf-sp-counts span + span::before { content: "\00b7"; margin: 0 8px; }
+.pf .pf-rel-msg { flex-basis: 100%; margin: 0; color: var(--pf-err); font-size: 13px; }
+.pf .pf-rel-note { margin: 0 0 8px; }
+
+/* ---- Collaborators block (Settings tab) and the invites notice on Projects ---- */
+.pf .pf-collab { margin: 32px 0 0; max-width: 560px; }
+.pf .pf-collab-list { list-style: none; margin: 0; padding: 0; }
+.pf .pf-collab-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-collab-state { color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.06em; }
+.pf .pf-collab-invite { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.pf .pf-collab-invite input { flex: 1 1 180px; min-width: 0; min-height: 44px; padding: 0 0 0 2px; border: 0; border-bottom: 1px solid var(--pf-fg); border-radius: 0; background: transparent; color: var(--pf-fg); font: inherit; }
+.pf .pf-collab-invite input:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-invites { margin: 0 0 24px; max-width: 760px; }
+.pf .pf-invites ul { list-style: none; margin: 0; padding: 0; }
+.pf .pf-invites li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-height: 44px; border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-invites li > span { flex: 1 1 220px; overflow-wrap: anywhere; }
+.pf .pf-inline-msg { margin: 6px 0 0; min-height: 1.4em; font-size: 13px; color: var(--pf-mut); }
+.pf .pf-inline-msg[data-error="true"] { color: var(--pf-err); }
+
+@media (max-width: 520px) {
+  .pf .pf-nt-link { grid-template-columns: 12px minmax(0, 1fr); }
+  .pf .pf-nt-when { grid-column: 2; }
+}

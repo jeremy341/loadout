@@ -1,0 +1,218 @@
+/* Community section (proposed pages). Uses the --pf-* tokens from platform.css and the shared classes (pf-box, pf-table,
+   pf-explore-filters, pf-event-line). Lists share one idiom: a single framed sheet whose rows are separated by rules, so
+   nothing bordered ever sits inside something bordered. Nothing animates. */
+
+/* ---- Tab row ---- */
+.pf .cm-tabs { margin: 0 0 22px; border-bottom: 1px solid var(--pf-rule); }
+.pf .cm-tabs ul { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 0; padding: 0; list-style: none; }
+.pf .cm-tabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  color: var(--pf-mut);
+  font: 400 12px var(--font-dot), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.pf .cm-tabs a:hover { color: var(--pf-link); }
+.pf .cm-tabs a[aria-current="page"] {
+  color: var(--pf-fg);
+  box-shadow: inset 0 -3px 0 var(--pf-ac);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/* ---- Small shared parts ---- */
+.pf .cm-tag { flex: none; border: 1px solid var(--pf-fg); padding: 3px 10px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .cm-closed { margin: 0 0 18px; max-width: 65ch; color: var(--pf-mut); font-size: 0.875em; }
+.pf .cm-h2 { margin: 0 0 12px; font: 700 1.25em/1.2 var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .cm-plain { margin-top: 8px; }
+.pf .cm-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 0; color: var(--pf-mut); font-size: 0.875em; }
+.pf .cm-frame, .pf .cm-ideas-board, .pf .cm-sessions-ruled, .pf .cm-showcases, .pf .cm-news, .pf .cm-goals {
+  margin: 0 0 24px;
+  padding: 0 20px;
+  list-style: none;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 4px 4px 0 var(--pf-edge);
+}
+.pf .cm-detail-head { display: grid; gap: 18px; margin: 0 0 24px; }
+.pf .cm-detail-head h1 { margin: 0; }
+.pf .cm-handle-text { text-transform: none; }
+
+/* ---- Overview ---- */
+.pf .cm-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin: 0 0 24px; }
+.pf .cm-grid > .pf-box { margin: 0; }
+@media (min-width: 900px) {
+  .pf .cm-grid-wide { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+  .pf .cm-grid-even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* The Era: five stages as a strip of bars, then the rules in three short facts. */
+.pf .cm-era .pf-box-head { align-items: center; }
+.pf .cm-era-lead { margin: 0 0 18px; max-width: 65ch; }
+.pf .cm-era-stages { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin: 0 0 20px; padding: 0; list-style: none; }
+.pf .cm-era-stages li { display: grid; grid-template-columns: 14px minmax(0, 1fr); align-items: center; gap: 2px 12px; }
+.pf .cm-era-bar { grid-row: 1 / span 2; width: 14px; height: 14px; background: var(--pf-cell-off); }
+.pf .cm-era-stages li[data-state="earlier"] .cm-era-bar { background: var(--pf-mut); }
+.pf .cm-era-stages li[data-state="current"] .cm-era-bar { background: var(--pf-ac); }
+.pf .cm-era-name { font: 700 1em var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-mut); overflow-wrap: anywhere; }
+.pf .cm-era-stages li[data-state="current"] .cm-era-name { color: var(--pf-fg); }
+.pf .cm-era-state { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-era-stages li[data-state="current"] .cm-era-state { color: var(--pf-link); }
+/* Five columns only from 900px: ELECTRIFICATION needs about 150px, so on a tablet the stages stay a list. */
+@media (min-width: 900px) {
+  .pf .cm-era-stages { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .pf .cm-era-stages li { grid-template-columns: minmax(0, 1fr); gap: 8px; align-items: start; }
+  .pf .cm-era-bar { grid-row: auto; width: 100%; height: 10px; }
+}
+.pf .cm-facts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 24px; margin: 0; }
+.pf .cm-facts > div { padding: 10px 0; border-top: 1px dashed var(--pf-rule); }
+.pf .cm-facts dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-facts dd { margin: 4px 0 0; }
+@media (min-width: 720px) {
+  .pf .cm-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.pf .cm-era-foot { margin: 8px 0 0; font-size: 0.875em; color: var(--pf-mut); max-width: 70ch; }
+
+/* Two-column preview rows: a small label, then a link. */
+.pf .cm-mini { margin: 0; padding: 0; list-style: none; }
+.pf .cm-mini li { display: grid; grid-template-columns: minmax(84px, auto) minmax(0, 1fr); align-items: center; gap: 4px 14px; min-height: 48px; padding: 6px 0; border-top: 1px solid var(--pf-rule); }
+.pf .cm-mini-kind { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-mini a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }
+
+/* ---- Ideas ---- */
+.pf .cm-ideas { margin: 0; padding: 0; list-style: none; }
+.pf .cm-ideas-board { margin-top: 0; }
+.pf .cm-idea { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1px solid var(--pf-rule); }
+.pf .cm-ideas-board > .cm-idea:first-child { border-top: 0; }
+.pf .cm-vote { display: grid; justify-items: start; align-content: start; gap: 2px; }
+.pf .cm-vote-n { font: 400 2.25em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
+.pf .cm-vote-l { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-upvote { width: 100%; min-height: 44px; margin-top: 8px; padding: 0 8px; font-size: 0.8125em; }
+.pf .cm-idea-main { min-width: 0; }
+.pf .cm-idea-main h2, .pf .cm-idea-main h3 { margin: 0 0 6px; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .cm-idea-main h2 a, .pf .cm-idea-main h3 a { color: var(--pf-fg); text-decoration: none; }
+.pf .cm-idea-main h2 a:hover, .pf .cm-idea-main h3 a:hover { color: var(--pf-link); text-decoration: underline; }
+.pf .cm-idea-summary { margin: 0 0 8px; max-width: 60ch; }
+
+/* The status is always a word; the small mark beside it is a second cue that differs by shape. */
+.pf .cm-status { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border: 1px solid var(--pf-fg); color: var(--pf-fg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .cm-status::before { content: ""; flex: none; width: 8px; height: 8px; border: 1px solid currentColor; }
+.pf .cm-status[data-status="planned"]::before { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+.pf .cm-status[data-status="built"]::before { background: currentColor; }
+.pf .cm-status[data-status="declined"]::before { background: linear-gradient(45deg, transparent 42%, currentColor 42% 58%, transparent 58%); }
+
+.pf .cm-reply { max-width: 720px; }
+.pf .cm-reply p { margin: 0; }
+.pf .cm-vote-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.pf .cm-vote-bar .cm-upvote { width: auto; margin: 0; padding: 0 22px; font-size: 1em; }
+.pf .cm-vote-bar .cm-closed { margin: 0; }
+
+/* ---- Show & Tell ---- */
+.pf .cm-next .cm-closed { margin: 16px 0 12px; }
+.pf .cm-next-line { margin: 0 0 8px; font: 400 2em/1.05 var(--font-display), monospace; }
+.pf .cm-sessions { margin: 0; padding: 0; list-style: none; }
+.pf .cm-sessions-ruled { margin: 0 0 24px; }
+.pf .cm-session { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px 16px; padding: 14px 0; border-top: 1px solid var(--pf-rule); }
+.pf .cm-sessions-ruled > .cm-session:first-child { border-top: 0; }
+.pf .cm-session-no, .pf .cm-session-meta { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-session-main { min-width: 0; }
+.pf .cm-session-main h3 { margin: 0; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .cm-session-main h3 a { color: var(--pf-fg); text-decoration: none; }
+.pf .cm-session-main h3 a:hover { color: var(--pf-link); text-decoration: underline; }
+.pf .cm-session-main p { margin: 4px 0 0; max-width: 60ch; color: var(--pf-mut); font-size: 0.875em; }
+@media (min-width: 720px) {
+  .pf .cm-session { grid-template-columns: 96px minmax(0, 1fr) auto; align-items: start; }
+}
+.pf .cm-showcases > li { padding: 16px 0 16px 14px; border-top: 1px solid var(--pf-rule); border-left: 4px solid var(--tk, var(--pf-mut)); margin-left: -14px; }
+.pf .cm-showcases > li:first-child { border-top: 0; }
+.pf .cm-showcases h3 { margin: 0 0 4px; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .cm-showcases p { margin: 0 0 8px; max-width: 60ch; }
+.pf .cm-showcases .cm-meta { margin: 0; }
+.pf .cm-track { display: inline-flex; align-items: center; gap: 6px; color: var(--pf-fg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+.pf .cm-track::before { content: ""; width: 10px; height: 10px; background: var(--tk, var(--pf-mut)); }
+
+/* ---- News ---- */
+.pf .cm-news > li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px 16px; padding: 16px 0; border-top: 1px solid var(--pf-rule); }
+.pf .cm-news > li:first-child { border-top: 0; }
+.pf .cm-news-kind { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
+.pf .cm-news h2 { margin: 0 0 6px; font: 700 1.125em/1.25 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .cm-news p { margin: 0; max-width: 65ch; }
+@media (min-width: 720px) {
+  .pf .cm-news > li { grid-template-columns: 112px minmax(0, 1fr); }
+}
+
+/* ---- Leaderboard ---- */
+.pf .cm-leader th.cm-handle { font: 700 1em var(--font-pixel), monospace; letter-spacing: 0; text-transform: none; color: var(--pf-fg); border-bottom-color: var(--pf-rule); }
+.pf .cm-leader tbody tr:last-child th.cm-handle { border-bottom: 0; }
+.pf .cm-rank { font: 400 1.5em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pf .cm-tie { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .cm-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---- Goals ---- */
+.pf .cm-goals > li { padding: 20px 0 22px; border-top: 1px solid var(--pf-rule); }
+.pf .cm-goals > li:first-child { border-top: 0; }
+.pf .cm-goal-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 6px; }
+.pf .cm-goal-head h2 { margin: 0; font: 700 1.25em/1.2 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .cm-goal-text { margin: 0 0 16px; max-width: 65ch; color: var(--pf-mut); }
+.pf .cm-bar {
+  position: relative;
+  height: 22px;
+  border: 1px solid var(--pf-fg);
+  background-color: var(--pf-cell-off);
+  /* Quarter marks, so a reader can see where the bar sits without reading the number. */
+  background-image: linear-gradient(90deg, transparent calc(25% - 1px), var(--pf-rule) calc(25% - 1px) 25%, transparent 25% calc(50% - 1px), var(--pf-rule) calc(50% - 1px) 50%, transparent 50% calc(75% - 1px), var(--pf-rule) calc(75% - 1px) 75%, transparent 75%);
+}
+.pf .cm-bar-fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--pf-ac); border-right: 2px solid var(--pf-fg); }
+.pf .cm-goal-value { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+.pf .cm-goal-pct { font: 400 1.75em/1 var(--font-display), monospace; color: var(--pf-link); }
+.pf .cm-goal-reward { margin: 14px 0 0; max-width: 65ch; font-size: 0.875em; }
+.pf .cm-goal-reward-label { display: block; margin-bottom: 2px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+
+@media (max-width: 559px) {
+  .pf .cm-frame, .pf .cm-ideas-board, .pf .cm-sessions-ruled, .pf .cm-showcases, .pf .cm-news, .pf .cm-goals { padding: 0 14px; }
+  .pf .cm-idea { grid-template-columns: 84px minmax(0, 1fr); gap: 12px; }
+  .pf .cm-showcases > li { margin-left: -14px; }
+}
+
+@media (forced-colors: active) {
+  .pf .cm-ideas-board, .pf .cm-sessions-ruled, .pf .cm-showcases, .pf .cm-news, .pf .cm-goals { border: 1px solid CanvasText; box-shadow: none; }
+  .pf .cm-bar-fill { background: Highlight; }
+}
+
+/* ---- Formatting pass (round 2) ---- */
+/* Tabs: seven short labels. On phones they wrap in two even rows with the same gap, and every tab keeps a 44px target. */
+@media (max-width: 559px) {
+  .pf .cm-tabs ul { gap: 0 2px; }
+  .pf .cm-tabs a { padding: 0 10px; letter-spacing: 0.1em; }
+}
+
+/* Hub: every preview has the same shape (a head and three rows). Cards in a row share a height and the extra goes to the rows,
+   so no frame has a blank band at its foot. */
+.pf .cm-grid { align-items: stretch; }
+.pf .cm-grid > .pf-box { display: flex; flex-direction: column; }
+.pf .cm-grid .cm-mini { flex: 1; display: flex; flex-direction: column; }
+.pf .cm-grid .cm-mini li { flex: 1; }
+.pf .cm-mini-text { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 16px; }
+.pf .cm-mini-text .cm-handle-text { font: 700 1em var(--font-pixel), monospace; }
+@media (min-width: 900px) {
+  .pf .cm-grid-even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.pf .cm-mini li { min-height: 56px; }
+.pf .cm-refer .cm-closed { margin: 0; max-width: 60ch; }
+
+/* Leaderboard: the depth column may wrap on a phone instead of running into the frame. */
+.pf .cm-leader .pf-table td, .pf .cm-leader .pf-table th[scope="row"] { vertical-align: middle; }
+@media (max-width: 559px) {
+  .pf .cm-deeper { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media (max-width: 559px) {
+  .pf .cm-leader .pf-table th, .pf .cm-leader .pf-table td { padding-inline: 8px; }
+}
+
+/* Lead notes under the tab row and filters share one spacing. */
+.pf .cm-tabs + .pf-event-line { margin-top: 0; }

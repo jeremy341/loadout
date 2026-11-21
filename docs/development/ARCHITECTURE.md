@@ -20,7 +20,7 @@ The Docs layout owns bounded sidebar, article and contents panes. Native scrolli
 
 ## Content ownership
 
-[content authoring](content-authoring.md) owns the public publishing gate. [docs/README.md](../README.md) maps internal sources. Product/economy/Era/IRL plans remain policies; public Markdown is the reviewed explanation, not an automatic plan export.
+[content authoring](content-authoring.md) owns the public publishing gate. [docs/README.md](../README.md) maps internal sources. Product/economy/Era plans remain policies; public Markdown is the reviewed explanation, not an automatic plan export.
 
 ## Hosting and checks
 

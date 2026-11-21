@@ -1,0 +1,15 @@
+
+
+/* On this page: one ruled line, wide screens only. */
+.pf .pf-proj-jump { display: none; }
+@media (min-width: 900px) {
+  .pf .pf-proj-jump { display: flex; flex-wrap: wrap; gap: 4px 24px; margin: 0 0 20px; border-block: 1px solid var(--pf-rule); }
+  .pf .pf-proj-jump a { display: inline-flex; align-items: center; min-height: 44px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+}
+
+/* The stage band and the Toolbelt. On phones the Toolbelt comes first so it starts within the first screen and a half; the stage
+   band follows it. From 900 px the order is the spec order: stage band, then Toolbelt. */
+.pf .pf-proj-flow { display: flex; flex-direction: column; }
+@media (max-width: 899px) {
+  .pf .pf-proj-flow > .pf-stage { order: 2; margin-top: 0; }
+}

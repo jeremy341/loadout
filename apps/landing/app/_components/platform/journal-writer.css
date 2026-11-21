@@ -1,0 +1,60 @@
+/* The full page journal writer and the cover upload. Existing platform tokens only; both themes follow the tokens. */
+.pf .pf-jw { display: flex; flex-direction: column; gap: 16px; max-width: 1080px; margin-inline: auto; min-width: 0; }
+.pf .pf-jw > .pf-back { align-self: flex-start; }
+.pf .pf-jw-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+.pf .pf-jw-title { margin: 0; font: 700 clamp(1.5rem, 1rem + 2vw, 2rem)/1.15 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .pf-jw-status { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+
+.pf .pf-jw-project { margin: 0; font-size: 0.875em; color: var(--pf-mut); }
+.pf .pf-jw-form { display: grid; gap: 16px; min-width: 0; }
+.pf .pf-jw-guide { padding: 16px; border: 2px solid var(--pf-rule); background: var(--pf-panel); }
+.pf .pf-jw-guide h2 { margin: 0 0 8px; font: 700 1em/1.2 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .pf-jw-guide ul { margin: 0; padding-left: 20px; list-style: disc; display: grid; gap: 4px; font-size: 0.875em; }
+.pf .pf-jw-card { display: grid; gap: 20px; min-width: 0; padding: 20px; border: 2px solid var(--pf-rule); background: var(--pf-panel); }
+@media (max-width: 559px) { .pf .pf-jw-card { padding: 16px; } }
+.pf .pf-jw-card .pf-field { display: grid; gap: 6px; margin: 0; min-width: 0; }
+.pf .pf-jw-card .pf-field > label,
+.pf .pf-jw-label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; margin: 0; }
+.pf .pf-jw-card .pf-input { width: 100%; min-height: 48px; }
+.pf .pf-jw-cap { margin: 0; font-size: 0.8125em; color: var(--pf-mut); }
+.pf .pf-jw-time { display: flex; flex-wrap: wrap; gap: 12px; }
+.pf .pf-jw-unit { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; letter-spacing: 0; text-transform: none; }
+.pf .pf-jw-card .pf-jw-unit .pf-input { width: 96px; }
+.pf .pf-jw-note { margin: 0; font-size: 0.875em; }
+.pf .pf-jw-note-hot { padding: 8px 10px; border: 1px solid var(--pf-link); }
+.pf .pf-jw-editor { display: grid; min-width: 0; border: 2px solid var(--pf-rule); background: var(--pf-bg); }
+.pf .pf-jw-toolbar { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border-bottom: 2px solid var(--pf-rule); }
+.pf .pf-jw-toolbar .pf-btn { min-height: 40px; padding: 0 12px; }
+.pf .pf-jw-toolbar .pf-jw-toggle { margin-left: auto; }
+.pf .pf-jw-editor .pf-jw-body { min-height: 640px; width: 100%; resize: vertical; border: 0; }
+.pf .pf-jw-body[hidden] { display: none; }
+.pf .pf-jw-preview { display: grid; gap: 8px; min-width: 0; padding: 12px; }
+.pf .pf-jw-preview .pf-hint { margin: 0; }
+.pf .pf-jw-count { margin: 0; font-size: 0.8125em; color: var(--pf-mut); }
+.pf .pf-jw-count[data-met="false"] { color: var(--pf-link); }
+.pf .pf-jw-count-max { color: var(--pf-mut); }
+.pf .pf-jw-saved { margin: 0; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+
+.pf .pf-jw-photos { justify-items: start; gap: 10px; }
+.pf .pf-jw-photos .pf-hint { margin: 0; max-width: 62ch; }
+.pf .pf-jw-photolist { display: grid; gap: 12px; width: 100%; margin: 0; padding: 0; list-style: none; }
+.pf .pf-jw-photolist li { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px; border: 1px solid var(--pf-rule); background: var(--pf-bg); }
+.pf .pf-jw-photolist img { width: 96px; height: 72px; object-fit: cover; border: 1px solid var(--pf-rule); }
+.pf .pf-jw-photolist .pf-btn { min-height: 44px; }
+@media (max-width: 559px) {
+  .pf .pf-jw-photolist li { grid-template-columns: 72px minmax(0, 1fr); }
+  .pf .pf-jw-photolist img { width: 72px; height: 54px; }
+  .pf .pf-jw-photolist .pf-btn { grid-column: 1 / -1; }
+}
+
+.pf .pf-jw-error { padding: 12px 16px; border: 2px solid var(--pf-link); background: var(--pf-panel); }
+.pf .pf-jw-error .pf-error { margin: 0; }
+.pf .pf-jw-save { min-height: 56px; display: inline-flex; align-items: center; justify-content: center; width: 100%; }
+
+/* Cover upload: the 16:9 frame, its buttons, its hint. */
+.pf .pf-cover-up { display: grid; gap: 8px; margin: 12px; justify-items: start; }
+.pf .pf-cover-frame { display: grid; place-items: center; width: min(100%, 320px); aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--pf-rule); background: var(--pf-bg); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-cover-frame img { width: 100%; height: 100%; object-fit: cover; }
+.pf .pf-cover-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.pf .pf-cover-actions .pf-btn { min-height: 44px; }
+.pf .pf-cover-up .pf-hint { margin: 0; }

@@ -1,0 +1,78 @@
+name: Deploy Nest
+
+on:
+  # Checks run on the pull request, so a push to main is already a verified tree.
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-nest
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ vars.NEST_DEPLOY_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out the deployed commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Install Bun and the locked dependencies
+        uses: ./.github/actions/install-landing
+
+      - name: Generate the Prisma client
+        working-directory: apps/landing
+        run: bunx prisma generate
+
+      - name: Build the production app
+        working-directory: apps/landing
+        run: bun run build
+
+      - name: Create the immutable release archive
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/loadout-$RELEASE_SHA.tgz" \
+            --exclude=.env.local \
+            --exclude=test-results \
+            --exclude=playwright-report \
+            -C apps/landing .
+
+      - name: Configure SSH
+        env:
+          NEST_DEPLOY_KEY: ${{ secrets.NEST_DEPLOY_KEY }}
+          NEST_KNOWN_HOSTS: ${{ secrets.NEST_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$NEST_DEPLOY_KEY" > "$HOME/.ssh/loadout_deploy"
+          chmod 600 "$HOME/.ssh/loadout_deploy"
+          printf '%s\n' "$NEST_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+
+      - name: Upload release archive
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          NEST_HOST: ${{ secrets.NEST_HOST }}
+          NEST_USER: ${{ secrets.NEST_USER }}
+        run: |
+          scp -i "$HOME/.ssh/loadout_deploy" \
+            "$RUNNER_TEMP/loadout-$RELEASE_SHA.tgz" \
+            "$NEST_USER@$NEST_HOST:/tmp/loadout-$RELEASE_SHA.tgz"
+
+      - name: Deploy and verify
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+          NEST_HOST: ${{ secrets.NEST_HOST }}
+          NEST_USER: ${{ secrets.NEST_USER }}
+        run: |
+          ssh -i "$HOME/.ssh/loadout_deploy" "$NEST_USER@$NEST_HOST" \
+            "RELEASE_SHA=$RELEASE_SHA RELEASE_ARCHIVE=/tmp/loadout-$RELEASE_SHA.tgz APP_ROOT=/srv/loadout bash -s" \
+            < apps/landing/scripts/deploy-nest.sh

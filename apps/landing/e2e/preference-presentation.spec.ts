@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 
+// These specs read the public docs. Local development is signed in, which shows the docs in the platform, so ask for the public layout.
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
+});
+
 async function openSettings(page: Page) {
   await expect(page.locator("html")).toHaveAttribute("data-display-theme", /^(dark|light)$/);
   await page.getByRole("link", { name: "Open accessibility settings" }).focus();
@@ -236,7 +241,13 @@ for (const width of [390, 1440]) {
     });
     await page.goto("/docs/start");
     await expect(page.locator("html")).toHaveAttribute("data-reading-size", "200");
-    if (width < 821) await page.getByRole("button", { name: "Guides", exact: true }).click();
+    if (width < 821) {
+      // The public docs fold the guides into a "Guides" drawer; inside the platform the same list lives in the sidebar,
+      // which the top bar opens with "Menu".
+      const guides = page.getByRole("button", { name: "Guides", exact: true });
+      if (await guides.count()) await guides.click();
+      else await page.getByRole("button", { name: "Menu", exact: true }).click();
+    }
     const search = page.getByRole("searchbox", { name: "Search documentation" });
     await search.fill("track xp");
     const result = page.locator("#docs-search-result-0");
@@ -253,7 +264,7 @@ for (const width of [390, 1440]) {
     await question.click();
     await expect(page.locator(".fq2").first()).toHaveAttribute("open", "");
     await expect(page.locator(".fq2-a p").first()).toBeVisible();
-    const prizes = page.getByRole("region", { name: "Prices" });
+    const prizes = page.getByRole("region", { name: "Prizes" });
     await prizes.focus();
     const start = await prizes.evaluate(element => element.scrollLeft);
     await page.keyboard.press("ArrowRight");
@@ -271,20 +282,22 @@ test("default layouts stay unchanged when no reading options are selected", asyn
     await expect(page.locator(".hero-frame > p")).toHaveCSS("text-align", "center");
     await expect(page.locator(".docs-tab")).toHaveCSS("position", "fixed");
     if (width <= 560) {
-      await expect(page.locator(".hero .meta-left")).toHaveCSS("left", "20px");
+      // The marking sits clear of the 44px Accessibility tab on the left edge (it was 20px before the tab stopped covering it).
+      await expect(page.locator(".hero .meta-left")).toHaveCSS("left", "56px");
       expect(await page.locator(".home .nav").evaluate(element => element.clientHeight)).toBeLessThan(80);
     }
     await page.goto("/docs/start");
     await expect(page.locator("html")).toHaveAttribute("data-reading-layout", "false");
-    await expect(page.locator(".docs .a11y-shortcut")).toHaveCSS("position", "fixed");
-    await expect(page.locator(".docs .a11y-tab")).toHaveCSS("writing-mode", "vertical-rl");
+    // Wide Docs dock the tab in the directory header so it cannot cover the guide links; phones keep the edge tab, parked off-screen.
+    await expect(page.locator(".docs .a11y-shortcut")).toHaveCSS("position", width > 820 ? "static" : "fixed");
+    await expect(page.locator(".docs .a11y-tab")).toHaveCSS("writing-mode", width > 820 ? "horizontal-tb" : "vertical-rl");
     if (width <= 560) expect(await page.locator(".docs-nav").evaluate(element => element.clientHeight)).toBeLessThan(80);
   }
   await page.evaluate(() => localStorage.setItem("loadout-strong-contrast", "true"));
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-strong-contrast", "true");
   await expect(page.locator("html")).toHaveAttribute("data-reading-layout", "false");
-  await expect(page.locator(".docs .a11y-shortcut")).toHaveCSS("position", "fixed");
+  await expect(page.locator(".docs .a11y-shortcut")).toHaveCSS("position", "static");
 });
 
 test("enlarged settings use full-width horizontal categories without changing defaults", async ({ page }) => {

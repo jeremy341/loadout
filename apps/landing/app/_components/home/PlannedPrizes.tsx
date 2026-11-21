@@ -55,13 +55,13 @@ export function PlannedPrizes() {
       </div>
       <div className="sect" id="shop">
         <h2 className="h2">
-          Prices
+          Prizes
         </h2>
         <p className="lead">
-          What your Ore can buy.
+          Examples of what Ore could buy. Working prices, provisional until the shop opens.
         </p>
         <div className="pb">
-          <div className="pb-view" role="region" aria-label="Prices" tabIndex={0}>
+          <div className="pb-view" role="region" aria-label="Prizes" tabIndex={0}>
             <div className="pb-track">
               <PrizeList />
               <PrizeList hidden />

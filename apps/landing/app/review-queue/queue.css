@@ -1,0 +1,64 @@
+.pf:has(.pf-rq) .pf-plain { max-width: 1120px; margin-inline: auto; }
+.pf:has(.pf-rq) .pf-top .pf-brand { order: 0; }
+.pf:has(.pf-plain .pf-rq) .pf-koi-side { display: none; }
+.pf .pf-rq { width: 100%; max-width: 880px; margin-inline: auto; position: relative; }
+.pf .pf-rq h1 { margin: 0; }
+.pf .pf-rq h2 { margin: 0; font-size: 1.35em; }
+
+/* Visitor header: LOADOUT, Home and Docs on the left, the Accessibility tab and the theme switch on the right. On phones the
+   two links drop to their own row, so nothing wraps awkwardly. The tab lives in this row, so it never covers the title. */
+.pf-rq-tools { order: 3; display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.pf-rq-links { order: 4; flex: 1 0 100%; display: flex; flex-wrap: wrap; gap: 0 20px; }
+.pf .pf-rq-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--pf-fg); font: 400 calc(13px * var(--reading-scale, 1))/1 var(--font-dot), monospace; letter-spacing: .14em; text-transform: uppercase; text-decoration: underline; text-decoration-color: var(--pf-rule); text-underline-offset: 5px; }
+.pf .pf-rq-links a:hover { text-decoration-color: var(--pf-fg); }
+.pf .pf-rq-links a:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 3px; }
+@media (min-width: 700px) {
+  .pf-rq-links { order: 2; flex: 0 1 auto; margin-left: 12px; }
+}
+.pf .pf-rq-tools .a11y-shortcut { position: static; max-width: none; transform: none; }
+.pf .pf-rq-tools .a11y-tab { text-decoration: none; writing-mode: horizontal-tb; min-height: 44px; padding: 6px 12px; border-width: 2px 4px 4px 2px; font-size: calc(14px * min(var(--reading-scale, 1), 1.5)); }
+.pf .pf-rq-tools .a11y-tab:hover { border-left-width: 2px; }
+@media (max-width: 380px) { .pf .pf-rq-tools .a11y-tab { padding-inline: 8px; font-size: 12px; } }
+
+.pf-rq-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .35rem 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--pf-fg); }
+.pf-rq-head p, .pf-rq-summary, .pf-rq-empty, .pf-rq-foot, .pf-rq-hint { color: var(--pf-mut); font-size: .85em; margin: 0; }
+
+/* Search first: the one thing most visitors came for. */
+.pf-rq-find { display: grid; gap: .5rem; margin-block: 1.5rem 1.25rem; }
+.pf .pf-rq-find input { width: 100%; box-sizing: border-box; min-height: 56px; font-size: 1.05em; }
+.pf-rq-result { display: flex; flex-wrap: wrap; gap: .65rem 1rem; align-items: start; padding: .75rem; border-left: 3px solid var(--pf-link); background: var(--pf-panel); overflow-wrap: anywhere; }
+.pf-rq-result > div { flex: 1 1 14rem; min-width: 0; }
+.pf-rq-result p { margin: .25rem 0; }
+.pf-rq-result progress { width: 100%; accent-color: var(--pf-link); }
+
+/* The overview is a quiet summary under the search, not a boxed panel. */
+.pf-rq-pipeline { display: grid; gap: .4rem; margin-block: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--pf-rule); }
+.pf .pf-rq .pf-rq-pipeline h2 { font-size: 1.1em; color: var(--pf-mut); }
+.pf-rq-total { margin: 0; }
+.pf-rq-total strong { color: var(--pf-link); font: 400 1.7em/1 var(--font-display), monospace; vertical-align: middle; }
+.pf-rq-meter { display: flex; gap: 2px; height: .35rem; }
+.pf-rq-meter span { flex-basis: 0; background: var(--pf-link); }
+.pf-rq-meter [data-segment="1"] { background: var(--pf-mut); }
+.pf-rq-meter [data-segment="2"] { background: var(--pf-fg); }
+
+.pf-rq-section { margin-block: 1.5rem; }
+.pf-rq-section-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; }
+.pf-rq-switch { flex: 0 1 24em; min-width: min(100%, 12em); }
+/* Two equal columns when they fit, one per row when they do not (large text, narrow phones): equal width and height either way, and no label is broken. The unpressed one keeps the
+   same 2px border box as the filled one, and the pressed one is underlined as well as filled, so it does not rely on colour. */
+.pf-rq-switch { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11em), 1fr)); align-items: stretch; gap: .5rem; }
+.pf .pf-rq-switch .pf-btn { box-sizing: border-box; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 52px; margin: 0; padding: .4rem .75rem; border: 2px solid var(--pf-fg); line-height: 1.25; text-align: center; overflow-wrap: normal; }
+.pf .pf-rq-switch .pf-btn[aria-pressed="true"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.pf-rq-empty, .pf-rq-rows { padding: .75rem 0; margin: .5rem 0 0; border-top: 1px solid var(--pf-rule); }
+.pf-rq-rows { list-style: none; padding: 0; }
+.pf-rq-rows li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1rem; padding: .75rem 0; border-bottom: 1px solid var(--pf-rule); overflow-wrap: anywhere; }
+.pf-rq-rows li > div:first-of-type { flex: 1 1 10rem; min-width: 0; }
+.pf-rq-rows small { display: block; color: var(--pf-mut); }
+.pf-rq-position { color: var(--pf-link); font: 400 1.55em var(--font-display), monospace; }
+
+/* Onward links for a visitor, then the attribution. */
+.pf-rq-next { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-top: 1.5rem; padding-top: .5rem; border-top: 1px solid var(--pf-rule); }
+.pf .pf-rq-next a { display: inline-flex; align-items: center; min-height: 44px; color: var(--pf-link); text-underline-offset: 4px; }
+.pf-rq-foot { padding-block: .85rem 1.25rem; border-top: 1px solid var(--pf-rule); }
+.pf-rq-foot a { color: var(--pf-link); }
+.pf-rq-next + .pf-rq-foot { border-top: 0; padding-top: 0; }

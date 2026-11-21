@@ -27,7 +27,7 @@ With that explanation, a reviewer can look at the problem you solved and the wor
 | Compute | Graphics, inference, numerical work and performance. |
 | Hardware | Electronics, embedded systems, robotics and instruments. |
 
-Pick the tracks that describe the work you actually did. A project can use several; [Tracks](/docs/tracks) explains how its XP is divided.
+Pick the one track that describes the work you actually did. A project has exactly one track, and all its Track XP goes there; [Tracks](/docs/tracks) explains when you can change it.
 
 ## Look for the technical core {#examples}
 

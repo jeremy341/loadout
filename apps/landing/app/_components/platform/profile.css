@@ -1,0 +1,179 @@
+/* Profile screens (pf-prof-*) and the account control (pf-account-*). Existing tokens only: the colours, fonts, square corners
+   and hard shadows come from platform.css, and nothing here animates. The ID plate and the dashed free pin slots are the two
+   marks that make a profile recognisable without its nav. */
+
+/* ---- Account control in the top bar ---- */
+.pf .pf-account { position: relative; flex: none; }
+.pf .pf-account-button { padding: 0; font: inherit; cursor: pointer; }
+.pf .pf-account-button[data-current="true"] { border: 2px solid var(--pf-link); }
+.pf .pf-account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  width: min(200px, calc(100vw - 32px));
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 4px 4px 0 var(--pf-edge);
+}
+.pf .pf-account-menu ul { margin: 0; padding: 0; list-style: none; }
+.pf .pf-account-menu li + li { border-top: 1px solid var(--pf-rule); }
+.pf .pf-account-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--pf-fg);
+  font: 700 1em var(--font-pixel), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.pf .pf-account-menu a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.pf .pf-account-menu a[aria-current="page"] { color: var(--pf-link); background: var(--pf-ln); }
+.pf .pf-account-menu a[aria-current="page"]::before { content: "[ "; white-space: pre; }
+.pf .pf-account-menu a[aria-current="page"]::after { content: " ]"; white-space: pre; }
+html[data-larger-controls="true"] .pf :is(.pf-account-menu a, .pf-prof-handle, .pf-prof-btn) { min-height: 48px; }
+
+/* ---- Frame ---- */
+.pf .pf-prof-saved { margin: 0; }
+
+/* ---- Header: one wide band (identity left, stats right, pins under) ---- */
+.pf .pf-prof-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px 32px; align-items: center; margin: 0 0 28px; padding: 0 0 24px; border-bottom: 1px solid var(--pf-fg); }
+.pf .pf-prof-id { display: flex; align-items: center; gap: 20px; min-width: 0; }
+.pf .pf-prof-plate {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  border: 1px solid var(--pf-fg);
+  background: var(--pf-panel);
+  box-shadow: 3px 3px 0 var(--pf-edge);
+}
+.pf .pf-prof-plate-letter { padding-bottom: 10px; font: 400 3em/1 var(--font-display), monospace; color: var(--pf-fg); }
+.pf .pf-prof-plate-strip { position: absolute; inset: auto 0 0 0; height: 8px; background: var(--tk, var(--pf-rule)); }
+.pf .pf-prof-who { display: grid; gap: 8px; justify-items: start; min-width: 0; }
+.pf .pf-prof-who .pf-prof-h1 { margin: 0; font-size: clamp(1.5em, 5vw, 2.25em); overflow-wrap: anywhere; }
+.pf .pf-prof-h1-solo { margin: 0 0 24px; }
+.pf .pf-prof-who .pf-project-lead { overflow-wrap: anywhere; }
+.pf .pf-prof-stats { display: flex; flex-wrap: wrap; gap: 14px 0; margin: 0; padding: 0; border: 0; background: none; }
+.pf .pf-prof-stats > div { display: grid; gap: 4px; min-width: 0; align-content: start; padding: 0 24px; border-left: 1px solid var(--pf-rule); }
+.pf .pf-prof-stats > div:first-child { padding-left: 0; border-left: 0; }
+.pf .pf-prof-stats > div:last-child { padding-right: 0; }
+.pf .pf-prof-stats dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-prof-stats dd { margin: 0; display: grid; gap: 2px; font: 700 1.25em/1.1 var(--font-pixel), monospace; text-transform: uppercase; overflow-wrap: anywhere; }
+.pf .pf-prof-ore-pending { font: 400 0.7em var(--font-ui), monospace; text-transform: none; color: var(--pf-mut); }
+.pf .pf-prof-top::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 8px; background: var(--tk); }
+@media (min-width: 900px) {
+  .pf .pf-prof-head { grid-template-columns: minmax(0, 1fr) auto; }
+  .pf .pf-prof-stats { justify-content: flex-end; }
+}
+
+/* ---- Internal tabs ---- */
+.pf .pf-prof-tablist { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+.pf .pf-prof-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--pf-fg);
+  background: transparent;
+  color: var(--pf-fg);
+  font: 700 1em var(--font-pixel), monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.pf .pf-prof-tab:hover { border-color: var(--pf-link); }
+.pf .pf-prof-tab[aria-selected="true"] { background: var(--pf-ln); border-color: var(--pf-link); color: var(--pf-link); text-decoration: underline; text-underline-offset: 5px; }
+.pf .pf-prof-tab:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 3px; }
+.pf .pf-prof-n { font: 400 0.8em var(--font-dot), monospace; opacity: 0.85; }
+.pf .pf-prof-panel:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 6px; }
+html[data-larger-controls="true"] .pf .pf-prof-tab { min-height: 48px; }
+.pf .pf-prof-live { margin: 0 0 8px; }
+.pf .pf-prof-live:empty { margin: 0; }
+.pf .pf-prof-pinform { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pf .pf-prof-btn { padding: 0 14px; font-size: 0.875em; }
+.pf .pf-prof-btn[aria-disabled="true"] { opacity: 0.6; cursor: not-allowed; }
+.pf .pf-prof-pinform .pf-hint { font-size: 0.8125em; }
+
+/* ---- Toolbelt on a profile ---- */
+.pf .pf-prof-tools { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.pf .pf-prof-tool-title { font: 700 1em var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-prof-note-line { margin: 4px 0 0; font-size: 0.875em; color: var(--pf-mut); overflow-wrap: anywhere; }
+.pf .pf-prof-handles { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 16px; }
+.pf .pf-prof-handle { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* ---- Edit profile dialog ---- */
+.pf .pf-prof-count { white-space: nowrap; }
+.pf .pf-project-foot > span:last-child { flex: none; }
+.pf .pf-facts-account .pf-fact-wide { grid-column: 1 / -1; }
+.pf .pf-fact-link { font: 600 0.5em var(--font-ui), monospace; letter-spacing: 0; text-transform: none; }
+.pf .pf-pin-glyph { flex: none; }
+
+/* The underlined tab row (the project page): one slim line of tabs, scrolls sideways on a phone and never wraps. */
+.pf .pf-tabs-line .pf-prof-tablist { flex-wrap: nowrap; gap: 0; margin: 0 0 20px; overflow-x: auto; border-bottom: 1px solid var(--pf-rule); scrollbar-width: thin; }
+.pf .pf-tabs-line .pf-prof-tab { flex: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; padding: 0 16px; background: transparent; }
+.pf .pf-tabs-line .pf-prof-tab:hover { border-bottom-color: var(--pf-rule); }
+.pf .pf-tabs-line .pf-prof-tab[aria-selected="true"] { background: transparent; border-bottom-color: var(--pf-link); text-decoration: none; }
+.pf svg.pf-pin-glyph { width: 14px; height: 14px; max-width: 14px; flex: none; }
+.pf .pf-prof-pinform .pf-btn { width: auto; flex-direction: row; display: inline-flex; align-items: center; gap: 8px; }
+
+/* ---- Profile copied from Stasis (pf-sp-*): two columns of flat cards. Left 320px from 1024px, the cards stack below. ---- */
+.pf .pf-sp { display: flex; flex-direction: column; gap: 40px; }
+.pf .pf-sp-left { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.pf .pf-sp-right { display: flex; flex-direction: column; gap: 48px; flex: 1; min-width: 0; }
+@media (min-width: 1024px) {
+  .pf .pf-sp { flex-direction: row; align-items: flex-start; }
+  .pf .pf-sp-left { width: 320px; flex: none; }
+}
+.pf .pf-sp-card { min-width: 0; padding: 24px; border: 2px solid var(--pf-rule); background: var(--pf-panel); }
+.pf .pf-sp-card h2 { margin: 0 0 16px; font: 700 1.5em/1.1 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); overflow-wrap: anywhere; }
+.pf .pf-sp-empty { margin: 0; color: var(--pf-mut); font-size: 0.875em; }
+
+/* profile card */
+.pf .pf-sp-profile { text-align: center; }
+.pf .pf-sp-plate { position: relative; display: grid; place-items: center; width: 160px; height: 160px; margin: 0 auto 16px; overflow: hidden; border: 2px solid var(--tk, var(--pf-link)); background: var(--pf-bg); }
+.pf .pf-sp-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pf .pf-sp-plate-letter { padding-bottom: 14px; font: 400 4.5em/1 var(--font-display), monospace; color: var(--pf-fg); }
+.pf .pf-sp-plate-strip { position: absolute; inset: auto 0 0 0; height: 12px; background: var(--tk, var(--pf-rule)); }
+.pf .pf-sp-name { margin: 0 0 12px; font: 700 1.5em/1.15 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); overflow-wrap: anywhere; }
+.pf .pf-sp-bio { margin: 0 0 16px; font-size: 0.875em; overflow-wrap: anywhere; }
+.pf .pf-sp-ore { margin: 0 0 16px; }
+.pf .pf-sp-ore-line { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 8px; margin: 0; }
+.pf .pf-sp-ore-figure { font: 700 2em/1 var(--font-pixel), monospace; color: var(--pf-link); }
+.pf .pf-sp-ore-label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-sp-pending { margin: 4px 0 0; font-size: 0.8125em; color: var(--pf-mut); }
+/* track levels card */
+.pf .pf-sp-levels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+@media (max-width: 639px) { .pf .pf-sp-levels { grid-template-columns: minmax(0, 1fr); } }
+.pf .pf-sp-level { display: grid; grid-template-columns: 16px 1fr; gap: 4px 12px; align-items: center; padding: 12px; border: 1px solid var(--pf-rule); background: var(--pf-bg); }
+.pf .pf-sp-level-swatch { grid-row: 1 / span 3; align-self: start; width: 16px; height: 16px; background: var(--tk); }
+.pf .pf-sp-level-name { font: 700 1em var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); }
+.pf .pf-sp-level-lv { font: 700 0.875em var(--font-pixel), monospace; text-transform: uppercase; }
+.pf .pf-sp-level-hours { font-size: 0.8125em; color: var(--pf-mut); }
+.pf .pf-sp-actions { display: flex; flex-direction: column; gap: 8px; }
+.pf .pf-sp-btn { width: 100%; justify-content: center; }
+.pf .pf-sp-actions .pf-btn { flex-direction: row; display: inline-flex; align-items: center; }
+
+/* projects */
+.pf .pf-sp-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 640px) {
+  .pf .pf-sp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1280px) {
+  .pf .pf-sp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.pf .pf-sp-grid > li { display: flex; min-width: 0; }
+.pf .pf-sp-project { display: flex; flex: 1; flex-direction: column; min-width: 0; border: 1px solid var(--pf-rule); background: var(--pf-bg); color: var(--pf-fg); text-decoration: none; }
+.pf a.pf-sp-project:hover { border-color: var(--pf-link); }
+.pf a.pf-sp-project:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+.pf .pf-sp-project-body { display: flex; flex-direction: column; flex: 1; gap: 8px; padding: 16px; min-width: 0; }
+.pf .pf-sp-project-title { font: 700 0.875em/1.2 var(--font-pixel), monospace; text-transform: uppercase; color: var(--pf-link); overflow-wrap: anywhere; }
+.pf .pf-sp-project-text { font-size: 0.875em; overflow-wrap: anywhere; }
+.pf .pf-sp-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: auto; padding-top: 4px; }
+.pf .pf-sp-tag { padding: 2px 8px; border: 1px solid var(--pf-rule); background: var(--pf-panel); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.06em; text-transform: uppercase; }

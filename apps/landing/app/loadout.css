@@ -12,6 +12,28 @@
   --ease:cubic-bezier(.22,1,.36,1)
 }
 
+/* The pixel face draws a 2, a 5 and an 8 almost alike, so every digit in it comes from IBM Plex Mono instead (only the digits:
+   the range below leaves the letters, the dollar sign and the rest in the pixel face). --font-pixel is the pixel face with that
+   digit face in front, so everything that already uses it is fixed at once. */
+@font-face {
+  font-family: "LOADOUT Digits";
+  src: url("/fonts/IBMPlexMono-Regular.ttf") format("truetype");
+  font-weight: 100 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+@font-face {
+  font-family: "LOADOUT Digits";
+  src: url("/fonts/IBMPlexMono-SemiBold.ttf") format("truetype");
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+html {
+  --font-pixel: "LOADOUT Digits", var(--font-pixel-base);
+}
 * {
   box-sizing:border-box
 }

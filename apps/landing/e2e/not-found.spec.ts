@@ -1,6 +1,11 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+// These specs read the public docs. Local development is signed in, which shows the docs in the platform, so ask for the public layout.
+test.beforeEach(async ({ context, baseURL }) => {
+  await context.addCookies([{ name: "loadout_preview_role", value: "visitor", url: baseURL ?? "http://localhost:3001" }]);
+});
+
 const lost = "/definitely-not-a-page";
 const title = "Sorry, you’ve hit rock bottom.";
 

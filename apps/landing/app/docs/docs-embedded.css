@@ -1,0 +1,86 @@
+/* The documentation inside the participant platform. The platform supplies the top bar (Ore chip and account menu), the theme switch, the
+   grain and the accessibility tab. The docs section list takes the place of the participant links in the platform sidebar (on a phone
+   it is inside the same drawer). This file styles that list and the page beside it: the article and "on this page". The article keeps
+   the docs look (Poppins text, pixel headings) on the platform colours, light and dark. The article and the contents each scroll
+   inside the page, so the sheet fits the window. */
+
+.pf .pf-frame-docs { height: 100dvh; grid-template-rows: auto minmax(0, 1fr); }
+.pf .pf-main-docs { max-width: none; margin: 0; padding: 0; min-height: 0; overflow: hidden; }
+
+.docs-embedded, .docs-side {
+  --ink: var(--pf-fg); --dim: var(--pf-mut); --bg: var(--pf-bg); --ac: var(--pf-ac); --acf: var(--pf-acf);
+  --panel: var(--pf-panel); --panel-2: color-mix(in srgb, var(--pf-panel), var(--pf-fg) 6%); --stroke: var(--pf-rule); --hl: var(--pf-link);
+  --drop: 4px 4px 0 var(--pf-edge); --drop-lg: 8px 8px 0 var(--pf-edge); --ease: cubic-bezier(.22, 1, .36, 1);
+  font-family: var(--font-poppins), system-ui, sans-serif;
+  line-height: 1.5; color: var(--ink);
+}
+/* Light paper keeps the Docs' solid ink strokes; the panel step and the highlight still follow the platform tokens. */
+html[data-display-theme="light"] .docs-embedded, html[data-display-theme="light"] .docs-side {
+  --stroke: var(--pf-fg);
+}
+.docs-embedded { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); height: 100%; min-height: 0; overflow: hidden; }
+
+/* Section list, in the sidebar */
+.docs-side { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding-top: 4px; }
+.docs-side .docs-search { margin: 0; }
+.docs-side .docs-search-label { margin-bottom: 4px; }
+.docs-side .docs-search input { min-height: 44px; background: var(--pf-bg); }
+.docs-side .docs-search-feedback { margin: 4px 0 0; }
+.docs-side .docs-search-results { position: static; max-height: none; margin: 6px 0 0; box-shadow: none; }
+.pf .docs-side .docs-back-link { display: flex; align-items: center; min-height: 44px; padding: 0 10px; color: var(--ink); font-family: var(--font-pixel), monospace; font-size: 14px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; text-decoration: none; border: 1px solid var(--pf-rule); }
+.pf .docs-side .docs-back-link:hover { background: var(--panel-2); }
+.docs-back-link > span { margin-right: 8px; }
+.docs-guides-nav { display: block; }
+.docs-guides-group { display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; }
+.docs-guides-label { margin: 10px 8px 6px; font-family: var(--font-pixel), monospace; font-size: 12px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--dim); }
+.pf .docs-side .docs-guides-link { display: flex; align-items: center; min-height: 44px; padding: 8px 10px; font-size: 14px; font-weight: 500; line-height: 1.3; color: var(--ink); text-decoration: none; border: 1px solid transparent; }
+.pf .docs-side .docs-guides-link:hover { background: var(--panel-2); }
+.pf .docs-side .docs-guides-link.active { color: var(--acf); font-weight: 600; background: var(--ac); border-color: var(--ac); }
+.pf .docs-side .docs-search-results a { color: var(--ink); text-decoration: none; }
+
+/* Article and the column beside it */
+.pf .docs-embedded .docs-main { padding: 24px 20px 96px; }
+.docs-embedded .docs-toc { display: none; }
+.docs-embedded .docs-inline-toc { display: block; margin: 18px 0 8px; background: var(--panel); border: 2px solid var(--stroke); box-shadow: none; }
+.docs-embedded .docs-inline-toc summary { min-height: 44px; padding: 12px 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.docs-embedded .docs-inline-toc nav { display: grid; padding: 0 12px 12px; }
+.pf .docs-embedded .docs-inline-toc a { display: flex; align-items: center; min-height: 44px; padding: 10px 8px; font-size: 14px; color: var(--ink); text-decoration: none; border-top: 2px solid var(--stroke); }
+.pf .docs-embedded .docs-inline-toc a.subheading { padding-left: 22px; }
+
+/* The platform heading and link rules are for platform pages; the article keeps the docs ones. */
+.pf-main .docs-embedded .doc h1 { width: auto; max-width: none; margin: 0; font-weight: 700; font-size: 38px; line-height: 1.1; letter-spacing: .2px; text-transform: none; overflow-wrap: break-word; }
+.pf .docs-embedded a { color: var(--ink); text-decoration: none; }
+.pf .docs-embedded .doc-content a { text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--hl); text-underline-offset: 3px; }
+.pf .docs-embedded .doc-content a:hover { color: var(--acf); background: var(--ac); }
+.pf .docs-embedded .docs-toc a { color: var(--dim); }
+.pf .docs-embedded .docs-toc a[aria-current] { color: var(--ink); }
+.pf .docs-embedded .doc-sign a { text-decoration: underline; text-underline-offset: 3px; }
+.docs-embedded ::selection, .docs-side ::selection { background: var(--ac); color: var(--acf); }
+.docs-embedded .doc-content h2 { font-size: 26px; }
+@media (min-width: 561px) {
+  .pf .docs-embedded .docs-main { padding: 32px 32px 100px; }
+  .pf-main .docs-embedded .doc h1 { font-size: 46px; }
+  .docs-embedded .doc-content h2 { font-size: 30px; }
+}
+@media (max-width: 560px) {
+  .docs-embedded .doc-foot { grid-template-columns: 1fr; }
+  .docs-embedded .doc-foot .next { text-align: left; }
+  .docs-embedded .doc .lead { font-size: 17px; }
+}
+
+/* Wide: "on this page" is a column on the right. The accessibility tab sits at the right edge, so the column leaves it room. */
+@media (min-width: 1240px) {
+  .docs-embedded { grid-template-columns: minmax(0, 1fr) 220px; }
+  .docs-embedded .docs-toc { display: block; padding: 40px 48px 40px 6px; }
+  .docs-embedded .docs-inline-toc { display: none; }
+  /* Larger reading sizes and more spacing need the room, so the short disclosure stays in use. */
+  html:is([data-more-spacing="true"], [data-reading-size="150"], [data-reading-size="200"]) .docs-embedded { grid-template-columns: minmax(0, 1fr); }
+  html:is([data-more-spacing="true"], [data-reading-size="150"], [data-reading-size="200"]) .docs-embedded .docs-toc { display: none; }
+  html:is([data-more-spacing="true"], [data-reading-size="150"], [data-reading-size="200"]) .docs-embedded .docs-inline-toc { display: block; }
+}
+@media (prefers-reduced-motion: reduce) { .docs-embedded .docs-main { scroll-behavior: auto; } }
+@media (forced-colors: active) {
+  .pf .docs-side .docs-guides-link.active { border: 2px solid Highlight; }
+}
+/* On a phone the accessibility tab is over the right edge at the top of the page, so the article header leaves it room. */
+@media (max-width: 899px) { .docs-embedded .doc-header { padding-right: 48px; } }

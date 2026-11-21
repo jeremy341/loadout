@@ -1,0 +1,17 @@
+# Local development database only. Not for deployment: the production host is an open decision
+# (see plans/proposals/participant-platform-infrastructure.md). The password is a local dev value.
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: loadout
+      POSTGRES_PASSWORD: loadout-local
+      POSTGRES_DB: loadout_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - loadout_pg:/var/lib/postgresql/data
+
+volumes:
+  loadout_pg:

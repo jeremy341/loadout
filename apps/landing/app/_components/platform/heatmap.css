@@ -1,0 +1,40 @@
+/* Activity heatmap (pf-hm-*), after Stasis's Activity card: 16 weeks of 12px squares with a 2px gap, month labels above, Mon, Wed
+   and Fri at the left, five levels, a Less to More legend and a dark tooltip on hover and focus. The grid scrolls sideways inside
+   its card if it ever overflows. Existing tokens only; the levels mix the accent into the panel colour so both themes work.
+   Nothing animates. */
+.pf .pf-hm { --hm-cell: 12px; --hm-gap: 2px; }
+.pf .pf-hm-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin: 0 0 16px; }
+.pf .pf-hm-head h2 { margin: 0; }
+.pf .pf-hm-stats { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-hm-stats strong { font: 700 14px var(--font-pixel), monospace; color: var(--pf-fg); }
+.pf .pf-hm-stats strong.pf-hm-hot { color: var(--pf-link); }
+
+.pf .pf-hm-frame { position: relative; }
+.pf .pf-hm-scroll { overflow-x: auto; padding: 0 0 8px; scrollbar-width: thin; }
+.pf .pf-hm-grid { display: flex; gap: var(--hm-gap); width: max-content; }
+.pf .pf-hm-col { display: flex; flex-direction: column; gap: var(--hm-gap); }
+.pf .pf-hm-month { position: relative; height: 16px; width: var(--hm-cell); overflow: visible; font: 400 11px/16px var(--font-dot), monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pf-mut); white-space: nowrap; }
+.pf .pf-hm-days { width: 30px; margin-right: 2px; }
+.pf .pf-hm-day { height: var(--hm-cell); font: 400 10px/var(--hm-cell) var(--font-dot), monospace; letter-spacing: 0.06em; text-transform: uppercase; text-align: right; padding-right: 4px; color: var(--pf-mut); }
+
+.pf .pf-hm-cell { display: block; width: var(--hm-cell); height: var(--hm-cell); margin: 0; padding: 0; border: 0; border-radius: 0; background: var(--pf-ln); box-shadow: inset 0 0 0 1px var(--pf-rule); appearance: none; }
+.pf button.pf-hm-cell { cursor: default; }
+.pf button.pf-hm-cell:hover { outline: 1px solid var(--pf-link); outline-offset: 0; }
+.pf button.pf-hm-cell:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 1px; position: relative; z-index: 1; }
+.pf .pf-hm-cell[data-future="true"] { background: transparent; box-shadow: none; }
+.pf .pf-hm-cell[data-level="1"] { background: color-mix(in srgb, var(--pf-ac) 30%, var(--pf-panel)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pf-ac) 40%, var(--pf-panel)); }
+.pf .pf-hm-cell[data-level="2"] { background: color-mix(in srgb, var(--pf-ac) 55%, var(--pf-panel)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pf-ac) 60%, var(--pf-panel)); }
+.pf .pf-hm-cell[data-level="3"] { background: color-mix(in srgb, var(--pf-ac) 80%, var(--pf-panel)); box-shadow: inset 0 0 0 1px var(--pf-ac); }
+.pf .pf-hm-cell[data-level="4"] { background: var(--pf-ac); box-shadow: inset 0 0 0 1px var(--pf-ac); }
+
+/* Dark tooltip as in Stasis: the page ink as the background, the page colour as the text. */
+.pf .pf-hm-tip { position: absolute; z-index: 5; transform: translate(-50%, calc(-100% - 6px)); display: grid; gap: 2px; padding: 8px 12px; background: var(--pf-fg); color: var(--pf-bg); font: 400 12px var(--font-ui), monospace; white-space: nowrap; pointer-events: none; }
+.pf .pf-hm-tip-date { font: 400 10px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; }
+.pf .pf-hm-tip strong { font-weight: 700; }
+.pf .pf-hm-tip-none { opacity: 0.8; }
+
+.pf .pf-hm-legend { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 8px; font: 400 10px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-hm-legend > span:first-child { margin-right: 4px; }
+.pf .pf-hm-legend > span:last-child { margin-left: 4px; }
+.pf .pf-hm-key-cell { --hm-cell: 10px; }
+.pf .pf-hm-empty { margin: 12px 0 0; text-align: center; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }

@@ -1,0 +1,133 @@
+/* The New project wizard (design brief .ulpi/design/redesign-phase-2-wizard.md). Uses the --pf-* tokens and the shared card, choice,
+   field and button classes, so both themes follow. Only opacity and transform ever animate, and not under reduced motion. */
+.pf .pf-wiz { display: flex; flex-direction: column; width: 100%; max-width: 880px; min-height: calc(100dvh - 140px); margin-inline: auto; }
+.pf .pf-wiz-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.pf .pf-wiz-close { min-height: 44px; padding: 0 16px; text-decoration: none; }
+.pf .pf-wiz-kicker { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+
+/* Step header: five segments. Done and current are filled. A later segment is outlined. */
+.pf .pf-wiz-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin: 0 0 32px; padding: 0; list-style: none; }
+.pf .pf-wiz-step { display: grid; gap: 8px; width: 100%; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--pf-mut); text-align: left; cursor: pointer; }
+.pf .pf-wiz-step:disabled { cursor: not-allowed; opacity: 0.7; }
+.pf .pf-wiz-seg { display: block; height: 8px; border: 1px solid var(--pf-fg); background: transparent; }
+.pf .pf-wiz-step[data-state="done"] .pf-wiz-seg,
+.pf .pf-wiz-step[data-state="current"] .pf-wiz-seg { background: var(--pf-ac); border-color: var(--pf-fg); }
+.pf .pf-wiz-step[data-state="todo"] .pf-wiz-seg { border-color: var(--pf-rule); }
+.pf .pf-wiz-step-label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+.pf .pf-wiz-step[data-state="current"] { color: var(--pf-fg); }
+.pf .pf-wiz-step[data-state="current"] .pf-wiz-step-label { text-decoration: underline; text-underline-offset: 4px; }
+.pf .pf-wiz-step[data-state="done"] { color: var(--pf-fg); }
+/* Phone: the labels go except the current one. They stay in the accessible name. */
+@media (max-width: 599px) {
+  .pf .pf-wiz-step:not([data-state="current"]) .pf-wiz-step-name { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pf .pf-wiz-steps { gap: 4px; }
+}
+
+.pf .pf-wiz-body { flex: 1; min-width: 0; }
+.pf .pf-wiz-h1 { margin: 0 0 12px; width: auto; font-size: clamp(1.75em, 6vw, 2.5em); line-height: 1.1; }
+.pf .pf-wiz-h1:focus-visible { outline-offset: 6px; }
+.pf .pf-wiz-sub { margin: 0 0 20px; max-width: 62ch; opacity: 0.85; line-height: 1.7; }
+.pf .pf-wiz-pane { padding-bottom: 24px; }
+
+/* Step 1 */
+.pf .pf-wiz-kinds .pf-choice { padding: 20px 20px 22px; }
+.pf .pf-wiz-kinds .pf-choice-name { font-size: 1.5em; }
+.pf .pf-wiz-tracks { margin-top: 24px; }
+.pf .pf-wiz-tracks legend { display: block; width: 100%; }
+.pf .pf-wiz-track-grid { grid-template-columns: 1fr; }
+@media (min-width: 700px) {
+  .pf .pf-wiz-track-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Steps 2 and 3 */
+.pf .pf-wiz-idea { width: 100%; min-height: 120px; resize: vertical; }
+.pf .pf-wiz-title { width: 100%; min-height: 52px; font-size: 1.125em; }
+.pf .pf-wiz-meta { display: flex; justify-content: space-between; gap: 12px; }
+.pf .pf-wiz-count { white-space: nowrap; }
+.pf .pf-wiz-sparks { margin-top: 8px; }
+.pf .pf-wiz-sparks-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.pf .pf-wiz-sparks-head h2 { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-wiz-more { min-height: 44px; padding: 0 16px; }
+.pf .pf-wiz-sparks ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.pf .pf-wiz-spark {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px dashed var(--pf-fg);
+  background: transparent;
+  color: var(--pf-fg);
+  font: 400 0.9375em/1.5 var(--font-ui), monospace;
+  text-align: left;
+  cursor: pointer;
+}
+.pf .pf-wiz-spark:hover { border-color: var(--pf-link); color: var(--pf-link); background: var(--pf-panel); }
+.pf .pf-wiz-undo { min-height: 44px; margin-top: 8px; padding: 0 14px; border: 1px solid var(--pf-fg); background: var(--pf-panel); color: var(--pf-fg); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
+.pf .pf-wiz-preview-wrap { max-width: 420px; margin: 20px 0 20px 0; padding-bottom: 4px; perspective: 900px; }
+.pf .pf-wiz-preview { transition: transform 120ms var(--pf-ease); will-change: transform; }
+.pf .pf-wiz-preview .pf-project-cover { aspect-ratio: 16 / 9; min-height: 0; }
+.pf .pf-wiz-preview .pf-project-body > span { display: block; }
+.pf .pf-wiz-preview [data-empty="true"] { color: var(--pf-mut); }
+.pf .pf-wiz-notice { max-width: 62ch; margin: 0; }
+
+/* Step 4 */
+.pf .pf-wiz-links { display: grid; grid-template-columns: 1fr; gap: 0 20px; margin-bottom: 8px; }
+@media (min-width: 700px) {
+  .pf .pf-wiz-links { grid-template-columns: 1fr 1fr; }
+}
+.pf .pf-wiz-links .pf-input { width: 100%; min-height: 48px; }
+.pf .pf-wiz-links .pf-field > label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+
+/* Step 5 */
+.pf .pf-wiz-review { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }
+@media (min-width: 760px) {
+  .pf .pf-wiz-review { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 32px; }
+}
+.pf .pf-wiz-facts { margin: 0 0 12px; padding: 0; border-top: 1px solid var(--pf-rule); }
+.pf .pf-wiz-facts > div { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 48px; border-bottom: 1px solid var(--pf-rule); }
+.pf .pf-wiz-facts dt { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-wiz-facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.pf .pf-wiz-change { min-height: 44px; padding: 0 8px; border: 0; background: transparent; color: var(--pf-link); font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* Bottom bar: Back on the left, the main action on the right. It sticks to the bottom of the screen. */
+.pf .pf-wiz-server { min-height: 0; }
+.pf .pf-wiz-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 0 14px;
+  border-top: 1px solid var(--pf-rule);
+  background: var(--pf-bg);
+}
+.pf .pf-wiz-bar .pf-btn { min-height: 48px; }
+.pf .pf-wiz-bar .pf-btn.pri { min-height: 52px; padding: 0 32px; }
+@media (max-width: 599px) {
+  .pf .pf-wiz-bar .pf-btn { flex: 1; }
+  .pf .pf-wiz-bar .pf-btn.pri { flex: 2; padding: 0 16px; }
+  .pf .pf-wiz-bar > span { display: none; }
+}
+
+/* Leave confirm */
+.pf .pf-wiz-leave { padding: 20px 22px 22px; }
+.pf .pf-wiz-leave p { margin: 0 0 20px; }
+.pf .pf-wiz-leave-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* The step change: the content fades in and rises 8px. Instant under reduced motion or when motion is paused. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-body { animation: pf-wiz-in 220ms var(--pf-ease) both; }
+}
+@keyframes pf-wiz-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf .pf-wiz-preview { transition: none; }
+}
+@media (forced-colors: active) {
+  .pf .pf-wiz-seg, .pf .pf-wiz-spark, .pf .pf-wiz-undo { border-color: CanvasText; }
+  .pf .pf-wiz-step[data-state="done"] .pf-wiz-seg, .pf .pf-wiz-step[data-state="current"] .pf-wiz-seg { background: Highlight; }
+}

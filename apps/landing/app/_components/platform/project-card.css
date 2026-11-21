@@ -1,0 +1,13 @@
+/* Project cards on the profile and the own projects page: one tag per fact, one hours line. Tokens only (--pf-*), both themes. */
+.pf .pf-sp-project-title { display: flex; align-items: center; gap: 8px; }
+.pf .pf-sp-pin { display: inline-flex; flex: none; color: var(--pf-link); }
+.pf .pf-sp-tags { margin-top: 0; padding-top: 0; }
+.pf .pf-sp-foot { margin-top: auto; padding-top: 4px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-sp-tag { padding: 2px 8px; border: 1px solid var(--pf-rule); background: var(--pf-panel); font: 400 11px var(--font-dot), monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+.pf .pf-projects-card .pf-project-body > .pf-sp-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.pf .pf-projects-title { display: flex; align-items: center; gap: 8px; }
+.pf .pf-projects-card .pf-project-body > .pf-projects-title { display: flex; }
+/* One line: the hours foot never wraps; a very narrow card trims it instead. */
+.pf .pf-sp-foot,
+.pf .pf-projects-foot > span { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.02em; text-transform: none; }
+.pf .pf-sp-foot { color: var(--pf-mut); }

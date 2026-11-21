@@ -1,0 +1,171 @@
+import { notFound } from "next/navigation";
+import { requirePage } from "@/reviewer-dash/lib/guard";
+import { getShopOrder, buyerDetailsByUserId } from "@/reviewer-dash/lib/db";
+import { audit } from "@/reviewer-dash/lib/audit";
+import { canViewLabel } from "@/reviewer-dash/lib/fulfillmentAccess";
+import { isGrantOrder } from "@/reviewer-dash/lib/fulfillmentGrant";
+import { PrintButton } from "./PrintButton";
+
+export const dynamic = "force-dynamic";
+
+// A physical shipping label, sized to a quarter of an A4 sheet
+// (105mm x 148.5mm - same as ISO A6) and pinned to the sheet's top-right
+// quadrant so the printout lines up with a quarter-cut label sheet, or can
+// just be cut out by hand.
+export default async function ShippingLabelPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const access = await requirePage("fulfiller");
+  const { id } = await params;
+  const orderId = Number(id);
+  if (!Number.isSafeInteger(orderId) || orderId <= 0) notFound();
+  const order = await getShopOrder(orderId, { viewerSlack: access.session.slackId, allowPrivateNames: access.isOwner });
+  // IDOR: the label is the buyer's full address, so only the fulfiller who
+  // claimed this order (or an owner) may open it. Anyone else gets the same
+  // 404 as a missing order, so ids can't be probed.
+  if (!order || !canViewLabel(order, access)) {
+    await audit({
+      action: "fulfillment.label_view",
+      result: "denied",
+      slackId: access.session.slackId,
+      target: `order:${orderId}`,
+    });
+    notFound();
+  }
+  await audit({
+    action: "fulfillment.label_view",
+    result: "ok",
+    slackId: access.session.slackId,
+    target: `order:${order.id}`,
+  });
+  const buyer = (await buyerDetailsByUserId([order.user_id])).get(order.user_id);
+  // A grant is delivered by email. Its label must show the recipient's name and email only, never a postal address
+  // or phone number, matching the shipping panel in OrderDetail.
+  const grant = isGrantOrder(order);
+  const addressLines = grant ? [] : buyer?.addressLines ?? [];
+
+  return (
+    <>
+      <PrintButton />
+      <div className="sheet">
+        <div className="label">
+          <div className="label-inner">
+            <div className="header-row">
+              <span className="wordmark">LOADOUT</span>
+            </div>
+            <div className="address-block">
+              <div className="ship-to">{grant ? "Grant recipient" : "Ship to"}</div>
+              <div className="name">{buyer?.name || order.player_name || "(name missing)"}</div>
+              {grant ? (
+                buyer?.email
+                  ? <div className="line">{buyer.email}</div>
+                  : <div className="line missing">No email on file - don&apos;t send the grant yet.</div>
+              ) : addressLines.length > 0 ? (
+                addressLines.map((line, i) => (
+                  <div className="line" key={i}>
+                    {line}
+                  </div>
+                ))
+              ) : (
+                <div className="line missing">No address on file - don&apos;t ship yet.</div>
+              )}
+              {!grant && buyer?.phone && <div className="phone">{buyer.phone}</div>}
+            </div>
+            <div className="footer">
+              LOADOUT · {order.item_name || "item"} · Order #{order.id}
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>{`
+        html, body { margin: 0; padding: 0; background: #e8e8e8; }
+        .sheet {
+          width: 210mm;
+          height: 297mm;
+          position: relative;
+          background: #fff;
+          margin: 20px auto;
+          box-shadow: 0 0 0 1px #ddd;
+        }
+        .label {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 105mm;
+          height: 148.5mm;
+          box-sizing: border-box;
+          border: 0.4mm dashed #aaa;
+          overflow: hidden;
+        }
+        /* The label box itself stays portrait (105 x 148.5mm) - the content
+           is rotated 90deg within it, landscape, so it reads sideways when
+           the envelope/box is turned on its side. */
+        .label-inner {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 148.5mm;
+          height: 105mm;
+          transform: translate(-50%, -50%) rotate(90deg);
+          transform-origin: center center;
+          box-sizing: border-box;
+          padding: 7mm;
+          display: flex;
+          flex-direction: column;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          color: #111;
+        }
+        /* .label-inner is a flex column, whose default align-items:stretch
+           forces a child's width to fill the container unless it opts out -
+           without this the images lose their aspect ratio and squash wide,
+           ignoring width:auto entirely. */
+        .header-row {
+          display: flex;
+          align-items: center;
+          gap: 3mm;
+          align-self: flex-start;
+        }
+        .wordmark {
+          font-size: 13pt;
+          font-weight: 800;
+          letter-spacing: 0.18em;
+          display: block;
+        }
+        .address-block {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin-top: 6mm;
+        }
+        .ship-to {
+          font-size: 8pt;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #888;
+          margin-bottom: 2.5mm;
+        }
+        .name { font-size: 15pt; font-weight: 700; margin-bottom: 1.5mm; }
+        .line { font-size: 12pt; line-height: 1.45; }
+        .line.missing { color: #c0392b; font-style: italic; font-size: 11pt; }
+        .phone { font-size: 11pt; margin-top: 2.5mm; color: #333; }
+        .footer { font-size: 7pt; color: #999; }
+        @media print {
+          @page { size: A4; margin: 0; }
+          html, body { background: #fff !important; }
+          body * { visibility: hidden !important; }
+          .sheet, .sheet * { visibility: visible !important; }
+          .sheet {
+            position: fixed !important;
+            inset: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+          }
+          .no-print { display: none !important; }
+        }
+      `}</style>
+    </>
+  );
+}

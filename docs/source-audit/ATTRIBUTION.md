@@ -143,3 +143,106 @@ Effect on this record:
 - Product decisions in `DECISIONS.md` still stand. Permission to copy does not mean LOADOUT adopts the other project's rules, currency, copy or branding.
 
 **TODO (owner):** attach or link the written grants. Record who granted permission for each of the four references, when, and where the message or file can be found (channel, thread link or document). Do not paraphrase from memory. Until this is done the statement is an unsupported claim and the evidence is pending. The 2026-10-11 Stasis entry (an informal reply from Hack Club) and the 2026-10-14 Pixl entry (a Slack message) are the only grants quoted so far, and both still need the sender, date and link.
+
+## Shop catalog photos — 2026-11-01
+
+The Shop tab (`apps/landing/lib/platform/shop.ts`, `app/(platform)/dashboard/(shell)/shop/`) lists proposed items. Their photos come from two places. Pixl's product photos are covered by the permission quoted in the 2026-10-14 entry above; on 2026-11-01 the LOADOUT owner also said in chat that they hold permission to use the pictures from the reference repositories (Pixl and the others), which answers the open question in "Pixl licence exceptions" for these files. The written grant is still the owner's TODO in "Reuse permission statement".
+
+**From Pixl** (`references/pixl/apps/landing/public/shop/`, pinned commit `8141b992e92e05583246fd914c63a101100f6fe4`, copied unchanged to `apps/landing/public/loadout/prizes/`): `flipper.webp`, `screwdriver.webp`, `furycube.webp`, `pcb.webp`, `arduino.webp`, `logitech-mx-master-3s-nobg.webp`, and the two pixel-art icons `gpu-grant.webp` and `hosting-grant.webp`. They show products by other companies as examples. Pixl's own origin for `pcb.webp` is not recorded and the photo may be a Wikimedia Commons image whose credit we do not have; replace it with a photo whose licence is known before launch. The same applies to the product photos in general: they are other companies' product images, used as examples of what an item looks like.
+
+**From Wikimedia Commons**, each downloaded on 2026-11-01 as a resized copy (no crop or other edit) into `apps/landing/public/loadout/prizes/`, with the photographer credited on the item page (`credit` in `shop.ts`):
+
+| File | Commons page | Author | Licence |
+| --- | --- | --- | --- |
+| `pico-w.jpg` | File:RPI_PICO_W_1.jpg | SparkFun Electronics | CC BY 2.0 |
+| `tang-nano-fpga.jpg` | File:Sipeed_Tang_Nano_9K_FPGA.jpg | Popolon | CC0 1.0 |
+| `usb-logic-analyzer.jpg` | File:8_Channel_USB_logic_analyzer_(5172098012).jpg | Dilshan Jayakody | CC BY-SA 2.0 |
+| `oscilloscope.jpg` | File:RIGOL_DS1054Z_Digital_Storage_Oscilloscope.jpg | Draconichiaro | CC BY-SA 4.0 |
+| `yubikey.png` | File:YubiKey_5_NFC.png | FelixLadd | CC BY-SA 4.0 |
+| `mini-pc.jpg` | File:Intel_NUC_Mini_PC.jpg | Project Kei | CC BY-SA 4.0 |
+
+Page URLs are `https://commons.wikimedia.org/wiki/` plus the file name. The share-alike licences apply to those photos only, not to the rest of the site. The conference grant (`conference-grant`) uses LOADOUT's own sprites.
+
+## Shop catalog photos, second round — 2026-11-01
+
+The proposed shop catalog grew to 69 items (`apps/landing/lib/platform/shop.ts`) and the owner asked for real pictures instead of icons. Same basis as the entry above: Pixl photos under the 2026-10-14 permission and the owner's statement of 2026-11-01, Commons photos under their own open licences with a credit on the item page.
+
+**More from Pixl** (`references/pixl/apps/landing/public/shop/`, pinned commit `8141b992e92e05583246fd914c63a101100f6fe4`, copied unchanged to `apps/landing/public/loadout/prizes/`): `aseprite.webp`, `google-play.webp`, `cpu-grant.webp`, `ram-grant.webp` (pixel-art icons), `framework-13.webp` and `ender3-v3.webp`. Pixl's logo-only images (the Anthropic wordmark, the Apple logo and the PICO-8 wordmark), its `hardware-grant.webp` banner (it carries other companies' logos) and its Tamagotchi photo were left out on purpose.
+
+**More from Wikimedia Commons**, downloaded on 2026-11-01 as resized copies (no crop or other edit), each credited on its item page. Page URLs are `https://commons.wikimedia.org/wiki/` plus the file name.
+
+| File in `prizes/` | Commons file | Author | Licence |
+| --- | --- | --- | --- |
+| `pi-zero-2-w.jpg` | File:Raspberry_Pi_Zero_2_W.jpg | Laserlicht | CC BY-SA 4.0 |
+| `breadboard.jpg` | File:400_points_breadboard.jpg | oomlout | CC BY-SA 2.0 |
+| `eink-module.jpg` | File:Monokroomne_e-paberi_moodul_suurusega_122x250_pikslit.jpg | Tauno Erik | CC BY 4.0 |
+| `rtl-sdr.jpg` | File:Rtl-sdr.jpg | Joeceads | CC BY-SA 4.0 |
+| `servo.jpg` | File:Tower_Pro_SG90_micro_servo_motor.jpg | Suyash Dwivedi | CC BY-SA 4.0 |
+| `multimeter.jpg` | File:UT61D_digital_multimeter_front.jpg | Anselm Schüler | CC BY-SA 4.0 |
+| `usb-microscope.jpg` | File:Digital_USB_microscope.jpg | Ravi312 | CC BY-SA 4.0 |
+| `pinecil.jpg` | File:Pinecil_USB_C_soldering_iron.jpg | 4300streetcar | CC BY 4.0 |
+| `usb-c-dock.jpg` | File:USB-C_dock_front.jpg | Basfluax | CC BY-SA 4.0 |
+| `jetson-nano.jpg` | File:NVIDIA_Jetson_Nano_Developer_Kit_(47616885631).jpg | SparkFun Electronics | CC BY 2.0 |
+| `calipers.jpg` | File:2020_Suwmiarka_cyfrowa.jpg | Jacek Halicki | CC BY-SA 4.0 |
+| `hot-air-station.png` | File:Accta_301_Soldering_Station.png | YuriyTer | CC BY-SA 4.0 |
+| `fume-extractor.jpg` | File:BOFA_V250.jpeg | Ivan Albion | CC BY-SA 3.0 |
+| `filament.jpg` | File:Crossed_filiment.jpg | SuperBlobMonster | CC BY-SA 3.0 |
+| `sensor-kit.jpg` | File:SparkFun_HC-SR04_Ultrasonic-Sensor_13959-01a.jpg | SparkFun Electronics | CC BY 2.0 |
+| `network-router.jpg` | File:Ubiquiti_edgerouter_x_router.jpg | Kent Madsen | CC BY 4.0 |
+| `nas.jpg` | File:Synology_Disk_Station_DS223J_-_NAS-Server.jpg | DYVER | CC BY-SA 4.0 |
+| `thermal-camera.jpg` | File:FLIR_One_Pro_Thermal_Camera_(29349789547).jpg | jcutrer.com | CC BY-SA 2.0 |
+| `usb-c-cable.jpg` | File:USB-C_cable_2017_A.jpg | Fructibus | CC0 1.0 |
+| `lora-node.png` | File:Meshtastic2.png | Valanagut | CC0 1.0 |
+
+Notes: the thermal camera photo is a picture a FLIR camera took, not the camera; the LoRa photo is a labelled board in German; the filament photo is a hand holding a strand. Replace any of these with a better photo when one is available. Items with no photo yet keep a LOADOUT sprite: the tickets, stays, grants and licences, and the macropad kit, DIY handheld kit, Cardputer, debug probe, bench power supply and portable monitor (no open-licence photo was found for them).
+
+## Shop pictures from the references, background removed — 2026-11-01
+
+The owner asked for the shop to use the references' own pictures first, with every background removed, and said they hold permission to use them. The shop now lives on 59 processed pictures in `apps/landing/public/loadout/shop/` (WebP with transparency, trimmed, at most 800 px). The eight prize photos on the homepage belt stay untouched in `apps/landing/public/loadout/prizes/`. This entry replaces the file names in the two shop-photo entries above: every Pixl or Commons picture listed there that the shop still uses was processed and renamed to `shop/<item picture name>.webp` (for example `pico-w.jpg` became `shop/pico-w.webp`). Three of the pictures listed above are no longer used: the Rigol oscilloscope photo (the Stasis drawing replaced it) and the filament and thermal-camera photos (their cut-outs came out unusable, so those two items use LOADOUT sprites). The Commons photos that are still used keep their credit on the item page.
+
+**New sources**, all copied unchanged first and then processed:
+
+- **Stardance** (`references/stardance` at pinned commit `5b6bfb86462e0edc68592d6985168d09543f00d5`, `app/assets/images/`): `onboarding/prizes/raspberry-pi-5.png`, `onboarding/prizes/framework-laptop.png`, `onboarding/prizes/bambu-a1-mini.png`, `onboarding/prizes/ipad.png`, `onboarding/prizes/meta-quest-3.png`, `landing/prizes/camera.png`, `landing/prizes/mouse.png`, `landing/prizes/switch.png`, `landing/prizes/airpods.png`, `landing/prizes/kindle.avif`, `landing/prizes/amd-rx9060.png`, `landing/prizes/blahaj.png`, `macbook-air.png`, `shop/hardware_build_fund.png` and `landing/weekend/cat-printer.png`. They show products by other companies as examples.
+- **Stasis** (`references/stasis/public/`): `bench-power-supply-orange.png` and `oscilloscope-orange.png`, line drawings in Stasis's orange.
+- **YSWS template** (`references/ysws-template/frontend/static/images/shop/`): `flight-stipend.webp`.
+- **Pixl** (`references/pixl/apps/landing/public/shop/`): `esp32`, `arduino`, `flipper`, `screwdriver`, `furycube`, `domain-grant`, `hosting-grant`, `gpu-grant`, `cpu-grant`, `ram-grant`, `samsung-t7-ssd`, `soldering-iron`, `pcb`, `ender3-v3`, `centauri-carbon`, `framework-13`, `aseprite` and `google-play` (all `.webp`).
+
+**Processing:** the 27 pictures that still had a background (the Commons photos, Pixl's PCB, Framework 13 and the template's flight stipend) were cut out locally with the IMG.LY `@imgly/background-removal-node` 1.4.5 model, run on this machine from a scratch folder outside the repository (nothing was uploaded and none of its code was added to the repo; the library is AGPL-3.0, and the pictures it produced are data, not part of it). Every picture was then trimmed of empty margin, fitted inside 800 px and saved as WebP with `sharp`. Pixl's logo-only images and the Tamagotchi photo were not used.
+
+**Added to the catalog from Stardance's prize list:** a MacBook Air, an AMD Radeon RX 9060 XT graphics card (it replaces the $200 GPU upgrade grant and keeps the Compute LV.8 gate), an iPad, a Meta Quest 3, a Nintendo Switch, AirPods Pro, a Kindle, a compact 4K camera, a mini thermal sticker printer and a Blåhaj plush. All are General items at the full price. Plan 02 keeps entertainment, merch and unrelated consumer electronics out of the shop, so the owner's request overrides it for these items; they sit in one block at the end of `shop.ts` and are easy to remove.
+
+## Shop pictures, more from Stardance and the references — 2026-11-01
+
+The owner found some pictures weak and asked for as many as possible from Stardance, including its icons for grants, then the other references. The shop now uses 70 processed pictures (`apps/landing/public/loadout/shop/`), counted by source: Stardance 25, Pixl 20, Wikimedia Commons 21, Stasis 2 and the YSWS template 2. The Commons credits are on the item pages. This entry replaces the picture counts in the entry above.
+
+**Added from Stardance** (`references/stardance/app/assets/images/` at commit `5b6bfb86462e0edc68592d6985168d09543f00d5`): `landing/weekend/keebcard.png` (the macropad), and its pastel icons `icons/book.png`, `icons/calendar.png`, `icons/box.png`, `icons/rocket.png`, `icons/stardust.png`, `icons/paper.png` and `icons/cart.png`, used for the IRL ticket, the nights' stays, the grants, licences and credits. Two of its one-colour UI glyphs, `icons/terminal.svg` and `icons/code.svg`, were drawn in LOADOUT blue (`#4F8BE8`) so they read on both themes.
+
+**Added from the other references:** from the YSWS template, `frontend/static/images/shop/framework.webp` (the Framework 12 convertible); from Pixl, `mac-mini-m6-nobg.webp`, `odyssey-g5.webp` and `retro-handheld.webp`.
+
+**Dropped:** Pixl's `framework-13.webp` (a dark laptop on a hand, a poor cut-out), and the Commons photos of the collage mini PC and the labelled LoRa board. The multimeter and the RTL-SDR cut-outs were cleaned of stray lines and specks.
+
+**Changed in the catalog to match the pictures:** the Framework 13 became a Framework 12 (1,290 Ore), the mini PC a Mac mini (1,410 Ore), the portable monitor a 27-inch QHD monitor (470 Ore) and the DIY handheld kit a retro handheld console (150 Ore, General). Five hardware items still use a LOADOUT sprite because no reference or open picture was usable: the Cardputer, the debug probe, the LoRa node, the filament and the phone thermal camera.
+
+## Shop pictures, owner's corrections — 2026-11-01
+
+The owner reviewed the shop again: official marks for the software items, LOADOUT's own icons for the event and learning items and for the hardware items LOADOUT already has icons for, no Stasis drawings, a real filament photo, and three items removed. The shop now has 75 items and 62 pictures in `apps/landing/public/loadout/shop/`: Stardance 14, Pixl 22, Wikimedia Commons 24 and the YSWS template 2. This entry replaces the counts above.
+
+**Stasis:** its two orange drawings (`bench-power-supply-orange.png`, `oscilloscope-orange.png`) are no longer used. The oscilloscope has the Commons Rigol photo again and the bench power supply has LOADOUT's `psu` icon. Stasis's older pictures (`public/old-cdn`) are KiCad and CAD tutorial screenshots, with no product photos to use.
+
+**Stardance:** no longer used are the calendar, rocket, paper, book, cart and stardust icons, the two blue glyphs, and the Switch, camera and cat printer pictures. Still used: the product shots (Raspberry Pi 5, Framework laptop, Bambu A1 Mini, mouse, MacBook Air, iPad, Quest 3, AirPods, Kindle, Blåhaj, RX 9060), `shop/hardware_build_fund.png`, `landing/weekend/keebcard.png` (the macropad) and `icons/box.png` (the nights' stays).
+
+**Pixl, new:** `api.webp`, `apple-dev.webp` and `mac-mini.webp` (the front view, cut out; the earlier `-nobg` file had stray edges). `api.webp` is the Anthropic wordmark Pixl uses for AI credits and `apple-dev.webp` is the Apple logo; both are one black colour, so the page flips them to white in the dark theme. They are other companies' marks shown to say what the item is.
+
+**Wikimedia Commons, new:** `File:ABS_filament_spool.jpg` (Tatár Lehel, CC BY-SA 3.0, credited on the item page), `File:Visual_Studio_Code_1.35_icon.svg` (Microsoft, public domain) for the code editor item, and `File:PICO-8_logo.png` (Lexaloffle, public domain) for the PICO-8 item. The Rigol photo (`File:RIGOL_DS1054Z_Digital_Storage_Oscilloscope.jpg`, Draconichiaro, CC BY-SA 4.0) is back with its credit. The two public-domain marks carry no credit line; the PICO-8 mark is one pale colour on black, keyed out by brightness, and the page flips it to black in the light theme.
+
+**LOADOUT's own icons** (`apps/landing/public/loadout/sprites/`) now stand for: the conference grant (`people`), the book grant (`cap`), the $10 hosting grant (`cloud`), the cloud database credits (`storage`), the laptop grant (`laptop`), the e-ink module (`eink`), the Cardputer (`cardputer`), the LoRa node (`lora`), the phone thermal camera (`thermal`), the debug probe (`probe`) and the bench power supply (`psu`).
+
+**Removed from the catalog:** the Nintendo Switch, the compact 4K camera and the mini thermal sticker printer.
+
+## Shop pictures, last corrections — 2026-11-01
+
+The two nights' stays and the $10 parts grant were removed (72 items on 60 pictures). The $10 PCB fabrication grant now uses Stardance's `shop/hardware_build_fund.png` (the picture the parts grant had). The USB-C dock uses `File:ALMIGHTY_DOCK_C1.jpg` from Wikimedia Commons (しろうるり, public domain) instead of the StarTech dock photo, which showed a flat slab without ports, and its credit line was updated. Shop pictures are now saved as `<name>.<content hash>.webp`, so a replaced picture can never be shown from the browser's or the image optimiser's cache under an old name. That is why the oscilloscope still showed the old Stasis drawing: the new Rigol photo (`File:RIGOL_DS1054Z_Digital_Storage_Oscilloscope.jpg`, Draconichiaro, CC BY-SA 4.0) had kept the same file name. The unused Pixl `pcb.webp` and the StarTech dock photo are no longer in the shop.
+
+## Reviewer site: copy of Pixl's internal dashboard — 2026-11-15
+
+The reviewer site (`apps/landing/reviewer-dash/` and the review routes in `apps/landing/app/(reviewer)/reviewer/`) is a copy of `references/pixl/apps/internal-dashboard` at commit `1468ba6942b13add1ac50e1319541a033ee1df38`, under Pixl's MIT licence and the owner-stated permission recorded above. Pixl's notice is kept in `apps/landing/reviewer-dash/PIXL-LICENSE.md`. The files are copied by `apps/landing/reviewer-dash/scripts/copy-from-pixl.mjs`, which rewrites the import aliases and prints how each file differs from Pixl's; every hand edit is listed in `apps/landing/reviewer-dash/ADJUSTMENTS.md` and `ADJUSTED.txt`. The data layer, sign-in, session and server actions are LOADOUT's own and run on sample data. Not copied: Phantom Sans and every other font, images and art, `apps/pixorpheus`, the game, pixels and shop code, and anything that needs a key or a network call. The copied code uses `@hackclub/icons` (the Hack Foundation, a three-clause BSD-style licence), `motion`, `d3-scale`, `d3-shape`, `d3-array`, `clsx` and `tailwind-merge` (MIT or ISC).

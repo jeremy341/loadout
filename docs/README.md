@@ -7,11 +7,13 @@ This repository has separate public, contributor, and planning material. Use the
 | [`content/docs/`](../content/docs/) | Builders and visitors | Public explanation of the current program draft | Draft; no live submission or reward services |
 | [`development/WORKFLOW.md`](development/WORKFLOW.md) | Contributors and AI agents | Contribution, branch, review, verification, and release process | Current operating policy |
 | [`development/agent-commits.md`](development/agent-commits.md) | Contributors and AI agents | Commit messages, co-author lines and grouping commits | Current operating rule |
-| [`development/SETUP.md`](development/SETUP.md) | Developers | Local setup and environment names | Current implementation reference |
+| [`development/SETUP.md`](development/SETUP.md) | Developers | Local setup, environment names and the optional platform password gate | Current implementation reference |
+| [`development/ui-skills.md`](development/ui-skills.md) | UI contributors and AI agents | Required UI skills, scoped design brief and accessibility evidence for any UI change | Current operating rule |
 | [`development/ARCHITECTURE.md`](development/ARCHITECTURE.md) | Developers | Application boundaries and runtime architecture | Current implementation reference |
 | [`development/workspace.md`](development/workspace.md) | Contributors | Recommended local layout, worktrees and companion checkouts | Current layout guide |
 | [`related-projects/`](related-projects/README.md) | Maintainers | Outside projects that connect to LOADOUT, their owners and contracts | Current registry; confirm unverified owners |
-| [`design/system/design-system.md`](design/system/design-system.md) | Designers and UI contributors | Shared visual tokens, layout, motion, and asset rules | Current design authority |
+| [`design/system/design-system.md`](design/system/design-system.md) | Designers and UI contributors | Shared visual tokens, layout, motion, and asset rules | Current design authority; earlier design records under `.ulpi/design/` are historical unless a brief says otherwise |
+| [`design/asset-catalog.md`](design/asset-catalog.md) | Designers and UI contributors | Where artwork belongs | Current asset home list |
 | [`development/content-authoring.md`](development/content-authoring.md) | Docs maintainers | Public Markdown source and publication gate | Current publishing guide |
 | [`development/deployment-and-rollback.md`](development/deployment-and-rollback.md), [`development/quality-integrations.md`](development/quality-integrations.md) | Maintainers | Hosting, CI, integrations, and evidence | Operational records; refresh before relying on dated status |
 | [`development/rivet-handoff.md`](development/rivet-handoff.md) | Rivet maintainers | Handoff between the website and Rivet's public Docs source | Website-side handoff only; bot changes are separate |

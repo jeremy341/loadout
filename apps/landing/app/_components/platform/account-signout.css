@@ -1,0 +1,19 @@
+/* The Sign out text button at the foot of the account menu. Same look as the links above it. */
+.pf .pf-account-menu .pf-signout { margin: 0; }
+.pf .pf-account-menu .pf-signout button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  color: var(--pf-fg);
+  font: 700 1em var(--font-pixel), monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+.pf .pf-account-menu .pf-signout button:hover { text-decoration: underline; text-underline-offset: 4px; }
+html[data-larger-controls="true"] .pf .pf-account-menu .pf-signout button { min-height: 48px; }

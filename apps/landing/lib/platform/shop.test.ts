@@ -1,0 +1,293 @@
+import { describe, expect, test } from "bun:test";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import {
+  categoryCount,
+  categoryThumbs,
+  filterShopItems,
+  hasTag,
+  isNewItem,
+  matchesShopText,
+  parseShopPage,
+  recentlyAdded,
+  relatedItems,
+  visibleItems,
+  withinReach,
+  hoursOfWork,
+  lockFor,
+  parseShopQuery,
+  priceFor,
+  SHOP_ITEMS,
+  SHOP_TAGS,
+  shopGridColumns,
+  shopHref,
+  shopItemById,
+  type ShopItem,
+  type ShopQuery,
+  type TrackHours,
+} from "./shop";
+
+// The sample hours the Overview shows: Tools LV.6, Systems LV.3, Compute LV.0, Hardware LV.1.
+const approved: TrackHours = { Tools: 58, Systems: 14, Compute: 0, Hardware: 2 };
+const all: ShopQuery = { q: "", tag: null, sort: "featured", afford: false };
+const item = (id: string) => shopItemById(id) as ShopItem;
+
+describe("catalog", () => {
+  test("it holds the 70 proposed items", () => {
+    expect(SHOP_ITEMS).toHaveLength(70);
+  });
+
+  test("every item has a unique id, a positive price and a photo", () => {
+    expect(new Set(SHOP_ITEMS.map((entry) => entry.id)).size).toBe(SHOP_ITEMS.length);
+    for (const entry of SHOP_ITEMS) {
+      expect(entry.baseOre).toBeGreaterThan(0);
+      expect(entry.photo.startsWith("/loadout/")).toBe(true);
+    }
+  });
+
+  test("the working prices match the Docs table", () => {
+    expect(item("esp32-starter-kit").baseOre).toBe(30);
+    expect(item("raspberry-pi-5").baseOre).toBe(490);
+    expect(item("framework-16").baseOre).toBe(2915);
+  });
+
+  test("an unknown id is not an item", () => {
+    expect(shopItemById("nope")).toBeNull();
+  });
+});
+
+describe("price", () => {
+  test("a single-track item uses that track's level discount", () => {
+    const price = priceFor(item("domain"), approved);
+    expect(price.track).toBe("Tools");
+    expect(price.percent).toBe(4.8);
+    expect(price.final).toBe(24);
+  });
+
+  test("a multi-track item uses the best related track, never a sum", () => {
+    const price = priceFor(item("raspberry-pi-5"), approved);
+    expect(price.track).toBe("Systems");
+    expect(price.percent).toBe(1.1);
+    expect(price.final).toBe(485);
+    expect(priceFor(item("framework-16"), approved).track).toBe("Tools");
+  });
+
+  test("a General item has no discount at any level", () => {
+    const maxed: TrackHours = { Tools: 275, Systems: 275, Compute: 275, Hardware: 275 };
+    for (const id of ["conference-grant"]) {
+      const price = priceFor(item(id), maxed);
+      expect(price.track).toBeNull();
+      expect(price.percent).toBe(0);
+      expect(price.final).toBe(price.base);
+    }
+  });
+
+  test("LV.15 in a track takes 15% off its items", () => {
+    const maxed: TrackHours = { Tools: 0, Systems: 0, Compute: 0, Hardware: 178 };
+    expect(priceFor(item("enclosed-printer"), maxed).final).toBe(867);
+  });
+
+  test("hours of work is the price at 10 Ore an hour", () => {
+    expect(hoursOfWork(487)).toBe(48.7);
+    expect(hoursOfWork(25)).toBe(2.5);
+  });
+});
+
+describe("level lock", () => {
+  const gated: ShopItem = { ...item("enclosed-printer"), need: { track: "Hardware", level: 8 } };
+
+  test("an item with no level needed is never locked", () => {
+    expect(lockFor(item("domain"), approved)).toBeNull();
+  });
+
+  test("a level still missing gives the hours to go", () => {
+    expect(lockFor(gated, approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 56 });
+  });
+
+  test("the level reached unlocks it", () => {
+    expect(lockFor(gated, { ...approved, Hardware: 58 })).toBeNull();
+  });
+});
+
+describe("query", () => {
+  test("an empty address shows everything in the featured order", () => {
+    expect(parseShopQuery({})).toEqual(all);
+  });
+
+  test("tag, sort and affordable are read from the address, and unknown values are ignored", () => {
+    expect(parseShopQuery({ tag: "HARDWARE", sort: "low", afford: "1" })).toEqual({ q: "", tag: "Hardware", sort: "low", afford: true });
+    expect(parseShopQuery({ tag: "general" }).tag).toBe("General");
+    expect(parseShopQuery({ tag: "art", sort: "cheapest", afford: "yes" })).toEqual(all);
+  });
+
+  test("the search text is trimmed and capped, and repeats use the first value", () => {
+    expect(parseShopQuery({ q: "  pi  " }).q).toBe("pi");
+    expect(parseShopQuery({ q: "x".repeat(500) }).q).toHaveLength(80);
+    expect(parseShopQuery({ tag: ["systems", "tools"] }).tag).toBe("Systems");
+  });
+
+  test("the default view has no query, and a view keeps what is set", () => {
+    expect(shopHref(all)).toBe("/dashboard/shop");
+    expect(shopHref({ q: "pi", tag: "Hardware", sort: "high", afford: true })).toBe("/dashboard/shop?q=pi&tag=hardware&sort=high&afford=1");
+  });
+});
+
+describe("filter and sort", () => {
+  const ids = (query: ShopQuery, ore = 0) => filterShopItems(SHOP_ITEMS, query, approved, ore).map((entry) => entry.id);
+
+  test("a track tag shows every item that relates to it, including multi-track items", () => {
+    expect(ids({ ...all, tag: "Systems" })).toEqual(["security-key", "vps-year", "hosting-grant", "cloud-db-credits", "network-switch", "nas", "mac-mini", "samsung-t7-ssd", "raspberry-pi-5", "pi-zero-2-w", "pc-upgrade-grant", "framework-12", "framework-16", "laptop-grant", "lora-node", "macbook-air"]);
+    expect(ids({ ...all, tag: "Compute" })).toEqual(["api-credits", "mac-mini", "samsung-t7-ssd", "gpu-cloud-credits", "cpu-cloud-credits", "pc-upgrade-grant", "fpga-starter-board", "jetson-nano", "rx-9060", "framework-12", "framework-16", "laptop-grant", "macbook-air"]);
+  });
+
+  test("General shows only the items with no track", () => {
+    expect(ids({ ...all, tag: "General" })).toEqual(["conference-grant", "book-grant", "screwdriver-set", "cable-kit", "retro-handheld", "ipad", "meta-quest-3", "airpods", "kindle", "blahaj"]);
+  });
+
+  test("the tags cover every item", () => {
+    const seen = new Set(SHOP_TAGS.flatMap((tag) => ids({ ...all, tag })));
+    expect(seen.size).toBe(SHOP_ITEMS.length);
+  });
+
+  test("search matches the name, kind and description, ignoring case", () => {
+    expect(ids({ ...all, q: "PI" })).toContain("raspberry-pi-5");
+    expect(ids({ ...all, q: "fabrication" })).toEqual(["pcb-grant", "filament", "ender-3-v3", "bambu-a1-mini", "enclosed-printer"]);
+    expect(ids({ ...all, q: "zzz" })).toEqual([]);
+  });
+
+  test("affordable keeps only what the balance covers", () => {
+    expect(ids({ ...all, afford: true }, 0)).toEqual([]);
+    expect(ids({ ...all, afford: true }, 30)).toEqual(["domain", "api-credits", "hosting-grant", "pico-w", "esp32-starter-kit", "debug-probe", "pcb-grant"]);
+  });
+
+  test("price sorts use the price after the discount", () => {
+    const low = ids({ ...all, sort: "low" });
+    expect(low[0]).toBe("pico-w");
+    expect(low.at(-1)).toBe("framework-16");
+    expect(ids({ ...all, sort: "high" })[0]).toBe("framework-16");
+  });
+});
+
+describe("the proposed catalog", () => {
+  test("General items have no track and everything else names at least one", () => {
+    const general = SHOP_ITEMS.filter((entry) => entry.tracks.length === 0).map((entry) => entry.id);
+    expect(general).toEqual(["conference-grant", "book-grant", "screwdriver-set", "cable-kit", "retro-handheld", "ipad", "meta-quest-3", "airpods", "kindle", "blahaj"]);
+  });
+
+  test("the graphics card and the oscilloscope are the gated items, each locked until LV.8 in its track", () => {
+    const gated = SHOP_ITEMS.filter((entry) => entry.need);
+    expect(gated.map((entry) => entry.id)).toEqual(["rx-9060", "oscilloscope"]);
+    expect(lockFor(gated[0], approved)).toEqual({ track: "Compute", level: 8, hoursToGo: 58 });
+    expect(lockFor(gated[1], approved)).toEqual({ track: "Hardware", level: 8, hoursToGo: 56 });
+  });
+
+});
+
+describe("catalog photos", () => {
+  test("every photo file exists in the public folder", () => {
+    for (const entry of SHOP_ITEMS) {
+      expect(existsSync(join(process.cwd(), "public", entry.photo))).toBe(true);
+    }
+  });
+
+  test("exactly the photos taken from Wikimedia Commons carry a credit, and each credit is complete", () => {
+    const credited = SHOP_ITEMS.filter((entry) => entry.credit).map((entry) => entry.id);
+    expect(new Set(credited)).toEqual(
+      new Set([
+        "pico-w", "fpga-starter-board", "logic-analyzer", "security-key", "pi-zero-2-w", "breadboard-kit", "rtl-sdr", "oscilloscope", "filament",
+        "robotics-kit", "multimeter", "usb-microscope", "pinecil", "usb-c-dock", "jetson-nano", "calipers", "hot-air-station", "fume-extractor",
+        "sensor-kit", "network-switch", "nas", "cable-kit",
+      ]),
+    );
+    for (const entry of SHOP_ITEMS) {
+      if (!entry.credit) continue;
+      expect(entry.credit.url.startsWith("https://commons.wikimedia.org/wiki/File:")).toBe(true);
+      expect(entry.credit.by.length).toBeGreaterThan(0);
+      expect(entry.credit.licence.length).toBeGreaterThan(0);
+    }
+  });
+
+  test("a General item is never a gated one", () => {
+    for (const entry of SHOP_ITEMS.filter((candidate) => candidate.tracks.length === 0)) {
+      expect(entry.need).toBeUndefined();
+    }
+  });
+});
+
+describe("hub helpers", () => {
+  test("the last eight catalog entries are new, newest first", () => {
+    const fresh = recentlyAdded();
+    expect(fresh).toHaveLength(8);
+    expect(fresh.map((entry) => entry.id)).toEqual(SHOP_ITEMS.slice(-8).map((entry) => entry.id).reverse());
+    expect(isNewItem(item("blahaj"))).toBe(true);
+    expect(isNewItem(item("pico-w"))).toBe(false);
+  });
+
+  test("related items share a track, never include the item and prefer more shared tracks", () => {
+    const pi = item("raspberry-pi-5");
+    const related = relatedItems(pi, 4);
+    expect(related).toHaveLength(4);
+    expect(related.map((entry) => entry.id)).not.toContain(pi.id);
+    for (const entry of related) expect(entry.tracks.some((track) => pi.tracks.includes(track))).toBe(true);
+    expect(related[0].tracks.filter((track) => pi.tracks.includes(track))).toHaveLength(2);
+  });
+
+  test("a General item is related to other General items only", () => {
+    for (const entry of relatedItems(item("ipad"), 6)) expect(entry.tracks).toHaveLength(0);
+  });
+
+  test("category thumbs are items under the tag, without theme-flipped logos", () => {
+    for (const tag of SHOP_TAGS) {
+      const thumbs = categoryThumbs(tag);
+      expect(thumbs.length).toBeGreaterThan(0);
+      expect(thumbs.length).toBeLessThanOrEqual(3);
+      for (const entry of thumbs) {
+        expect(hasTag(entry, tag)).toBe(true);
+        expect(entry.logo).toBeUndefined();
+      }
+    }
+    expect(categoryCount("General")).toBe(SHOP_ITEMS.filter((entry) => entry.tracks.length === 0).length);
+  });
+
+  test("within reach lists only what the balance covers", () => {
+    expect(withinReach(SHOP_ITEMS, approved, 0)).toEqual([]);
+    const reach = withinReach(SHOP_ITEMS, approved, 40);
+    expect(reach.length).toBeGreaterThan(0);
+    for (const entry of reach) expect(priceFor(entry, approved).final).toBeLessThanOrEqual(40);
+  });
+
+  test("pages keep everything already shown and link to the next", () => {
+    const first = visibleItems(SHOP_ITEMS, 1);
+    expect(first.shown).toHaveLength(24);
+    expect(first.next).toBe(2);
+    expect(visibleItems(SHOP_ITEMS, 2).shown).toHaveLength(48);
+    const last = visibleItems(SHOP_ITEMS, 3);
+    expect(last.shown).toHaveLength(SHOP_ITEMS.length);
+    expect(last.next).toBeNull();
+    expect(visibleItems(SHOP_ITEMS, 0).shown).toHaveLength(24);
+  });
+
+  test("the page and the search text are read safely from the address", () => {
+    expect(parseShopPage({})).toBe(1);
+    expect(parseShopPage({ page: "3" })).toBe(3);
+    expect(parseShopPage({ page: ["2", "9"] })).toBe(2);
+    expect(parseShopPage({ page: "-4" })).toBe(1);
+    expect(parseShopPage({ page: "abc" })).toBe(1);
+    expect(matchesShopText(item("pico-w"), "  WI-FI ")).toBe(true);
+    expect(matchesShopText(item("pico-w"), "zzzz")).toBe(false);
+    expect(matchesShopText(item("pico-w"), "")).toBe(true);
+  });
+
+  test("the address carries the page only past the first", () => {
+    expect(shopHref(all, 1)).toBe("/dashboard/shop");
+    expect(shopHref({ ...all, tag: "Tools" }, 2)).toBe("/dashboard/shop?tag=tools&page=2");
+  });
+});
+
+describe("the grid column count", () => {
+  test("is four from 1280, three from 700 and two below", () => {
+    expect([320, 390, 471, 699].map(shopGridColumns)).toEqual([2, 2, 2, 2]);
+    expect([700, 900, 1100, 1279].map(shopGridColumns)).toEqual([3, 3, 3, 3]);
+    expect([1280, 1440, 1920].map(shopGridColumns)).toEqual([4, 4, 4]);
+  });
+});

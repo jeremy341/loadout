@@ -1,0 +1,30 @@
+/* Ship panel: the checklist (pass, fail, waiting), the submit dialog, the status lines. Uses the platform tokens only. */
+.pf .pf-ship-checks li { flex-wrap: nowrap; align-items: flex-start; }
+.pf .pf-ship-checks li[data-state="pass"] .pf-check-box { border-color: var(--pf-ac); background: var(--pf-ac); }
+.pf .pf-ship-checks li[data-state="pass"] .pf-check-box svg { fill: var(--pf-acf); }
+.pf .pf-ship-checks li[data-state="fail"] { color: var(--pf-fg); }
+.pf .pf-ship-checks li[data-state="fail"] .pf-check-box { border-color: var(--pf-err); }
+.pf .pf-ship-checks li[data-state="fail"] .pf-check-box svg { fill: var(--pf-err); }
+.pf .pf-ship-checks li[data-state="waiting"] { color: var(--pf-mut); }
+.pf .pf-ship-checks li[data-state="waiting"] .pf-check-box { border-style: dashed; }
+.pf .pf-ship-checks li[data-state="fail"] .pf-ship-reason { color: var(--pf-err); }
+.pf .pf-ship-reason { display: block; margin-top: 2px; overflow-wrap: anywhere; }
+
+.pf .pf-ship-form .pf-ship-checks { margin-bottom: 18px; }
+.pf .pf-ship-tick-label { display: flex; align-items: flex-start; gap: 12px; font-size: 0.9375em; line-height: 1.4; letter-spacing: normal; text-transform: none; cursor: pointer; }
+.pf .pf-modal-form .pf-field > label.pf-ship-tick-label { font-size: 0.9375em; letter-spacing: normal; text-transform: none; }
+.pf .pf-ship-why { margin: 0 0 14px; }
+
+.pf .pf-ship-state { margin: 0 0 14px; max-width: 70ch; }
+.pf .pf-ship-action { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.pf .pf-ship-note { margin: 0 0 16px; padding: 12px 14px; border: 1px solid var(--pf-link); }
+.pf .pf-ship-note p { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
+.pf .pf-ship-note .pf-ship-note-title { margin-bottom: 4px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
+
+@media (max-width: 480px) {
+  .pf .pf-ship-form .pf-modal-actions { grid-template-columns: 1fr; }
+}
+
+/* Cover area: the cover, then the upload placeholder under it. */
+.pf .pf-column-cover { flex-direction: column; gap: 10px; }
+.pf .pf-column-cover .pf-conn { margin: 0; }

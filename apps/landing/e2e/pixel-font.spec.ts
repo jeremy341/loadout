@@ -5,10 +5,15 @@ import { expect, test } from "@playwright/test";
 // of rows with no ink in the right fifth of the letter, as a share of the letter's height.
 async function openness(page: import("@playwright/test").Page, weight: number) {
   return page.evaluate(async (fontWeight) => {
-    // Only the first family: the list also names the generated fallback face (a local Arial), which does not exist on
-    // a Linux CI runner and makes document.fonts.load() reject with a NetworkError.
-    const family = getComputedStyle(document.querySelector(".hero .h1")!).fontFamily.split(",")[0].trim();
-    const font = `${fontWeight} 200px ${family}`;
+    // Measure with the heading's whole family chain: its first face (LOADOUT Digits) has only digits, so letters fall
+    // through to the pixel face. Dropping the generated ...Fallback face matters — it is a local() face that does not
+    // exist on a Linux CI runner and makes document.fonts.load() reject with a NetworkError.
+    const chain = getComputedStyle(document.querySelector(".hero .h1")!)
+      .fontFamily.split(",")
+      .map((family) => family.trim())
+      .filter((family) => !/Fallback/i.test(family))
+      .join(", ");
+    const font = `${fontWeight} 200px ${chain}`;
     const measure = async (letter: string) => {
       await document.fonts.load(font, letter);
       const size = 400;

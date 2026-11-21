@@ -1,0 +1,759 @@
+/* The minimal pass (brief .ulpi/design/dashboard-minimal-pass.md, 18 Nov 2026). Quieter chrome on the same --pf-* tokens:
+   text controls for filters and secondary actions, fewer boxes, themed scrollbars, overlay headers with a LOADOUT motif,
+   a calmer Ledger and a richer new-project page. Selectors start with `html .pf` so they win over the older rules whatever
+   the load order. Only opacity and transform animate, never under reduced motion or when motion is paused. */
+
+/* ---- Scrollbars: thin and in the theme, not the bright system bar ---- */
+html .pf * { scrollbar-width: thin; scrollbar-color: var(--pf-mut) transparent; }
+
+/* ---- Text controls: filters, sorts and tabs are words, not boxes. The active one is underlined and full strength. ---- */
+html .pf .pf-explore-filters { gap: 0 4px; margin: 0 0 20px; }
+html .pf .pf-explore-filters a {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--pf-mut);
+  font: 400 13px var(--font-dot), monospace;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+  text-decoration-color: transparent;
+}
+html .pf .pf-explore-filters a:hover { color: var(--pf-link); text-decoration-color: var(--pf-link); }
+html .pf .pf-explore-filters a[aria-current="page"] { border: 0; background: transparent; color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+html .pf .pf-shop-sort a { font-size: 13px; }
+
+/* Secondary actions inside dialogs and the wizard read as text; the one primary action stays a button. */
+html .pf :is(.pf-modal-x, .pf-confirm-actions [data-cancel]) {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--pf-mut);
+  font: 400 13px var(--font-dot), monospace;
+  letter-spacing: 0.14em;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+  box-shadow: none;
+}
+html .pf :is(.pf-modal-x, .pf-confirm-actions [data-cancel]):hover { color: var(--pf-fg); text-decoration-color: var(--pf-fg); box-shadow: none; }
+html .pf .pf-modal-actions .pf-btn:not(.pri):not(.pf-btn-danger) {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--pf-mut);
+  font: 400 13px var(--font-dot), monospace;
+  letter-spacing: 0.14em;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+  box-shadow: none;
+}
+html .pf .pf-modal-actions .pf-btn:not(.pri):not(.pf-btn-danger):hover { color: var(--pf-fg); text-decoration-color: var(--pf-fg); box-shadow: none; }
+html .pf .pf-modal-actions, html .pf .pf-confirm-actions { grid-template-columns: auto 1fr; align-items: center; }
+
+/* ---- The Shop discount row sits right under the tag tabs as one quiet line, not a second set of boxes ---- */
+html .pf .pf-shop-discounts { display: flex; flex-wrap: wrap; align-items: center; gap: 0 22px; margin: -8px 0 16px; padding: 0 12px; }
+html .pf .pf-shop-discounts a { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0; border-top: 0; }
+html .pf .pf-shop-discount-name { font: 400 13px var(--font-dot), monospace; letter-spacing: 0.1em; color: var(--pf-fg); }
+html .pf .pf-shop-discount-value { grid-column: auto; font-size: 12px; color: var(--pf-mut); }
+html .pf .pf-shop-top + .pf-shop-discounts { margin: -8px 0 16px; }
+
+/* ---- Overlays: a LOADOUT motif per type. Default and form: a ruler along the head. Danger: hatching. ---- */
+html .pf .pf-modal-head { position: relative; padding-bottom: 16px; }
+html .pf .pf-modal-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: repeating-linear-gradient(90deg, var(--pf-rule) 0 1px, transparent 1px 8px);
+  pointer-events: none;
+}
+html .pf .pf-modal[data-variant="danger"] .pf-modal-head { background: var(--pf-panel) repeating-linear-gradient(45deg, transparent 0 6px, var(--pf-ln) 6px 8px); }
+html .pf .pf-modal[data-variant="danger"] .pf-modal-head::after { background: var(--pf-err); height: 2px; }
+html .pf .pf-modal-form .pf-field > label { font-size: 13px; }
+
+/* ---- Ledger: the balance is a big number with a hatched "waiting" strip; no boxes inside boxes ---- */
+html .pf .pf-ledger-card { gap: 14px; padding: 4px 0 24px; border: 0; border-bottom: 1px solid var(--pf-rule); background: transparent; box-shadow: none; }
+html .pf .pf-ledger-hero { margin-top: 0; font-size: 3.5em; }
+html .pf .pf-ledger-hero .pf-ore-icon { width: 48px; height: 48px; }
+html .pf .pf-ledger-pending { position: relative; gap: 4px; padding: 0 0 0 20px; border: 0; background: transparent; }
+html .pf .pf-ledger-pending::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 8px;
+  background: repeating-linear-gradient(45deg, var(--pf-mut) 0 2px, transparent 2px 5px);
+}
+html .pf .pf-ledger-pending .pf-hint { max-width: 60ch; color: var(--pf-mut); }
+html .pf .pf-ledger-history { display: flex; flex-wrap: wrap; gap: 4px 28px; margin: 0; }
+html .pf .pf-ledger-history > span { display: inline-flex; align-items: baseline; gap: 8px; color: var(--pf-mut); }
+html .pf .pf-ledger-history b { font: 400 1.75em/1 var(--font-display), monospace; color: var(--pf-fg); font-variant-numeric: tabular-nums; }
+html .pf .pf-ledger-filter select.pf-input { min-width: 170px; min-height: 44px; border-width: 0 0 1px; background-color: transparent; padding-left: 0; }
+html .pf .pf-ledger-day { border: 0; background: transparent; box-shadow: none; }
+html .pf .pf-ledger-day h3 { padding: 0 0 8px; border-bottom: 1px solid var(--pf-fg); font-size: 13px; }
+html .pf .pf-ledger-row { position: relative; padding: 14px 0 14px 0; border-bottom: 1px solid var(--pf-rule); }
+html .pf .pf-ledger-row[data-status="pending"] { padding-left: 20px; box-shadow: none; }
+html .pf .pf-ledger-row[data-status="pending"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 8px;
+  background: repeating-linear-gradient(45deg, var(--pf-mut) 0 2px, transparent 2px 5px);
+}
+html .pf .pf-ledger-status, html .pf .pf-ledger-status[data-status="pending"] { padding: 0; border: 0; background: transparent; color: var(--pf-mut); font-size: 13px; }
+html .pf .pf-ledger-reason { -webkit-line-clamp: 1; line-clamp: 1; color: var(--pf-mut); }
+html .pf .pf-ledger-pager a, html .pf .pf-ledger-pager-off { border: 0; background: transparent; text-decoration: underline; text-underline-offset: 6px; }
+@media (max-width: 720px) {
+  html .pf .pf-ledger-hero { font-size: 2.5em; }
+  html .pf .pf-ledger-hero .pf-ore-icon { width: 36px; height: 36px; }
+}
+
+
+/* ---- New project, step 1: two kind tiles (brief .ulpi/design/dashboard-minimal-pass.md, "Kind tiles"). No icons. The chosen tile
+   brightens and gets a full-strength border; the other one dims. Hover lifts a tile 4px. Only opacity, background and transform
+   change, never under reduced motion or when motion is paused. ---- */
+html .pf .pf-wiz-kinds .pf-choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 800px; margin: 36px 0 0; }
+html .pf .pf-wiz-kinds .pf-wiz-kind { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 10px; min-height: 260px; padding: 28px; background: var(--pf-panel); border: 1px solid var(--pf-rule); box-shadow: none; }
+html .pf .pf-wiz-kinds .pf-wiz-kind .pf-choice-name { font-size: 2.25em; letter-spacing: 0.04em; }
+html .pf .pf-wiz-kinds .pf-wiz-kind .pf-choice-name::before, html .pf .pf-wiz-kinds .pf-wiz-kind .pf-choice-name::after { display: none; }
+html .pf .pf-wiz-kinds .pf-wiz-kind .pf-hint { max-width: 34ch; font-size: 1em; line-height: 1.6; }
+html .pf .pf-wiz-kinds .pf-wiz-kind:hover { border-color: var(--pf-mut); }
+html .pf .pf-wiz-kinds .pf-wiz-kind:has(input:checked) { background: var(--pf-field); border-color: var(--pf-fg); box-shadow: inset 0 0 0 1px var(--pf-fg); }
+html .pf .pf-wiz-kinds .pf-choice-grid:has(input:checked) .pf-wiz-kind:not(:has(input:checked)) { opacity: 0.45; background: var(--pf-bg); }
+html .pf .pf-wiz-kinds .pf-choice-grid:has(input:checked) .pf-wiz-kind:not(:has(input:checked)):hover { opacity: 0.8; }
+@media (max-width: 599px) {
+  html .pf .pf-wiz-kinds .pf-choice-grid { grid-template-columns: 1fr; margin-top: 28px; }
+  html .pf .pf-wiz-kinds .pf-wiz-kind { min-height: 180px; padding: 22px; }
+  html .pf .pf-wiz-kinds .pf-wiz-kind .pf-choice-name { font-size: 1.75em; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kinds .pf-wiz-kind { transition: opacity 200ms var(--pf-ease), background-color 200ms var(--pf-ease), border-color 200ms var(--pf-ease), transform 200ms var(--pf-ease); }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kinds .pf-wiz-kind:active { transform: scale(0.98); transition-duration: 100ms; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kinds .pf-wiz-kind:hover { transform: translateY(-4px); }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kinds .pf-wiz-kind:active:hover { transform: translateY(-4px) scale(0.98); }
+}
+@media (forced-colors: active) {
+  html .pf .pf-wiz-kinds .pf-wiz-kind:has(input:checked) { border-width: 3px; }
+  html .pf .pf-wiz-kinds .pf-choice-grid:has(input:checked) .pf-wiz-kind:not(:has(input:checked)) { opacity: 1; }
+}
+html .pf .pf-wiz-kinds .pf-wiz-kind .pf-hint { min-height: 4.8em; }
+
+/* Close is a plain x (the link keeps the accessible name "Close"). */
+html .pf .pf-wiz-close { display: inline-flex; align-items: center; justify-content: center; width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--pf-mut); font: 400 2em/1 var(--font-ui), monospace; text-decoration: none; box-shadow: none; }
+html .pf .pf-wiz-close:hover { color: var(--pf-fg); }
+
+/* Kind tile height follows the reference: about 3 : 2 (372 by 250), whatever the width. */
+html .pf .pf-wiz-kinds .pf-wiz-kind { min-height: 0; aspect-ratio: 3 / 2; }
+@media (max-width: 599px) {
+  html .pf .pf-wiz-kinds .pf-wiz-kind { aspect-ratio: auto; min-height: 180px; }
+}
+
+/* Page layout after the reference: the x sits left of the step bar on the same row, no "New project" label, and the question
+   and tiles start lower on the page. Below 1000px the x stays above the bar. */
+html .pf .pf-wiz { position: relative; }
+html .pf .pf-wiz-top { margin-bottom: 4px; }
+@media (min-width: 1000px) {
+  html .pf .pf-wiz-top { position: absolute; left: -56px; top: -8px; margin: 0; }
+}
+html .pf .pf-wiz-body { padding-top: clamp(4px, 1.5vh, 16px); }
+html .pf .pf-wiz { padding-top: clamp(8px, 3vh, 28px); }
+
+/* The Next button stands alone on the grid: the bar behind it has no fill and no rule, so the grid shows through. */
+html .pf .pf-wiz-bar { background: transparent; border-top: 0; }
+
+/* ---- Lock-in: what happens when a kind tile is picked. A hatched sweep wipes across the tile (the same hatching as the depth
+   markers and pending Ore), registration marks snap in from outside and fade, the tile gives a small press, and the track options
+   rise in. The whole thing lasts about 0.6s, plays once per pick, and is off under reduced motion or when motion is paused. ---- */
+html .pf .pf-wiz-burst { position: absolute; inset: -1px; overflow: visible; pointer-events: none; opacity: 0; }
+html .pf .pf-wiz-burst::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, var(--pf-fg) 0 1px, transparent 1px 6px); clip-path: inset(0 100% 0 0); }
+html .pf .pf-wiz-burst::after {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  background:
+    linear-gradient(var(--pf-link), var(--pf-link)) top left / 18px 2px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) top left / 2px 18px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) top right / 18px 2px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) top right / 2px 18px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) bottom left / 18px 2px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) bottom left / 2px 18px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) bottom right / 18px 2px no-repeat,
+    linear-gradient(var(--pf-link), var(--pf-link)) bottom right / 2px 18px no-repeat;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kind[data-burst="true"] { animation: pf-wiz-press 360ms var(--pf-ease); }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kind[data-burst="true"] .pf-wiz-burst { opacity: 1; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kind[data-burst="true"] .pf-wiz-burst::before { animation: pf-wiz-sweep 560ms var(--pf-ease) both; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-kind[data-burst="true"] .pf-wiz-burst::after { animation: pf-wiz-snap 600ms var(--pf-ease) both; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-tracks { animation: pf-wiz-rise 280ms var(--pf-ease) 120ms backwards; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-tracks .pf-choice { animation: pf-wiz-rise 260ms var(--pf-ease) backwards; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-tracks .pf-choice:nth-child(1) { animation-delay: 180ms; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-tracks .pf-choice:nth-child(2) { animation-delay: 240ms; }
+  html:not([data-motion-paused="true"]) .pf .pf-wiz-tracks .pf-choice:nth-child(3) { animation-delay: 300ms; }
+}
+@keyframes pf-wiz-press { 0% { transform: scale(0.97); } 45% { transform: scale(1.012); } 100% { transform: none; } }
+@keyframes pf-wiz-sweep { 0% { clip-path: inset(0 100% 0 0); opacity: 0.22; } 65% { clip-path: inset(0 0 0 0); opacity: 0.22; } 100% { clip-path: inset(0 0 0 0); opacity: 0; } }
+@keyframes pf-wiz-snap { 0% { opacity: 0; transform: scale(1.1); } 30% { opacity: 1; transform: none; } 100% { opacity: 0; transform: none; } }
+@keyframes pf-wiz-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (forced-colors: active) {
+  html .pf .pf-wiz-burst { display: none; }
+}
+
+/* Track step (Software only): three tiles in the same style as the kind tiles, with the same dimming and lock-in effect. */
+html .pf .pf-wiz-kinds .pf-wiz-track-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; gap: 20px; margin-top: 28px; }
+html .pf .pf-wiz-tracks .pf-wiz-kind { aspect-ratio: auto; min-height: 280px; }
+@media (max-width: 759px) {
+  html .pf .pf-wiz-kinds .pf-wiz-track-grid { grid-template-columns: 1fr; }
+  html .pf .pf-wiz-tracks .pf-wiz-kind { min-height: 180px; }
+}
+
+/* Next only lights up when the step has a choice. Until then it is an unlit outline, not a dimmed blue button. */
+html .pf .pf-wiz-bar .pf-btn.pri:disabled { background: transparent; color: var(--pf-mut); border-color: var(--pf-rule); opacity: 1; cursor: not-allowed; box-shadow: none; }
+
+/* Links step, Software: the Hackatime project picker. Two columns and its own scroll area, like the reference; the last row fades. */
+html .pf .pf-wiz-hk { margin: 8px 0 20px; }
+html .pf .pf-wiz-hk h2 { margin: 0 0 4px; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-wiz-hk > .pf-hint { margin: 0 0 14px; }
+html .pf .pf-wiz-hk-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-height: 236px; margin: 0; padding: 0 8px 28px 0; list-style: none; overflow-y: auto; -webkit-mask-image: linear-gradient(#000 calc(100% - 44px), transparent); mask-image: linear-gradient(#000 calc(100% - 44px), transparent); }
+html .pf .pf-wiz-hk-list:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 4px; }
+html .pf .pf-wiz-hk-row { display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 0 16px; border: 1px solid var(--pf-field-bd); background: var(--pf-panel); cursor: pointer; }
+html .pf .pf-wiz-hk-row input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--pf-link); cursor: pointer; }
+html .pf .pf-wiz-hk-row:hover { border-color: var(--pf-fg); }
+html .pf .pf-wiz-hk-row:has(input:checked) { border-color: var(--pf-fg); background: var(--pf-field); }
+html .pf .pf-wiz-hk-row:has(input:focus-visible) { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+html .pf .pf-wiz-hk-name { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html .pf .pf-wiz-hk-hours { flex: none; color: var(--pf-mut); font-variant-numeric: tabular-nums; }
+@media (max-width: 599px) {
+  html .pf .pf-wiz-hk-list { grid-template-columns: 1fr; max-height: 260px; }
+}
+
+/* The Back and Next bar sits in the page flow (it no longer sticks), so nothing scrolls under it. */
+html .pf .pf-wiz-bar { position: static; }
+
+/* Review step: just the project card, then Back and Create project, like the reference. */
+html .pf .pf-wiz-review { grid-template-columns: minmax(0, 440px); }
+
+/* Projects page, after the reference: the title, then big cards in three columns (name and approved hours on one row, three lines of
+   description) and the dashed New project tile last. */
+html .pf .pf-sg-head { margin: 0 0 20px; }
+html .pf .pf-sg-head h1 { margin: 0; }
+@media (min-width: 1280px) { html .pf .pf-sg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+html .pf .pf-sg-grid { gap: 20px; }
+html .pf .pf-sg-body { gap: 8px; padding: 18px 20px 22px; }
+html .pf .pf-sg-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+html .pf .pf-sg-title { min-width: 0; color: var(--pf-fg); font-size: 1.25em; }
+html .pf .pf-sg-card:hover .pf-sg-title, html .pf .pf-sg-card:focus-visible .pf-sg-title { color: var(--pf-link); }
+html .pf .pf-sg-hours { flex: none; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.04em; color: var(--pf-mut); font-variant-numeric: tabular-nums; }
+html .pf .pf-sg-desc { -webkit-line-clamp: 3; line-clamp: 3; margin-top: 2px; font-size: 1em; line-height: 1.6; }
+html .pf .pf-sg-card { background: var(--pf-panel); }
+html .pf .pf-sg-grid .pf-new-card { min-height: 100%; }
+
+/* ---- Project page (owner): flat header, one meta line, inline facts, no boxes inside boxes ---- */
+html .pf .pf-column { max-width: 960px; }
+html .pf .pf-spp-head { gap: 14px; padding: 0; border: 0; background: transparent; }
+html .pf .pf-spp-cover { max-height: 150px; border: 1px solid var(--pf-rule); }
+html .pf .pf-spp-cover > .pf-project-cover { aspect-ratio: 16 / 3; }
+html .pf .pf-spp-top { align-items: center; }
+html .pf .pf-spp-id { gap: 6px; }
+html .pf .pf-spp-title { color: var(--pf-fg); font-size: clamp(1.75rem, 1.1rem + 2vw, 2.25rem); }
+html .pf .pf-spp-by { gap: 6px 12px; color: var(--pf-mut); }
+html .pf .pf-spp-by .pf-column-pill { min-height: 0; padding: 0 8px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; }
+html .pf .pf-spp-by .pf-column-tag { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-fg); }
+html .pf .pf-spp-desc { max-width: 64ch; margin-top: 2px; font-size: 1em; color: var(--pf-fg); }
+html .pf .pf-spp-facts { display: flex; flex-wrap: wrap; gap: 6px 36px; border-top: 0; }
+html .pf .pf-spp-facts > div { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: baseline; gap: 10px; padding: 0; }
+html .pf .pf-spp-facts dt { font-size: 12px; }
+html .pf .pf-spp-facts dd { font: 400 1.75em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; }
+html .pf .pf-spp-links { padding-top: 0; border-top: 0; gap: 0 28px; }
+
+/* Sections inside the tabs are flat: a small label, a hairline, the content. */
+html .pf .pf-column .pf-box { margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+html .pf .pf-column .pf-box > h2, html .pf .pf-column .pf-box-head h2 { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-column .pf-box > h2 { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
+html .pf .pf-column .pf-box-head { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
+html .pf .pf-column .pf-prof-panel:not([hidden]) { gap: 32px; }
+
+/* Journal tab */
+html .pf .pf-journal-locked { position: relative; padding: 0 0 0 20px; border: 0; color: var(--pf-mut); }
+html .pf .pf-journal-locked::before { content: ""; position: absolute; left: 0; top: 3px; bottom: 3px; width: 8px; background: repeating-linear-gradient(45deg, var(--pf-mut) 0 2px, transparent 2px 5px); }
+html .pf .pf-journal-due { border: 0; padding: 0 0 0 12px; border-left: 3px solid var(--pf-link); }
+html .pf .pf-journal-empty { padding: 4px 0 0; border-top: 0; }
+html .pf .pf-spp-entry { padding: 18px 20px; background: var(--pf-panel); }
+html .pf .pf-spp-entry-title { font-size: 1.25em; }
+html .pf .pf-spp-line { background: var(--pf-rule); }
+
+/* Toolbelt tab: slots are plain tiles, the gate and the provisional note are quiet lines */
+html .pf .pf-belt-slot { background: var(--pf-panel); border: 1px solid var(--pf-rule); border-left: 4px solid var(--pf-rule); }
+html .pf .pf-belt-slot-empty { background: transparent; }
+html .pf .pf-belt-foot { border-top: 0; padding-top: 8px; }
+html .pf .pf-belt-note { color: var(--pf-mut); font-size: 0.875em; }
+html .pf .pf-belt-note .pf-tag { border: 0; padding: 0; background: none; color: var(--pf-fg); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Ship tab */
+html .pf .pf-stage { border: 1px solid var(--pf-rule); box-shadow: none; }
+
+/* Edit and Delete on an entry are text actions. */
+html .pf .pf-spp-entry-actions { gap: 4px 12px; padding-top: 2px; }
+html .pf .pf-spp-entry-actions .pf-btn { min-height: 36px; padding: 0 6px; border: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 6px; box-shadow: none; }
+html .pf .pf-spp-entry-actions .pf-btn:hover { color: var(--pf-fg); text-decoration-color: var(--pf-fg); box-shadow: none; }
+html .pf .pf-spp-entry-actions .pf-btn[data-danger], html .pf .pf-spp-entry-actions .pf-btn.pf-btn-danger { color: var(--pf-err); }
+
+/* ---- Journal writer page: flat guide, flat form, text toolbar, a calmer editor ---- */
+html .pf .pf-jw { max-width: 880px; gap: 20px; }
+html .pf .pf-jw-title { color: var(--pf-fg); }
+html .pf .pf-jw-guide { position: relative; padding: 0 0 0 20px; border: 0; background: transparent; }
+html .pf .pf-jw-guide::before { content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 8px; background: repeating-linear-gradient(45deg, var(--pf-mut) 0 2px, transparent 2px 5px); }
+html .pf .pf-jw-guide h2 { margin: 0 0 6px; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; color: var(--pf-mut); }
+html .pf .pf-jw-guide ul { list-style: none; padding: 0; color: var(--pf-mut); }
+html .pf .pf-jw-card { padding: 0; border: 0; background: transparent; gap: 24px; }
+html .pf .pf-jw-card .pf-field > label, html .pf .pf-jw-label { font-size: 13px; color: var(--pf-mut); }
+html .pf .pf-jw-editor { border: 1px solid var(--pf-rule); background: var(--pf-panel); }
+html .pf .pf-jw-toolbar { gap: 2px 14px; padding: 4px 12px; border-bottom: 1px solid var(--pf-rule); }
+html .pf .pf-jw-toolbar .pf-btn { min-height: 40px; padding: 0 4px; border: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 6px; box-shadow: none; }
+html .pf .pf-jw-toolbar .pf-btn:hover { color: var(--pf-fg); text-decoration-color: var(--pf-fg); box-shadow: none; }
+html .pf .pf-jw-editor .pf-jw-body { min-height: 360px; background: transparent; }
+
+/* The cover: a slim strip. Its upload control sits under it as a text action, nothing is clipped. */
+html .pf .pf-spp-cover { max-height: none; overflow: visible; border: 0; display: grid; gap: 2px; }
+html .pf .pf-spp-cover > .pf-project-cover { border: 1px solid var(--pf-rule); }
+html .pf .pf-spp-cover .pf-cover-up { margin: 0; gap: 0; }
+html .pf .pf-spp-cover .pf-cover-frame { display: none; }
+html .pf .pf-spp-cover .pf-cover-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; }
+html .pf .pf-spp-cover .pf-cover-actions .pf-btn { min-height: 36px; padding: 0 4px; border: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 6px; box-shadow: none; }
+html .pf .pf-spp-cover .pf-cover-actions .pf-btn:hover { color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+html .pf .pf-spp-cover .pf-cover-actions .pf-btn-danger { color: var(--pf-err); }
+html .pf .pf-spp-cover .pf-cover-up .pf-hint { font-size: 0.8125em; }
+
+/* ---- Explore: text filters, flat cards in the Projects style ---- */
+html .pf .pf-explore-intro { margin: 0 0 20px; }
+html .pf .pf-explore-intro p { max-width: 58ch; color: var(--pf-mut); font-size: 0.9375em; }
+html .pf .pf-explore-chips { gap: 0 4px; margin: 6px 0 20px; }
+html .pf .pf-explore-chips a { min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: var(--pf-mut); font-size: 13px; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; text-decoration-color: transparent; }
+html .pf .pf-explore-chips a:hover { color: var(--pf-link); text-decoration-color: var(--pf-link); }
+html .pf .pf-explore-chips a[aria-current="page"] { border: 0; background: transparent; color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+html .pf .pf-explore-count { font-size: 13px; }
+html .pf .pf-explore-grid { gap: 20px; }
+html .pf .pf-explore-card { border: 1px solid var(--pf-rule); box-shadow: none; background: var(--pf-panel); }
+html .pf .pf-explore-card:hover, html .pf .pf-explore-card:focus-within { border-color: var(--pf-link); }
+html .pf .pf-explore-cover { height: 132px; }
+html .pf .pf-explore-check { display: none; }
+html .pf .pf-explore-kudos, html .pf .pf-explore-star { border: 0; background: color-mix(in srgb, var(--pf-bg) 82%, transparent); }
+html .pf .pf-explore-track { border: 0; padding: 2px 8px; background: color-mix(in srgb, var(--pf-bg) 82%, transparent); font-size: 12px; }
+html .pf .pf-explore-card-body { gap: 8px; padding: 16px 18px; }
+html .pf .pf-explore-card-title { font-size: 1.125em; color: var(--pf-fg); }
+html .pf .pf-explore-card:hover .pf-explore-card-link, html .pf .pf-explore-card:focus-within .pf-explore-card-link { color: var(--pf-link); }
+html .pf .pf-explore-card-text { -webkit-line-clamp: 3; line-clamp: 3; min-height: 0; font-size: 1em; line-height: 1.6; color: var(--pf-mut); }
+html .pf .pf-explore-foot { padding: 0 18px; border-top: 1px solid var(--pf-rule); font-size: 12px; }
+
+/* ---- Expeditions: calmer cards ---- */
+html .pf .ex-grid { gap: 20px; }
+html .pf .ex-card { gap: 12px; padding: 20px 22px; border: 1px solid var(--pf-rule); background: var(--pf-panel); box-shadow: none; }
+html .pf .ex-card:hover, html .pf .ex-card:focus-within { border-color: var(--pf-link); }
+html .pf .ex-card-name { font-size: 1.25em; color: var(--pf-fg); }
+html .pf .ex-card:hover .ex-card-name, html .pf .ex-card:focus-within .ex-card-name { color: var(--pf-link); }
+html .pf .ex-card-line { font-size: 1em; line-height: 1.6; }
+html .pf .ex-card-next { padding-top: 0; border-top: 0; color: var(--pf-mut); }
+html .pf .ex-card-foot { padding-top: 12px; border-top: 1px solid var(--pf-rule); }
+html .pf .ex-cell { border-color: var(--pf-mut); }
+html .pf .ex-tag, html .pf .ex-state, html .pf .ex-card-facts, html .pf .ex-progress-text, html .pf .ex-label { font-size: 12px; }
+
+/* ---- Profile: flat sections, bigger track levels ---- */
+html .pf .pf-sp-card { padding: 0; border: 0; background: transparent; box-shadow: none; }
+html .pf .pf-sp-right .pf-sp-card > h2, html .pf .pf-sp-left .pf-sp-card > h2 { margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-sp-profile { padding: 0 0 8px; }
+html .pf .pf-sp-name { color: var(--pf-fg); }
+html .pf .pf-sp-bio { color: var(--pf-mut); }
+html .pf .pf-sp-levels { gap: 12px; }
+html .pf .pf-sp-level { position: relative; display: grid; gap: 4px; padding: 16px 16px 14px; border: 1px solid var(--pf-rule); border-top: 3px solid var(--tk, var(--pf-rule)); background: var(--pf-panel); }
+html .pf .pf-sp-level-swatch { display: none; }
+html .pf .pf-sp-level-name { font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-sp-level-lv { font: 400 1.75em/1.1 var(--font-display), monospace; font-variant-numeric: tabular-nums; color: var(--pf-fg); }
+html .pf .pf-sp-level-hours { font-size: 0.875em; color: var(--pf-mut); }
+html .pf .pf-sp-level { grid-template-columns: minmax(0, 1fr); align-items: start; }
+
+/* ---- Settings: a plain list of facts instead of boxes ---- */
+html .pf .pf-section > h2 { margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-facts-account { display: block; margin: 0 0 20px; }
+html .pf .pf-facts-account > div { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 24px; padding: 14px 0; border: 0; border-bottom: 1px solid var(--pf-rule); background: transparent; box-shadow: none; }
+html .pf .pf-facts-account dt { font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-facts-account dd { margin: 0; text-align: right; color: var(--pf-fg); }
+html .pf .pf-conn { position: relative; padding: 0 0 0 20px; border: 0; background: transparent; box-shadow: none; }
+html .pf .pf-conn::before { content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 8px; background: repeating-linear-gradient(45deg, var(--pf-mut) 0 2px, transparent 2px 5px); }
+html .pf .pf-conn-status { border: 0; padding: 0; color: var(--pf-mut); }
+html .pf .pf-facts-account dd { font: 400 1em var(--font-ui), monospace; }
+
+/* ---- Community: flat sections ---- */
+html .pf .cm-era, html .pf .cm-grid > .pf-box, html .pf .cm-refer { padding: 0; border: 0; background: transparent; box-shadow: none; }
+html .pf .cm-era .pf-box-head, html .pf .cm-grid > .pf-box > .pf-box-head, html .pf .cm-refer .pf-box-head { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
+html .pf .cm-era .pf-box-head h2, html .pf .cm-grid > .pf-box .pf-box-head h2, html .pf .cm-refer .pf-box-head h2 { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .cm-grid { gap: 40px; }
+html .pf .cm-era-lead { font-size: 1.125em; color: var(--pf-fg); }
+
+/* ---- Orders and other ruled lists: no frame, hairlines between rows ---- */
+html .pf .ex-list { border: 0; background: transparent; box-shadow: none; }
+html .pf .ex-row { padding: 18px 0; border-bottom: 1px solid var(--pf-rule); }
+
+/* ---- Shop: cards in the Projects style ---- */
+html .pf .pf-shop-card { border: 1px solid var(--pf-rule); box-shadow: none; background: var(--pf-panel); }
+html .pf .pf-shop-card:hover, html .pf .pf-shop-card:focus-within { border-color: var(--pf-link); }
+html .pf .pf-shop-card h3.pf-shop-name { font-size: 1.0625em; color: var(--pf-fg); }
+
+/* ---- Profile, second pass: one column. A header row (plate beside name, Ore and actions), the four track levels across, the
+   activity heatmap, then the projects grid. The two old columns are dissolved with display: contents and the parts reordered. ---- */
+html .pf .pf-sp { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; max-width: 960px; }
+html .pf .pf-sp-left, html .pf .pf-sp-right { display: contents; }
+html .pf .pf-sp-profile { order: 1; }
+html .pf .pf-sp-right > .pf-sp-card:nth-child(1) { order: 2; }
+html .pf .pf-sp-left > .pf-hm { order: 3; }
+html .pf .pf-sp-right > .pf-sp-card:nth-child(2) { order: 4; }
+
+html .pf .pf-sp-profile { display: grid; grid-template-columns: 128px minmax(0, 1fr); column-gap: 32px; row-gap: 10px; align-items: center; padding: 0; text-align: left; }
+html .pf .pf-sp-profile > .pf-sp-plate { grid-row: 1 / span 4; width: 128px; height: 128px; margin: 0; }
+html .pf .pf-sp-plate-letter { font-size: 3.5em; }
+html .pf .pf-sp-profile > :not(.pf-sp-plate) { grid-column: 2; margin: 0; }
+html .pf .pf-sp-name { font-size: 2em; line-height: 1.1; color: var(--pf-fg); }
+html .pf .pf-sp-bio { max-width: 56ch; font-size: 1em; color: var(--pf-mut); }
+html .pf .pf-sp-ore-line { justify-content: flex-start; gap: 8px 12px; }
+html .pf .pf-sp-ore-figure { font: 400 2.75em/1 var(--font-display), monospace; font-variant-numeric: tabular-nums; color: var(--pf-fg); }
+html .pf .pf-sp-actions { flex-direction: row; flex-wrap: wrap; gap: 8px 20px; align-items: center; }
+html .pf .pf-sp-actions .pf-sp-btn { width: auto; min-width: 160px; }
+html .pf .pf-sp-actions .pf-btn:not(.pri) { min-height: 44px; padding: 0 6px; border: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 6px; box-shadow: none; }
+html .pf .pf-sp-actions .pf-btn:not(.pri):hover { color: var(--pf-fg); text-decoration-color: var(--pf-fg); box-shadow: none; }
+@media (max-width: 639px) {
+  html .pf .pf-sp-profile { grid-template-columns: minmax(0, 1fr); }
+  html .pf .pf-sp-profile > .pf-sp-plate { grid-row: auto; }
+  html .pf .pf-sp-profile > :not(.pf-sp-plate) { grid-column: 1; }
+}
+
+html .pf .pf-sp-card h2, html .pf .pf-hm h2 { margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+@media (min-width: 760px) { html .pf .pf-sp-levels { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+html .pf .pf-hm { padding: 0; border: 0; background: transparent; box-shadow: none; }
+
+/* Project cards on a profile match the Projects page */
+html .pf .pf-sp-grid { gap: 20px; }
+html .pf .pf-sp-project { background: var(--pf-panel); }
+html .pf .pf-sp-project-body { padding: 16px 18px; }
+html .pf .pf-sp-project-title { font-size: 1.0625em; color: var(--pf-fg); }
+html .pf a.pf-sp-project:hover .pf-sp-project-title { color: var(--pf-link); }
+
+/* ---- Settings, second pass: label and value side by side, a narrower reading column ---- */
+html .pf .pf-section { max-width: 760px; }
+html .pf .pf-facts-account > div { display: grid; grid-template-columns: 160px minmax(0, 1fr); align-items: baseline; gap: 4px 24px; }
+html .pf .pf-facts-account dd { text-align: left; }
+@media (max-width: 559px) { html .pf .pf-facts-account > div { grid-template-columns: minmax(0, 1fr); } }
+html .pf .pf-section > .pf-lead { color: var(--pf-mut); }
+html .pf .pf-section + .pf-section { margin-top: 48px; }
+
+/* ---- Community sub-pages: roomy tabs, no frames around lists, tables and goals ---- */
+html .pf .cm-tabs { margin: 0 0 32px; }
+html .pf .cm-tabs a { padding: 0 16px; font-size: 13px; }
+html .pf .cm-tabs ~ .pf-box, html .pf .cm-tabs ~ .pf-table-wrap, html .pf .cm-tabs ~ .cm-leader { padding: 0; border: 0; background: transparent; box-shadow: none; }
+html .pf .cm-leader .pf-table th { color: var(--pf-mut); }
+html .pf .cm-goals > li { padding: 28px 0; }
+html .pf .cm-goals .cm-goal-head h2 { font-size: 1.25em; color: var(--pf-fg); }
+html .pf .cm-idea { padding: 22px 0; }
+html .pf .cm-upvote { border: 0; background: transparent; color: var(--pf-mut); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-decoration: underline; text-underline-offset: 6px; box-shadow: none; }
+html .pf .cm-tag { border: 0; padding: 0; color: var(--pf-mut); }
+html .pf .cm-frame, html .pf .cm-ideas-board, html .pf .cm-sessions-ruled, html .pf .cm-showcases, html .pf .cm-news, html .pf .cm-goals { padding: 0; border: 0; background: transparent; box-shadow: none; }
+
+/* ---- Sidebar fixes ---- */
+/* The edge tab no longer sits over the open drawer. */
+body:has(.pf-side[data-open="true"]) .a11y-shortcut { visibility: hidden; }
+/* The drawer overlays the page; the document behind it must not scroll with a drag on the scrim. */
+body:has(.pf-side[data-open="true"]) { overflow: hidden; }
+/* Short windows: tighter rows so the theme switch stays on screen, and a thin scrollbar if it still overflows. */
+html .pf .pf-side { scrollbar-width: thin; scrollbar-color: var(--pf-rule) transparent; }
+@media (min-width: 900px) and (max-height: 760px) {
+  html .pf .pf-tabs a { min-height: 44px; }
+  html .pf .pf-tabs ul { gap: 2px; }
+  html .pf .pf-tab-group + .pf-tab-group { margin-top: 6px; }
+  html .pf .pf-side-head { min-height: 44px; padding-bottom: 4px; }
+  html .pf .pf-side-foot { padding-top: 8px; }
+}
+@media (min-width: 900px) and (max-height: 560px) {
+  html .pf .pf-tabs a { min-height: 44px; }
+  html .pf .pf-tab-heading { margin-bottom: 0; }
+}
+
+/* ---- Profile, third pass: Stasis's two columns, flattened. Identity and heatmap stay in a 300px left column that sticks while
+   the right column (levels, then projects) scrolls. Under 1100px it is the single column above. ---- */
+@media (min-width: 1100px) {
+  html .pf .pf-sp { grid-template-columns: 300px minmax(0, 1fr); column-gap: 56px; max-width: 1180px; align-items: start; }
+  html .pf .pf-sp-left { display: flex; flex-direction: column; gap: 32px; position: sticky; top: 24px; }
+  html .pf .pf-sp-right { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+  html .pf .pf-sp-profile, html .pf .pf-sp-right > .pf-sp-card, html .pf .pf-sp-left > .pf-hm { order: 0; }
+  html .pf .pf-sp-profile { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 0 0 24px; border-bottom: 1px solid var(--pf-rule); }
+  html .pf .pf-sp-profile > .pf-sp-plate { width: 160px; height: 160px; margin: 0 0 8px; }
+  html .pf .pf-sp-plate-letter { font-size: 4.5em; }
+  html .pf .pf-sp-name { font-size: 1.75em; overflow-wrap: anywhere; }
+  html .pf .pf-sp-ore-figure { font-size: 2.25em; }
+  html .pf .pf-sp-actions { margin-top: 4px; }
+  html .pf .pf-sp-levels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1360px) {
+  html .pf .pf-sp-levels { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  html .pf .pf-sp-actions { width: 100%; flex-direction: column; align-items: stretch; gap: 4px; }
+  html .pf .pf-sp-actions .pf-sp-btn { width: 100%; }
+  html .pf .pf-sp-actions .pf-btn:not(.pri) { justify-content: flex-start; padding-left: 0; }
+}
+
+/* The heatmap sits in the wide column under the track levels: 30 weeks of larger squares, spread across the whole width. */
+html .pf .pf-hm { --hm-cell: 18px; --hm-gap: 4px; }
+html .pf .pf-hm-days { width: 36px; }
+html .pf .pf-hm-day { font-size: 11px; }
+html .pf .pf-hm-month { font-size: 12px; }
+@media (min-width: 1100px) { html .pf .pf-hm { --hm-cell: 20px; --hm-gap: 4px; } }
+@media (min-width: 1100px) { html .pf .pf-sp-left { gap: 0; } }
+html .pf .pf-sp-right > :nth-child(1) { order: 1; }
+html .pf .pf-sp-right > :nth-child(2) { order: 2; }
+html .pf .pf-sp-right > :nth-child(3) { order: 3; }
+html .pf .pf-sp-right > .pf-hm { order: 2; }
+html .pf .pf-sp-right > .pf-sp-card:not(.pf-hm):nth-of-type(n+2) { order: 3; }
+html .pf .pf-sp .pf-sp-right > .pf-sp-card:nth-child(1) { order: 1; }
+html .pf .pf-sp .pf-sp-right > .pf-sp-card.pf-hm:nth-child(2) { order: 2; }
+html .pf .pf-sp .pf-sp-right > .pf-sp-card:nth-child(3) { order: 3; }
+@media (min-width: 1100px) { html .pf .pf-hm { --hm-cell: 17px; --hm-gap: 3px; } }
+
+/* ---- Personality and motion ----
+   Three pieces, all transform and opacity only, all under 700ms, all off under reduced motion or when motion is paused:
+   a wave through the heatmap, track tiles that drop in one after the other, and corner brackets that
+   snap onto a card when a mouse or the keyboard reaches it (after Stasis's MagneticCorners). Titles decode in ScrambleText. */
+@keyframes pf-cell-in { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: none; } }
+@keyframes pf-tile-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-hm-col:not(.pf-hm-days) .pf-hm-cell { animation: pf-cell-in 360ms var(--pf-ease) both; animation-delay: calc(var(--w, 0) * 16ms + 250ms); }
+  html:not([data-motion-paused="true"]) .pf .pf-sp-level { animation: pf-tile-in 360ms var(--pf-ease) both; }
+  html:not([data-motion-paused="true"]) .pf .pf-sp-level:nth-child(2) { animation-delay: 70ms; }
+  html:not([data-motion-paused="true"]) .pf .pf-sp-level:nth-child(3) { animation-delay: 140ms; }
+  html:not([data-motion-paused="true"]) .pf .pf-sp-level:nth-child(4) { animation-delay: 210ms; }
+}
+
+/* Corner brackets: one pseudo-element, four L shapes drawn with gradients, sitting 8px outside the card and closing to 0 on hover or focus. */
+html .pf :is(.pf-sg-grid > li, .pf-sp-grid > *) { position: relative; }
+html .pf :is(.pf-sg-grid > li, .pf-sp-grid > *)::after {
+  content: ""; position: absolute; inset: -6px; pointer-events: none; opacity: 0;
+  --b: var(--pf-link);
+  background:
+    linear-gradient(var(--b), var(--b)) top left / 14px 2px no-repeat, linear-gradient(var(--b), var(--b)) top left / 2px 14px no-repeat,
+    linear-gradient(var(--b), var(--b)) top right / 14px 2px no-repeat, linear-gradient(var(--b), var(--b)) top right / 2px 14px no-repeat,
+    linear-gradient(var(--b), var(--b)) bottom left / 14px 2px no-repeat, linear-gradient(var(--b), var(--b)) bottom left / 2px 14px no-repeat,
+    linear-gradient(var(--b), var(--b)) bottom right / 14px 2px no-repeat, linear-gradient(var(--b), var(--b)) bottom right / 2px 14px no-repeat;
+}
+html .pf :is(.pf-sg-grid > li, .pf-sp-grid > *):is(:focus-within, :hover)::after { opacity: 1; inset: -2px; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf :is(.pf-sg-grid > li, .pf-sp-grid > *)::after { transition: inset 180ms var(--pf-ease), opacity 120ms var(--pf-ease); }
+}
+@media (hover: none) { html .pf :is(.pf-sg-grid > li, .pf-sp-grid > *):hover::after { opacity: 0; } }
+
+/* Twelve weeks is the whole run, so the heatmap goes back under the identity in the left column, with squares sized to fill it. */
+@media (min-width: 1100px) {
+  html .pf .pf-sp-left { gap: 32px; }
+  html .pf .pf-hm { --hm-cell: 16px; --hm-gap: 3px; }
+}
+
+/* Orders: the status is one square chip, the tracker steps carry their dates, and the order page reads as a column of plain boxes. */
+html .pf .pf-chip { display: inline-block; padding: 2px 8px; border: 1px solid var(--pf-rule); border-radius: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); background: transparent; white-space: nowrap; }
+html .pf .pf-chip[data-status="shipped"] { color: var(--pf-fg); border-color: var(--pf-fg); }
+html .pf .pf-chip[data-status="delivered"] { color: var(--pf-state-fg); background: var(--pf-state); border-color: var(--pf-state); }
+html .pf .ex-order-date { margin: 2px 0 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; color: var(--pf-mut); }
+html .pf .ex-flow-note { font: 400 13px var(--font-ui), sans-serif; font-variant-numeric: tabular-nums; }
+html .pf .ex-flow-step[data-state="todo"] .ex-flow-note { opacity: 0.7; }
+
+/* The rest of the pages that still had boxed sections (order, referrals, track, shop item, public project): the same plain section as the project page, a small grey title over a rule. The shop price box stays a box because it is the one thing to act on. */
+html .pf :is(.pf-flat .pf-box:not(.pf-shop-buy), .pf-spp-box) { margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+html .pf :is(.pf-flat .pf-box:not(.pf-shop-buy), .pf-spp-box) > h2, html .pf :is(.pf-flat, .pf-spp) .pf-box-head h2 { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf :is(.pf-flat .pf-box:not(.pf-shop-buy), .pf-spp-box) > h2 { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
+html .pf :is(.pf-flat, .pf-spp) .pf-box-head { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
+html .pf .pf-flat > .pf-box + .pf-box, html .pf .pf-flat > .ex-section, html .pf .pf-spp > .pf-spp-box + .pf-spp-box { margin-top: 40px; }
+html .pf .pf-spp-box h2 { margin: 0; padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+/* Track page link tiles become two plain text rows. */
+html .pf .pf-track-links { gap: 0; }
+html .pf .pf-track-links .pf-link-tile { border: 0; border-top: 1px solid var(--pf-rule); background: transparent; padding: 14px 0; }
+html .pf .pf-track-links .pf-link-tile:hover .pf-link-title { text-decoration: underline; text-underline-offset: 3px; }
+html .pf .pf-flat .ex-invite input { border-radius: 0; }
+html .pf .pf-flat > .pf-project-head + .pf-box, html .pf .pf-flat > .pf-event-line + .pf-box { margin-top: 40px; }
+html .pf .pf-track-lower { margin-top: 40px; }
+
+/* The Field Requisition choice is always on the item page: a plain checkbox row, greyed out with its reason when this item cannot use one. */
+html .pf .pf-shop-option { min-height: 0; padding: 0; border: 0; }
+html .pf .pf-shop-option[data-disabled="true"] { cursor: not-allowed; }
+html .pf .pf-shop-option[data-disabled="true"] input { cursor: not-allowed; }
+html .pf .pf-project-head + .pf-box, html .pf .pf-flat > .pf-project-head { margin-bottom: 0; }
+html .pf .pf-flat .pf-meta-box { margin-top: 16px; }
+
+/* ---- Profile projects carousel ---- */
+html .pf .pf-sp-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin: 0 0 16px; border-bottom: 1px solid var(--pf-fg); }
+html .pf .pf-sp-head h2 { margin: 0; padding-bottom: 8px; border: 0; }
+html .pf .pf-sp-head .pf-sp-count { margin-left: 6px; color: var(--pf-fg); font-variant-numeric: tabular-nums; }
+html .pf .pf-sp-head .pf-shop-rail-tools { padding-bottom: 6px; }
+html .pf .pf-sp-grid { display: flex; grid-template-columns: none; gap: 16px; margin: -8px; padding: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: 8px; scrollbar-width: thin; scrollbar-color: var(--pf-rule) transparent; }
+html .pf .pf-sp-grid > li { flex: 0 0 clamp(210px, 31%, 250px); scroll-snap-align: start; }
+html .pf .pf-sp-grid:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 0; }
+html .pf .pf-sp-card .pf-sp-grid + * { margin-top: 0; }
+
+/* ---- Track page level strip: flat, with a bar to the next level ---- */
+html .pf .pf-lvstrip { padding: 0; border: 0; background: transparent; box-shadow: none; margin: 28px 0 0; padding-top: 20px; border-top: 1px solid var(--pf-fg); }
+html .pf .pf-strip-top { align-items: flex-end; gap: 20px 40px; }
+html .pf .pf-strip-level { flex: 1 1 320px; max-width: 560px; gap: 10px; }
+html .pf .pf-strip-n { font-size: clamp(2.5em, 5vw, 3.75em); margin: 0; }
+html .pf .pf-strip-off-value { font-size: clamp(2.5em, 5vw, 3.75em); }
+html .pf .pf-strip-bar { display: grid; gap: 8px; }
+html .pf .pf-strip-bar-track { position: relative; display: block; height: 10px; background: var(--pf-cell-off); overflow: hidden; }
+html .pf .pf-strip-bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--tk); }
+html .pf .pf-strip-bar-pending { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, transparent 0 3px, var(--tk) 3px 5px); opacity: 0.7; }
+html .pf .pf-strip-cells { margin-top: 28px; }
+html .pf .pf-strip-cell { height: 36px; }
+html .pf .pf-strip-rewards { display: flex; flex-wrap: wrap; gap: 10px 32px; margin-top: 20px; }
+html .pf .pf-strip-rewards li { grid-template-columns: auto auto; align-items: center; }
+html .pf .pf-strip-flag-text { display: flex; gap: 10px; align-items: baseline; }
+html .pf .pf-strip-flag-reward { font-size: 12px; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion-paused="true"]) .pf .pf-strip-bar-fill { transform-origin: left; animation: pf-bar-in 700ms var(--pf-ease) both; }
+}
+@keyframes pf-bar-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---- Public project page: less air between sections ---- */
+html .pf .pf-spp { gap: 20px; }
+html .pf .pf-spp > .pf-back { margin: 0; }
+html .pf .pf-spp > .pf-explore-saved-status:empty { margin: -10px 0; }
+html .pf .pf-spp > .pf-spp-box + .pf-spp-box, html .pf .pf-spp > .pf-spp-head + .pf-spp-box { margin-top: 12px; }
+/* The cap belongs on the cover box, where the aspect ratio can shrink to meet it. Capping .pf-spp-cover instead let the
+   cover overflow its grid row and paint over the upload controls below it. */
+html .pf .pf-spp-cover > .pf-project-cover { aspect-ratio: 16 / 4; max-height: 200px; }
+html .pf .pf-spp-head { gap: 12px; }
+html .pf .pf-spp-box h2 { margin-bottom: 12px; }
+html .pf .pf-spp-box .pf-prof-handles { margin: 0; }
+
+/* Profile track cards: a thin bar for how far to the next level, and tighter left column. */
+html .pf .pf-sp-level { position: relative; }
+html .pf .pf-sp-level-bar { display: block; height: 4px; margin-top: 10px; background: var(--pf-cell-off); }
+html .pf .pf-sp-level-bar > span { display: block; height: 100%; background: var(--tk, var(--pf-link)); }
+html .pf .pf-sp-card > .pf-sp-empty, html .pf .pf-sp-empty { margin: 0; }
+html .pf .pf-spp-cover > .pf-project-cover { aspect-ratio: 16 / 3; max-height: 180px; }
+@media (min-width: 1100px) { html .pf .pf-sp-right { gap: 28px; } }
+
+/* ---- Fixes from the 1440 review ---- */
+/* The tab row scrolled sideways only; a tab's own height overflowed it and gave it a tiny vertical scrollbar. */
+html .pf .pf-tabs-line .pf-prof-tablist, html .pf .pf-prof-tablist { overflow-y: hidden; overscroll-behavior: contain; }
+/* Coupon levels: six equal columns in one row, label over reward, so nothing wraps unevenly. */
+html .pf .pf-strip-rewards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px 16px; }
+html .pf .pf-strip-rewards li { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+html .pf .pf-strip-flag-text { display: grid; gap: 3px; }
+@media (max-width: 899px) { html .pf .pf-strip-rewards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 479px) { html .pf .pf-strip-rewards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Track projects: one rule under the heading, then plain rows with a hairline between them. */
+html .pf .pf-track-lower .pf-box-head { margin-bottom: 0; }
+html .pf .pf-track-projects li { padding: 12px 0; border-top: 0; border-bottom: 1px solid var(--pf-rule); align-items: baseline; }
+html .pf .pf-track-projects li:last-child { border-bottom: 0; }
+html .pf .pf-track-projects li > span { margin-left: auto; }
+
+/* Track page: with the projects list gone, the two doc links sit side by side under the strip. */
+@media (min-width: 900px) { html .pf .pf-track-lower { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; } }
+html .pf .pf-track-links { margin: 0; padding: 0; list-style: none; display: contents; }
+
+/* ---- Participant UI audit follow-up (.ulpi/design/participant-ui-audit-followup.md, 19 Nov 2026) ---- */
+
+/* Tabs: every tab stays reachable. The project tab row and the Shop tag chips wrap instead of scrolling sideways, also at 200% text.
+   The Profile tabs keep their own row. */
+html .pf .pf-tabs-line .pf-prof-tablist { flex-wrap: wrap; overflow: visible; }
+html .pf .pf-tabs-line .pf-prof-tab { flex: 0 1 auto; max-width: 100%; }
+@media (max-width: 559px) {
+  html .pf .pf-tabs-line .pf-prof-tablist { gap: 0 4px; }
+  html .pf .pf-tabs-line .pf-prof-tab { flex: 1 1 auto; justify-content: center; padding: 0 8px; font-size: 0.875em; letter-spacing: 0.04em; }
+}
+html .pf .pf-shop-chips { flex-wrap: wrap; overflow: visible; }
+
+/* Projects: the default page stays the title and the grid. The search shows only when the list is longer than one page. */
+html .pf .pf-sg-search { display: grid; gap: 6px; max-width: 520px; margin: 0 0 20px; }
+html .pf .pf-sg-search label { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-sg-search-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+html .pf .pf-sg-search-row .pf-explore-input { flex: 1 1 200px; min-width: 0; }
+html .pf .pf-sg-search-row a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; color: var(--pf-link); }
+html .pf .pf-sg-search p { margin: 0; font-size: 0.875em; color: var(--pf-mut); }
+html .pf .pf-sg-meta { display: none; }
+
+/* Projects on a phone: one compact row per project. Title and hours on the first line, track and status as text under it, a
+   track-coloured edge on the left. The cover and the description are left out so about six rows fit on one screen. */
+@media (max-width: 559px) {
+  html .pf .pf-sg-grid { gap: 8px; }
+  html .pf .pf-sg-card { border-left: 4px solid var(--tk, var(--pf-rule)); }
+  html .pf .pf-sg-card .pf-project-cover, html .pf .pf-sg-desc { display: none; }
+  html .pf .pf-sg-body { gap: 2px; min-width: 0; padding: 10px 14px 12px; }
+  html .pf .pf-sg-title { font-size: 1.0625em; }
+  html .pf .pf-sg-title-text { overflow: visible; white-space: normal; text-overflow: clip; overflow-wrap: anywhere; }
+  html .pf .pf-sg-meta { display: block; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); }
+  html .pf .pf-sg-grid .pf-new-card { min-height: 56px; }
+}
+
+/* Project header: an empty cover is a thin band, and the one active action sits beside the title (under it on a phone). */
+html .pf .pf-spp-cover[data-cover="none"] > .pf-project-cover { aspect-ratio: auto; height: 56px; min-height: 0; }
+html .pf .pf-spp-tools { align-items: center; gap: 4px 16px; }
+html .pf .pf-spp-tools a:not(.pf-btn) { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; color: var(--pf-link); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.1em; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+html .pf .pf-spp-tools a:not(.pf-btn):hover { color: var(--pf-fg); }
+@media (max-width: 559px) {
+  html .pf .pf-spp-cover[data-cover="none"] > .pf-project-cover { height: 40px; }
+  html .pf .pf-spp-top { gap: 8px; }
+  html .pf .pf-spp-tools { flex: 1 1 100%; }
+  html .pf .pf-spp-tools .pf-btn.pri { flex: 1 1 auto; justify-content: center; min-height: 48px; }
+}
+
+/* Journal tab, empty: one sentence and a text link, no box, no second filled button. */
+html .pf .pf-journal-empty { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; padding: 0 0 12px; }
+html .pf .pf-journal-empty p { color: var(--pf-fg); }
+html .pf .pf-journal-empty .pf-btn { min-height: 44px; padding: 0 4px; border: 0; background: transparent; box-shadow: none; color: var(--pf-link); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.1em; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+html .pf .pf-journal-empty .pf-btn:hover { color: var(--pf-fg); box-shadow: none; }
+
+/* Writer: the Preview toggle shows its state with a mark as well as colour, and is its own full-width row on a phone. */
+html .pf .pf-jw-toolbar .pf-jw-toggle { display: inline-flex; align-items: center; gap: 8px; }
+html .pf .pf-jw-toolbar .pf-jw-toggle::before { content: ""; flex: none; width: 10px; height: 10px; border: 2px solid currentColor; box-sizing: border-box; }
+html .pf .pf-jw-toolbar .pf-jw-toggle[aria-pressed="true"] { color: var(--pf-fg); text-decoration-color: var(--pf-fg); }
+html .pf .pf-jw-toolbar .pf-jw-toggle[aria-pressed="true"]::before { background: currentColor; }
+@media (max-width: 559px) {
+  html .pf .pf-jw-toolbar .pf-btn { min-height: 44px; }
+  html .pf .pf-jw-toolbar .pf-jw-toggle { flex: 1 0 100%; justify-content: center; margin-left: 0; border-top: 1px solid var(--pf-rule); }
+}
+
+/* Ship checks: not done is a to do, not an error. An empty square in the text colour and a muted reason, no red and no cross.
+   Done keeps its tick and waiting keeps its dashed square. */
+html .pf .pf-ship-checks li[data-state="fail"] .pf-check-box { border-color: var(--pf-fg); background: transparent; }
+html .pf .pf-ship-checks li[data-state="fail"] .pf-ship-reason { color: var(--pf-mut); }
+
+/* Returned for changes: the reviewer's reason and note, then three steps. */
+html .pf .pf-ship-returned { display: grid; gap: 10px; margin: 0 0 20px; padding: 0 0 0 16px; border-left: 3px solid var(--pf-link); }
+html .pf .pf-ship-returned h3 { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-link); }
+html .pf .pf-ship-returned p { margin: 0; }
+html .pf .pf-ship-returned-reason { font-weight: 600; }
+html .pf .pf-ship-returned .pf-ship-note { margin: 0; padding: 0; border: 0; }
+html .pf .pf-ship-returned-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 0.9375em; }
+/* The Review Queue link is the last child of the Ship box; anything placed above it flows with a clear gap. */
+html .pf #ship > .pf-btn { display: inline-flex; margin-top: 16px; }
+
+/* Shop: the level discount is a labelled legend right under the tag tabs, two across on a phone. */
+html .pf .pf-shop-legend { display: grid; gap: 2px 16px; margin: 0 0 16px; padding: 8px 12px 6px; border-block: 1px solid var(--pf-rule); }
+html .pf .pf-shop-legend-label { margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .pf-shop-legend .pf-shop-discounts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0 16px; margin: 0; padding: 0; }
+@media (max-width: 559px) {
+  html .pf .pf-shop-legend .pf-shop-discounts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html .pf .pf-shop-legend .pf-shop-discounts a { min-height: 44px; }
+}
+
+/* Shop item: an unavailable requisition reads as muted text with its reason beside it, not as a faded control. */
+html .pf .pf-shop-option[data-disabled="true"] { flex-wrap: wrap; color: var(--pf-mut); }
+html .pf .pf-shop-option-state { margin-left: auto; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pf-mut); }

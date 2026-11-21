@@ -1,12 +1,12 @@
 ---
 title: "Tracks"
-description: "Tools, Systems, Compute and Hardware: choose the tracks you actually build in."
+description: "Tools, Systems, Compute and Hardware: pick the one track that fits your project."
 group: "START HERE"
 order: 40
 status: draft
 ---
 
-Which track should you pick? Look at what you're actually building. Designing a board gives you Hardware work to show, and building a substantial service to collect its readings could add Systems work too. Tell us about both when you ship, so we can put your Track XP into the fields you've worked in.
+Which track should you pick? Look at the work you're actually building and choose the one track that fits it best. Say you design a sensor board and also write a service that collects its readings. The board is Hardware work and the service is Systems work, so ship them as two projects, each with its own track.
 
 ## The four fields
 
@@ -17,13 +17,15 @@ Which track should you pick? Look at what you're actually building. Designing a 
 | Compute | A renderer, inference engine, GPU workload or numerical optimization. | Correctness checks, measurements and the conditions behind them. |
 | Hardware | A PCB, embedded device, robot component, FPGA design or instrument. | The design files, the choices you made and evidence of the device working. |
 
-Choosing a track doesn't lock you into it forever, either. You can work on a profiler for one project and a circuit for the next. Each track has its own level, so you'll keep the progress you made in the first while you try the second.
+Choosing a track doesn't lock you into it forever. You can work on a profiler for one project and a circuit for the next. Each track has its own level, so you'll keep the progress you made in the first while you try the second.
 
-## One project, several tracks
+## One project, one track
 
-Let's use that sensor board and service as an example. The circuit and bench measurements explain your Hardware work. The service's storage design and failure tests show the Systems work. Including both gives reviewers a way to understand how much you contributed in each field.
+A project has exactly one track. You pick it when you create the project. You can change it while the project is a draft or after a reviewer asks for changes, and it locks when you submit.
 
-The team uses that evidence to split **one Track XP award** between the relevant tracks. Adding a second track doesn't duplicate the award. On a team, the split follows each person's contribution, so the board designer's progress may look different from the service developer's.
+All the Track XP from a ship goes to that track. Take the sensor board and its service: if you want Hardware and Systems progress, make them two projects, each with its own track. A team ship shares one track.
+
+If the work doesn't fit the track, the reviewer asks for changes with the reason "Does not fit the track". You then add more work in that track, or change the track, and ship again.
 
 ## Why pick a track?
 

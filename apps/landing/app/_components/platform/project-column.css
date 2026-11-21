@@ -1,0 +1,94 @@
+/* The project page as one centred column (Stasis project page structure). Existing platform tokens only (--pf-*, --tk-*, the three
+   fonts). Both themes follow the tokens. No motion beyond the existing button press. */
+
+.pf .pf-column { display: flex; flex-direction: column; max-width: 960px; margin-inline: auto; min-width: 0; }
+.pf .pf-column > .pf-box,
+.pf .pf-column > .pf-stage { margin-bottom: 24px; }
+.pf .pf-column > .pf-back { align-self: flex-start; }
+
+/* Header: title with Edit project, then status, track and owner, then the description. */
+.pf .pf-column-head { display: grid; gap: 12px; margin: 0 0 20px; min-width: 0; }
+.pf .pf-column-title { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; min-width: 0; }
+.pf .pf-column-title h1 { margin: 0; flex: 1 1 240px; min-width: 0; font-size: clamp(1.75rem, 4.4vw, 2.5rem); overflow-wrap: anywhere; }
+.pf .pf-column-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+.pf .pf-column-pill { display: inline-flex; align-items: center; min-height: 24px; padding: 2px 10px; border: 1px solid var(--pf-fg); background: var(--pf-panel); color: var(--pf-fg); }
+.pf .pf-column-pill[data-status="approved"] { border-color: var(--pf-ac); background: var(--pf-ac); color: var(--pf-acf); }
+.pf .pf-column-pill[data-status="needs-changes"],
+.pf .pf-column-pill[data-status="rejected"] { border-color: var(--pf-err); color: var(--pf-err); }
+.pf .pf-column-tag { display: inline-flex; align-items: center; gap: 8px; color: var(--pf-fg); }
+.pf .pf-column-tag .pf-swatch { width: 12px; height: 12px; }
+.pf .pf-column-by { color: var(--pf-mut); }
+.pf .pf-column-by a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -14px; padding-inline: 2px; text-transform: none; letter-spacing: 0.04em; }
+.pf .pf-column-head .pf-project-lead { max-width: 70ch; overflow-wrap: anywhere; }
+
+/* Cover and track card: side by side from 900 px, stacked on phones. The cover's own badges repeat the pill and the track tag
+   above, so only the depth chip stays on it. */
+.pf .pf-column-visual { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin: 0 0 20px; }
+@media (min-width: 900px) {
+  .pf .pf-column-visual { grid-template-columns: minmax(0, 1fr) 288px; gap: 20px; }
+}
+.pf .pf-column-cover { min-width: 0; display: flex; }
+.pf .pf-column-cover > .pf-project-cover { flex: 1; min-height: 176px; border: 1px solid var(--pf-fg); box-shadow: 4px 4px 0 var(--pf-edge); }
+.pf .pf-column-cover .pf-badge { display: none; }
+
+/* Quick actions. */
+.pf .pf-column-actions { display: grid; gap: 10px; margin: 0 0 24px; }
+.pf .pf-column-actions-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.pf .pf-column-actions-row .pf-btn { min-width: 0; max-width: 100%; min-height: 48px; padding: 0 18px; }
+.pf .pf-column-actions-row .pf-btn.pri { padding: 0 20px; }
+.pf .pf-column-actions .pf-hint { margin: 0; max-width: 70ch; }
+.pf .pf-column-host { margin-left: 10px; max-width: 16ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 400 11px var(--font-dot), monospace; letter-spacing: 0.04em; text-transform: none; color: var(--pf-mut); }
+@media (max-width: 559px) {
+  .pf .pf-column-actions-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pf .pf-column-actions-row .pf-btn { width: 100%; padding: 0 8px; }
+  .pf .pf-column-actions-row .pf-btn.pri { grid-column: 1 / -1; }
+  .pf .pf-column-host { display: none; }
+}
+
+/* Stage strip: the outcome square for a project sent back or rejected. */
+.pf .pf-stage-label { overflow-wrap: anywhere; }
+.pf .pf-stage-step[data-state="changes"] .pf-stage-node { border-color: var(--pf-link); color: var(--pf-link); }
+.pf .pf-stage-step[data-state="changes"] .pf-stage-node::after { content: "!"; }
+.pf .pf-stage-step[data-state="changes"] .pf-stage-label { color: var(--pf-link); }
+.pf .pf-stage-step[data-state="rejected"] .pf-stage-node { border-color: var(--pf-err); color: var(--pf-err); }
+.pf .pf-stage-step[data-state="rejected"] .pf-stage-node::after { content: "X"; }
+.pf .pf-stage-step[data-state="rejected"] .pf-stage-label { color: var(--pf-err); }
+.pf .pf-stage-step:last-child[data-state="done"] .pf-stage-node { border-color: var(--pf-ac); }
+@media (max-width: 559px) {
+  .pf .pf-stage { padding: 18px 12px; }
+  .pf .pf-stage-label { font-size: 10px; letter-spacing: 0.04em; }
+}
+
+/* Requirements: a reason under a placeholder item, and the "You still need to" list. */
+.pf .pf-checks li { align-items: flex-start; }
+.pf .pf-checks .pf-check-box { margin-top: 1px; }
+.pf .pf-column-reason { display: block; margin-top: 2px; font-size: 0.9em; color: var(--pf-mut); }
+.pf .pf-column-needs { margin: 0 0 16px; padding: 12px 14px; border: 1px dashed var(--pf-rule); }
+.pf .pf-column-needs p { margin: 0 0 6px; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+.pf .pf-column-needs ul { margin: 0; padding-left: 18px; font-size: 0.8125em; line-height: 1.7; }
+
+/* Timeline: date first, then what happened. */
+.pf .pf-column-timeline li { align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
+.pf .pf-column-timeline time { flex: none; min-width: 108px; }
+.pf .pf-column-timeline span { min-width: 0; overflow-wrap: anywhere; }
+
+/* The one-time line after the creation wizard sends the builder here. */
+.pf .pf-column > .pf-saved { margin: 0 0 16px; }
+
+/* The tab panels of the project page stack their boxes with one gap. A hidden panel stays hidden. */
+.pf .pf-column .pf-prof-panel:not([hidden]) { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.pf .pf-column .pf-prof-panel > .pf-box,
+.pf .pf-column .pf-prof-panel > .pf-stage { margin: 0; }
+.pf .pf-column .pf-prof-panel:focus-visible { outline-offset: 4px; }
+
+/* The Settings form lives in a box, not a dialog. */
+.pf .pf-settings-form { display: flex; flex-direction: column; gap: 0; max-width: 640px; }
+.pf .pf-settings-form .pf-field > label,
+.pf .pf-settings-form legend { font: 400 12px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; }
+.pf .pf-settings-form .pf-field { margin-bottom: 16px; gap: 6px; }
+.pf .pf-settings-form .pf-input { width: 100%; min-height: 48px; }
+.pf .pf-settings-form .pf-textarea { min-height: 88px; }
+.pf .pf-settings-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+.pf .pf-pin-setting .pf-prof-pinform .pf-btn { display: inline-flex; align-items: center; gap: 8px; }
+.pf .pf-column-ship-left { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.06em; }
+.pf .pf-column-preview { display: grid; gap: 12px; }

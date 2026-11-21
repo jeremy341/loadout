@@ -85,6 +85,10 @@ jobs:
       - name: Install Bun and the locked dependencies
         if: steps.changed.outputs.app == 'true'
         uses: ./.github/actions/install-landing
+      - name: Generate the Prisma client
+        if: steps.changed.outputs.app == 'true'
+        working-directory: apps/landing
+        run: bunx prisma generate
       - name: Lint
         if: steps.changed.outputs.app == 'true'
         run: bun run lint
@@ -178,6 +182,10 @@ jobs:
       - name: Install Bun and the locked dependencies
         if: steps.changed.outputs.app == 'true'
         uses: ./.github/actions/install-landing
+      - name: Generate the Prisma client
+        if: steps.changed.outputs.app == 'true'
+        working-directory: apps/landing
+        run: bunx prisma generate
       - name: Confirm Chromium is present
         if: steps.changed.outputs.app == 'true'
         working-directory: apps/landing

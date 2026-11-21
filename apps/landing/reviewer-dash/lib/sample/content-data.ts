@@ -62,7 +62,7 @@ export interface PersonalShopItem extends ShopItemRow {
 }
 
 export interface DashEventRow {
-  id: number;
+  id: string;
   type: string;
   name: string;
   config: Record<string, unknown>;
@@ -79,7 +79,7 @@ export const EVENT_TYPES: Record<string, string> = {
 };
 
 export interface FormSubmissionRow {
-  id: number;
+  id: string;
   form_key: string;
   slack_id: string;
   name: string;
@@ -276,7 +276,7 @@ function buildStock(items: ShopItemRow[]): Map<number, ShopOptionStockRow[]> {
 // Only Show and Tell is planned (lib/platform/events.ts), so every event is a Show and Tell session. The config holds a plain note.
 function buildEvents(): DashEventRow[] {
   const ev = (id: number, name: string, note: string, startH: number, endH: number, stopped = false): DashEventRow => ({
-    id,
+    id: String(id),
     type: "show_and_tell",
     name,
     config: { note },
@@ -358,10 +358,11 @@ function buildForms(): { configs: FormConfigRow[]; submissions: FormSubmissionRo
   for (const config of configs) {
     (answers[config.form_key] ?? []).forEach((vals, i) => {
       id += 1;
+      const rowId = String(id);
       const status: FormSubmissionRow["status"] = i === 0 && config.form_key !== "custom-order" ? "accepted" : i === 1 && config.form_key === "event-registration" ? "rejected" : "pending";
       const h = handle(id + 2);
       submissions.push({
-        id,
+        id: rowId,
         form_key: config.form_key,
         slack_id: h,
         name: h,

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { EmptyState } from "@/reviewer-dash/app/_ui/ui";
 import { Spinner } from "@/reviewer-dash/app/_components/Loading";
+import { safeBaseHref } from "@/reviewer-dash/lib/safeUrl";
 
 type State = { status: "loading" } | { status: "error"; error: string } | { status: "ready"; doc: string };
 
@@ -33,7 +34,8 @@ function themeVars(): Record<string, string> {
 // nothing but images and inline styles. Links open in a new tab.
 function frameDoc(html: string, baseHref: string | null): string {
   const t = themeVars();
-  const base = baseHref ? `<base href="${baseHref.replace(/"/g, "&quot;")}" target="_blank">` : `<base target="_blank">`;
+  const safeBase = safeBaseHref(baseHref);
+  const base = safeBase ? `<base href="${safeBase}" target="_blank">` : `<base target="_blank">`;
   return `<!doctype html><html><head><meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: data:; style-src 'unsafe-inline'; media-src https:">
 ${base}

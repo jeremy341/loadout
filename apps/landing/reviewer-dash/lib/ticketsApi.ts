@@ -2,7 +2,7 @@
 // for (helpers and owners), else the plain 404. Same name and call shape as Pixl's guardedRoute for these routes.
 import { headers } from "next/headers";
 import { isReviewHost } from "@/lib/reviewer/host";
-import { notFoundJson } from "./apiGuard";
+import { noStore, notFoundJson } from "./apiGuard";
 import { getAccess, can } from "./guard";
 import type { AdminAccess, Requirement } from "./roles";
 
@@ -16,7 +16,8 @@ export function guardedRoute<C = unknown>(
     if (!isReviewHost((await headers()).get("host"))) return notFoundJson();
     const access = await getAccess();
     if (!access || !can(access, req)) return notFoundJson();
-    return fn(access, request, ctx);
+    // Every answer, including a successful one, is signed-in reviewer data: never stored, never served from somebody else's cache.
+    return noStore(await fn(access, request, ctx));
   };
 }
 

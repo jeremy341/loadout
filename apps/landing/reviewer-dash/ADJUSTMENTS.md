@@ -69,7 +69,7 @@ Product rules
 
 Honesty
 - Controls that do nothing (Robert, Airtable, extend cutoff, grant claim, AI draft) accept the form and return quietly; some need the Local/Stub sentence.
-- The sample note is one line under the top bar on every page.
+- The line under the top bar only says that each page names its own data source. The notice that says what is saved and what is sample sits in each page header (`app/_ui/DataScopeNote.tsx`, rules in `app/_ui/dataScope.ts`), because Operations, bans and reports, events and forms, feature flags and ship reviews write to the database while the rest is in-memory sample data. Change a page's source and its rule together.
 
 Layout and platform
 - On a 390 px screen the page scrolls sideways by 156 px (the top nav row is wider than the screen). That is Pixl's own nav; V pass.

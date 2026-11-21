@@ -63,11 +63,10 @@ export function NotifyForm() {
 
           <div className="flex flex-col gap-2">
             <span className="hc-label">Audience</span>
-            <div className="hc-segmented w-fit" role="tablist">
+            <div className="hc-segmented w-fit" role="group" aria-label="Audience">
               <button
                 type="button"
-                role="tab"
-                aria-selected={everyone}
+                aria-pressed={everyone}
                 className="hc-segmented-item px-3"
                 onClick={() => setEveryone(true)}
               >
@@ -75,8 +74,7 @@ export function NotifyForm() {
               </button>
               <button
                 type="button"
-                role="tab"
-                aria-selected={!everyone}
+                aria-pressed={!everyone}
                 className="hc-segmented-item px-3"
                 onClick={() => setEveryone(false)}
               >

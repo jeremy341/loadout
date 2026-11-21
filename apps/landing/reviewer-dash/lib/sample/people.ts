@@ -13,7 +13,8 @@ import type {
 } from "../db";
 import { AUDITS, PROJECTS, USERS } from "./index";
 import { store } from "./store";
-import { allBanLog, allBans, allProposals, allReports, allViolations, type ReportRow } from "./moderation-data";
+import type { ReportRow } from "./moderation-data";
+import { listBans, listViolations, moderationForPlayer, reportsAgainstOwner } from "./moderation";
 import {
   OWNER_IDS,
   fulfillerStats,
@@ -53,8 +54,9 @@ export async function listPlayers(query?: string) {
   const users = playerRows()
     .filter((u) => !needle || u.display_name.toLowerCase().includes(needle) || u.real_name.toLowerCase().includes(needle))
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
-  const bans = allBans();
-  const violations = allViolations();
+  // The ban and violation rows come from the database when its tables have rows (see ./moderation); a sample builder matches none of them.
+  const bans = await listBans();
+  const violations = await listViolations(5000);
   return users.map((u) => ({
     ...u,
     projectCount: PROJECTS.filter((p) => p.user_id === u.id).length,
@@ -69,25 +71,19 @@ export async function getPlayer(id: string) {
   const projects = PROJECTS.filter((p) => p.user_id === id)
     .map(projectOf)
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
-  const violations = allViolations().filter((v) => v.user_id === id) as ViolationRow[];
-  const bans = allBans().filter((b) => b.user_id === id) as BanRow[];
+  // The bans, the ban log, violations and open proposals for this builder: database rows when the tables have rows, else the sample.
+  const { bans, actions: logRows, violations, proposals } = await moderationForPlayer(id);
   const states: PlayerStateRow[] = [];
-  // The same in-memory log the Bans page shows, so a ban, a lift or a warning made anywhere appears here at once.
+  // The same log the Bans page shows, so a ban, a lift or a warning made anywhere appears here at once.
   const actions: ModActionRow[] = [
     ...violations.map((v, i): ModActionRow => ({ id: 800 + i, user_id: id, action: "note", detail: `${v.kind}: ${v.content}`, actor: "bellwether", created_at: v.created_at })),
-    ...allBanLog()
-      .filter((row) => row.user_id === id)
-      .map((row): ModActionRow => ({ id: row.id, user_id: id, action: row.action, detail: row.detail, actor: row.actor, created_at: row.created_at })),
+    ...logRows.map((row): ModActionRow => ({ id: row.id, user_id: id, action: row.action, detail: row.detail, actor: row.actor, created_at: row.created_at })),
   ].sort((a, b) => b.created_at.localeCompare(a.created_at));
-  const proposals = allProposals().filter((p) => p.user_id === id && p.status === "pending");
-  return { user, states, projects, violations, bans, actions, proposals };
+  return { user, states, projects, violations: violations as ViolationRow[], bans: bans as BanRow[], actions, proposals };
 }
 
 export async function listReportsAgainst(targetId: string, limit = 50): Promise<ReportRow[]> {
-  return allReports()
-    .filter((r) => r.target_id === targetId)
-    .sort((a, b) => b.created_at.localeCompare(a.created_at))
-    .slice(0, limit);
+  return reportsAgainstOwner(targetId, limit);
 }
 
 export async function displayNamesBySlackId(ids: string[]): Promise<Map<string, string>> {

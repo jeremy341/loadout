@@ -65,4 +65,30 @@ describe("proxy", () => {
       expect(response.headers.get("x-middleware-next")).toBe("1");
     }
   });
+
+  test("pages that depend on who is signed in are private, no-store and vary on the cookie", () => {
+    for (const path of ["/dashboard", "/dashboard/projects/abc", "/docs", "/docs/review", "/review-queue"]) {
+      const { response } = run(`http://localhost:3011${path}`, "localhost:3011");
+      expect(response.headers.get("cache-control")).toBe("private, no-store");
+      expect(response.headers.get("vary")).toContain("Cookie");
+    }
+  });
+
+  test("public pages keep their own caching", () => {
+    for (const path of ["/", "/accessibility", "/dashboards"]) {
+      const { response } = run(`http://localhost:3011${path}`, "localhost:3011");
+      expect(response.headers.get("cache-control")).toBeNull();
+      expect(response.headers.get("vary")).toBeNull();
+    }
+  });
+
+  test("every review host answer is private, noindex and never cached", () => {
+    const rewritten = run("http://review.localhost:3011/review/2041", "review.localhost:3011").response;
+    expect(rewritten.headers.get("cache-control")).toBe("private, no-store");
+    expect(rewritten.headers.get("vary")).toContain("Cookie");
+    expect(rewritten.headers.get("x-robots-tag")).toContain("noindex");
+    const redirected = run("http://review.localhost:3011/stats", "review.localhost:3011").response;
+    expect(redirected.status).toBe(308);
+    expect(redirected.headers.get("x-robots-tag")).toBe("noindex, nofollow");
+  });
 });

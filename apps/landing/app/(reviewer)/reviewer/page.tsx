@@ -64,19 +64,18 @@ export default async function Overview({
   ]);
 
   const rangePicker = (
-    <div className="hc-segmented" role="tablist" aria-label="Chart range">
+    <nav className="hc-segmented" aria-label="Chart range">
       {RANGES.map((r) => (
         <Link
           key={r}
           href={r === 30 ? "/" : `/?range=${r}`}
-          role="tab"
-          aria-selected={r === days}
+          aria-current={r === days ? "page" : undefined}
           className="hc-segmented-item inline-flex items-center justify-center px-3"
         >
           {r}d
         </Link>
       ))}
-    </div>
+    </nav>
   );
 
   return (
@@ -118,21 +117,21 @@ export default async function Overview({
         )}
       </StatGrid>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card className="min-w-0">
           <GrowthChart title="Builders" series="players" kind="cumulative" points={growth.players} />
         </Card>
-        <Card>
+        <Card className="min-w-0">
           <GrowthChart title="Projects" series="projects" kind="cumulative" points={growth.projects} />
         </Card>
         {showModeration && (
-          <Card className="lg:col-span-2">
+          <Card className="min-w-0 lg:col-span-2">
             <GrowthChart title="Violations" series="violations" kind="daily" points={growth.violations} />
           </Card>
         )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card padding="flush">
           <CardHeader title="Recent activity" icon="history" />
           {feed.length === 0 ? (

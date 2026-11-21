@@ -7,8 +7,8 @@ import {
   scaleLinear,
 } from "d3-scale";
 
-type ScaleLinear<Output, _Input = number> = D3ScaleLinear<Output, Output>;
-type ScaleTime<Output, _Input = Date | number> = D3ScaleTime<Output, Output>;
+type ScaleLinear<Output> = D3ScaleLinear<Output, Output>;
+type ScaleTime<Output> = D3ScaleTime<Output, Output>;
 type ScaleBand<Domain extends { toString(): string }> = D3ScaleBand<Domain>;
 
 import type { Transition } from "motion/react";
@@ -154,11 +154,11 @@ export interface ChartContextValue extends ChartHoverContextValue {
   renderData: Record<string, unknown>[];
 
   // Scales
-  xScale: ScaleTime<number, number>;
+  xScale: ScaleTime<number>;
   /** Primary (left) y-scale — alias for `yScales[DEFAULT_Y_AXIS_ID]`. */
-  yScale: ScaleLinear<number, number>;
+  yScale: ScaleLinear<number>;
   /** Per-axis y-scales keyed by `yAxisId`. */
-  yScales: Record<string, ScaleLinear<number, number>>;
+  yScales: Record<string, ScaleLinear<number>>;
 
   // Dimensions
   width: number;
@@ -590,7 +590,7 @@ export function useStableMargin(margin: Margin): Margin {
 /** Y-scale for a series axis (`yAxisId` on Line / Area / YAxis). */
 export function useYScale(
   yAxisId?: string | number
-): ScaleLinear<number, number> {
+): ScaleLinear<number> {
   const { yScales, yScale } = useChartStable();
   const id =
     yAxisId == null || yAxisId === "" ? DEFAULT_Y_AXIS_ID : String(yAxisId);
@@ -604,7 +604,7 @@ export function useYScale(
  */
 export function useSettledYScale(
   yAxisId?: string | number
-): ScaleLinear<number, number> {
+): ScaleLinear<number> {
   const { yDomainTargetByAxis, innerHeight } = useChartStable();
   const liveScale = useYScale(yAxisId);
   const id =

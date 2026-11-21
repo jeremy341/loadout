@@ -4,6 +4,7 @@ import { banIsActive, getPlayer, listReportsAgainst } from "@/reviewer-dash/lib/
 import { creditFor } from "@/lib/platform/review";
 import { banLength } from "@/reviewer-dash/lib/sample/moderation-data";
 import { isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
+import { ImpersonateCard } from "./ImpersonateCard";
 import {
   BanForm,
   DeleteAccountForm,
@@ -96,6 +97,8 @@ export default async function PlayerPage({
         }
       />
 
+      {/* Action errors arrive as text from the server action. Impersonation subject refusals are already reduced to one generic
+          message by startImpersonation; their specific reasons are in the audit log, never in this banner. */}
       <Flash error={error} ok={ok} />
 
       <StatGrid>
@@ -116,7 +119,7 @@ export default async function PlayerPage({
       </StatGrid>
 
       {owner && (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card>
             <CardHeader title="Moderate" icon="admin-badge" />
             <div className="flex flex-col gap-3">
@@ -132,6 +135,7 @@ export default async function PlayerPage({
               <CardHeader title="Builder info" icon="person-card" />
               <EditInfoForm userId={user.id} displayName={user.display_name} email={user.email ?? ""} />
             </Card>
+            <ImpersonateCard playerId={user.id} name={user.display_name} />
             <Card>
               <CardHeader title="Danger zone" icon="delete" />
               <p className="hc-caption mb-3 text-sm">
@@ -210,7 +214,7 @@ export default async function PlayerPage({
         </Card>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card padding="flush">
           <CardHeader title="Violations" icon="important" count={violations.length} />
           {violations.length === 0 ? (

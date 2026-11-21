@@ -31,6 +31,7 @@ export function OrderList({
   selectedId,
   hrefFor,
   nameFor,
+  canSee,
   now,
   eligibility,
 }: {
@@ -38,6 +39,8 @@ export function OrderList({
   selectedId: number | null;
   hrefFor: (id: number) => string;
   nameFor: (o: ShopOrderRow) => string;
+  // Buyer identity is shown only on orders this viewer claimed (or when an owner is looking).
+  canSee: (o: ShopOrderRow) => boolean;
   now: number;
   eligibility: Map<number, EligibilityResult>;
 }) {
@@ -70,7 +73,7 @@ export function OrderList({
                   {o.item_name || "(item removed)"}
                 </span>
                 <span className="fw-request-byline">
-                  {nameFor(o)}
+                  {canSee(o) ? nameFor(o) : o.buyer_country || "Country not on file"}
                   {age && <span> · {age}</span>}
                 </span>
                 {o.option && <span className="fw-request-option">{o.option}</span>}

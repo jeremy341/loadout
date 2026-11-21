@@ -355,12 +355,12 @@ describe("team and roles", () => {
     const reviewerGroups = byRole.reviewer.opens.map((item) => item.group);
     expect(reviewerGroups).toContain("Review tabs");
     expect(reviewerGroups).not.toContain("Admin");
-    expect(byRole.reviewer.opens.find((item) => item.group === "Review tabs")?.tabs).not.toContain("Spot check");
+    expect(byRole.reviewer.opens.find((item) => item.group === "Review tabs")?.tabs).not.toContain("Second pass");
   });
 
   test("marker effects are derived from the same gating", () => {
     const effects = Object.fromEntries(markerEffects().map((item) => [item.marker, item]));
-    expect(effects.second_pass.adds).toEqual(["Spot check"]);
+    expect(effects.second_pass.adds).toEqual(["Second pass"]);
     expect(effects.reviewer_hardware_only.removes).toEqual([]);
     expect(effects.reviewer_software_only.removes).toEqual(["Hardware"]);
     // An owner passes every gate, so the marker changes who may take ships, not which tabs open.

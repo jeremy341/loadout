@@ -14,6 +14,7 @@ import {
   Mono,
   Muted,
   PageHeader,
+  Pagination,
   StatusBadge,
   Table,
   TextLink,
@@ -23,16 +24,18 @@ import {
 
 export const dynamic = "force-dynamic";
 
+const PER = 25;
+
 export default async function ProjectsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; view?: string; ok?: string; error?: string }>;
+  searchParams: Promise<{ q?: string; view?: string; page?: string; ok?: string; error?: string }>;
 }) {
   const access = await requirePage("reviewer");
   // Admins see archived projects mixed into the main list; plain reviewers
   // only see active ones.
   const isAdmin = can(access, "owner");
-  const { q, view, ok, error } = await searchParams;
+  const { q, view, page, ok, error } = await searchParams;
   const archived = view === "archived";
   // Legal names are for owners/final reviewers only (lib/reviewAccess.ts),
   // stripped here before anything renders.
@@ -45,7 +48,19 @@ export default async function ProjectsPage({
     // Added for the role model (R roles): the list shows what the detail page would open (the viewer's queue).
     .filter((p) => canReadReviewEvidence(access, p))
     .map((p) => ({ ...p, users: redactBuilderUser(access, p.users) }));
-  const collaborators = await collaboratorsByProject(projects.map((p) => p.id));
+  const total = projects.length;
+  const pages = Math.max(1, Math.ceil(total / PER));
+  const cur = Math.min(Math.max(parseInt(page ?? "1", 10) || 1, 1), pages);
+  const start = (cur - 1) * PER;
+  const visible = projects.slice(start, start + PER);
+  const qp = (n: number) => {
+    const params = new URLSearchParams();
+    if (archived) params.set("view", "archived");
+    if (q) params.set("q", q);
+    params.set("page", String(n));
+    return `/projects?${params.toString()}`;
+  };
+  const collaborators = await collaboratorsByProject(visible.map((p) => p.id));
 
   const headers = ["Project", "Status", "Builder", "Links", "Hackatime", "Created"];
 
@@ -53,7 +68,7 @@ export default async function ProjectsPage({
     <div>
       <PageHeader
         title={archived ? "Archived projects" : "Projects"}
-        count={projects.length}
+        count={total}
         actions={
           <>
             {access.isOwner && (
@@ -85,7 +100,7 @@ export default async function ProjectsPage({
 
       <Card padding="flush">
         <Table headers={headers}>
-          {projects.map((p) => {
+          {visible.map((p) => {
             const collabCount = collaborators.get(p.id)?.length ?? 0;
             return (
               <tr key={p.id}>
@@ -150,6 +165,12 @@ export default async function ProjectsPage({
           )}
         </Table>
       </Card>
+      {total > 0 && (
+        <p className="hc-caption mt-3 text-sm">
+          Showing {start + 1} to {Math.min(start + PER, total)} of {total}
+        </p>
+      )}
+      <Pagination page={cur} totalPages={pages} hrefFor={qp} />
     </div>
   );
 }

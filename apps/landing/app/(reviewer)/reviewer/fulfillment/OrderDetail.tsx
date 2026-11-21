@@ -153,6 +153,7 @@ export function OrderDetail({
   buyer,
   country,
   requesterName,
+  canSee,
   mine,
   ownOrder,
   canManage,
@@ -162,6 +163,8 @@ export function OrderDetail({
   buyer?: BuyerDetails;
   country?: string;
   requesterName: string;
+  /** The viewer claimed this order or is an owner: only then may buyer identity, notes and supplier links appear. */
+  canSee: boolean;
   mine: boolean;
   ownOrder: boolean;
   canManage: boolean;
@@ -214,10 +217,16 @@ export function OrderDetail({
             {o.item_name || "(item removed)"}
           </h2>
           <p className="fw-meta">
-            <TextLink href={`/players/${o.user_id}`} className="font-bold">
-              {requesterName}
-            </TextLink>
-            {o.player_slack && <span className="hc-muted"> · @{o.player_slack}</span>}
+            {canSee ? (
+              <>
+                <TextLink href={`/players/${o.user_id}`} className="font-bold">
+                  {requesterName}
+                </TextLink>
+                {o.player_slack && <span className="hc-muted"> · @{o.player_slack}</span>}
+              </>
+            ) : (
+              <span className="hc-muted">{country || "Country not on file"}</span>
+            )}
             {" · "}
             <span className="hc-muted">{formatDateTime(o.created_at)}</span>
           </p>
@@ -263,7 +272,7 @@ export function OrderDetail({
           <Panel title={grant ? "Grant recipient" : "Shipping info"} icon={grant ? "person" : "pin"}>
             <ShippingPanel order={o} buyer={buyer} country={country} />
           </Panel>
-          {o.buyer_note && (
+          {canSee && o.buyer_note && (
             <Panel title="Buyer note" icon="message">
               <p className="fw-note">{o.buyer_note}</p>
             </Panel>
@@ -271,16 +280,18 @@ export function OrderDetail({
 
         </div>
         <div className="fw-col">
-          <Panel title="Requester" icon="person">
-            <DescriptionList
-              items={[
-                ["Builder", <TextLink key="p" href={`/players/${o.user_id}`} className="font-bold">{requesterName}</TextLink>],
-                ["Handle", o.player_slack ? <span key="s">@{o.player_slack}</span> : null],
-                ["Placed", formatDateTime(o.created_at)],
-              ]}
-            />
-          </Panel>
-          {!grant && <Panel title="Previous source" icon="link">
+          {canSee && (
+            <Panel title="Requester" icon="person">
+              <DescriptionList
+                items={[
+                  ["Builder", <TextLink key="p" href={`/players/${o.user_id}`} className="font-bold">{requesterName}</TextLink>],
+                  ["Handle", o.player_slack ? <span key="s">@{o.player_slack}</span> : null],
+                  ["Placed", formatDateTime(o.created_at)],
+                ]}
+              />
+            </Panel>
+          )}
+          {canSee && !grant && <Panel title="Previous source" icon="link">
             {o.item_source_url ? (
               <>
                 <p className="hc-caption text-xs">Last bought from</p>

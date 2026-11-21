@@ -117,7 +117,7 @@ export default async function ReviewersPage({
 
       <Card>
         <CardHeader title="Add a reviewer" icon="member-add" />
-        <form action={addReviewer} className="grid items-end gap-4 sm:grid-cols-[1fr_1fr_auto]">
+        <form action={addReviewer} className="grid grid-cols-1 items-end gap-4 sm:grid-cols-[1fr_1fr_auto]">
           <Field label="Display name">
             <Input name="name" placeholder="Optional" />
           </Field>

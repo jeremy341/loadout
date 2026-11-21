@@ -1,7 +1,5 @@
 import { describe, expect, test } from "bun:test";
 import {
-  canFlagship,
-  canReviewShip,
   canSeeBuyerDetails,
   idsFromEnv,
   isOwnOrCollaborator,
@@ -10,6 +8,7 @@ import {
   proposedBanDecision,
   queueAllows,
   resolveAccess,
+  resolvePersonAccess,
   reviewQueueScopeFor,
   satisfies,
   staffRolesOnly,
@@ -68,6 +67,28 @@ describe("resolveAccess", () => {
     const fulfiller = access("f@loadout.test", ["fulfiller"]);
     expect(helper).toMatchObject({ isReviewer: false, isHelper: true, isFulfiller: false });
     expect(fulfiller).toMatchObject({ isReviewer: false, isHelper: false, isFulfiller: true });
+  });
+});
+
+describe("resolvePersonAccess (the shared resolution for sessions and gates)", () => {
+  test("is the same resolution getAccess and the superadmin/impersonation gates use", () => {
+    const person = { id: "p1", email: "r@loadout.test", roles: ["reviewer", "second_pass"] };
+    expect(resolvePersonAccess(person, OWNERS)).toEqual(resolveAccess(person, { ownerEmails: OWNERS, roles: person.roles }));
+  });
+
+  test("a removal written to RoleGrant revokes reviewer power here too", () => {
+    const person = { id: "p1", email: "r@loadout.test", roles: ["reviewer"] };
+    expect(resolvePersonAccess(person, OWNERS)).not.toBeNull();
+    // removeReviewer deletes the grant (or adds no_review to an owner), so the next read sees no reviewer access.
+    expect(resolvePersonAccess({ ...person, roles: [] }, OWNERS)).toBeNull();
+    expect(resolvePersonAccess({ ...person, roles: ["no_review"] }, OWNERS)).toBeNull();
+    const owner = { id: "o", email: "owner@loadout.test", roles: [] };
+    expect(resolvePersonAccess(owner, OWNERS)?.isReviewer).toBe(true);
+    expect(resolvePersonAccess({ ...owner, roles: ["no_review"] }, OWNERS)?.isReviewer).toBe(false);
+  });
+
+  test("the superadmin admin marker alone never grants reviewer power", () => {
+    expect(resolvePersonAccess({ id: "a", email: "a@loadout.test", roles: ["admin"] }, OWNERS)).toBeNull();
   });
 });
 

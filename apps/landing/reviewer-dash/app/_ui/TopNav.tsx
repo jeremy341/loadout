@@ -7,12 +7,17 @@ import Icon from "@hackclub/icons";
 import { glyphStyle } from "./glyphs";
 import { activeNavHref, type NavGroup, type NavItem, type NavModel } from "./nav";
 
-function NavLink({ item, count, active }: { item: NavItem; count?: number; active: boolean }) {
+// A count says what it counts: the label is the tooltip, the words a screen reader hears, and (inside a menu, where there is room and
+// no hover on a phone) a line of small text under the link.
+function NavLink({ item, count, label, active }: { item: NavItem; count?: number; label?: string; active: boolean }) {
+  const shown = count !== undefined && count > 0;
   return (
     <Link href={item.href} className="hc-nav-link" data-active={active ? true : undefined}>
       <Icon glyph={item.glyph} size={20} style={glyphStyle(item.glyph)} aria-hidden />
       {item.label}
-      {count !== undefined && count > 0 && <span className="hc-nav-count">{count}</span>}
+      {shown && <span className="hc-nav-count" title={label} aria-hidden={label ? true : undefined}>{count}</span>}
+      {shown && label && <span className="sr-only">{label}</span>}
+      {shown && label && <span className="hc-nav-count-note" aria-hidden>{label}</span>}
     </Link>
   );
 }
@@ -21,12 +26,14 @@ function NavLink({ item, count, active }: { item: NavItem; count?: number; activ
 function MoreMenu({
   groups,
   counts,
+  countLabels,
   activeHref,
   label = "More",
   className = "",
 }: {
   groups: NavGroup[];
   counts: Record<string, number>;
+  countLabels: Record<string, string>;
   activeHref: string | null;
   label?: string;
   className?: string;
@@ -61,7 +68,11 @@ function MoreMenu({
       <summary className="hc-nav-link">
         <Icon glyph="menu" size={20} aria-hidden />
         {label}
-        {total > 0 && <span className="hc-nav-count">{total}</span>}
+        {total > 0 && (
+          <span className="hc-nav-count" title={items.filter((item) => counts[item.href]).map((item) => countLabels[item.href]).filter(Boolean).join(". ") || undefined}>
+            {total}
+          </span>
+        )}
         <Icon glyph="down-caret" size={16} aria-hidden />
       </summary>
       <div className="hc-nav-menu-panel hc-nav-mega">
@@ -71,7 +82,7 @@ function MoreMenu({
             <ul>
               {group.items.map((item) => (
                 <li key={item.href}>
-                  <NavLink item={item} count={counts[item.href]} active={item.href === activeHref} />
+                  <NavLink item={item} count={counts[item.href]} label={countLabels[item.href]} active={item.href === activeHref} />
                 </li>
               ))}
             </ul>
@@ -82,7 +93,7 @@ function MoreMenu({
   );
 }
 
-export default function TopNav({ nav, counts }: { nav: NavModel; counts: Record<string, number> }) {
+export default function TopNav({ nav, counts, countLabels = {} }: { nav: NavModel; counts: Record<string, number>; countLabels?: Record<string, string> }) {
   const activeHref = activeNavHref(usePathname(), nav);
   // Wide screens: the everyday links in the bar and the rest under More. Narrow screens: one Menu with everything in it, so the bar
   // never grows wider than the screen.
@@ -91,11 +102,11 @@ export default function TopNav({ nav, counts }: { nav: NavModel; counts: Record<
     <nav className="flex items-center gap-1">
       <div className="hidden items-center gap-1 lg:flex">
         {nav.primary.map((item) => (
-          <NavLink key={item.href} item={item} count={counts[item.href]} active={item.href === activeHref} />
+          <NavLink key={item.href} item={item} count={counts[item.href]} label={countLabels[item.href]} active={item.href === activeHref} />
         ))}
-        {nav.groups.length > 0 && <MoreMenu groups={nav.groups} counts={counts} activeHref={activeHref} />}
+        {nav.groups.length > 0 && <MoreMenu groups={nav.groups} counts={counts} countLabels={countLabels} activeHref={activeHref} />}
       </div>
-      <MoreMenu groups={everything} counts={counts} activeHref={activeHref} label="Menu" className="lg:hidden" />
+      <MoreMenu groups={everything} counts={counts} countLabels={countLabels} activeHref={activeHref} label="Menu" className="lg:hidden" />
     </nav>
   );
 }

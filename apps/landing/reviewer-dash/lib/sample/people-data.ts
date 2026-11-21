@@ -7,6 +7,9 @@ import { PLAYERS, STAFF_PROJECTS, TEAM, type StaffProject } from "@/lib/reviewer
 import { FULFILLERS, FULFILMENT_ORDERS, type FulfilmentStatus } from "@/lib/reviewer/fulfilment";
 import { shopItemById } from "@/lib/platform/shop";
 import { REVIEWERS } from "@/lib/platform/review";
+import { databaseConfigured, db } from "@/lib/platform/db";
+import { recordAudit } from "@/lib/platform/audit";
+import { emailForHandle, roleDelta, roleKeysForLog } from "./role-grants";
 import type { AdminRow, JournalRow, ProjectRow, UserRow } from "../db";
 import { SECOND_PASS, REVIEW, NO_REVIEW, REVIEW_HARDWARE_ONLY, REVIEW_SOFTWARE_ONLY, EDIT_SUBMISSION, AI_DRAFT, FRAUD_REVIEW } from "../roles";
 import { JOURNALS, PROJECTS, ensureUser, iso, userIdFor } from "./index";
@@ -176,6 +179,8 @@ export interface TeamLogRow {
   id: number;
   source: "audit" | "legacy";
   slack_id: string;
+  // Stable person key (email) used by the access overlay; absent on seeded legacy rows.
+  person_key?: string;
   name: string;
   action: string;
   before: string[];
@@ -269,6 +274,70 @@ function seedStore(): PeopleStore {
 export const peopleStore: PeopleStore = (root[KEY] ??= seedStore());
 
 export const OWNER_IDS: readonly string[] = TEAM.filter((member) => member.roles.includes("owner")).map((member) => member.handle);
+
+// ---- Persisting a team change ----
+//
+// The Pixl-shaped roster above is the sample store. The viewer's real grants are the RoleGrant rows read by readViewer, and the
+// superadmin/impersonation gates resolve their access from those same rows. A change on the Admins page is written to both: the
+// in-memory log gives the viewer the change on their very next request, and this transaction makes it durable and auditable.
+// With no database configured (the sample-only development mode) this is a no-op and the in-memory store remains the whole story.
+
+export const DEFAULT_TEAM_CHANGE_REASON = "Team role change from the Admins page.";
+
+export interface TeamRoleChange {
+  personKey: string;
+  before: readonly string[];
+  after: readonly string[];
+  actorId: string;
+  reason?: string;
+  action?: string;
+}
+
+// Resolves the key an action received (sample handle, email or person id) to the Person row, then applies only the changed grants
+// and the audit row in one transaction. Returns the person so the caller can key its overlay entry by the same stable email.
+export async function persistTeamRoleChange(input: TeamRoleChange): Promise<{ id: string; email: string } | null> {
+  const key = input.personKey.trim();
+  if (!databaseConfigured() || !key) return null;
+  const mappedEmail = emailForHandle(key);
+  const person = await db().person.findFirst({
+    where: {
+      OR: [
+        { id: key },
+        { email: key },
+        ...(mappedEmail ? [{ email: mappedEmail }] : []),
+        { handle: key },
+      ],
+    },
+    select: { id: true, email: true },
+  });
+  if (!person) return null;
+
+  const delta = roleDelta(input.before, input.after);
+  if (delta.add.length === 0 && delta.remove.length === 0) return person;
+
+  await db().$transaction(async (tx) => {
+    if (delta.remove.length > 0) {
+      await tx.roleGrant.deleteMany({ where: { personId: person.id, role: { in: delta.remove } } });
+    }
+    for (const role of delta.add) {
+      await tx.roleGrant.upsert({
+        where: { personId_role: { personId: person.id, role } },
+        create: { personId: person.id, role },
+        update: {},
+      });
+    }
+    await recordAudit(tx, {
+      actorId: input.actorId,
+      action: input.action ?? "team.role.change",
+      targetType: "Person",
+      targetId: person.id,
+      reason: input.reason?.trim() || DEFAULT_TEAM_CHANGE_REASON,
+      before: { roles: roleKeysForLog(input.before) },
+      after: { roles: roleKeysForLog(input.after) },
+    });
+  });
+  return person;
+}
 
 // ---- Fulfillers and their orders ----
 

@@ -3,7 +3,7 @@
 // any database import so it stays a pure unit under test.
 
 // Robert's own "Fraud" band (its docs: 1-4 is "Fraud! Fraud! Fraud!"). A
-// score in this range still goes to Spot check like every other reviewed
+// score in this range still goes to Second pass like every other reviewed
 // project - it just also gets an alert, see robertSync.ts.
 export const FRAUD_SCORE_THRESHOLD = 4;
 

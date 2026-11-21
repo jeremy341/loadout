@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition, type FormEvent, type ReactNode } from "react";
+import { useEffect, useState, useTransition, type FormEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { AiTimePanel } from "@/reviewer-dash/app/_components/AiTimePanel";
 import { ReadmePanel } from "@/reviewer-dash/app/_components/ReadmePanel";
 import type { CommitResult } from "@/reviewer-dash/lib/commits";
@@ -235,15 +235,31 @@ export function ReviewDetailTabs({
     return () => document.removeEventListener("keydown", onKey);
   }, [tabKeys]);
 
+  // A real tablist: arrow/Home/End move between tabs, and only the active tab is in the Tab order.
+  const onTabsKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const current = tabs.findIndex((t) => t.key === tab);
+    let next = current;
+    if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+    else if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = tabs.length - 1;
+    else return;
+    event.preventDefault();
+    setTab(tabs[next]!.key);
+    const buttons = event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    buttons[next]?.focus();
+  };
+
   return (
     <Card padding="flush">
-      <div className="hc-tabs hc-tabs-fill" role="tablist">
+      <div className="hc-tabs hc-tabs-fill hc-tabs-wrap" role="tablist" onKeyDown={onTabsKeyDown}>
         {tabs.map((t, i) => (
           <button
             key={t.key}
             type="button"
             role="tab"
             aria-selected={tab === t.key}
+            tabIndex={tab === t.key ? 0 : -1}
             className="hc-tab gap-2"
             onClick={() => setTab(t.key)}
             title={i < 9 ? `Shortcut: ${i + 1}` : undefined}

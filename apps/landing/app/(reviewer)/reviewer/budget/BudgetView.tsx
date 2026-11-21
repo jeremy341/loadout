@@ -35,7 +35,7 @@ export function BudgetView() {
         <strong>10 Ore = {formatUsd(config.economy.oreValueUsd * 1000)}.</strong> This is the internal rate for budgeting. It is never shown to builders as a cash value.
       </Callout>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <Card className="min-w-0">
           <CardHeader title="What we still need to cover" icon="bank" />
           <BudgetCharts kind="obligations" rows={owed.lines.map((line) => ({ label: line.label, value: line.cents }))} />

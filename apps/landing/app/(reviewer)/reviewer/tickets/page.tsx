@@ -113,7 +113,7 @@ export default async function TicketsPage() {
 
       <TicketsClient />
 
-      <div className={`grid gap-6 ${access.isOwner ? "lg:grid-cols-2" : ""}`}>
+      <div className={`grid grid-cols-1 gap-6 ${access.isOwner ? "lg:grid-cols-2" : ""}`}>
         <ResolverLeaderboard />
         {access.isOwner && <HelperManager />}
       </div>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ComponentProps, ComponentPropsWithoutRef, ReactNode } from "react";
 import HcIcon, { type GlyphName } from "@hackclub/icons";
 import SubmitButton from "./SubmitButton";
+import DataScopeNote from "./DataScopeNote";
 import { glyphStyle } from "./glyphs";
 import { pageWindow } from "@/reviewer-dash/lib/pagination";
 
@@ -183,6 +184,7 @@ export function PageHeader({
           {count !== undefined && <CountBadge>{count}</CountBadge>}
         </h1>
         {description && <p className="hc-caption mt-1">{description}</p>}
+        <DataScopeNote />
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </header>
@@ -614,20 +616,20 @@ export function LinkTabs({
   active: string;
 }) {
   return (
-    <div className="hc-tabs" role="tablist">
+    // Navigation, not a tab widget: links with aria-current, no tablist/tab roles.
+    <nav className="hc-tabs hc-tabs-wrap" aria-label="Sections">
       {tabs.map((tab) => (
         <Link
           key={tab.key}
           href={tab.href}
           className="hc-tab gap-2"
-          role="tab"
-          aria-selected={tab.key === active}
+          aria-current={tab.key === active ? "page" : undefined}
         >
           {tab.label}
           {tab.count !== undefined && <CountBadge>{tab.count}</CountBadge>}
         </Link>
       ))}
-    </div>
+    </nav>
   );
 }
 

@@ -112,7 +112,7 @@ function projectStatus(ship: ReviewShip): { status: string; patch: Partial<Proje
     case "waiting":
     case "claimed":
       return { status: "shipped", patch: {} };
-    case "spot-check":
+    case "second-pass":
       return { status: "second_review", patch: { second_pass_verdict: "not_fraud", second_pass_by: "Robert", second_pass_at: iso(6) } };
     case "proposed-ban":
       return { status: "second_review", patch: { first_pass_verdict: "banned" } };

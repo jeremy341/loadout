@@ -5,6 +5,8 @@ import Icon from "@hackclub/icons";
 import { saveStaffSettings } from "@/reviewer-dash/app/actions";
 import { ReviewMacroEditor } from "@/reviewer-dash/app/_components/ReviewMacroEditor";
 import { Card, DescriptionList, Mono } from "@/reviewer-dash/app/_ui/ui";
+import FlagsSection from "./FlagsSection";
+import type { FlagRow } from "./flag-rows";
 import {
   ACCENTS,
   THEME_INFO,
@@ -16,6 +18,7 @@ import {
 const SECTIONS = [
   { id: "appearance", label: "Appearance", glyph: "photo" },
   { id: "review", label: "Review", glyph: "checkmark" },
+  { id: "flags", label: "Flags", glyph: "flag" },
   { id: "account", label: "Account", glyph: "person" },
 ] as const;
 type Section = (typeof SECTIONS)[number]["id"];
@@ -91,21 +94,27 @@ export default function SettingsClient({
   initial,
   account,
   canEditReviewMacros,
+  flags,
 }: {
   initial: StaffSettings;
   account: { name: string; slackId: string };
   canEditReviewMacros: boolean;
+  // The feature flags, for owners; null for everyone else, who then get no Flags section.
+  flags: FlagRow[] | null;
 }) {
   const [settings, setSettings] = useState(initial);
   const [section, setSection] = useState<Section>("appearance");
   const [failed, setFailed] = useState(false);
   const [saving, startSaving] = useTransition();
+  // The Flags section exists for owners only (the page sends null to everyone else).
+  const hasFlags = flags !== null;
+  const sections = SECTIONS.filter((s) => s.id !== "flags" || hasFlags);
 
   // #review / #account deep-link straight to a section.
   useEffect(() => {
     const fromHash = window.location.hash.slice(1);
-    if (SECTIONS.some((s) => s.id === fromHash)) setSection(fromHash as Section);
-  }, []);
+    if (SECTIONS.some((s) => s.id === fromHash && (s.id !== "flags" || hasFlags))) setSection(fromHash as Section);
+  }, [hasFlags]);
 
   function pick(next: Section) {
     setSection(next);
@@ -139,7 +148,7 @@ export default function SettingsClient({
   return (
     <div className="hc-settings-layout">
       <nav className="hc-settings-nav" aria-label="Settings sections">
-        {SECTIONS.map((s) => (
+        {sections.map((s) => (
           <button
             key={s.id}
             type="button"
@@ -265,6 +274,8 @@ export default function SettingsClient({
           </>
         )}
 
+        {section === "flags" && flags && <FlagsSection flags={flags} />}
+
         {section === "account" && (
           <Card>
             <h2 className="hc-heading mb-3 text-base">Signed in as</h2>
@@ -280,7 +291,7 @@ export default function SettingsClient({
           </Card>
         )}
 
-        {section !== "account" && (
+        {section !== "account" && section !== "flags" && (
           <p className="hc-save-status" data-tone={failed && !saving ? "danger" : undefined}>
             {status}
           </p>

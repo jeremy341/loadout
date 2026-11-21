@@ -2,6 +2,16 @@
 // sample rows and the in-memory store in ./content-data.ts. Re-exported at the end of lib/db.ts. No network, nothing saved.
 import type { IdeaWithUser } from "../db";
 import { content, shippableProjects, type DashEventRow } from "./content-data";
+import { databaseConfigured } from "@/lib/platform/db";
+import * as platform from "@/lib/platform/content-data";
+import { sampleFallbackAllowed } from "@/lib/platform/records-data";
+
+// Reads the real table when a database is configured. The sample rows answer only when the table is empty and the server runs in
+// development (sampleFallbackAllowed). Production shows the real list, even when it is empty, and without a database it is empty.
+async function fromDb<T>(load: () => Promise<T[]>, sample: () => T[]): Promise<T[]> {
+  const rows = databaseConfigured() ? await load() : [];
+  return sampleFallbackAllowed({ nodeEnv: process.env.NODE_ENV, rowCount: rows.length }) ? sample() : rows;
+}
 
 export {
   EVENT_TYPES,
@@ -62,21 +72,32 @@ export async function listPersonalShopItems(): Promise<PersonalShopItem[]> {
 // ---- Events ----
 
 export async function listEvents(limit = 100): Promise<DashEventRow[]> {
-  return [...content.events].sort((a, b) => b.starts_at.localeCompare(a.starts_at)).slice(0, limit);
+  return fromDb(
+    () => platform.listDbEvents(limit),
+    () => [...content.events].sort((a, b) => b.starts_at.localeCompare(a.starts_at)).slice(0, limit),
+  );
 }
 
 // ---- Forms ----
 
+const sampleSubmissions = (formKey?: string): FormSubmissionRow[] =>
+  content.submissions.filter((s) => !formKey || s.form_key === formKey).sort((a, b) => b.created_at.localeCompare(a.created_at));
+
 export async function listFormSubmissions(formKey?: string): Promise<FormSubmissionRow[]> {
-  return content.submissions.filter((s) => !formKey || s.form_key === formKey).sort((a, b) => b.created_at.localeCompare(a.created_at));
+  return fromDb(() => platform.listDbFormSubmissions(formKey), () => sampleSubmissions(formKey));
 }
 
 export async function countPendingFormSubmissions(): Promise<number> {
+  const rows = databaseConfigured() ? await platform.listDbFormSubmissions() : [];
+  if (!sampleFallbackAllowed({ nodeEnv: process.env.NODE_ENV, rowCount: rows.length })) return rows.filter((s) => s.status === "pending").length;
   return content.submissions.filter((s) => s.status === "pending").length;
 }
 
 export async function listFormConfigs(): Promise<FormConfigRow[]> {
-  return [...content.configs].sort((a, b) => a.form_key.localeCompare(b.form_key));
+  return fromDb(
+    () => platform.listDbFormConfigs(),
+    () => [...content.configs].sort((a, b) => a.form_key.localeCompare(b.form_key)),
+  );
 }
 
 // ---- Show & Tell ----

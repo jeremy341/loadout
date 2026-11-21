@@ -4,7 +4,7 @@
 import { NOT_SET } from "./records-copy";
 
 export const PAY_PER_REVIEW = NOT_SET;
-export const PERKS_PROVISIONAL = "Provisional. The owner has not set these milestones or what each perk is.";
+export const PERKS_PROVISIONAL = "The owner has not set these milestones or what each perk is.";
 
 export type PerkMilestone = { id: string; reviews: number; label: string; perk: string };
 

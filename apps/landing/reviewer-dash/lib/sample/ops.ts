@@ -47,6 +47,8 @@ export interface ShopOrderRow {
   player_name: string;
   player_display_name: string;
   player_slack: string | null;
+  /** The buyer's country, always safe to show. Filled by listShopOrders/getShopOrder for the country-only list view. */
+  buyer_country?: string;
   item_source_url: string | null;
   item_alt_source_url?: string | null;
   item_image_url?: string | null;
@@ -175,7 +177,30 @@ function build(): OpsStore {
 
 export const opsStore: OpsStore = (root[KEY] ??= build());
 
-const clone = (row: ShopOrderRow): ShopOrderRow => ({ ...row });
+const clone = (row: ShopOrderRow): ShopOrderRow => ({ ...row, buyer_country: BUYER_COUNTRY.get(row.user_id) ?? "" });
+
+// A fulfiller may see a buyer's identity only on an order they claimed, or when an owner is viewing. Everyone else gets the
+// country, item and status: no legal name, handle, note or contact detail on orders still in the shared queue.
+function maySeeBuyer(row: ShopOrderRow, opts: OrderSearchOptions): boolean {
+  if (opts.allowPrivateNames) return true;
+  const viewer = (opts.viewerSlack ?? "").trim();
+  const claimer = (row.claimed_by_slack ?? "").trim();
+  return viewer !== "" && claimer !== "" && viewer === claimer;
+}
+
+function forViewer(row: ShopOrderRow, opts: OrderSearchOptions): ShopOrderRow {
+  const copy = clone(row);
+  if (maySeeBuyer(row, opts)) return copy;
+  return {
+    ...copy,
+    player_name: "",
+    player_display_name: "",
+    player_slack: null,
+    buyer_note: "",
+    item_source_url: null,
+    item_alt_source_url: null,
+  };
+}
 
 export function patchOrder(id: number, patch: Partial<ShopOrderRow>): ShopOrderRow | null {
   const row = opsStore.orders.get(id);
@@ -207,18 +232,21 @@ export async function listShopOrders(
   if (opts.claimedBySlack) rows = rows.filter((row) => row.claimed_by_slack === opts.claimedBySlack);
   const q = opts.search?.trim().toLowerCase();
   if (q) {
-    rows = rows.filter((row) =>
-      [row.item_name, row.option, row.player_display_name, row.player_slack ?? "", String(row.id)].some((value) => value.toLowerCase().includes(q)),
-    );
+    rows = rows.filter((row) => {
+      const hay = [row.item_name, row.option, String(row.id)];
+      // A fulfiller must not be able to search by a buyer's handle or private note on orders they cannot see.
+      if (maySeeBuyer(row, opts)) hay.push(row.player_display_name, row.player_slack ?? "", row.buyer_note ?? "");
+      return hay.some((value) => value.toLowerCase().includes(q));
+    });
   }
   rows.sort((a, b) => b.created_at.localeCompare(a.created_at) || b.id - a.id);
   const from = Math.max(0, opts.offset ?? 0);
-  return rows.slice(from, from + limit).map(clone);
+  return rows.slice(from, from + limit).map((row) => forViewer(row, opts));
 }
 
-export async function getShopOrder(id: number): Promise<ShopOrderRow | null> {
+export async function getShopOrder(id: number, opts: OrderSearchOptions = {}): Promise<ShopOrderRow | null> {
   const row = opsStore.orders.get(id);
-  return row ? clone(row) : null;
+  return row ? forViewer(row, opts) : null;
 }
 
 const handleOf = (userId: string): string => userId.replace(/^u-/, "");

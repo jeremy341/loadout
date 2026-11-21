@@ -33,7 +33,11 @@ describe("GitHub profile shortcut", () => {
     expect(source).toContain("{githubOwnerProfile && (");
     expect(source).toContain('href={githubOwnerProfile} external variant="outline"');
     expect(source).toContain("GitHub profile");
-    expect(source.indexOf("GitHub profile")).toBeGreaterThan(source.indexOf(">\n              Repo"));
-    expect(source.indexOf("GitHub profile")).toBeLessThan(source.indexOf("README\n"));
+    // The shortcut sits between the Repo and README links in the project-links block.
+    const repoIndex = source.indexOf("ButtonLink href={repoUrl}");
+    const profileIndex = source.indexOf("GitHub profile");
+    const readmeIndex = source.indexOf("#readme");
+    expect(profileIndex).toBeGreaterThan(repoIndex);
+    expect(profileIndex).toBeLessThan(readmeIndex);
   });
 });

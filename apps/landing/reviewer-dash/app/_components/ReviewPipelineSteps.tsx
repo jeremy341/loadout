@@ -29,13 +29,13 @@ export function ReviewPipelineSteps({
 }) {
   const firstPassThisCycle = currentFirstPassAt(status, firstPassAt);
   const approved = status === "approved";
-  const spotCheck: StepState = approved ? "done" : status === "second_review" ? "current" : "upcoming";
+  const secondPass: StepState = approved ? "done" : status === "second_review" ? "current" : "upcoming";
 
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
       <Step label="Submitted" state={shippedAt ? "done" : "upcoming"} />
       <Step label="First pass" state={firstPassThisCycle ? "done" : shippedAt ? "current" : "upcoming"} />
-      <Step label="Spot check" state={spotCheck} />
+      <Step label="Second pass" state={secondPass} />
       <Step label="Approved" state={approved ? "done" : "upcoming"} />
     </div>
   );

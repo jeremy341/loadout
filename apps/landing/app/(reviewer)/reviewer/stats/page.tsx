@@ -3,6 +3,7 @@ import { requirePage } from "@/reviewer-dash/lib/guard";
 import { publicStats, publicGallery } from "@/reviewer-dash/lib/db";
 import { GrowthChart } from "@/reviewer-dash/app/_components/GrowthChart";
 import { Card, Icon, Stat, StatGrid } from "@/reviewer-dash/app/_ui/ui";
+import { isAllowedImageSrc } from "@/reviewer-dash/lib/safeUrl";
 
 export const dynamic = "force-dynamic";
 
@@ -48,11 +49,11 @@ export default async function StatsPage() {
       {gallery.length > 0 && (
         <section>
           <h2 className="hc-heading mb-4 text-base">Recently approved</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {gallery.map((p) => (
               <div key={p.id} className="hc-card block overflow-hidden" data-density="flush">
-                {p.image_url ? (
-                  <img src={p.image_url} alt="" className="h-36 w-full object-cover" />
+                {isAllowedImageSrc(p.image_url) ? (
+                  <img src={p.image_url} alt="" referrerPolicy="no-referrer" className="h-36 w-full object-cover" />
                 ) : (
                   <div className="hc-muted grid h-36 w-full place-items-center" style={{ background: "var(--sunken)" }}>
                     <Icon glyph="photo" size={40} />

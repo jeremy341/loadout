@@ -36,6 +36,8 @@ export interface CollaboratorHours {
 
 type Draft = Record<string, string | number>;
 
+const STEP_ERROR_ID = "review-verdict-error";
+
 // Friendly names for the browser's own validation messages, see onVerdictSelect.
 const FIELD_LABEL: Record<string, string> = {
   approvedHours: "Hours to credit",
@@ -398,7 +400,7 @@ export function ReviewForm({
     typeof document !== "undefined" && document.visibilityState === "visible" && document.hasFocus();
   const submittedRef = useRef(false);
 
-  // The default can come from an earlier reviewer (first or spot-check pass), so
+  // The default can come from an earlier reviewer (first or second-pass pass), so
   // it may predate a journal deflation that has since lowered claimedHours. Never
   // start above what can actually be credited (the input's own max).
   const baseHours = round1(Math.min(defaultHours ?? claimedHours, claimedHours));
@@ -555,6 +557,9 @@ export function ReviewForm({
   // Submission, audit notes and verdict all sit on one scrolling form, so
   // nothing has to be opened or clicked through before judging.
   const [stepError, setStepError] = useState("");
+  // Focus target for errors that are not about one field (a failed or bounced submit).
+  const errorRef = useRef<HTMLDivElement>(null);
+  const verdictRowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Fresh accumulator per mount: a remount without a page load would
@@ -626,7 +631,6 @@ export function ReviewForm({
       document.removeEventListener("click", onClick);
       document.removeEventListener("auxclick", onClick);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Technical features / additional notes are only required for approve
@@ -644,23 +648,41 @@ export function ReviewForm({
     if (notesRef.current) notesRef.current.required = required;
     if (ageJustificationRef.current) ageJustificationRef.current.required = required && ageFlag;
 
-    const fail = (_section: number, message: string) => {
+    // The message is announced (role="alert" below) and focus moves to the field it is about, so a keyboard or screen reader user
+    // lands where the problem is instead of on a verdict button far from it.
+    const fail = (field: HTMLElement | null | undefined, message: string) => {
       setStepError(message);
+      if (field) {
+        field.setAttribute("aria-invalid", "true");
+        field.setAttribute("aria-describedby", STEP_ERROR_ID);
+        field.focus();
+      } else {
+        errorRef.current?.focus();
+      }
       return false;
     };
+    for (const el of [
+      technicalFeaturesRef.current,
+      deflationReasonRef.current,
+      ageJustificationRef.current,
+      notesRef.current,
+      noteRef.current,
+    ]) {
+      el?.removeAttribute("aria-invalid");
+      el?.removeAttribute("aria-describedby");
+    }
     if (verdict === "needs_changes" && hasUnfilledMacroPlaceholder(noteRef.current?.value ?? "")) {
-      noteRef.current?.focus();
-      return fail(3, "Specify what's missing from the README before requesting changes.");
+      return fail(noteRef.current, "Specify what's missing from the README before requesting changes.");
     }
     // Hours are only credited on an approve, so only an approve needs the reason.
     if (verdict === "approved" && needsDeflationReason && !deflationReasonRef.current?.value.trim())
-      return fail(2, "Say why you're lowering the hours before deciding.");
+      return fail(deflationReasonRef.current, "Say why you're lowering the hours before deciding.");
     if (verdict === "approved" && ageFlag && !ageJustificationRef.current?.value.trim())
-      return fail(2, "Age justification is required before deciding.");
+      return fail(ageJustificationRef.current, "Age justification is required before deciding.");
     if (required) {
       if ((technicalFeaturesRef.current?.value.trim().length ?? 0) < TECHNICAL_FEATURES_MIN)
-        return fail(2, `Technical features needs at least ${TECHNICAL_FEATURES_MIN} characters.`);
-      if (!notesRef.current?.value.trim()) return fail(2, "Additional notes is required before approving.");
+        return fail(technicalFeaturesRef.current, `Technical features needs at least ${TECHNICAL_FEATURES_MIN} characters.`);
+      if (!notesRef.current?.value.trim()) return fail(notesRef.current, "Additional notes is required before approving.");
     }
     // Anything else the browser would reject (an hours value off the 0.1 step,
     // above the cap, ...): named here, since its own bubble can be scrolled
@@ -668,7 +690,7 @@ export function ReviewForm({
     const invalid = formRef.current?.querySelector<HTMLInputElement | HTMLTextAreaElement>(
       "input:invalid, textarea:invalid, select:invalid",
     );
-    if (invalid) return fail(0, `${fieldLabel(invalid.name)}: ${invalid.validationMessage}`);
+    if (invalid) return fail(invalid, `${fieldLabel(invalid.name)}: ${invalid.validationMessage}`);
     setStepError("");
     return true;
   };
@@ -679,12 +701,17 @@ export function ReviewForm({
   const [pendingVerdict, setPendingVerdict] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState("");
   const [, startSubmit] = useTransition();
+  // Move focus to the message when a submit fails, so it is read out and the reviewer is not left on a disabled button.
+  useEffect(() => {
+    if (submitError) errorRef.current?.focus();
+  }, [submitError]);
 
   // Undo window: a verdict is only sent (and so only announced, credited)
   // UNDO_SECONDS after the click, and Undo within that time cancels
   // it. The FormData is captured at click time and held here until then.
   const UNDO_SECONDS = 10;
   const [undoLeft, setUndoLeft] = useState<number | null>(null);
+  const undoWindowOpen = undoLeft !== null;
   const pendingFd = useRef<FormData | null>(null);
 
   useEffect(() => {
@@ -696,21 +723,24 @@ export function ReviewForm({
     const t = setTimeout(() => setUndoLeft((n) => (n === null ? null : n - 1)), 1000);
     return () => clearTimeout(t);
     // sendVerdict only reads refs and stable setters.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [undoLeft]);
 
   // Leaving the page inside the window would drop the verdict silently.
   useEffect(() => {
-    if (undoLeft === null) return;
+    if (!undoWindowOpen) return;
     const warn = (ev: BeforeUnloadEvent) => ev.preventDefault();
     window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
-  }, [undoLeft === null]);
+  }, [undoWindowOpen]);
 
+  const [undone, setUndone] = useState(false);
   const undoVerdict = () => {
     pendingFd.current = null;
     setUndoLeft(null);
     setPendingVerdict(null);
+    setUndone(true);
+    // The Undo button is about to unmount: put focus back on the verdict buttons (they re-enable on this render).
+    requestAnimationFrame(() => verdictRowRef.current?.querySelector<HTMLButtonElement>("button:not(:disabled)")?.focus());
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -727,6 +757,7 @@ export function ReviewForm({
     fd.set("approvedHours", String(roundedHours));
     const verdict = String(fd.get("verdict") ?? "");
     setSubmitError("");
+    setUndone(false);
     setPendingVerdict(verdict);
     pendingFd.current = fd;
     setUndoLeft(UNDO_SECONDS);
@@ -1082,12 +1113,23 @@ export function ReviewForm({
             defaultChecked={defaultNotifyOnResubmit}
             label="If you request changes: tell me when the builder ships this project again, so I can re-review it while I still remember it."
           />
-          {stepError && <Callout tone="danger" icon="important">{stepError}</Callout>}
-          {submitError && <Callout tone="danger" icon="important">{submitError}</Callout>}
+          {(stepError || submitError) && (
+            <div ref={errorRef} id={STEP_ERROR_ID} role="alert" tabIndex={-1} className="outline-none">
+              <Callout tone="danger" icon="important">{stepError || submitError}</Callout>
+            </div>
+          )}
+          {/* Always mounted so a screen reader announces it. The message is said once, not on every tick of the countdown. */}
+          <div role="status" aria-live="polite" className="sr-only">
+            {undoLeft !== null
+              ? `Sending your verdict in ${UNDO_SECONDS} seconds. Nothing is posted or credited until then. Undo and Send now are available.`
+              : undone
+                ? "Verdict cancelled. Nothing was sent."
+                : ""}
+          </div>
           {undoLeft !== null && (
             <Callout tone="neutral" icon="clock">
               <span className="flex flex-wrap items-center gap-3">
-                <span>
+                <span aria-hidden="true">
                   Sending your verdict in {undoLeft}s. Nothing is posted or credited until then.
                 </span>
                 <Button type="button" variant="outline" onClick={undoVerdict}>
@@ -1099,11 +1141,13 @@ export function ReviewForm({
               </span>
             </Callout>
           )}
-          <VerdictButtons
-            secondPass={secondPass}
-            pendingVerdict={pendingVerdict}
-            onVerdictSelect={onVerdictSelect}
-          />
+          <div ref={verdictRowRef}>
+            <VerdictButtons
+              secondPass={secondPass}
+              pendingVerdict={pendingVerdict}
+              onVerdictSelect={onVerdictSelect}
+            />
+          </div>
         </div>
       </form>
     </div>

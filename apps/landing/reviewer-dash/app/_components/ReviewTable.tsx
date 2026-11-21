@@ -10,6 +10,7 @@ import type { QueueLock } from "@/reviewer-dash/lib/reviewAssignment";
 import { TrackBadge, StatusBadge, TypeBadge, BeaconBadge } from "@/reviewer-dash/app/_components/ProjectBadges";
 import type { Track } from "@/lib/platform/progress";
 import { staffName } from "@/reviewer-dash/lib/staffName";
+import { isAllowedImageSrc } from "@/reviewer-dash/lib/safeUrl";
 import { RowSelect, SelectAllBox } from "@/reviewer-dash/app/_components/MassSelect";
 import { Badge, EmptyRow, Mono, Muted, Table } from "@/reviewer-dash/app/_ui/ui";
 
@@ -99,10 +100,11 @@ export function ReviewTable({
             <td className="relative">
               {!lock && <Link href={href} prefetch={false} aria-label={p.name} className="absolute inset-0 z-10" />}
               <div className="flex min-w-0 items-center gap-3">
-                {p.image_url ? (
+                {isAllowedImageSrc(p.image_url) ? (
                   <img
                     src={p.image_url}
                     alt=""
+                    referrerPolicy="no-referrer"
                     className="h-10 w-10 shrink-0 rounded-md border border-[var(--border)] object-cover"
                   />
                 ) : (

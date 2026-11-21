@@ -21,7 +21,7 @@ import { TrackBadge, trackOfProject, BeaconBadge, ShipBadges } from "@/reviewer-
 import { CommitList } from "@/reviewer-dash/app/_components/CommitList";
 import { ProjectNotes } from "@/reviewer-dash/app/_components/ProjectNotes";
 import { renderMarkdown } from "@/reviewer-dash/lib/markdown";
-import { isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
+import { isAllowedImageSrc, isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
 import { slackHandle } from "@/reviewer-dash/lib/slack";
 import {
   ActionButton,
@@ -193,10 +193,11 @@ export default async function ProjectPage({
       </div>
 
       <div className="flex items-start gap-4">
-        {project.image_url && isSafeUrl(project.image_url) && (
+        {isAllowedImageSrc(project.image_url) && (
           <img
             src={project.image_url}
             alt=""
+            referrerPolicy="no-referrer"
             className="hc-card h-20 w-20 shrink-0 object-cover md:h-24 md:w-24"
             data-density="flush"
           />
@@ -312,7 +313,7 @@ export default async function ProjectPage({
         />
       </StatGrid>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="flex min-w-0 flex-col gap-6">
           <Card>
             <CardHeader title="About" icon="info" />
@@ -362,7 +363,7 @@ export default async function ProjectPage({
 
           <Card padding="flush">
             <CardHeader title="Commits" icon="github" />
-            <Suspense fallback={<EmptyState title="Loading commits..." icon="github" />}>
+            <Suspense fallback={<div role="status" aria-live="polite"><EmptyState title="Loading commits..." icon="github" /></div>}>
               <Commits commits={commits} projectId={project.id} />
             </Suspense>
           </Card>
@@ -592,7 +593,7 @@ export default async function ProjectPage({
                 <div className={DIVIDER}>
                   <h3 className="hc-heading text-sm">Correct approved hours</h3>
                   <p className="hc-caption mb-2 mt-1 text-xs">
-                    Changes credited hours after approval, up or down, e.g. when a spot check found an over-claim
+                    Changes credited hours after approval, up or down, e.g. when a second pass found an over-claim
                     or more work. Fill in the new hours only for the people who should change, a blank box leaves
                     that person alone. Lowering takes their Ore back down to what the new hours are worth
                     ({ORE_PER_HOUR} Ore an hour) and cancels any pending order that can no longer be covered.

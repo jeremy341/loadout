@@ -1,17 +1,17 @@
 import Link from "next/link";
 import { requirePage, requireGuidelinesAck } from "@/reviewer-dash/lib/guard";
 import { canSeeBuilderPII } from "@/reviewer-dash/lib/reviewAccess";
-import { listShippedProjects, listReviewAudits } from "@/reviewer-dash/lib/db";
+import { countPendingByKind, listShippedProjects, listReviewAudits } from "@/reviewer-dash/lib/db";
 import { slackHandles, warmSlackHandles } from "@/reviewer-dash/lib/slack";
 import { ReviewTable } from "@/reviewer-dash/app/_components/ReviewTable";
 import {
   assigneeOf,
   assignmentDeadlineMs,
-  lockedForViewer,
   openableQueueIds,
   type QueueLock,
 } from "@/reviewer-dash/lib/reviewAssignment";
 import { LiveReview } from "@/reviewer-dash/app/_components/LiveReview";
+import { reviewErrorCopy } from "@/reviewer-dash/lib/reviewError";
 import {
   REVIEW_TYPE_FILTERS,
   filterReviewType,
@@ -23,6 +23,7 @@ import {
   Callout,
   Card,
   CardHeader,
+  CountBadge,
   Muted,
   Pagination,
   Table,
@@ -48,10 +49,11 @@ export default async function ReviewListPage({
   }>;
 }) {
   const access = await requirePage("reviewer");
-  const guidelinesAck = requireGuidelinesAck(access);
-  guidelinesAck.catch(() => {});
+  // Await the gate before any queue data is read or rendered: a fire-and-forget promise could redirect after the page streamed.
+  await requireGuidelinesAck(access);
   const viewer = access.session.slackId;
   const { page, kind: rawKind, type: rawType, error } = await searchParams;
+  const errorCopy = reviewErrorCopy(error);
   const typeFilter = parseReviewTypeFilter(rawType);
   // Hardware and software have separate review queues. A reviewer restricted
   // to one queue (access.reviewQueues) can't view or query the other, so clamp
@@ -60,11 +62,12 @@ export default async function ReviewListPage({
   const kind: "software" | "hardware" = access.reviewQueues === "both" ? requestedKind : access.reviewQueues;
   const kindQ = kind === "hardware" ? "&kind=hardware" : "";
 
-  // First-pass work only. Spot checks are on the Spot check tab.
-  const [, myRecent, rowsAll] = await Promise.all([
-    guidelinesAck,
+  // First-pass work only. Second passs are on the Second pass tab.
+  // The per-queue split is for a reviewer who can open both queues; a one-queue reviewer is never shown the other queue's number.
+  const [myRecent, rowsAll, byKind] = await Promise.all([
     listReviewAudits(5, viewer, { realNames: canSeeBuilderPII(access) }),
     listShippedProjects(viewer, kind, { includeClaimed: true }),
+    access.reviewQueues === "both" ? countPendingByKind() : Promise.resolve(null),
   ]);
   const nowMs = Date.now();
   // Everyone can open every row except one reserved for another reviewer.
@@ -112,31 +115,36 @@ export default async function ReviewListPage({
 
   return (
     <div className="flex flex-col gap-6">
-      {error && (
+      {errorCopy && (
         <Callout tone="warning" icon="private">
-          {error.slice(0, 300)}
+          {errorCopy}
         </Callout>
       )}
       {access.reviewQueues === "both" && (
-        <div className="hc-segmented self-start" role="tablist">
+        <nav className="hc-segmented self-start" aria-label="Review queue">
           {(["software", "hardware"] as const).map((k) => (
             <Link
               key={k}
               href={k === "hardware" ? "/review?kind=hardware" : "/review"}
-              role="tab"
-              aria-selected={kind === k}
+              aria-current={kind === k ? "page" : undefined}
               className="hc-segmented-item inline-flex items-center justify-center px-4"
             >
               {k === "software" ? "Software queue" : "Hardware queue"}
+              {byKind ? <CountBadge>{byKind[k]}</CountBadge> : null}
             </Link>
           ))}
-        </div>
+        </nav>
+      )}
+      {byKind && (
+        <p className="hc-caption text-sm">
+          {(byKind.software + byKind.hardware).toLocaleString()} ships wait across both queues. This list is the {kind} queue ({byKind[kind].toLocaleString()}).
+        </p>
       )}
 
       <div>
         <Card padding="flush">
           <CardHeader
-            title={kind === "hardware" ? "Hardware queue" : "Needs review"}
+            title={kind === "hardware" ? "Hardware queue" : "Software queue"}
             icon="clock"
             count={total}
             action={
@@ -147,6 +155,9 @@ export default async function ReviewListPage({
           />
           <nav aria-label="Filter projects by type" className="flex flex-wrap items-center gap-2 border-b border-[var(--border)] px-4 py-3">
             <span className="mr-1 text-xs font-semibold text-[var(--muted)]">Project type</span>
+            <span className="order-last w-full text-xs text-[var(--muted)] sm:order-none sm:ml-auto sm:w-auto">
+              Showing {total.toLocaleString()} of {baseRows.length.toLocaleString()} in the {kind} queue
+            </span>
             {types.map((filter) => (
               <Link
                 key={filter.id}

@@ -533,7 +533,6 @@ function TooltipBoxInner({
   springConfig,
   animate = true,
   entrance = true,
-  exit: _exit,
   replayOnFlip = true,
   animateSize = true,
   panelStyle,

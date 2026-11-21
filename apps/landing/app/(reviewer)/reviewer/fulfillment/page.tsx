@@ -37,7 +37,6 @@ import {
   ButtonLink,
   Card,
   CardHeader,
-  CountBadge,
   EmptyRow,
   EmptyState,
   Field,
@@ -240,17 +239,6 @@ export default async function FulfillmentPage({
     { key: "cancelled" as const, label: "Cancelled", count: counts.cancelled },
   ] : [];
 
-  const tabs: { key: TabKey; label: string; count?: number }[] = [
-    { key: "pending", label: "New", count: counts?.pending },
-    { key: "claimed", label: "Claimed", count: counts?.claimed },
-    { key: "packed", label: "Packed", count: counts?.packed },
-    { key: "shipped", label: "Shipped", count: counts?.shipped },
-    { key: "delivered", label: "Delivered", count: counts?.delivered },
-    { key: "cancelled", label: "Cancelled", count: counts?.cancelled },
-    { key: "flagged", label: "Over budget", count: counts?.flagged },
-    { key: "all", label: "All", count: counts?.all },
-  ];
-
   const hrefFor = (next: {
     status?: TabKey;
     mine?: boolean;
@@ -295,12 +283,13 @@ export default async function FulfillmentPage({
           : "Nothing here yet";
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="fw-page flex flex-col gap-5" data-explicit={showingQueue && explicitSelection ? "true" : undefined}>
       <PageHeader
         title={mineOnly ? "My queue" : "Fulfillment"}
         description="Find what needs attention, source within budget, and track each request through delivery. Nobody fulfils their own order."
         actions={
           <div className="fw-header-actions">
+            <ButtonLink href="/fulfillment/airbridge-preview" variant="outline" size="sm">Airbridge preview</ButtonLink>
             {showingQueue ? (
               <ButtonLink href={hrefFor({ mine: !mineOnly })} variant={mineOnly ? "primary" : "outline"} size="sm" icon="list">
                 {mineOnly ? "Back to all orders" : "My queue"}
@@ -402,7 +391,7 @@ export default async function FulfillmentPage({
         <FulfillmentLeaderboard />
       ) : (
         <div className="fw-grid" data-explicit={explicitSelection ? "true" : undefined}>
-          <section className="fw-list" aria-label="Requests">
+          <section className="fw-list" id="fw-requests" aria-label="Requests">
             <div className="fw-list-head">
               <div className="fw-list-heading">
                 <h2 className="hc-heading text-lg">Requests</h2>
@@ -512,6 +501,7 @@ export default async function FulfillmentPage({
                 selectedId={selected?.id ?? null}
                 hrefFor={(id) => hrefFor({ order: id })}
                 nameFor={nameFor}
+                canSee={(o) => canSeeBuyerDetails(o, access)}
                 now={Date.now()}
                 eligibility={eligibility}
               />
@@ -527,6 +517,7 @@ export default async function FulfillmentPage({
             )}
           </section>
           <section className="fw-pane" aria-label="Selected request">
+            {explicitSelection && <a href="#fw-requests" className={buttonClass("outline", "sm") + " fw-back-to-list"}>Back to the requests list</a>}
             {selected ? (
               <OrderDetail
                 key={selected.id}
@@ -534,6 +525,7 @@ export default async function FulfillmentPage({
                 buyer={selectedCanSee ? buyerDetails.get(selected.user_id) : undefined}
                 country={selectedCanSee ? undefined : (buyerCountries.get(selected.user_id) ?? "")}
                 requesterName={nameFor(selected)}
+                canSee={selectedCanSee}
                 ownOrder={isOwnOrder(selected, me, access.isOwner)}
                 mine={selected.claimed_by_slack === me}
                 canManage={access.isOwner}

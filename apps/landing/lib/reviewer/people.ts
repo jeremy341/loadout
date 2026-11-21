@@ -249,7 +249,7 @@ export const STAGE_LABELS: Record<ProjectStage, string> = {
 export const STAGE_FOR_STATUS: Record<ReviewStatus, ProjectStage> = {
   waiting: "in_review",
   claimed: "in_review",
-  "spot-check": "final_review",
+  "second-pass": "final_review",
   "proposed-ban": "final_review",
   approved: "approved",
   "needs-changes": "needs_changes",
@@ -564,7 +564,7 @@ export const MARKER_LABELS: Record<RoleMarker, string> = {
   [NO_REVIEW]: "Not reviewing",
 };
 export const MARKER_MEANING: Record<RoleMarker, string> = {
-  [SECOND_PASS]: "Makes a reviewer a final reviewer, who can take parked ships, spot checks and ban proposals.",
+  [SECOND_PASS]: "Makes a reviewer a final reviewer, who can take parked ships, second passes and ban proposals.",
   [HARDWARE_ONLY]: "Limits a reviewer to the hardware queue.",
   [SOFTWARE_ONLY]: "Limits a reviewer to the software queue.",
   [NO_REVIEW]: "Takes reviewing away from an owner, who otherwise reviews like a reviewer. Their tabs stay the same.",

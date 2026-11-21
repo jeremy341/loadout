@@ -27,9 +27,9 @@ export default async function ReviewPayPage() {
         <p className="hc-caption mt-3 text-xs">Opens with the review service. Nothing here is saved.</p>
       </Card>
       <Card padding="flush">
-        <CardHeader title="Milestone perks" icon="rep" action={<Badge tone="warning">Provisional</Badge>} />
+        <CardHeader title="Milestone perks" icon="rep" />
         <p className="hc-caption px-4 py-3 text-sm">{PERKS_PROVISIONAL} A milestone is a number of reviews. Reviews are every counted verdict.</p>
-        <Table headers={["Milestone", "Reviews (provisional)", "Perk"]}>
+        <Table headers={["Milestone", "Reviews", "Perk"]}>
           {PERK_MILESTONES.map((item) => (
             <tr key={item.id}>
               <td className="font-bold">{item.label}</td>

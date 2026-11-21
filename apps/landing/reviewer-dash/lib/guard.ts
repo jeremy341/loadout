@@ -12,16 +12,18 @@
 // Roles come from the database grants (readViewer) with the team changes made since the server started laid over them
 // (sample/role-grants.ts), so the Admins page changes what a person may open.
 import { cache } from "react";
+import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { readViewer, ownerEmails } from "@/lib/platform/session";
-import { describeRequirement, resolveAccess } from "@/lib/reviewer/access";
+import { describeRequirement, resolvePersonAccess } from "@/lib/reviewer/access";
 import { TEAM } from "@/lib/reviewer/people";
-import { handleFor } from "./session";
+import { sessionFor } from "./session";
 import { satisfies, type AdminAccess, type Requirement } from "./roles";
 import { handleForEmail, rolesAfterTeamLog } from "./sample/role-grants";
 import { peopleStore } from "./sample/people-data";
 import { getGuidelinesAck } from "./db";
-import { GUIDELINES_VERSION } from "./guidelines";
+import { GUIDELINES_SKIP_COOKIE, guidelinesSkipValue, GUIDELINES_VERSION } from "./guidelines";
+import { audit, type AuditResult } from "./audit";
 
 export * from "./roles";
 
@@ -44,12 +46,18 @@ export function secondPassSlackIds(): string[] {
 export const getAccess = cache(async (): Promise<AdminAccess | null> => {
   const viewer = await readViewer();
   if (!viewer) return null;
-  const handle = handleFor(viewer.access, viewer.displayName);
-  const roles = rolesAfterTeamLog(handle, viewer.roles, peopleStore.log, STARTED);
-  const resolved = resolveAccess({ id: viewer.id, email: viewer.email }, { ownerEmails: ownerEmails(), roles });
+  // The handle is display only (a fixture handle for the sample team, the Person id otherwise). The overlay is keyed by the
+  // stable Person id, with the email accepted as well for entries written before ids were stored. A display name never decides
+  // a role, so two people who share one cannot share a role change or a claim.
+  const session = sessionFor(viewer);
+  const personKeys = [viewer.id, viewer.email.trim().toLowerCase()];
+  const roles = rolesAfterTeamLog(personKeys, viewer.roles, peopleStore.log, STARTED);
+  // The same resolution the session and the superadmin/impersonation gates use: a removal written to RoleGrant revokes the
+  // person's reviewer power here and in those gates on the same request.
+  const resolved = resolvePersonAccess({ id: viewer.id, email: viewer.email, roles }, ownerEmails());
   if (!resolved) return null;
   return {
-    session: { slackId: handle, name: viewer.displayName, exp: Math.floor(Date.now() / 1000) + 3600 },
+    session,
     isOwner: resolved.isOwner,
     isReviewer: resolved.isReviewer,
     isHelper: resolved.isHelper,
@@ -87,34 +95,65 @@ export async function requirePage(req: Requirement = "staff"): Promise<AdminAcce
 
 export async function requireGuidelinesAck(access: AdminAccess): Promise<void> {
   const acked = await getGuidelinesAck(access.session.slackId);
-  if (acked === null || acked < GUIDELINES_VERSION) redirect("/review/guidelines");
+  if (acked !== null && acked >= GUIDELINES_VERSION) return;
+  // "Skip for now" grants exactly one pass and is audited when set. Consuming it here means the next gated request sends
+  // the reviewer back to the guidelines, as the button promises.
+  const jar = await cookies();
+  if (jar.get(GUIDELINES_SKIP_COOKIE)?.value === guidelinesSkipValue()) {
+    jar.delete(GUIDELINES_SKIP_COOKIE);
+    return;
+  }
+  redirect("/review/guidelines");
 }
 
-// Wraps every exported server action: the role is checked again on the server, whatever the page showed. The name is for the
-// log Pixl keeps; there is no log here.
+// One audit row per guarded call, named after the action/route the caller passed in. The audit writer is fire-and-forget and
+// swallows its own database errors, so logging can never turn a clean allow or deny into a 500.
+async function writeAudit(name: string, access: AdminAccess | null, result: AuditResult, req?: Request): Promise<void> {
+  await audit(
+    { action: name, result, actorType: access ? "staff" : "anonymous", slackId: access?.session.slackId ?? null },
+    req,
+  );
+}
+
+// Wraps every exported server action: the role is checked again on the server, whatever the page showed. The first argument
+// names the action in the audit row written for every allow and deny.
 export function guardedAction<A extends unknown[], R>(
-  _name: string,
+  name: string,
   req: Requirement,
   fn: (access: AdminAccess, ...args: A) => Promise<R>,
 ): (...args: A) => Promise<R> {
   return async (...args: A): Promise<R> => {
     const access = await getAccess();
-    if (!access) notFound();
-    if (!satisfies(access, req)) throw new Error(`You need the ${describeRequirement(req)} role for that.`);
+    if (!access) {
+      await writeAudit(name, null, "denied");
+      notFound();
+    }
+    if (!satisfies(access, req)) {
+      await writeAudit(name, access, "denied");
+      throw new Error(`You need the ${describeRequirement(req)} role for that.`);
+    }
+    await writeAudit(name, access, "ok");
     return fn(access, ...args);
   };
 }
 
 // The same contract for app/api route handlers. No role: 404 JSON (as every other reviewer address). A role that is not enough: 403.
 export function guardedRoute<C = unknown>(
-  _name: string,
+  name: string,
   req: Requirement,
   fn: (access: AdminAccess, request: Request, ctx: C) => Promise<Response>,
 ): (request: Request, ctx: C) => Promise<Response> {
   return async (request: Request, ctx: C): Promise<Response> => {
     const access = await getAccess();
-    if (!access) return Response.json({ error: "not_found" }, { status: 404 });
-    if (!satisfies(access, req)) return Response.json({ error: "forbidden" }, { status: 403 });
+    if (!access) {
+      await writeAudit(name, null, "denied", request);
+      return Response.json({ error: "not_found" }, { status: 404 });
+    }
+    if (!satisfies(access, req)) {
+      await writeAudit(name, access, "denied", request);
+      return Response.json({ error: "forbidden" }, { status: 403 });
+    }
+    await writeAudit(name, access, "ok", request);
     return fn(access, request, ctx);
   };
 }

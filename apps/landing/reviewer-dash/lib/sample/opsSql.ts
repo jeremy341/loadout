@@ -4,6 +4,8 @@
 // Money is Ore where Pixl has pixels (the unit change is for the adjustment pass). Invented figures, nothing is live.
 import { builderBalances } from "@/lib/reviewer/budget";
 import { REVIEWERS } from "@/lib/platform/review";
+import { databaseConfigured, db } from "@/lib/platform/db";
+import * as records from "@/lib/platform/records-data";
 import { AUDITS } from "./index";
 import { opsStore } from "./ops";
 import { NOW } from "./ops-data";
@@ -103,11 +105,28 @@ function answer(query: string): Row[] {
   return [];
 }
 
-// Used as sql<RowType[]>`...`, like Pixl's.
+// Paid reviews come from ReviewPayout when the database is connected, keyed by the reviewer's Person id. Paid and pending counts are
+// payouts, and the Ore are summed; credited is paid (a paid payout is credited). The sample answers only in development with an empty
+// table (sampleFallbackAllowed), as every other reviewer read does.
+async function paidReviewRows(): Promise<Row[]> {
+  const rows = databaseConfigured() ? await db().reviewPayout.findMany({ select: { reviewerId: true, status: true, amountOre: true } }) : [];
+  if (records.sampleFallbackAllowed({ nodeEnv: process.env.NODE_ENV, rowCount: rows.length })) return answer("paid_reviews");
+  return [...records.payoutCountsByReviewer(rows).entries()].map(([id, value]) => ({
+    slack_id: id,
+    paid_reviews: String(value.paid),
+    pending_reviews: String(value.pending),
+    paid_px: String(value.paidOre),
+    credited_px: String(value.paidOre),
+  }));
+}
+
+// Used as sql<RowType[]>`...`, like Pixl's. Only the paid-reviews read touches the database; every other answer is the sample.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the copied callers type the rows themselves, as they do with Pixl's sql
-export function sql<T = any[]>(strings: TemplateStringsArray, ...values: unknown[]): Promise<T> {
+export async function sql<T = any[]>(strings: TemplateStringsArray, ...values: unknown[]): Promise<T> {
   void values;
-  return Promise.resolve(answer(text(strings)) as unknown as T);
+  const query = text(strings);
+  if (query.includes("paid_reviews")) return (await paidReviewRows()) as unknown as T;
+  return answer(query) as unknown as T;
 }
 
 // ---- The cash ledger (HCB in Pixl) ----

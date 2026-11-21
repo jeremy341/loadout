@@ -37,20 +37,24 @@ export function GrowthChart({
     value: kind === "cumulative" ? p.total : p.added,
   }));
   const color = SERIES_COLOR[series];
+  // Nothing to draw: no points, or every point is zero. Say so in words, with the range, instead of an empty axis.
+  const empty = rows.length === 0 || rows.every((p) => p.value === 0);
   const labels = rows.map((p) => dateLabel(p.date));
   const tooltipRows = (point: Record<string, unknown>) => [
     { label: title, value: fmt(Number(point.value) || 0), color },
   ];
 
   return (
-    <div>
+    <div className="min-w-0">
       <div className="mb-2 flex items-baseline justify-between gap-2">
         <h3 className="hc-heading text-base">{title}</h3>
         <Muted className="text-xs">{kind === "cumulative" ? "Total over time" : "Per day"}</Muted>
       </div>
-      <div className="h-[200px] w-full" style={BKLIT_THEME} aria-hidden="true">
-        {rows.length === 0 ? (
-          <div className="hc-muted flex h-full items-center justify-center text-sm">No activity yet</div>
+      <div className="h-[200px] w-full min-w-0 overflow-hidden" style={BKLIT_THEME} aria-hidden={empty ? undefined : "true"}>
+        {empty ? (
+          <div className="hc-muted flex h-full items-center justify-center px-4 text-center text-sm">
+            {kind === "cumulative" ? `No ${title.toLowerCase()} yet in this range.` : `No ${title.toLowerCase()} recorded in this range.`}
+          </div>
         ) : kind === "cumulative" ? (
           <AreaChart
             data={rows.map((p) => ({ ...p, date: chartUtcDate(p.date) }))}
@@ -83,7 +87,7 @@ export function GrowthChart({
           </BarChart>
         )}
       </div>
-      <div className="mt-2">
+      {!empty && <div className="mt-2">
         <Details summary="Data table">
           <div className="max-h-48 overflow-y-auto">
             <Table headers={["Date", kind === "cumulative" ? "Total" : "Count"]}>
@@ -93,7 +97,7 @@ export function GrowthChart({
             </Table>
           </div>
         </Details>
-      </div>
+      </div>}
     </div>
   );
 }

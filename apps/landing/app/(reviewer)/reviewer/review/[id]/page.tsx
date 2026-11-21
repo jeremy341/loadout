@@ -30,7 +30,7 @@ import {
 import { yswsShipsForReview } from "@/reviewer-dash/lib/ysws";
 import { renderMarkdown } from "@/reviewer-dash/lib/markdown";
 import { computeClaimedHours, round1 } from "@/reviewer-dash/lib/hours";
-import { isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
+import { isAllowedImageSrc, isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
 import { githubRepoOwnerProfile } from "@/reviewer-dash/lib/githubRepoOwner";
 import { db } from "@/reviewer-dash/lib/db";
 import { ReviewForm } from "@/reviewer-dash/app/_components/ReviewForm";
@@ -44,8 +44,11 @@ import {
   toggleProjectPeak,
   holdReview,
   releaseReviewHold,
+  recordSecondPassTriage,
 } from "@/reviewer-dash/app/actions";
+import { isRealId } from "@/reviewer-dash/lib/real";
 import { DoubleDipBanner } from "@/reviewer-dash/app/_components/DoubleDipBanner";
+import { FraudChecksPanel } from "@/reviewer-dash/app/_components/FraudChecksPanel";
 import { ReviewPipelineSteps } from "@/reviewer-dash/app/_components/ReviewPipelineSteps";
 import { SecondPassChecklist } from "@/reviewer-dash/app/_components/SecondPassChecklist";
 import { hackatimeCutoffUnix } from "@/reviewer-dash/app/_generated/config";
@@ -167,8 +170,8 @@ export default async function ReviewDetail({
   searchParams: Promise<{ error?: string }>;
 }) {
   const access = await requirePage("reviewer");
-  const guidelinesAck = requireGuidelinesAck(access);
-  guidelinesAck.catch(() => {});
+  // Await the gate before the ship is read or the page streams. The actions re-check it on their own too.
+  await requireGuidelinesAck(access);
   const viewer = access.session.slackId;
   const canSecondPass = access.canSecondPass;
   // Only admins (ban perm) may permanently ban a project from the review page.
@@ -180,8 +183,7 @@ export default async function ReviewDetail({
   const projectId = Number(id);
   if (!Number.isFinite(projectId)) notFound();
 
-  const [, staffSettings, data, allCollaborators, notes] = await Promise.all([
-    guidelinesAck,
+  const [staffSettings, data, allCollaborators, notes] = await Promise.all([
     getStaffSettings(access.session.slackId),
     getProject(projectId),
     listCollaboratorsForProject(projectId),
@@ -192,7 +194,7 @@ export default async function ReviewDetail({
   // A reviewer restricted to one queue can't open a project from the other.
   // Treat it the same as a missing project rather than exposing that it exists.
   if (access.reviewQueues !== "both" && p.kind !== access.reviewQueues) notFound();
-  // Spot check (second pass) belongs to final reviewers, integrity reviewers and owners. A normal reviewer gets the same
+  // Second pass (second pass) belongs to final reviewers, integrity reviewers and owners. A normal reviewer gets the same
   // "not found" as a missing project, so the first-pass triage notes never reach them.
   if (p.status === "second_review" && !access.canFraudReview) notFound();
   // First pass: a project reserved for another reviewer can't be opened (owners
@@ -206,8 +208,11 @@ export default async function ReviewDetail({
   // A first-pass reviewer proposing a ban goes straight to a full ReviewForm confirm/overturn by a different
   // canSecondPass reviewer (see the isProposedBan gate in reviewProject).
   const isProposedBan = isFinalStage && p.first_pass_verdict === "banned";
-  // A ship in second_review is either a proposed ban or waiting for a spot check.
-  const spotCheckStage = isFinalStage && p.second_pass_verdict === "not_fraud";
+  // A ship in second_review is either a proposed ban or waiting for a second pass. A sample ship waits there once its triage says
+  // not fraud. A real ship waits there from its first-pass approval and needs the triage recorded here (needsTriage) before any verdict.
+  const isReal = isRealId(p.id);
+  const secondPassStage = isFinalStage && !isProposedBan && (isReal ? p.second_pass_verdict !== null : p.second_pass_verdict === "not_fraud");
+  const needsTriage = isReal && isFinalStage && !isProposedBan && p.second_pass_verdict === null;
   // The project owner may review their own work; collaborators still cannot.
   // Mirrors isOwnProject / isCollaboratorProject in app/actions.ts.
   const isProjectOwner = !!p.users?.slack_id && p.users.slack_id === viewer;
@@ -224,11 +229,19 @@ export default async function ReviewDetail({
     !p.banned_at &&
     ((p.status === "shipped" && !isCollaborator) ||
       (isProposedBan && canSecondPass && !isCollaborator) ||
-      (spotCheckStage && (access.isOwner || canSecondPass) && !isCollaborator));
+      (secondPassStage && (access.isOwner || canSecondPass) && !isCollaborator));
   // Reviewer-side unship (see unshipProject): available to final reviewers at
   // second pass or fraud review regardless of who could submit a verdict, and
   // never on your own project or while a hold is set.
-  const unshipNote = canSecondPass && !isCollaborator && !isHeld ? unshipWarning(p.status) : null;
+  // A real approved ship can be unshipped by an owner (the core action checks it again).
+  const unshipNote =
+    canSecondPass && !isCollaborator && !isHeld
+      ? isReal && p.status === "approved"
+        ? access.isOwner && !isOwn
+          ? "This project is approved. Unshipping sends it back to draft, takes back the Ore it earned and clears the review, so it starts again from the first pass."
+          : null
+        : unshipWarning(p.status)
+      : null;
   const shippedAt = (p as { shipped_at?: string | null }).shipped_at ?? null;
   // Viewing must never reserve a project; only an explicit POST may claim it.
   const currentClaim = activeReviewClaim(p, Date.now(), REVIEW_LOCK_MS);
@@ -367,7 +380,7 @@ export default async function ReviewDetail({
   // first_pass_hours is a Postgres numeric column the driver returns as a
   // string, so it has to go through Number() before any hours math.
   const formDefaultHours =
-    spotCheckStage && p.second_pass_hours != null
+    secondPassStage && p.second_pass_hours != null
       ? Number(p.second_pass_hours)
       : isFinalStage && p.first_pass_hours != null
         ? Number(p.first_pass_hours)
@@ -601,15 +614,21 @@ export default async function ReviewDetail({
         <>
           <Card>
             <h3 className="hc-heading text-base">
-              {isProposedBan ? "Final pass" : spotCheckStage ? "Spot check" : "First pass"}
+              {isProposedBan ? "Final pass" : secondPassStage ? "Second pass" : "First pass"}
             </h3>
             <p className="hc-caption mt-1 mb-4 text-sm">
               {isProposedBan
                 ? `A first-pass reviewer proposed banning this. Confirm it, or approve to overturn. Approving credits ${ORE_PER_HOUR} Ore and ${TRACK_XP_PER_HOUR} Track XP for each approved hour. Every verdict needs a note. You can only lower the credited hours.`
-                : spotCheckStage
+                : secondPassStage
                   ? `The final verdict, after the first pass. Approving credits ${ORE_PER_HOUR} Ore and ${TRACK_XP_PER_HOUR} Track XP for each approved hour. Every verdict needs a note. You can only lower the credited hours.`
-                  : "Every verdict needs a note. Approving sends this to Spot check, where an owner or a final reviewer gives the verdict, so even with final-reviewer rights your first look is still a proposal. You can only lower the credited hours."}
+                  : "Every verdict needs a note. Approving sends this to Second pass, where an owner or a final reviewer gives the verdict, so even with final-reviewer rights your first look is still a proposal. You can only lower the credited hours."}
             </p>
+            {isReal && (
+              <p className="hc-caption mb-3 text-sm">
+                Hours credited come from your decision on each journal entry (the Journals tab). Set every entry before the verdict.
+                {p.second_pass_verdict === "fraud" ? " The triage says Fraud, so this can only be sent back or banned." : ""}
+              </p>
+            )}
             {hasActiveClaim ? (
               <>
                 <form action={endReviewClaim} className="mb-3 flex items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
@@ -627,7 +646,7 @@ export default async function ReviewDetail({
               isSuper={access.isOwner}
               canAiDraft={access.canAiDraft}
               canEditSubmission={access.canEditSubmission}
-              secondPass={spotCheckStage || isProposedBan}
+              secondPass={secondPassStage || isProposedBan}
               track={track}
               researchMode={Boolean(p.research_mode)}
               kind={p.kind === "hardware" ? "hardware" : "software"}
@@ -674,6 +693,33 @@ export default async function ReviewDetail({
             )}
           </Card>
         </>
+      ) : needsTriage && !isHeld && !isOwn && (access.isOwner || canSecondPass) ? (
+        <Card>
+          <h3 className="hc-heading text-base">Fraud triage</h3>
+          <p className="hc-caption mt-1 mb-4 text-sm">
+            The first pass approved this. Before the final verdict, record whether it looks like fraud, with a note. Not fraud opens
+            the verdict. Fraud closes the approval: you can ask for changes or ban it.
+          </p>
+          {hasActiveClaim ? (
+            <form action={recordSecondPassTriage} className="flex flex-col gap-3">
+              <input type="hidden" name="projectId" value={p.id} />
+              <Textarea name="note" required rows={3} maxLength={500} placeholder="What did you check, and what did you find?" />
+              <div className="flex flex-wrap gap-2">
+                <ActionButton name="decision" value="not-fraud" icon="checkmark" pendingLabel="Saving...">Not fraud</ActionButton>
+                <ActionButton name="decision" value="fraud" variant="danger" pendingLabel="Saving...">Fraud</ActionButton>
+              </div>
+            </form>
+          ) : (
+            <div className="flex flex-col items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--sunken)] p-4">
+              <p className="hc-caption text-sm">Start reviewing to reserve this ship for 30 minutes, then record the triage.</p>
+              <form action={beginReviewClaim}>
+                <input type="hidden" name="projectId" value={p.id} />
+                <ActionButton icon="view" pendingLabel="Claiming...">Start reviewing</ActionButton>
+              </form>
+              {claimedByOther && <p className="hc-caption text-xs">Another reviewer currently has the claim.</p>}
+            </div>
+          )}
+        </Card>
       ) : p.banned_at ? (
         <Callout tone="danger" icon="important">
           <strong>This project was banned{p.ban_by ? ` by ${p.ban_by}` : ""} on {formatDateTime(p.banned_at)}.</strong>{" "}
@@ -770,7 +816,7 @@ export default async function ReviewDetail({
         </Details>
       )}
 
-      {canReview && isFinalStage && (
+      {canReview && isFinalStage && !isReal && (
         <Details summary="Send back to first pass">
           <form action={sendBackToFirstPass} className="flex flex-col gap-3">
             <input type="hidden" name="projectId" value={p.id} />
@@ -907,7 +953,7 @@ export default async function ReviewDetail({
                 approve to overturn.
                 {p.first_pass_verdict === "banned" && !access.isOwner && (
                   <p className="mt-1">
-                    Only an owner can confirm a ban. Approving sends it to the owner&apos;s spot check.
+                    Only an owner can confirm a ban. Approving sends it to the owner&apos;s second pass.
                   </p>
                 )}
               </Callout>
@@ -1050,10 +1096,11 @@ export default async function ReviewDetail({
             <Await promise={ownerHandlePromise}>{(handle) => ownerCard(ownerNameFor(handle))}</Await>
           </Suspense>
 
-          {p.image_url && (
+          {isAllowedImageSrc(p.image_url) && (
             <img
               src={p.image_url}
               alt=""
+              referrerPolicy="no-referrer"
               className="max-h-96 w-full rounded-lg border border-[var(--border)] bg-[var(--sunken)] object-contain"
             />
           )}
@@ -1068,6 +1115,10 @@ export default async function ReviewDetail({
 
           <DoubleDipBanner systemNote={p.system_note} />
           <PrecheckCallout view={precheckView(p)} />
+          {/* The automated checks LOADOUT runs itself (lib/platform/fraud): pre-check, double dip, Telescreen and Fraudy. Read-only. */}
+          <Suspense fallback={null}>
+            <FraudChecksPanel projectId={p.id} showScores={canViewAiTime || access.canFraudReview} />
+          </Suspense>
           {!p.used_ai && (
             <Suspense fallback={null}>
               <Await promise={commitsPromise}>
@@ -1141,7 +1192,7 @@ export default async function ReviewDetail({
                 </p>
                 {p.bom_url && bomPromise ? (
                   <>
-                    <Suspense fallback={<Muted className="text-sm">Loading BOM preview...</Muted>}>
+                    <Suspense fallback={<Muted className="text-sm"><span role="status">Loading BOM preview...</span></Muted>}>
                       <Await promise={bomPromise}>
                         {(bomRows) =>
                           bomRows ? (
@@ -1246,7 +1297,7 @@ export default async function ReviewDetail({
             </Callout>
           )}
 
-          {spotCheckStage && p.second_pass_note && (
+          {secondPassStage && p.second_pass_note && (
             <Card padding="compact">
               <p className="hc-heading text-sm">Triage note ({staffName(p.second_pass_by, "a reviewer")})</p>
               <p className="hc-caption mt-1 whitespace-pre-wrap text-sm">{p.second_pass_note}</p>

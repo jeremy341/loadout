@@ -117,6 +117,16 @@ export function resolveAccess(person: AccessPerson, input: RoleInputs): Reviewer
   return isOwner || isReviewer || access.canFraudReview || access.isHelper || access.isFulfiller ? access : null;
 }
 
+// The one place a person's grants become access. The session's viewer (lib/platform/session.ts toViewer), the staff session of the
+// reviewer pages and actions (reviewer-dash/lib/session.ts), superadmin and impersonation (lib/platform/impersonation.ts) all call
+// this, so a role revoked in the database is revoked for every one of them on the same request. The input is the Person row's id and
+// email and the raw grants read from RoleGrant; nothing else (a handle, a display name, an in-memory roster) decides access.
+export type StaffPersonInput = AccessPerson & { roles: readonly string[] };
+
+export function resolvePersonAccess(person: StaffPersonInput, owners: readonly string[]): ReviewerAccess | null {
+  return resolveAccess({ id: person.id, email: person.email }, { ownerEmails: [...owners], roles: person.roles });
+}
+
 // What a page, action or API route needs. "staff" means any role at all. { review: "fraud" } is the integrity tab
 // (Pixl calls it fraud; the visible words change in the adjustment pass, the requirement name stays).
 export type Requirement =

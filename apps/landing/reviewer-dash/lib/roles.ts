@@ -68,17 +68,11 @@ export function idsFromEnv(raw: string | undefined): string[] {
 }
 
 export interface Session {
+  // Display/fixture id only. Never used for an access decision.
   slackId: string;
+  // Stable Person id: the key for roles, claims, holds and self-review.
+  personId: string;
   name: string;
-  exp: number;
-}
-
-export interface RoleInputs {
-  ownerIds: string[]; // ADMIN_SLACK_IDS
-  secondPassIds: string[]; // SECOND_PASS_SLACK_IDS
-  adminPermissions: string[] | null; // the admins row, null when there is none
-  isHelper: boolean;
-  isFulfiller: boolean;
 }
 
 export interface AdminAccess {
@@ -95,36 +89,9 @@ export interface AdminAccess {
   reviewQueues: ReviewQueueScope;
 }
 
-// null = no role at all (can't sign in).
-export function resolveAccess(session: Session, input: RoleInputs): AdminAccess | null {
-  const perms = reviewerPermsOnly(input.adminPermissions);
-  const isOwner = input.ownerIds.includes(session.slackId);
-  const reviewBlocked = perms.includes(NO_REVIEW);
-  const isReviewer = !reviewBlocked && (isOwner || perms.includes(REVIEW));
-  // Final reviewers: an explicit SECOND_PASS marker, or SECOND_PASS_SLACK_IDS;
-  // with that env unset, owners are the final reviewers.
-  const secondPassByEnv =
-    input.secondPassIds.length > 0 ? input.secondPassIds.includes(session.slackId) : isOwner;
-  const canSecondPass = isReviewer && (perms.includes(SECOND_PASS) || secondPassByEnv);
-  const canEditSubmission =
-    isOwner || canSecondPass || (isReviewer && perms.includes(EDIT_SUBMISSION));
-  const canAiDraft = isOwner || (isReviewer && perms.includes(AI_DRAFT));
-  const canOpenFullQueue = isOwner || (isReviewer && perms.includes(FULL_QUEUE));
-  const access: AdminAccess = {
-    session,
-    isOwner,
-    isReviewer,
-    isHelper: isOwner || input.isHelper,
-    isFulfiller: isOwner || input.isFulfiller,
-    canSecondPass,
-    canEditSubmission,
-    canFraudReview: isOwner || canSecondPass || perms.includes(FRAUD_REVIEW),
-    canAiDraft,
-    canOpenFullQueue,
-    reviewQueues: reviewQueueScopeFor(perms),
-  };
-  return isOwner || isReviewer || access.canFraudReview || input.isHelper || input.isFulfiller ? access : null;
-}
+// Access is resolved in one place, lib/reviewer/access.ts resolvePersonAccess, from the Person id, email and RoleGrant rows.
+// getAccess in lib/guard.ts calls it with the signed-in person and the in-memory team overlay; the superadmin and impersonation
+// gates call it with the same database rows. There is no second resolver here: a revoked grant is revoked everywhere at once.
 
 // What a page, action or API route needs. "staff" = any role at all.
 export type Requirement =

@@ -20,6 +20,7 @@ import {
   Field,
   Muted,
   NativeSelect,
+  Pagination,
   Table,
   TextLink,
   formatDateTime,
@@ -56,6 +57,11 @@ const SORT_LABEL: Record<AuditSortKey, string> = {
   project: "Project name",
   verdict: "Verdict",
 };
+
+// One reviewer's history is read up to this many reviews (newest first), then sorted and paged here.
+const REVIEWER_LIMIT = 1000;
+const EVERYONE_LIMIT = 200;
+const PER_PAGE = 20;
 
 const SLACK_ID_RE = /^[UW][A-Z0-9]{5,20}$/;
 
@@ -124,7 +130,7 @@ function AuditCard({ a }: { a: ReviewAuditRow }) {
 export default async function AuditNotesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ reviewer?: string; sort?: string; dir?: string }>;
+  searchParams: Promise<{ reviewer?: string; sort?: string; dir?: string; page?: string }>;
 }) {
   const access = await requirePage("reviewer");
   await requireGuidelinesAck(access);
@@ -142,25 +148,39 @@ export default async function AuditNotesPage({
   // Legal names only for owners/final reviewers.
   const realNames = canSeeBuilderPII(access);
   const audits = selected
-    ? (await listReviewAudits(100000, selected.slackId, { realNames })).filter(
+    ? (await listReviewAudits(REVIEWER_LIMIT, selected.slackId, { realNames })).filter(
         (a) => slackIdFromLabel(a.reviewer) === selected.slackId,
       )
-    : await listReviewAudits(200, undefined, { realNames });
-  const sorted = selected ? sortAudits(audits, sort, dir) : audits;
-  const withNotes = sorted.filter((a) => a.audit_note && a.audit_note.trim() !== "");
+    : await listReviewAudits(EVERYONE_LIMIT, undefined, { realNames });
+  // The sort controls apply to both views, so they always do something.
+  const sorted = sortAudits(audits, sort, dir);
+  const truncated = audits.length >= (selected ? REVIEWER_LIMIT : EVERYONE_LIMIT);
   const summary = selected ? summarizeAudits(audits) : null;
+
+  const pages = Math.max(1, Math.ceil(sorted.length / PER_PAGE));
+  const cur = Math.min(Math.max(parseInt(params.page ?? "1", 10) || 1, 1), pages);
+  const slice = sorted.slice((cur - 1) * PER_PAGE, cur * PER_PAGE);
+  const withNotes = slice.filter((a) => a.audit_note && a.audit_note.trim() !== "");
+  const hrefFor = (n: number) => {
+    const q = new URLSearchParams();
+    if (selected) q.set("reviewer", selected.slackId);
+    q.set("sort", sort);
+    q.set("dir", dir);
+    if (n > 1) q.set("page", String(n));
+    return `/review/audit?${q.toString()}`;
+  };
 
   return (
     <div className="flex flex-col gap-6">
       <p className="hc-caption max-w-2xl text-sm">
         Internal notes reviewers write with every verdict. Builders never see these: they&apos;re for audits
-        and integrity checks. Pick a reviewer to see every review they made.
+        and integrity checks. Pick a reviewer to see their reviews, up to the latest {REVIEWER_LIMIT.toLocaleString()}.
       </p>
 
       <form className="flex flex-wrap items-end gap-3">
         <Field label="Reviewer">
           <NativeSelect name="reviewer" defaultValue={selected?.slackId ?? ""}>
-            <option value="">Everyone (latest 200)</option>
+            <option value="">Everyone (latest {EVERYONE_LIMIT})</option>
             {reviewers.map((r) => (
               <option key={r.slackId} value={r.slackId}>
                 {r.name} ({r.reviews})
@@ -204,10 +224,10 @@ export default async function AuditNotesPage({
             </div>
           </Card>
           <Table headers={["Date", "Project", "Builder", "Verdict", "Claimed", "Approved", "Review time", "Note"]}>
-            {sorted.length === 0 ? (
+            {slice.length === 0 ? (
               <EmptyRow colSpan={8} title="No reviews" />
             ) : (
-              sorted.map((a) => (
+              slice.map((a) => (
                 <tr key={a.id}>
                   <td>{formatDateTime(a.created_at)}</td>
                   <td>
@@ -239,6 +259,12 @@ export default async function AuditNotesPage({
       ) : (
         withNotes.map((a) => <AuditCard key={a.id} a={a} />)
       )}
+      {truncated && (
+        <p className="hc-caption text-xs">
+          Showing the latest {audits.length.toLocaleString()} reviews. Sorting orders those, not older ones.
+        </p>
+      )}
+      <Pagination page={cur} totalPages={pages} hrefFor={hrefFor} />
     </div>
   );
 }

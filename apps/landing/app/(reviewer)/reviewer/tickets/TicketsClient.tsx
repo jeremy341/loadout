@@ -37,7 +37,8 @@ function esc(s: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 // Escapes first, then adds a small set of formatting tags (bold, italic, code, @handle), so the HTML is safe.
@@ -257,13 +258,12 @@ export function TicketsClient() {
   return (
     <Card padding="flush">
       <div className="flex flex-wrap items-center justify-between gap-3 p-4" style={{ borderBottom: "1px solid var(--border)" }}>
-        <div className="hc-segmented w-fit" role="tablist">
+        <div className="hc-segmented w-fit" role="group" aria-label="Filter tickets by status">
           {TABS.map((t) => (
             <button
               key={t.key}
               type="button"
-              role="tab"
-              aria-selected={status === t.key}
+              aria-pressed={status === t.key}
               className="hc-segmented-item px-3"
               onClick={() => setStatus(t.key)}
             >
@@ -299,7 +299,9 @@ export function TicketsClient() {
       )}
 
       {tickets === null ? (
-        <EmptyState title="Loading tickets..." icon="message-simple" />
+        <div role="status" aria-live="polite">
+          <EmptyState title="Loading tickets..." icon="message-simple" />
+        </div>
       ) : tickets.length === 0 ? (
         listError ? null : <EmptyState title="No tickets found" icon="checkmark-all" />
       ) : (
@@ -344,7 +346,7 @@ export function TicketsClient() {
                     <Card sunken padding="compact">
                       <div className="flex max-h-72 flex-col gap-3 overflow-y-auto">
                         {thread === null ? (
-                          <Muted className="text-xs">Loading thread...</Muted>
+                          <Muted className="text-xs"><span role="status">Loading thread...</span></Muted>
                         ) : threadIssue === "gone" ? (
                           <Muted className="text-xs">This ticket&apos;s thread was deleted.</Muted>
                         ) : threadIssue === "error" && thread.length === 0 ? (

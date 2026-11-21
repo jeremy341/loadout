@@ -6,7 +6,8 @@ import { Card } from "@/reviewer-dash/app/_ui/ui";
 // Suspense boundaries, so this only covers the first paint.
 export default function Loading() {
   return (
-    <div className="hc-review flex flex-col gap-6">
+    <div className="hc-review flex flex-col gap-6" aria-busy="true">
+      <span className="sr-only" role="status">Loading…</span>
       <Bar w="120px" />
       <div className="hc-review-split">
         <div className="flex min-w-0 flex-col gap-6">

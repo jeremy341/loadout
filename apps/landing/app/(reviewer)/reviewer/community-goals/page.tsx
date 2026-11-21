@@ -137,7 +137,7 @@ export default async function CommunityGoalsPage({
 function LevelFields({ level: l }: { level?: VaultLevelRow }) {
   return (
     <>
-      <div className="grid gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <Field label="Era #">
           <Input name="level" type="number" min={l ? undefined : 1} required={!l} defaultValue={l?.level} placeholder="6" />
         </Field>
@@ -163,7 +163,7 @@ function LevelFields({ level: l }: { level?: VaultLevelRow }) {
           placeholder="What the community is working toward in this Era."
         />
       </Field>
-      <div className="grid items-start gap-3 sm:grid-cols-[1fr_auto]">
+      <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-[1fr_auto]">
         <Field label="Rewards" hint={REWARDS_HINT}>
           <Textarea name="rewards" rows={3} defaultValue={l ? rewardsText(l) : undefined} />
         </Field>

@@ -65,6 +65,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     items: [
       { href: "/budget", label: "Budget", requires: "owner", words: "money cost platform ore dollars" },
       { href: "/shop", label: "Shop", requires: "owner", words: "catalog items prices" },
+      { href: "/operations", label: "Operations", requires: "owner", words: "campaign schedule pause" },
       { href: "/events", label: "Events", requires: "owner", words: "show and tell" },
       { href: "/referrals", label: "Referrals", requires: "owner", words: "invite" },
     ],
@@ -108,7 +109,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
 ];
 
 // The Review area's own tab row (ReviewTabs draws it, with live counts, in Pixl's order). They are not in the top bar, but the
-// command palette offers them. Pixl shows Proposed bans, the reviewer log and the audit notes to owners only, and Spot check to
+// command palette offers them. Pixl shows Proposed bans, the reviewer log and the audit notes to owners only, and Second pass to
 // owners and final reviewers; the pages ask for the same. Hardware is the hardware queue, reached from the queue and not a tab of
 // its own; `queue` says which queue a page belongs to, so a reviewer limited to the other one is not offered it.
 export type ReviewTabItem = NavItem;
@@ -119,7 +120,7 @@ export const REVIEW_TABS: readonly ReviewTabItem[] = [
   { href: "/review/reviewed", label: "Reviewed", requires: "reviewer", words: "history verdicts" },
   { href: "/review/stats", label: "Stats", requires: "reviewer", words: "my stats totals" },
   { href: "/review/proposed-bans", label: "Proposed bans", requires: "owner", words: "ban proposals" },
-  { href: "/review/spot-check", label: "Spot check", requires: { review: "second_pass" }, words: "sample final" },
+  { href: "/review/second-pass", label: "Second pass", requires: { review: "second_pass" }, words: "sample final" },
   { href: "/review/log", label: "Reviewer log", requires: "owner", words: "claims" },
   { href: "/review/audit", label: "Audit notes", requires: "owner", words: "notes" },
   { href: "/review/guidelines", label: "Guidelines", requires: "reviewer", words: "rules handbook" },

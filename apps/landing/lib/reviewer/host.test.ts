@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isReviewerRoute, isReviewHost, movedTo, PROXY_MATCHER, publicPath, reviewerRoute } from "./host";
+import { isPrivatePagePath, isReviewerRoute, isReviewHost, movedTo, PROXY_MATCHER, publicPath, reviewerRoute } from "./host";
 
 describe("isReviewHost", () => {
   test("matches review.<anything>, with or without a port", () => {
@@ -11,6 +11,66 @@ describe("isReviewHost", () => {
   test("does not match other hosts", () => {
     for (const host of ["localhost:3011", "localhost", "www.example.com", "reviewer.example.com", "review", "review.", "notreview.example.com", "example.com", "loadout.dino.icu", "x.review.example.com", "", null, undefined]) {
       expect(isReviewHost(host)).toBe(false);
+    }
+  });
+});
+
+describe("isReviewHost with LOADOUT_REVIEW_HOST", () => {
+  const env = { LOADOUT_REVIEW_HOST: "review.example.com" };
+
+  test("only the named host matches, with or without a port, in any case", () => {
+    expect(isReviewHost("review.example.com", env)).toBe(true);
+    expect(isReviewHost("REVIEW.Example.com:8443", env)).toBe(true);
+  });
+
+  test("a forged review.<anything> host no longer matches", () => {
+    for (const host of ["review.evil.com", "review.localhost:3011", "review.example.com.evil.com", "example.com", "", null, undefined]) {
+      expect(isReviewHost(host, env)).toBe(false);
+    }
+  });
+
+  test("takes a comma separated list, and a port-specific entry", () => {
+    const list = { LOADOUT_REVIEW_HOST: "review.example.com, review.localhost:3011" };
+    expect(isReviewHost("review.localhost:3011", list)).toBe(true);
+    expect(isReviewHost("review.localhost:3012", list)).toBe(false);
+    expect(isReviewHost("review.example.com", list)).toBe(true);
+  });
+
+  test("blank or unset keeps the review.<domain> rule outside production", () => {
+    expect(isReviewHost("review.localhost:3011", { LOADOUT_REVIEW_HOST: "  " })).toBe(true);
+    expect(isReviewHost("review.localhost:3011", {})).toBe(true);
+    expect(isReviewHost("review.localhost:3011", { NODE_ENV: "development" })).toBe(true);
+    expect(isReviewHost("review.localhost:3011", { NODE_ENV: "test" })).toBe(true);
+  });
+});
+
+describe("isReviewHost fails closed in production", () => {
+  const prod = { NODE_ENV: "production" };
+
+  test("an unconfigured production host matches nothing, not even review.<domain>", () => {
+    for (const host of ["review.localhost:3011", "review.example.com", "review.loadout.dino.icu", "REVIEW.Example.com:8443", "review", "localhost:3011", "www.example.com", "", null, undefined]) {
+      expect(isReviewHost(host, prod)).toBe(false);
+      expect(isReviewHost(host, { ...prod, LOADOUT_REVIEW_HOST: "  ,  " })).toBe(false);
+    }
+  });
+
+  test("an explicitly configured host still matches, with or without a port", () => {
+    const env = { ...prod, LOADOUT_REVIEW_HOST: "review.example.com, review.staging.example.com" };
+    expect(isReviewHost("review.example.com", env)).toBe(true);
+    expect(isReviewHost("REVIEW.Example.com:8443", env)).toBe(true);
+    expect(isReviewHost("review.staging.example.com", env)).toBe(true);
+    expect(isReviewHost("review.evil.com", env)).toBe(false);
+    expect(isReviewHost("review.localhost:3011", env)).toBe(false);
+  });
+});
+
+describe("isPrivatePagePath", () => {
+  test("covers the dashboard, the docs and the review queue, and nothing that merely starts with them", () => {
+    for (const path of ["/dashboard", "/dashboard/projects/abc", "/docs", "/docs/review", "/review-queue", "/Dashboard/x"]) {
+      expect(isPrivatePagePath(path)).toBe(true);
+    }
+    for (const path of ["/", "/dashboards", "/docsify", "/review-queues", "/accessibility", "/robots.txt"]) {
+      expect(isPrivatePagePath(path)).toBe(false);
     }
   });
 });
@@ -49,7 +109,7 @@ describe("movedTo", () => {
   test("old addresses go to Pixl's paths", () => {
     expect(movedTo("/hardware")).toBe("/review/hardware");
     expect(movedTo("/second-pass")).toBe("/review/second-pass");
-    expect(movedTo("/spot-check")).toBe("/review/spot-check");
+    expect(movedTo("/spot-check")).toBe("/review/second-pass");
     expect(movedTo("/reviewed")).toBe("/review/reviewed");
     expect(movedTo("/stats")).toBe("/review/stats");
     expect(movedTo("/log")).toBe("/review/log");

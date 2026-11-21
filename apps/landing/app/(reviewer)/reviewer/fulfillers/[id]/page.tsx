@@ -75,7 +75,13 @@ function fmtDuration(seconds: number): string {
 export default async function FulfillerPage({ params }: { params: Promise<{ id: string }> }) {
   await requirePage("owner");
   const { id } = await params;
-  const slackId = decodeURIComponent(id);
+  let slackId: string;
+  try {
+    slackId = decodeURIComponent(id);
+  } catch {
+    // A malformed percent escape in the address is a bad request, not a server error.
+    notFound();
+  }
 
   const fulfillerIds = await listFulfillerIds();
   if (!fulfillerIds.includes(slackId)) notFound();

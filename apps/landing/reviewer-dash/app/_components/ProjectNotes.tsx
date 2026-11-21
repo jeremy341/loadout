@@ -2,6 +2,7 @@
 import { addProjectNote } from "@/reviewer-dash/app/actions";
 import { ActionButton, Card, CardHeader, EmptyState, Field, Textarea, formatDateTime } from "@/reviewer-dash/app/_ui/ui";
 import type { ProjectNoteRow } from "@/reviewer-dash/lib/db";
+import { isAllowedImageSrc, isSafeUrl } from "@/reviewer-dash/lib/safeUrl";
 
 // One steady color per author, so a thread between a few reviewers is easy to
 // follow at a glance.
@@ -49,9 +50,11 @@ export function ProjectNotes({
                   </p>
                   <div className="hc-chat-bubble">
                     <p className="whitespace-pre-wrap break-words">{n.body}</p>
-                    {n.image_url && (
-                      <a href={n.image_url} target="_blank" rel="noreferrer" className="mt-2 block">
-                        <img src={n.image_url} alt="" className="max-h-48 rounded object-cover" />
+                    {isSafeUrl(n.image_url) && (
+                      <a href={n.image_url} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="mt-2 block">
+                        {isAllowedImageSrc(n.image_url) && (
+                          <img src={n.image_url} alt="" referrerPolicy="no-referrer" className="max-h-48 rounded object-cover" />
+                        )}
                       </a>
                     )}
                   </div>

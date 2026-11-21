@@ -25,13 +25,13 @@ export function githubRepo(value: string | null): string | null {
       ? host + "/" + path[0]!.toLowerCase() + "/" + path[1]!.toLowerCase() : null;
   } catch { return null; }
 }
-export function parseApproval(value: unknown, id: string): Approval {
+export function parseApproval(value: unknown, id: string, program = "pixl"): Approval {
   if (!ID.test(id) || !value || typeof value !== "object") throw Error("Malformed approval");
   const row = value as { id?: unknown; fields?: Record<string, unknown> };
   const f = row.fields ?? {};
   if (row.id !== id || f["Record ID"] !== id) throw Error("Unified record ID mismatch");
   const programs = Array.isArray(f["YSWS–Name"]) ? f["YSWS–Name"] : [f["YSWS–Name"]];
-  if (!programs.some(v => typeof v === "string" && v.trim().toLowerCase() === "pixl"))
+  if (!programs.some(v => typeof v === "string" && v.trim().toLowerCase() === program.trim().toLowerCase()))
     throw Error("Approval belongs to another YSWS");
   const hours = f["Hours Spent"], repoUrl = f["Code URL"], date = f["Approved At"];
   if (typeof hours !== "number" || !Number.isFinite(hours) || hours < 0 ||
@@ -84,7 +84,7 @@ export class InvalidApprovalError extends Error {
   }
 }
 
-async function fetchApprovalBatch(ids: string[], fetchImpl: typeof fetch):
+async function fetchApprovalBatch(ids: string[], fetchImpl: typeof fetch, program: string):
   Promise<Map<string, Approval | null>> {
   const res = await fetchImpl(airbridgeLookupUrl(ids), {
     headers: { Accept: "application/json" },
@@ -101,7 +101,7 @@ async function fetchApprovalBatch(ids: string[], fetchImpl: typeof fetch):
     if (typeof id !== "string" || !found.has(id) || seen.has(id))
       throw Error("Airbridge returned unexpected or duplicate IDs");
     seen.add(id);
-    try { found.set(id, parseApproval(value, id)); }
+    try { found.set(id, parseApproval(value, id, program)); }
     catch (e) { throw new InvalidApprovalError(id, (e as Error).message); }
   }
   return found;
@@ -111,9 +111,9 @@ async function fetchApprovalBatch(ids: string[], fetchImpl: typeof fetch):
  * A single-ID absence is itself checked twice to guard against transient empty
  * responses. Any failed confirmation rejects the entire batch (fail closed).
  */
-export async function getApprovals(ids: string[], fetchImpl: typeof fetch = fetch):
+export async function getApprovals(ids: string[], fetchImpl: typeof fetch = fetch, program = "pixl"):
   Promise<Map<string, Approval | null>> {
-  const found = await fetchApprovalBatch(ids, fetchImpl);
+  const found = await fetchApprovalBatch(ids, fetchImpl, program);
   const missing = ids.filter(id => !found.get(id));
   if (missing.length === 0) return found;
   for (let i = 0; i < missing.length; i += 6) {
@@ -121,7 +121,7 @@ export async function getApprovals(ids: string[], fetchImpl: typeof fetch = fetc
     const confirmations = await Promise.all(chunk.map(async id => {
       // For a single-ID first query, retry once; for a bulk omission, obtain
       // an independent single-ID response rather than trusting pagination.
-      const result = await fetchApprovalBatch([id], fetchImpl);
+      const result = await fetchApprovalBatch([id], fetchImpl, program);
       return [id, result.get(id) ?? null] as const;
     }));
     for (const [id, approval] of confirmations) found.set(id, approval);
@@ -131,13 +131,13 @@ export async function getApprovals(ids: string[], fetchImpl: typeof fetch = fetc
 
 /** Split only malformed-record errors. Network/HTTP failures stay bounded. */
 export async function getApprovalsIsolated(
-  ids: string[], fetchImpl: typeof fetch = fetch,
+  ids: string[], fetchImpl: typeof fetch = fetch, program = "pixl",
 ): Promise<{ approvals: Map<string, Approval | null>; errors: Map<string, string> }> {
   const approvals = new Map<string, Approval | null>();
   const errors = new Map<string, string>();
   async function visit(batch: string[]): Promise<void> {
     try {
-      const found = await getApprovals(batch, fetchImpl);
+      const found = await getApprovals(batch, fetchImpl, program);
       for (const [id, approval] of found) approvals.set(id, approval);
     } catch (e) {
       if (e instanceof InvalidApprovalError && batch.length > 1) {

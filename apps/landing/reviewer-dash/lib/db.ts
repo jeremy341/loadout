@@ -125,8 +125,8 @@ export interface ProjectRow {
   // Second pass is now Robert's fraud review (lib/robertSync.ts), not a
   // human triage step - a landed review always writes second_pass_by
   // "Robert" and verdict "not_fraud" (parking it for a super's real verdict
-  // in Spot check), carrying Robert's own note here. second_pass_hours is
-  // unused by Robert (null) - kept for the Spot check reviewer to still see
+  // in Second pass), carrying Robert's own note here. second_pass_hours is
+  // unused by Robert (null) - kept for the Second pass reviewer to still see
   // what a verdict's hours were historically. null verdict = still parked
   // in fraud_review, awaiting Robert (see the Second pass tab).
   second_pass_by: string;
@@ -192,7 +192,7 @@ export interface ProjectRow {
   assigned_reviewer_slack_id: string;
   assigned_at: string | null;
   assignment_reminded_at: string | null;
-  // Optional super-admin QA pass over second_review projects (the Spot check
+  // Optional super-admin QA pass over second_review projects (the Second pass
   // tab, markSpotChecked in app/actions.ts). Doesn't gate the project - purely
   // a "has a super looked at how this was reviewed" marker. Global once set
   // (not per-admin), and reset back to null whenever a project re-enters
@@ -446,6 +446,7 @@ import { reForHours } from "@/reviewer-dash/app/_generated/config";
 import { sampleDb } from "./sample/query";
 import { store } from "./sample/store";
 import { AUDITS, COLLABORATORS, JOURNALS, NOTES, PROJECTS, USERS } from "./sample/index";
+import { isRealId, loadAudits, loadReal, sampleShipsOn } from "./real";
 
 export const db = sampleDb;
 
@@ -475,25 +476,32 @@ function current(row: ProjectRow): ProjectRow {
   return patch ? { ...row, ...patch } : row;
 }
 
-function allProjects(): ProjectRow[] {
-  return PROJECTS.map(current);
+// What the desk reads: the real ships from the database, plus the sample ships when sampleShipsOn() (a development fixture).
+type Snap = {
+  projects: ProjectRow[];
+  userFor: (id: string) => Pick<UserRow, "id" | "display_name" | "real_name" | "first_name" | "last_name" | "email" | "slack_id" | "birthday" | "address_country" | "address_line1" | "address_line2" | "address_city" | "address_state" | "address_postal"> | null;
+  journalsFor: (projectId: number) => JournalRow[];
+};
+
+async function snapshot(): Promise<Snap> {
+  const real = await loadReal();
+  const sample = sampleShipsOn();
+  const sampleJournals = (projectId: number): JournalRow[] =>
+    JOURNALS.filter((row) => row.project_id === projectId).map((row) => {
+      const set = store.journalApprovals.get(row.id);
+      return set ? { ...row, approved_hours: set.approved_hours, deflation_reason: set.deflation_reason } : row;
+    });
+  return {
+    projects: [...(sample ? PROJECTS.map(current) : []), ...real.projects],
+    userFor: (id) => real.users.get(id) ?? (sample ? (USERS().find((row) => row.id === id) ?? null) : null),
+    journalsFor: (projectId) => (isRealId(projectId) ? real.journals.filter((row) => row.project_id === projectId) : sampleJournals(projectId)),
+  };
 }
 
-function userFor(id: string) {
-  return USERS().find((row) => row.id === id) ?? null;
-}
-
-function journalsFor(projectId: number): JournalRow[] {
-  return JOURNALS.filter((row) => row.project_id === projectId).map((row) => {
-    const set = store.journalApprovals.get(row.id);
-    return set ? { ...row, approved_hours: set.approved_hours, deflation_reason: set.deflation_reason } : row;
-  });
-}
-
-function toShipped(row: ProjectRow): ShippedProject {
-  const user = userFor(row.user_id);
+function toShipped(row: ProjectRow, snap: Snap): ShippedProject {
+  const user = snap.userFor(row.user_id);
   const picked = Object.fromEntries(QUEUE_FIELDS.map((key) => [key, row[key]])) as Pick<ProjectRow, (typeof QUEUE_FIELDS)[number]>;
-  const journals = journalsFor(row.id);
+  const journals = snap.journalsFor(row.id);
   const journalHours = Math.round(journals.reduce((sum, entry) => sum + (Number(entry.approved_hours ?? entry.hours) || 0), 0) * 10) / 10;
   const hackatimeHours = Math.round(((row.hackatime_seconds ?? 0) / 3600) * 10) / 10;
   return {
@@ -536,7 +544,8 @@ export async function listShippedProjects(
   kind?: Kind,
   opts?: { includeClaimed?: boolean },
 ): Promise<ShippedProject[]> {
-  const rows = oldestWaitFirst(allProjects().filter((p) => p.status === "shipped" && live(p) && ofKind(kind)(p)).map(toShipped)).filter(
+  const snap = await snapshot();
+  const rows = oldestWaitFirst(snap.projects.filter((p) => p.status === "shipped" && live(p) && ofKind(kind)(p)).map((p) => toShipped(p, snap))).filter(
     (p) => !isPrecheckRunning(p),
   );
   const visible = opts?.includeClaimed ? annotateClaims(rows, viewer) : rows.filter((p) => !claimedByOther(p, viewer));
@@ -557,7 +566,7 @@ export async function firstPassAccess(
   isOwner: boolean,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
   if (isOwner) return { ok: true };
-  const row = allProjects().find((p) => p.id === projectId);
+  const row = (await snapshot()).projects.find((p) => p.id === projectId);
   if (!row || row.status !== "shipped") return { ok: true };
   if (lockedForViewer(row as AssignmentFields, viewer, false, Date.now()))
     return {
@@ -574,33 +583,41 @@ export async function listSecondReviewProjects(
   kind?: Kind,
   opts?: { includeClaimed?: boolean },
 ): Promise<ShippedProject[]> {
+  const snap = await snapshot();
   const rows = oldestWaitFirst(
-    allProjects().filter((p) => p.status === "fraud_review" && p.first_pass_verdict !== "banned" && live(p) && ofKind(kind)(p)).map(toShipped),
+    snap.projects.filter((p) => p.status === "fraud_review" && p.first_pass_verdict !== "banned" && live(p) && ofKind(kind)(p)).map((p) => toShipped(p, snap)),
   );
   return opts?.includeClaimed ? annotateClaims(rows, viewer) : rows.filter((p) => !claimedByOther(p, viewer));
 }
 
 export async function listReviewedProjects(): Promise<ShippedProject[]> {
-  return allProjects()
+  const snap = await snapshot();
+  return snap.projects
     .filter((p) => (p.status === "approved" || p.status === "needs_changes") && !p.archived_at)
     .sort((a, b) => String(b.shipped_at).localeCompare(String(a.shipped_at)))
-    .map(toShipped);
+    .map((p) => toShipped(p, snap));
 }
 
-export async function listSpotCheckProjects(viewer?: string, kind?: Kind, opts?: { includeClaimed?: boolean }): Promise<ShippedProject[]> {
+export async function listSecondPassProjects(viewer?: string, kind?: Kind, opts?: { includeClaimed?: boolean }): Promise<ShippedProject[]> {
+  const snap = await snapshot();
+  // A sample ship waits here once its triage says not fraud (Robert's way). A real ship waits here from its first-pass approval:
+  // the final reviewer records the triage on the ship's page, then gives the verdict.
   const rows = oldestWaitFirst(
-    allProjects().filter((p) => p.status === "second_review" && p.second_pass_verdict === "not_fraud" && live(p) && ofKind(kind)(p)).map(toShipped),
+    snap.projects
+      .filter((p) => p.status === "second_review" && p.first_pass_verdict !== "banned" && (isRealId(p.id) || p.second_pass_verdict === "not_fraud") && live(p) && ofKind(kind)(p))
+      .map((p) => toShipped(p, snap)),
   );
   return opts?.includeClaimed ? annotateClaims(rows, viewer) : rows.filter((p) => !claimedByOther(p, viewer));
 }
 
-export async function countSpotCheckProjects(kind?: Kind): Promise<number> {
-  return (await listSpotCheckProjects(undefined, kind)).length;
+export async function countSecondPassProjects(kind?: Kind): Promise<number> {
+  return (await listSecondPassProjects(undefined, kind)).length;
 }
 
 export async function listProposedBanProjects(kind?: Kind): Promise<ShippedProject[]> {
+  const snap = await snapshot();
   return oldestWaitFirst(
-    allProjects().filter((p) => p.status === "second_review" && p.first_pass_verdict === "banned" && live(p) && ofKind(kind)(p)).map(toShipped),
+    snap.projects.filter((p) => p.status === "second_review" && p.first_pass_verdict === "banned" && live(p) && ofKind(kind)(p)).map((p) => toShipped(p, snap)),
   );
 }
 
@@ -613,10 +630,17 @@ export async function countPendingReviews(opts?: { viewer?: string; kind?: Kind 
   return (await listShippedProjects(undefined, opts?.kind, { includeClaimed: true })).length;
 }
 
-export const countReviewTabs = cache(async (kind?: Kind): Promise<{ pending: number; spotCheck: number; proposedBans: number }> => ({
+export const countReviewTabs = cache(async (kind?: Kind): Promise<{ pending: number; secondPass: number; proposedBans: number }> => ({
   pending: await countPendingReviews({ kind }),
-  spotCheck: await countSpotCheckProjects(kind),
+  secondPass: await countSecondPassProjects(kind),
   proposedBans: await countProposedBanProjects(),
+}));
+
+// Ships waiting for a first-pass review, one count per queue. The top bar and the tab badge add the two (only for a reviewer who can
+// open both) and say so, so a figure is never taken for the queue the page below it lists.
+export const countPendingByKind = cache(async (): Promise<{ software: number; hardware: number }> => ({
+  software: await countPendingReviews({ kind: "software" }),
+  hardware: await countPendingReviews({ kind: "hardware" }),
 }));
 
 export async function countSecondPassReviews(): Promise<number> {
@@ -638,7 +662,7 @@ export async function nextReviewId(opts: {
   excludeId: number;
   prefer: "shipped" | "second_review";
   reviewQueues?: "software" | "hardware" | "both";
-  spotCheck?: boolean;
+  secondPass?: boolean;
 }): Promise<number | null> {
   const kind = opts.reviewQueues && opts.reviewQueues !== "both" ? opts.reviewQueues : undefined;
   const queue = await listShippedProjects(opts.viewer, kind, { includeClaimed: true });
@@ -655,13 +679,19 @@ export async function listReviewAudits(
   opts: { realNames?: boolean } = {},
 ): Promise<ReviewAuditRow[]> {
   void opts;
-  const all = [...store.audits, ...AUDITS].sort((a, b) => b.created_at.localeCompare(a.created_at));
+  const all = (await auditRows()).sort((a, b) => b.created_at.localeCompare(a.created_at));
   const rows = reviewerSlackId ? all.filter((a) => a.reviewer.includes(`(${reviewerSlackId})`)) : all;
   return rows.slice(0, limit);
 }
 
+// Real verdicts from the audit rows, plus the sample history when the sample ships are on.
+async function auditRows(): Promise<ReviewAuditRow[]> {
+  const real = await loadAudits();
+  return [...real.audits, ...(sampleShipsOn() ? [...store.audits, ...AUDITS] : [])];
+}
+
 export async function listReviewAuditsForProject(projectId: number): Promise<ReviewAuditRow[]> {
-  return [...store.audits, ...AUDITS].filter((a) => a.project_id === projectId).map((a) => ({ ...a, player_name: "", project_name: "" }));
+  return (await auditRows()).filter((a) => a.project_id === projectId).sort((a, b) => b.created_at.localeCompare(a.created_at)).map((a) => ({ ...a, player_name: isRealId(projectId) ? a.player_name : "", project_name: isRealId(projectId) ? a.project_name : "" }));
 }
 
 export async function getFirstPassAuditNote(projectId: number): Promise<string | null> {
@@ -670,10 +700,13 @@ export async function getFirstPassAuditNote(projectId: number): Promise<string |
 }
 
 export async function listProjectNotes(projectId: number): Promise<ProjectNoteRow[]> {
+  if (isRealId(projectId)) return (await loadAudits()).notes.filter((n) => n.project_id === projectId).sort((a, b) => b.created_at.localeCompare(a.created_at));
   return [...store.notes, ...NOTES].filter((n) => n.project_id === projectId).sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
 
 export async function listCollaboratorsForProject(projectId: number): Promise<CollaboratorRow[]> {
+  // There is no collaborator table yet, so a real ship has none.
+  if (isRealId(projectId)) return [];
   return COLLABORATORS.filter((c) => c.project_id === projectId && (c.status === "pending" || c.status === "accepted"));
 }
 
@@ -687,9 +720,10 @@ export async function collaboratorsByProject(projectIds: number[]): Promise<Map<
 }
 
 export async function getProject(id: number) {
-  const row = allProjects().find((p) => p.id === id);
+  const snap = await snapshot();
+  const row = snap.projects.find((p) => p.id === id);
   if (!row) return null;
-  const user = userFor(row.user_id);
+  const user = snap.userFor(row.user_id);
   const project: ProjectWithUser = {
     ...row,
     users: user
@@ -704,13 +738,13 @@ export async function getProject(id: number) {
   };
   // The full builder row rides along for the eligibility check, as Pixl's select("*, users(...)") does.
   Object.assign(project.users ?? {}, user ? { first_name: user.first_name, last_name: user.last_name, email: user.email, address_country: user.address_country, address_line1: user.address_line1, address_line2: user.address_line2, address_city: user.address_city, address_state: user.address_state, address_postal: user.address_postal } : {});
-  const journals = journalsFor(id).sort((a, b) => b.created_at.localeCompare(a.created_at));
+  const journals = snap.journalsFor(id).sort((a, b) => b.created_at.localeCompare(a.created_at));
   return { project, journals, verdicts: [] as ModActionRow[], reviewAudits: await listReviewAuditsForProject(id) };
 }
 
 // What a builder already earned elsewhere sets their rate in Pixl's economy. Sample: approved hours of their other ships.
 export async function lifetimeRe(userId: string, excludeProjectId?: number): Promise<number> {
-  const hours = allProjects()
+  const hours = (await snapshot()).projects
     .filter((p) => p.user_id === userId && p.id !== excludeProjectId && p.status === "approved")
     .reduce((sum, p) => sum + (Number(p.approved_hours) || 0), 0);
   return Math.round(reForHours(hours, 1) * 10) / 10;
@@ -727,23 +761,10 @@ export async function saveStaffSettingsRow(slackId: string, settings: StaffSetti
   return true;
 }
 
-// Sample reviewers start with the guidelines already read, so every page can be opened. The acknowledgement page still works.
-export async function getGuidelinesAck(slackId: string): Promise<number | null> {
-  return store.ackedGuidelines.get(slackId) ?? Number.MAX_SAFE_INTEGER;
-}
-
-export async function ackGuidelines(slackId: string, version: number): Promise<void> {
-  store.ackedGuidelines.set(slackId, version);
-}
-
-export async function payoutTotalsBySlackId(): Promise<Map<string, PayoutTotals>> {
-  return new Map();
-}
-
 // ---- The overview page (owner) ----
 
 export async function getStats() {
-  const projects = allProjects();
+  const projects = (await snapshot()).projects;
   return {
     players: USERS().length,
     projects: projects.length,
@@ -801,3 +822,5 @@ export * from "./sample/content";
 export * from "./sample/people";
 
 export * from "./sample/ops";
+
+export * from "./sample/records";

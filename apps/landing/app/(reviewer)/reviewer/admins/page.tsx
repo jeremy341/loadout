@@ -125,7 +125,7 @@ export default async function AdminsPage() {
         description="Owners can do everything. Reviewers only work the review queue, helpers only work tickets, fulfillers only work the order queue. Every change here is written to the team log."
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card padding="flush">
           <CardHeader title="Owners" icon="admin-badge" count={owners.length} />
           <Table headers={["Owner"]}>
@@ -242,7 +242,7 @@ export default async function AdminsPage() {
           paid, and no amount is shown to a reviewer.
         </p>
         <div className="flex flex-col gap-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Pay per approval">
               <Input value="Not set" readOnly disabled />
             </Field>

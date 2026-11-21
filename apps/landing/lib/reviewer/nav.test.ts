@@ -55,7 +55,7 @@ describe("what each role sees", () => {
     expect(moreLabels(owner)).toContain("Fulfilment");
     expect(moreLabels(owner)).toContain("Budget");
     expect(moreLabels(owner)).toContain("Team and roles");
-    expect(tabLabels(owner)).toEqual(["Needs review", "Hardware", "Reviewed", "Stats", "Proposed bans", "Spot check", "Reviewer log", "Audit notes", "Guidelines"]);
+    expect(tabLabels(owner)).toEqual(["Needs review", "Hardware", "Reviewed", "Stats", "Proposed bans", "Second pass", "Reviewer log", "Audit notes", "Guidelines"]);
   });
 
   test("a reviewer has My stats, Review and Projects, and nothing under More", () => {
@@ -64,8 +64,8 @@ describe("what each role sees", () => {
     expect(tabLabels(reviewer)).toEqual(["Needs review", "Hardware", "Reviewed", "Stats", "Guidelines"]);
   });
 
-  test("a final reviewer also has Second pass and Spot check, but not the owner-only tabs", () => {
-    expect(tabLabels(finalReviewer)).toEqual(["Needs review", "Hardware", "Reviewed", "Stats", "Spot check", "Guidelines"]);
+  test("a final reviewer also has Second pass, but not the owner-only tabs", () => {
+    expect(tabLabels(finalReviewer)).toEqual(["Needs review", "Hardware", "Reviewed", "Stats", "Second pass", "Guidelines"]);
   });
 
   test("a software-only reviewer loses the hardware queue", () => {

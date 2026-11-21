@@ -256,7 +256,7 @@ function EditItemForm({ item }: { item: ShopItemRow }) {
   return (
     <form action={updateShopItem} className="flex flex-col gap-4">
       <input type="hidden" name="id" value={item.id} />
-      <div className="grid gap-3 sm:grid-cols-[1fr_8rem]">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_8rem]">
         <Field label="Name">
           <Input name="name" required maxLength={60} defaultValue={item.name} />
         </Field>
@@ -264,7 +264,7 @@ function EditItemForm({ item }: { item: ShopItemRow }) {
           <Input name="price" type="number" min={0} required defaultValue={item.price} />
         </Field>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Field label="Category">
           <NativeSelect name="category" defaultValue={item.category}>
             {SHOP_CATEGORIES.map((c) => (

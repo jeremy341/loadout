@@ -2,6 +2,7 @@
 // claim -> send grant -> delivered. An order is a grant when its shop item is a grant (the sample
 // sets is_grant), or a fulfiller converted that single order with "Convert to grant".
 // LOADOUT pays nobody in Ore for fulfilling an order, so there is no payout here.
+import { claimedBy, isOwnOrder, type FulfillmentViewer, type OrderOwnership } from "./fulfillmentAccess";
 
 export interface GrantShaped {
   item_category?: string | null;
@@ -10,6 +11,21 @@ export interface GrantShaped {
 
 export function isGrantOrder(order: GrantShaped): boolean {
   return order.is_grant === true || order.item_category === "grants";
+}
+
+// A grant is sent from Claimed by the fulfiller who claimed it. The own-order rule is checked
+// again here: an owner who reassigned a grant for their own order to themselves must not be
+// able to send it.
+export function canSendGrant(
+  order: GrantShaped & OrderOwnership & { status: string },
+  viewer: FulfillmentViewer,
+): boolean {
+  return (
+    isGrantOrder(order) &&
+    order.status === "claimed" &&
+    claimedBy(order, viewer.session.slackId) &&
+    !isOwnOrder(order, viewer.session.slackId, viewer.isOwner)
+  );
 }
 
 // Grants are claimed and then sent in one step. Orders already moved past "claimed" by the item flow keep the standard controls.

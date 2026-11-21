@@ -1,5 +1,5 @@
 // biome-ignore-all lint/correctness/useExhaustiveDependencies: usePathStrokeMetrics intentionally accepts caller-controlled deps
-import { type RefObject, useEffect, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 export function findPathLengthAtX(
   path: SVGPathElement | null,
@@ -33,6 +33,27 @@ interface PathStrokeMetrics {
 const EMPTY_METRICS: PathStrokeMetrics = { pathD: null, pathLength: 0 };
 
 /**
+ * `deps` is a freshly-built caller array each render; the effect below must
+ * re-run when any element changes (compared like React compares effect
+ * dependencies), but the dependency array itself has to be static. Compress
+ * that element-wise comparison into an incrementing token the effect can
+ * list instead of spreading `deps` (which would advance by one whenever the
+ * values change, exactly like the token does).
+ */
+function useDepsChangeToken(deps: readonly unknown[]): number {
+  const prevDeps = useRef<readonly unknown[]>(deps);
+  const token = useRef(0);
+  const changed =
+    prevDeps.current.length !== deps.length ||
+    deps.some((dep, i) => !Object.is(dep, prevDeps.current[i]));
+  if (changed) {
+    prevDeps.current = deps;
+    token.current += 1;
+  }
+  return token.current;
+}
+
+/**
  * Caller passes the references that drive the rendered path (renderData,
  * innerWidth, etc.) as `deps`. A stringified summary like
  * `${renderData.length}:${innerWidth}` is *not* safe here — same-length
@@ -52,6 +73,7 @@ export function usePathStrokeMetrics(
   enabled = true
 ): PathStrokeMetrics {
   const [metrics, setMetrics] = useState<PathStrokeMetrics>(EMPTY_METRICS);
+  const depsToken = useDepsChangeToken(deps);
 
   useEffect(() => {
     const path = pathRef.current;
@@ -65,7 +87,7 @@ export function usePathStrokeMetrics(
         ? prev
         : { pathD: d, pathLength: len }
     );
-  }, [enabled, ...deps]);
+  }, [enabled, pathRef, depsToken]);
 
   return metrics;
 }

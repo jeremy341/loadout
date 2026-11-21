@@ -1,5 +1,4 @@
 // GENERATED from packages/config/pixl.json by `bun run config:sync` - do not edit
-/* eslint-disable */
 import { USD_PER_TEN_ORE } from "@/lib/platform/review";
 
 // The one Ore rate on the reviewer site: 10 Ore = USD_PER_TEN_ORE (lib/platform/review.ts), an internal budgeting rate. Every

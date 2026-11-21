@@ -8,7 +8,7 @@
 //
 // Two columns, because Pixl does some of its checks inside the page:
 //   guard  what the page's own requirePage(...) asks for.
-//   access who actually gets the page. Often the same. A page such as Spot check asks for a reviewer and then sends a reviewer who
+//   access who actually gets the page. Often the same. A page such as Second pass asks for a reviewer and then sends a reviewer who
 //          is not a final reviewer back to /review; `access` is the stricter one and `inPage` says how the page enforces it.
 // Someone with a role who fails `access` is redirected to their own landing page (landingFor), except where `inPage` sends them to /review.
 // Someone with no role at all (a builder, nobody signed in) gets the plain 404 on every entry, pages and APIs alike.
@@ -56,6 +56,9 @@ export const ROUTES: readonly RouteEntry[] = [
   // The Overview is the owner's. Everyone else is sent on: a reviewer to their stats, the rest to their own landing page.
   page("/", "page.tsx", "staff", "owner", { inPage: "redirects every non-owner to /review/stats (reviewer) or their landing page" }),
   page("/settings", "settings/page.tsx", "staff"),
+  // Superadmin bootstrap: reviewer-reachable (the reviewer layout already 404s anyone with no staff role),
+  // and the page itself is a 404 while LOADOUT_SUPERADMIN_BOOTSTRAP_SECRET is unset (lib/platform bootstrap).
+  page("/superadmin", "superadmin/page.tsx", "reviewer"),
 
   // Review area (Pixl's review tabs).
   page("/review", "review/(tabs)/page.tsx", "reviewer", "reviewer", { inPage: "lists only the viewer's queue (kind)" }),
@@ -63,7 +66,7 @@ export const ROUTES: readonly RouteEntry[] = [
   page("/review/reviewed", "review/(tabs)/reviewed/page.tsx", "reviewer"),
   page("/review/stats", "review/(tabs)/stats/page.tsx", "reviewer"),
   page("/review/guidelines", "review/(tabs)/guidelines/page.tsx", "reviewer"),
-  page("/review/spot-check", "review/(tabs)/spot-check/page.tsx", "reviewer", FINAL, { inPage: "owner or final reviewer, else redirect to /review" }),
+  page("/review/second-pass", "review/(tabs)/second-pass/page.tsx", "reviewer", FINAL, { inPage: "owner or final reviewer, else redirect to /review" }),
   page("/review/proposed-bans", "review/(tabs)/proposed-bans/page.tsx", "reviewer", "owner", { inPage: "owner, else redirect to /review" }),
   page("/review/log", "review/(tabs)/log/page.tsx", "reviewer", "owner", { inPage: "owner, else redirect to /review" }),
   page("/review/audit", "review/(tabs)/audit/page.tsx", "reviewer", "owner", { inPage: "owner, else redirect to /review" }),
@@ -94,10 +97,12 @@ export const ROUTES: readonly RouteEntry[] = [
   page("/bans", "bans/page.tsx", "owner"),
   page("/ideas", "ideas/page.tsx", "owner"),
   page("/notify", "notify/page.tsx", "owner"),
+  page("/news", "news/page.tsx", "owner"),
   page("/forms", "forms/page.tsx", "owner"),
   page("/budget", "budget/page.tsx", "owner"),
   page("/shop", "shop/page.tsx", "owner"),
   page("/shop-detail", "shop-detail/page.tsx", "owner"),
+  page("/operations", "operations/page.tsx", "owner"),
   page("/events", "events/page.tsx", "owner"),
   page("/referrals", "referrals/page.tsx", "owner"),
   page("/community-goals", "community-goals/page.tsx", "owner"),
@@ -107,6 +112,7 @@ export const ROUTES: readonly RouteEntry[] = [
   // Queues of the helper and the fulfiller. Owners pass every gate.
   page("/tickets", "tickets/page.tsx", "helper"),
   page("/fulfillment", "fulfillment/page.tsx", "fulfiller", "fulfiller", { inPage: "the Fulfillers tab is the owner's (canOpenFulfillmentTab)" }),
+  page("/fulfillment/airbridge-preview", "fulfillment/airbridge-preview/page.tsx", "fulfiller"),
   page("/fulfillment/label/[id]", "fulfillment/label/[id]/page.tsx", "fulfiller", "fulfiller", { sample: "/fulfillment/label/2001", inPage: "buyer details only for the fulfiller who claimed the order, or an owner" }),
 
   // JSON endpoints the review components call. Plain 404 without a role, 403 with a role that is not enough.

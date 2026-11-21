@@ -27,12 +27,16 @@ export async function refererClean(fallback: string): Promise<string> {
 }
 
 // The same path with one query value set (used for ?error= and ?ok= notices), replacing the old value of that key.
-export function withNotice(path: string, key: "error" | "ok" | "done", message: string): string {
-  const [base, query = ""] = path.split("?");
-  const params = new URLSearchParams(query);
-  params.delete("error");
-  params.delete("ok");
-  params.delete("done");
+// A #fragment must stay at the very end: appending "?error=..." after it would put the notice inside the fragment,
+// where the server never sees it. Split it off first and put it back after the query string.
+export function withNotice(path: string, key: "error" | "ok" | "done" | "sent", message: string): string {
+  const hashAt = path.indexOf("#");
+  const fragment = hashAt >= 0 ? path.slice(hashAt) : "";
+  const withoutFragment = hashAt >= 0 ? path.slice(0, hashAt) : path;
+  const qAt = withoutFragment.indexOf("?");
+  const base = qAt >= 0 ? withoutFragment.slice(0, qAt) : withoutFragment;
+  const params = new URLSearchParams(qAt >= 0 ? withoutFragment.slice(qAt + 1) : "");
+  for (const old of ["error", "ok", "done", "sent"]) params.delete(old);
   params.set(key, message);
-  return `${base}?${params.toString()}`;
+  return `${base}?${params.toString()}${fragment}`;
 }

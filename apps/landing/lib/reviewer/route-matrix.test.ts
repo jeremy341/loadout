@@ -18,7 +18,28 @@ function walk(dir: string, names: string[]): string[] {
 }
 
 const pageFiles = walk(join(APP, "app", "(reviewer)", "reviewer"), ["page.tsx"]).map(rel);
-const apiFiles = walk(join(APP, "app", "api"), ["route.ts"]).map(rel);
+// Public API routes that run before anyone has signed in, so they have no role guard by design. Each one is named here with its
+// reason; a new unguarded route must be added to this list on purpose, not slip through.
+const PUBLIC_API_ROUTES = new Set([
+  "app/api/review/queue/route.ts", // public participant queue
+  "app/api/auth/hackclub/start/route.ts", // starts the Hack Club Auth sign-in (no session yet)
+  "app/api/auth/hackclub/callback/route.ts", // finishes it (it creates the session)
+  "app/api/auth/signout/route.ts", // ends the session; same-origin POST, no role guard needed
+  "app/api/auth/platform-gate/route.ts", // checks the shared platform password before Hack Club Auth starts (no session yet)
+  // Participant routes, not reviewer routes: each checks the signed in builder and the project owner itself (journal photos and covers).
+  "app/api/journal-media/route.ts", // POST: the owner uploads a photo or cover
+  "app/api/journal-media/[id]/route.ts", // GET: a signed in builder reads an image; DELETE: the owner removes it
+  // Cron jobs, not reviewer routes: each one answers only a Bearer CRON_SECRET request and 403s while the env is unset
+  // (lib/platform/jobs and lib/platform/fraud own the guard; lib/platform/public-routes.ts lists them for the /api classifier).
+  "app/api/cron/[job]/route.ts", // the generic job runner (hackatime-sync, stats-snapshot, queue-health)
+  "app/api/cron/fraud-precheck/route.ts", // pre-check and Fraudy sweep of freshly shipped projects
+  "app/api/cron/fraud-robert-sync/route.ts", // submits to the fraud desk and polls outcomes into FraudCheck rows
+]);
+// The public read-only API (/api/v1) is guarded by personal API keys, not roles; lib/platform/api-v1/routes.test.ts checks every one of its routes.
+// The Slack bot's internal routes (app/api/internal/bot) take the bot's service key, not a role; lib/platform/public-routes.ts lists them.
+const apiFiles = walk(join(APP, "app", "api"), ["route.ts"])
+  .map(rel)
+  .filter((file) => !PUBLIC_API_ROUTES.has(file) && !file.startsWith("app/api/v1/") && !file.startsWith("app/api/internal/bot/"));
 
 // What a file's own guard call asks for, read from the source. Pages call requirePage (Pixl's copies) or requireAccess (older ones); routes
 // call reviewApi or guardedRoute.
@@ -127,7 +148,7 @@ function everyLevel(): Level[] {
   ];
   return defs.map(([name, roles, email]) => ({ name, roles, email, access: resolveAccess({ id: email, email }, { ownerEmails: OWNERS, roles }) }));
 }
-const toAdmin = (access: ReviewerAccess): AdminAccess => ({ ...access, session: { slackId: "x", name: "X", exp: 0 } });
+const toAdmin = (access: ReviewerAccess): AdminAccess => ({ ...access, session: { slackId: "x", personId: "p1", name: "X" } });
 
 // What each level may open, by address. A route is in the set when the matrix says the level gets it.
 const opens = (level: Level) => ROUTES.filter((route) => route.kind === "page" && mayOpen(level.access, route)).map((route) => route.path);
@@ -143,13 +164,13 @@ describe("what each level may open (from the matrix)", () => {
   test("a reviewer opens the review area and projects, and no owner page", () => {
     const paths = opens(by("reviewer"));
     for (const path of ["/review", "/review/reviewed", "/review/stats", "/review/guidelines", "/review/[id]", "/projects", "/projects/[id]", "/settings"]) expect(paths).toContain(path);
-    for (const path of ["/", "/players", "/admins", "/review/spot-check", "/review/log", "/review/fraud-reviews", "/tickets", "/fulfillment", "/budget"]) expect(paths).not.toContain(path);
+    for (const path of ["/", "/players", "/admins", "/review/second-pass", "/review/log", "/review/fraud-reviews", "/tickets", "/fulfillment", "/budget"]) expect(paths).not.toContain(path);
   });
 
-  test("a final reviewer adds Spot check and the integrity tab, nothing else", () => {
+  test("a final reviewer adds Second pass and the integrity tab, nothing else", () => {
     const reviewer = new Set(opens(by("reviewer")));
     const extra = opens(by("final reviewer")).filter((path) => !reviewer.has(path));
-    expect(extra.sort()).toEqual(["/review/fraud-reviews", "/review/spot-check"]);
+    expect(extra.sort()).toEqual(["/review/fraud-reviews", "/review/second-pass"]);
   });
 
   test("queue-limited reviewers open the same pages as a reviewer (the queue is narrowed inside the pages and actions)", () => {
@@ -163,7 +184,7 @@ describe("what each level may open (from the matrix)", () => {
 
   test("a helper opens Tickets and a fulfiller opens the order pages, nothing else", () => {
     expect(opens(by("helper")).sort()).toEqual(["/settings", "/tickets"].sort());
-    expect(opens(by("fulfiller")).sort()).toEqual(["/fulfillment", "/fulfillment/label/[id]", "/settings"].sort());
+    expect(opens(by("fulfiller")).sort()).toEqual(["/fulfillment", "/fulfillment/airbridge-preview", "/fulfillment/label/[id]", "/settings"].sort());
   });
 
   test("a builder and nobody open nothing: the matrix has no access for them", () => {

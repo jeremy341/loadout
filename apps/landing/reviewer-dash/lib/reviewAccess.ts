@@ -3,6 +3,11 @@
 
 import type { ReviewQueueScope } from "./roles";
 
+// One ban-proposal rule for the whole site. The old copy here compared display-name labels and let an owner decide on their own
+// project; lib/reviewer/access.ts compares stable Person ids and refuses self-review for owners too. Re-export it so the pages,
+// actions and the shared platform rules can never disagree.
+export { proposedBanDecision, type ProposedBanDecision } from "@/lib/reviewer/access";
+
 export interface ReviewViewer {
   isOwner: boolean;
   canSecondPass: boolean;
@@ -39,45 +44,6 @@ export function isOwnOrCollaborator(
 // changes whenever someone edits their Slack profile.
 export function slackIdFromActorName(label: string | null | undefined): string {
   return (label ?? "").match(/\(([^)]+)\)\s*$/)?.[1] ?? "";
-}
-
-// A verdict on a first-pass BAN PROPOSAL (stage second_review,
-// first_pass_verdict = "banned").
-// - Ban decisions are owner-only (spec): confirming the ban, or approving the
-//   project outright, is a final decision only an owner makes.
-// - A non-owner final reviewer who disagrees with the ban ("approved") does
-//   NOT final-approve: the project goes back into the normal pipeline
-//   (fraud_review -> Robert -> owner Spot check), exactly like a first-pass
-//   approval.
-// - "needs_changes" bounces it to the maker, as from any stage.
-// - Nobody may decide on a project they own or collaborate on, owners included
-//   (it would be approving or banning their own work).
-export type ProposedBanDecision =
-  | { kind: "deny"; reason: string }
-  | { kind: "final" } // owner: the verdict applies as-is
-  | { kind: "reroute_to_pipeline" } // non-owner overturn: treat as first-pass approval
-  | { kind: "needs_changes" };
-
-export function proposedBanDecision(
-  viewer: ReviewViewer,
-  verdict: string,
-  opts: { own: boolean; owner?: boolean; proposedBy: string; actor: string },
-): ProposedBanDecision {
-  if (opts.own && !opts.owner)
-    return { kind: "deny", reason: "You can't decide on a project you collaborate on." };
-  if (!viewer.canSecondPass && !viewer.isOwner)
-    return { kind: "deny", reason: "You don't have second-pass review access." };
-  // By Slack id: the same person under a renamed display name is still the
-  // same reviewer. An unparseable proposer label is treated as a match (deny).
-  const proposerId = slackIdFromActorName(opts.proposedBy);
-  const actorId = slackIdFromActorName(opts.actor) || viewer.session.slackId;
-  if (!viewer.isOwner && (!proposerId || proposerId === actorId))
-    return { kind: "deny", reason: "A different reviewer must confirm or overturn this ban proposal." };
-  if (verdict === "needs_changes") return { kind: "needs_changes" };
-  if (viewer.isOwner) return { kind: "final" };
-  if (verdict === "ban") return { kind: "deny", reason: "Only an owner can confirm a ban." };
-  if (verdict === "approved") return { kind: "reroute_to_pipeline" };
-  return { kind: "deny", reason: "Unknown verdict." };
 }
 
 // Putting a review on hold must not clobber somebody else's active hold
@@ -131,7 +97,8 @@ export function redactBuilderUser<T extends BuilderNameSource>(
   user: T | null | undefined,
 ): T | null | undefined {
   if (!user || canSeeBuilderPII(viewer) || !("real_name" in user)) return user;
-  const { real_name: _hidden, ...rest } = user;
+  const rest = { ...user };
+  delete rest.real_name;
   return rest as T;
 }
 

@@ -11,7 +11,7 @@ const KIND_LABEL = { ai: "AI usage", "double-dip": "Double dip" } as const;
 const STATUS_OF: Record<string, string> = {
   waiting: "shipped",
   claimed: "shipped",
-  "spot-check": "second_review",
+  "second-pass": "second_review",
   "proposed-ban": "second_review",
   approved: "approved",
   "needs-changes": "needs_changes",

@@ -22,56 +22,53 @@ const viewer = (over: Partial<ReviewViewer> = {}): ReviewViewer => ({
 });
 
 describe("M1: decisions on a first-pass ban proposal", () => {
-  const opts = { own: false, proposedBy: "Alice (UALICE)", actor: "Rev (UREV)" };
+  // The shared resolver keys on stable Person ids, never on display-name labels. The label helper stays for display only.
+  const opts = { own: false, proposedById: "p-alice" };
+  const actor = (over: Partial<ReviewViewer> = {}) => {
+    const v = viewer(over);
+    return { isOwner: v.isOwner, canSecondPass: v.canSecondPass, personId: "p-rev" };
+  };
 
   test("a non-owner final reviewer can't confirm a ban (owner-only)", () => {
-    const d = proposedBanDecision(viewer({ canSecondPass: true }), "ban", opts);
+    const d = proposedBanDecision(actor({ canSecondPass: true }), "ban", opts);
     expect(d.kind).toBe("deny");
   });
 
   test("a non-owner final reviewer's approve is rerouted into the pipeline, never final", () => {
-    const d = proposedBanDecision(viewer({ canSecondPass: true }), "approved", opts);
+    const d = proposedBanDecision(actor({ canSecondPass: true }), "approved", opts);
     expect(d.kind).toBe("reroute_to_pipeline");
   });
 
   test("an owner's verdict is final (ban or approve)", () => {
-    expect(proposedBanDecision(viewer({ isOwner: true, canSecondPass: true }), "ban", opts).kind).toBe("final");
-    expect(proposedBanDecision(viewer({ isOwner: true }), "approved", opts).kind).toBe("final");
+    expect(proposedBanDecision(actor({ isOwner: true, canSecondPass: true }), "ban", opts).kind).toBe("final");
+    expect(proposedBanDecision(actor({ isOwner: true }), "approved", opts).kind).toBe("final");
   });
 
   test("request changes still bounces to the maker", () => {
-    expect(proposedBanDecision(viewer({ canSecondPass: true }), "needs_changes", opts).kind).toBe("needs_changes");
+    expect(proposedBanDecision(actor({ canSecondPass: true }), "needs_changes", opts).kind).toBe("needs_changes");
   });
 
   test("no second-pass access -> denied", () => {
-    expect(proposedBanDecision(viewer(), "approved", opts).kind).toBe("deny");
+    expect(proposedBanDecision(actor(), "approved", opts).kind).toBe("deny");
   });
 
   test("the proposer can't confirm/overturn their own proposal (non-owner)", () => {
-    const d = proposedBanDecision(viewer({ canSecondPass: true }), "approved", { ...opts, actor: opts.proposedBy });
+    const d = proposedBanDecision(actor({ canSecondPass: true }), "approved", { ...opts, proposedById: "p-rev" });
     expect(d.kind).toBe("deny");
   });
 
-  test("the proposer is matched by Slack id, not the display-name label", () => {
-    const d = proposedBanDecision(viewer({ canSecondPass: true }), "approved", {
-      ...opts,
-      proposedBy: "Rev Old Name (UREV)",
-      actor: "Rev (UREV)",
-    });
-    expect(d.kind).toBe("deny");
-    // A label with no parseable Slack id can't prove it's someone else.
-    expect(proposedBanDecision(viewer({ canSecondPass: true }), "approved", { ...opts, proposedBy: "Alice" }).kind).toBe(
-      "deny",
-    );
+  test("a renamed proposer is still matched by Person id; the label helper is display only", () => {
     expect(slackIdFromActorName("A (B) Name (U123)")).toBe("U123");
     expect(slackIdFromActorName(null)).toBe("");
+    // A proposer id that cannot be established refuses the decision rather than allowing it.
+    expect(proposedBanDecision(actor({ canSecondPass: true }), "approved", { ...opts, proposedById: "" }).kind).toBe("deny");
   });
 
-  test("project owners may decide on their own project, but collaborators still can't", () => {
-    const owner = viewer({ isOwner: true, canSecondPass: true });
-    for (const verdict of ["approved", "ban", "needs_changes"])
-      expect(proposedBanDecision(owner, verdict, { ...opts, own: true, owner: true }).kind).not.toBe("deny");
-    expect(proposedBanDecision(viewer({ canSecondPass: true }), "approved", { ...opts, own: true, owner: false }).kind).toBe("deny");
+  test("nobody, not even an owner, decides on a project they own or collaborate on", () => {
+    for (const who of [actor(), actor({ canSecondPass: true }), actor({ isOwner: true, canSecondPass: true })]) {
+      for (const verdict of ["approved", "ban", "needs_changes"])
+        expect(proposedBanDecision(who, verdict, { ...opts, own: true }).kind).toBe("deny");
+    }
   });
 });
 

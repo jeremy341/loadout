@@ -44,6 +44,53 @@ export function canFlagOrder(order: OrderOwnership, viewer: FulfillmentViewer): 
   return viewer.isOwner || claimedBy(order, viewer.session.slackId);
 }
 
+// The last two moves that can put an order in someone's hands (an owner taking a claim over,
+// and packing a claimed order) re-check the own-order rule. An owner who reassigned their own
+// order to themselves would otherwise be able to source and approve their own purchase.
+export function canReassignOrder(order: OrderOwnership & { status?: string }, viewer: FulfillmentViewer): boolean {
+  return (
+    viewer.isOwner &&
+    !["pending", "done", "cancelled"].includes(order.status ?? "") &&
+    !isOwnOrder(order, viewer.session.slackId, viewer.isOwner)
+  );
+}
+
+export function canPackOrder(order: OrderOwnership & { status?: string }, viewer: FulfillmentViewer): boolean {
+  return (
+    (order.status ?? "") === "claimed" &&
+    claimedBy(order, viewer.session.slackId) &&
+    !isOwnOrder(order, viewer.session.slackId, viewer.isOwner)
+  );
+}
+
+// The shape of one fulfilment audit row. Pure so the actor rule can be unit tested: the actor
+// is the handle the server derived from the session; there is no form field for it.
+export interface FulfillmentAuditEntry {
+  action: string;
+  result: "ok" | "denied";
+  actorId: string;
+  slackId: string;
+  target: string;
+  meta?: { reason: string };
+}
+
+export function fulfillmentAuditEntry(
+  action: string,
+  result: "ok" | "denied",
+  actorSlackId: string,
+  orderId: number,
+  reason?: string,
+): FulfillmentAuditEntry {
+  return {
+    action: `fulfillment.${action}`,
+    result,
+    actorId: actorSlackId,
+    slackId: actorSlackId,
+    target: `order:${orderId}`,
+    ...(reason ? { meta: { reason } } : {}),
+  };
+}
+
 export function canOpenFulfillmentTab(tab: string, viewer: Pick<FulfillmentViewer, "isOwner">): boolean {
   return tab !== "fulfillers" || viewer.isOwner;
 }

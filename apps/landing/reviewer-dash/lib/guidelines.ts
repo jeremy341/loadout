@@ -10,3 +10,11 @@
 export const GUIDELINES_VERSION = 1;
 
 export const MIN_SECONDS_PER_PAGE = 10;
+
+// "Skip for now" is a one-request pass, not an acknowledgement. The cookie is consumed by requireGuidelinesAck, so the person
+// is asked again next time and no permanent ack row is written on their behalf.
+export const GUIDELINES_SKIP_COOKIE = "loadout_guidelines_skip";
+export const guidelinesSkipValue = () => String(GUIDELINES_VERSION);
+export function guidelinesSkipCookieOptions() {
+  return { httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 };
+}

@@ -70,7 +70,6 @@ export async function loadPlayerEvidence(
 ): Promise<Map<string, PlayerEvidence>> {
   const out = new Map<string, PlayerEvidence>();
   const loadedAt = opts.now ?? Date.now();
-  const shipsView: ShipsView | null = !opts.ships ? null : "get" in opts.ships ? await opts.ships.get() : opts.ships;
   for (const userId of new Set(userIds)) {
     const handle = userId.replace(/^u-/, "");
     const hours = totalApproved(approvedHoursFor(handle));

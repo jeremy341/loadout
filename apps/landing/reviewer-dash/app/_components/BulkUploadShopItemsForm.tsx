@@ -203,11 +203,10 @@ export function BulkUploadShopItemsForm() {
                         {hit ? (
                           <div className="inline-flex items-center gap-2">
                             <Badge tone="warning">exists · {hit.price} Ore</Badge>
-                            <div className="hc-segmented w-40" role="tablist">
+                            <div className="hc-segmented w-40" role="group" aria-label={`Resolution for ${r.key}`}>
                               <button
                                 type="button"
-                                role="tab"
-                                aria-selected={resolutions[r.key] === "replace"}
+                                aria-pressed={resolutions[r.key] === "replace"}
                                 className="hc-segmented-item"
                                 onClick={() => setResolutions((r0) => ({ ...r0, [r.key]: "replace" }))}
                               >
@@ -215,8 +214,7 @@ export function BulkUploadShopItemsForm() {
                               </button>
                               <button
                                 type="button"
-                                role="tab"
-                                aria-selected={resolutions[r.key] !== "replace"}
+                                aria-pressed={resolutions[r.key] !== "replace"}
                                 className="hc-segmented-item"
                                 onClick={() => setResolutions((r0) => ({ ...r0, [r.key]: "skip" }))}
                               >

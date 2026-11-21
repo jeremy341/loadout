@@ -3,6 +3,7 @@ import { requirePage } from "@/reviewer-dash/lib/guard";
 import { getShopOrder, buyerDetailsByUserId } from "@/reviewer-dash/lib/db";
 import { audit } from "@/reviewer-dash/lib/audit";
 import { canViewLabel } from "@/reviewer-dash/lib/fulfillmentAccess";
+import { isGrantOrder } from "@/reviewer-dash/lib/fulfillmentGrant";
 import { PrintButton } from "./PrintButton";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ export default async function ShippingLabelPage({
   const { id } = await params;
   const orderId = Number(id);
   if (!Number.isSafeInteger(orderId) || orderId <= 0) notFound();
-  const order = await getShopOrder(orderId);
+  const order = await getShopOrder(orderId, { viewerSlack: access.session.slackId, allowPrivateNames: access.isOwner });
   // IDOR: the label is the buyer's full address, so only the fulfiller who
   // claimed this order (or an owner) may open it. Anyone else gets the same
   // 404 as a missing order, so ids can't be probed.
@@ -40,7 +41,10 @@ export default async function ShippingLabelPage({
     target: `order:${order.id}`,
   });
   const buyer = (await buyerDetailsByUserId([order.user_id])).get(order.user_id);
-  const addressLines = buyer?.addressLines ?? [];
+  // A grant is delivered by email. Its label must show the recipient's name and email only, never a postal address
+  // or phone number, matching the shipping panel in OrderDetail.
+  const grant = isGrantOrder(order);
+  const addressLines = grant ? [] : buyer?.addressLines ?? [];
 
   return (
     <>
@@ -52,9 +56,13 @@ export default async function ShippingLabelPage({
               <span className="wordmark">LOADOUT</span>
             </div>
             <div className="address-block">
-              <div className="ship-to">Ship to</div>
+              <div className="ship-to">{grant ? "Grant recipient" : "Ship to"}</div>
               <div className="name">{buyer?.name || order.player_name || "(name missing)"}</div>
-              {addressLines.length > 0 ? (
+              {grant ? (
+                buyer?.email
+                  ? <div className="line">{buyer.email}</div>
+                  : <div className="line missing">No email on file - don&apos;t send the grant yet.</div>
+              ) : addressLines.length > 0 ? (
                 addressLines.map((line, i) => (
                   <div className="line" key={i}>
                     {line}
@@ -63,7 +71,7 @@ export default async function ShippingLabelPage({
               ) : (
                 <div className="line missing">No address on file - don&apos;t ship yet.</div>
               )}
-              {buyer?.phone && <div className="phone">{buyer.phone}</div>}
+              {!grant && buyer?.phone && <div className="phone">{buyer.phone}</div>}
             </div>
             <div className="footer">
               LOADOUT · {order.item_name || "item"} · Order #{order.id}

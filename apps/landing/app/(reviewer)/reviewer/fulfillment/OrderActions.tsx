@@ -12,6 +12,8 @@ export function EditFulfillmentInfo({ order: o }: { order: ShopOrderRow }) {
     <Details summary="Edit cost, tracking or source URL">
       <form action={updateOrderFulfillmentInfo} className="fw-order-action-form">
         <input type="hidden" name="id" value={o.id} />
+        <input type="hidden" name="confirm" value="yes" />
+        <input type="hidden" name="expectedStatus" value={o.status} />
         <div className="fw-order-action-fields">
           <Field label="Actual cost ($)">
             <Input
@@ -66,7 +68,7 @@ export function FlagControls({ order: o, canManage, budget }: { order: ShopOrder
       <form action={flagOrderOverBudget} className="fw-order-flag-form">
         <input type="hidden" name="id" value={o.id} />
         <Field label="What's the cheapest you found, and where?">
-          <Input name="flagNote" maxLength={300} required placeholder="Cheapest is $95 at one shop, $88 refurbished at another" />
+          <Input name="flagNote" maxLength={300} minLength={10} required placeholder="Cheapest is $95 at one shop, $88 refurbished at another" />
         </Field>
         <ActionButton variant="danger" pendingLabel="Flagging..." icon="flag">
           Flag over budget
@@ -115,6 +117,8 @@ export function OrderActions({
     canManage && (o.status === "pending" || claimed) ? (
       <form action={cancelOrder}>
         <input type="hidden" name="id" value={o.id} />
+        <input type="hidden" name="confirm" value="yes" />
+        <input type="hidden" name="expectedStatus" value={o.status} />
         <ActionButton
           variant="danger"
           pendingLabel="Refunding..."

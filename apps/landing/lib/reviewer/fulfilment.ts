@@ -340,7 +340,7 @@ export function fulfilmentOrderById(id: string): FulfilmentOrder | null {
 
 // The participant-side Order shape, so the shop's own helpers price the lines.
 function asOrder(order: FulfilmentOrder): Order {
-  return { id: order.id, number: order.number, status: "placed", lines: order.lines };
+  return { id: order.id, number: order.number, status: "placed", dates: {}, lines: order.lines };
 }
 
 // Lines with the catalog item and the price the builder pays at their own level.

@@ -1,9 +1,8 @@
 import { requirePage } from "@/reviewer-dash/lib/guard";
 import { listPlayers } from "@/reviewer-dash/lib/db";
 import { massPlayerAction } from "@/reviewer-dash/app/actions";
-import { SelectAllBox, RowSelect } from "@/reviewer-dash/app/_components/MassSelect";
+import { SelectAllBox, RowSelect, MassActionButton } from "@/reviewer-dash/app/_components/MassSelect";
 import {
-  ActionButton,
   Badge,
   Card,
   CardHeader,
@@ -85,13 +84,7 @@ export default async function PlayersPage({
                 <option value="0">Permanent</option>
               </NativeSelect>
             </Field>
-            <ActionButton
-              variant="danger"
-              pendingLabel="Applying..."
-              confirm="Apply this action to every selected builder?"
-            >
-              Apply to selected
-            </ActionButton>
+            <MassActionButton noun="builder" variant="danger" pendingLabel="Applying..." />
           </div>
         </Card>
 

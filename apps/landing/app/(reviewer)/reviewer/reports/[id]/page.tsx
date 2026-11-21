@@ -79,7 +79,7 @@ export default async function ReportDetailPage({
 
       <Flash error={error} ok={ok} />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="flex min-w-0 flex-col gap-6">
           <Card>
             <CardHeader title="Reason given" icon="message-simple" action={<Badge tone="neutral">{report.rule}</Badge>} />

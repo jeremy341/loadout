@@ -85,3 +85,156 @@ html:has(.reviewer-root) {
 :where(.reviewer-root) svg:where([width="48"]) { width: 48px; height: 48px; }
 :where(.reviewer-root) svg:where([width="56"]) { width: 56px; height: 56px; }
 :where(.reviewer-root) svg:where([width="64"]) { width: 64px; height: 64px; }
+
+/* ---- Phones and narrow windows ----
+   The audit measured the Overview at about 1,040px inside a 390px viewport. A Tailwind "grid" with no column template has one
+   implicit auto track, and a grid item's default min-width is its min-content width, so a chart or a wide table inside the track
+   stretches the track (and the page) instead of scrolling or shrinking. Grid items may shrink; anything wider than its card scrolls
+   inside its own region (.hc-table-wrap) rather than widening the page. An item that sets its own min-w-* keeps it. */
+.reviewer-root .hc-main {
+  min-width: 0;
+  overflow-x: clip;
+}
+.reviewer-root .hc-main .grid > :not([class*="min-w-"]) {
+  min-width: 0;
+}
+
+/* A page's data-scope line (app/_ui/DataScopeNote.tsx): where this page's data lives, in words. */
+.rv-data-scope {
+  max-width: 72ch;
+  margin: 8px 0 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--border-strong);
+  color: var(--secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.rv-data-scope strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* A count's own words (the tooltip does not exist on a phone): shown inside menus only. */
+.hc-nav-count-note {
+  display: none;
+}
+.hc-nav-menu-panel .hc-nav-link {
+  flex-wrap: wrap;
+}
+.hc-nav-menu-panel .hc-nav-count-note {
+  display: block;
+  flex-basis: 100%;
+  padding-left: 28px;
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+@media (max-width: 1023.98px) {
+  /* The menu panel is wider than the space to the right of its button, so it opened past the screen edge. Hang it off the top bar
+     (which is sticky, so it is the containing block) with a 16px gutter each side, and let it scroll if it is taller than the screen. */
+  .hc-topbar .hc-nav-menu {
+    position: static;
+  }
+  .hc-topbar .hc-nav-menu-panel.hc-nav-mega {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-height: calc(100dvh - 88px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Tabs wrap onto more rows instead of scrolling sideways with the scrollbar hidden, where the later tabs were unreachable. */
+  .hc-tabs.hc-tabs-wrap {
+    flex-wrap: wrap;
+    gap: 0 4px;
+    padding: 0;
+    overflow: visible;
+  }
+  .hc-tabs-wrap .hc-tab {
+    flex: 1 1 auto;
+    height: 44px;
+  }
+}
+
+/* Navigation tabs and queue switches are links with aria-current (no tab roles), so they take the selected look from it. */
+.hc-tab[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--primary);
+}
+.hc-segmented-item[aria-current="page"],
+.hc-segmented-item[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+@media (max-width: 760px) {
+  /* Primary controls reach the 44px touch target on a phone. The desktop density (28 to 34px) is unchanged above this width. */
+  .reviewer-root .hc-btn,
+  .reviewer-root .hc-btn-sm,
+  .reviewer-root .hc-btn-lg {
+    min-height: 44px;
+    height: auto;
+    padding-block: 0;
+  }
+  .reviewer-root .hc-input,
+  .reviewer-root .hc-select-trigger,
+  .reviewer-root .hc-nav-link {
+    min-height: 44px;
+  }
+  .reviewer-root .hc-check {
+    min-height: 44px;
+  }
+  .reviewer-root .hc-segmented-item {
+    min-height: 44px;
+  }
+  .reviewer-root .hc-table input[type="checkbox"],
+  .reviewer-root .hc-check input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Segmented controls (queue, chart range) reflow into rows rather than forcing one row wider than the screen. */
+  .hc-segmented:not(.hc-tabs-sticky) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, minmax(4.25rem, 1fr));
+    max-width: 100%;
+  }
+  .hc-segmented:not(.hc-tabs-sticky) .hc-segmented-item {
+    height: auto;
+    min-height: 44px;
+    padding-block: 4px;
+    text-align: center;
+  }
+}
+
+/* Fulfillment on a phone: once a request is selected (?order=), it comes first, straight under the page title, ahead of the pipeline
+   and the list. Only the visual order moves; the document order is unchanged, and "Back to the requests list" jumps to the list. */
+.fw-page > header {
+  order: -2;
+}
+.fw-back-to-list {
+  display: none;
+}
+@media (max-width: 1179.98px) {
+  .fw-page[data-explicit="true"] > .fw-grid {
+    display: contents;
+  }
+  .fw-page[data-explicit="true"] .fw-pane {
+    order: -1;
+  }
+  .fw-page[data-explicit="true"] .fw-back-to-list {
+    display: inline-flex;
+    margin: 10px 14px 0;
+  }
+  .fw-list {
+    scroll-margin-top: 72px;
+  }
+}

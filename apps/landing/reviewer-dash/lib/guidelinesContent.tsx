@@ -62,11 +62,11 @@ export const GUIDELINE_PAGES: GuidelinePage[] = [
         <ol className="list-decimal space-y-2 pl-5">
           <li>
             <strong>First pass.</strong> You open a ship from Needs review, check that the project fits LOADOUT, check the evidence and
-            the time, and write a note. Approving at this stage is a proposal: the ship goes to Spot check, where an owner or a final
+            the time, and write a note. Approving at this stage is a proposal: the ship goes to Second pass, where an owner or a final
             reviewer gives the verdict. Requesting changes sends it straight back to the builder. A ban is only a proposal too.
           </li>
           <li>
-            <strong>Spot check.</strong> An owner or a final reviewer reads the first reviewer&apos;s note and hours call and gives the
+            <strong>Second pass.</strong> An owner or a final reviewer reads the first reviewer&apos;s note and hours call and gives the
             verdict: approve, request changes or, for owners, ban. Nobody gives a final verdict on a project they own or collaborate on.
           </li>
           <li>

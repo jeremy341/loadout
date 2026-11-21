@@ -6,7 +6,19 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requirePage } from "../lib/guard";
+import { MAX_ORE_PRICE, parseOrePrice } from "../lib/amounts";
 import { serializeGroups } from "../lib/shopOptions";
+import type { FormState } from "@/lib/platform/actions";
+import { databaseConfigured } from "@/lib/platform/db";
+import { readViewer } from "@/lib/platform/session";
+import {
+  createDbEvent,
+  decideDbSubmission,
+  deleteDbEvent,
+  saveDbFormConfig,
+  setDbSubmissionInterest,
+  stopDbEvent,
+} from "@/lib/platform/content-data";
 import {
   content,
   EVENT_TYPES,
@@ -25,6 +37,20 @@ const refresh = (): void => revalidatePath("/", "layout");
 const actor = (): string => SAMPLE_ACTOR;
 const num = (data: FormData, key: string): number => Number(data.get(key) ?? 0);
 const text = (data: FormData, key: string, max: number): string => String(data.get(key) ?? "").trim().slice(0, max);
+
+// The signed-in person's Person id: the database keeps it as the creator or the decider. The session handle is a sample id, not one.
+const personId = async (): Promise<string> => (await readViewer())?.id ?? "";
+
+// Database ids are cuids; the in-memory sample rows keep numeric ids. A numeric id always goes to the sample store.
+const isSampleId = (id: string): boolean => /^\d+$/.test(id);
+
+// Writes for events and forms go to the database when one is configured. Without one, the in-memory sample takes the write in
+// development only; production refuses rather than report a save that did not happen.
+function writeTarget(): "db" | "sample" {
+  if (databaseConfigured()) return "db";
+  if (process.env.NODE_ENV === "development") return "sample";
+  throw new Error("No database is connected, so nothing was saved.");
+}
 
 const TRACKS = ["Tools", "Systems", "Compute", "Hardware"];
 // The tracks an item relates to, from the form's ticked boxes. None ticked means General.
@@ -56,16 +82,19 @@ function shopItemError(message: string): never {
   redirect(`/shop?shopError=${encodeURIComponent(message)}`);
 }
 
+const PRICE_ERROR = `Enter a price in whole Ore, from 0 to ${MAX_ORE_PRICE.toLocaleString("en-GB")}.`;
+
 // ---- Shop ----
 
 export async function addShopItem(formData: FormData): Promise<void> {
   await requirePage("owner");
   const name = text(formData, "name", 60);
   const description = text(formData, "description", 300);
-  const price = Math.max(0, Math.round(num(formData, "price")));
+  const price = parseOrePrice(formData.get("price"));
   const options = readOptions(String(formData.get("options") ?? ""));
   const category = readCategory(String(formData.get("category") ?? ""));
   if (!name) return;
+  if (price === null) shopItemError(PRICE_ERROR);
   if (content.shop.some((r) => r.name === name)) shopItemError(`${name} is already in the shop.`);
   const position = content.shop.reduce((m, r) => Math.max(m, r.position), 0) + 1;
   content.shop.push({
@@ -104,10 +133,12 @@ export async function updateShopItem(formData: FormData): Promise<void> {
   const name = text(formData, "name", 60);
   if (!name) shopItemError("An item needs a name.");
   if (content.shop.some((r) => r.id !== id && r.name === name)) shopItemError(`${name} is already in the shop.`);
+  const price = parseOrePrice(formData.get("price"));
+  if (price === null) shopItemError(PRICE_ERROR);
   Object.assign(row, {
     name,
     description: text(formData, "description", 300),
-    price: Math.max(0, Math.round(num(formData, "price"))),
+    price,
     options: readOptions(String(formData.get("options") ?? "")),
     category: readCategory(String(formData.get("category") ?? "")),
     tracks: readTracks(formData),
@@ -123,7 +154,11 @@ export async function updateShopItemDetails(formData: FormData): Promise<void> {
   const row = content.shop.find((r) => r.id === num(formData, "id"));
   if (!row) return;
   const price = formData.get("price");
-  if (price != null) row.price = Math.max(0, Math.round(Number(price)));
+  if (price != null) {
+    const parsed = parseOrePrice(price);
+    if (parsed === null) shopItemError(PRICE_ERROR);
+    row.price = parsed;
+  }
   const source = formData.get("source");
   if (typeof source === "string") row.price_source_url = source.trim().slice(0, 500);
   const alt = formData.get("alt_source");
@@ -176,6 +211,11 @@ export async function commitShopItemsCsv(
       errors.push(`Row ${r.key}: a name is required.`);
       continue;
     }
+    const price = parseOrePrice(r.price);
+    if (price === null) {
+      errors.push(`Row ${r.key}: the price must be whole Ore from 0 to ${MAX_ORE_PRICE.toLocaleString("en-GB")}.`);
+      continue;
+    }
     const existingId = conflicts[r.key];
     if (existingId) {
       if (resolutions[r.key] !== "replace") {
@@ -184,7 +224,7 @@ export async function commitShopItemsCsv(
       }
       const row = content.shop.find((s) => s.id === existingId);
       if (row) {
-        Object.assign(row, { price: Math.max(0, Math.round(r.price)), description: r.description.slice(0, 300), options: readOptions(r.options) });
+        Object.assign(row, { price, description: r.description.slice(0, 300), options: readOptions(r.options) });
         replaced += 1;
         continue;
       }
@@ -193,7 +233,7 @@ export async function commitShopItemsCsv(
       id: nextContentId(),
       name,
       description: r.description.slice(0, 300),
-      price: Math.max(0, Math.round(r.price)),
+      price,
       image_url: "",
       options: readOptions(r.options),
       active: true,
@@ -228,10 +268,10 @@ export async function createPersonalShopItem(formData: FormData): Promise<void> 
   await requirePage("owner");
   const name = text(formData, "name", 60);
   const builder = text(formData, "builder", 80);
-  const price = Math.round(num(formData, "price"));
+  const price = parseOrePrice(formData.get("price"));
   if (!name) personalItemError("Give the item a name.");
   if (!builder) personalItemError("Name the builder this item is for.");
-  if (!(price > 0)) personalItemError("Give the item a price above 0.");
+  if (price === null || price <= 0) personalItemError(`Give the item a price above 0 and up to ${MAX_ORE_PRICE.toLocaleString("en-GB")} Ore.`);
   const item: PersonalShopItem = {
     id: nextContentId(),
     name,
@@ -296,8 +336,19 @@ export async function createEvent(formData: FormData): Promise<void> {
   const ends = new Date(endsRaw + "Z");
   if (!endsRaw || isNaN(ends.getTime())) fail("An end time is required.");
   if (isNaN(starts.getTime()) || ends <= starts) fail("The event must end after it starts.");
+  if (writeTarget() === "db") {
+    let error = "";
+    try {
+      await createDbEvent({ name, note: text(formData, "note", 500), startsAt: starts, endsAt: ends }, await personId());
+    } catch (e) {
+      error = e instanceof Error ? e.message : "Could not save the event.";
+    }
+    if (error) fail(error);
+    refresh();
+    redirect("/events?created=1");
+  }
   content.events.push({
-    id: nextContentId(),
+    id: String(nextContentId()),
     type,
     name,
     config: { note: text(formData, "note", 500) },
@@ -311,59 +362,124 @@ export async function createEvent(formData: FormData): Promise<void> {
   redirect("/events?created=1");
 }
 
+// A stop sets the event's stopped time, and leaves its end alone (lib/platform/content-data.ts). An event that is already stopped is refused.
 export async function stopEvent(formData: FormData): Promise<void> {
   await requirePage("owner");
-  const event = content.events.find((e) => e.id === num(formData, "id"));
+  const id = text(formData, "id", 64);
+  if (writeTarget() === "db" && !isSampleId(id)) {
+    await stopDbEvent(id, await personId());
+    refresh();
+    return;
+  }
+  const event = content.events.find((e) => e.id === id);
   if (event && !event.stopped_at) event.stopped_at = new Date().toISOString();
   refresh();
 }
 
 export async function deleteEvent(formData: FormData): Promise<void> {
   await requirePage("owner");
-  const id = num(formData, "id");
+  const id = text(formData, "id", 64);
+  if (writeTarget() === "db" && !isSampleId(id)) {
+    await deleteDbEvent(id, await personId());
+    refresh();
+    return;
+  }
   content.events = content.events.filter((e) => e.id !== id);
   refresh();
 }
 
 // ---- Forms ----
 
-export async function saveFormConfig(formData: FormData): Promise<void> {
+const FORM_QUESTIONS_MAX = 30;
+
+type QuestionCheck = { ok: true; questions: { key: string; label: string }[] } | { ok: false; message: string };
+
+// Rows left completely blank are the editor's spare rows and are dropped. A row with only one half filled, a repeated key or
+// more rows than the limit is refused with a message, rather than dropped without a word.
+function checkFormQuestions(raw: string): QuestionCheck {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return { ok: false, message: "The questions could not be read. Reload the page and try again." };
+  }
+  if (!Array.isArray(parsed)) return { ok: false, message: "The questions could not be read. Reload the page and try again." };
+  const questions: { key: string; label: string }[] = [];
+  const seen = new Set<string>();
+  for (const [index, q] of parsed.entries()) {
+    const key = String(q?.key ?? "").trim().slice(0, 50);
+    const label = String(q?.label ?? "").trim().slice(0, 300);
+    if (!key && !label) continue;
+    const row = `Question ${index + 1}`;
+    if (!key) return { ok: false, message: `${row} needs a key.` };
+    if (!label) return { ok: false, message: `${row} needs the question text.` };
+    if (seen.has(key)) return { ok: false, message: `${row} repeats the key "${key}". Each key must be unique.` };
+    seen.add(key);
+    questions.push({ key, label });
+  }
+  if (questions.length > FORM_QUESTIONS_MAX) return { ok: false, message: `A form can have at most ${FORM_QUESTIONS_MAX} questions.` };
+  return { ok: true, questions };
+}
+
+// The form editor's save. It returns a FormState (useActionState) so the editor can say what was refused or that it saved.
+export async function saveFormConfigState(_prev: FormState, formData: FormData): Promise<FormState> {
   await requirePage("owner");
   const formKey = text(formData, "formKey", 50);
-  if (!/^[a-z0-9_-]{1,50}$/.test(formKey)) return;
+  if (!/^[a-z0-9_-]{1,50}$/.test(formKey)) return { status: "error", message: "The form key must be 1 to 50 lowercase letters, numbers, dashes or underscores." };
   const closeRaw = text(formData, "closeAt", 40);
   const close = closeRaw ? new Date(closeRaw) : null;
-  let questions: { key: string; label: string }[] = [];
-  try {
-    const parsed: unknown = JSON.parse(String(formData.get("questionsJson") ?? "[]"));
-    if (Array.isArray(parsed)) {
-      questions = parsed
-        .map((q) => ({ key: String(q?.key ?? "").trim().slice(0, 50), label: String(q?.label ?? "").trim().slice(0, 300) }))
-        .filter((q) => q.key && q.label)
-        .slice(0, 30);
-    }
-  } catch {
-    /* keep no questions */
-  }
+  if (close && isNaN(close.getTime())) return { status: "error", field: "closeAt", message: "The closing time is not a valid date." };
+  const checked = checkFormQuestions(String(formData.get("questionsJson") ?? "[]"));
+  if (!checked.ok) return { status: "error", field: "questions", message: checked.message };
   const next = {
     form_key: formKey,
     title: text(formData, "title", 200),
     description: text(formData, "description", 2000),
-    questions,
-    close_at: close && !isNaN(close.getTime()) ? close.toISOString() : null,
+    questions: checked.questions,
+    close_at: close ? close.toISOString() : null,
     updated_by: actor(),
     updated_at: new Date().toISOString(),
   };
-  const at = content.configs.findIndex((c) => c.form_key === formKey);
-  if (at >= 0) content.configs[at] = next;
-  else content.configs.push(next);
+  try {
+    if (writeTarget() === "db") {
+      await saveDbFormConfig(
+        {
+          formKey,
+          title: next.title,
+          description: next.description,
+          questions: next.questions,
+          closeAt: next.close_at ? new Date(next.close_at) : null,
+        },
+        await personId(),
+      );
+    } else {
+      const at = content.configs.findIndex((c) => c.form_key === formKey);
+      if (at >= 0) content.configs[at] = next;
+      else content.configs.push(next);
+    }
+  } catch (error) {
+    return { status: "error", message: error instanceof Error && error.message ? error.message : "The form could not be saved." };
+  }
   refresh();
+  return { status: "saved", message: "Saved." };
+}
+
+// The plain form action (the "New form" box on the Forms page), which has no place to show a result.
+export async function saveFormConfig(formData: FormData): Promise<void> {
+  await saveFormConfigState({ status: "idle" }, formData);
 }
 
 export async function decideFormSubmission(formData: FormData): Promise<void> {
   await requirePage("owner");
   const decision = String(formData.get("decision") ?? "");
-  const row = content.submissions.find((s) => s.id === num(formData, "id"));
+  const id = text(formData, "id", 64);
+  if (writeTarget() === "db" && !isSampleId(id)) {
+    if (decision !== "accepted" && decision !== "rejected") return;
+    await decideDbSubmission(id, decision, text(formData, "note", 1000), await personId());
+    refresh();
+    return;
+  }
+  const row = content.submissions.find((s) => s.id === id);
   if (!row || (decision !== "accepted" && decision !== "rejected")) return;
   Object.assign(row, { status: decision, decided_by: actor(), decided_at: new Date().toISOString(), decision_note: text(formData, "note", 1000) });
   refresh();
@@ -371,7 +487,13 @@ export async function decideFormSubmission(formData: FormData): Promise<void> {
 
 export async function markFormSubmissionInteresting(formData: FormData): Promise<void> {
   await requirePage("owner");
-  const row = content.submissions.find((s) => s.id === num(formData, "id"));
+  const id = text(formData, "id", 64);
+  if (writeTarget() === "db" && !isSampleId(id)) {
+    await setDbSubmissionInterest(id, true, await personId());
+    refresh();
+    return;
+  }
+  const row = content.submissions.find((s) => s.id === id);
   if (!row || row.status !== "pending") return;
   Object.assign(row, { interesting_at: new Date().toISOString(), interesting_by: actor() });
   refresh();
@@ -379,7 +501,13 @@ export async function markFormSubmissionInteresting(formData: FormData): Promise
 
 export async function unmarkFormSubmissionInteresting(formData: FormData): Promise<void> {
   await requirePage("owner");
-  const row = content.submissions.find((s) => s.id === num(formData, "id"));
+  const id = text(formData, "id", 64);
+  if (writeTarget() === "db" && !isSampleId(id)) {
+    await setDbSubmissionInterest(id, false, await personId());
+    refresh();
+    return;
+  }
+  const row = content.submissions.find((s) => s.id === id);
   if (!row) return;
   Object.assign(row, { interesting_at: null, interesting_by: "" });
   refresh();

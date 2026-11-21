@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { requirePage, landingFor } from "@/reviewer-dash/lib/guard";
-import { countReviewTabs } from "@/reviewer-dash/lib/db";
+import { countPendingByKind, countReviewTabs } from "@/reviewer-dash/lib/db";
 import { ReviewTabs } from "@/reviewer-dash/app/_components/ReviewTabs";
 import { PageHeader } from "@/reviewer-dash/app/_ui/ui";
 
@@ -14,17 +14,21 @@ async function ReviewTabsWithCounts({
   wants,
   access,
   ...tabProps
-}: Omit<TabProps, "pending" | "spotCheckCount" | "proposedBanCount"> & {
-  wants: { pending: boolean; spotCheck: boolean; proposedBans: boolean } | null;
+}: Omit<TabProps, "pending" | "secondPassCount" | "proposedBanCount" | "queues" | "queueScope"> & {
+  wants: { pending: boolean; secondPass: boolean; proposedBans: boolean } | null;
   access: { reviewQueues: "software" | "hardware" | "both" };
 }) {
-  // A reviewer limited to one queue is counted that queue only.
+  // A reviewer limited to one queue is counted that queue only. One who can open both also gets the split, so the badge can follow the
+  // queue the page lists instead of adding software and hardware together.
   const counts = wants ? await countReviewTabs(access.reviewQueues === "both" ? undefined : access.reviewQueues) : null;
+  const queues = wants?.pending && access.reviewQueues === "both" ? await countPendingByKind() : undefined;
   return (
     <ReviewTabs
       {...tabProps}
+      queues={queues}
+      queueScope={access.reviewQueues}
       pending={wants?.pending ? counts?.pending : undefined}
-      spotCheckCount={wants?.spotCheck ? counts?.spotCheck : undefined}
+      secondPassCount={wants?.secondPass ? counts?.secondPass : undefined}
       proposedBanCount={wants?.proposedBans ? counts?.proposedBans : undefined}
     />
   );
@@ -39,16 +43,16 @@ export default async function ReviewLayout({ children }: { children: React.React
   const access = await requirePage("staff");
   if (!access.isReviewer && !access.canFraudReview) redirect(landingFor(access));
   const fraudOnly = !access.isReviewer && !access.isOwner;
-  // Spot check is worked by owners and final reviewers (second_pass).
-  const canSpotCheck = access.isOwner || access.canSecondPass;
+  // Second pass is worked by owners and final reviewers (second_pass).
+  const canSecondPass = access.isOwner || access.canSecondPass;
   const tabProps = {
     isSuper: access.isOwner,
-    canSpotCheck,
+    canSecondPass,
     canFraudReview: access.canFraudReview,
     fraudOnly,
   };
-  const countsNeeded = !fraudOnly || canSpotCheck || access.isOwner;
-  const wants = { pending: !fraudOnly, spotCheck: canSpotCheck, proposedBans: access.isOwner };
+  const countsNeeded = !fraudOnly || canSecondPass || access.isOwner;
+  const wants = { pending: !fraudOnly, secondPass: canSecondPass, proposedBans: access.isOwner };
 
   return (
     <div>

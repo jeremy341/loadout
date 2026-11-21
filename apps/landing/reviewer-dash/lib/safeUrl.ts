@@ -11,17 +11,23 @@ import { config } from "@/reviewer-dash/app/_generated/config";
 // validation existed, or any other database-controlled URL field a reviewer
 // page ends up linking.
 //
-// Returns true only for a plain http(s) link, or a same-app-relative path (no
-// scheme at all) - never for javascript:/vbscript:/file:/data:/any other
-// scheme.
+// Returns true only for an absolute http(s) link ("http://" or "https://" written out, with a host) or a same-app path that starts
+// with exactly one slash. Never for javascript:/vbscript:/file:/data:/any other scheme, protocol-relative "//host", a backslash
+// ("\host", "/\host": browsers read it as a slash), "http:host" without the slashes, or a value with a control character or a
+// space: the URL parser silently drops tabs and newlines and would let those through.
+const CONTROL_OR_SPACE = /[\u0000-\u0020\u007f-\u009f\\]/;
+const APP_BASE = "https://app.invalid";
+
 export function isSafeUrl(url: string | null | undefined): url is string {
   const s = String(url ?? "").trim();
-  if (!s) return false;
+  if (!s || s.length > 2000 || CONTROL_OR_SPACE.test(s)) return false;
+  const absolute = /^https?:\/\/[^/?#]/i.test(s);
+  const appPath = s.startsWith("/") && !s.startsWith("//");
+  if (!absolute && !appPath) return false;
   try {
-    // A base is required to resolve a relative URL ("/foo"); it's otherwise
-    // unused - we only look at the resulting protocol.
-    const u = new URL(s, "https://pixl.invalid");
-    return u.protocol === "http:" || u.protocol === "https:";
+    const u = new URL(s, APP_BASE);
+    if (appPath) return u.origin === APP_BASE;
+    return (u.protocol === "http:" || u.protocol === "https:") && u.hostname !== "";
   } catch {
     return false;
   }
@@ -42,7 +48,11 @@ export function safeRedirectPath(raw: unknown, fallback: string): string {
     const u = new URL(s, "https://pixl.invalid");
     // A scheme/host smuggled in any form resolves off the base origin.
     if (u.origin !== "https://pixl.invalid") return fallback;
-    return u.pathname + u.search + u.hash;
+    const path = u.pathname + u.search + u.hash;
+    // A same-origin input can still normalize to a protocol-relative address: /..//evil.com keeps the base origin here but
+    // becomes Location: //evil.com in the browser. Check the result, not just the input.
+    if (path.startsWith("//")) return fallback;
+    return path;
   } catch {
     return fallback;
   }
@@ -65,5 +75,36 @@ export function isSafeImageUrl(url: string | null | undefined): url is string {
     return IMAGE_HOSTS.includes(u.hostname.toLowerCase());
   } catch {
     return false;
+  }
+}
+
+// A participant's own uploaded picture, served by this app (app/api/journal-media/[id]). The id is a cuid.
+const MEDIA_PATH = /^\/api\/journal-media\/[A-Za-z0-9_-]{8,40}$/;
+
+export function isJournalMediaPath(url: string | null | undefined): url is string {
+  return MEDIA_PATH.test(String(url ?? "").trim());
+}
+
+// Where an <img src> may point on the reviewer site: the shop/CDN allowlist or the participant media path. Anything else is shown
+// as a link or as nothing. Pair it with referrerPolicy="no-referrer" so the picture's host never sees which page is being reviewed.
+export function isAllowedImageSrc(url: string | null | undefined): url is string {
+  return isSafeImageUrl(url) || isJournalMediaPath(url);
+}
+
+// HTML-attribute escaping for a value written into a string of markup (a srcDoc, a <base href>).
+export function escapeAttr(value: string): string {
+  return value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
+}
+
+// A README's <base href> is upstream-controlled: only an absolute https address (no credentials, control
+// characters or spaces) is allowed, and all five HTML-attribute metacharacters are escaped before insertion.
+export function safeBaseHref(value: string | null | undefined): string | null {
+  if (!value) return null;
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "https:" || parsed.username || parsed.password || /[\u0000-\u0020\u007f]/.test(value)) return null;
+    return escapeAttr(parsed.href);
+  } catch {
+    return null;
   }
 }

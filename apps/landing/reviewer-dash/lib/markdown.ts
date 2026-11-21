@@ -1,31 +1,71 @@
 // Safe Markdown subset for rendering player journals in the dashboard. Mirrors
-// the game's web renderer (web/pixl.js): escapes first, restricts URLs to
-// http(s), supports headings, bold/italic/strike, inline + fenced code, links,
-// images, lists, blockquotes and rules. Returns an HTML string for
-// dangerouslySetInnerHTML , never trust the input, so everything is escaped.
+// the game's web renderer (web/pixl.js): restricts URLs to http(s), supports
+// headings, bold/italic/strike, inline + fenced code, links, images, lists,
+// blockquotes and rules. Returns an HTML string for dangerouslySetInnerHTML,
+// never trust the input, so everything is escaped.
+//
+// Inline text is tokenised on the RAW text: code spans, images and links are pulled out and replaced by placeholders first (their
+// URLs are checked on the raw string and every part is escaped when its tag is built), then emphasis runs on what is left, then the
+// placeholders go back. So `*` or `_` inside a URL or a code span is never read as emphasis, and the page's markup is never built
+// from text that was escaped halfway.
+//
+// Pictures: a participant's own upload (/api/journal-media/<id>) or an https image on the shop/CDN allowlist. Any other image
+// (a tracker pixel, an arbitrary host) is shown as a plain link, or as its alt text when the address is not a web link at all. Every
+// picture and link carries no-referrer, and links open with noopener.
+import { isAllowedImageSrc, isSafeUrl } from "./safeUrl";
+
 function esc(s: string): string {
   return s.replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string,
   );
 }
 
-function safeUrl(u: string): boolean {
-  return /^https?:\/\/[^"'\s]+$/i.test(u);
+// A web link a reader may click: absolute http(s) only (a markdown link is never an app path or a scheme).
+function isWebLink(u: string): boolean {
+  return /^https?:\/\//i.test(u) && isSafeUrl(u);
 }
 
-function inline(raw: string): string {
-  return esc(raw)
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-    .replace(/!\[([^\[\]]*)\]\((https?:\/\/[^)\s\[\]]+)\)/g, (_m, a, u) =>
-      safeUrl(u) ? `<img class="md-img" src="${u}" alt="${a}" loading="lazy" />` : "",
-    )
-    .replace(/\[([^\[\]]+)\]\((https?:\/\/[^)\s\[\]]+)\)/g, (_m, t, u) =>
-      safeUrl(u) ? `<a href="${u}" target="_blank" rel="noreferrer">${t}</a>` : t,
-    )
+function anchor(url: string, innerHtml: string): string {
+  return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${innerHtml}</a>`;
+}
+
+const SLOT = "\u0000";
+
+function emphasis(escaped: string): string {
+  return escaped
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/__([^_]+)__/g, "<strong>$1</strong>")
     .replace(/(^|[^*])\*([^*\s][^*]*?)\*/g, "$1<em>$2</em>")
     .replace(/~~([^~]+)~~/g, "<s>$1</s>");
+}
+
+function inline(rawInput: string): string {
+  const raw = rawInput.replace(/\u0000/g, "");
+  const slots: string[] = [];
+  const stash = (html: string): string => {
+    slots.push(html);
+    return `${SLOT}${slots.length - 1}${SLOT}`;
+  };
+
+  const tokenised = raw
+    .replace(/`([^`]+)`/g, (_m, code: string) => stash(`<code>${esc(code)}</code>`))
+    .replace(/!\[([^\[\]]*)\]\(([^)\s]+)\)/g, (_m, alt: string, url: string) => {
+      if (isAllowedImageSrc(url)) {
+        return stash(`<img class="md-img" src="${esc(url)}" alt="${esc(alt)}" loading="lazy" referrerpolicy="no-referrer" />`);
+      }
+      if (isWebLink(url)) return stash(anchor(url, esc(alt || url)));
+      return stash(esc(alt));
+    })
+    .replace(/\[([^\[\]]+)\]\(([^)\s]+)\)/g, (_m, text: string, url: string) =>
+      isWebLink(url) ? stash(anchor(url, emphasis(esc(text)))) : stash(emphasis(esc(text))),
+    );
+
+  let html = emphasis(esc(tokenised));
+  // A placeholder can sit inside another one (a picture inside a link), so restore until none is left.
+  for (let guard = 0; guard < 8 && html.includes(SLOT); guard++) {
+    html = html.replace(/\u0000(\d+)\u0000/g, (_m, n: string) => slots[Number(n)] ?? "");
+  }
+  return html.replace(/\u0000/g, "");
 }
 
 export function renderMarkdown(src: string | null | undefined): string {

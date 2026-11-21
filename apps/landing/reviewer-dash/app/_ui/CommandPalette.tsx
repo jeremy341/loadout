@@ -148,7 +148,7 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
               <button
                 type="button"
                 className="hc-search-item"
-                aria-selected={i === cursor}
+                aria-pressed={i === cursor}
                 ref={i === cursor ? (el) => el?.scrollIntoView({ block: "nearest" }) : undefined}
                 onMouseMove={() => setCursor(i)}
                 onClick={() => go(hit.href)}

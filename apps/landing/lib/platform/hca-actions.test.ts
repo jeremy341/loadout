@@ -84,7 +84,7 @@ const savedClient = globalForDb.loadoutDbClientReview;
 process.env.DATABASE_URL = "postgres://unused@localhost/loadout";
 globalForDb.loadoutDbClientReview = fakePrisma;
 
-const { consumeAttempt, bindIdentity } = await import("./hca-actions");
+const { consumeAttempt, bindIdentity, setClientForTests } = await import("./hca-actions");
 const { GET } = await import("../../app/api/auth/hackclub/start/route");
 
 afterAll(() => {
@@ -95,6 +95,7 @@ afterAll(() => {
   }
   if (savedClient === undefined) delete globalForDb.loadoutDbClientReview;
   else globalForDb.loadoutDbClientReview = savedClient;
+  setClientForTests(undefined);
 });
 
 // Re-establish the fake client before every case: the runner shares globalThis across test files,
@@ -102,6 +103,7 @@ afterAll(() => {
 beforeEach(() => {
   process.env.DATABASE_URL = "postgres://unused@localhost/loadout";
   globalForDb.loadoutDbClientReview = fakePrisma;
+  setClientForTests(fakePrisma as never);
 });
 
 const startRequest = (ip: string) =>

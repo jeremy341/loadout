@@ -19,7 +19,12 @@ import { fetchSlackAvatar } from "./slack-avatar";
 // db() caches its client on globalThis. Reading that cache here as well keeps the fake client
 // installed by the sign-in tests in charge even when another test file has replaced the db module.
 const globalForDb = globalThis as unknown as { loadoutDbClientReview?: ReturnType<typeof db> };
-const client = () => globalForDb.loadoutDbClientReview ?? db();
+let injectedClient: ReturnType<typeof db> | undefined;
+// The test runner can share a module across files with different globals, so it sets this directly.
+export function setClientForTests(value: ReturnType<typeof db> | undefined): void {
+  injectedClient = value;
+}
+const client = () => injectedClient ?? globalForDb.loadoutDbClientReview ?? db();
 
 // Starts one sign-in: stores the hash of the state and of a browser nonce, and returns the raw values for the redirect and cookie.
 export async function startAttempt(now = new Date()): Promise<{ state: string; nonce: string; expiresAt: Date }> {

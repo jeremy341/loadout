@@ -920,9 +920,8 @@ test("the page advertises the share image, the touch icon and the favicon", asyn
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", "https://loadout.dino.icu");
   await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
   const imageBodies: Buffer[] = [];
-  const expectedImageOrigin = process.env.CI
-    ? "https://loadout.dino.icu"
-    : new URL(process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${process.env.LOADOUT_TEST_PORT ?? "3001"}`).origin;
+  // CI starts a dev server, so the static share images are served from its own origin.
+  const expectedImageOrigin = new URL(process.env.LOADOUT_TEST_BASE_URL ?? `http://localhost:${process.env.LOADOUT_TEST_PORT ?? "3001"}`).origin;
   for (const [attribute, name] of [["property", "og:image"], ["name", "twitter:image"]]) {
     const url = await page.locator(`meta[${attribute}="${name}"]`).first().getAttribute("content");
     expect(url, name).toBeTruthy();

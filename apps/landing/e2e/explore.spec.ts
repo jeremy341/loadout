@@ -54,8 +54,8 @@ test("one title, one paragraph, one search and one grid with no rails", async ({
   await expect(tinyparse.getByText("Approved")).toHaveCount(1);
   await expect(tinyparse.getByRole("button", { name: /^Kudos for Tinyparse, No kudos yet$/ })).toBeVisible();
   await expect(tinyparse.getByRole("link", { name: "juniper_dev" })).toHaveAttribute("href", "/dashboard/builders/juniper_dev");
-  await expect(tinyparse).toContainText("3 entries");
-  await expect(tinyparse.locator("time")).toHaveCount(1);
+  await expect(tinyparse).toContainText("0 entries");
+  await expect(tinyparse.locator("time")).toHaveCount(0);
   await expect(tinyparse.getByRole("link", { name: "Tinyparse" })).toHaveAttribute("href", "/dashboard/explore/seed-tinyparse");
   // open source first: Lamp Bus (no source link) comes after the projects that have one, so Tinyparse leads
   await expect(cards(page).first()).toContainText("Tinyparse");

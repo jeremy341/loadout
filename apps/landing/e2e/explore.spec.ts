@@ -354,4 +354,3 @@ for (const [width, height] of [[390, 844], [1440, 900]] as const) {
     });
   }
 }
-

@@ -31,11 +31,16 @@ const tx: Record<string, unknown> = {
   auditEvent: { create: mock(async (args: unknown) => { record("auditEvent.create", [args]); return {}; }) },
   $transaction: mock(async (fn: (client: typeof tx) => Promise<unknown>) => fn(tx)),
 };
-mock.module("./db", () => ({ db: () => tx }));
+const realDb = await import("./db");
+const realSession = await import("./session");
+const realReviewData = await import("./review-data");
+
+mock.module("./db", () => ({ ...realDb, db: () => tx as never }));
 
 const requireAccess = mock(async () => viewer);
-mock.module("./session", () => ({ requireAccess }));
+mock.module("./session", () => ({ ...realSession, requireAccess }));
 mock.module("./review-data", () => ({
+  ...realReviewData,
   loadDeskShip: mock(async () => ship),
   minutesOf: (hours: number) => Math.round(hours * 60),
 }));

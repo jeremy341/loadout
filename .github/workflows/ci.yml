@@ -115,6 +115,7 @@ jobs:
       DATABASE_URL: postgresql://loadout:loadout-local@postgres:5432/loadout_dev
       NODE_ENV: development
       LOADOUT_LOCAL_TEST_ACCOUNTS: "true"
+      LOADOUT_E2E_WORKERS: "1"
     # The pinned Playwright image already carries Chromium and its system libraries, so a shard
     # skips the download and the apt install that used to cost about twenty seconds each. The
     # image tag must match the locked @playwright/test version in bun.lock.

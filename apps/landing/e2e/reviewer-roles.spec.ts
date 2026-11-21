@@ -104,7 +104,7 @@ test.describe("roles with a landing page", () => {
       await page.goto(path);
       await expect(page, path).toHaveURL(/\/review\/fraud-reviews$/);
     }
-    await expect(page.getByRole("tab", { name: /^Integrity reviews/ })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Review sections" }).getByRole("link", { name: /^Integrity reviews/ })).toBeVisible();
   });
 });
 
@@ -113,8 +113,8 @@ test.describe("a hardware-only reviewer", () => {
     await actAs(context, "hardware-reviewer");
     await page.goto("/review");
     // A one-queue reviewer gets no software/hardware switch, only their own queue.
-    await expect(page.getByRole("tab", { name: /^Needs review/ })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /queue$/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /^Needs review/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /^(Software|Hardware) queue/ })).toHaveCount(0);
     const ships = await page.locator('main a[href^="/review/"]').evaluateAll((links) => links.map((a) => a.getAttribute("href")));
     expect(ships.length).toBeGreaterThan(0);
     // Ship 2043 is software. The dev server streams the not-found page after a 200 header, so the content is what is checked.

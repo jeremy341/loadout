@@ -22,7 +22,8 @@ async function shipProject(page: Page, name: string) {
   log("created");
   await saveProjectSettings(page, {
     description: "A small tool that turns a messy log file into a tidy table for quick reading by people.",
-    repoUrl: "https://codeberg.org/example-handle/log-table",
+    // The README gate only fetches GitHub sources; other hosts fail closed and keep Submit for review disabled.
+    repoUrl: "https://github.com/jeremy341/loadout",
     track: "Tools",
   });
   await addJournalEntryViaPage(page, {
@@ -216,7 +217,8 @@ test.describe("the review desk against the database", () => {
 
       await page.goto(`${projectUrl}?tab=ship`);
       const note = page.locator("#ship").getByRole("note");
-      await expect(note).toContainText("README missing steps", { timeout: 15000 });
+      // The reason label sits in the returned-ship section; the note itself carries the reviewer's words.
+      await expect(page.locator("#ship")).toContainText("Reason: README missing steps", { timeout: 15000 });
       await expect(note).toContainText("The README has no run steps");
       await page.screenshot({ path: `${SHOTS}/reviewer-builder-changes.png`, fullPage: true });
     } finally {

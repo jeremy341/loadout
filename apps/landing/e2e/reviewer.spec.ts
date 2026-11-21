@@ -28,9 +28,9 @@ test.describe("the queue", () => {
     await page.goto("/review");
     await expect(page).toHaveTitle(/LOADOUT Review/);
     for (const name of [/^Needs review/, /^Reviewed/, /^Stats/, /^Integrity reviews/, /^Proposed bans/, /^Second pass/, /^Reviewer log/, /^Audit notes/, /^Guidelines/]) {
-      await expect(page.getByRole("tab", { name }).first()).toBeVisible();
+      await expect(page.getByRole("link", { name }).first()).toBeVisible();
     }
-    await expect(page.getByRole("tab", { name: /^Needs review/ }).first()).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByRole("link", { name: /^Needs review/ }).first()).toHaveAttribute("aria-current", "page");
     await expect(page.getByRole("columnheader", { name: "Maker" })).toBeVisible();
     await expect(page.locator(SHIP_LINKS).first()).toBeVisible();
   });
@@ -54,13 +54,13 @@ test.describe("the queue", () => {
   test("the owner switches between the software and hardware queues", async ({ page }) => {
     await page.goto("/review");
     const software = await hrefs(page);
-    await page.getByRole("tab", { name: /^Hardware queue/ }).click();
+    await page.getByRole("link", { name: /^Hardware queue/ }).click();
     await expect(page).toHaveURL(/kind=hardware/);
-    await expect(page.getByRole("tab", { name: /^Hardware queue/ })).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByRole("link", { name: /^Hardware queue/ })).toHaveAttribute("aria-current", "page");
     const hardware = await hrefs(page);
     expect(hardware.length).toBeGreaterThan(0);
     expect(hardware.filter((href) => software.includes(href))).toEqual([]);
-    await page.getByRole("tab", { name: /^Software queue/ }).click();
+    await page.getByRole("link", { name: /^Software queue/ }).click();
     await expect(page).not.toHaveURL(/kind=hardware/);
   });
 

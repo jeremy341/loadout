@@ -105,7 +105,7 @@ export default async function ReviewerLayout({ children }: { children: React.Rea
             <div className="flex min-w-48 flex-1 justify-center">
               <CommandPalette nav={nav} />
             </div>
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex min-w-0 max-w-full flex-wrap items-center justify-end gap-3">
               <span className="hidden text-sm 2xl:inline">
                 <span className="font-bold">{firstName}</span>{" "}
                 <span className="hc-muted">

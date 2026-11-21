@@ -11,7 +11,9 @@ import { withNotice } from "../lib/sample/referer";
 import { databaseConfigured } from "@/lib/platform/db";
 import * as live from "@/lib/platform/moderation-data";
 import { ownerEmails, readViewer } from "@/lib/platform/session";
-import { knownPlayers } from "../lib/sample/moderation-data";
+import { canDecide } from "@/lib/reviewer/moderation";
+import { iso } from "../lib/sample/index";
+import { allProposals, changes, knownPlayers, nextModerationId, type BanProposalRow } from "../lib/sample/moderation-data";
 
 const PROPOSED = "/bans?tab=proposed";
 const NO_DATABASE = "The database is not connected here, so nothing was saved.";
@@ -19,11 +21,57 @@ const MISSING_PROPOSAL = "That ban proposal is sample data or was already decide
 
 // Confirms (owner), overturns (a second-pass reviewer or an owner) or withdraws (the proposer) one proposal.
 async function decideProposal(formData: FormData, decision: "confirm" | "overturn", role: "owner" | "reviewer"): Promise<void> {
-  await requirePage(role);
+  const access = await requirePage(role);
   const id = Number(formData.get("id") ?? 0);
   if (!id) return;
   const viewer = await readViewer();
   if (!viewer) redirect(withNotice(PROPOSED, "error", "Sign in again to decide this."));
+  // A proposal on a sample builder has no Person row, so the database data layer cannot see it. Decide it in the same
+  // in-memory store the Bans page reads, keeping the two-person rule: the proposer withdraws, someone else decides.
+  const sample = allProposals().find((p) => p.id === id && p.status === "pending");
+  if (sample) {
+    const me = access.session.slackId;
+    if (decision === "confirm" && !canDecide({ proposedBy: sample.proposed_by }, me)) {
+      redirect(withNotice(PROPOSED, "error", "A different owner has to confirm it."));
+    }
+    const by = access.session.name;
+    const at = iso(0);
+    const patch: Partial<BanProposalRow> = {
+      status: decision === "confirm" ? "confirmed" : "rejected",
+      decided_by: by,
+      decided_at: at,
+    };
+    if (decision === "confirm") {
+      const banId = nextModerationId();
+      const days = sample.days > 0 ? sample.days : null;
+      changes.bans.unshift({
+        id: banId,
+        user_id: sample.user_id,
+        reason: sample.reason,
+        banned_by: by,
+        expires_at: days === null ? null : iso(-days * 24),
+        lifted_at: null,
+        created_at: at,
+        users: sample.users,
+      });
+      patch.ban_id = banId;
+    }
+    changes.proposals.set(id, patch);
+    changes.log.unshift({
+      id: nextModerationId(),
+      user_id: sample.user_id,
+      action: decision === "confirm" ? "ban" : "ban_rejected",
+      detail: decision === "confirm"
+        ? `${sample.days > 0 ? `${sample.days} days` : "Permanent"}, ${sample.reason} (proposed by ${sample.proposed_by})`
+        : `proposed by ${sample.proposed_by}`,
+      actor: by,
+      created_at: at,
+      player_name: sample.users?.display_name ?? sample.user_id,
+    });
+    revalidatePath("/", "layout");
+    revalidatePath("/bans");
+    return;
+  }
   if (!databaseConfigured()) redirect(withNotice(PROPOSED, "error", NO_DATABASE));
   const result = await live.decideBanProposal({
     access: viewer.access,

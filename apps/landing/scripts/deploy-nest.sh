@@ -21,6 +21,7 @@ if [ ! -f "$RELEASE_ARCHIVE" ]; then
 fi
 
 RELEASE_DIR="$APP_ROOT/releases/$RELEASE_SHA"
+APP_DIR="$RELEASE_DIR/apps/landing"
 CURRENT_LINK="$APP_ROOT/current"
 PREVIOUS_LINK="$APP_ROOT/previous"
 SHARED_ENV="$APP_ROOT/shared/loadout.env"
@@ -37,13 +38,13 @@ if [ ! -f "$RELEASE_DIR/package.json" ]; then
   tar -xzf "$RELEASE_ARCHIVE" -C "$RELEASE_DIR"
 fi
 
-if [ ! -f "$RELEASE_DIR/package.json" ] || [ ! -d "$RELEASE_DIR/.next" ]; then
+if [ ! -f "$RELEASE_DIR/package.json" ] || [ ! -f "$APP_DIR/package.json" ] || [ ! -d "$APP_DIR/.next" ]; then
   echo "Release archive is missing the app contract"
   exit 2
 fi
 
 # The environment lives outside the release so it survives every deploy.
-ln -sfn "$SHARED_ENV" "$RELEASE_DIR/.env.local"
+ln -sfn "$SHARED_ENV" "$APP_DIR/.env.local"
 
 if [ -L "$CURRENT_LINK" ]; then
   ln -sfn "$(readlink "$CURRENT_LINK")" "$PREVIOUS_LINK"
@@ -55,7 +56,7 @@ set -a
 set +a
 
 (
-  cd "$CURRENT_LINK"
+  cd "$CURRENT_LINK/apps/landing"
   # Use the Prisma CLI pinned in the release. bunx resolves the latest release, which is a different major version.
   ./node_modules/.bin/prisma migrate deploy
   pm2 startOrReload ecosystem.config.cjs --update-env
@@ -77,7 +78,7 @@ if [ "$healthy" != true ]; then
   if [ -L "$PREVIOUS_LINK" ]; then
     ln -sfn "$(readlink "$PREVIOUS_LINK")" "$CURRENT_LINK"
     (
-      cd "$CURRENT_LINK"
+      cd "$CURRENT_LINK/apps/landing"
       pm2 reload ecosystem.config.cjs --update-env
     )
   fi

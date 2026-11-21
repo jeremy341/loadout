@@ -6,7 +6,7 @@ order: 190
 status: draft
 ---
 
-Who's making all of this? There are four of us putting LOADOUT together: Jerry, Fazin, Netic and Kernel. The work goes from figuring out the program rules to building this site, developing the bots and looking after the Slack community. Here's who handles each part, with links if you'd like to see what else they've made.
+Who's making all of this? There are four of us putting LOADOUT together: Jerry leads, and Fazin, Netic and Kernel are co-organizers. The work goes from figuring out the program rules to building this site, developing the bots and looking after the Slack community. Here's who handles each part, with links if you'd like to see what else they've made.
 
 ## Jerry, lead organizer {#jerry}
 
@@ -20,9 +20,9 @@ Fazin researches how LOADOUT should work and helps organize the program.
 
 Seen the mole on the homepage? That's Orry, who also has a job in Slack. Netic develops the bot that lets Orry answer program questions using these Docs and pass difficult questions to human helpers. You can see the work in the bot's [public repository](https://github.com/NeticYTOF/orry), under Netic's NeticYTOF account.
 
-## Kernel, community manager {#kernel}
+## Kernel, co-organizer and community lead {#kernel}
 
-Kernel looks after the Slack community and develops Goose Lee, the duck you'll meet there. Alongside the bot, he works on community ideas and events so people have places to share what they're making and get to know the other builders.
+Kernel is a co-organizer and is responsible for the community. He looks after the Slack community and develops Goose Lee, the duck you'll meet there. Alongside the bot, he works on community ideas and events so people have places to share what they're making and get to know the other builders.
 
 ## Hack Club {#hack-club}
 

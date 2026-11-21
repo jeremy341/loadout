@@ -6,10 +6,6 @@
 
 The **Toolbelt** is where builders use other builders' finished, approved LOADOUT tool/projects in their own work. A tool/project is an accepted ship; "tool" is shorthand for it, and the rules say "tool/project".
 
-### Why it exists
-
-Toolbelt ties the two halves of a loadout together. What a builder ships becomes part of their own Digital Loadout (Plan 01, section 4.6). Through Toolbelt, that same shipped tool/project can become part of another builder's loadout, and both builders are rewarded. Announcement copy follows this link: what you ship becomes part of your loadout, and Toolbelt is how others use it.
-
 ## 2. What can be equipped
 
 - Only accepted tool/projects, which must be open source (Plan 01).

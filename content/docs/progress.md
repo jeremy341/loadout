@@ -31,11 +31,11 @@ So ten approved hours earn 100 Ore, and twenty earn 200. There's no multiplier, 
 
 A project has exactly one track. You pick it when you create the project, and all the Track XP from a ship goes to that track. A board and the service that runs on it are two different projects if you want both fields to count, each with its own track.
 
-Each approved hour gives **10 Track XP** in the project's track. XP is a straight count of your approved hours, so the hours you've logged tell you your XP. Your level depends on your approved hours in one track, not on XP.
+Each approved hour gives **10 Track XP**, split across the tracks your ship uses. XP is a straight count of your approved hours, so the hours you've logged tell you your XP. Your level depends on your approved hours in one track, not on XP.
 
 ## Your field levels {#levels}
 
-Each track has **20 lifetime levels**. LV.15 is a target of about **178 approved hours of solid work in one track**, LV.18 about **236 hours**, and LV.20 about **275 hours**. The Track XP figures for these levels are still being set, so this page doesn't give an XP number for them yet. If you spread your projects equally between two tracks, reaching LV.15 in both is a target of about 356 hours altogether.
+Each track has **20 lifetime levels**. LV.15 is a target of about **178 approved hours of solid work in one track**, LV.18 about **236 hours**, and LV.20 about **275 hours**. The Track XP figures for these levels are still being set, so this page doesn't give an XP number for them yet. If you split the work equally between two tracks, reaching LV.15 in both is a target of about 356 hours altogether.
 
 If the ship also qualifies for the [Era bonus](/docs/eras#bonus), add 10% of its base Ore award. A 100-Ore base award becomes 110 Ore. It adds no Track XP. How it combines with future Ore bonuses is still undecided.
 

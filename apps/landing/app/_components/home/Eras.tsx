@@ -7,7 +7,7 @@ export function Eras() {
     <>
       <div className="pit">
         <b>
-          −600 M
+          −400 M
         </b>
         <span>
           2. Sohle

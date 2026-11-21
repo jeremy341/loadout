@@ -28,7 +28,7 @@ test("the footer docs link leaves the homepage for the separate docs route", asy
   await expect(page.locator(".home #docs")).toHaveCount(0);
   await expect(page.locator(".nav").getByRole("link", { name: "DOCS" })).toHaveCount(0);
   await page.locator("footer.ft").getByRole("link", { name: "LOADOUT docs", exact: true }).click();
-  await expect(page).toHaveURL(/\/docs\/start$/);
+  await expect(page).toHaveURL(/\/docs$/);
   await expect(page.getByRole("heading", { level: 1, name: "What is LOADOUT?" })).toBeVisible();
 });
 
@@ -400,6 +400,31 @@ test("sections reveal with main's triggered slide-in, not a scroll-scrubbed fade
   expect(await page.locator(".reveal").count()).toBeGreaterThanOrEqual(7);
   await expect(page.locator(".reveal[data-stagger]").first()).toHaveCount(1);
   await expect(page.locator("#tracks .card").first()).toHaveCSS("animation-name", "none");
+
+  const lastReveal = page.locator(".reveal").last();
+  await expect(lastReveal).toHaveAttribute("data-revealed", "false");
+  await lastReveal.scrollIntoViewIfNeeded();
+  await expect(lastReveal).toHaveAttribute("data-revealed", "true");
+  await expect(lastReveal).toHaveCSS("opacity", "1");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.locator(".reveal").last()).toHaveAttribute("data-revealed", "true");
+  await expect(page.locator(".reveal").last()).toHaveCSS("opacity", "1");
+});
+
+test("decorative loops pause offscreen and resume near the viewport", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const art = page.locator("#tracks .ar");
+  await expect(art).toHaveCSS("animation-play-state", "paused");
+  await art.scrollIntoViewIfNeeded();
+  await expect(art).toHaveCSS("animation-play-state", "running");
+
+  const belt = page.locator(".pb-track");
+  await expect(belt).toHaveCSS("animation-play-state", "paused");
+  await belt.scrollIntoViewIfNeeded();
+  await expect(belt).toHaveCSS("animation-play-state", "running");
 });
 
 test("the hero enters with main's title, badge and copy animations, and holds still for reduced motion", async ({ page }) => {
@@ -564,7 +589,7 @@ test("buttons use main's style: bordered, rounded 2px, block shadow, capitals", 
   }
 });
 
-test("the grain is a full-screen noise canvas that redraws and never takes input", async ({ page }) => {
+test("the grain is a full-screen noise canvas that shifts without repainting and never takes input", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
@@ -578,11 +603,21 @@ test("the grain is a full-screen noise canvas that redraws and never takes input
     const data = canvas.getContext("2d")!.getImageData(0, 0, 64, 64).data;
     let covered = 0;
     for (let index = 3; index < data.length; index += 4) if (data[index] > 0) covered++;
-    return { covered, hash: Array.from(data.slice(0, 256)).join(",") };
+    const bounds = canvas.getBoundingClientRect();
+    return { covered, transform: canvas.style.transform, bounds: { left: bounds.left, top: bounds.top, right: bounds.right, bottom: bounds.bottom } };
   });
   const first = await sample();
   expect(first.covered).toBeGreaterThan(64 * 64 * 0.9);
-  await expect.poll(async () => (await sample()).hash, { timeout: 3000 }).not.toBe(first.hash);
+  expect(first.bounds.left).toBeLessThanOrEqual(0);
+  expect(first.bounds.top).toBeLessThanOrEqual(0);
+  expect(first.bounds.right).toBeGreaterThanOrEqual(1440);
+  expect(first.bounds.bottom).toBeGreaterThanOrEqual(900);
+  await expect.poll(async () => (await sample()).transform, { timeout: 3000 }).not.toBe(first.transform);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => grain.evaluate((canvas: HTMLCanvasElement) => {
+    const bounds = canvas.getBoundingClientRect();
+    return bounds.left <= 0 && bounds.top <= 0 && bounds.right >= 390 && bounds.bottom >= 844;
+  })).toBe(true);
 });
 
 test("the docs use the Pixl layout: boxed sidebar, hard rules, block shadows", async ({ page }) => {
@@ -630,21 +665,29 @@ test("the homepage follows the new order and its depth strips count down without
   const ids = await page.locator("main > div > div.sect, main .sect[id]").evaluateAll((nodes) => nodes.map((node) => node.id));
   expect(ids).toEqual(["tracks", "process", "toolbelt", "shop", "progression", "eras", "faq", "hack-club"]);
   const metres = await page.locator("main .pit b").allTextContents();
-  expect(metres.map((m) => m.replace(/\s+/g, " ").trim())).toEqual(["−000 M", "−100 M", "−150 M", "−200 M", "−300 M", "−600 M", "−700 M"]);
+  expect(metres.map((m) => m.replace(/\s+/g, " ").trim())).toEqual(["−000 M", "−100 M", "−150 M", "−200 M", "−300 M", "−400 M", "−500 M"]);
   await expect(page.locator("#what")).toHaveCount(0);
   await expect(page.locator("#progression .facts > div")).toHaveCount(4);
   await expect(page.locator("#requisitions")).toContainText("Field Requisition");
 });
 
-test("Project fit and Custom Orders are in the Docs, not the homepage; the Hack Club note stays on it", async ({ page }) => {
+test("Project fit, Custom Orders and the Hack Club story are in the Docs, not the homepage", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#project-fit")).toHaveCount(0);
   await expect(page.locator("#custom-orders")).toHaveCount(0);
-  await expect(page.locator("#hack-club")).toHaveCount(1);
   await page.goto("/docs/about");
   await expect(page.getByRole("heading", { level: 1, name: "Where LOADOUT comes from" })).toBeVisible();
   await expect(page.locator("blockquote")).toContainText("While being part of Hack Club");
   await expect(page.locator("main")).toContainText("has not accepted it yet");
+});
+test("Hack Club block carries Jerry's reason and makes no claim about other programs' rates", async ({ page }) => {
+  await page.goto("/");
+  const block = page.locator("#hack-club");
+  await expect(block.locator("figure.why")).toContainText("While being part of Hack Club");
+  await expect(block).toContainText("Where LOADOUT comes from");
+  await expect(block).toContainText("has not accepted it yet");
+  await expect(block.locator("figure.why figcaption")).toContainText("Jerry");
+  await expect(block).not.toContainText(/better rates|higher rates|best rates/i);
 });
 
 for (const width of [1024, 1280, 1440, 1920]) {
@@ -811,7 +854,7 @@ test("homepage review copy matches the team acceptance rule", async ({ page }) =
 
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
+  await expect(page.locator("#shop")).toContainText("What your Ore can buy");
   await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 

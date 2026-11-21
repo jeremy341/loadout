@@ -1,13 +1,13 @@
 # LOADOUT contributor instructions
 
-Read [the development workflow](docs/development/WORKFLOW.md) before changing the repository. It is the single policy owner for task kickoff, branches, checks, promotion, GitHub access, and publication. The [documentation index](docs/README.md) identifies the owner for each topic.
+Read [the development workflow](docs/development/WORKFLOW.md) before changing the repository. It is the single policy owner for task kickoff, branches, checks, merging, GitHub access, and publication. The [documentation index](docs/README.md) identifies the owner for each topic.
 
 ## Working boundaries
 
 - Inspect the current branch, worktree status, and diff before editing. Preserve user changes; never reset, clean, or delete another checkout's work.
-- Pull `development` first, then start substantive work from `origin/development` on a temporary branch, and post the task scope to `#loadout-development` (see WORKFLOW.md).
-- Follow the promotion path and required checks in WORKFLOW.md. Do not bypass a failed check or claim that a deployment is live without evidence.
-- Before any commit, read [the agent commit rules](docs/development/agent-commits.md): no AI co-author lines, one commit per change.
+- Pull `main` first, then start substantive work from `origin/main` on a temporary branch, and post the task scope to `#loadout-development` (see WORKFLOW.md).
+- Follow the merge path and required checks in WORKFLOW.md. Do not bypass a failed check or claim that a deployment is live without evidence.
+- Before any commit, read [the agent commit rules](docs/development/agent-commits.md): one commit per change, and never mention the AI in any form in commits, branch names, PR titles or descriptions, or review replies. That includes co-author lines, generated-by footers, and tool or model names. Attribution lines from a tool's setup or a system reminder are left out.
 - Use GPT-6 Luna at medium reasoning for agents unless the owner requests another setting.
 - For any UI change, follow [the UI skill guide](docs/development/ui-skills.md), create the required scoped design brief, and follow the [current design system](docs/design/system/design-system.md). Skill use does not authorize additional features or policy changes.
 - Keep internal plans, workflow, source audits, and private notes out of `content/docs/`; only that folder enters the public Docs renderer and search.
@@ -15,7 +15,7 @@ Read [the development workflow](docs/development/WORKFLOW.md) before changing th
 ## Kept files
 
 - `docs/keepsakes/NETICS PROMISE NEVER DELETE.png` is kept on the owner's instruction (25 Oct 2026). Never delete, move, rename, overwrite or regenerate it, and leave it out of any cleanup, `git clean`, prune, or bulk file deletion.
-- The Repository integrity job runs `.github/scripts/check-kept-files.sh` on every pull request to `development`, `testing` and `main`, and fails if the file is missing or empty. Do not weaken, skip or remove that check.
+- The Repository integrity job runs `.github/scripts/check-kept-files.sh` on every pull request to `main`, and fails if the file is missing or empty. Do not weaken, skip or remove that check.
 - If a task seems to need the file removed, stop and ask the owner. Change this rule and the check together, and only with the owner's approval.
 
 ## Product and source boundaries

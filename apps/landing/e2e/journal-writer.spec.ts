@@ -344,6 +344,10 @@ for (const scheme of ["dark", "light"] as const) {
       }
       await page.getByRole("button", { name: "Write" }).click();
       if (width === 1440 || width === 390) await page.screenshot({ path: join(SHOTS, `journal-look-write-${width}-${scheme}.png`), fullPage: true });
+      // Axe's target-size check measures a target's clear area. The sticky header covers the Hours field at whatever
+      // offset the last click scrolled to, which turns into a scroll-dependent violation; run the check from the top of
+      // the page, where the header sits above the content and nothing is under it.
+      await page.evaluate(() => window.scrollTo(0, 0));
       await page.evaluate(() => document.fonts.ready);
       const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
       expect(result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => `${n.target.join(" ")} ${n.html}`).join(" | ")}`), `${width}px`).toEqual([]);

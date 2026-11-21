@@ -42,10 +42,11 @@ jobs:
         run: |
           set -euo pipefail
           tar -czf "$RUNNER_TEMP/loadout-$RELEASE_SHA.tgz" \
-            --exclude=.env.local \
-            --exclude=test-results \
-            --exclude=playwright-report \
-            -C apps/landing .
+            --exclude=.git \
+            --exclude=apps/landing/.env.local \
+            --exclude=apps/landing/test-results \
+            --exclude=apps/landing/playwright-report \
+            -C . apps/landing node_modules package.json bun.lock
 
       - name: Configure SSH
         env:

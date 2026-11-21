@@ -480,12 +480,12 @@ test("the writer accepts only quarter hours from a quarter hour up to twelve", a
     if (uploads) await expect(page.getByTestId("photos-count")).toContainText("0 of 1");
     await expect(page.getByTestId("ore-line")).toContainText("About 3 Ore once approved.");
 
-    // Just below the minimum and above the maximum are both refused beside the field.
-    // Use 0 rather than 0.1: the number input's step rejects an off-step value before the form is submitted.
-    await hours.fill("0");
+    // Just below the minimum and above the maximum are both refused beside the field. The client rejects a
+    // fractional hour before submit; the quarter-hour rule itself is covered by journal.test.ts.
+    await hours.fill("0.1");
     await minutes.selectOption("0");
     await page.getByRole("button", { name: "Save journal entry" }).click();
-    await expect(page.getByText("Log at least a quarter of an hour.")).toBeVisible();
+    await expect(page.getByText("Enter whole hours, 0 or more.")).toBeVisible();
     await hours.fill("13");
     await page.getByRole("button", { name: "Save journal entry" }).click();
     await expect(page.getByText("One entry covers up to 12 hours. Split longer sessions.")).toBeVisible();

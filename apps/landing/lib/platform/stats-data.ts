@@ -125,4 +125,3 @@ export async function refreshStats(now: Date = new Date()): Promise<{ day: strin
   }
   return { day, counts };
 }
-

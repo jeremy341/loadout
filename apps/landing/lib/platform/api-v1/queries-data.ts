@@ -246,4 +246,3 @@ export async function visibleStatsPeople(personIds: string[]): Promise<Map<strin
   });
   return new Map(rows.map((r) => [r.id, r.handle ?? ""]));
 }
-

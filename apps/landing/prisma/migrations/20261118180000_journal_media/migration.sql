@@ -29,4 +29,3 @@ ALTER TABLE "JournalMedia" ADD CONSTRAINT "JournalMedia_projectId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "JournalMedia" ADD CONSTRAINT "JournalMedia_entryId_fkey" FOREIGN KEY ("entryId") REFERENCES "JournalEntry"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-

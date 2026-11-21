@@ -275,4 +275,3 @@ export async function orderForPerson(personId: string, id: string): Promise<Orde
   const row = await db().shopOrder.findFirst({ where: { personId, number }, include: ORDER_INCLUDE });
   return row ? orderRowFromDb(row) : null;
 }
-

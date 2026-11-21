@@ -165,4 +165,3 @@ export function ProjectSettingsForm({ project }: Readonly<{ project: EditablePro
     </section>
   );
 }
-

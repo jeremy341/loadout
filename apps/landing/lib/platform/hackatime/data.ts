@@ -213,4 +213,3 @@ export async function listLinkedPersonIds(): Promise<string[]> {
   });
   return rows.map((r) => r.personId);
 }
-

@@ -17,4 +17,3 @@ CREATE INDEX "ProjectExpedition_expeditionId_idx" ON "ProjectExpedition"("expedi
 
 -- AddForeignKey
 ALTER TABLE "ProjectExpedition" ADD CONSTRAINT "ProjectExpedition_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-

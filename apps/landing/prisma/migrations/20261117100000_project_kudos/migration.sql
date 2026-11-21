@@ -19,4 +19,3 @@ ALTER TABLE "ProjectKudos" ADD CONSTRAINT "ProjectKudos_personId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "ProjectKudos" ADD CONSTRAINT "ProjectKudos_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-

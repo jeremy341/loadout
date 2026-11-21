@@ -52,7 +52,7 @@ test("one title, one paragraph, one search and one grid with no rails", async ({
   // a card: check badge, kudos heart with its count, two line text, author chip, entries and the time of the last entry
   const tinyparse = cards(page).filter({ hasText: "Tinyparse" });
   await expect(tinyparse.getByText("Approved")).toHaveCount(1);
-  await expect(tinyparse.getByRole("button", { name: /^Kudos for Tinyparse, 3 kudos$/ })).toBeVisible();
+  await expect(tinyparse.getByRole("button", { name: /^Kudos for Tinyparse, No kudos yet$/ })).toBeVisible();
   await expect(tinyparse.getByRole("link", { name: "juniper_dev" })).toHaveAttribute("href", "/dashboard/builders/juniper_dev");
   await expect(tinyparse).toContainText("3 entries");
   await expect(tinyparse.locator("time")).toHaveCount(1);

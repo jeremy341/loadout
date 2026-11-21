@@ -177,4 +177,3 @@ export async function bindIdentity(identity: HcaIdentity, now = new Date()): Pro
   await refreshAvatar(bound.personId, identity.slackId);
   return bound;
 }
-

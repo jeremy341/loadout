@@ -854,7 +854,7 @@ test("homepage review copy matches the team acceptance rule", async ({ page }) =
 
 test("caveats stay next to the claims they qualify after the copy cuts", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#shop")).toContainText("What your Ore can buy");
+  await expect(page.locator("#shop")).toContainText("Examples of what Ore could buy");
   await expect(page.locator("#shop")).not.toContainText(/available to order|not open/i);
 });
 

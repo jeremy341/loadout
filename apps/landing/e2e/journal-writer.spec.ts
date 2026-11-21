@@ -346,7 +346,7 @@ for (const scheme of ["dark", "light"] as const) {
       if (width === 1440 || width === 390) await page.screenshot({ path: join(SHOTS, `journal-look-write-${width}-${scheme}.png`), fullPage: true });
       await page.evaluate(() => document.fonts.ready);
       const result = await new AxeBuilder({ page }).withTags(TAGS).analyze();
-      expect(result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(" | ")}`), `${width}px`).toEqual([]);
+      expect(result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => `${n.target.join(" ")} ${n.html}`).join(" | ")}`), `${width}px`).toEqual([]);
     }
 
     // Keyboard: Shift+Tab from the writing box reaches the Preview toggle, and Space presses it.
@@ -481,7 +481,8 @@ test("the writer accepts only quarter hours from a quarter hour up to twelve", a
     await expect(page.getByTestId("ore-line")).toContainText("About 3 Ore once approved.");
 
     // Just below the minimum and above the maximum are both refused beside the field.
-    await hours.fill("0.1");
+    // Use 0 rather than 0.1: the number input's step rejects an off-step value before the form is submitted.
+    await hours.fill("0");
     await minutes.selectOption("0");
     await page.getByRole("button", { name: "Save journal entry" }).click();
     await expect(page.getByText("Log at least a quarter of an hour.")).toBeVisible();

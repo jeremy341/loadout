@@ -16,19 +16,9 @@ import { fetchSlackAvatar } from "./slack-avatar";
 
 // Database and network side of Hack Club Auth sign-in. The rules it applies live in hca.ts.
 
-// db() caches its client on globalThis. Reading that cache here as well keeps the fake client
-// installed by the sign-in tests in charge even when another test file has replaced the db module.
-const globalForDb = globalThis as unknown as { loadoutDbClientReview?: ReturnType<typeof db> };
-let injectedClient: ReturnType<typeof db> | undefined;
-// The test runner can share a module across files with different globals, so it sets this directly.
-export function setClientForTests(value: ReturnType<typeof db> | undefined): void {
-  injectedClient = value;
-}
-const client = () => injectedClient ?? globalForDb.loadoutDbClientReview ?? db();
-
 // Starts one sign-in: stores the hash of the state and of a browser nonce, and returns the raw values for the redirect and cookie.
 export async function startAttempt(now = new Date()): Promise<{ state: string; nonce: string; expiresAt: Date }> {
-  const prisma = client();
+  const prisma = db();
   await prisma.loginAttempt.deleteMany({ where: { expiresAt: { lt: now } } });
   const state = newRandom();
   const nonce = newRandom();
@@ -50,7 +40,7 @@ export async function consumeAttempt(
   if (!state || state.length > 200) return { ok: false, error: "invalid_state" };
   const stateHash = sha256(state);
   const nonceHash = nonce ? sha256(nonce) : null;
-  const rows = await client().$queryRaw<Array<{ state: string; nonceHash: string; expiresAt: Date }>>`
+  const rows = await db().$queryRaw<Array<{ state: string; nonceHash: string; expiresAt: Date }>>`
     DELETE FROM "LoginAttempt"
     WHERE "state" = ${stateHash} AND "nonceHash" = ${nonceHash}
     RETURNING "state", "nonceHash", "expiresAt"`;
@@ -112,14 +102,14 @@ async function refreshAvatar(personId: string, slackId: string | null): Promise<
   if (!slackId) return;
   // The Slack id is kept on the person for the bot and DMs (unique; if another account already holds it, this one is left without).
   try {
-    await client().person.update({ where: { id: personId }, data: { slackId } });
+    await db().person.update({ where: { id: personId }, data: { slackId } });
   } catch {
     // A unique clash or a failed write never blocks sign-in.
   }
   const avatar = await fetchSlackAvatar(slackId);
   if (!avatar) return;
   try {
-    await client().person.update({ where: { id: personId }, data: { avatar } });
+    await db().person.update({ where: { id: personId }, data: { avatar } });
   } catch {
     // The picture is a nicety; a failed write never blocks sign-in.
   }
@@ -129,7 +119,7 @@ async function refreshAvatar(personId: string, slackId: string | null): Promise<
 // Returns the person id, or an error code. A banned person is refused here, as everywhere else. The read, the decision, the
 // conditional write and the final ban check all run in one transaction, so a concurrent sign-in or a ban cannot slip between them.
 export async function bindIdentity(identity: HcaIdentity, now = new Date()): Promise<{ personId: string } | { error: SignInError }> {
-  const prisma = client();
+  const prisma = db();
   let bound: { personId: string } | { error: SignInError };
   try {
     bound = await prisma.$transaction(async (tx) => {
@@ -187,3 +177,4 @@ export async function bindIdentity(identity: HcaIdentity, now = new Date()): Pro
   await refreshAvatar(bound.personId, identity.slackId);
   return bound;
 }
+

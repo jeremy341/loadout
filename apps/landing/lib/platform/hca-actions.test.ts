@@ -84,7 +84,8 @@ const savedClient = globalForDb.loadoutDbClientReview;
 process.env.DATABASE_URL = "postgres://unused@localhost/loadout";
 globalForDb.loadoutDbClientReview = fakePrisma;
 
-const { consumeAttempt, bindIdentity, setClientForTests } = await import("./hca-actions");
+const { setClientForTests } = await import("./db");
+const { consumeAttempt, bindIdentity } = await import("./hca-actions");
 const { GET } = await import("../../app/api/auth/hackclub/start/route");
 
 afterAll(() => {

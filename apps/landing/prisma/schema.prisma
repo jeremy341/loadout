@@ -460,6 +460,13 @@ model ShopOrder {
   status       String                  @default("placed")
   totalOre     Int
   region       String?
+  // Fulfilment, recorded when the order ships. The tracking number is what the buyer reads, so it is never cleared by a
+  // later edit. The supplier is where the item was bought; the shipper is the person who moved it to shipped.
+  // Owner: plans/proposals/platform-parity-pixl.md step 1.
+  trackingNumber String?
+  carrier        String?
+  supplier       String?
+  shippedById    String?
   createdAt    DateTime                @default(now())
   updatedAt    DateTime                @updatedAt
   lines        ShopOrderLine[]

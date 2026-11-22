@@ -1,6 +1,7 @@
 // Shop orders in the database. Server only (uses the database). The rules are in shop-rules.ts; this file runs them in transactions.
 //   placeOrder({ personId, lines, useRequisition?, region?, approved })  -> PlaceResult
 //   advanceOrder(orderId, actorId, next)                                 -> Result; placed -> packed -> shipped -> delivered only
+//   shipOrder(orderId, actorId, { trackingNumber, carrier?, supplier? })  -> Result; packed -> shipped, records the tracking
 //   cancelOrder(orderId, personId)                                       placed only: restocks and refunds the stored total
 //   listOrdersFor(personId)                                              OrderRow[], newest first; cancelled orders included with cancelled: true
 //   orderForPerson(personId, id)                                         OrderRow | null; id is the number in lower case ("lo-1101")
@@ -26,6 +27,7 @@ import {
   checkAdvance,
   checkCancel,
   checkRegion,
+  checkShipment,
   mergeRequestLines,
   nextOrderNumber,
   orderRowFromDb,
@@ -208,6 +210,44 @@ export async function advanceOrder(orderId: string, actorId: string, next: Order
       reason: `Order ${order.number} moved from ${order.status} to ${next}.`,
       before: { status: order.status },
       after: { status: next },
+    });
+    return { ok: true };
+  });
+}
+
+// Moves an order to shipped and records how it left: the tracking number, the carrier and the supplier. One transaction, so a
+// shipped order always has its tracking row, and the compare-and-set on the status stops two fulfillers shipping the same parcel
+// twice. The tracking number is required (checkShipment).
+export async function shipOrder(
+  orderId: string,
+  actorId: string,
+  input: { trackingNumber: unknown; carrier?: unknown; supplier?: unknown },
+): Promise<Result> {
+  const checked = checkShipment(input);
+  if (!checked.ok) return { ok: false, message: checked.message };
+  const shipment = checked.value;
+
+  return db().$transaction(async (tx): Promise<Result> => {
+    const order = await tx.shopOrder.findUnique({ where: { id: orderId }, select: { number: true, status: true } });
+    if (!order) return { ok: false, message: "That order does not exist." };
+    const verdict = checkAdvance(order.status, "shipped");
+    if (!verdict.ok) return verdict;
+
+    const moved = await tx.shopOrder.updateMany({
+      where: { id: orderId, status: order.status },
+      data: { status: "shipped", shippedById: actorId, ...shipment },
+    });
+    if (moved.count !== 1) return { ok: false, message: "The order changed while you were looking. Reload and try again." };
+
+    await tx.orderStatusEvent.create({ data: { orderId, status: "shipped", actorId } });
+    await recordAudit(tx, {
+      actorId,
+      action: "shop.order.shipped",
+      targetType: "ShopOrder",
+      targetId: orderId,
+      reason: `Order ${order.number} shipped with tracking ${shipment.trackingNumber}.`,
+      before: { status: order.status },
+      after: { status: "shipped", trackingNumber: shipment.trackingNumber, carrier: shipment.carrier, supplier: shipment.supplier },
     });
     return { ok: true };
   });

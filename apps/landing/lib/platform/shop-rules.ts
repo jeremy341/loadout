@@ -74,6 +74,38 @@ export function checkCancel(status: string): Verdict {
   return { ok: false, message: `Only a placed order can be cancelled. This one is ${status}.` };
 }
 
+// ---- Shipping ----
+
+export const ORDER_TRACKING_MAX = 120;
+export const ORDER_CARRIER_MAX = 60;
+export const ORDER_SUPPLIER_MAX = 80;
+
+export type Shipment = { trackingNumber: string; carrier: string | null; supplier: string | null };
+export type ShipmentCheck = { ok: true; value: Shipment } | { ok: false; message: string };
+
+// A blank optional field is stored as null, never as an empty string, so "not recorded" has one representation.
+function optionalText(value: unknown, max: number, label: string): { ok: true; value: string | null } | { ok: false; message: string } {
+  const text = typeof value === "string" ? value.trim() : "";
+  if (text.length > max) return { ok: false, message: `${label} is at most ${max} characters.` };
+  return { ok: true, value: text || null };
+}
+
+// What a ship records. The tracking number is required: it is the only thing that lets the buyer follow the parcel, so an order
+// cannot reach shipped without one. The carrier and the supplier are optional.
+export function checkShipment(input: { trackingNumber: unknown; carrier?: unknown; supplier?: unknown }): ShipmentCheck {
+  const tracking = optionalText(input.trackingNumber, ORDER_TRACKING_MAX, "A tracking number");
+  if (!tracking.ok) return tracking;
+  if (!tracking.value) return { ok: false, message: "Enter the tracking number before shipping." };
+
+  const carrier = optionalText(input.carrier, ORDER_CARRIER_MAX, "A carrier");
+  if (!carrier.ok) return carrier;
+
+  const supplier = optionalText(input.supplier, ORDER_SUPPLIER_MAX, "A supplier");
+  if (!supplier.ok) return supplier;
+
+  return { ok: true, value: { trackingNumber: tracking.value, carrier: carrier.value, supplier: supplier.value } };
+}
+
 // ---- Order requests ----
 
 export const ORDER_MAX_LINES = 20;
@@ -269,16 +301,24 @@ export type OrderDbRow = {
   createdAt: Date;
   lines: readonly OrderDbLine[];
   events: readonly OrderEventRow[];
+  // Fulfilment, written when the order ships. Optional so older callers and tests can build a row without them.
+  trackingNumber?: string | null;
+  carrier?: string | null;
 };
 
-// The Order type from orders.ts, plus what a row adds: the total paid, the region, whether it was cancelled, and the lines as paid
-// (option and unit price). A cancelled order keeps status "placed" so the tracker still reads, and sets cancelled.
+// What the buyer may read about a shipped order: the tracking number and, when staff recorded one, the carrier.
+export type OrderTracking = { number: string; carrier: string | null };
+
+// The Order type from orders.ts, plus what a row adds: the total paid, the region, whether it was cancelled, the lines as paid
+// (option and unit price), and the tracking once it ships. A cancelled order keeps status "placed" so the tracker still reads,
+// and sets cancelled.
 export type OrderRow = Order & {
   totalOre: number;
   region: string | null;
   placedAt: Date;
   cancelled: boolean;
   paid: readonly OrderDbLine[];
+  tracking: OrderTracking | null;
 };
 
 export function orderRowFromDb(row: OrderDbRow): OrderRow {
@@ -287,6 +327,7 @@ export function orderRowFromDb(row: OrderDbRow): OrderRow {
   const quantities = new Map<string, number>();
   for (const line of row.lines) quantities.set(line.itemId, (quantities.get(line.itemId) ?? 0) + line.quantity);
   const lines: OrderLine[] = [...quantities].map(([itemId, quantity]) => ({ itemId, quantity }));
+  const trackingNumber = row.trackingNumber?.trim();
   return {
     id: row.number.toLowerCase(),
     number: row.number,
@@ -298,6 +339,7 @@ export function orderRowFromDb(row: OrderDbRow): OrderRow {
     placedAt: row.createdAt,
     cancelled,
     paid: row.lines,
+    tracking: trackingNumber ? { number: trackingNumber, carrier: row.carrier?.trim() || null } : null,
   };
 }
 

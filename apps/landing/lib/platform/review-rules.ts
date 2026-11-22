@@ -414,20 +414,6 @@ export function waitStart({ firstShippedAt, updateShippedAt, isUpdate }: { first
   return firstShippedAt ?? updateShippedAt ?? null;
 }
 
-// ---- Resubmit window (Pixl, adopted: submissionDeadline.ts) ----
-
-// After the program's ship deadline the only allowed ship is the one resubmit a "needs changes" earns: the project must be in
-// needs changes, not rejected, first shipped before the deadline, and not shipped since the deadline. Everything else is
-// closed. This is Pixl's rule (submissionDeadline.ts). No date is set for LOADOUT yet: with deadline null the rule is off and
-// nothing is closed. The owner sets the date later.
-export function submissionsClosed(project: { status: string; rejected?: boolean; firstShippedAt?: Date | null; shippedAt?: Date | null }, now: Date, deadline: Date | null): boolean {
-  if (!deadline) return false;
-  if (now.getTime() <= deadline.getTime()) return false;
-  if (project.status !== "needs-changes" || project.rejected) return true;
-  if (!project.firstShippedAt) return true;
-  return !!project.shippedAt && project.shippedAt.getTime() > deadline.getTime();
-}
-
 // ---- Bans ----
 
 // Only an owner confirms a ban (Pixl: reviewAccess.ts proposedBanDecision, lines 60 to 80). The different-reviewer check that

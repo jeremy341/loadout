@@ -27,7 +27,6 @@ import {
   keptTotal,
   pendingCredit,
   stageAllows,
-  submissionsClosed,
   trackXpFor,
   turnedNineteenSinceShipping,
   UPDATE_MIN_MINUTES,
@@ -540,31 +539,6 @@ describe("waitStart", () => {
   });
 });
 
-describe("submissionsClosed", () => {
-  const deadline = t("2026-12-01T00:00:00Z");
-  const before = t("2026-11-20T00:00:00Z");
-  const after = t("2026-12-05T00:00:00Z");
-  const first = t("2026-11-10T00:00:00Z");
-  it("is open before and on the deadline", () => {
-    expect(submissionsClosed({ status: "draft" }, before, deadline)).toBe(false);
-    expect(submissionsClosed({ status: "draft" }, deadline, deadline)).toBe(false);
-  });
-  it("lets the one resubmit through after the deadline", () => {
-    expect(submissionsClosed({ status: "needs-changes", firstShippedAt: first, shippedAt: first }, after, deadline)).toBe(false);
-  });
-  it("closes once that resubmit is spent", () => {
-    expect(submissionsClosed({ status: "needs-changes", firstShippedAt: first, shippedAt: t("2026-12-03T00:00:00Z") }, after, deadline)).toBe(true);
-  });
-  it("closes first ships, drafts, rejected projects and updates after the deadline", () => {
-    expect(submissionsClosed({ status: "draft" }, after, deadline)).toBe(true);
-    expect(submissionsClosed({ status: "approved", firstShippedAt: first }, after, deadline)).toBe(true);
-    expect(submissionsClosed({ status: "needs-changes", rejected: true, firstShippedAt: first }, after, deadline)).toBe(true);
-    expect(submissionsClosed({ status: "needs-changes" }, after, deadline)).toBe(true);
-  });
-  it("a missing last-ship date does not spend the resubmit", () => {
-    expect(submissionsClosed({ status: "needs-changes", firstShippedAt: first, shippedAt: null }, after, deadline)).toBe(false);
-  });
-});
 
 describe("canConfirmBan", () => {
   it("lets an owner confirm, including a proposal from a reviewer", () => {

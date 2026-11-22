@@ -3,6 +3,7 @@ import { clientIp, UNKNOWN_IP } from "@/lib/platform/client-ip";
 import { databaseConfigured } from "@/lib/platform/db";
 import { startAttempt } from "@/lib/platform/hca-actions";
 import { buildAuthorizeUrl, hcaConfig, NONCE_COOKIE, SIGN_IN_PATH, signInErrorPath } from "@/lib/platform/hca";
+import { publicUrl } from "@/lib/platform/public-origin";
 import { hasPlatformUnlock } from "@/lib/platform/platform-gate";
 import { checkLimit, rateLimitHeaders } from "@/lib/platform/rate-limit-db";
 
@@ -17,15 +18,15 @@ const SHARED_PER_MINUTE = { limit: 200, windowMs: 60_000 } as const;
 // which says sign-in is not set up.
 export async function GET(request: Request) {
   // A direct call to this route must not skip the shared-password step shown on the sign-in page.
-  if (!(await hasPlatformUnlock())) return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url), 303);
+  if (!(await hasPlatformUnlock())) return NextResponse.redirect(publicUrl(request, SIGN_IN_PATH), 303);
   const config = hcaConfig();
-  if (!config) return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url), 303);
-  if (!databaseConfigured()) return NextResponse.redirect(new URL(signInErrorPath("server_error"), request.url), 303);
+  if (!config) return NextResponse.redirect(publicUrl(request, SIGN_IN_PATH), 303);
+  if (!databaseConfigured()) return NextResponse.redirect(publicUrl(request, signInErrorPath("server_error")), 303);
   try {
     const ip = clientIp(request);
     const limit = await checkLimit({ key: `hca-start:${ip}:minute`, ...(ip === UNKNOWN_IP ? SHARED_PER_MINUTE : START_PER_MINUTE) });
     if (!limit.ok) {
-      return NextResponse.redirect(new URL(signInErrorPath("throttled"), request.url), {
+      return NextResponse.redirect(publicUrl(request, signInErrorPath("throttled")), {
         status: 303,
         headers: { ...rateLimitHeaders(limit), "Cache-Control": "no-store" },
       });
@@ -40,7 +41,8 @@ export async function GET(request: Request) {
       expires: expiresAt,
     });
     return response;
-  } catch {
-    return NextResponse.redirect(new URL(signInErrorPath("server_error"), request.url), 303);
+  } catch (error) {
+    console.error("hca sign-in start failed", error instanceof Error ? error.name : "unknown");
+    return NextResponse.redirect(publicUrl(request, signInErrorPath("server_error")), 303);
   }
 }

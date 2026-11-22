@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { SIGN_IN_PATH } from "@/lib/platform/hca";
 import { endImpersonation } from "@/lib/platform/impersonation";
+import { publicUrl } from "@/lib/platform/public-origin";
 import { sameOrigin } from "@/lib/platform/same-origin";
 import {
   destroySession,
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
       // Clear the cookie either way; an orphaned row expires on its own.
     }
   }
-  const response = NextResponse.redirect(new URL(SIGN_IN_PATH, request.url), 303);
+  const response = NextResponse.redirect(publicUrl(request, SIGN_IN_PATH), 303);
   response.cookies.set(SESSION_COOKIE, "", sessionCookieOptions(new Date(0)));
   response.cookies.set(IMPERSONATION_COOKIE, "", impersonationCookieOptions(new Date(0)));
   return response;

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AccessibilityTab } from "@/app/_components/Accessibility";
 import { ConnectionPlaceholder } from "@/app/_components/platform/ConnectionPlaceholder";
-import { PlatformPlain } from "@/app/_components/platform/PlatformNotice";
+import { SignInFrame } from "@/app/_components/platform/SignInFrame";
 import { databaseConfigured } from "@/lib/platform/db";
 import { hcaConfig, isSignInError, SIGN_IN_ERROR_MESSAGES } from "@/lib/platform/hca";
 import { hasPlatformUnlock } from "@/lib/platform/platform-gate";
@@ -30,9 +28,8 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
   const showAlert = message !== null && !gateError && !(code === "not_configured" && !configured);
 
   return (
-    <PlatformPlain accessibility={<AccessibilityTab />}>
+    <SignInFrame>
       <h1>Sign in</h1>
-      <p className="pf-lead">LOADOUT uses your Hack Club account. We read your name, email, birthday and verification status to check you can take part.</p>
       {showAlert ? (
         <p className="pf-error" role="alert">
           {message}
@@ -40,7 +37,6 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       ) : null}
       {!unlocked ? (
         <>
-          <p className="pf-lead">This site is limited to admins. Enter the shared access password to continue to Hack Club Auth.</p>
           <form method="post" action="/api/auth/platform-gate" className="pf-form pf-gate-form">
             <div className="pf-field">
               <label htmlFor="platform-password">Access password</label>
@@ -78,9 +74,6 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
           </button>
         </ConnectionPlaceholder>
       )}
-      <p className="pf-lead">
-        <Link href="/">Back to the homepage</Link>
-      </p>
-    </PlatformPlain>
+    </SignInFrame>
   );
 }

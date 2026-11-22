@@ -58,26 +58,30 @@ export async function exchangeCode(config: HcaConfig, code: string): Promise<{ a
   try {
     const response = await fetch(`${config.baseUrl}/oauth/token`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      // RFC 6749 section 4.1.3: the token request is form encoded.
+      headers: { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" },
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-      body: JSON.stringify({
+      body: new URLSearchParams({
         client_id: config.clientId,
         client_secret: config.clientSecret,
         redirect_uri: config.redirectUri,
         code,
         grant_type: "authorization_code",
-      }),
+      }).toString(),
     });
     if (!response.ok) {
       const body = await response.text();
       const throttled = response.status === 429 || body.includes("slow your roll");
+      // Log the status only. The body and the request are never logged, since they can carry the code or secret.
+      console.warn("hca token exchange rejected", { status: response.status, throttled });
       return { error: throttled ? "throttled" : "token_failed" };
     }
     const json = (await response.json()) as { access_token?: unknown };
     return typeof json.access_token === "string" && json.access_token
       ? { accessToken: json.access_token }
       : { error: "token_failed" };
-  } catch {
+  } catch (error) {
+    console.warn("hca token exchange failed", error instanceof Error ? error.name : "unknown");
     return { error: "token_failed" };
   }
 }

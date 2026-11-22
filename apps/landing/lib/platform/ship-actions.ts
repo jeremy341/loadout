@@ -52,7 +52,7 @@ export async function submitShip(_prev: FormState, formData: FormData): Promise<
   const changeNote = text(formData.get("changeNote"));
   const check = checkShip(project, await shipJournals(journals), now, {
     uploadsOn: uploadsEnabled(),
-    eligibilityRefusal: await eligibilityRefusal(viewer, now),
+    eligibilityRefusal: await eligibilityRefusal(viewer),
     readmeText: await fetchGithubReadme(project.repoUrl),
     attested: text(formData.get("attested")) === "on",
     changeNote,

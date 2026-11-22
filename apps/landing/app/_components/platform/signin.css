@@ -1,0 +1,96 @@
+/* Sign-in frame: no topbar, no sidebar. A single centred column over the shared LOADOUT backdrop. */
+
+.pf.pf-signin {
+  min-height: 100dvh;
+  display: grid;
+  position: relative;
+}
+
+.pf-signin-main {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 48px 16px;
+  box-sizing: border-box;
+}
+
+.pf-signin-card {
+  width: 100%;
+  max-width: 440px;
+  display: grid;
+  gap: 20px;
+  justify-items: center;
+  text-align: center;
+}
+
+.pf .pf-signin-brand {
+  margin: 0;
+  color: var(--pf-fg);
+  font: 400 13px/1 var(--font-dot), monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.pf-signin-card h1 {
+  margin: 0;
+  color: var(--pf-fg);
+  font: 700 clamp(2rem, 5vw, 2.75rem)/1.05 var(--font-pixel), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.pf-signin-card .pf-lead {
+  margin: 0;
+  max-width: 48ch;
+}
+
+.pf-signin-card .pf-form {
+  display: grid;
+  gap: 16px;
+}
+
+.pf-signin-card .pf-field {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.pf .pf-signin-card .pf-form,
+.pf .pf-signin-card .pf-field,
+.pf .pf-signin-card form,
+.pf .pf-signin-card a.pf-btn {
+  width: 100%;
+}
+
+.pf .pf-signin-card .pf-input {
+  width: 100%;
+  max-width: none;
+  min-height: 52px;
+  box-sizing: border-box;
+}
+
+.pf .pf-signin-card .pf-btn.pri {
+  width: 100%;
+  min-height: 52px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.pf .pf-signin-card .pf-field > label {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.pf-signin-card .pf-lead:last-child {
+  margin-top: 4px;
+}
+
+@media (max-width: 480px) {
+  .pf-signin-main {
+    padding: 32px 16px;
+    place-items: start center;
+  }
+}

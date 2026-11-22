@@ -31,7 +31,7 @@ describe("buildAuthorizeUrl", () => {
     const url = new URL(buildAuthorizeUrl({ clientId: "abc", redirectUri: "http://x/cb", baseUrl: "https://auth.hackclub.com" }, "st"));
     expect(url.origin + url.pathname).toBe("https://auth.hackclub.com/oauth/authorize");
     expect(url.searchParams.get("response_type")).toBe("code");
-    expect(url.searchParams.get("scope")).toBe("openid profile birthdate basic_info slack_id verification_status");
+    expect(url.searchParams.get("scope")).toBe("openid profile slack_id verification_status");
     expect(url.searchParams.get("state")).toBe("st");
     expect(url.searchParams.get("code_challenge")).toBeNull();
   });
@@ -137,13 +137,13 @@ describe("error redirects", () => {
 
 describe("hcaScopes", () => {
   test("uses the default when the variable is empty", () => {
-    expect(hcaScopes({} as NodeJS.ProcessEnv)).toBe("openid profile birthdate basic_info slack_id verification_status");
+    expect(hcaScopes({} as NodeJS.ProcessEnv)).toBe("openid profile slack_id verification_status");
   });
   test("splits on spaces and commas and keeps only scope-shaped words", () => {
     expect(hcaScopes({ HCA_SCOPES: "openid profile, slack_id  verification_status" } as NodeJS.ProcessEnv)).toBe("openid profile slack_id verification_status");
     expect(hcaScopes({ HCA_SCOPES: "openid profile%20evil&x=1" } as NodeJS.ProcessEnv)).toBe("openid");
   });
   test("falls back to the default when openid is missing", () => {
-    expect(hcaScopes({ HCA_SCOPES: "profile slack_id" } as NodeJS.ProcessEnv)).toBe("openid profile birthdate basic_info slack_id verification_status");
+    expect(hcaScopes({ HCA_SCOPES: "profile slack_id" } as NodeJS.ProcessEnv)).toBe("openid profile slack_id verification_status");
   });
 });

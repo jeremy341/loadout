@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { databaseConfigured } from "@/lib/platform/db";
 import { bindIdentity, consumeAttempt, exchangeCode, fetchIdentity } from "@/lib/platform/hca-actions";
 import { hcaConfig, NONCE_COOKIE, signInErrorPath, type SignInError } from "@/lib/platform/hca";
+import { publicOrigin } from "@/lib/platform/public-origin";
 import { createSession, SESSION_COOKIE, sessionCookieOptions } from "@/lib/platform/session";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +21,7 @@ function nonceFrom(request: Request): string | null {
 export async function GET(request: Request) {
   const config = hcaConfig();
   // Redirect targets use the origin the app registered, so a proxy cannot change where people land.
-  const origin = config ? new URL(config.redirectUri).origin : new URL(request.url).origin;
+  const origin = config ? new URL(config.redirectUri).origin : publicOrigin(request);
   const fail = (code: SignInError) => {
     const response = NextResponse.redirect(new URL(signInErrorPath(code), origin), 303);
     response.cookies.delete({ name: NONCE_COOKIE, path: "/api/auth/hackclub" });

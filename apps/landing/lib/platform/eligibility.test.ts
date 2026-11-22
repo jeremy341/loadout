@@ -29,36 +29,19 @@ describe("isUnder19", () => {
 });
 
 describe("eligibilityState", () => {
-  const on = d("2026-11-16");
-  test("ok for a verified builder under 19", () => {
-    expect(eligibilityState({ birthday: d("2010-01-01"), verificationStatus: "verified", on })).toBe("ok");
+  test("ok when Hack Club Auth reports verified; the birthday is not checked", () => {
+    expect(eligibilityState({ verificationStatus: "verified" })).toBe("ok");
   });
-  test("too_old on the 19th birthday, even when verified", () => {
-    expect(eligibilityState({ birthday: d("2007-11-16"), verificationStatus: "verified", on })).toBe("too_old");
-  });
-  test("too_young below 13, distinct from a missing birthday; 13 is the first eligible age", () => {
-    expect(eligibilityState({ birthday: d("2014-11-17"), verificationStatus: "verified", on })).toBe("too_young");
-    expect(eligibilityState({ birthday: d("2020-01-01"), verificationStatus: "verified", on })).toBe("too_young");
-    // too_young wins over unverified: a child is refused before verification is asked for.
-    expect(eligibilityState({ birthday: d("2018-01-01"), verificationStatus: "pending", on })).toBe("too_young");
-    expect(eligibilityState({ birthday: d("2013-11-16"), verificationStatus: "verified", on })).toBe("ok");
-    expect(eligibilityMessage("too_young")).toBe("LOADOUT is for ages 13 to 18.");
-  });
-  test("aged 19 or over stays too_old, never too_young", () => {
-    expect(eligibilityState({ birthday: d("1990-05-05"), verificationStatus: "verified", on })).toBe("too_old");
-  });
-  test("missing birthday and future birthday both ask for the birthday", () => {
-    expect(eligibilityState({ birthday: null, verificationStatus: "verified", on })).toBe("missing_birthday");
-    expect(eligibilityState({ birthday: d("2030-01-01"), verificationStatus: "verified", on })).toBe("missing_birthday");
-    expect(eligibilityState({ birthday: new Date("nope"), verificationStatus: "verified", on })).toBe("missing_birthday");
-  });
-  test("unverified for pending, needs_submission, empty or unknown text", () => {
-    for (const status of ["pending", "needs_submission", "", null, "ineligible", "VERIFIED-ish"]) {
-      expect(eligibilityState({ birthday: d("2010-01-01"), verificationStatus: status, on })).toBe("unverified");
+  test("unverified for pending, needs_submission, empty, unknown or missing text", () => {
+    for (const status of ["pending", "needs_submission", "", null, undefined, "ineligible", "VERIFIED-ish"]) {
+      expect(eligibilityState({ verificationStatus: status })).toBe("unverified");
     }
   });
+  test("verified status is case and whitespace tolerant", () => {
+    expect(eligibilityState({ verificationStatus: "  Verified " })).toBe("ok");
+  });
   test("messages are plain and carry no dashes", () => {
-    for (const s of ["ok", "too_young", "too_old", "missing_birthday", "unverified"] as const) {
+    for (const s of ["ok", "unverified"] as const) {
       expect(eligibilityMessage(s)).not.toMatch(/[–—]| - /);
     }
   });

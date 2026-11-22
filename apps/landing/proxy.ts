@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { SIGN_IN_PATH } from "@/lib/platform/hca";
+import { publicOrigin } from "@/lib/platform/public-origin";
 import { hasPlatformUnlockCookie, PLATFORM_GATE_COOKIE, platformGateEnabled } from "@/lib/platform/platform-gate";
 import { isPrivatePagePath, isReviewerRoute, isReviewHost, movedTo, reviewerRoute } from "@/lib/reviewer/host";
 
@@ -49,10 +50,8 @@ export function proxy(request: NextRequest) {
     !isGateExempt(pathname, review) &&
     !hasPlatformUnlockCookie(request.cookies.get(PLATFORM_GATE_COOKIE)?.value)
   ) {
-    const to = request.nextUrl.clone();
-    to.pathname = SIGN_IN_PATH;
-    to.search = "";
-    to.hash = "";
+    // Built from the public origin: behind the proxy, nextUrl can carry the bind address (localhost) instead of the host.
+    const to = new URL(SIGN_IN_PATH, publicOrigin(request));
     // On the review host the sign-in page is let through below, so this redirect cannot loop.
     const redirect = NextResponse.redirect(to, 307);
     return markPrivate(redirect);

@@ -55,7 +55,7 @@ const LIGHT: Palette = { water: "#DDD3BF", ink: "#1A1714", accent: "#C4491F", ko
 // The pond is drawn on a bigger canvas than it is shown on, so the fish come out smaller.
 const SCALE = 1.6;
 
-export function KoiPond() {
+export function KoiPond({ sidebar = true }: { sidebar?: boolean }) {
   const box = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -147,7 +147,7 @@ export function KoiPond() {
   return (
     <div ref={box} className="pf-koi" aria-hidden="true">
       {/* The sidebar keeps its grey. It is drawn here, under the fish, so they swim over it; the sidebar itself is see-through and its words stay on top. */}
-      <div className="pf-koi-side" />
+      {sidebar ? <div className="pf-koi-side" /> : null}
       <canvas ref={canvas} />
     </div>
   );

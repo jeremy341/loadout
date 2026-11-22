@@ -30,13 +30,19 @@ export function platformGateToken(env: Env = process.env): string {
   return createHmac("sha256", configuredSecret(env)).update(GATE_LABEL).digest("base64url");
 }
 
-export function platformGateCookieOptions() {
+// The unlock must reach every host the session reaches (the dashboard and the reviewer desk), so it shares the same
+// SESSION_COOKIE_DOMAIN as the session cookie. Without it the gate cookie stays host-only and the other host sends the
+// reviewer back to the password page. Only set over a secure cookie, as in sessionCookieOptions.
+export function platformGateCookieOptions(env: Env = process.env) {
+  const secure = env.NODE_ENV === "production";
+  const domain = env.SESSION_COOKIE_DOMAIN?.trim();
   return {
     httpOnly: true,
     sameSite: "lax" as const,
-    secure: process.env.NODE_ENV === "production",
+    secure,
     path: "/",
     maxAge: GATE_MAX_AGE_SECONDS,
+    ...(secure && domain ? { domain } : {}),
   };
 }
 

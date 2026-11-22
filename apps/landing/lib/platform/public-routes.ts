@@ -37,6 +37,8 @@ export const PUBLIC_ROUTES: readonly RouteRule[] = Object.freeze([
   { method: "*", pattern: "/api/cron/:job" },
   { method: "*", pattern: "/api/cron/fraud-precheck" },
   { method: "*", pattern: "/api/cron/fraud-robert-sync" },
+  // Signed fraud-outcome webhook. No session: the handler verifies an HMAC shared secret and answers 503 while it is unset.
+  { method: "POST", pattern: "/api/fraud-outcome" },
 ] as const);
 
 // Needs a signed-in session cookie. Reviewer and admin routes also check the role inside the handler.

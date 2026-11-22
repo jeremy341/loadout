@@ -1,10 +1,17 @@
-/* Focused task pages (the project wizard): no topbar, no sidebar, one centred column of up to 760px. */
+/* Focused task pages (the project wizard): no sidebar, no topbar, no koi, one centred column. Brief .ulpi/design/wizard-focus-layout.md.
+   The wizard's own rules are in wizard.css and minimal.css; the `html .pf.pf-focus` selectors here are one class heavier, so they win
+   whatever order the stylesheets load in. */
 
 .pf.pf-focus {
   min-height: 100dvh;
   display: grid;
   position: relative;
+  isolation: isolate;
 }
+
+/* The accessibility tab is the shared fixed tab on the left edge. Only its colours follow the platform palette (as in shell.css). */
+.pf.pf-focus .a11y-shortcut { --a11y-tab-top: 116px; }
+.pf.pf-focus .a11y-tab { border-width: 2px 2px 4px 4px; color: var(--pf-acf); background: var(--pf-ac); }
 
 .pf-focus-main {
   position: relative;
@@ -13,19 +20,83 @@
   justify-items: center;
   align-content: start;
   min-height: 100dvh;
-  padding: 40px 16px 56px;
+  min-width: 0;
+  padding: 40px 16px 32px;
   box-sizing: border-box;
 }
 
 .pf-focus-card {
   width: 100%;
-  max-width: 760px;
+  min-width: 0;
+  max-width: 600px;
   display: grid;
   gap: 28px;
 }
 
-@media (max-width: 480px) {
-  .pf-focus-main {
-    padding: 24px 16px 40px;
-  }
+/* ---- The wizard inside the focus frame ---- */
+html .pf.pf-focus .pf-wiz { max-width: none; min-height: calc(100dvh - 72px); padding-top: 0; }
+html .pf.pf-focus .pf-wiz-top { margin: 0 0 4px; }
+@media (min-width: 1000px) {
+  html .pf.pf-focus .pf-wiz-top { left: -56px; top: -9px; }
+}
+
+/* Progress strip: thin segments, small labels. The current label stays underlined, so colour is never the only cue. */
+html .pf.pf-focus .pf-wiz-steps { gap: 8px; margin-bottom: 0; }
+html .pf.pf-focus .pf-wiz-step { gap: 10px; min-height: 44px; align-content: start; }
+html .pf.pf-focus .pf-wiz-seg { height: 3px; border: 0; background: var(--pf-rule); }
+html .pf.pf-focus .pf-wiz-step[data-state="done"] .pf-wiz-seg,
+html .pf.pf-focus .pf-wiz-step[data-state="current"] .pf-wiz-seg { background: var(--pf-state); border: 0; }
+html .pf.pf-focus .pf-wiz-step-label { font-size: 11px; }
+
+/* The question sits in the middle of the page, centred. The fields under it stay left aligned inside the column. */
+html .pf.pf-focus .pf-wiz-body { display: grid; align-content: center; justify-items: stretch; gap: 0; padding: 24px 0; }
+html .pf.pf-focus .pf-wiz-h1 { margin: 0 0 20px; text-align: center; text-transform: lowercase; font-size: clamp(1.625em, 6vw, 2.25em); }
+html .pf.pf-focus .pf-wiz-sub { margin-inline: auto; text-align: center; }
+
+/* Step 1 and the track step: compact cards with a small icon tile. */
+html .pf.pf-focus .pf-wiz-kinds .pf-choice-grid { gap: 12px; max-width: none; margin: 0; }
+html .pf.pf-focus .pf-wiz-kinds .pf-wiz-kind {
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  min-height: 0;
+  aspect-ratio: auto;
+  padding: 16px;
+}
+html .pf.pf-focus .pf-wiz-kinds .pf-wiz-kind .pf-choice-name { font-size: 1.25em; letter-spacing: 0.04em; }
+html .pf.pf-focus .pf-wiz-kinds .pf-wiz-kind .pf-hint { max-width: none; min-height: 0; font-size: 0.8125em; line-height: 1.55; }
+html .pf.pf-focus .pf-wiz-tracks .pf-wiz-kind { min-height: 0; aspect-ratio: auto; }
+html .pf.pf-focus .pf-wiz-kinds .pf-wiz-track-grid { gap: 12px; margin-top: 8px; }
+html .pf.pf-focus .pf-wiz-kinds .pf-wiz-kind:has(input:checked) { border-width: 1px; }
+html .pf.pf-focus .pf-wiz-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 4px;
+  border: 1px solid var(--pf-rule);
+  background: var(--pf-bg);
+  color: var(--pf-fg);
+}
+html .pf.pf-focus .pf-wiz-icon svg { display: block; width: auto; height: auto; max-width: none; shape-rendering: crispEdges; }
+html .pf.pf-focus .pf-wiz-kinds .pf-wiz-kind:has(input:checked) .pf-wiz-icon { border-color: var(--pf-fg); }
+html .pf.pf-focus .pf-wiz-pane > .pf-hint { margin-top: 12px; text-align: center; }
+html .pf.pf-focus .pf-wiz-pane [aria-live] .pf-error { text-align: center; }
+
+/* The bar: Back on the left, a small Next at the right end of the column. It sits at the bottom of the page. */
+html .pf.pf-focus .pf-wiz-bar { margin-top: auto; padding: 8px 0 0; }
+html .pf.pf-focus .pf-wiz-bar .pf-btn { min-height: 44px; }
+html .pf.pf-focus .pf-wiz-bar .pf-btn.pri { min-height: 44px; padding: 0 18px; gap: 8px; font-size: 0.8125em; }
+html .pf.pf-focus .pf-wiz-bar .pf-btn.pri svg { flex: none; width: 14px; height: 14px; shape-rendering: crispEdges; }
+html .pf.pf-focus .pf-wiz-bar .pf-btn.pri[type="submit"] { padding: 0 24px; }
+
+@media (max-width: 599px) {
+  .pf-focus-main { padding: 24px 16px 24px; }
+  html .pf.pf-focus .pf-wiz-kinds .pf-choice-grid { grid-template-columns: 1fr; }
+  html .pf.pf-focus .pf-wiz-bar .pf-btn { flex: 1; min-height: 48px; }
+  html .pf.pf-focus .pf-wiz-bar .pf-btn.pri { flex: 2; min-height: 48px; justify-content: center; }
+}
+
+@media (forced-colors: active) {
+  html .pf.pf-focus .pf-wiz-icon { border-color: CanvasText; }
 }

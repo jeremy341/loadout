@@ -2,12 +2,14 @@
 // Pure, so it can be tested. A real row's lines and total come from what was stored at checkout: history is never re-priced.
 import { orderLines, orderTotal, type Order, type ResolvedLine } from "./orders";
 import { shopItemById, type TrackHours } from "./shop";
-import type { OrderDbLine } from "./shop-rules";
+import type { OrderDbLine, OrderTracking } from "./shop-rules";
 
 export type ViewOrder = Order & {
   totalOre?: number;
   cancelled?: boolean;
   paid?: readonly OrderDbLine[];
+  // Present on real rows once the order has shipped; absent on fixtures. A grant stores its reference here with carrier "Grant".
+  tracking?: OrderTracking | null;
 };
 
 // Lines of an order. Real rows group the paid lines by item, so a split requisition line shows as one row at what was paid.

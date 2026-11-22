@@ -27,6 +27,7 @@ import { TECHNICAL_FEATURES_MIN } from "@/reviewer-dash/lib/auditNote";
 import { Badge, Button, ButtonLink, Callout, Checkbox, Details, Field, formatDateTime, Input, Textarea } from "@/reviewer-dash/app/_ui/ui";
 import { actionErrorMessage, isStaleDeployError } from "@/reviewer-dash/app/_ui/actionError";
 import { round1 } from "@/reviewer-dash/lib/hours";
+import { clearReviewCheer, markReviewCheer } from "@/reviewer-dash/app/_ui/cheerFlag";
 
 export interface CollaboratorHours {
   id: number;
@@ -771,15 +772,19 @@ export function ReviewForm({
     // Only flags the attempt; the unmount effect decides whether to clear the draft.
     submittedRef.current = true;
     if (serverDraftTimer.current) clearTimeout(serverDraftTimer.current);
+    // An approval that sticks redirects to the next ship, so the short celebration is shown there (ui/ReviewCheer.tsx).
+    if (String(fd.get("verdict") ?? "") === "approved") markReviewCheer();
     startSubmit(async () => {
       try {
         await reviewProject(fd);
+        clearReviewCheer();
         // Every verdict that sticks redirects (to the next project, or back
         // here with ?error=), so getting here means the action stopped early.
         setSubmitError(
           "The verdict didn't go through. The project probably changed while you had it open (someone else reviewed it, or it left the review queue). Reload to see where it stands. Your notes are kept in this browser.",
         );
       } catch (err) {
+        clearReviewCheer();
         // A validation failure redirects back to this same page with ?error=,
         // which doesn't remount the form: re-enable it and repeat the message
         // next to the buttons, where the reviewer is looking.
@@ -999,6 +1004,18 @@ export function ReviewForm({
               />
             </Field>
           )}
+          <Details summary="The four quality dimensions">
+            <ul className="flex flex-col gap-1 text-sm">
+              {QUALITY_DIMENSIONS.map((d) => (
+                <li key={d.name}>
+                  <span className="font-bold">{d.name}.</span> {d.ask}
+                </li>
+              ))}
+            </ul>
+            <p className="hc-caption mt-2 text-xs">
+              One line in the notes for each. They are a way to explain the hours, not four scores, and they set no Ore by themselves.
+            </p>
+          </Details>
           <Field
             label="Additional notes"
             hint={

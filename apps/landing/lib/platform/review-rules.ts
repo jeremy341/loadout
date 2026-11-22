@@ -5,7 +5,7 @@
 import { TECHNICAL_FEATURES_MIN } from "@/reviewer-dash/lib/auditNote";
 import { AGE_LIMIT, ageOn } from "./eligibility";
 import { oreForMinutes, tenthsOfHour } from "./ledger";
-import { ORE_PER_HOUR, TRACK_XP_PER_HOUR, USD_PER_TEN_ORE, type ReviewStatus } from "./review";
+import { ORE_PER_HOUR, PARKED_STATUS, TRACK_XP_PER_HOUR, USD_PER_TEN_ORE, type ReviewStatus } from "./review";
 import { visibleTextLength } from "./text-evidence";
 
 export type Checked<T> = { ok: true; value: T } | { ok: false; message: string };
@@ -82,7 +82,7 @@ export type ReviewStage = "first-pass" | "second-pass";
 export type JournalForVerdict = { minutes: number; action?: JournalActionKind; keptMinutes?: number };
 
 // review.ts status values. "second-pass" there is the second pass (the owner's name); the desk still uses that string.
-export type StateChange = Extract<ReviewStatus, "second-pass" | "proposed-ban" | "approved" | "needs-changes" | "banned">;
+export type StateChange = Extract<ReviewStatus, "second-pass" | "proposed-ban" | "approved" | "needs-changes" | "banned"> | typeof PARKED_STATUS;
 
 export type VerdictEffect = {
   // Minutes and Ore this verdict credits. Zero unless it approves at the second pass.
@@ -90,7 +90,7 @@ export type VerdictEffect = {
   hours: number;
   ore: number;
   trackXp: number;
-  // confirmed: second-pass approval, Ore is spendable. pending: a first-pass approval, which goes to the second pass and is
+  // confirmed: second-pass approval, Ore is spendable. pending: a first-pass approval, which parks for the fraud score and is
   // not paid yet. null: nothing is credited.
   oreStatus: "confirmed" | "pending" | null;
   // May the builder still claim hours on this project and ship it again? Approved and needs changes: yes. Banned: no.
@@ -129,8 +129,8 @@ function claimedOf(journals: readonly JournalForVerdict[]): number {
 }
 
 // What a verdict does at a stage. While the ship is held no verdict can be given.
-// - approve, first pass: every first-pass approval goes to the second pass (owner decision, 16 Nov 2026; Pixl second_review).
-//   The recommended hours are checked and the Ore stays pending. Nothing is confirmed.
+// - approve, first pass: every first-pass approval parks for Robert's fraud score before the second pass (PARKED_STATUS). The
+//   recommended hours are checked and the Ore stays pending. Nothing is confirmed.
 // - approve, second pass: credits exactly what the journal decisions kept and confirms the Ore.
 // - needs_changes: credits nothing, needs a written reason, goes back to the builder at either stage.
 // - banned, first pass: only a proposal (state proposed-ban). Second pass: the ban itself, which only an owner may give (use
@@ -167,7 +167,7 @@ export function verdictEffect(verdict: Verdict, journals: readonly JournalForVer
           trackXp: second ? trackXpFor(kept) : 0,
           oreStatus: second ? "confirmed" : "pending",
           claimable: true,
-          state: second ? "approved" : "second-pass",
+          state: second ? "approved" : PARKED_STATUS,
           unlocksTrack: false,
           reduced: !allFull,
           claimedMinutes,
@@ -385,24 +385,38 @@ export function assignmentReminderDue({ reshippedAt, reminderSentAt, now }: { re
   return !reminderSentAt || reminderSentAt.getTime() < start;
 }
 
-// ---- Fraud triage (Pixl, adopted: actions.ts lines 1137 and 2183 to 2245; Robert scoring is dropped, the human call stays) ----
+// ---- Fraud triage (retired) ----
 
-// Before a second-pass verdict, a final reviewer or an owner records a triage: "not-fraud" or "fraud", with a note. A second pass
-// verdict is refused until the triage says not-fraud (Pixl: "This still needs a fraud triage (Fraud / Not fraud) before a final
-// verdict."). A fraud triage stops the approval: the ship can only go to a ban proposal.
+// The human fraud triage and its second-pass gate are gone (plans/proposals/platform-parity-pixl.md, step 2.3). Robert's score is
+// the fraud signal, and it decides whether a parked ship moves on (robert-outcome.ts). FraudTriage is kept only because
+// review-decisions.ts still imports it, and canGiveSecondPassVerdict only because that file still calls it. Both come out with
+// review-decisions.ts's triage gate.
 export type FraudTriage = "not-fraud" | "fraud";
-export const FRAUD_TRIAGE_NOTE_MAX = 500;
-export function recordFraudTriage({ decision, by, note, byIsFinalOrOwner }: { decision: FraudTriage; by: string; note: string; byIsFinalOrOwner: boolean }): Checked<{ triage: FraudTriage; by: string; note: string }> {
-  if (!byIsFinalOrOwner) return { ok: false, message: "Only a final reviewer or an owner can make the fraud triage." };
-  if (decision !== "not-fraud" && decision !== "fraud") return { ok: false, message: "Choose Fraud or Not fraud." };
-  const text = note.trim().slice(0, FRAUD_TRIAGE_NOTE_MAX);
-  if (!text) return { ok: false, message: "A note is required for the fraud triage." };
-  return { ok: true, value: { triage: decision, by, note: text } };
+
+// Always passes. There is no triage to require any more.
+export function canGiveSecondPassVerdict(_triage: { triage: FraudTriage | null | undefined }): Checked<true> {
+  return { ok: true, value: true };
 }
 
-export function canGiveSecondPassVerdict({ triage }: { triage: FraudTriage | null | undefined }): Checked<true> {
-  if (triage !== "not-fraud") return { ok: false, message: "This still needs a fraud triage (Fraud / Not fraud) before a final verdict." };
-  return { ok: true, value: true };
+// ---- Reviewer pay (owner decision, 22 Nov 2026; plans/proposals/platform-parity-pixl.md, step 2.7) ----
+
+// Every verdict a reviewer gives writes one ReviewPayout row: 2 Ore for an approval or a confirmed ban, 1 Ore for needs changes. A
+// first-pass approval's row stays pending until the final verdict settles it, and nothing is cut: an overturned first pass keeps its
+// pay. A first-pass ban is a proposal, not a verdict, so it pays nothing.
+export type ReviewPayoutKind = "first-pass-approve" | "approve" | "needs-changes" | "ban";
+export type ReviewPayoutRow = { kind: ReviewPayoutKind; amountOre: number; status: "pending" };
+export function reviewPayoutFor(kind: ReviewPayoutKind): ReviewPayoutRow {
+  return { kind, amountOre: kind === "needs-changes" ? 1 : 2, status: "pending" };
+}
+
+// ---- Unship (plans/proposals/platform-parity-pixl.md, step 2.6) ----
+
+// The ship states an owner may unship, back to a draft. Approved ships, and ships still in review (parked for the fraud score, or
+// in the second pass). Clawback only ever takes back Ore the ship earned as confirmed credit; a pending first-pass amount is simply
+// released, so a ship with no confirmed credit is never clawed back.
+export const UNSHIP_FROM_STATUSES = ["fraud-review", "second-pass", "approved"] as const;
+export function unshipFrom(status: string): boolean {
+  return (UNSHIP_FROM_STATUSES as readonly string[]).includes(status);
 }
 
 // ---- Wait (Pixl, adopted: queueWait.ts) ----
@@ -457,7 +471,8 @@ export function canSecondPass({ reviewerId, role }: { reviewerId: string; role: 
   return stageAllows(role, "second-pass");
 }
 
-// Every first-pass approval goes to the second pass; there is no sampling (owner decision, 16 Nov 2026; Pixl second_review).
+// Every first-pass approval is taken on to the second pass (after the fraud-score park); there is no sampling (owner decision, 16
+// Nov 2026; Pixl second_review).
 export function goesToSecondPass(firstPassVerdict: "approve" | "needs_changes" | "banned"): boolean {
   return firstPassVerdict === "approve";
 }

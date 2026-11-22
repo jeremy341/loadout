@@ -24,6 +24,7 @@ const tx: Record<string, unknown> = {
     count: mock(async (args: unknown) => { record("project.count", [args]); return 1; }),
   },
   journalEntry: { updateMany: mock(async (args: unknown) => { record("journalEntry.updateMany", [args]); return { count: 1 }; }) },
+  reviewPayout: { create: mock(async (args: unknown) => { record("reviewPayout.create", [args]); return {}; }) },
   ledgerEntry: {
     aggregate: mock(async (args: unknown) => { record("ledgerEntry.aggregate", [args]); return { _sum: { amountOre: 0 } }; }),
     create: mock(async (args: unknown) => { record("ledgerEntry.create", [args]); return {}; }),
@@ -282,5 +283,68 @@ describe("reviewVerdict audit-note validation", () => {
     calls.length = 0;
     const saved = await A.reviewVerdict(IDLE, verdictForm(fullAuditNote()));
     expect(saved.status).toBe("saved");
+  });
+});
+
+describe("verdict routing, parking and reviewer pay (plans step 2.1, 2.3, 2.7)", () => {
+  const payouts = () => callsOf("reviewPayout.create").map((entry) => (entry.args[0] as { data: Record<string, unknown> }).data);
+  const statusWritten = () => (callsOf("project.updateMany").map((entry) => (entry.args[0] as { data: { status?: string } }).data.status).find((s) => s !== undefined));
+  const ownerViewer = () => makeViewer({ access: { isOwner: true, isReviewer: true, canSecondPass: true, reviewQueues: "both" } });
+
+  it("a first-pass approval parks the ship at fraud-review, not in the second pass, and pays the reviewer 2 Ore pending", async () => {
+    viewer = makeViewer();
+    ship = makeShip();
+    const result = await A.reviewVerdict(IDLE, form({ verdict: "approve", note: "Approved after reviewing the repo and demo.", auditNote: fullAuditNote() }));
+    expect(result.status).toBe("saved");
+    expect(statusWritten()).toBe("fraud-review");
+    expect(payouts()).toEqual([{ reviewerId: "rev", projectId: "p1", kind: "first-pass-approve", amountOre: 2, status: "pending" }]);
+    expect(result.status === "saved" && result.message).toContain("Parked");
+  });
+
+  it("a second-pass approval needs no fraud triage and pays the final reviewer 2 Ore", async () => {
+    viewer = makeViewer({ access: { isOwner: false, isReviewer: true, canSecondPass: true, reviewQueues: "both" } });
+    ship = makeShip({ status: "second-pass", facts: { status: "second-pass", triage: null } });
+    const result = await A.reviewVerdict(IDLE, form({ verdict: "approve", note: "Approved after reviewing the repo and demo.", auditNote: fullAuditNote() }));
+    expect(result.status).toBe("saved");
+    expect(statusWritten()).toBe("approved");
+    expect(payouts()).toEqual([{ reviewerId: "rev", projectId: "p1", kind: "approve", amountOre: 2, status: "pending" }]);
+  });
+
+  it("needs changes pays 1 Ore at either stage", async () => {
+    ship = makeShip();
+    const result = await A.reviewVerdict(IDLE, form({ verdict: "needs_changes", note: "The README is missing the build steps.", reasonCode: "readme" }));
+    expect(result.status).toBe("saved");
+    expect(payouts()).toEqual([{ reviewerId: "rev", projectId: "p1", kind: "needs-changes", amountOre: 1, status: "pending" }]);
+  });
+
+  it("a first-pass ban is only a proposal and pays nothing", async () => {
+    ship = makeShip();
+    const result = await A.reviewVerdict(IDLE, form({ verdict: "ban", note: "The commits were copied from another project." }));
+    expect(result.status).toBe("saved");
+    expect(statusWritten()).toBe("second-pass");
+    expect(payouts()).toEqual([]);
+  });
+
+  it("an owner's confirmed ban pays 2 Ore; a final reviewer who is not an owner cannot confirm one", async () => {
+    viewer = ownerViewer();
+    ship = makeShip({ status: "second-pass", proposedBanBy: "rev", facts: { status: "second-pass", proposedBanBy: "rev", triage: null, claimedBy: "rev" } });
+    const confirmed = await A.reviewVerdict(IDLE, form({ verdict: "ban", note: "Confirmed: the ship is a copy of another project." }));
+    expect(confirmed.status).toBe("saved");
+    expect(statusWritten()).toBe("banned");
+    expect(payouts()).toEqual([{ reviewerId: "rev", projectId: "p1", kind: "ban", amountOre: 2, status: "pending" }]);
+
+    calls.length = 0;
+    viewer = makeViewer({ access: { isOwner: false, isReviewer: true, canSecondPass: true, reviewQueues: "both" } });
+    ship = makeShip({ status: "second-pass", facts: { status: "second-pass", triage: null, claimedBy: "rev" } });
+    const refused = await A.reviewVerdict(IDLE, form({ verdict: "ban", note: "Not an owner, so this must not confirm." }));
+    expect(refused.status).toBe("error");
+    expect(payouts()).toEqual([]);
+  });
+
+  it("the retired triage action refuses every call and writes nothing", async () => {
+    ship = makeShip({ status: "second-pass", facts: { status: "second-pass", claimedBy: "rev" } });
+    const result = await A.recordTriage(IDLE, form({ decision: "not-fraud", note: "Looks fine." }));
+    expect(result).toMatchObject({ status: "error" });
+    expect(calls.filter((entry) => entry.name.startsWith("project."))).toEqual([]);
   });
 });

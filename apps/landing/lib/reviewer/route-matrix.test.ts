@@ -34,6 +34,7 @@ const PUBLIC_API_ROUTES = new Set([
   "app/api/cron/[job]/route.ts", // the generic job runner (hackatime-sync, stats-snapshot, queue-health)
   "app/api/cron/fraud-precheck/route.ts", // pre-check and Fraudy sweep of freshly shipped projects
   "app/api/cron/fraud-robert-sync/route.ts", // submits to the fraud desk and polls outcomes into FraudCheck rows
+  "app/api/fraud-outcome/route.ts", // signed webhook: verifies an HMAC shared secret, no role guard, 503 while unconfigured
 ]);
 // The public read-only API (/api/v1) is guarded by personal API keys, not roles; lib/platform/api-v1/routes.test.ts checks every one of its routes.
 // The Slack bot's internal routes (app/api/internal/bot) take the bot's service key, not a role; lib/platform/public-routes.ts lists them.

@@ -8,6 +8,9 @@ export function CommunityHead({ title, children }: Readonly<{ title: string; chi
   return (
     <>
       <PageHead title={title}>{children}</PageHead>
+      <p className="cm-staging">
+        <strong>Sample data.</strong> Ideas, Show &amp; Tell sessions and the Era strip are sample content. Voting is not connected. This is a staging build.
+      </p>
       <CommunityTabs />
     </>
   );

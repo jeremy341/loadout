@@ -29,6 +29,24 @@ const HACKATIME_PROJECTS: readonly HackatimeProject[] = [];
 const idle: FormState = { status: "idle" };
 const DESCRIPTION_SHIP_MIN = 40;
 
+// Small marks for the two kind cards and the Next arrow (brief .ulpi/design/wizard-focus-layout.md). Hand drawn on a pixel grid,
+// square ends, decoration only: the card name and the button label carry the meaning.
+const SOFTWARE_ICON = (
+  <svg viewBox="0 0 16 12" width="24" height="18" fill="currentColor" focusable="false">
+    <path d="M5 1h2v1H5zM4 2h2v1H4zM3 3h2v1H3zM2 4h2v1H2zM1 5h2v1H1zM1 6h2v1H1zM2 7h2v1H2zM3 8h2v1H3zM4 9h2v1H4zM5 10h2v1H5zM9 1h2v1H9zM10 2h2v1h-2zM11 3h2v1h-2zM12 4h2v1h-2zM13 5h2v1h-2zM13 6h2v1h-2zM12 7h2v1h-2zM11 8h2v1h-2zM10 9h2v1h-2zM9 10h2v1H9z" />
+  </svg>
+);
+const HARDWARE_ICON = (
+  <svg viewBox="0 0 12 12" width="20" height="20" fill="currentColor" focusable="false">
+    <path d="M3 3h6v6H3zm1 1v4h4V4zM5 5h2v2H5zM4 0h1v2H4zM7 0h1v2H7zM4 10h1v2H4zM7 10h1v2H7zM0 4h2v1H0zM0 7h2v1H0zM10 4h2v1h-2zM10 7h2v1h-2z" fillRule="evenodd" />
+  </svg>
+);
+const NEXT_ARROW = (
+  <svg viewBox="0 0 12 12" width="14" height="14" fill="currentColor" aria-hidden="true" focusable="false">
+    <path d="M1 5h8v2H1zM7 3h1v1H7zM8 4h1v1H8zM9 5h1v2H9zM8 7h1v1H8zM7 8h1v1H7z" />
+  </svg>
+);
+
 // There is one wizard on its page, so its field ids are fixed names.
 const FIELD_ID: Record<string, string> = {
   description: "wiz-description",
@@ -354,12 +372,14 @@ export function NewProjectWizard() {
                 <label className="pf-choice pf-wiz-kind" data-burst={burst === "software" ? "true" : undefined}>
                   <input type="radio" name="kind" value="software" checked={kind === "software"} onChange={() => pickKind("software")} />
                   <span className="pf-wiz-burst" aria-hidden="true" />
+                  <span className="pf-wiz-icon" aria-hidden="true">{SOFTWARE_ICON}</span>
                   <span className="pf-choice-name">Software</span>
                   <span className="pf-hint">Tools, systems and compute: command line tools, servers, databases, machine learning.</span>
                 </label>
                 <label className="pf-choice pf-wiz-kind" data-burst={burst === "hardware" ? "true" : undefined}>
                   <input type="radio" name="kind" value="hardware" checked={kind === "hardware"} onChange={() => pickKind("hardware")} />
                   <span className="pf-wiz-burst" aria-hidden="true" />
+                  <span className="pf-wiz-icon" aria-hidden="true">{HARDWARE_ICON}</span>
                   <span className="pf-choice-name">Hardware</span>
                   <span className="pf-hint">Circuits, boards, robots: anything you can hold in your hand.</span>
                 </label>
@@ -566,6 +586,7 @@ export function NewProjectWizard() {
             aria-describedby={(stepKey === "kind" || stepKey === "track") && problemAt(steps, step, draft, kind) ? "wiz-next-hint" : undefined}
           >
             {stepKey === "links" && !hasLinks ? "Skip" : "Next"}
+            {NEXT_ARROW}
           </button>
         ) : (
           <button key="create" type="submit" className="pf-btn pri" disabled={pending || done}>

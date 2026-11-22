@@ -14,6 +14,10 @@
 //   planErasure(personId) -> { personId, removed, kept, revokesKeys }
 //   toExportJson(value) -> unknown                       Dates become ISO strings; undefined keys are dropped
 //   exportEnvelope(parts, now) -> object                 the top of the export bundle
+//   BUILDER_SHIP_FIELDS                                  the only review-payload fields a builder may see (a whitelist)
+//   REVIEWER_ONLY_SHIP_FIELDS                            desk fields that must never reach a builder (the test checks they are not whitelisted)
+//   redactShipForBuilder(ship) -> object                 drops every field that is not on the builder whitelist
+//   builderReviewNotes(ship, viewerId) -> { reviewNote, reviewReason } | {}   a builder sees only their own ship's notes
 export const ERASURE_DELAY_DAYS = 7;
 export const EXPORT_FORMAT = "loadout-export";
 export const EXPORT_VERSION = 1;
@@ -123,4 +127,71 @@ export function exportEnvelope(parts: Record<string, unknown>, now: Date): Recor
     version: EXPORT_VERSION,
     exportedAt: now.toISOString(),
   };
+}
+
+// ---- Builder view of a review payload ----
+// Reviewers see the whole desk payload (review-data.ts DeskShip). A builder sees their own ship's title and status, and the two
+// notes a reviewer wrote for them (reviewNote, reviewReason). Everything else the desk reads is reviewer-only: claims, triage,
+// holds, first-pass and proposed-ban notes, assignments, the decision facts, the owner's birthday, and any collaborator or
+// invite lists. redactShipForBuilder is a whitelist, so a new desk field stays hidden until it is added here on purpose.
+export const BUILDER_SHIP_FIELDS: readonly string[] = Object.freeze([
+  "id",
+  "seq",
+  "title",
+  "description",
+  "track",
+  "status",
+  "repoUrl",
+  "demoUrl",
+  "isUpdate",
+  "changeNote",
+  "resubmitCount",
+  "createdAt",
+  "submittedAt",
+  "firstShippedAt",
+  "reshippedAt",
+  "reviewNote",
+  "reviewReason",
+]);
+
+export const REVIEWER_ONLY_SHIP_FIELDS: readonly string[] = Object.freeze([
+  "owner",
+  "journals",
+  "claimedMinutes",
+  "facts",
+  "selfReviewExceptionIds",
+  "approvedMinutes",
+  "bannedAt",
+  "firstPassBy",
+  "firstPassAt",
+  "firstPassNote",
+  "firstPassMinutes",
+  "triage",
+  "triageBy",
+  "triageNote",
+  "triageAt",
+  "heldAt",
+  "heldBy",
+  "holdReason",
+  "assignedTo",
+  "assignmentRemindedAt",
+  "proposedBanBy",
+  "proposedBanReason",
+  "claimedBy",
+  "claimedAt",
+  "claimHeartbeatAt",
+]);
+
+export function redactShipForBuilder(ship: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(Object.entries(ship).filter(([key]) => BUILDER_SHIP_FIELDS.includes(key)));
+}
+
+// A builder sees the reviewer's notes only on their own ship. Anyone else gets an empty object.
+export function builderReviewNotes(
+  ship: { ownerId?: string; owner?: { id: string }; reviewNote?: string | null; reviewReason?: string | null },
+  viewerId: string,
+): { reviewNote?: string | null; reviewReason?: string | null } {
+  const ownerId = ship.ownerId ?? ship.owner?.id;
+  if (!viewerId || ownerId !== viewerId) return {};
+  return { reviewNote: ship.reviewNote ?? null, reviewReason: ship.reviewReason ?? null };
 }

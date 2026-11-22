@@ -3,7 +3,7 @@ import { STAFF_PROJECTS } from "@/lib/reviewer/people";
 import type { Track } from "@/lib/platform/progress";
 import { Badge as KitBadge, StatusBadge as KitStatusBadge, type Tone as KitTone } from "@/reviewer-dash/app/_ui/ui";
 
-// Project badges shared by the review, project and player pages.
+// Project badges shared by the review, project and builder pages.
 
 type Tone = "gray" | "green" | "amber" | "rose" | "blue" | "violet";
 
@@ -57,7 +57,7 @@ export function TypeBadge({ type }: { type?: string | null }) {
   return <KitBadge>{TYPE_LABELS[type] ?? type}</KitBadge>;
 }
 
-// Reviewer-nominated Flagship award mark (Pixl's Beacon). Cosmetic only, see toggleProjectPeak.
+// Reviewer-nominated Flagship award mark. Cosmetic only, see toggleProjectPeak.
 export function BeaconBadge() {
   return (
     <KitBadge tone="yellow" icon="rep">
@@ -66,7 +66,7 @@ export function BeaconBadge() {
   );
 }
 
-// Hardware-only funding ask, set by the player via needs_funding. See the
+// Hardware-only funding ask, set by the builder via needs_funding. See the
 // funding panel in review/[id]/page.tsx for the BOM / cart screenshot detail.
 export function FundingBadge({ needsFunding, fundingUsd }: { needsFunding: boolean; fundingUsd?: number | null }) {
   if (!needsFunding) return null;

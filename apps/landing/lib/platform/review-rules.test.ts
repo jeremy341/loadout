@@ -7,7 +7,8 @@ import {
   canConfirmBan,
   canGiveSecondPassVerdict,
   canHold,
-  recordFraudTriage,
+  reviewPayoutFor,
+  unshipFrom,
   canReleaseHold,
   canSecondPass,
   equipGateMet,
@@ -228,7 +229,7 @@ describe("verdictEffect", () => {
     const result = verdictEffect({ kind: "approve" }, full, first);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value).toMatchObject({ minutes: 0, ore: 0, trackXp: 0, oreStatus: "pending", state: "second-pass", claimable: true });
+    expect(result.value).toMatchObject({ minutes: 0, ore: 0, trackXp: 0, oreStatus: "pending", state: "fraud-review", claimable: true });
   });
   it("refuses to approve with no entries, an undecided entry, a clarification or zero kept", () => {
     expect(verdictEffect({ kind: "approve" }, [], second).ok).toBe(false);
@@ -298,7 +299,7 @@ describe("verdictEffect", () => {
     });
     it("accepts 150 new kept minutes at the first pass too", () => {
       const ok = update({ minutes: 150, action: "approve-all" }, first);
-      expect(ok.ok && ok.value.state).toBe("second-pass");
+      expect(ok.ok && ok.value.state).toBe("fraud-review");
     });
     it("a first ship (no prior approved minutes) has no minimum", () => {
       expect(verdictEffect({ kind: "approve" }, [{ minutes: 10, action: "approve-all" }], { ...second, priorApprovedMinutes: 0 }).ok).toBe(true);
@@ -670,21 +671,27 @@ describe("assignmentReminderDue (Pixl: a day into the window, once per re-ship)"
   });
 });
 
-describe("recordFraudTriage and the second-pass gate (Pixl: actions.ts 1137)", () => {
-  it("only a final reviewer or an owner may triage", () => {
-    expect(recordFraudTriage({ decision: "not-fraud", by: "rev-a", note: "Looks fine.", byIsFinalOrOwner: false }).ok).toBe(false);
-  });
-  it("needs a note and a valid choice", () => {
-    expect(recordFraudTriage({ decision: "fraud", by: "fin-a", note: "  ", byIsFinalOrOwner: true }).ok).toBe(false);
-    expect(recordFraudTriage({ decision: "maybe" as never, by: "fin-a", note: "x", byIsFinalOrOwner: true }).ok).toBe(false);
-  });
-  it("records a not-fraud or fraud triage with the note", () => {
-    expect(recordFraudTriage({ decision: "not-fraud", by: "fin-a", note: " Checked the commits. ", byIsFinalOrOwner: true })).toEqual({ ok: true, value: { triage: "not-fraud", by: "fin-a", note: "Checked the commits." } });
-  });
-  it("refuses a second-pass verdict until the triage says not-fraud", () => {
-    expect(canGiveSecondPassVerdict({ triage: null }).ok).toBe(false);
-    expect(canGiveSecondPassVerdict({ triage: "fraud" }).ok).toBe(false);
+describe("the human fraud triage is retired (plans step 2.3)", () => {
+  it("no second-pass verdict waits on a triage any more", () => {
+    expect(canGiveSecondPassVerdict({ triage: null }).ok).toBe(true);
+    expect(canGiveSecondPassVerdict({ triage: "fraud" }).ok).toBe(true);
     expect(canGiveSecondPassVerdict({ triage: "not-fraud" }).ok).toBe(true);
+  });
+});
+
+describe("reviewer pay per verdict (plans step 2.7)", () => {
+  it("2 Ore for an approval or a confirmed ban, 1 Ore for needs changes, all pending", () => {
+    expect(reviewPayoutFor("approve")).toEqual({ kind: "approve", amountOre: 2, status: "pending" });
+    expect(reviewPayoutFor("first-pass-approve")).toEqual({ kind: "first-pass-approve", amountOre: 2, status: "pending" });
+    expect(reviewPayoutFor("ban")).toEqual({ kind: "ban", amountOre: 2, status: "pending" });
+    expect(reviewPayoutFor("needs-changes")).toEqual({ kind: "needs-changes", amountOre: 1, status: "pending" });
+  });
+});
+
+describe("unship states (plans step 2.6)", () => {
+  it("unships from the fraud review, the second pass and approved, and from nothing else", () => {
+    for (const status of ["fraud-review", "second-pass", "approved"]) expect(unshipFrom(status)).toBe(true);
+    for (const status of ["draft", "submitted", "in-review", "needs-changes", "banned", "proposed-ban", ""]) expect(unshipFrom(status)).toBe(false);
   });
 });
 

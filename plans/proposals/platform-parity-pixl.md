@@ -86,7 +86,7 @@ One step per pull request, in this order. Each step starts from `origin/main` on
 ### Step 2: Review pipeline
 
 1. Add the parking state between first pass and second pass.
-2. Make a real score advance the project; a score of 4 or less flags it and keeps the alert visible.
+2. Make any real score advance the project; a score of 4 or less flags it with the alert visible but still advances, as in Pixl. A low score never bans or rejects on its own.
 3. Remove the human triage and its gate.
 4. Narrow submission to after first-pass approval.
 5. Park every project when the Robert config is unset.
@@ -95,8 +95,8 @@ One step per pull request, in this order. Each step starts from `origin/main` on
 
 ### Step 3: Permissions
 
-1. Fill `collaboratorIds` and `pendingInviteIds` from `ProjectCollaborator`, and enforce self-review against them, with `SelfReviewException` as the documented exception.
-2. Write a per-action audit row for review and team actions.
+1. Fill `collaboratorIds` and `pendingInviteIds` from `ProjectCollaborator`, and enforce self-review against them, with `SelfReviewException` as the documented exception. Exceptions are project-scoped and lift accepted collaborators and pending invitees for that viewer only; an owner may never review their own ship, and a person-wide or expired grant does not count.
+2. Write a per-action audit row for review and team actions. The second-pass list is the `second_pass` role grant plus an optional `LOADOUT_SECOND_PASS_EMAILS` override that can only promote someone who is already a reviewer and never overrides `no_review`. Slack profile links are staff-only; DMs are outbox placeholders marked not live until the integration is real.
 3. Confirm builder privacy redaction in the review payloads.
 4. Record the owner-fulfil change (#7) in the rule, the desk copy and the tests.
 
@@ -145,6 +145,7 @@ A first-pass approval creates a pending `ReviewPayout` row. The final verdict se
 | --- | --- | --- |
 | Score threshold | 4 or less flags | Pixl's own fraud band. Carried over unchanged. |
 | Unship at fraud review and second review | No clawback | There is no confirmed credit at those stages. Confirm before the code assumes it. |
+| First-pass payout settlement | Stays `pending` | `ReviewPayout` has no "settled" status, so a final verdict does not yet close the first-pass row. Decide whether to add a status or close it when the final verdict lands. |
 
 Nothing here is a public claim. No participant-facing copy changes until a step ships and Plan 05 records the rule.
 

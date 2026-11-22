@@ -4,7 +4,7 @@
 // The internal rate is 10 Ore = $4.35 (owner, 14 Nov 2026). It is staff facing; the participant UI does not show dollars.
 
 export const ORE_PER_APPROVED_HOUR = 10;
-export const LEDGER_KINDS = ["approved_hours", "funding_deduction", "shop_purchase", "shop_refund", "toolbelt_reward", "adjustment", "dev_seed"] as const;
+export const LEDGER_KINDS = ["approved_hours", "funding_deduction", "shop_purchase", "shop_refund", "toolbelt_reward", "fulfilment_payout", "adjustment", "dev_seed"] as const;
 export type LedgerKind = (typeof LEDGER_KINDS)[number];
 export const LEDGER_STATUSES = ["pending", "confirmed"] as const;
 export type LedgerStatus = (typeof LEDGER_STATUSES)[number];
@@ -82,6 +82,7 @@ const KIND_LABELS: Record<LedgerKind, string> = {
   shop_purchase: "Shop purchase",
   shop_refund: "Shop refund",
   toolbelt_reward: "Toolbelt reward",
+  fulfilment_payout: "Fulfilment payout",
   adjustment: "Adjustment",
   dev_seed: "Starting balance",
 };
@@ -155,7 +156,7 @@ export function checkLedgerEntry(input: {
   const reason = typeof input.reason === "string" ? input.reason.trim() : "";
   if (reason.length === 0) return { ok: false, message: "Give a short reason." };
   if (reason.length > LEDGER_REASON_MAX) return { ok: false, message: `Keep the reason under ${LEDGER_REASON_MAX} characters.` };
-  const earns = kind === "approved_hours" || kind === "shop_refund" || kind === "toolbelt_reward";
+  const earns = kind === "approved_hours" || kind === "shop_refund" || kind === "toolbelt_reward" || kind === "fulfilment_payout";
   const spends = kind === "shop_purchase" || kind === "funding_deduction";
   if (earns && amountOre < 0) return { ok: false, message: "This kind of entry adds Ore." };
   if (spends && amountOre > 0) return { ok: false, message: "This kind of entry spends Ore." };

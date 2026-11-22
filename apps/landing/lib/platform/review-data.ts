@@ -6,11 +6,23 @@
 //   listDeskShips()                        every ship in a desk state, oldest wait first
 //   listPersonNames(ids)                   id -> display name
 //   pendingOreFor(projectId)               sum of pending approved-hours rows for the project
-//   listShipAudits(projectId?, limit?)     the review history from AuditEvent rows (action "review.*")
+//   listShipAudits(projectId?, limit?)     the review history from AuditEvent rows (action "review.*", audit.ts REVIEW_AUDIT_PREFIX)
 //   assignmentView(ship, now)              { reservedFor, hoursLeft, locked, reminderDue } for the first-pass queue
+//   factsForReviewer(ship, viewerId)       the ShipFacts a viewer's decision is made on: a collaborator or invitee under a
+//                                          SelfReviewException for this project is taken off the lists for that viewer only
 //   minutesOf(hours)                       a journal's hours as whole minutes
+//
+// Team facts: collaboratorIds are the accepted ProjectCollaborator rows, pendingInviteIds the invited ones (team-actions.ts teamFacts).
+// Declined rows count for neither, so self-review is enforced by review-rules.ts canReview and canHold through these lists.
+// Owners are never lifted by an exception.
+//
+// Builder redaction: this payload is reviewer-only. Owner fields are id, displayName and birthday (the age flag); no email and no
+// slack id. A builder sees only their own reviewNote and reviewReason through the builder pages and api-v1 (privacy.ts).
 import type { Prisma } from "../generated/prisma/client";
 import { db } from "./db";
+import { REVIEW_AUDIT_PREFIX } from "./audit";
+import { teamFacts } from "./team-actions";
+import { selfReviewExceptionIds, type SelfReviewGrant } from "../reviewer/access";
 import { assignmentReminderDue, assignmentWindow } from "./review-rules";
 import { kindOfTrack, type DeskKind, type ShipFacts } from "./review-decisions";
 
@@ -75,6 +87,8 @@ export type DeskShip = {
   journals: DeskJournal[];
   claimedMinutes: number;
   facts: ShipFacts;
+  // Person ids that an active, project-scoped SelfReviewException lifts self-review for on this ship. Read with factsForReviewer.
+  selfReviewExceptionIds: string[];
 };
 
 const baseSelect = {
@@ -116,6 +130,7 @@ const baseSelect = {
   claimedBy: true,
   claimedAt: true,
   claimHeartbeatAt: true,
+  collaborators: { select: { personId: true, status: true } },
   journal: {
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],
     select: { id: true, seq: true, title: true, body: true, hours: true, status: true, reviewAction: true, keptMinutes: true, reviewReason: true, authorId: true, createdAt: true },
@@ -134,16 +149,19 @@ function findOne(where: { id: string } | { seq: number }) {
   return db().project.findUnique({ where, select: projectSelect });
 }
 
-function toDeskShip(row: DeskRow): DeskShip {
+// Pure mapping from a loaded project row to the reviewer payload. Exported so the tests can check what reaches reviewers.
+export function toDeskShip(row: DeskRow, exceptionIds: readonly string[] = []): DeskShip {
   const journals: DeskJournal[] = row.journal.map((entry) => ({ ...entry, minutes: minutesOf(entry.hours) }));
-  const { journal: _journal, claimedBy, claimedAt, claimHeartbeatAt, ownerId, ...rest } = row;
+  const { journal: _journal, collaborators, claimedBy, claimedAt, claimHeartbeatAt, ownerId, ...rest } = row;
   void _journal;
+  const team = teamFacts(collaborators);
   return {
     ...rest,
     owner: { id: row.owner.id, displayName: row.owner.displayName, birthday: row.owner.birthday ?? null },
     kind: kindOfTrack(row.track),
     journals,
     claimedMinutes: journals.reduce((sum, entry) => sum + entry.minutes, 0),
+    selfReviewExceptionIds: [...exceptionIds],
     facts: {
       ownerId,
       kind: kindOfTrack(row.track),
@@ -158,25 +176,51 @@ function toDeskShip(row: DeskRow): DeskShip {
       assignedTo: row.assignedTo,
       reshippedAt: row.reshippedAt,
       proposedBanBy: row.proposedBanBy,
-      // No collaborator or invite table exists yet, so nobody collaborates. Pixl blocks them; the rule is ready for the data.
-      collaboratorIds: [],
-      pendingInviteIds: [],
+      collaboratorIds: team.collaboratorIds,
+      pendingInviteIds: team.pendingInviteIds,
     },
   };
 }
 
-export async function loadDeskShip(where: { id: string } | { seq: number }): Promise<DeskShip | null> {
-  const row = await findOne(where);
-  return row ? toDeskShip(row) : null;
+// Active, project-scoped grants for the given projects (one query). Expired and person-wide grants are not read.
+async function exceptionsByProject(projectIds: readonly string[], now: Date): Promise<SelfReviewGrant[]> {
+  if (projectIds.length === 0) return [];
+  return db().selfReviewException.findMany({
+    where: { projectId: { in: [...projectIds] }, expiresAt: { gt: now } },
+    select: { personId: true, projectId: true, expiresAt: true },
+  });
 }
 
-export async function listDeskShips(): Promise<DeskShip[]> {
+// The viewer-scoped facts a review decision uses. Without an exception this is the stored facts unchanged. With one, the viewer
+// is taken off the collaborator and invitee lists for this ship only, so canReview/canHold/authorizeShip treat them as allowed.
+// The owner is never removed, so an exception cannot let anyone review a ship they own.
+export function factsForReviewer(ship: Pick<DeskShip, "facts" | "selfReviewExceptionIds">, viewerId: string): ShipFacts {
+  if (!ship.selfReviewExceptionIds.includes(viewerId)) return ship.facts;
+  return {
+    ...ship.facts,
+    collaboratorIds: ship.facts.collaboratorIds.filter((id) => id !== viewerId),
+    pendingInviteIds: ship.facts.pendingInviteIds.filter((id) => id !== viewerId),
+  };
+}
+
+export async function loadDeskShip(where: { id: string } | { seq: number }, now: Date = new Date()): Promise<DeskShip | null> {
+  const row = await findOne(where);
+  if (!row) return null;
+  const grants = await exceptionsByProject([row.id], now);
+  return toDeskShip(row, selfReviewExceptionIds(grants, row.id, now));
+}
+
+export async function listDeskShips(now: Date = new Date()): Promise<DeskShip[]> {
   const rows = await db().project.findMany({
     where: { status: { in: [...DESK_STATUSES] } },
     select: listSelect,
     orderBy: [{ firstShippedAt: "asc" }, { submittedAt: "asc" }, { seq: "asc" }],
   });
-  return rows.map(toDeskShip);
+  const grants = await exceptionsByProject(
+    rows.map((row) => row.id),
+    now,
+  );
+  return rows.map((row) => toDeskShip(row, selfReviewExceptionIds(grants, row.id, now)));
 }
 
 export async function listPersonNames(ids: readonly string[]): Promise<Map<string, string>> {
@@ -195,7 +239,7 @@ export type ShipAudit = { id: string; projectId: string; actorId: string; action
 
 export async function listShipAudits(projectId?: string, limit = 200): Promise<ShipAudit[]> {
   const rows = await db().auditEvent.findMany({
-    where: { targetType: "project", action: { startsWith: "review." }, ...(projectId ? { targetId: projectId } : {}) },
+    where: { targetType: "project", action: { startsWith: REVIEW_AUDIT_PREFIX }, ...(projectId ? { targetId: projectId } : {}) },
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     take: limit,
   });

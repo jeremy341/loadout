@@ -8,7 +8,6 @@ import {
   mayGiveVerdict,
   mayHold,
   mayRelease,
-  mayTriage,
   mayUnship,
   mayAddNote,
   NOTE_STATUSES,
@@ -113,31 +112,13 @@ describe("mayClaim", () => {
   });
 });
 
-describe("secondPassVerdictAllowed and mayTriage (the triage gate)", () => {
-  it("blocks every verdict until a triage exists", () => {
-    for (const kind of ["approve", "needs_changes", "banned"] as const) expect(secondPassVerdictAllowed(null, kind).ok).toBe(false);
-    expect(secondPassVerdictAllowed(null, "approve")).toMatchObject({ message: expect.stringContaining("fraud triage") });
-  });
-  it("Not fraud allows all three; Fraud allows changes and a ban but never an approval", () => {
-    for (const kind of ["approve", "needs_changes", "banned"] as const) expect(secondPassVerdictAllowed("not-fraud", kind).ok).toBe(true);
-    expect(secondPassVerdictAllowed("fraud", "approve").ok).toBe(false);
-    expect(secondPassVerdictAllowed("fraud", "needs_changes").ok).toBe(true);
-    expect(secondPassVerdictAllowed("fraud", "banned").ok).toBe(true);
-  });
-  const second = (over: Partial<ShipFacts> = {}) => ship({ status: "second-pass", claimedBy: "fin", ...over });
-  it("is for the second pass only, a final reviewer or an owner, with their own live claim and no hold", () => {
-    expect(mayTriage(finalReviewer, second(), NOW).ok).toBe(true);
-    expect(mayTriage(finalReviewer, ship(), NOW).ok).toBe(false);
-    expect(mayTriage(reviewer, second({ claimedBy: "rev" }), NOW).ok).toBe(false);
-    expect(mayTriage(finalReviewer, second({ claimedBy: "someone" }), NOW).ok).toBe(false);
-    expect(mayTriage(finalReviewer, second({ heldAt: NOW, heldBy: "x" }), NOW).ok).toBe(false);
-    expect(mayTriage({ ...finalReviewer, id: "builder" }, second({ claimedBy: "builder" }), NOW).ok).toBe(false);
-  });
-  it("is immutable once recorded: a second call is refused, Fraud included, until the triage is null again", () => {
-    expect(mayTriage(finalReviewer, second({ triage: "not-fraud" }), NOW)).toMatchObject({ ok: false, message: expect.stringContaining("already recorded") });
-    expect(mayTriage(finalReviewer, second({ triage: "fraud" }), NOW).ok).toBe(false);
-    expect(mayTriage(owner, second({ claimedBy: "own", triage: "fraud" }), NOW).ok).toBe(false);
-    expect(mayTriage(finalReviewer, second({ triage: null }), NOW).ok).toBe(true);
+describe("secondPassVerdictAllowed (no triage gate)", () => {
+  it("never blocks a verdict on a triage value", () => {
+    for (const triage of [null, "not-fraud", "fraud"]) {
+      for (const kind of ["approve", "needs_changes", "banned"] as const) {
+        expect(secondPassVerdictAllowed(triage, kind).ok).toBe(true);
+      }
+    }
   });
 });
 
@@ -186,10 +167,10 @@ describe("mayGiveVerdict, second pass and proposed ban", () => {
   it("lets an owner confirm a ban", () => {
     expect(mayGiveVerdict(owner, second({ claimedBy: "own" }), "banned", NOW).ok).toBe(true);
   });
-  it("refuses a plain reviewer in the second pass, and any verdict without a triage", () => {
+  it("refuses a plain reviewer in the second pass, but no longer blocks on a triage", () => {
     expect(mayGiveVerdict(reviewer, second({ claimedBy: "rev" }), "approve", NOW).ok).toBe(false);
-    expect(mayGiveVerdict(finalReviewer, second({ triage: null }), "approve", NOW).ok).toBe(false);
-    expect(mayGiveVerdict(finalReviewer, second({ triage: "fraud" }), "approve", NOW).ok).toBe(false);
+    expect(mayGiveVerdict(finalReviewer, second({ triage: null }), "approve", NOW).ok).toBe(true);
+    expect(mayGiveVerdict(finalReviewer, second({ triage: "fraud" }), "approve", NOW).ok).toBe(true);
   });
   const proposed = (over: Partial<ShipFacts> = {}) => second({ proposedBanBy: "rev", triage: null, ...over });
   it("keeps the proposer from confirming their own ban proposal, owners excepted (Pixl proposedBanDecision)", () => {
@@ -246,11 +227,13 @@ describe("journal decisions, corrections and unship", () => {
     expect(mayCorrect(finalReviewer, ship()).ok).toBe(false);
     expect(mayCorrect({ ...finalReviewer, id: "builder" }, ship({ status: "approved" })).ok).toBe(false);
   });
-  it("unships an approved ship for an owner only", () => {
-    expect(mayUnship(owner, ship({ status: "approved" })).ok).toBe(true);
-    expect(mayUnship(finalReviewer, ship({ status: "approved" })).ok).toBe(false);
-    expect(mayUnship(owner, ship({ status: "second-pass" })).ok).toBe(false);
-    expect(mayUnship({ ...owner, id: "builder" }, ship({ status: "approved" })).ok).toBe(false);
+  it("unships from fraud review, the second pass or approved, for an owner only", () => {
+    for (const status of ["fraud-review", "second-pass", "approved"]) {
+      expect(mayUnship(owner, ship({ status })).ok).toBe(true);
+      expect(mayUnship(finalReviewer, ship({ status })).ok).toBe(false);
+      expect(mayUnship({ ...owner, id: "builder" }, ship({ status })).ok).toBe(false);
+    }
+    expect(mayUnship(owner, ship({ status: "in-review" })).ok).toBe(false);
   });
 });
 

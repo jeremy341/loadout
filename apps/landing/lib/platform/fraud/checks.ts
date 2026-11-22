@@ -1,8 +1,9 @@
 // FraudCheck: the evidence rows that the automated fraud and verification checks leave for the review desk. Pixl keeps the same
 // facts as columns on its projects row (ai_review_*, robert_*, system_note) and lets the automation move the project; LOADOUT keeps
-// them apart on purpose. A check only ever writes a row here. It never writes a verdict, a status or a triage field onto Project:
-// "flagged" means "a reviewer should look closely", never "this ship is refused". The desk's decision stays a human one, written to
-// the project by lib/platform/review-actions.ts.
+// them apart on purpose. A check only ever writes a row here. It never writes a verdict or a triage field onto Project: "flagged"
+// means "a reviewer should look closely", never "this ship is refused". The one status move a check causes is Robert's "cleared" (a
+// score above 4) moving a parked ship to the second pass, made by robert-sync.ts (advanceIfCleared). The desk's verdicts stay human,
+// written to the project by lib/platform/review-actions.ts.
 //
 // The table is append-only. A pending Robert submission that later gets its score is a NEW row, not an update of the pending one,
 // so the history of what the machines said and when is never rewritten. The reader gives the newest row per (project, kind).

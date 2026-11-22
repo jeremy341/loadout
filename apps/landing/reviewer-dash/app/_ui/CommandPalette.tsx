@@ -5,8 +5,11 @@ import { useRouter } from "next/navigation";
 import Icon, { type GlyphName } from "@hackclub/icons";
 import { glyphStyle } from "./glyphs";
 import type { NavModel } from "./nav";
+import ReviewCheer from "./ReviewCheer";
+import { searchIsAbsent } from "./searchProbe";
+import Shortcuts, { OPEN_SEARCH_EVENT, OPEN_SHORTCUTS_EVENT } from "./Shortcuts";
 
-interface PlayerHit {
+interface BuilderHit {
   id: string;
   label: string;
   sub: string;
@@ -24,14 +27,19 @@ interface Hit {
   glyph: GlyphName;
 }
 
-// Ctrl/Cmd+K: jump to a page, player or project.
+// Ctrl/Cmd+K (or /): jump to a page, builder or project. Pages are searched here and always work. Builders and projects come from
+// /api/search; when that is absent (a 404, an HTML error page, a network failure) the palette stops asking for the rest of the session
+// and says it is searching pages only. The desk's shortcut list and the approval celebration are mounted from here because this is the one
+// client component the layout already renders.
 export default function CommandPalette({ nav }: { nav: NavModel }) {
   const router = useRouter();
   const dialog = useRef<HTMLDialogElement>(null);
   const [q, setQ] = useState("");
-  const [players, setPlayers] = useState<PlayerHit[]>([]);
+  const [builders, setBuilders] = useState<BuilderHit[]>([]);
   const [projects, setProjects] = useState<ProjectHit[]>([]);
   const [cursor, setCursor] = useState(0);
+  // False once /api/search has failed in a way that means it is not there; the rest of the palette keeps working on page names.
+  const [remote, setRemote] = useState(true);
 
   function open() {
     dialog.current?.showModal();
@@ -49,15 +57,23 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
         else open();
       }
     }
+    // The "/" shortcut asks for the palette with this event (Shortcuts.tsx).
+    function onOpenRequest() {
+      if (!dialog.current?.open) open();
+    }
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    window.addEventListener(OPEN_SEARCH_EVENT, onOpenRequest);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener(OPEN_SEARCH_EVENT, onOpenRequest);
+    };
   }, []);
 
   useEffect(() => {
     const term = q.trim();
     setCursor(0);
-    if (term.length < 2) {
-      setPlayers([]);
+    if (term.length < 2 || !remote) {
+      setBuilders([]);
       setProjects([]);
       return;
     }
@@ -65,19 +81,24 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
     const t = setTimeout(async () => {
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(term)}`, { signal: ctrl.signal });
-        if (!res.ok) return;
-        const d = (await res.json()) as { players?: PlayerHit[]; projects?: ProjectHit[] };
-        setPlayers(d.players ?? []);
+        // 401, 403 and 404 all mean this desk cannot answer; so does a body that is not JSON (the 404 page is HTML).
+        if (!res.ok || !(res.headers.get("content-type") ?? "").includes("json")) {
+          if (searchIsAbsent({ ok: res.ok, status: res.status, contentType: res.headers.get("content-type") })) setRemote(false);
+          return;
+        }
+        // The endpoint's key is still "players" (Pixl's name); "builders" is read first so the endpoint can be renamed.
+        const d = (await res.json()) as { builders?: BuilderHit[]; players?: BuilderHit[]; projects?: ProjectHit[] };
+        setBuilders(d.builders ?? d.players ?? []);
         setProjects(d.projects ?? []);
-      } catch {
-        // aborted by the next keystroke
+      } catch (err) {
+        if ((err as { name?: string } | null)?.name !== "AbortError") setRemote(false);
       }
     }, 200);
     return () => {
       clearTimeout(t);
       ctrl.abort();
     };
-  }, [q]);
+  }, [q, remote]);
 
   const ql = q.trim().toLowerCase();
   const pages: Hit[] = [
@@ -88,7 +109,7 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
     .map(({ href, label, group, glyph }) => ({ href, label, group, glyph }));
   const hits: Hit[] = [
     ...pages,
-    ...players.map((p) => ({ href: `/players/${p.id}`, label: p.label, sub: p.sub, group: "Builders", glyph: "person" as const })),
+    ...builders.map((p) => ({ href: `/players/${p.id}`, label: p.label, sub: p.sub, group: "Builders", glyph: "person" as const })),
     ...projects.map((p) => ({ href: `/projects/${p.id}`, label: p.label, sub: p.sub, group: "Projects", glyph: "rep" as const })),
   ];
 
@@ -101,7 +122,7 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
     <>
       <button type="button" className="hc-search-trigger" onClick={open}>
         <Icon glyph="search" size={18} aria-hidden />
-        <span className="flex-1 truncate text-left">Search pages, builders, projects...</span>
+        <span className="flex-1 truncate text-left">{remote ? "Search pages, builders, projects..." : "Search pages..."}</span>
         <span className="flex shrink-0 gap-1">
           <kbd className="hc-kbd">Ctrl</kbd>
           <kbd className="hc-kbd">K</kbd>
@@ -120,7 +141,8 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
           <Icon glyph="search" size={20} className="hc-muted shrink-0" aria-hidden />
           <input
             autoFocus
-            placeholder="Search pages, builders, projects..."
+            placeholder={remote ? "Search pages, builders, projects..." : "Search pages..."}
+            aria-label="Search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => {
@@ -140,6 +162,9 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
             Esc
           </button>
         </div>
+        <p className="rv-search-note" aria-live="polite">
+          {remote ? "" : "Pages only. Builder and project search is not connected."}
+        </p>
         <ul className="hc-search-results">
           {hits.length === 0 && <li className="hc-caption p-6 text-center text-sm">No results found.</li>}
           {hits.map((hit, i) => (
@@ -170,8 +195,20 @@ export default function CommandPalette({ nav }: { nav: NavModel }) {
           <span>
             <kbd className="hc-kbd">Esc</kbd> to close
           </span>
+          <button
+            type="button"
+            className="hc-kbd"
+            onClick={() => {
+              close();
+              window.dispatchEvent(new Event(OPEN_SHORTCUTS_EVENT));
+            }}
+          >
+            ? shortcuts
+          </button>
         </div>
       </dialog>
+      <Shortcuts nav={nav} />
+      <ReviewCheer />
     </>
   );
 }

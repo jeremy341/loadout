@@ -10,6 +10,7 @@ import type { YswsShip } from "@/reviewer-dash/lib/ysws";
 import { CommitList } from "@/reviewer-dash/app/_components/CommitList";
 import { renderMarkdown } from "@/reviewer-dash/lib/markdown";
 import { HackatimePanel } from "@/reviewer-dash/app/_components/HackatimePanel";
+import DataNote from "@/reviewer-dash/app/_ui/DataNote";
 import { setJournalHours } from "@/reviewer-dash/app/actions";
 import { staffName } from "@/reviewer-dash/lib/staffName";
 import { parseAuditNote, type AuditHeader } from "@/reviewer-dash/lib/auditNote";
@@ -169,6 +170,9 @@ export function ReviewDetailTabs({
   canViewAiTime: boolean;
 }) {
   const [tab, setTab] = useState<TabKey>("commits");
+  // A desk id below 100000 is a sample ship (REAL_ID_BASE in lib/real.ts, which a client file cannot import). Its commits and Hackatime
+  // time come from the sample evidence, not from a repository or from Hackatime.
+  const sampleShip = projectId < 100_000;
   const okReports = hackatimeReports.filter((r) => r.report.ok);
   const linkedProjects = okReports.flatMap((r) => r.report.projects.filter((p) => p.linked));
   const [commitsState, setCommitsState] = useState(commits);
@@ -271,6 +275,11 @@ export function ReviewDetailTabs({
       </div>
 
       <div role="tabpanel" hidden={tab !== "commits"}>
+        {sampleShip && (
+          <DataNote kind="sample" className="mx-4 mt-3">
+            These commits are sample evidence. No repository was read. Nothing here is saved.
+          </DataNote>
+        )}
         <CommitList result={commitsState} projectId={projectId} onCommitsChange={setCommitsState} />
       </div>
 
@@ -280,6 +289,11 @@ export function ReviewDetailTabs({
 
       {hackatimeReports.length > 0 && (
         <div role="tabpanel" hidden={tab !== "hackatime"}>
+          {sampleShip && (
+            <DataNote kind="sample" className="mx-4 mt-3">
+              This coding time is sample evidence. Hackatime is not connected on staging.
+            </DataNote>
+          )}
           {hackatimeReports.map(({ userId, report }) => (
             <div key={userId}>
               {multipleContributors && (
@@ -347,6 +361,11 @@ export function ReviewDetailTabs({
               import counts. Credit the new work, not the whole project.
             </Callout>
           </div>
+        )}
+        {sampleShip && (
+          <DataNote kind="not-connected" className="mx-4 mt-3">
+            The archive of other programs is not connected on staging. A result below is sample data and is not a clean duplicate check.
+          </DataNote>
         )}
         {yswsArchiveStatus !== "ready" ? (
           <div className="p-4">

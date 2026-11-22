@@ -105,8 +105,10 @@ export function Badge({
 }
 
 export function CountBadge({ children }: { children: ReactNode }) {
+  // A zero is still shown (inside a tab, "none" is information) but muted, so it does not read as something waiting for the reviewer.
+  const zero = children === 0 || children === "0";
   return (
-    <span className="hc-badge" data-variant="count">
+    <span className="hc-badge" data-variant="count" data-zero={zero ? "true" : undefined}>
       {children}
     </span>
   );

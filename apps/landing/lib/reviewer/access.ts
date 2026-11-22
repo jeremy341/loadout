@@ -12,6 +12,15 @@
 //              (AI-usage and double-dip flags) and nothing else: no queue, no verdicts.
 // Markers on a reviewer (Pixl's names, LOADOUT spelling): second_pass, reviewer_hardware_only, reviewer_software_only,
 // edit_submission, ai_draft, full_queue, no_review. Not ported: the game-side roles, Slack ids, and Pixl's removed roles.
+//
+// The final (second-pass) reviewer list is the second_pass grant plus an optional environment override,
+// LOADOUT_SECOND_PASS_EMAILS (comma separated). The override only promotes someone who is already a reviewer; it never
+// makes a reviewer, and no_review still wins.
+//
+// Self-review: a reviewer may never review a ship they own (owners included). A collaborator or a pending invitee is also
+// blocked, except under a SelfReviewException: an unexpired grant scoped to that one project (projectId set). A grant with no
+// project never lifts self-review, and an exception never lets anyone review a ship they own. Grants are written by
+// records-data.ts grantSelfReviewException, which is audited.
 
 export const REVIEWER = "reviewer";
 export const HELPER = "helper";
@@ -74,7 +83,13 @@ export type AccessPerson = { id: string; email: string };
 export type RoleInputs = {
   ownerEmails: string[]; // LOADOUT_OWNER_EMAILS, lower-cased
   roles: readonly string[]; // the person's role grants
+  secondPassEmails?: readonly string[]; // LOADOUT_SECOND_PASS_EMAILS, lower-cased (see secondPassFromEnv)
 };
+
+// The environment override for final reviewers. Read with the same comma-separated, lower-cased rules as the owner list.
+export function secondPassFromEnv(raw: string | undefined = process.env.LOADOUT_SECOND_PASS_EMAILS): string[] {
+  return idsFromEnv(raw);
+}
 
 export type ReviewerAccess = {
   personId: string;
@@ -97,8 +112,9 @@ export function resolveAccess(person: AccessPerson, input: RoleInputs): Reviewer
   const isOwner = input.ownerEmails.includes(person.email.trim().toLowerCase());
   const reviewBlocked = roles.includes(NO_REVIEW);
   const isReviewer = !reviewBlocked && (isOwner || roles.includes(REVIEWER));
-  // Final reviewers: an explicit second_pass marker on a reviewer, or an owner.
-  const canSecondPass = isReviewer && (isOwner || roles.includes(SECOND_PASS));
+  // Final reviewers: an owner, a reviewer with the second_pass marker, or a reviewer named in the environment override.
+  const listedForSecondPass = (input.secondPassEmails ?? []).includes(person.email.trim().toLowerCase());
+  const canSecondPass = isReviewer && (isOwner || roles.includes(SECOND_PASS) || listedForSecondPass);
   const access: ReviewerAccess = {
     personId: person.id,
     isOwner,
@@ -123,8 +139,31 @@ export function resolveAccess(person: AccessPerson, input: RoleInputs): Reviewer
 // email and the raw grants read from RoleGrant; nothing else (a handle, a display name, an in-memory roster) decides access.
 export type StaffPersonInput = AccessPerson & { roles: readonly string[] };
 
-export function resolvePersonAccess(person: StaffPersonInput, owners: readonly string[]): ReviewerAccess | null {
-  return resolveAccess({ id: person.id, email: person.email }, { ownerEmails: [...owners], roles: person.roles });
+// The second-pass override is read from the environment by default, so every caller (session, impersonation, the staff guard)
+// agrees on who is a final reviewer. Tests pass [] to ignore the environment.
+export function resolvePersonAccess(
+  person: StaffPersonInput,
+  owners: readonly string[],
+  secondPassEmails: readonly string[] = secondPassFromEnv(),
+): ReviewerAccess | null {
+  return resolveAccess(
+    { id: person.id, email: person.email },
+    { ownerEmails: [...owners], roles: person.roles, secondPassEmails: [...secondPassEmails] },
+  );
+}
+
+// A SelfReviewException row as the review desk reads it (records-data.ts). projectId null is a person-wide grant, which
+// never counts toward a ship.
+export type SelfReviewGrant = { personId: string; projectId: string | null; expiresAt: Date };
+
+// The person ids a project-scoped, unexpired grant lifts self-review for on this project. An expired, person-wide or
+// other-project grant is ignored. Owners are never lifted by this (see canReview in review-rules.ts and
+// review-data.ts factsForReviewer, which applies it to collaborators and invitees only).
+export function selfReviewExceptionIds(grants: readonly SelfReviewGrant[], projectId: string, now: Date): string[] {
+  const ids = grants
+    .filter((grant) => grant.projectId === projectId && grant.expiresAt.getTime() > now.getTime())
+    .map((grant) => grant.personId);
+  return [...new Set(ids)];
 }
 
 // What a page, action or API route needs. "staff" means any role at all. { review: "fraud" } is the integrity tab

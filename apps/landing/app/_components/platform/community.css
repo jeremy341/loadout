@@ -303,3 +303,42 @@ html[data-display-theme="light"] .pf {
 .pf .cm-news > li,
 .pf .cm-goals > li,
 .pf .cm-showcases > li { border-top-width: 2px; }
+
+/* ---- Section separation (staging pass) ---- */
+/* On the hub the Era, the goals and the preview grid were flat blocks 24px apart, so they ran into one another. Each section after the
+   first now starts under a strong rule with space above and below it, and the headings inside carry the same rule weight. The selectors
+   carry .pf-box or a second class so they win over the flat-section rules in minimal.css whatever order the sheets load in. */
+html .pf :is(.cm-era, .cm-refer, .cm-grid) + :is(.cm-refer, .cm-grid) {
+  margin-top: 36px;
+  padding-top: 32px;
+  border-top: 2px solid var(--cm-rule-strong);
+}
+html .pf .cm-era.pf-box, html .pf .cm-refer.pf-box { margin-bottom: 0; }
+html .pf .cm-era.pf-box .pf-box-head,
+html .pf .cm-refer.pf-box .pf-box-head,
+html .pf .cm-grid > .pf-box > .pf-box-head { border-bottom: 2px solid var(--cm-rule-strong); }
+html .pf .cm-grid { margin-bottom: 0; }
+/* One column (under 900px): the previews stack, so each gets a rule above it too. Two columns keep the gap and the heading rules. */
+@media (max-width: 899px) {
+  html .pf .cm-grid > .pf-box + .pf-box { padding-top: 32px; border-top: 2px solid var(--cm-rule-strong); }
+}
+/* A heading that starts a new block after a framed list (ideas board, sessions, news, goals) gets the rule and room above it. */
+html .pf :is(.cm-frame, .cm-ideas-board, .cm-sessions-ruled, .cm-showcases, .cm-news, .cm-goals) + h2 {
+  margin-top: 44px;
+  padding-top: 24px;
+  border-top: 2px solid var(--cm-rule-strong);
+}
+/* Breathing room between the frame, its list and the next frame everywhere on the Community pages. */
+html .pf .cm-tabs ~ :is(.cm-frame, .cm-ideas-board, .cm-sessions-ruled, .cm-showcases, .cm-news, .cm-goals) { margin-bottom: 32px; }
+
+/* The one-line staging note under the title (CommunityHead). A word in bold says what it is; the rule is a second cue. */
+.pf .cm-staging {
+  max-width: 70ch;
+  margin: 0 0 16px;
+  padding-left: 10px;
+  border-left: 2px dashed var(--cm-rule-strong);
+  color: var(--pf-mut);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.pf .cm-staging strong { color: var(--pf-fg); }

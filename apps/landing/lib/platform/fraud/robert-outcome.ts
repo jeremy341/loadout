@@ -1,12 +1,17 @@
 // What a scored review from Robert means for a ship. Pure. Ported from Pixl's apps/internal-dashboard/lib/robertOutcome.ts at
 // upstream 1468ba6942b13add1ac50e1319541a033ee1df38.
 //
-// Pixl's rule: Robert's own fraud score IS the fraud determination, so every real score parks the project straight in Spot check as
-// "not fraud"; a score of 4 or less (Robert's own "Fraud! Fraud! Fraud!" band) only adds an alert, it never bans or rejects on its
-// own. LOADOUT keeps the spirit and drops the write: the score becomes evidence. 4 or less is "flagged" (the desk should look
-// hard), anything else is "cleared". Neither moves the project, sets triage or sends a DM; the human triage on the desk is still
-// the only thing that decides.
+// Robert's score gates progression (plans/proposals/platform-parity-pixl.md, step 2.2). A first-pass approval parks the ship in
+// PARKED_STATUS; any real 1-10 score moves it on to the second pass. A score above 4 is "cleared", and 4 or less is "flagged": the
+// flagged FraudCheck row is the alert the final reviewer reads, not a park. Pixl does the same — a low score never bans or rejects on
+// its own. There is no human fraud triage.
 import type { FraudStatus } from "./checks";
+
+// Both score bands advance the ship: a flagged score is an alert, not a park. The type stays for callers and tests.
+export type ScoreMove = "advance" | "hold";
+export function scoreMoveFor(_status: Extract<FraudStatus, "cleared" | "flagged">): ScoreMove {
+  return "advance";
+}
 
 // Robert's own "Fraud" band (its docs: 1-4).
 export const FRAUD_SCORE_THRESHOLD = 4;

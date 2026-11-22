@@ -1,34 +1,31 @@
-// The Robert sync job: submit ships that are waiting on fraud triage to Telescreen, then poll for the scores that have come back and
-// record them as FraudCheck rows. Ported in behaviour from Pixl's apps/internal-dashboard/app/api/cron/robert-sync/route.ts and
-// lib/robertSync.ts (submitToRobert, applyReview) at upstream 1468ba6942b13add1ac50e1319541a033ee1df38.
+// The Robert sync job: submit parked ships to Telescreen, poll for the scores that have come back and record them as FraudCheck rows,
+// and move a scored ship on to the second pass. Ported in behaviour from Pixl's apps/internal-dashboard/app/api/cron/robert-sync/
+// route.ts and lib/robertSync.ts (submitToRobert, applyReview) at upstream 1468ba6942b13add1ac50e1319541a033ee1df38.
 //
-// Which ships are submitted. The brief for this port says "projects in pre-second-pass states", and that is what is done: a ship
-// that is submitted or in first-pass review (ROBERT_SUBMIT_STATES) goes to Telescreen, so the score is usually there by the time a
-// final reviewer opens it. Pixl is narrower: it sends a project only after its first pass approves it (status fraud_review), so
-// Robert's reviewers never see a ship that first pass bounces. LOADOUT has no parking state between first and second pass, so the
-// narrow rule would race the human triage; the wide rule trades some Telescreen workload for an earlier score. If that workload
-// matters, narrow ROBERT_SUBMIT_STATES to ["second-pass"] and add the triage/first-pass conditions to isRobertCandidate; both are
-// in this file and nothing else depends on them. Hardware is never sent automatically: Pixl sends it by hand only, because its
-// journal needs a person's judgement.
+// Which ships are submitted: only the ships parked after first-pass approval (PARKED_STATUS, "fraud-review"). A ship that first pass
+// bounces never reaches Telescreen, as in Pixl. Hardware is never sent automatically: Pixl sends it by hand only.
 //
-// What is written. Every state change is a new FraudCheck row (checks.ts is append-only):
+// What is written. Every Robert state change is a new FraudCheck row (checks.ts is append-only):
 //   pending   submitted; detail carries externalId and Robert's own project id
 //   cleared   scored above 4
-//   flagged   scored 4 or less (Robert's fraud band)
+//   flagged   scored 4 or less (Robert's fraud band); this row is the alert the final reviewer reads
 //   error     the submit failed; detail carries the attempt count and Robert's answer, retried up to ROBERT_MAX_ATTEMPTS
-// Polling reads the pending rows themselves, not the ship's current status, so a ship that has moved on to a verdict still gets its
-// score recorded. The ship is never touched, and nothing is written back to Robert.
+// Progression is the one status write this job makes: a parked ship with any real score moves to "second-pass". Flagged ships move
+// with their alert, as in Pixl — a low score never bans or rejects on its own. The sweep runs every time, so a failed move is retried
+// and a ship a person already moved is left alone. Nothing is written back to Robert by this job.
 //
-// Unset LOADOUT_TELESCREEN_URL or LOADOUT_TELESCREEN_KEY: the run answers { disabled: true } and does nothing else.
+// Unset LOADOUT_TELESCREEN_URL or LOADOUT_TELESCREEN_KEY: the run answers { disabled: true } and does nothing else. Parked ships stay
+// parked until the job is configured.
 import type { Prisma, PrismaClient } from "../../generated/prisma/client";
 import { db } from "../db";
+import { PARKED_STATUS } from "../review";
 import { kindOfTrack } from "../review-decisions";
 import { robertConfig, type Env } from "./config";
 import { latestPerKind, recordCheck, type CheckStore } from "./checks";
 import { fetchScoredProjects, robertExternalId, submitProject, type FetchImpl } from "./robert";
-import { verdictFor } from "./robert-outcome";
+import { scoreMoveFor, verdictFor } from "./robert-outcome";
 
-export const ROBERT_SUBMIT_STATES = ["submitted", "in-review", "in_review"] as const;
+export const ROBERT_SUBMIT_STATES = [PARKED_STATUS] as const;
 export const ROBERT_MAX_ATTEMPTS = 5;
 export const ROBERT_RETRY_GAP_MS = 15 * 60_000;
 export const ROBERT_SUBMIT_BATCH = 50;
@@ -40,13 +37,28 @@ export type RobertSyncDeps = { env?: Env; fetch?: FetchImpl; now?: () => Date; c
 
 export type RobertSyncSummary =
   | { disabled: true }
-  | { disabled: false; candidates: number; submitted: number; submitFailed: number; skipped: number; pending: number; scored: number; writeFailed: number };
+  | { disabled: false; candidates: number; submitted: number; submitFailed: number; skipped: number; pending: number; scored: number; advanced: number; writeFailed: number };
 
-// Pure: whether a ship is one the sync sends. Status spellings vary (in_review, in-review), so the word is canonicalised first.
+// Pure: whether a ship is one the sync sends: a parked software ship. Status spellings vary (fraud_review, fraud-review), so the word
+// is canonicalised first.
 export function isRobertCandidate(ship: { status: string; track: string | null }): boolean {
   const status = ship.status.trim().toLowerCase().replace(/_/g, "-");
   return (ROBERT_SUBMIT_STATES as readonly string[]).some((s) => s.replace(/_/g, "-") === status) && kindOfTrack(ship.track) === "software";
 }
+
+// The one status move a Robert score makes. A parked ship with any real score moves to the second pass; for a flagged score the
+// FraudCheck row is the alert. Only a ship still parked moves, so a ship a person already moved is left alone. Returns whether it moved.
+export async function advanceIfScored(client: Store, projectId: string, now: Date): Promise<boolean> {
+  const latest = await client.fraudCheck.findFirst({ where: { projectId, kind: "robert" }, orderBy: { checkedAt: "desc" } });
+  if (!latest || !isFraudStatusRow(latest.status) || scoreMoveFor(latest.status) !== "advance") return false;
+  const moved = await client.project.updateMany({ where: { id: projectId, status: PARKED_STATUS }, data: { status: "second-pass", statusChangedAt: now } });
+  return moved.count > 0;
+}
+
+// Older callers still import this name; the behaviour is now "advance on any score".
+export const advanceIfCleared = advanceIfScored;
+
+const isFraudStatusRow = (status: string): status is "cleared" | "flagged" => status === "cleared" || status === "flagged";
 
 type RobertDetail = { externalId?: string; robertProjectId?: string; attempts?: number };
 const detailOf = (value: unknown): RobertDetail => (value && typeof value === "object" && !Array.isArray(value) ? (value as RobertDetail) : {});
@@ -74,7 +86,7 @@ export async function syncRobert(deps: RobertSyncDeps = {}): Promise<RobertSyncS
   const client: Store = deps.client ?? db();
   const now = (deps.now ?? (() => new Date()))();
   const net = { fetch: deps.fetch };
-  const summary = { candidates: 0, submitted: 0, submitFailed: 0, skipped: 0, pending: 0, scored: 0, writeFailed: 0 };
+  const summary = { candidates: 0, submitted: 0, submitFailed: 0, skipped: 0, pending: 0, scored: 0, advanced: 0, writeFailed: 0 };
 
   // ---- Submit ----
   const waiting = await client.project.findMany({
@@ -151,6 +163,14 @@ export async function syncRobert(deps: RobertSyncDeps = {}): Promise<RobertSyncS
       if (written.ok) summary.scored += 1;
       else summary.writeFailed += 1;
     }
+  }
+
+  // ---- Advance ----
+  // Every parked ship with a newest Robert row of cleared or flagged moves on; the flagged row stays as the alert. This runs after
+  // the poll, so a score written above is moved in the same run, and a failed move is retried here.
+  const parked = await client.project.findMany({ where: { status: PARKED_STATUS }, select: { id: true }, take: 200 });
+  for (const ship of parked) {
+    if (await advanceIfScored(client, ship.id, now)) summary.advanced += 1;
   }
   return { disabled: false, ...summary };
 }

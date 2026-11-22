@@ -1,7 +1,8 @@
 // Fulfillers and order commitments in the database. Server only (uses the database).
 //   addFulfiller(actorId, personId, reason)      -> Result; audited
 //   removeFulfiller(actorId, personId, reason)   -> Result; audited; refused while the fulfiller has any commitment
-//   commitOrder(orderId, fulfillerId)            -> CommitResult; one open commitment per order
+//   commitOrder(orderId, fulfillerId)            -> CommitResult; one open commitment per order; audited in the same transaction
+//   reassignCommitment(orderId, actorId)         -> Result; owner takes the claim: closes the open one, opens one for the actor
 //   completeCommitment(commitmentId, fulfillerId) -> Result; marks the fulfiller's own commitment done
 //   listCommitments(opts?)                        -> CommitmentRow[], newest first
 //
@@ -87,7 +88,55 @@ export async function commitOrder(orderId: string, fulfillerId: string): Promise
     if (!verdict.ok) return verdict;
 
     const commitment = await tx.fulfillmentCommitment.create({ data: { orderId, fulfillerId }, select: { id: true } });
+    await recordAudit(tx, {
+      actorId: fulfillerId,
+      action: "shop.order.claimed",
+      targetType: "ShopOrder",
+      targetId: orderId,
+      reason: "Fulfiller claimed the order.",
+      before: { claimed: false },
+      after: { claimed: true, commitmentId: commitment.id },
+    });
     return { ok: true, commitmentId: commitment.id };
+  });
+}
+
+// Owner takes an order over: the open claim is closed and a new one is opened for the actor, in one transaction. Own orders are refused
+// and the usual fulfiller checks apply to the new holder (canCommit). Placed and packed orders only.
+export async function reassignCommitment(orderId: string, actorId: string): Promise<Result> {
+  return db().$transaction(async (tx): Promise<Result> => {
+    await tx.$queryRaw`SELECT "id" FROM "ShopOrder" WHERE "id" = ${orderId} FOR UPDATE`;
+    const order = await tx.shopOrder.findUnique({ where: { id: orderId }, select: { number: true, personId: true, status: true } });
+    if (!order) return { ok: false, message: "That order does not exist." };
+    if (order.status !== "placed" && order.status !== "packed") return { ok: false, message: "Only a new or packed order can change its claim." };
+
+    const fulfiller = await tx.fulfiller.findUnique({ where: { personId: actorId }, select: { personId: true } });
+    const person = await tx.person.findUnique({ where: { id: actorId }, select: { bannedAt: true } });
+    // The open claim is closed first, so the check below sees no open commitment and the new one is the only one.
+    const verdict = canCommit({
+      fulfillerId: actorId,
+      isFulfiller: Boolean(fulfiller),
+      fulfillerBanned: !person || Boolean(person.bannedAt),
+      orderPersonId: order.personId,
+      orderStatus: order.status,
+      openCommitments: 0,
+    });
+    if (!verdict.ok) return verdict;
+
+    const now = new Date();
+    const previous = await tx.fulfillmentCommitment.findMany({ where: { orderId, doneAt: null }, select: { fulfillerId: true } });
+    await tx.fulfillmentCommitment.updateMany({ where: { orderId, doneAt: null }, data: { doneAt: now } });
+    const commitment = await tx.fulfillmentCommitment.create({ data: { orderId, fulfillerId: actorId }, select: { id: true } });
+    await recordAudit(tx, {
+      actorId,
+      action: "shop.order.reassigned",
+      targetType: "ShopOrder",
+      targetId: orderId,
+      reason: `Owner took over the claim on order ${order.number}.`,
+      before: { claimedBy: previous.map((row) => row.fulfillerId) },
+      after: { claimedBy: actorId, commitmentId: commitment.id },
+    });
+    return { ok: true };
   });
 }
 

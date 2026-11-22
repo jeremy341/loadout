@@ -112,9 +112,18 @@ Update Plans 01, 02, 05 and 11 with the rules settled here, and the port map (`a
 
 | Value | Provisional | Why it is not settled |
 | --- | --- | --- |
-| Fulfiller payout | 14 Ore per item, 5 Ore per grant | Pixl pays 6 pixels an item and 2 a grant at a nominal $0.10 a pixel, so $0.60 and $0.20. LOADOUT's Ore is $0.435 per 10, which converts to 13.79 and 4.60, rounded to 14 and 5. The conversion is arithmetic, not an approved rate. |
+| Fulfiller payout | 1.38 Ore per item, 0.46 Ore per grant | Pixl pays 6 pixels an item and 2 a grant at a nominal $0.10 a pixel, so $0.60 and $0.20. One Ore is $0.435 (10 Ore = $4.35), so $0.60 is 1.38 Ore and $0.20 is 0.46 Ore. Cross-check: Pixl's base-to-max payout is $4–6 an hour, which is 40–60 pixels, so 6 pixels is 10–15% of an hour; 10–15% of LOADOUT's 10 Ore an hour is 1–1.5 Ore. The ledger only accepts whole Ore, so this exact rate cannot be paid. Pick an integer rule before step 4. |
 | Score threshold | 4 or less flags | Pixl's own fraud band. Carried over unchanged. |
 | Unship at fraud review and second review | No clawback | There is no confirmed credit at those stages. Confirm before the code assumes it. |
+
+Whole-Ore options for the payout, pending the owner's choice:
+
+| Rule | Item | Grant | Against Pixl |
+| --- | --- | --- | --- |
+| Nearest whole Ore | 1 Ore ($0.44) | 1 Ore ($0.44) | Item is ~27% under, grant is ~117% over. The item and grant pay the same. |
+| Keep Pixl's 3:1 split | 3 Ore ($1.31) | 1 Ore ($0.44) | Both are ~2.2× Pixl, but the grant is worth a third of an item as in Pixl. |
+| Compromise | 2 Ore ($0.87) | 1 Ore ($0.44) | Item is ~45% over, grant ~117% over. A simpler split than 3:1 and cheaper than it. |
+| Sub-Ore pool | 1.38 Ore | 0.46 Ore | Exact value, but the ledger needs a separate accumulator that pays out in whole Ore. |
 
 Nothing here is a public claim. No participant-facing copy changes until a step ships and Plan 05 records the rule.
 

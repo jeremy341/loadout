@@ -278,3 +278,28 @@ html .pf .cm-tabs ~ .cm-next { margin-top: 32px; }
 @media (max-width: 559px) {
   html .pf .cm-idea { grid-template-columns: 72px minmax(0, 1fr); gap: 14px; }
 }
+
+/* Section dividers on the community pages. The platform rule colour is faint, so sections ran together. These rules are stronger and
+   only apply to community lists, cards and tabs; the light theme gets a darker line. */
+.pf {
+  --cm-rule-strong: rgba(233, 235, 231, 0.5);
+}
+html[data-display-theme="light"] .pf {
+  --cm-rule-strong: rgba(26, 23, 20, 0.55);
+}
+.pf .cm-tabs,
+.pf .cm-idea,
+.pf .cm-session,
+.pf .cm-news > li,
+.pf .cm-goals > li,
+.pf .cm-showcases > li,
+.pf .cm-facts > div,
+.pf .cm-mini li {
+  border-color: var(--cm-rule-strong);
+}
+.pf .cm-tabs { border-bottom-width: 2px; }
+.pf .cm-idea,
+.pf .cm-session,
+.pf .cm-news > li,
+.pf .cm-goals > li,
+.pf .cm-showcases > li { border-top-width: 2px; }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CommunityHead } from "@/app/_components/platform/community/CommunityHead";
 import { IdeaRow } from "@/app/_components/platform/community/IdeaRow";
-import { SampleNote } from "@/app/_components/platform/community/Parts";
 import { filterIdeas, IDEA_SORT_LABELS, IDEA_SORTS, IDEA_STATUSES, IDEAS, ideasHref, parseIdeasQuery, sortIdeas } from "@/lib/platform/community";
 import { requireViewer } from "@/lib/platform/session";
 
@@ -19,7 +18,6 @@ export default async function IdeasPage({ searchParams }: { searchParams: Promis
   return (
     <>
       <CommunityHead title="Ideas">Ideas for the program and the platform. They cannot be shop requests: the shop has no suggestion or voting system.</CommunityHead>
-      <SampleNote>The idea board is proposed. These ideas, builders and vote counts are invented samples.</SampleNote>
       <p className="cm-closed">Voting opens with the community release. Nothing here is saved.</p>
 
       <nav className="pf-explore-filters" aria-label="Filter by status">

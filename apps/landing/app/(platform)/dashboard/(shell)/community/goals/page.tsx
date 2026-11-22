@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { CommunityHead } from "@/app/_components/platform/community/CommunityHead";
 import { GoalBar } from "@/app/_components/platform/community/GoalBar";
-import { goalPercent, goalValueText } from "@/lib/platform/community";
 import { listGoals } from "@/lib/platform/community-data";
 import { requireViewer } from "@/lib/platform/session";
 
@@ -29,7 +28,6 @@ export default async function GoalsPage() {
         <ol className="cm-goals">
           {goals.map((goal) => {
             const closed = goal.closedAt !== null;
-            const percent = goalPercent(goal.current, goal.target);
             return (
               <li key={goal.id} data-closed={closed ? "true" : undefined}>
                 <div className="cm-goal-head">
@@ -42,10 +40,6 @@ export default async function GoalsPage() {
                 </div>
                 <p className="cm-goal-text">{goal.body}</p>
                 <GoalBar goal={goal} />
-                <p className="cm-goal-value">
-                  <span>{goalValueText(goal)}</span>
-                  <span className="cm-goal-pct">{percent}%</span>
-                </p>
                 {closed ? <p className="pf-empty-line">This goal is closed. Its figures stand as they were met.</p> : null}
               </li>
             );

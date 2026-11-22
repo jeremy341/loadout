@@ -216,3 +216,65 @@
 
 /* Lead notes under the tab row and filters share one spacing. */
 .pf .cm-tabs + .pf-event-line { margin-top: 0; }
+
+/* ---- Readability pass ---- */
+/* Small caps labels were 12px in the muted grey; 13px is the floor on every community page, and the text under them is 15px or more. */
+html .pf :is(.cm-tag, .cm-vote-l, .cm-status, .cm-session-no, .cm-session-meta, .cm-news-kind, .cm-tie, .cm-track, .cm-mini-kind, .cm-facts dt, .cm-era-state, .cm-goal-reward-label, .cm-tabs a) { font-size: 13px; }
+html .pf :is(.cm-session-main p, .cm-closed, .cm-era-foot, .cm-goal-reward) { font-size: 0.9375em; }
+html .pf .cm-meta { font-size: 0.9375em; }
+
+/* Tabs: on a phone the seven labels share the width of each row, so the second row lines up with the first. */
+@media (max-width: 559px) {
+  html .pf .cm-tabs ul { gap: 0; }
+  html .pf .cm-tabs li { flex: 1 1 auto; }
+  html .pf .cm-tabs a { justify-content: center; padding: 0 8px; }
+}
+
+/* The lead note, the filters and the first heading under the tab row get room to breathe. */
+html .pf .cm-tabs ~ .ex-section:first-of-type, html .pf .cm-tabs + .pf-event-line + .ex-section { margin-top: 32px; }
+html .pf .cm-tabs ~ h2 { margin-top: 36px; }
+html .pf .cm-next { margin-top: 8px; }
+html .pf .cm-next-line { margin: 6px 0 16px; line-height: 1.2; }
+html .pf .cm-session { padding: 18px 0; gap: 8px 20px; }
+html .pf .cm-session-main p { margin-top: 6px; line-height: 1.55; }
+html .pf .cm-next ~ .cm-closed, html .pf .cm-next .cm-closed { margin-top: 20px; }
+html .pf .cm-next .pf-btn, html .pf .cm-next + .pf-btn { margin-bottom: 36px; }
+
+/* Disabled controls stay readable: the page already says why they are inert, so they are not faded a second time. */
+html .pf :is(.cm-upvote, .cm-next .pf-btn, .cm-refer .pf-btn):disabled { opacity: 1; color: var(--pf-fg); }
+html .pf .cm-next .pf-btn:disabled { border-color: var(--pf-mut); }
+html .pf .cm-upvote { width: auto; margin-top: 10px; padding: 0; justify-content: flex-start; text-align: left; }
+html .pf .cm-vote-bar .cm-upvote { padding: 0; }
+html .pf .cm-idea { grid-template-columns: 104px minmax(0, 1fr); gap: 20px; }
+html .pf .cm-idea-summary { line-height: 1.55; }
+html .pf .cm-idea-main h2, html .pf .cm-idea-main h3 { margin-bottom: 8px; }
+html .pf .cm-meta { gap: 6px 12px; }
+
+/* Events: the dates, the button and the count are separate lines with space between them. */
+html .pf .ex-event .cm-mini-kind { margin: 16px 0 0; }
+html .pf .ex-event .ex-event-actions, html .pf .ex-event .ex-event-rsvp { margin-top: 18px; }
+html .pf .ex-event .ex-closed { margin-top: 14px; }
+html .pf .ex-event-grid > :only-child { grid-column: 1 / -1; }
+
+/* News: a wider date column so the date reads on two short lines, not three. */
+@media (min-width: 720px) {
+  html .pf .cm-news > li { grid-template-columns: 150px minmax(0, 1fr); gap: 6px 24px; }
+}
+html .pf .cm-news p { line-height: 1.55; }
+html .pf .cm-news .cm-meta { margin-top: 10px; }
+
+/* Show & Tell session: the track colour bar keeps the page gutter instead of bleeding to the screen edge. */
+html .pf .cm-showcases > li { margin-left: 0; padding: 16px 0 16px 14px; }
+html .pf .cm-showcases .cm-meta { margin-top: 8px; }
+
+/* Goals and facts: a little more air between the number, the bar and the text. */
+html .pf .cm-goal-text { line-height: 1.55; }
+html .pf .cm-bar { height: 24px; }
+html .pf .cm-facts dd { line-height: 1.5; }
+html .pf .cm-next + .cm-plain { margin-top: 40px; }
+html .pf .cm-next { margin-top: 28px; }
+html .pf .cm-next h2 { margin-bottom: 8px; }
+html .pf .cm-tabs ~ .cm-next { margin-top: 32px; }
+@media (max-width: 559px) {
+  html .pf .cm-idea { grid-template-columns: 72px minmax(0, 1fr); gap: 14px; }
+}

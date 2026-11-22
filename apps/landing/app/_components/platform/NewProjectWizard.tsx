@@ -141,6 +141,8 @@ export function NewProjectWizard() {
   // The step the page last moved focus for. Focus only moves when the step really changes, never on load: React Strict Mode
   // runs every effect twice in development, which used to put a focus ring on the first heading as the page opened.
   const focusedStep = useRef(0);
+  // True once the builder has actually moved step. A restored draft is not a move, so it must not pull focus.
+  const userMoved = useRef(false);
   const softwareRef = useRef(false);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -183,6 +185,9 @@ export function NewProjectWizard() {
   // still see the focus indicator (the heading and fields use :focus-visible, which a script's focus() shows after a key press).
   useEffect(() => {
     if (focusedStep.current === step) return;
+    // A restored draft sets focusedStep to a later step before this effect first sees step 0. That is not a builder move,
+    // so do not put the ring on the heading. React Strict Mode runs this setup twice on mount; the same guard covers both.
+    if (step === 0 && focusedStep.current !== 0 && !userMoved.current) return;
     focusedStep.current = step;
     const wanted = focusField.current;
     focusField.current = null;
@@ -203,6 +208,7 @@ export function NewProjectWizard() {
       focusField.current = FIELD_ID[state.field] ?? null;
       setErrors({ [state.field]: state.message });
       const core = stepOfField(state.field);
+      userMoved.current = true;
       setStep(softwareRef.current ? (state.field === "track" ? 1 : core >= 1 ? core + 1 : core) : core);
     }
   }, [state, router]);
@@ -231,6 +237,7 @@ export function NewProjectWizard() {
 
   const go = useCallback((target: number) => {
     setErrors({});
+    userMoved.current = true;
     setStep(target);
   }, []);
 
@@ -308,6 +315,7 @@ export function NewProjectWizard() {
     setErrors({});
     setUndo(null);
     setRestored(false);
+    userMoved.current = true;
     setStep(0);
     requestAnimationFrame(() => heading.current?.focus());
   };

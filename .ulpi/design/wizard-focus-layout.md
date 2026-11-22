@@ -21,12 +21,18 @@ Skills loaded for this change: frontend-design-ui-ux, frontend-design, design-ta
 
 1. **What kind of project is it?** Question and its hint centred. Two compact cards in two columns, 12px gap, 16px padding: a 36px square tile with a hand-drawn mark (software: angle brackets; hardware: a chip), the name, the approved hint. Selected card: full-strength border; no tilt, no lift beyond the existing hover.
 2. **Which track is it?** (software only). Same centred question and "You can change it until you submit." Three compact cards (Tools, Systems, Compute) in a row, name and the approved line. Hardware skips this step.
-3. **What's your idea?** Question and helper line left aligned in a 480px body. Textarea, counter, the key hint, then "Need a spark?" in a quiet 11px label, "More ideas" as an underlined text control (44px hit area) and three solid rows with a 1px rule border.
-4. **What's it called?** Left aligned. A large name field underlined with a 1px rule, counter, a compact 300px live preview card and the public-by-default notice.
-5. **Link it up.** Left aligned. Source and demo address side by side from 700px, stacked below it, then the Hackatime or Lapse block. Optional step; Skip is the button label until a link is typed.
-6. **Ready to start?** Left aligned. One compact 300px preview card. Create project posts once.
+3. **What's your idea?** Left aligned in a 480px body (the body is centred in the viewport; owner put this step back to left aligned, 22 Nov 2026, after the centring pass). Question and helper line, textarea, counter, the key hint, then "Need a spark?" in a quiet 11px label with "More ideas" as an underlined text control (44px hit area) on the same row, and three solid rows with a 1px rule border and left aligned text.
+4. **What's it called?** Question and helper centred. A large name field underlined with a 1px rule (name centred in it), counter, a compact 300px live preview card centred under it and the public-by-default notice centred.
+5. **Link it up.** Question and helper centred. Source and demo address side by side from 700px, stacked below it (labels and typed addresses left aligned), then the Hackatime or Lapse block. Optional step; Skip is the button label until a link is typed.
+6. **Ready to start?** Question centred over one compact 300px preview card, centred. Create project posts once.
 
 The step numbers above follow the software path. For hardware, steps 3 to 6 are 2 to 5 and the strip has five segments.
+
+## Centring decision (22 Nov 2026, owner)
+
+The question, helper line, fields and preview card sit on the viewport's centre line on every step except the idea step, which the owner put back to left aligned inside its centred 480px body (see step 3). Earlier, steps 3 to 6 were left aligned inside a 480px body, which read as left of centre even though the column itself was centred. Now: the 480px body stays centred in the 560px column, and everything in it is centred on that axis (heading, helper, key hint, counters under fields, "Need a spark?" head, spark rows, the 300px preview card, the notice). Text a person edits (the idea box and the link addresses) stays left aligned so it is easy to read and edit; the name field centres its text because it reads as the title. The progress strip stays at the top (close to its left from 1000px) and Back and Next stay at the bottom, unchanged. The koi, the accessibility tab, the small Next and Back and the five or six segment strip are unchanged. Measured at 1440 and 390 on the idea, name and review steps: heading, body, preview card and name field centres are all at half the viewport width (720 and 195), with no sideways scroll.
+
+At phone width the gutter is now the same 48px on both sides (it was 48px left and 16px right), so the column is centred on the viewport and still clear of the fixed accessibility tab. No new font, colour, radius or motion. Focus: nothing changed; Tab still shows the `--pf-focus` outline.
 
 ## States
 
@@ -36,7 +42,7 @@ Unchanged from `redesign-phase-2-wizard.md`: Next is `aria-disabled` until the s
 
 ## Responsive
 
-No horizontal scroll at 320, 390, 471, 700, 900, 1440. Under 600px the cards stack, the Next button goes wide, 48px, and the column keeps a 48px left gutter so the fixed accessibility tab never covers the question.
+No horizontal scroll at 320, 390, 471, 700, 900, 1440. Under 600px the cards stack, the Next button goes wide, 48px, and the column keeps a 48px gutter on both sides, so it stays centred and the fixed accessibility tab never covers the question.
 
 ## Accessibility
 

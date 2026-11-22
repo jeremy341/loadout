@@ -1,4 +1,4 @@
-/* Focused task pages (the project wizard): no sidebar, no topbar, no koi, one centred column. Brief .ulpi/design/wizard-focus-layout.md.
+/* Focused task pages (the project wizard): no sidebar, no topbar, the koi pond behind, one centred column. Brief .ulpi/design/wizard-focus-layout.md.
    The wizard's own rules are in wizard.css and minimal.css; the `html .pf.pf-focus` selectors here are one class heavier, so they win
    whatever order the stylesheets load in. */
 
@@ -28,7 +28,7 @@
 .pf-focus-card {
   width: 100%;
   min-width: 0;
-  max-width: 600px;
+  max-width: 560px;
   display: grid;
   gap: 28px;
 }
@@ -46,7 +46,7 @@ html .pf.pf-focus .pf-wiz-step { gap: 10px; min-height: 44px; align-content: sta
 html .pf.pf-focus .pf-wiz-seg { height: 3px; border: 0; background: var(--pf-rule); }
 html .pf.pf-focus .pf-wiz-step[data-state="done"] .pf-wiz-seg,
 html .pf.pf-focus .pf-wiz-step[data-state="current"] .pf-wiz-seg { background: var(--pf-state); border: 0; }
-html .pf.pf-focus .pf-wiz-step-label { font-size: 11px; }
+html .pf.pf-focus .pf-wiz-step-label { font-size: 11px; letter-spacing: 0.06em; text-transform: none; }
 
 /* The question sits in the middle of the page, centred. The fields under it stay left aligned inside the column. */
 html .pf.pf-focus .pf-wiz-body { display: grid; align-content: center; justify-items: stretch; gap: 0; padding: 24px 0; }
@@ -83,6 +83,30 @@ html .pf.pf-focus .pf-wiz-kinds .pf-wiz-kind:has(input:checked) .pf-wiz-icon { b
 html .pf.pf-focus .pf-wiz-pane > .pf-hint { margin-top: 12px; text-align: center; }
 html .pf.pf-focus .pf-wiz-pane [aria-live] .pf-error { text-align: center; }
 
+/* Steps 2 to 5 (idea, name, links, review): a narrower column with the question and its fields left aligned, as in the target.
+   The kind and track steps keep the centred question over their cards. */
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"], [data-step="links"], [data-step="review"]) { width: 100%; max-width: 480px; margin-inline: auto; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"], [data-step="links"], [data-step="review"]) .pf-wiz-h1 { margin-bottom: 12px; text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"], [data-step="links"], [data-step="review"]) .pf-wiz-sub { margin-inline: 0; text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"], [data-step="links"], [data-step="review"]) .pf-wiz-pane > .pf-hint { text-align: left; }
+html .pf.pf-focus .pf-wiz-sub { font-size: 0.875em; line-height: 1.6; }
+
+/* Step 2: a quiet "need a spark" label, a text-style "More ideas" and three solid rows. */
+html .pf.pf-focus .pf-wiz-sparks { margin-top: 20px; }
+html .pf.pf-focus .pf-wiz-sparks-head { margin-bottom: 4px; }
+html .pf.pf-focus .pf-wiz-sparks-head h2 { font-size: 11px; letter-spacing: 0.06em; text-transform: none; color: var(--pf-mut); }
+html .pf.pf-focus .pf-wiz-more { min-height: 44px; padding: 0 4px; border: 0; background: transparent; box-shadow: none; color: var(--pf-fg); font-size: 11px; letter-spacing: 0.06em; text-transform: none; text-decoration: underline; text-underline-offset: 3px; }
+html .pf.pf-focus .pf-wiz-sparks ul { gap: 6px; }
+html .pf.pf-focus .pf-wiz-spark { min-height: 44px; padding: 8px 12px; border: 1px solid var(--pf-rule); background: var(--pf-panel); font-size: 0.8125em; }
+html .pf.pf-focus .pf-wiz-spark:hover { border-color: var(--pf-fg); background: var(--pf-panel); color: var(--pf-fg); }
+
+/* Step 3: a large underlined name field and a compact preview card. */
+html .pf.pf-focus .pf-wiz-title { min-height: 56px; padding-inline: 2px; border-width: 0 0 1px; border-color: var(--pf-fg); background: transparent; font-size: 1.5em; }
+html .pf.pf-focus .pf-wiz-preview-wrap { max-width: 300px; margin: 16px 0 12px; }
+
+/* Step 5: the one preview card, compact, under the question. */
+html .pf.pf-focus .pf-wiz-review { grid-template-columns: minmax(0, 300px); gap: 0; }
+
 /* The bar: Back on the left, a small Next at the right end of the column. It sits at the bottom of the page. */
 html .pf.pf-focus .pf-wiz-bar { margin-top: auto; padding: 8px 0 0; }
 html .pf.pf-focus .pf-wiz-bar .pf-btn { min-height: 44px; }
@@ -91,7 +115,8 @@ html .pf.pf-focus .pf-wiz-bar .pf-btn.pri svg { flex: none; width: 14px; height:
 html .pf.pf-focus .pf-wiz-bar .pf-btn.pri[type="submit"] { padding: 0 24px; }
 
 @media (max-width: 599px) {
-  .pf-focus-main { padding: 24px 16px 24px; }
+  /* The shared accessibility tab is fixed on the left edge and about 40px wide, so the column starts clear of it. */
+  .pf-focus-main { padding: 24px 16px 24px 48px; }
   html .pf.pf-focus .pf-wiz-kinds .pf-choice-grid { grid-template-columns: 1fr; }
   html .pf.pf-focus .pf-wiz-bar .pf-btn { flex: 1; min-height: 48px; }
   html .pf.pf-focus .pf-wiz-bar .pf-btn.pri { flex: 2; min-height: 48px; justify-content: center; }

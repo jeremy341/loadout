@@ -81,7 +81,7 @@ function writeStorage(draft: WizardDraft | null, step = 0) {
 }
 
 // Software has an extra step for its track, right after the kind. Hardware has the one track, so it skips that step. The lib's
-// five steps stay as they are; the track step lives here.
+// five steps stay as they are; the track step lives here. The strip shows six segments for software (owner, 22 Nov 2026: six is fine).
 type StepKey = (typeof WIZARD_STEPS)[number]["key"] | "track";
 type StepItem = { key: StepKey; label: string; heading: string };
 const TRACK_STEP: StepItem = { key: "track", label: "Track", heading: "Which track is it?" };
@@ -136,7 +136,11 @@ export function NewProjectWizard() {
 
   const heading = useRef<HTMLHeadingElement>(null);
   const focusField = useRef<string | null>(null);
+  // False until the first storage effect has run, so the empty first draft never overwrites a saved one.
   const mounted = useRef(false);
+  // The step the page last moved focus for. Focus only moves when the step really changes, never on load: React Strict Mode
+  // runs every effect twice in development, which used to put a focus ring on the first heading as the page opened.
+  const focusedStep = useRef(0);
   const softwareRef = useRef(false);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -159,21 +163,27 @@ export function NewProjectWizard() {
     // Reading sessionStorage has to wait for the browser, so the restore can only happen here.
     dispatch({ type: "restore", draft: saved });
     setKindPick(kindOfTrack(saved.track));
-    setStep(savedStep(text, saved));
+    const restoredStep = savedStep(text, saved);
+    // A restore is not a step change by the builder, so it does not pull focus to the heading either.
+    focusedStep.current = restoredStep;
+    setStep(restoredStep);
     setRestored(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   useEffect(() => {
-    if (mounted.current) writeStorage(draft, step);
-  }, [draft, step]);
-
-  // Focus follows the step: the heading, or the field a server error names. Not on first load.
-  useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
       return;
     }
+    writeStorage(draft, step);
+  }, [draft, step]);
+
+  // Focus follows the step: the heading, or the field a server error names. Never on first load or a restore. Keyboard builders
+  // still see the focus indicator (the heading and fields use :focus-visible, which a script's focus() shows after a key press).
+  useEffect(() => {
+    if (focusedStep.current === step) return;
+    focusedStep.current = step;
     const wanted = focusField.current;
     focusField.current = null;
     const target = wanted ? document.getElementById(wanted) : null;
@@ -361,7 +371,7 @@ export function NewProjectWizard() {
         ))}
       </ol>
 
-      <div className="pf-wiz-body" key={step}>
+      <div className="pf-wiz-body" key={step} data-step={stepKey}>
         <h1 className="pf-wiz-h1" ref={heading} tabIndex={-1}>{current.heading}</h1>
 
         {stepKey === "kind" ? (

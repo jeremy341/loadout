@@ -24,7 +24,7 @@ export default async function CommunityPage() {
 
   return (
     <>
-      <CommunityHead title="Community">Where builders meet: the Era, Show &amp; Tell, the idea board, news, the leaderboard and shared goals.</CommunityHead>
+      <CommunityHead title="Community">Where builders meet: the Era, Show &amp; Tell, the idea board, news, the leaderboard, shared goals and events.</CommunityHead>
 
       <EraStrip />
 

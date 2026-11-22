@@ -1,11 +1,4 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-
-// The "proposed or sample content" line is not shown any more: nothing is labelled as a demo until release.
-export function SampleNote(props: { children: ReactNode }) {
-  void props;
-  return null;
-}
 
 // A section title with a link to the page that owns the full list.
 export function PreviewHead({ id, title, href }: { id: string; title: string; href: string }) {

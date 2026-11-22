@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { IdeaStatusTag, UpvoteButton } from "@/app/_components/platform/community/IdeaRow";
-import { BackLink, SampleNote } from "@/app/_components/platform/community/Parts";
+import { BackLink } from "@/app/_components/platform/community/Parts";
 import { COMMUNITY_HOME, findIdea } from "@/lib/platform/community";
 import { requireViewer } from "@/lib/platform/session";
 
-export const metadata: Metadata = { title: "Idea - LOADOUT" };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const idea = findIdea((await params).id);
+  return { title: idea ? `${idea.title} - LOADOUT` : "Idea - LOADOUT" };
+}
 
 // One idea, read only: what was asked, its status and vote count, and the team's reply once it is not open. An unknown id is
 // a 404.
@@ -18,7 +21,6 @@ export default async function IdeaPage({ params }: { params: Promise<{ id: strin
   return (
     <>
       <BackLink href={`${COMMUNITY_HOME}/ideas`}>Back to Ideas</BackLink>
-      <SampleNote>This idea and its votes are an invented sample.</SampleNote>
 
       <div className="cm-detail-head">
         <h1>{idea.title}</h1>

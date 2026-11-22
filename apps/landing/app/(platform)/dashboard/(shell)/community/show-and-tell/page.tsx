@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { CommunityHead } from "@/app/_components/platform/community/CommunityHead";
 import { SessionRow } from "@/app/_components/platform/community/SessionRow";
-import { SampleNote } from "@/app/_components/platform/community/Parts";
 import { NEXT_SESSION_LINE, pastSessions, upcomingSessions } from "@/lib/platform/community";
 import { requireViewer } from "@/lib/platform/session";
 
@@ -17,7 +16,6 @@ export default async function ShowAndTellPage() {
   return (
     <>
       <CommunityHead title="Show & Tell">Sessions where builders show a project they have worked on.</CommunityHead>
-      <SampleNote>Show &amp; Tell is proposed. The recaps below are invented samples, and no session has a confirmed date or place.</SampleNote>
 
       <section className="pf-box cm-next" aria-labelledby="cm-next-title">
         <h2 id="cm-next-title">Upcoming</h2>

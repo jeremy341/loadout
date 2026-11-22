@@ -1,6 +1,6 @@
 # Platform parity with Pixl
 
-**Status:** Internal. Owner decisions taken 22 Nov 2026: the eight original open questions answered "same as Pixl", plus reviewer pay settled as 2 Ore on approval or ban and 1 Ore on needs-changes. This plan records what those decisions mean, the gaps found by three read-only mappings of `references/pixl` against `apps/landing`, and the order of work. Nothing here is built. Plans 01, 02, 05 and 11 keep ownership of their own policy; this plan owns only the parity work and points at them.
+**Status:** Internal. Owner decisions taken 22 Nov 2026: the eight original open questions answered "same as Pixl", plus reviewer pay settled as 4 Ore on approval or ban and 2 Ore on needs-changes. This plan records what those decisions mean, the gaps found by three read-only mappings of `references/pixl` against `apps/landing`, and the order of work. Nothing here is built. Plans 01, 02, 05 and 11 keep ownership of their own policy; this plan owns only the parity work and points at them.
 
 `references/pixl` is a pinned submodule at upstream `1468ba69`. Reading it is fine; nothing in it is edited.
 
@@ -30,7 +30,7 @@ The first eight are "same as Pixl". Reviewer pay in row 9 is an owner rate above
 | 6 | Do fulfillers get paid? | Yes: 6 pixels per item, 2 per grant, credited at settlement. | Pay in Ore, rounded up to the next whole Ore: 2 per item, 1 per grant (owner, 22 Nov 2026). Detail in section 6. |
 | 7 | May an owner fulfil their own order? | Yes, since 14 Nov 2026. | Drop the own-order refusal in `canCommit`. The sample store already says "nobody fulfils their own order, owners included", so the desk copy, the rule and its test all change together. |
 | 8 | Per-option stock? | Yes, `shop_option_stock`. | Already in place in LOADOUT (`ShopOptionStock`, `stockNeeds`, `hasStock`). Nothing to port; the desk's sample stock display should read the real table when the pages are wired. |
-| 9 | Reviewer pay | Admin-configurable per verdict; currently 4 px approval, 2 px needs-changes, 4 px ban. | 2 Ore approval and ban, 1 Ore needs-changes (owner, 22 Nov 2026). Detail in section 6. |
+| 9 | Reviewer pay | Admin-configurable per verdict; currently 4 px approval, 2 px needs-changes, 4 px ban. | 4 Ore approval and ban, 2 Ore needs-changes (owner, 22 Nov 2026). Detail in section 6. |
 
 ## 3. Corrections to the first report
 
@@ -91,7 +91,7 @@ One step per pull request, in this order. Each step starts from `origin/main` on
 4. Narrow submission to after first-pass approval.
 5. Park every project when the Robert config is unset.
 6. Widen unship to fraud review, second review and approved, with clawback only where credit exists.
-7. Create a `ReviewPayout` row at each verdict: 2 Ore on approval or a confirmed ban, 1 Ore on needs-changes. A first-pass approval stays pending until the final verdict settles, with no cut for an overturned first pass.
+7. Create a `ReviewPayout` row at each verdict: 4 Ore on approval or a confirmed ban, 2 Ore on needs-changes. A first-pass approval stays pending until the final verdict settles, with no cut for an overturned first pass.
 
 ### Step 3: Permissions
 
@@ -131,11 +131,11 @@ Cross-check: Pixl's base-to-max payout is $4–6 an hour, which is 40–60 pixel
 
 | Verdict | Payout |
 | --- | --- |
-| Approval, including first pass | 2 Ore |
-| Needs changes | 1 Ore |
-| Confirmed ban | 2 Ore |
+| Approval, including first pass | 4 Ore |
+| Needs changes | 2 Ore |
+| Confirmed ban | 4 Ore |
 
-Pixl's live settings are 4 px on approval and 2 px on needs-changes after the ×0.7 rescale in migration 0194, with a flat 4 px for a ban. At $0.10 a pixel that is $0.40 and $0.20. The owner chose 2/1/2 Ore anyway: 2 Ore is $0.87 and 1 Ore is $0.435, so this pays above Pixl in dollar terms. It is a deliberate choice, not the round-up conversion used for fulfiller pay.
+Pixl's live settings are 4 px on approval and 2 px on needs-changes after the ×0.7 rescale in migration 0194, with a flat 4 px for a ban. At $0.10 a pixel that is $0.40 and $0.20. The owner chose 4/2/4 Ore, the same numbers in Ore: 4 Ore is $1.74 and 2 Ore is $0.87, so this pays 4.35× Pixl in dollar terms. It is a deliberate choice, not the round-up conversion used for fulfiller pay.
 
 A first-pass approval creates a pending `ReviewPayout` row. The final verdict settles it. No cut is applied for a rushed review, an unopened repo, an overturned first pass or a later hours correction. Verdicts outside the three above pay nothing. The `ReviewPayout` table already has `status` pending/paid/cancelled and `paidAt`; the verdict actions do not write it yet.
 

@@ -24,7 +24,7 @@ export function IdeaRow({ idea, level = 3 }: { idea: Idea; level?: 2 | 3 }) {
     <li className="cm-idea">
       <div className="cm-vote">
         <span className="cm-vote-n">{idea.votes}</span>
-        <span className="cm-vote-l">votes</span>
+        <span className="cm-vote-l">{idea.votes === 1 ? "vote" : "votes"}</span>
         <UpvoteButton title={idea.title} />
       </div>
       <div className="cm-idea-main">

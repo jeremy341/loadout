@@ -344,8 +344,8 @@ test.describe("Community lists explain both their full and their empty state", (
     } else {
       await expect(empty).toHaveCount(0);
       await expect(rows).toHaveCount(await bars.count());
-      // The active goal row prints its figures twice today: once inside GoalBar and once beside it on the Goals page.
-      await expect(page.locator(".cm-goal-value")).toHaveCount((await bars.count()) * 2);
+      // Each goal prints its figures once, inside GoalBar.
+      await expect(page.locator(".cm-goal-value")).toHaveCount(await bars.count());
       for (const bar of await bars.all()) {
         await expect(bar).toHaveAttribute("aria-valuetext", /^[\d,]+ of [\d,]+, \d+%$/);
       }

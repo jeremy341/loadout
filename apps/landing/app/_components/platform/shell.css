@@ -103,7 +103,6 @@ html[data-larger-controls="true"] .pf .pf-tabs a { min-height: 52px; }
 .pf .pf-bare { display: block; min-height: 100dvh; }
 .pf .pf-main-bare { max-width: 880px; margin-inline: auto; padding-inline: 16px; }
 
-/* The accessibility tab on the participant platform: the edge tab from the home page, moved to the right edge under the top bar so it never covers the sidebar.
-   The accent follows the platform palette, so a colour-vision profile keeps the tab readable. */
-.pf .a11y-shortcut { top: var(--pf-a11y-top, 72px); left: auto; right: env(safe-area-inset-right, 0px); }
+/* The accessibility tab on the participant platform stays on the left edge, where the home page puts it. Only the colours follow the
+   platform palette, so a colour-vision profile keeps the tab readable. */
 .pf .a11y-tab { border-width: 2px 2px 4px 4px; color: var(--pf-acf); background: var(--pf-ac); }

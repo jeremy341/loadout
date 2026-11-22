@@ -8,6 +8,7 @@ This repository has separate public, contributor, and planning material. Use the
 | [`development/WORKFLOW.md`](development/WORKFLOW.md) | Contributors and AI agents | Contribution, branch, review, verification, and release process | Current operating policy |
 | [`development/agent-commits.md`](development/agent-commits.md) | Contributors and AI agents | Commit messages, co-author lines and grouping commits | Current operating rule |
 | [`development/SETUP.md`](development/SETUP.md) | Developers | Local setup, environment names and the optional platform password gate | Current implementation reference |
+| [`development/staging-posture.md`](development/staging-posture.md) | Contributors and organisers | Why the app is being built and what staging may claim | Owner record, 22 Nov 2026; not public copy |
 | [`development/ui-skills.md`](development/ui-skills.md) | UI contributors and AI agents | Required UI skills, scoped design brief and accessibility evidence for any UI change | Current operating rule |
 | [`development/ARCHITECTURE.md`](development/ARCHITECTURE.md) | Developers | Application boundaries and runtime architecture | Current implementation reference |
 | [`development/workspace.md`](development/workspace.md) | Contributors | Recommended local layout, worktrees and companion checkouts | Current layout guide |

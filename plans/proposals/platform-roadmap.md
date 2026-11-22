@@ -114,7 +114,7 @@ Our reviewer desk (the separate reviewer site) already has the screens, built on
 ### Reviewer-side records
 - **Log and audit:** review log with a reviewer filter, audit view, a note on every action, and the reviewer's own audit view.
 - **Review stats:** verdict counts per reviewer and day, with a chart. Only four outcomes count (approved, needs changes, rejected, banned), so housekeeping rows do not.
-- **Reviewer pay and perks:** a settings page for pay per review, and milestone grants (Pixl's food grant, reworded as a reviewer perk) with progress on the stats page. The rates are settled in [platform parity](platform-parity-pixl.md): 4 Ore on approval or ban, 2 Ore on needs-changes. The settings page itself is still planned.
+- **Reviewer pay and perks:** a settings page for pay per review, and milestone grants (Pixl's food grant, reworded as a reviewer perk) with progress on the stats page. The rates are settled in [platform parity](platform-parity-pixl.md): 2 Ore on approval or ban, 1 Ore on needs-changes. The settings page itself is still planned.
 - **Celebration:** short confetti and sound on a verdict, with a setting to turn it off (accessibility).
 - **Guidelines gate:** first-time reviewers read each page for a minimum time scaled to its length, then confirm; a version number forces a re-read when rules change.
 - **Public announcement:** each verdict is posted to the community review channel with a project link. Bans go privately.

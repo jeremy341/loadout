@@ -27,7 +27,7 @@ All eight are "same as Pixl".
 | 3 | When is a ship sent to the fraud service? | After first-pass approval only. | Narrow submission from `submitted` and first pass to after first-pass approval. `ROBERT_SUBMIT_STATES` already has the switch; the candidate rule needs the parking state from #1. |
 | 4 | What happens when the fraud service is unset? | Every project parks. | Park instead of `{ disabled: true }` and carrying on. A missing key must stop approvals, not silently pass them. |
 | 5 | Unship from which stages? | Fraud review, second review and approved. | Extend `mayUnship` beyond `approved`. A stage with no credit yet needs no clawback; the ledger plan must say so explicitly. |
-| 6 | Do fulfillers get paid? | Yes: 6 pixels per item, 2 per grant, credited at settlement. | Pay in Ore. Amount is provisional, see section 6. |
+| 6 | Do fulfillers get paid? | Yes: 6 pixels per item, 2 per grant, credited at settlement. | Pay in Ore, rounded up to the next whole Ore: 2 per item, 1 per grant (owner, 22 Nov 2026). Detail in section 6. |
 | 7 | May an owner fulfil their own order? | Yes, since 14 Nov 2026. | Drop the own-order refusal in `canCommit`. The sample store already says "nobody fulfils their own order, owners included", so the desk copy, the rule and its test all change together. |
 | 8 | Per-option stock? | Yes, `shop_option_stock`. | Already in place in LOADOUT (`ShopOptionStock`, `stockNeeds`, `hasStock`). Nothing to port; the desk's sample stock display should read the real table when the pages are wired. |
 
@@ -108,22 +108,29 @@ One step per pull request, in this order. Each step starts from `origin/main` on
 
 Update Plans 01, 02, 05 and 11 with the rules settled here, and the port map (`apps/landing/reviewer-dash/ADJUSTMENTS.md`). Plan 05's order flow still says `RECEIVED → APPROVED → PURCHASED → SHIPPED → TRACKING → DELIVERED`, which does not match the implemented `placed → packed → shipped → delivered → cancelled`. Pick one and make the plan, the code and the desk agree.
 
-## 6. Open values
+## 6. Fulfiller payout and open values
+
+### Fulfiller payout (settled 22 Nov 2026)
+
+Pay Pixl's value in Ore, rounding the converted amount **up** to the next whole Ore. The owner chose the ceiling rule; it is a rounding rule, not a new rate.
+
+```text
+payoutOre = ceil(payoutPixels × pixelValueUsd / oreValueUsd)
+pixelValueUsd = 0.10   (Pixl)
+oreValueUsd   = 0.435  (10 Ore = $4.35)
+
+item  = ceil(6 × 0.10 / 0.435) = ceil(1.38) = 2 Ore
+grant = ceil(2 × 0.10 / 0.435) = ceil(0.46) = 1 Ore
+```
+
+Cross-check: Pixl's base-to-max payout is $4–6 an hour, which is 40–60 pixels, so 6 pixels is 10–15% of an hour. 10–15% of LOADOUT's 10 Ore an hour is 1–1.5 Ore, the same band as the converted 1.38. Because Ore is whole, the paid value sits above Pixl's: 2 Ore is $0.87 against $0.60, and 1 Ore is $0.435 against $0.20. Recompute with the formula if either currency value changes.
+
+### Open values
 
 | Value | Provisional | Why it is not settled |
 | --- | --- | --- |
-| Fulfiller payout | 1.38 Ore per item, 0.46 Ore per grant | Pixl pays 6 pixels an item and 2 a grant at a nominal $0.10 a pixel, so $0.60 and $0.20. One Ore is $0.435 (10 Ore = $4.35), so $0.60 is 1.38 Ore and $0.20 is 0.46 Ore. Cross-check: Pixl's base-to-max payout is $4–6 an hour, which is 40–60 pixels, so 6 pixels is 10–15% of an hour; 10–15% of LOADOUT's 10 Ore an hour is 1–1.5 Ore. The ledger only accepts whole Ore, so this exact rate cannot be paid. Pick an integer rule before step 4. |
 | Score threshold | 4 or less flags | Pixl's own fraud band. Carried over unchanged. |
 | Unship at fraud review and second review | No clawback | There is no confirmed credit at those stages. Confirm before the code assumes it. |
-
-Whole-Ore options for the payout, pending the owner's choice:
-
-| Rule | Item | Grant | Against Pixl |
-| --- | --- | --- | --- |
-| Nearest whole Ore | 1 Ore ($0.44) | 1 Ore ($0.44) | Item is ~27% under, grant is ~117% over. The item and grant pay the same. |
-| Keep Pixl's 3:1 split | 3 Ore ($1.31) | 1 Ore ($0.44) | Both are ~2.2× Pixl, but the grant is worth a third of an item as in Pixl. |
-| Compromise | 2 Ore ($0.87) | 1 Ore ($0.44) | Item is ~45% over, grant ~117% over. A simpler split than 3:1 and cheaper than it. |
-| Sub-Ore pool | 1.38 Ore | 0.46 Ore | Exact value, but the ledger needs a separate accumulator that pays out in whole Ore. |
 
 Nothing here is a public claim. No participant-facing copy changes until a step ships and Plan 05 records the rule.
 

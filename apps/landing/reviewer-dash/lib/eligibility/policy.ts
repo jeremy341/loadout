@@ -54,9 +54,23 @@ export const POLICIES: Record<string, EligibilityPolicy> = {
     maxRateUsd: 6,
     itemValueRules: [{ match: /^hardware grant$/i, basis: "face", faceValueUsd: 10 }],
   },
+  // One Ore rate everywhere: 10 Ore per approved hour is $4.35 (lib/platform/review.ts USD_PER_TEN_ORE). Earlier versions keep
+  // the $4 rate they were calculated with, so past records still reproduce.
+  "2026-11-22.1": {
+    version: "2026-11-22.1",
+    ratePerHourUsd: 4.35,
+    evidenceMaxAgeMs: 6 * 60 * 60 * 1000,
+    shipsMaxAgeMs: 30 * 60 * 1000,
+    overBudgetToleranceUsd: 0.01,
+    enforceOnClaim: false,
+    allowUnledgeredClaim: false,
+    fundingBasis: "payout_history",
+    maxRateUsd: 6,
+    itemValueRules: [{ match: /^hardware grant$/i, basis: "face", faceValueUsd: 10 }],
+  },
 };
 
-export const CURRENT_POLICY_VERSION = "2026-10-22.3";
+export const CURRENT_POLICY_VERSION = "2026-11-22.1";
 
 export function currentPolicy(): EligibilityPolicy {
   return POLICIES[CURRENT_POLICY_VERSION]!;

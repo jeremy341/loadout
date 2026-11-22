@@ -286,12 +286,13 @@ export function NewProjectWizard() {
     }
   };
 
-  // Enter in a text field or on a radio moves on when the step is valid, and says what is wrong when it is not. It never submits.
+  // Enter in a one line field or on a radio moves on when the step is valid, and says what is wrong when it is not. It never submits.
+  // The idea box is a textarea, so Enter there is a plain new line (owner, 22 Nov 2026): the builder moves on with Next.
   const onKeyDown = (event: KeyboardEvent<HTMLFormElement>) => {
     if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
     const target = event.target;
     const isText = target instanceof HTMLInputElement && (target.type === "text" || target.type === "url" || target.type === "radio");
-    if (isText || target instanceof HTMLTextAreaElement) {
+    if (isText) {
       event.preventDefault();
       next();
     }
@@ -446,7 +447,7 @@ export function NewProjectWizard() {
                   if (draft.description.trim() && !stepValid(1, draft)) setErrors({ description: stepProblem(1, draft)?.message ?? "" });
                 }}
                 aria-invalid={errors.description ? true : undefined}
-                aria-describedby="wiz-description-help wiz-description-keys wiz-description-error"
+                aria-describedby="wiz-description-help wiz-description-error"
               />
               <div className="pf-wiz-meta">
                 <span className="pf-hint" id="wiz-description-help">
@@ -456,7 +457,6 @@ export function NewProjectWizard() {
                 </span>
                 <span className="pf-hint pf-wiz-count">{draft.description.length} / {PROJECT_DESCRIPTION_MAX}</span>
               </div>
-              <p className="pf-hint" id="wiz-description-keys">Enter moves to the next step. Shift+Enter starts a new line.</p>
               <div id="wiz-description-error" aria-live="polite">{errors.description ? <p className="pf-error">{errors.description}</p> : null}</div>
             </div>
 

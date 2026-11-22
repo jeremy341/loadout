@@ -95,7 +95,6 @@ html .pf.pf-focus .pf-wiz-sub { font-size: 0.875em; line-height: 1.6; }
 
 /* Counters and key hints under a field sit on the centre line too. The idea box and the link fields keep left aligned text. */
 html .pf.pf-focus .pf-wiz-body .pf-wiz-meta { justify-content: space-between; text-align: left; }
-html .pf.pf-focus .pf-wiz-body #wiz-description-keys { text-align: center; }
 html .pf.pf-focus .pf-wiz-body .pf-wiz-idea,
 html .pf.pf-focus .pf-wiz-body .pf-wiz-links .pf-input { text-align: left; }
 html .pf.pf-focus .pf-wiz-body .pf-wiz-links { text-align: left; }
@@ -103,14 +102,19 @@ html .pf.pf-focus .pf-wiz-body .pf-wiz-notice { max-width: 62ch; margin-inline: 
 
 /* The idea step (owner, 22 Nov 2026) goes back to the left aligned 480px body: question, helper, key hint, spark head and rows
    all read from the left edge of the column. The body itself stays centred in the viewport. */
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] { text-align: left; }
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] .pf-wiz-h1 { text-align: left; }
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] .pf-wiz-sub { margin-inline: 0; text-align: left; }
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] .pf-wiz-pane > .pf-hint,
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] #wiz-description-keys { margin-inline: 0; text-align: left; }
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] .pf-wiz-sparks-head { flex-direction: row; justify-content: space-between; gap: 12px; text-align: left; }
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] .pf-wiz-spark { text-align: left; }
-html .pf.pf-focus .pf-wiz-body[data-step="idea"] .pf-wiz-undo { display: inline-block; margin-inline: 0; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) { text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) .pf-wiz-h1 { text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) .pf-wiz-sub { margin-inline: 0; text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) .pf-wiz-pane > .pf-hint { margin-inline: 0; text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) .pf-wiz-sparks-head { flex-direction: row; justify-content: space-between; gap: 12px; text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) .pf-wiz-spark { text-align: left; }
+html .pf.pf-focus .pf-wiz-body:is([data-step="idea"], [data-step="name"]) .pf-wiz-undo { display: inline-block; margin-inline: 0; }
+
+/* The name step (owner, 22 Nov 2026) is left aligned the same way: question, helper, the typed name, the preview card and the
+   public notice all start at the left edge of the 480px body. */
+html .pf.pf-focus .pf-wiz-body[data-step="name"] .pf-wiz-title { text-align: left; }
+html .pf.pf-focus .pf-wiz-body[data-step="name"] .pf-wiz-preview-wrap { margin-inline: 0; }
+html .pf.pf-focus .pf-wiz-body[data-step="name"] .pf-wiz-notice { margin-inline: 0; text-align: left; }
 
 /* Step 2: a quiet "need a spark" label, a text-style "More ideas" and three solid rows. */
 html .pf.pf-focus .pf-wiz-sparks { margin-top: 20px; }

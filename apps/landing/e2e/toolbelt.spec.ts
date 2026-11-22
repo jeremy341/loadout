@@ -457,6 +457,8 @@ for (const [width, height] of [[390, 844], [1440, 900]] as const) {
       const name = `Belt axe ${Date.now()}`;
       await createProject(page, name);
       const scan = async () => {
+        // The page title is set after each client-side navigation; wait for it so the scan does not catch the gap.
+        await expect(page).toHaveTitle(/LOADOUT/);
         const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
         expect(result.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);
       };

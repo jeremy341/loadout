@@ -9,6 +9,10 @@ import { ledgerBalances } from "@/lib/platform/ledger-data";
 import { getOwnProfile } from "@/lib/platform/profile-data";
 import { readViewer } from "@/lib/platform/session";
 
+// The shell depends on the server's configuration (DATABASE_URL, the signed-in viewer). Without this, Next prerenders the
+// shell during the CI build, where the database is not configured, and serves that frozen "not connected" page on every deploy.
+export const dynamic = "force-dynamic";
+
 // Participant pages are private and never indexed.
 export const metadata: Metadata = {
   robots: { index: false, follow: false },

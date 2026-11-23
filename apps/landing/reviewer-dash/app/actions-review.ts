@@ -29,7 +29,6 @@ import {
   decideJournal,
   heartbeat,
   placeHold,
-  recordTriage,
   releaseClaim,
   releaseHold,
   reviewVerdict,
@@ -315,16 +314,6 @@ async function reviewReal(access: AdminAccess, projectId: number, verdict: strin
     reviewQueues: access.reviewQueues,
   });
   redirect(next ? back(next) : "/review");
-}
-
-// The fraud triage of the second pass: Fraud or Not fraud, with a note, before any final verdict.
-export async function recordSecondPassTriage(formData: FormData): Promise<void> {
-  await requireReviewAction("reviewer");
-  const projectId = Number(formData.get("projectId") ?? 0);
-  if (!projectId) return;
-  if (!isRealId(projectId)) bounce(projectId, "A sample ship has no triage to record.");
-  await real(projectId, formData, recordTriage);
-  redirect(back(projectId));
 }
 
 export async function setProjectLevel(formData: FormData): Promise<void> {

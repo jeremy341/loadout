@@ -44,7 +44,6 @@ import {
   toggleProjectPeak,
   holdReview,
   releaseReviewHold,
-  recordSecondPassTriage,
 } from "@/reviewer-dash/app/actions";
 import { isRealId } from "@/reviewer-dash/lib/real";
 import { DoubleDipBanner } from "@/reviewer-dash/app/_components/DoubleDipBanner";
@@ -208,11 +207,10 @@ export default async function ReviewDetail({
   // A first-pass reviewer proposing a ban goes straight to a full ReviewForm confirm/overturn by a different
   // canSecondPass reviewer (see the isProposedBan gate in reviewProject).
   const isProposedBan = isFinalStage && p.first_pass_verdict === "banned";
-  // A ship in second_review is either a proposed ban or waiting for a second pass. A sample ship waits there once its triage says
-  // not fraud. A real ship waits there from its first-pass approval and needs the triage recorded here (needsTriage) before any verdict.
+  // A ship in second_review is either a proposed ban or waiting for a final verdict. A real ship reaches it when its fraud score
+  // advances it; there is no human triage gate. Sample ships keep their old not-fraud marker from the fixture data.
   const isReal = isRealId(p.id);
-  const secondPassStage = isFinalStage && !isProposedBan && (isReal ? p.second_pass_verdict !== null : p.second_pass_verdict === "not_fraud");
-  const needsTriage = isReal && isFinalStage && !isProposedBan && p.second_pass_verdict === null;
+  const secondPassStage = isFinalStage && !isProposedBan && (isReal || p.second_pass_verdict === "not_fraud");
   // The project owner may review their own work; collaborators still cannot.
   // Mirrors isOwnProject / isCollaboratorProject in app/actions.ts.
   const isProjectOwner = !!p.users?.slack_id && p.users.slack_id === viewer;
@@ -693,33 +691,6 @@ export default async function ReviewDetail({
             )}
           </Card>
         </>
-      ) : needsTriage && !isHeld && !isOwn && (access.isOwner || canSecondPass) ? (
-        <Card>
-          <h3 className="hc-heading text-base">Fraud triage</h3>
-          <p className="hc-caption mt-1 mb-4 text-sm">
-            The first pass approved this. Before the final verdict, record whether it looks like fraud, with a note. Not fraud opens
-            the verdict. Fraud closes the approval: you can ask for changes or ban it.
-          </p>
-          {hasActiveClaim ? (
-            <form action={recordSecondPassTriage} className="flex flex-col gap-3">
-              <input type="hidden" name="projectId" value={p.id} />
-              <Textarea name="note" required rows={3} maxLength={500} placeholder="What did you check, and what did you find?" />
-              <div className="flex flex-wrap gap-2">
-                <ActionButton name="decision" value="not-fraud" icon="checkmark" pendingLabel="Saving...">Not fraud</ActionButton>
-                <ActionButton name="decision" value="fraud" variant="danger" pendingLabel="Saving...">Fraud</ActionButton>
-              </div>
-            </form>
-          ) : (
-            <div className="flex flex-col items-start gap-3 rounded-lg border border-[var(--border)] bg-[var(--sunken)] p-4">
-              <p className="hc-caption text-sm">Start reviewing to reserve this ship for 30 minutes, then record the triage.</p>
-              <form action={beginReviewClaim}>
-                <input type="hidden" name="projectId" value={p.id} />
-                <ActionButton icon="view" pendingLabel="Claiming...">Start reviewing</ActionButton>
-              </form>
-              {claimedByOther && <p className="hc-caption text-xs">Another reviewer currently has the claim.</p>}
-            </div>
-          )}
-        </Card>
       ) : p.banned_at ? (
         <Callout tone="danger" icon="important">
           <strong>This project was banned{p.ban_by ? ` by ${p.ban_by}` : ""} on {formatDateTime(p.banned_at)}.</strong>{" "}

@@ -184,8 +184,9 @@ test("the idea needs 10 characters and says so, and short text under 40 gets the
   const idea = page.getByLabel("Your idea");
   await expect(page.getByRole("button", { name: "Next" })).toBeDisabled();
   await idea.fill("Too short");
-  // Enter is a newline in the idea box; the Next button is what asks for the missing characters.
-  await page.getByRole("button", { name: "Next" }).click();
+  // Enter is a newline in the idea box; the Next button is what asks for the missing characters. It is aria-disabled,
+  // so force the press to exercise the refusal message rather than wait for actionability.
+  await page.getByRole("button", { name: "Next" }).click({ force: true });
   await expect(page.getByRole("heading", { level: 1, name: "What's your idea?" })).toBeVisible();
   await expect(page.getByText("Write at least 10 characters.")).toBeVisible();
   await expect(idea).toHaveAttribute("aria-invalid", "true");
@@ -337,6 +338,8 @@ test("a keyboard alone finishes every step and focus follows the heading", async
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Your idea")).toBeFocused();
   await page.keyboard.type("A tool that tidies my notes.");
+  // Enter in the idea box is a newline. Move to Next with the keyboard and press it to advance.
+  await page.getByRole("button", { name: "Next" }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { level: 1, name: "What's it called?" })).toBeFocused();
   await page.keyboard.press("Tab");

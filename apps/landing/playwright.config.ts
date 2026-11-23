@@ -49,7 +49,12 @@ export default defineConfig({
   webServer: {
     command: prodServer ? "bun run build && bun run start" : "bun run dev",
     url: baseURL,
-    env: { PORT: port, NEXT_PUBLIC_LOADOUT_SITE_URL: "https://loadout.dino.icu" },
+    env: {
+      PORT: port,
+      NEXT_PUBLIC_LOADOUT_SITE_URL: "https://loadout.dino.icu",
+      // Test-only secret for the signed fraud-outcome webhook used by the review-desk e2e flow.
+      LOADOUT_FRAUD_WEBHOOK_SECRET: "loadout-test-webhook-secret-123456",
+    },
     reuseExistingServer: reuseLocalServer,
     // A production build can take longer than the dev server's cold start; give it room before the suite is declared stuck.
     timeout: prodServer ? 300_000 : 120_000,

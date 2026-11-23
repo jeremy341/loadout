@@ -1,6 +1,14 @@
 import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test";
 import { actAs, REVIEW_BASE, type PreviewRole } from "./reviewer-helpers";
 import { addJournalEntryViaPage, createProjectViaWizard, openProjectTab, saveProjectSettings } from "./new-project-helper";
+import {
+  signWebhook,
+  WEBHOOK_SIGNATURE_HEADER,
+  WEBHOOK_TIMESTAMP_HEADER,
+} from "../lib/platform/integrations/webhook-signature";
+
+// The webServer in playwright.config.ts gives the app this test-only secret. It is not a production credential.
+const WEBHOOK_SECRET = "loadout-test-webhook-secret-123456";
 
 // The review desk against the database (lib/platform/review-actions.ts). A builder ships a project through the builder pages, a first
 // reviewer and a final reviewer (the local test accounts) work it on the review host, and the builder sees the result.
@@ -61,6 +69,29 @@ async function staffPage(browser: Browser, role: PreviewRole): Promise<{ context
   return { context, page };
 }
 
+// A first-pass approval parks a real ship in Fraud review. There is no live Robert desk in staging, so the test sends a signed
+// outcome to the same webhook the service uses. The desk id in the URL is Project.seq, which our external id carries.
+async function scoreParkedShip(page: Page, shipUrl: string) {
+  const seq = Number(shipUrl.split("/").pop());
+  if (!Number.isSafeInteger(seq) || seq <= 0) throw new Error(`No desk sequence in ${shipUrl}`);
+  const raw = JSON.stringify({
+    event: "outcome.set",
+    externalId: `loadout-${seq}-0`,
+    outcome: { trustScore: 8, reviewedAt: new Date().toISOString() },
+  });
+  const timestamp = String(Math.floor(Date.now() / 1000));
+  const response = await page.request.post("/api/fraud-outcome", {
+    data: raw,
+    headers: {
+      "content-type": "application/json",
+      [WEBHOOK_TIMESTAMP_HEADER]: timestamp,
+      [WEBHOOK_SIGNATURE_HEADER]: signWebhook(WEBHOOK_SECRET, timestamp, raw),
+    },
+  });
+  expect(response.status(), await response.text()).toBe(202);
+  expect((await response.json()).advanced).toBe(true);
+}
+
 // The ship's row on a queue page, opened. The queue lists the newest waits last, so the test finds it by name.
 async function openShip(page: Page, list: string, name: string) {
   log(`open ${list}`);
@@ -105,7 +136,7 @@ async function writeVerdict(page: Page, opts: { note: string; features?: string;
 test.describe("the review desk against the database", () => {
   test.skip(STAFF_MODE, "the builder pages are checked in builder mode");
 
-  test("a first pass, a fraud triage and a second pass approve a shipped project and confirm its Ore", async ({ page, browser }) => {
+  test("a first pass, a scored outcome and a second pass approve a shipped project and confirm its Ore", async ({ page, browser }) => {
     const name = `Desk approve ${Date.now()}`;
     await shipProject(page, name);
     const projectUrl = page.url().split("?")[0];
@@ -129,6 +160,9 @@ test.describe("the review desk against the database", () => {
       // The desk moves on to the next ship in the queue (or the queue itself).
       await expect(first.page).not.toHaveURL(shipUrl, { timeout: 30000 });
 
+      // A real score moves the parked ship to Second pass. In staging the outcome comes through the signed webhook.
+      await scoreParkedShip(page, shipUrl);
+
       // The builder sees the second pass, and the Ore is pending, not confirmed.
       await page.goto(`${projectUrl}?tab=ship`);
       await expect(page.locator("#ship").getByText("Second pass", { exact: false })).toBeVisible({ timeout: 15000 });
@@ -139,17 +173,13 @@ test.describe("the review desk against the database", () => {
       await expect(pendingRow).toContainText("Pending: 2 approved hours recommended at the first pass.", { timeout: 30000 });
       await expect(pendingRow).toHaveAttribute("data-status", "pending");
 
-      // The final reviewer: the ship is in Second pass; a verdict needs the triage first.
+      // The final reviewer: the scored ship is in Second pass and the verdict form is open without a human triage gate.
       const secondRow = await openShip(final.page, "/review/second-pass", name);
       await secondRow.click();
       await expect(final.page.getByRole("heading", { name })).toBeVisible({ timeout: 30000 });
       const secondUrl = final.page.url();
-      await expect(final.page.getByRole("heading", { name: "Fraud triage" })).toBeVisible();
-      await expect(final.page.getByLabel("Note to the builder")).toHaveCount(0);
-      await final.page.getByRole("button", { name: "Start reviewing" }).click({ timeout: 15000 });
-      await final.page.locator("textarea[name=note]").first().fill("Repo and journal agree; the commits match the hours logged.");
-      await final.page.getByRole("button", { name: "Not fraud" }).click();
-      await expect(final.page.getByLabel("Note to the builder")).toBeVisible({ timeout: 30000 });
+      await expect(final.page.getByRole("heading", { name: "Fraud triage" })).toHaveCount(0);
+      await startReviewing(final.page);
       await expect(final.page.getByRole("button", { name: /Approve & credit Ore/ })).toBeVisible();
       await final.page.screenshot({ path: `${SHOTS}/reviewer-second-pass-verdict.png`, fullPage: true });
       await writeVerdict(final.page, { note: "Approved. Clean parser, good tests, tidy output.", features: "A log parser with header, body and summary handling and tests.", notes: "All four dimensions checked on the repo; hours match.", button: /Approve & credit Ore/ });

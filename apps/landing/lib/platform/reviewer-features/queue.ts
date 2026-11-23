@@ -22,9 +22,14 @@ export const WAIT_AGED_MS = 7 * 24 * 60 * 60 * 1000;
 export const HOLD_REASON_MIN = 3;
 export const HOLD_REASON_MAX = 280;
 
+// True when an already approved project was updated after its approval.
+function updatedSinceApproval(approvedAt: number | null, updatedAt: number | null): updatedAt is number {
+  if (approvedAt === null || updatedAt === null) return false;
+  return updatedAt > approvedAt;
+}
+
 export function queueWaitStart(input: { firstShippedAt: number; approvedAt: number | null; updatedAt: number | null }): number {
-  if (input.approvedAt !== null && input.updatedAt !== null && input.updatedAt > input.approvedAt) return input.updatedAt;
-  return input.firstShippedAt;
+  return updatedSinceApproval(input.approvedAt, input.updatedAt) ? input.updatedAt : input.firstShippedAt;
 }
 
 export function queueWaitMs(input: Parameters<typeof queueWaitStart>[0], now: number): number {

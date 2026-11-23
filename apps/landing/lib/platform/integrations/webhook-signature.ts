@@ -18,20 +18,37 @@ export function signWebhook(secret: string, timestamp: string, rawBody: string):
   return "sha256=" + createHmac("sha256", secret).update(`${timestamp}.${rawBody}`).digest("hex");
 }
 
-export function verifyWebhook(input: {
+type WebhookInput = {
   secret: string | undefined;
   timestamp: string | null;
   signature: string | null;
   rawBody: string;
   now?: Date;
-}): WebhookVerdict {
+};
+
+const fail = (reason: Extract<WebhookVerdict, { ok: false }>["reason"]): WebhookVerdict => ({ ok: false, reason });
+
+function isMalformed(timestamp: string, signature: string): boolean {
+  return !/^\d{1,12}$/.test(timestamp) || !/^sha256=[0-9a-f]{64}$/.test(signature);
+}
+
+function isStale(timestamp: string, now: Date | undefined): boolean {
+  const seconds = (now ?? new Date()).getTime() / 1000;
+  return Math.abs(seconds - Number(timestamp)) > WEBHOOK_TOLERANCE_SECONDS;
+}
+
+function signaturesMatch(expected: string, given: string): boolean {
+  const a = Buffer.from(expected);
+  const b = Buffer.from(given);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+export function verifyWebhook(input: WebhookInput): WebhookVerdict {
   const secret = (input.secret ?? "").trim();
-  if (secret.length < WEBHOOK_MIN_SECRET_LENGTH) return { ok: false, reason: "not_configured" };
-  if (!input.timestamp || !input.signature) return { ok: false, reason: "missing" };
-  if (!/^\d{1,12}$/.test(input.timestamp) || !/^sha256=[0-9a-f]{64}$/.test(input.signature)) return { ok: false, reason: "malformed" };
-  const now = (input.now ?? new Date()).getTime() / 1000;
-  if (Math.abs(now - Number(input.timestamp)) > WEBHOOK_TOLERANCE_SECONDS) return { ok: false, reason: "stale" };
-  const expected = Buffer.from(signWebhook(secret, input.timestamp, input.rawBody));
-  const given = Buffer.from(input.signature);
-  return expected.length === given.length && timingSafeEqual(expected, given) ? { ok: true } : { ok: false, reason: "mismatch" };
+  if (secret.length < WEBHOOK_MIN_SECRET_LENGTH) return fail("not_configured");
+  const { timestamp, signature } = input;
+  if (!timestamp || !signature) return fail("missing");
+  if (isMalformed(timestamp, signature)) return fail("malformed");
+  if (isStale(timestamp, input.now)) return fail("stale");
+  return signaturesMatch(signWebhook(secret, timestamp, input.rawBody), signature) ? { ok: true } : fail("mismatch");
 }

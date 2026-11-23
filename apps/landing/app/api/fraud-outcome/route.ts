@@ -19,104 +19,123 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export async function POST(req: Request) {
-  const rawBody = await req.text();
-  if (new TextEncoder().encode(rawBody).byteLength > WEBHOOK_MAX_BODY_BYTES) {
-    return NextResponse.json({ ok: false, error: "Body too large." }, { status: 413 });
-  }
+type OutcomeBody = {
+  event?: unknown;
+  externalId?: unknown;
+  projectSeq?: unknown;
+  outcome?: { trustScore?: unknown; reviewedAt?: unknown; reason?: unknown; externalId?: unknown; projectSeq?: unknown };
+  project?: { externalId?: unknown; projectSeq?: unknown };
+};
 
+type Reading = NonNullable<ReturnType<typeof verdictFor>>;
+
+const reply = (body: Record<string, unknown>, status = 200) => NextResponse.json(body, { status });
+
+function isTooLarge(rawBody: string): boolean {
+  return new TextEncoder().encode(rawBody).byteLength > WEBHOOK_MAX_BODY_BYTES;
+}
+
+// Null when the signature checks out; otherwise the refusal to send back.
+function signatureRefusal(req: Request, rawBody: string): NextResponse | null {
   const verdict = verifyWebhook({
     secret: process.env.LOADOUT_FRAUD_WEBHOOK_SECRET,
     timestamp: req.headers.get(WEBHOOK_TIMESTAMP_HEADER),
     signature: req.headers.get(WEBHOOK_SIGNATURE_HEADER),
     rawBody,
   });
-  if (!verdict.ok) {
-    if (verdict.reason === "not_configured") {
-      return NextResponse.json({ ok: false, state: "not_connected", error: "The fraud webhook is not configured in this environment." }, { status: 503 });
-    }
-    return NextResponse.json({ ok: false, error: "Signature check failed." }, { status: 401 });
+  if (verdict.ok) return null;
+  if (verdict.reason === "not_configured") {
+    return reply({ ok: false, state: "not_connected", error: "The fraud webhook is not configured in this environment." }, 503);
   }
+  return reply({ ok: false, error: "Signature check failed." }, 401);
+}
 
-  let body: {
-    event?: unknown;
-    externalId?: unknown;
-    projectSeq?: unknown;
-    outcome?: { trustScore?: unknown; reviewedAt?: unknown; reason?: unknown; externalId?: unknown; projectSeq?: unknown };
-    project?: { externalId?: unknown; projectSeq?: unknown };
-  };
+function parseBody(rawBody: string): OutcomeBody | null {
   try {
-    body = JSON.parse(rawBody);
+    const parsed: unknown = JSON.parse(rawBody);
+    return parsed !== null && typeof parsed === "object" ? (parsed as OutcomeBody) : null;
   } catch {
-    return NextResponse.json({ ok: false, error: "Body is not valid JSON." }, { status: 400 });
+    return null;
   }
+}
 
-  if (body.event === "ping") return NextResponse.json({ ok: true });
-  if (body.event !== "outcome.set") return NextResponse.json({ ok: true, ignored: true });
+// Our external id is loadout-<seq>-<seconds>.
+function seqFromExternalId(value: unknown): number | null {
+  if (typeof value !== "string") return null;
+  const match = /^loadout-(\d+)-\d+$/.exec(value);
+  return match ? Number(match[1]) : null;
+}
 
-  const score = Number(body.outcome?.trustScore);
-  const reviewedAt = typeof body.outcome?.reviewedAt === "string" ? body.outcome.reviewedAt : new Date().toISOString();
-  const reading = verdictFor({ trustScore: score, note: "", reviewedAt, robertState: "decided" });
-  if (!reading) return NextResponse.json({ ok: false, error: "No usable score in the outcome." }, { status: 400 });
+function seqFromProjectSeq(value: unknown): number | null {
+  return typeof value === "number" && Number.isSafeInteger(value) && value > 0 ? value : null;
+}
 
-  // Our external id is loadout-<seq>-<seconds>; a payload without one is read but cannot be matched to a ship.
+// A payload without one of our ids is read but cannot be matched to a ship.
+function findSeq(body: OutcomeBody): number | null {
   const ids = [body.externalId, body.outcome?.externalId, body.project?.externalId];
-  let seq: number | null = null;
-  for (const value of ids) {
-    if (typeof value !== "string") continue;
-    const match = /^loadout-(\d+)-\d+$/.exec(value);
-    if (match) {
-      seq = Number(match[1]);
-      break;
-    }
-  }
-  if (seq === null) {
-    for (const value of [body.projectSeq, body.outcome?.projectSeq, body.project?.projectSeq]) {
-      if (typeof value === "number" && Number.isSafeInteger(value) && value > 0) {
-        seq = value;
-        break;
-      }
-    }
-  }
+  const seqs = [body.projectSeq, body.outcome?.projectSeq, body.project?.projectSeq];
+  const fromId = ids.map(seqFromExternalId).find((seq) => seq !== null);
+  if (fromId !== undefined) return fromId;
+  return seqs.map(seqFromProjectSeq).find((seq) => seq !== null) ?? null;
+}
 
-  let recorded = false;
-  let advanced = false;
-  let state = seq === null ? "unmatched" : "pending";
-  if (seq !== null && databaseConfigured()) {
-    const project = await db().project.findFirst({ where: { seq }, select: { id: true } });
-    if (project) {
-      const written = await recordCheck(
-        {
-          projectId: project.id,
-          kind: "robert",
-          status: reading.status,
-          score: reading.score,
-          summary: reading.summary,
-          detail: { source: "webhook", reviewedAt },
-        },
-        db(),
-      );
-      recorded = written.ok;
-      advanced = await advanceIfScored(db(), project.id, new Date());
-      state = "applied";
-    } else {
-      state = "unmatched_project";
-    }
-  } else if (seq !== null) {
-    state = "no_database";
-  }
+type Applied = { recorded: boolean; advanced: boolean; state: string };
+
+async function applyOutcome(seq: number, reading: Reading, reviewedAt: string): Promise<Applied> {
+  const project = await db().project.findFirst({ where: { seq }, select: { id: true } });
+  if (!project) return { recorded: false, advanced: false, state: "unmatched_project" };
+  const written = await recordCheck(
+    {
+      projectId: project.id,
+      kind: "robert",
+      status: reading.status,
+      score: reading.score,
+      summary: reading.summary,
+      detail: { source: "webhook", reviewedAt },
+    },
+    db(),
+  );
+  const advanced = await advanceIfScored(db(), project.id, new Date());
+  return { recorded: written.ok, advanced, state: "applied" };
+}
+
+async function applyIfMatched(seq: number | null, reading: Reading, reviewedAt: string): Promise<Applied> {
+  if (seq === null) return { recorded: false, advanced: false, state: "unmatched" };
+  if (!databaseConfigured()) return { recorded: false, advanced: false, state: "no_database" };
+  return applyOutcome(seq, reading, reviewedAt);
+}
+
+function readOutcome(body: OutcomeBody): { reading: Reading; reviewedAt: string } | null {
+  const reviewedAt = typeof body.outcome?.reviewedAt === "string" ? body.outcome.reviewedAt : new Date().toISOString();
+  const reading = verdictFor({ trustScore: Number(body.outcome?.trustScore), note: "", reviewedAt, robertState: "decided" });
+  return reading ? { reading, reviewedAt } : null;
+}
+
+// Events other than outcome.set are answered without touching anything.
+function nonOutcomeReply(body: OutcomeBody): NextResponse | null {
+  if (body.event === "ping") return reply({ ok: true });
+  return body.event === "outcome.set" ? null : reply({ ok: true, ignored: true });
+}
+
+export async function POST(req: Request) {
+  const rawBody = await req.text();
+  if (isTooLarge(rawBody)) return reply({ ok: false, error: "Body too large." }, 413);
+
+  const refusal = signatureRefusal(req, rawBody);
+  if (refusal) return refusal;
+
+  const body = parseBody(rawBody);
+  if (!body) return reply({ ok: false, error: "Body is not valid JSON." }, 400);
+
+  const early = nonOutcomeReply(body);
+  if (early) return early;
+
+  const outcome = readOutcome(body);
+  if (!outcome) return reply({ ok: false, error: "No usable score in the outcome." }, 400);
+  const { reading, reviewedAt } = outcome;
+
+  const { recorded, advanced, state } = await applyIfMatched(findSeq(body), reading, reviewedAt);
 
   // 202: the signature was verified. "applied" says whether a row or a status move actually happened; a staging reply never claims more.
-  return NextResponse.json(
-    {
-      ok: true,
-      applied: recorded || advanced,
-      state,
-      recorded,
-      advanced,
-      score: reading.score,
-      fraudStatus: reading.status,
-    },
-    { status: 202 },
-  );
+  return reply({ ok: true, applied: recorded || advanced, state, recorded, advanced, score: reading.score, fraudStatus: reading.status }, 202);
 }

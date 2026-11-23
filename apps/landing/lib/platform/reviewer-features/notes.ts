@@ -24,11 +24,16 @@ export function checkNoteBody(raw: unknown): NoteCheck {
 
 export type ImageCheck = { ok: true } | { ok: false; message: string };
 
+const isNoteImageType = (type: string): boolean => (NOTE_IMAGE_TYPES as readonly string[]).includes(type);
+
+function isNoteImageSizeOk(bytes: number): boolean {
+  if (!Number.isFinite(bytes)) return false;
+  return bytes > 0 && bytes <= NOTE_IMAGE_MAX_BYTES;
+}
+
 export function checkNoteImage(input: { type: string; bytes: number; count: number }): ImageCheck {
-  if (!(NOTE_IMAGE_TYPES as readonly string[]).includes(input.type)) return { ok: false, message: "Attach a PNG, JPEG or WebP image." };
-  if (!Number.isFinite(input.bytes) || input.bytes <= 0 || input.bytes > NOTE_IMAGE_MAX_BYTES) {
-    return { ok: false, message: "An image can be up to 5 MB." };
-  }
+  if (!isNoteImageType(input.type)) return { ok: false, message: "Attach a PNG, JPEG or WebP image." };
+  if (!isNoteImageSizeOk(input.bytes)) return { ok: false, message: "An image can be up to 5 MB." };
   if (input.count >= NOTE_IMAGES_MAX) return { ok: false, message: `A note holds up to ${NOTE_IMAGES_MAX} images.` };
   return { ok: true };
 }

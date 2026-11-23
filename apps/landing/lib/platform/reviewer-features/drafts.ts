@@ -25,19 +25,36 @@ export function shouldAutosave(input: { text: string; savedText: string; lastSav
 
 export type StoredDraft = { text: string; savedAt: number; shipVersion: number };
 
-export function readDraft(raw: unknown, input: { shipVersion: number; now: number }): { text: string; savedAt: number } | null {
-  if (typeof raw !== "string") return null;
-  let parsed: unknown;
+function parseJson(raw: string): unknown {
   try {
-    parsed = JSON.parse(raw);
+    return JSON.parse(raw);
   } catch {
     return null;
   }
-  if (!parsed || typeof parsed !== "object") return null;
-  const draft = parsed as Partial<StoredDraft>;
-  if (typeof draft.text !== "string" || typeof draft.savedAt !== "number" || typeof draft.shipVersion !== "number") return null;
-  if (draft.text.length === 0 || draft.text.length > DRAFT_MAX_CHARS) return null;
+}
+
+function asStoredDraft(value: unknown): StoredDraft | null {
+  if (!value || typeof value !== "object") return null;
+  const draft = value as Partial<StoredDraft>;
+  if (typeof draft.text !== "string") return null;
+  if (typeof draft.savedAt !== "number") return null;
+  if (typeof draft.shipVersion !== "number") return null;
+  return draft as StoredDraft;
+}
+
+const hasUsableText = (text: string): boolean => text.length > 0 && text.length <= DRAFT_MAX_CHARS;
+
+function isFresh(savedAt: number, now: number): boolean {
+  if (savedAt > now) return false;
+  return now - savedAt <= DRAFT_MAX_AGE_MS;
+}
+
+export function readDraft(raw: unknown, input: { shipVersion: number; now: number }): { text: string; savedAt: number } | null {
+  if (typeof raw !== "string") return null;
+  const draft = asStoredDraft(parseJson(raw));
+  if (!draft) return null;
+  if (!hasUsableText(draft.text)) return null;
   if (draft.shipVersion !== input.shipVersion) return null;
-  if (input.now - draft.savedAt > DRAFT_MAX_AGE_MS || draft.savedAt > input.now) return null;
+  if (!isFresh(draft.savedAt, input.now)) return null;
   return { text: draft.text, savedAt: draft.savedAt };
 }

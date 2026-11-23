@@ -22,6 +22,8 @@ html[data-display-theme="light"] .docs-embedded, html[data-display-theme="light"
 
 /* Section list, in the sidebar */
 .docs-side { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding-top: 4px; }
+/* The accessibility tab is fixed on the left edge, so the docs section list starts clear of it on desktop. */
+@media (min-width: 600px) { .pf .pf-frame-docs .docs-side { margin-left: 44px; width: calc(100% - 44px); } }
 .docs-side .docs-search { margin: 0; }
 .docs-side .docs-search-label { margin-bottom: 4px; }
 .docs-side .docs-search input { min-height: 44px; background: var(--pf-bg); }

@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BackLink, SampleNote } from "@/app/_components/platform/community/Parts";
+import { BackLink } from "@/app/_components/platform/community/Parts";
 import { COMMUNITY_HOME, findSession } from "@/lib/platform/community";
 import { requireViewer } from "@/lib/platform/session";
 import { trackSlug } from "@/lib/platform/tracks";
 
-export const metadata: Metadata = { title: "Show & Tell session - LOADOUT" };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const session = findSession((await params).id);
+  return { title: session ? `Session ${session.number}: ${session.title} - LOADOUT` : "Show & Tell session - LOADOUT" };
+}
 
 // One session: its theme and the projects shown. An upcoming session lists nothing and has no date; an unknown id is a 404.
 export default async function ShowAndTellSessionPage({ params }: { params: Promise<{ id: string }> }) {
@@ -17,7 +20,6 @@ export default async function ShowAndTellSessionPage({ params }: { params: Promi
   return (
     <>
       <BackLink href={`${COMMUNITY_HOME}/show-and-tell`}>Back to Show &amp; Tell</BackLink>
-      <SampleNote>This session is a proposed sample. Names and projects are invented.</SampleNote>
 
       <div className="cm-detail-head">
         <h1>

@@ -261,7 +261,7 @@ html .pf .pf-sg-card:hover .pf-sg-title, html .pf .pf-sg-card:focus-visible .pf-
 html .pf .pf-sg-hours { flex: none; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.04em; color: var(--pf-mut); font-variant-numeric: tabular-nums; }
 html .pf .pf-sg-desc { -webkit-line-clamp: 3; line-clamp: 3; margin-top: 2px; font-size: 1em; line-height: 1.6; }
 html .pf .pf-sg-card { background: var(--pf-panel); }
-html .pf .pf-sg-grid .pf-new-card { min-height: 100%; }
+html .pf .pf-sg-grid .pf-new-card { min-height: 280px; }
 
 /* ---- Project page (owner): flat header, one meta line, inline facts, no boxes inside boxes ---- */
 html .pf .pf-column { max-width: 960px; }
@@ -699,7 +699,7 @@ html .pf .pf-sg-meta { display: none; }
   html .pf .pf-sg-title { font-size: 1.0625em; }
   html .pf .pf-sg-title-text { overflow: visible; white-space: normal; text-overflow: clip; overflow-wrap: anywhere; }
   html .pf .pf-sg-meta { display: block; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); }
-  html .pf .pf-sg-grid .pf-new-card { min-height: 56px; }
+  html .pf .pf-sg-grid .pf-new-card { min-height: 200px; }
 }
 
 /* Project header: an empty cover is a thin band, and the one active action sits beside the title (under it on a phone). */

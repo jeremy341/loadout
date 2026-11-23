@@ -30,6 +30,8 @@ Separate public-site files:
 - [`m1-platform-shell.md`](m1-platform-shell.md): the M1 participant shell, builder overview and admin basics. Implemented on `feature/participant-platform-m1`. **Partly superseded:** the top-bar navigation is replaced by `redesign-phase-1-shell.md`, and the staff group moved to the reviewer site on 6 Nov 2026 (noted inside the brief). Track page and overview decisions in it still stand until a later brief changes them.
 - [`redesign-phase-1-shell.md`](redesign-phase-1-shell.md): the current shell spec. Left sidebar (a drawer on narrow screens), account panel and the one modal. Replaces the navigation in `m1-platform-shell.md`; owner changes after phase 1 are listed in the brief.
 - [`redesign-phase-2-wizard.md`](redesign-phase-2-wizard.md): the project creation wizard.
+- [`projects-empty-state.md`](projects-empty-state.md): 23 Nov 2026 — the zero-project page uses the full-size New project tile alone; the explanatory sentence is gone. Not reviewed by the owner.
+- [`wizard-focus-layout.md`](wizard-focus-layout.md): the 22 Nov 2026 focus route for the wizard: no shell, compact cards and the progress strip. The heading font is still Pixelify; the italic serif in the target needs owner approval. Not reviewed by the owner.
 - [`dashboard-minimal-pass.md`](dashboard-minimal-pass.md): the 18 Nov 2026 dashboard pass: fewer boxed buttons, calmer Ledger and Shop, raised small-text tiers. A later pass over the earlier participant briefs; where it differs on those points, it is the newer record.
 - [`participant-ui-audit-followup.md`](participant-ui-audit-followup.md): participant Projects, Project and Shop audit fixes (19 Nov 2026).
 - [`ui-audit-followup.md`](ui-audit-followup.md): public, participant and staff UI audit fixes (19 Nov 2026). Pair with `ui-audit-public.md` and `participant-ui-audit-followup.md`.
@@ -48,6 +50,7 @@ Separate public-site files:
 - [`expeditions-redesign.md`](expeditions-redesign.md): the Expeditions list and detail pages (17 Nov 2026). Replaces those parts of `expeditions.md`.
 - [`community.md`](community.md): the read-only Community hub (news, goals, leaderboard, Era). Fixture-driven.
 - [`placeholders-and-funding.md`](placeholders-and-funding.md): the not-connected placeholders and the Hardware funding card. Brief not reviewed by the owner.
+- [`buyer-tracking-line.md`](buyer-tracking-line.md): the 22 Nov 2026 tracking or grant-reference entry in the buyer's order metadata box, read from the shipped-order row. Not reviewed by the owner.
 
 ## Reviewer site (staff only, sample data)
 
@@ -56,6 +59,7 @@ Read `reviewer-pixl-port.md` first for look, layout and page structure. The othe
 - [`reviewer-pixl-port.md`](reviewer-pixl-port.md): the current direction (owner, 16 Nov 2026): a 1:1 port of Pixl's internal dashboard, then remove and adjust. Replaces the hand-built LOADOUT-styled and egg-styled reviewer UIs; wins over `reviewer-desk-parity.md` and `reviewer-egg-restyle.md` for look, layout and page structure.
 - [`reviewer-site.md`](reviewer-site.md): the base brief for the separate reviewer host, rules owner references and the round 4 parity with Pixl's internal dashboard. Its "drop" rows for heartbeat, celebration, AI draft, AI time, other-YSWS check and reviewer perks are superseded by `reviewer-desk-parity.md`.
 - [`reviewer-desk-parity.md`](reviewer-desk-parity.md): one track per project on the reviewer desk and the platform, and the Pixl review features the desk lacked, on sample data. Brief written 15 Nov 2026; not reviewed by the owner. Look and layout parts yield to `reviewer-pixl-port.md`.
+- [`reviewer-desk-staging-honesty.md`](reviewer-desk-staging-honesty.md): the 22 Nov 2026 staging pass on the reviewer desk and the Community pages: LOADOUT wording, Sample data and Not connected notes, palette fallback, keyboard shortcuts, a short approval celebration and clearer Community section dividers. Not reviewed by the owner.
 - [`reviewer-egg-restyle.md`](reviewer-egg-restyle.md): egg look with Pixl layout (16 Nov 2026). **Historical:** superseded the same day by Pixl's own design; see the "Superseded" section inside it.
 - [`reviewer-roles.md`](reviewer-roles.md): the role levels ported from Pixl and how they gate each page. The rules live in code and tests.
 - Round 4 page groups (7 Nov 2026, parity tables against Pixl's internal dashboard; page structure may since have changed under `reviewer-pixl-port.md`):

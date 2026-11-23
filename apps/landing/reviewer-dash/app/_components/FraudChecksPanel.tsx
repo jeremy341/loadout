@@ -2,18 +2,20 @@ import { isRealId } from "@/reviewer-dash/lib/real";
 import { doubleDipView } from "@/reviewer-dash/lib/doubleDip";
 import { latestChecksForSeq, type CheckRow } from "@/lib/platform/fraud/checks";
 import { Badge, Card, CardHeader, Muted, formatDateTime, type Tone } from "@/reviewer-dash/app/_ui/ui";
+import DataNote from "@/reviewer-dash/app/_ui/DataNote";
 
 // The automated fraud and verification checks for one ship, newest result per check (lib/platform/fraud/checks.ts). Read-only: the
 // desk's verdict is still the reviewer's, and nothing here writes to the project. Every line is fixed text built by the check itself;
-// the model's and Telescreen's own words sit under "note" and are rendered as plain text, never as markup.
+// the model's and the automated review check's own words sit under "note" and are rendered as plain text, never as markup.
 //
-// Robert and Fraudy rows carry scores that bear on the second-pass fraud decision, so they are shown only when `showScores` is true
+// The automated review check and the time split check carry scores that bear on the second-pass fraud decision, so they are shown only when `showScores` is true
 // (the page passes the same gate as the final-review stages); the pre-check and double-dip rows go to every reviewer.
-// A sample ship (id below 100000) has no rows and renders nothing, as does a desk with no database.
+// A sample ship (id below 100000) has no rows: the panel then says the checks are not connected, instead of vanishing and implying
+// the ship was checked and found clean.
 const KIND_LABEL: Record<string, string> = {
   precheck: "AI pre-check",
-  robert: "Telescreen (Robert)",
-  fraudy: "Fraudy time split",
+  robert: "Automated review check",
+  fraudy: "Time split check",
   "double-dip": "Double dip",
 };
 
@@ -30,7 +32,7 @@ function extras(row: CheckRow): string[] {
     const view = doubleDipView(String(d.systemNote ?? ""));
     if (view) out.push(view.text);
   }
-  if (row.kind === "robert" && typeof d.note === "string" && d.note) out.push(`Telescreen note: ${d.note}`);
+  if (row.kind === "robert" && typeof d.note === "string" && d.note) out.push(`Automated check note: ${d.note}`);
   if (row.kind === "precheck") {
     const findings = Array.isArray(d.findings) ? d.findings : [];
     for (const f of findings) {
@@ -44,7 +46,17 @@ function extras(row: CheckRow): string[] {
 }
 
 export async function FraudChecksPanel({ projectId, showScores }: { projectId: number; showScores: boolean }) {
-  if (!isRealId(projectId)) return null;
+  if (!isRealId(projectId)) {
+    return (
+      <Card>
+        <CardHeader title="Automated checks" icon="info" />
+        <DataNote kind="not-connected">
+          No automated check ran on this sample ship. The AI pre-check, the automated review check, the time split check and the double-dip
+          check do not exist on staging, so a missing result here does not mean the ship is clear.
+        </DataNote>
+      </Card>
+    );
+  }
   const rows = (await latestChecksForSeq(projectId)).filter((row) => showScores || (row.kind !== "robert" && row.kind !== "fraudy"));
   if (rows.length === 0) return null;
   return (

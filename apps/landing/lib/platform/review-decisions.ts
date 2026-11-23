@@ -8,15 +8,14 @@
 //   stageOf(ship)                            queue | first-pass | second-pass | proposed-ban | closed
 //   authorizeShip(actor, ship, opts?)        Pixl authorizeProjectAction: reviewer, queue scope, self and collaborator and pending invite
 //   mayClaim(actor, ship, now)               a claim: queue and role per stage, assignment lock, other reviewer's live claim, hold
-//   mayTriage(actor, ship, now)              fraud triage: second pass only, final reviewer or owner, own live claim, no hold
 //   mayGiveVerdict(actor, ship, verdict, now) first pass, second pass and proposed ban gates, with what the verdict does
-//   secondPassVerdictAllowed(triage, kind)   null blocks everything; fraud allows needs_changes and a ban only
+//   secondPassVerdictAllowed(triage, kind)   no gate: Robert's score is the evidence, the human triage is gone
 //   mayHold(actor, ship) / mayRelease(actor, ship)
 //   mayDecideJournal(actor, ship, now)       per-journal decisions need the live claim at either pass
 //   mayAddNote(actor, ship)                  a review note: a ship that has been submitted, not a draft or a banned project
 //   mayCorrect(actor, ship) / mayUnship(actor, ship)
 //   NEEDS_CHANGES_REASONS, reasonCodeOf(raw)
-import { canReleaseHold, claimState, assignmentWindow, canConfirmBan, canGiveSecondPassVerdict, canHold, canReview, placeHold, type Checked, type FraudTriage, type Hold } from "./review-rules";
+import { canReleaseHold, claimState, assignmentWindow, canConfirmBan, canHold, canReview, placeHold, type Checked, type Hold } from "./review-rules";
 import { proposedBanDecision, queueAllows, type ReviewQueueScope } from "@/lib/reviewer/access";
 
 export type DeskKind = "software" | "hardware";
@@ -38,7 +37,7 @@ export type ShipFacts = {
   assignedTo: string | null;
   reshippedAt: Date | null;
   proposedBanBy: string | null;
-  // There is no collaborator table yet, so the loader returns empty lists. The rules are here for when there is.
+  // Loaded from ProjectCollaborator: accepted collaborators and pending invites. Self-review is refused against both.
   collaboratorIds: readonly string[];
   pendingInviteIds: readonly string[];
 };
@@ -111,24 +110,9 @@ function holdsClaim(actor: ReviewActor, ship: ShipFacts, now: Date): boolean {
   return claim.state === "active" && claim.holder === actor.id;
 }
 
-export function secondPassVerdictAllowed(triage: string | null | undefined, kind: "approve" | "needs_changes" | "banned"): Checked<true> {
-  if (triage === "fraud") {
-    if (kind === "approve") return deny("The fraud triage says Fraud, so this can't be approved. Ask for changes or ban it.");
-    return yes(true);
-  }
-  return canGiveSecondPassVerdict({ triage: triage as FraudTriage | null | undefined });
-}
-
-export function mayTriage(actor: ReviewActor, ship: ShipFacts, now: Date): Checked<true> {
-  if (stageOf(ship) !== "second-pass") return deny("A fraud triage belongs to the second pass.");
-  const own = authorizeShip(actor, ship);
-  if (!own.ok) return own;
-  if (!isFinalReviewer(actor)) return deny("Only a final reviewer or an owner can make the fraud triage.");
-  // A recorded triage is final: a Fraud call cannot be flipped to Not fraud to unlock an approval. It is cleared only when the
-  // ship starts a new cycle (picked up again, or a ban proposal overturned).
-  if (ship.triage) return deny("A fraud triage is already recorded on this ship and can't be changed.");
-  if (ship.heldAt) return deny(HOLD_MESSAGE);
-  if (!holdsClaim(actor, ship, now)) return deny("Start reviewing first, or reclaim this project if your lock expired.");
+// Kept as a function so callers and tests do not need to change, but the human triage is gone: a verdict is never blocked by a
+// triage value. Robert's score is recorded as evidence on the ship and read by the final reviewer.
+export function secondPassVerdictAllowed(_triage: string | null | undefined, _kind: "approve" | "needs_changes" | "banned"): Checked<true> {
   return yes(true);
 }
 
@@ -229,12 +213,14 @@ export function mayCorrect(actor: ReviewActor, ship: ShipFacts): Checked<true> {
   return yes(true);
 }
 
-// Unship (LOADOUT): an approved project only, owner only. Pixl lets a final reviewer unship from the second pass; LOADOUT narrows it.
+// Unship: an owner may return a ship from fraud review, the second pass or approved. The wider stage set follows Pixl; the owner-only
+// actor rule stays a LOADOUT rule. Clawback still happens only where confirmed Ore exists, so a parked ship has nothing to take back.
+const UNSHIP_STATUSES = ["fraud-review", "second-pass", "approved"] as const;
 export function mayUnship(actor: ReviewActor, ship: ShipFacts): Checked<true> {
-  if (ship.status !== "approved") return deny("Only an approved project can be unshipped.");
+  if (!(UNSHIP_STATUSES as readonly string[]).includes(ship.status)) return deny("Only a ship in fraud review, the second pass or approved can be unshipped.");
   const own = authorizeShip(actor, ship);
   if (!own.ok) return own;
-  if (!actor.isOwner) return deny("Only an owner can unship an approved project.");
+  if (!actor.isOwner) return deny("Only an owner can unship a ship.");
   return yes(true);
 }
 

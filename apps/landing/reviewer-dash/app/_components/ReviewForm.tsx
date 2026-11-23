@@ -27,6 +27,7 @@ import { TECHNICAL_FEATURES_MIN } from "@/reviewer-dash/lib/auditNote";
 import { Badge, Button, ButtonLink, Callout, Checkbox, Details, Field, formatDateTime, Input, Textarea } from "@/reviewer-dash/app/_ui/ui";
 import { actionErrorMessage, isStaleDeployError } from "@/reviewer-dash/app/_ui/actionError";
 import { round1 } from "@/reviewer-dash/lib/hours";
+import { clearReviewCheer, markReviewCheer } from "@/reviewer-dash/app/_ui/cheerFlag";
 
 export interface CollaboratorHours {
   id: number;
@@ -69,6 +70,48 @@ function bouncedError(err: unknown): string | null {
   } catch {
     return null;
   }
+}
+
+type ServerSave = "idle" | "saving" | "saved" | "error" | "stale";
+
+const SAVE_LABELS: Record<ServerSave, string> = {
+  idle: "Autosaves as you type",
+  saving: "Saving draft…",
+  saved: "Draft saved",
+  error: "Draft kept in this browser only",
+  stale: "Draft kept in this browser only",
+};
+
+function saveTone(save: ServerSave): "danger" | "success" | undefined {
+  if (save === "error" || save === "stale") return "danger";
+  return save === "saved" ? "success" : undefined;
+}
+
+/** The hint beside the hours field: what was already deflated in journals and on this form. */
+function hoursHint(journalDeflatedHours: number, deflatedNow: number): string {
+  const parts = [
+    journalDeflatedHours > 0 ? `${journalDeflatedHours}h deflated in journals` : null,
+    deflatedNow > 0 ? `${deflatedNow}h deflated not in journals` : null,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" · ") : "Decrease only";
+}
+
+/** Hours typed by a reviewer, held between 0 and what can be credited and rounded to tenths. */
+function clampHours(input: string | number, max: number): number {
+  return round1(Math.min(max, Math.max(0, Number(input) || 0)));
+}
+
+/** Blank text boxes in a local draft must not hide text the server draft has (such as an AI draft pre-filled in technical features). */
+function fillBlanksFromServer(draft: Draft, server: Draft | null | undefined): void {
+  for (const [k, v] of Object.entries(server ?? {})) {
+    const mine = draft[k];
+    if (typeof v === "string" && v.trim() !== "" && typeof mine === "string" && mine.trim() === "") draft[k] = v;
+  }
+}
+
+function undoAnnouncement(undoLeft: number | null, undone: boolean, seconds: number): string {
+  if (undoLeft !== null) return `Sending your verdict in ${seconds} seconds. Nothing is posted or credited until then. Undo and Send now are available.`;
+  return undone ? "Verdict cancelled. Nothing was sent." : "";
 }
 
 function PayoutRow({ label, value, strong = false }: { label: ReactNode; value: ReactNode; strong?: boolean }) {
@@ -158,6 +201,11 @@ function CollaboratorHoursInput({ c }: { c: CollaboratorHours }) {
   );
 }
 
+function banLabel(pending: boolean, secondPass: boolean): string {
+  if (pending) return secondPass ? "Banning…" : "Proposing ban…";
+  return secondPass ? "Ban project" : "Propose ban";
+}
+
 function VerdictButtons({
   secondPass,
   pendingVerdict,
@@ -189,13 +237,7 @@ function VerdictButtons({
         {pendingVerdict === "needs_changes" ? "Sending back…" : "Request changes"}
       </Button>
       <Button type="submit" name="verdict" value="ban" variant="danger" disabled={busy} onClick={(e) => select("ban", e)}>
-        {pendingVerdict === "ban"
-          ? secondPass
-            ? "Banning…"
-            : "Proposing ban…"
-          : secondPass
-            ? "Ban project"
-            : "Propose ban"}
+        {banLabel(pendingVerdict === "ban", secondPass)}
       </Button>
     </div>
   );
@@ -440,7 +482,7 @@ export function ReviewForm({
   const pendingDraft = useRef<Draft | null>(null);
   const [draftSource, setDraftSource] = useState<"local" | "server" | "firstPass" | null>(null);
   const [featuresLen, setFeaturesLen] = useState(0);
-  const [serverSave, setServerSave] = useState<"idle" | "saving" | "saved" | "error" | "stale">("idle");
+  const [serverSave, setServerSave] = useState<ServerSave>("idle");
   const staleDeploy = useRef(false);
 
   const pushServerDraft = (draft: Draft) => {
@@ -469,12 +511,8 @@ export function ReviewForm({
     }
     if (draft) {
       // A local copy is saved on any edit (hours, notes...), so it can hold a
-      // blank text box. Blank fields must not hide text the server draft has,
-      // such as the AI draft pre-filled in technical features.
-      for (const [k, v] of Object.entries(serverDraft?.draft ?? {})) {
-        const mine = draft[k];
-        if (typeof v === "string" && v.trim() !== "" && typeof mine === "string" && mine.trim() === "") draft[k] = v;
-      }
+      // blank text box; see fillBlanksFromServer.
+      fillBlanksFromServer(draft, serverDraft?.draft);
       setDraftSource("local");
       // Push it to the server right away, so a restored draft the reviewer
       // never edits again still reaches whoever does the real pass.
@@ -753,7 +791,7 @@ export function ReviewForm({
     const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
     const fd = new FormData(e.currentTarget, submitter);
     // Ensure approvedHours in the submitted payload is rounded to tenths
-    const roundedHours = round1(Math.min(claimedHours, Math.max(0, Number(hoursInput) || 0)));
+    const roundedHours = clampHours(hoursInput, claimedHours);
     fd.set("approvedHours", String(roundedHours));
     const verdict = String(fd.get("verdict") ?? "");
     setSubmitError("");
@@ -771,15 +809,19 @@ export function ReviewForm({
     // Only flags the attempt; the unmount effect decides whether to clear the draft.
     submittedRef.current = true;
     if (serverDraftTimer.current) clearTimeout(serverDraftTimer.current);
+    // An approval that sticks redirects to the next ship, so the short celebration is shown there (ui/ReviewCheer.tsx).
+    if (String(fd.get("verdict") ?? "") === "approved") markReviewCheer();
     startSubmit(async () => {
       try {
         await reviewProject(fd);
+        clearReviewCheer();
         // Every verdict that sticks redirects (to the next project, or back
         // here with ?error=), so getting here means the action stopped early.
         setSubmitError(
           "The verdict didn't go through. The project probably changed while you had it open (someone else reviewed it, or it left the review queue). Reload to see where it stands. Your notes are kept in this browser.",
         );
       } catch (err) {
+        clearReviewCheer();
         // A validation failure redirects back to this same page with ?error=,
         // which doesn't remount the form: re-enable it and repeat the message
         // next to the buttons, where the reviewer is looking.
@@ -842,14 +884,8 @@ export function ReviewForm({
         <input type="hidden" name="totalSeconds" defaultValue="0" ref={totalSeconds} />
 
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <span className="hc-save-status" data-tone={serverSave === "error" || serverSave === "stale" ? "danger" : serverSave === "saved" ? "success" : undefined}>
-            {serverSave === "saving"
-              ? "Saving draft…"
-              : serverSave === "saved"
-                ? "Draft saved"
-                : serverSave === "error" || serverSave === "stale"
-                  ? "Draft kept in this browser only"
-                  : "Autosaves as you type"}
+          <span className="hc-save-status" data-tone={saveTone(serverSave)}>
+            {SAVE_LABELS[serverSave]}
           </span>
         </div>
         {serverSave === "stale" && (
@@ -868,16 +904,7 @@ export function ReviewForm({
           <p className="hc-eyebrow">Submission</p>
           <InlineNumber
             label="Hours to credit"
-            hint={
-              journalDeflatedHours > 0 || deflated
-                ? [
-                    journalDeflatedHours > 0 ? `${journalDeflatedHours}h deflated in journals` : null,
-                    deflated ? `${round1(claimedHours - hours)}h deflated not in journals` : null,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")
-                : "Decrease only"
-            }
+            hint={hoursHint(journalDeflatedHours, deflated ? round1(claimedHours - hours) : 0)}
           >
             <Input
               name="approvedHours"
@@ -896,7 +923,7 @@ export function ReviewForm({
                 saveDraft({ hours: val });
               }}
               onBlur={() => {
-                const rounded = round1(Math.min(claimedHours, Math.max(0, Number(hoursInput) || 0)));
+                const rounded = clampHours(hoursInput, claimedHours);
                 setHours(rounded);
                 setHoursInput(String(rounded));
                 saveDraft({ hours: rounded });
@@ -999,6 +1026,18 @@ export function ReviewForm({
               />
             </Field>
           )}
+          <Details summary="The four quality dimensions">
+            <ul className="flex flex-col gap-1 text-sm">
+              {QUALITY_DIMENSIONS.map((d) => (
+                <li key={d.name}>
+                  <span className="font-bold">{d.name}.</span> {d.ask}
+                </li>
+              ))}
+            </ul>
+            <p className="hc-caption mt-2 text-xs">
+              One line in the notes for each. They are a way to explain the hours, not four scores, and they set no Ore by themselves.
+            </p>
+          </Details>
           <Field
             label="Additional notes"
             hint={
@@ -1120,11 +1159,7 @@ export function ReviewForm({
           )}
           {/* Always mounted so a screen reader announces it. The message is said once, not on every tick of the countdown. */}
           <div role="status" aria-live="polite" className="sr-only">
-            {undoLeft !== null
-              ? `Sending your verdict in ${UNDO_SECONDS} seconds. Nothing is posted or credited until then. Undo and Send now are available.`
-              : undone
-                ? "Verdict cancelled. Nothing was sent."
-                : ""}
+            {undoAnnouncement(undoLeft, undone, UNDO_SECONDS)}
           </div>
           {undoLeft !== null && (
             <Callout tone="neutral" icon="clock">

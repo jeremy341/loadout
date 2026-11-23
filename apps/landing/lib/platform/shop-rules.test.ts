@@ -6,14 +6,18 @@ import {
   checkAdvance,
   checkCancel,
   checkRegion,
+  checkShipment,
   datesFromEvents,
   hasStock,
   isTrack,
   mergeRequestLines,
   nextOrderNumber,
+  ORDER_CARRIER_MAX,
   ORDER_MAX_LINES,
   ORDER_MAX_QUANTITY,
   ORDER_NUMBER_FLOOR,
+  ORDER_SUPPLIER_MAX,
+  ORDER_TRACKING_MAX,
   orderRowFromDb,
   priceOrder,
   shopItemFromRow,
@@ -494,6 +498,51 @@ describe("orderRowFromDb", () => {
 
   test("an unknown stored status reads as placed", () => {
     expect(orderRowFromDb({ ...base, status: "lost" }).status).toBe("placed");
+  });
+
+  test("a shipped order carries the tracking the buyer reads", () => {
+    const row = orderRowFromDb({ ...base, status: "shipped", trackingNumber: "1Z999AA10123456784", carrier: "UPS" });
+    expect(row.tracking).toEqual({ number: "1Z999AA10123456784", carrier: "UPS" });
+  });
+
+  test("no tracking number means nothing to show, and a blank carrier reads as none", () => {
+    expect(orderRowFromDb(base).tracking).toBeNull();
+    expect(orderRowFromDb({ ...base, status: "shipped", trackingNumber: "  " }).tracking).toBeNull();
+    expect(orderRowFromDb({ ...base, status: "shipped", trackingNumber: "1Z9", carrier: "  " }).tracking).toEqual({ number: "1Z9", carrier: null });
+  });
+});
+
+describe("checkShipment", () => {
+  test("requires a tracking number and trims it", () => {
+    expect(checkShipment({ trackingNumber: "   " })).toEqual({ ok: false, message: "Enter the tracking number before shipping." });
+    expect(checkShipment({ trackingNumber: "" }).ok).toBe(false);
+    expect(checkShipment({ trackingNumber: 42 }).ok).toBe(false);
+    expect(checkShipment({ trackingNumber: "  1Z999AA1  " })).toEqual({
+      ok: true,
+      value: { trackingNumber: "1Z999AA1", carrier: null, supplier: null },
+    });
+  });
+
+  test("stores a blank carrier or supplier as null, never an empty string", () => {
+    expect(checkShipment({ trackingNumber: "1Z9", carrier: "", supplier: "   " })).toEqual({
+      ok: true,
+      value: { trackingNumber: "1Z9", carrier: null, supplier: null },
+    });
+    expect(checkShipment({ trackingNumber: "1Z9", carrier: "DHL", supplier: "Adafruit" })).toEqual({
+      ok: true,
+      value: { trackingNumber: "1Z9", carrier: "DHL", supplier: "Adafruit" },
+    });
+  });
+
+  test("refuses a field past its length instead of cutting it", () => {
+    const long = "x".repeat(ORDER_TRACKING_MAX + 1);
+    expect(checkShipment({ trackingNumber: long })).toEqual({
+      ok: false,
+      message: `A tracking number is at most ${ORDER_TRACKING_MAX} characters.`,
+    });
+    expect(checkShipment({ trackingNumber: "1Z9", carrier: "c".repeat(ORDER_CARRIER_MAX + 1) }).ok).toBe(false);
+    expect(checkShipment({ trackingNumber: "1Z9", supplier: "s".repeat(ORDER_SUPPLIER_MAX + 1) }).ok).toBe(false);
+    expect(checkShipment({ trackingNumber: "x".repeat(ORDER_TRACKING_MAX) }).ok).toBe(true);
   });
 });
 

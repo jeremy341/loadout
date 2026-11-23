@@ -35,6 +35,7 @@ Internal and public age wording is 13–18. Hack Club teen verification is requi
 
 - [`proposals/future-platform-ui.md`](proposals/future-platform-ui.md) records the owner-approved future participant-platform feature set and the excluded/open ideas. Implementation and service design are not approved or built. The current app remains the public homepage and program-draft Docs.
 - [`proposals/participant-platform-milestones.md`](proposals/participant-platform-milestones.md) orders that approved scope into gated milestones M0–M5, records the gates (teen verification, data store and auth, peer-review removal, UI briefs, per-service privacy reviews), and lists the admin surfaces kept, dropped and deferred. Planning only; nothing is built.
+- [`proposals/platform-parity-pixl.md`](proposals/platform-parity-pixl.md) records the owner decisions of 22 Nov 2026 on fulfilment, the review pipeline, permissions and money, all taken "same as Pixl", the gaps found by three read-only mappings, and the five steps that would close them. Planning only; nothing is built.
 
 ## Removed on 25 Oct 2026
 

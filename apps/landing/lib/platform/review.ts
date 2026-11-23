@@ -11,8 +11,14 @@ export { REVIEW_AUDITS, REVIEW_LOG, REVIEW_SHIPS, REVIEWERS };
 //   first pass (the queue)  ->  second pass, where an owner or final reviewer gives the verdict  ->  approved
 //   a first-pass "request changes" goes straight back to the builder; a first-pass "ban" is only a proposal that an owner
 //   confirms or overturns in Proposed bans.
-// Pixl's fraud-review stage (Robert) is not ported, so a first-pass approval parks in Second pass directly. There are no scores,
-// no multipliers and no peer review: the four quality dimensions guide a written reason (plans/01 sections 6.4, 8 and 35).
+// There are no scores in the desk's own rules, no multipliers and no peer review: the four quality dimensions guide a written
+// reason (plans/01 sections 6.4, 8 and 35).
+
+// The parking state between the first pass and the second pass (plans/proposals/platform-parity-pixl.md, step 2.1). A first-pass
+// approval writes this word to Project.status. A Robert score above 4 moves the ship on to "second-pass"; a score of 4 or less keeps
+// it parked, and the flagged FraudCheck row is the alert. It is not in ReviewStatus: review-decisions.ts reads it as "closed" (no
+// claim, no verdict), so the desk shows nothing for it until the desk's labels are added.
+export const PARKED_STATUS = "fraud-review";
 
 export type ReviewKind = "software" | "hardware";
 export const REVIEW_KINDS: readonly ReviewKind[] = ["software", "hardware"];

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { robertConfig, trustedBase } from "./config";
 import { buildSubmission, fetchScoredProjects, robertExternalId, submitProject, type SubmittableProject } from "./robert";
-import { FRAUD_SCORE_THRESHOLD, verdictFor } from "./robert-outcome";
-import { isRobertCandidate, needsSubmission, ROBERT_MAX_ATTEMPTS, ROBERT_RETRY_GAP_MS, syncRobert } from "./robert-sync";
+import { FRAUD_SCORE_THRESHOLD, scoreMoveFor, verdictFor } from "./robert-outcome";
+import { advanceIfCleared, isRobertCandidate, needsSubmission, ROBERT_MAX_ATTEMPTS, ROBERT_RETRY_GAP_MS, syncRobert } from "./robert-sync";
 
 const project: SubmittableProject = { seq: 100123, name: "Thing", kind: "software", codeUrl: "https://github.com/a/b", demoUrl: "", hackatimeProjects: ["thing"], journal: [], submittedAt: new Date("2026-11-19T10:00:00Z") };
 const config = { base: "https://telescreen.example/api/v1/ysws", apiKey: "key-123" };
@@ -129,21 +129,37 @@ describe("syncRobert disabled", () => {
 });
 
 describe("isRobertCandidate", () => {
-  test("submitted and in-review software ships are sent, whatever the status spelling", () => {
-    for (const status of ["submitted", "in-review", "in_review", " IN-REVIEW "]) expect(isRobertCandidate({ status, track: "Tools" })).toBe(true);
+  test("a parked software ship is sent, whatever the status spelling", () => {
+    for (const status of ["fraud-review", "fraud_review", " FRAUD-REVIEW "]) expect(isRobertCandidate({ status, track: "Tools" })).toBe(true);
   });
-  test("later states, drafts and hardware are not", () => {
-    for (const status of ["draft", "logging", "second-pass", "needs-changes", "approved", "banned"]) expect(isRobertCandidate({ status, track: "Tools" })).toBe(false);
-    expect(isRobertCandidate({ status: "submitted", track: "Hardware" })).toBe(false);
+  test("ships before the first-pass approval, later states, drafts and hardware are not sent", () => {
+    for (const status of ["submitted", "in-review", "in_review", "second-pass", "needs-changes", "approved", "banned", "draft"]) expect(isRobertCandidate({ status, track: "Tools" })).toBe(false);
+    expect(isRobertCandidate({ status: "fraud-review", track: "Hardware" })).toBe(false);
   });
 });
 
-// A FraudCheck table and a project list in memory, enough for one syncRobert run.
+describe("scoreMoveFor", () => {
+  test("both bands advance the ship; a flagged score is an alert, not a park", () => {
+    expect(scoreMoveFor("cleared")).toBe("advance");
+    expect(scoreMoveFor("flagged")).toBe("advance");
+  });
+});
+
+// A FraudCheck table and a project list in memory, enough for one syncRobert run. Project rows keep their status, so a move is visible.
 function fakeSync(ships: Record<string, unknown>[]) {
   const rows: { id: string; projectId: string; kind: string; status: string; score: number | null; summary: string | null; detail: Record<string, unknown>; checkedAt: Date }[] = [];
   let tick = 0;
+  const matchesStatus = (status: unknown, where: { status?: unknown }) =>
+    typeof where.status === "string" ? where.status === status : ((where.status as { in: string[] } | undefined)?.in.includes(String(status)) ?? true);
   const client = {
-    project: { findMany: async () => ships },
+    project: {
+      findMany: async ({ where }: { where: { status?: unknown } }) => ships.filter((s) => matchesStatus(s.status, where)),
+      updateMany: async ({ where, data }: { where: { id: string; status: string }; data: Record<string, unknown> }) => {
+        const hit = ships.filter((s) => s.id === where.id && s.status === where.status);
+        for (const s of hit) Object.assign(s, data);
+        return { count: hit.length };
+      },
+    },
     hackatimeProject: { findMany: async () => [{ name: "thing" }] },
     fraudCheck: {
       findFirst: async ({ where }: { where: { projectId: string; kind: string } }) => [...rows].reverse().find((r) => r.projectId === where.projectId && r.kind === where.kind) ?? null,
@@ -160,7 +176,7 @@ function fakeSync(ships: Record<string, unknown>[]) {
 
 describe("syncRobert", () => {
   const env = { LOADOUT_TELESCREEN_URL: "https://t.example/api", LOADOUT_TELESCREEN_KEY: "k" };
-  const ship = (submittedAt: string) => ({ id: "p1", seq: 100123, title: "Thing", status: "submitted", track: "Tools", repoUrl: "https://github.com/a/b", demoUrl: null, submittedAt: new Date(submittedAt), ownerId: "o1", owner: { slackId: "U0A" } });
+  const ship = (submittedAt: string) => ({ id: "p1", seq: 100123, title: "Thing", status: "fraud-review", track: "Tools", repoUrl: "https://github.com/a/b", demoUrl: null, submittedAt: new Date(submittedAt), ownerId: "o1", owner: { slackId: "U0A" } });
   const answer = (score: number | null, externalIds: () => string[]) => async (url: string, init?: RequestInit) => {
     if (init?.method === "POST") {
       const body = JSON.parse(String(init.body));
@@ -202,5 +218,64 @@ describe("syncRobert", () => {
     // And it settles: a third run submits nothing more.
     await syncRobert({ env, client, fetch: answer(null, () => sent), now: () => new Date("2026-11-19T12:00:00Z") });
     expect(sent.length).toBe(2);
+  });
+
+  test("a score above 4 moves the parked ship on to the second pass, once", async () => {
+    const ships = [ship("2026-11-19T09:00:00Z")];
+    const { client } = fakeSync(ships);
+    const sent: string[] = [];
+    const now = () => new Date("2026-11-19T12:00:00Z");
+    await syncRobert({ env, client, fetch: answer(null, () => sent), now });
+    expect(ships[0].status).toBe("fraud-review");
+    const scored = await syncRobert({ env, client, fetch: answer(7, () => sent), now });
+    expect(scored).toMatchObject({ scored: 1, advanced: 1, writeFailed: 0 });
+    expect(ships[0].status).toBe("second-pass");
+    // Already moved: the next run finds nothing parked and changes nothing.
+    expect(await syncRobert({ env, client, fetch: answer(7, () => sent), now })).toMatchObject({ scored: 0, advanced: 0 });
+    expect(sent.length).toBe(1);
+  });
+
+  test("a score of 4 or less advances the ship with the flagged row left as the alert", async () => {
+    const ships = [ship("2026-11-19T09:00:00Z")];
+    const { client, rows } = fakeSync(ships);
+    const sent: string[] = [];
+    const now = () => new Date("2026-11-19T12:00:00Z");
+    await syncRobert({ env, client, fetch: answer(null, () => sent), now });
+    const flagged = await syncRobert({ env, client, fetch: answer(FRAUD_SCORE_THRESHOLD, () => sent), now });
+    expect(flagged).toMatchObject({ scored: 1, advanced: 1 });
+    expect(ships[0].status).toBe("second-pass");
+    expect(rows.at(-1)).toMatchObject({ status: "flagged", score: FRAUD_SCORE_THRESHOLD });
+  });
+
+  test("a cleared row written by an earlier run is still moved on by the next run", async () => {
+    const ships = [ship("2026-11-19T09:00:00Z")];
+    const { client, rows } = fakeSync(ships);
+    const externalId = robertExternalId(100123, new Date("2026-11-19T09:00:00Z"));
+    rows.push({ id: "r-old", projectId: "p1", kind: "robert", status: "cleared", score: 8, summary: null, detail: { externalId }, checkedAt: new Date("2026-11-19T11:00:00Z") });
+    const summary = await syncRobert({ env, client, fetch: answer(null, () => []), now: () => new Date("2026-11-19T12:00:00Z") });
+    expect(summary).toMatchObject({ advanced: 1 });
+    expect(ships[0].status).toBe("second-pass");
+  });
+
+  test("a ship that is not parked is never sent, whatever its Robert history", async () => {
+    const ships = [{ ...ship("2026-11-19T09:00:00Z"), status: "second-pass" }];
+    const { client } = fakeSync(ships);
+    const sent: string[] = [];
+    expect(await syncRobert({ env, client, fetch: answer(null, () => sent), now: () => new Date("2026-11-19T12:00:00Z") })).toMatchObject({ submitted: 0 });
+    expect(sent).toEqual([]);
+  });
+
+  test("advanceIfCleared leaves a ship alone while its newest row is pending, but advances on a flagged row", async () => {
+    const ships = [ship("2026-11-19T09:00:00Z")];
+    const { client, rows } = fakeSync(ships);
+    const now = new Date("2026-11-19T12:00:00Z");
+    rows.push({ id: "a", projectId: "p1", kind: "robert", status: "cleared", score: 9, summary: null, detail: {}, checkedAt: new Date("2026-11-19T10:00:00Z") });
+    rows.push({ id: "b", projectId: "p1", kind: "robert", status: "pending", score: null, summary: null, detail: {}, checkedAt: new Date("2026-11-19T11:00:00Z") });
+    expect(await advanceIfCleared(client as never, "p1", now)).toBe(false);
+    expect(ships[0].status).toBe("fraud-review");
+
+    rows.push({ id: "c", projectId: "p1", kind: "robert", status: "flagged", score: 3, summary: null, detail: {}, checkedAt: new Date("2026-11-19T11:30:00Z") });
+    expect(await advanceIfCleared(client as never, "p1", now)).toBe(true);
+    expect(ships[0].status).toBe("second-pass");
   });
 });

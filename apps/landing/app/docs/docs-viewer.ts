@@ -12,7 +12,9 @@ export const docsViewer = cache(async (): Promise<Viewer | null> => {
     if (!databaseConfigured()) return null;
     if (localTestAccountsEnabled() && (await cookies()).get(PREVIEW_COOKIE)?.value === "visitor") return null;
     return await readViewer();
-  } catch {
+  } catch (error) {
+    // A signed-in builder who lands here sees the public docs, with the wrong back link. Log why, so the cause is visible.
+    console.error("docs viewer unreadable; showing the public layout", error instanceof Error ? error.name : "unknown");
     return null;
   }
 });

@@ -29,6 +29,24 @@ const HACKATIME_PROJECTS: readonly HackatimeProject[] = [];
 const idle: FormState = { status: "idle" };
 const DESCRIPTION_SHIP_MIN = 40;
 
+// Small marks for the two kind cards and the Next arrow (brief .ulpi/design/wizard-focus-layout.md). Hand drawn on a pixel grid,
+// square ends, decoration only: the card name and the button label carry the meaning.
+const SOFTWARE_ICON = (
+  <svg viewBox="0 0 16 12" width="24" height="18" fill="currentColor" focusable="false">
+    <path d="M5 1h2v1H5zM4 2h2v1H4zM3 3h2v1H3zM2 4h2v1H2zM1 5h2v1H1zM1 6h2v1H1zM2 7h2v1H2zM3 8h2v1H3zM4 9h2v1H4zM5 10h2v1H5zM9 1h2v1H9zM10 2h2v1h-2zM11 3h2v1h-2zM12 4h2v1h-2zM13 5h2v1h-2zM13 6h2v1h-2zM12 7h2v1h-2zM11 8h2v1h-2zM10 9h2v1h-2zM9 10h2v1H9z" />
+  </svg>
+);
+const HARDWARE_ICON = (
+  <svg viewBox="0 0 12 12" width="20" height="20" fill="currentColor" focusable="false">
+    <path d="M3 3h6v6H3zm1 1v4h4V4zM5 5h2v2H5zM4 0h1v2H4zM7 0h1v2H7zM4 10h1v2H4zM7 10h1v2H7zM0 4h2v1H0zM0 7h2v1H0zM10 4h2v1h-2zM10 7h2v1h-2z" fillRule="evenodd" />
+  </svg>
+);
+const NEXT_ARROW = (
+  <svg viewBox="0 0 12 12" width="14" height="14" fill="currentColor" aria-hidden="true" focusable="false">
+    <path d="M1 5h8v2H1zM7 3h1v1H7zM8 4h1v1H8zM9 5h1v2H9zM8 7h1v1H8zM7 8h1v1H7z" />
+  </svg>
+);
+
 // There is one wizard on its page, so its field ids are fixed names.
 const FIELD_ID: Record<string, string> = {
   description: "wiz-description",
@@ -63,7 +81,7 @@ function writeStorage(draft: WizardDraft | null, step = 0) {
 }
 
 // Software has an extra step for its track, right after the kind. Hardware has the one track, so it skips that step. The lib's
-// five steps stay as they are; the track step lives here.
+// five steps stay as they are; the track step lives here. The strip shows six segments for software (owner, 22 Nov 2026: six is fine).
 type StepKey = (typeof WIZARD_STEPS)[number]["key"] | "track";
 type StepItem = { key: StepKey; label: string; heading: string };
 const TRACK_STEP: StepItem = { key: "track", label: "Track", heading: "Which track is it?" };
@@ -118,7 +136,13 @@ export function NewProjectWizard() {
 
   const heading = useRef<HTMLHeadingElement>(null);
   const focusField = useRef<string | null>(null);
+  // False until the first storage effect has run, so the empty first draft never overwrites a saved one.
   const mounted = useRef(false);
+  // The step the page last moved focus for. Focus only moves when the step really changes, never on load: React Strict Mode
+  // runs every effect twice in development, which used to put a focus ring on the first heading as the page opened.
+  const focusedStep = useRef(0);
+  // True once the builder has actually moved step. A restored draft is not a move, so it must not pull focus.
+  const userMoved = useRef(false);
   const softwareRef = useRef(false);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -141,21 +165,30 @@ export function NewProjectWizard() {
     // Reading sessionStorage has to wait for the browser, so the restore can only happen here.
     dispatch({ type: "restore", draft: saved });
     setKindPick(kindOfTrack(saved.track));
-    setStep(savedStep(text, saved));
+    const restoredStep = savedStep(text, saved);
+    // A restore is not a step change by the builder, so it does not pull focus to the heading either.
+    focusedStep.current = restoredStep;
+    setStep(restoredStep);
     setRestored(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   useEffect(() => {
-    if (mounted.current) writeStorage(draft, step);
-  }, [draft, step]);
-
-  // Focus follows the step: the heading, or the field a server error names. Not on first load.
-  useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
       return;
     }
+    writeStorage(draft, step);
+  }, [draft, step]);
+
+  // Focus follows the step: the heading, or the field a server error names. Never on first load or a restore. Keyboard builders
+  // still see the focus indicator (the heading and fields use :focus-visible, which a script's focus() shows after a key press).
+  useEffect(() => {
+    if (focusedStep.current === step) return;
+    // A restored draft sets focusedStep to a later step before this effect first sees step 0. That is not a builder move,
+    // so do not put the ring on the heading. React Strict Mode runs this setup twice on mount; the same guard covers both.
+    if (step === 0 && focusedStep.current !== 0 && !userMoved.current) return;
+    focusedStep.current = step;
     const wanted = focusField.current;
     focusField.current = null;
     const target = wanted ? document.getElementById(wanted) : null;
@@ -175,6 +208,7 @@ export function NewProjectWizard() {
       focusField.current = FIELD_ID[state.field] ?? null;
       setErrors({ [state.field]: state.message });
       const core = stepOfField(state.field);
+      userMoved.current = true;
       setStep(softwareRef.current ? (state.field === "track" ? 1 : core >= 1 ? core + 1 : core) : core);
     }
   }, [state, router]);
@@ -203,6 +237,7 @@ export function NewProjectWizard() {
 
   const go = useCallback((target: number) => {
     setErrors({});
+    userMoved.current = true;
     setStep(target);
   }, []);
 
@@ -251,12 +286,13 @@ export function NewProjectWizard() {
     }
   };
 
-  // Enter in a text field or on a radio moves on when the step is valid, and says what is wrong when it is not. It never submits.
+  // Enter in a one line field or on a radio moves on when the step is valid, and says what is wrong when it is not. It never submits.
+  // The idea box is a textarea, so Enter there is a plain new line (owner, 22 Nov 2026): the builder moves on with Next.
   const onKeyDown = (event: KeyboardEvent<HTMLFormElement>) => {
     if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
     const target = event.target;
     const isText = target instanceof HTMLInputElement && (target.type === "text" || target.type === "url" || target.type === "radio");
-    if (isText || target instanceof HTMLTextAreaElement) {
+    if (isText) {
       event.preventDefault();
       next();
     }
@@ -280,6 +316,7 @@ export function NewProjectWizard() {
     setErrors({});
     setUndo(null);
     setRestored(false);
+    userMoved.current = true;
     setStep(0);
     requestAnimationFrame(() => heading.current?.focus());
   };
@@ -343,7 +380,7 @@ export function NewProjectWizard() {
         ))}
       </ol>
 
-      <div className="pf-wiz-body" key={step}>
+      <div className="pf-wiz-body" key={step} data-step={stepKey}>
         <h1 className="pf-wiz-h1" ref={heading} tabIndex={-1}>{current.heading}</h1>
 
         {stepKey === "kind" ? (
@@ -354,12 +391,14 @@ export function NewProjectWizard() {
                 <label className="pf-choice pf-wiz-kind" data-burst={burst === "software" ? "true" : undefined}>
                   <input type="radio" name="kind" value="software" checked={kind === "software"} onChange={() => pickKind("software")} />
                   <span className="pf-wiz-burst" aria-hidden="true" />
+                  <span className="pf-wiz-icon" aria-hidden="true">{SOFTWARE_ICON}</span>
                   <span className="pf-choice-name">Software</span>
                   <span className="pf-hint">Tools, systems and compute: command line tools, servers, databases, machine learning.</span>
                 </label>
                 <label className="pf-choice pf-wiz-kind" data-burst={burst === "hardware" ? "true" : undefined}>
                   <input type="radio" name="kind" value="hardware" checked={kind === "hardware"} onChange={() => pickKind("hardware")} />
                   <span className="pf-wiz-burst" aria-hidden="true" />
+                  <span className="pf-wiz-icon" aria-hidden="true">{HARDWARE_ICON}</span>
                   <span className="pf-choice-name">Hardware</span>
                   <span className="pf-hint">Circuits, boards, robots: anything you can hold in your hand.</span>
                 </label>
@@ -408,7 +447,7 @@ export function NewProjectWizard() {
                   if (draft.description.trim() && !stepValid(1, draft)) setErrors({ description: stepProblem(1, draft)?.message ?? "" });
                 }}
                 aria-invalid={errors.description ? true : undefined}
-                aria-describedby="wiz-description-help wiz-description-keys wiz-description-error"
+                aria-describedby="wiz-description-help wiz-description-error"
               />
               <div className="pf-wiz-meta">
                 <span className="pf-hint" id="wiz-description-help">
@@ -418,7 +457,6 @@ export function NewProjectWizard() {
                 </span>
                 <span className="pf-hint pf-wiz-count">{draft.description.length} / {PROJECT_DESCRIPTION_MAX}</span>
               </div>
-              <p className="pf-hint" id="wiz-description-keys">Enter moves to the next step. Shift+Enter starts a new line.</p>
               <div id="wiz-description-error" aria-live="polite">{errors.description ? <p className="pf-error">{errors.description}</p> : null}</div>
             </div>
 
@@ -566,6 +604,7 @@ export function NewProjectWizard() {
             aria-describedby={(stepKey === "kind" || stepKey === "track") && problemAt(steps, step, draft, kind) ? "wiz-next-hint" : undefined}
           >
             {stepKey === "links" && !hasLinks ? "Skip" : "Next"}
+            {NEXT_ARROW}
           </button>
         ) : (
           <button key="create" type="submit" className="pf-btn pri" disabled={pending || done}>

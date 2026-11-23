@@ -9,6 +9,7 @@ import {
   landingFor,
   resolvePersonAccess,
   satisfies,
+  secondPassFromEnv,
   type Requirement,
   type ReviewerAccess,
 } from "@/lib/reviewer/access";
@@ -97,6 +98,11 @@ export function ownerEmails(env: NodeJS.ProcessEnv = process.env): string[] {
   return localTestAccountsEnabled(env) ? [...listed, ...LOCAL_OWNER_EMAILS] : listed;
 }
 
+// The optional final-reviewer override (LOADOUT_SECOND_PASS_EMAILS). It adds to the second_pass grant and never makes a reviewer.
+export function secondPassEmails(env: NodeJS.ProcessEnv = process.env): string[] {
+  return secondPassFromEnv(env.LOADOUT_SECOND_PASS_EMAILS);
+}
+
 // An unknown loadout_preview_role is a signed-out request, not a builder. The default only applies when nothing was chosen at
 // all. The "View as" menu uses the same key check so its label cannot claim a role the reader does not grant.
 export function previewRoleEmail(chosen: string | null | undefined): string | null {
@@ -111,7 +117,7 @@ export function viewAsRoleKey(chosen: string | null | undefined): string {
 function toViewer(person: { id: string; email: string; displayName: string; bannedAt: Date | null; roles: { role: string }[] }): Viewer | null {
   if (person.bannedAt) return null;
   const roles = person.roles.map((grant) => grant.role);
-  const access = resolvePersonAccess({ id: person.id, email: person.email, roles }, ownerEmails());
+  const access = resolvePersonAccess({ id: person.id, email: person.email, roles }, ownerEmails(), secondPassEmails());
   return { id: person.id, email: person.email, displayName: person.displayName, roles, access };
 }
 

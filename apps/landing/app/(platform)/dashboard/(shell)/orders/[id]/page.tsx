@@ -67,6 +67,17 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
               <dt>Total</dt>
               <dd className="ex-num">{ore(viewTotal(order, approved))}</dd>
             </div>
+            {order.tracking && (
+              <div>
+                <dt>{order.tracking.carrier === "Grant" ? "Grant reference" : "Tracking"}</dt>
+                <dd className="ex-num">
+                  {order.tracking.number}
+                  {order.tracking.carrier && order.tracking.carrier !== "Grant" && (
+                    <span className="hc-caption"> · {order.tracking.carrier}</span>
+                  )}
+                </dd>
+              </div>
+            )}
           </dl>
         </div>
       </div>

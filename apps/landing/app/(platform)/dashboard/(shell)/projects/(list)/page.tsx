@@ -63,8 +63,6 @@ export default async function ProjectsPage({ searchParams }: Readonly<{ searchPa
         </form>
       ) : null}
 
-      {all.length === 0 ? <p className="pf-sg-empty">No projects yet. Create your first one!</p> : null}
-
       <ul className="pf-sg-grid">
         {items.map((item) =>
           item.kind === "new" ? null : (

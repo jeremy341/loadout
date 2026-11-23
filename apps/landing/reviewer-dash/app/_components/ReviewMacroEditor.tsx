@@ -78,7 +78,7 @@ export function ReviewMacroEditor({
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-3">
         <p className="hc-muted text-sm">
-          Make your own /commands for the note to the player. Type a command to insert its text.
+          Make your own /commands for the note to the builder. Type a command to insert its text.
           Saved to your reviewer account, including on other devices. The four built-in commands cannot be edited.
         </p>
         {macros.length > 0 && (

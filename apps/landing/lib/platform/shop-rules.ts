@@ -12,6 +12,11 @@
 //   canCommit(check) / canRemoveFulfiller(n)  fulfilment rules
 //   datesFromEvents(events) / orderRowFromDb  the order rows the Orders pages read
 //   shopItemFromRow(row, base)                a ShopItem row merged with its static catalog entry (photo, need, credit)
+//   fulfilmentStage(status, claimed)          LOADOUT stage (New, Claimed, Packed, Shipped, Delivered, Cancelled); PIXL_STAGE_KEY maps to Pixl's keys
+//   isFlaggedFromEvents(events)               over-budget flag: the newest flag event decides
+//   checkStaffCancel / checkFlaggable         which statuses staff can cancel or flag
+//   checkGrantRef / checkShipmentEdit         grant reference; shipment edits that never clear a field
+//   fulfilmentPayoutOre({ items, grant })     2 Ore per item shipped, 1 Ore per grant (settled at ship in orders-data.ts)
 
 import { formatOre, dayKey } from "./ledger";
 import { isOrderStatus, nextStatus, ORDER_STATUSES, type Order, type OrderLine, type OrderStatus } from "./orders";
@@ -72,6 +77,38 @@ export function checkAdvance(from: string, to: string): Verdict {
 export function checkCancel(status: string): Verdict {
   if (status === "placed") return { ok: true };
   return { ok: false, message: `Only a placed order can be cancelled. This one is ${status}.` };
+}
+
+// ---- Shipping ----
+
+export const ORDER_TRACKING_MAX = 120;
+export const ORDER_CARRIER_MAX = 60;
+export const ORDER_SUPPLIER_MAX = 80;
+
+export type Shipment = { trackingNumber: string; carrier: string | null; supplier: string | null };
+export type ShipmentCheck = { ok: true; value: Shipment } | { ok: false; message: string };
+
+// A blank optional field is stored as null, never as an empty string, so "not recorded" has one representation.
+function optionalText(value: unknown, max: number, label: string): { ok: true; value: string | null } | { ok: false; message: string } {
+  const text = typeof value === "string" ? value.trim() : "";
+  if (text.length > max) return { ok: false, message: `${label} is at most ${max} characters.` };
+  return { ok: true, value: text || null };
+}
+
+// What a ship records. The tracking number is required: it is the only thing that lets the buyer follow the parcel, so an order
+// cannot reach shipped without one. The carrier and the supplier are optional.
+export function checkShipment(input: { trackingNumber: unknown; carrier?: unknown; supplier?: unknown }): ShipmentCheck {
+  const tracking = optionalText(input.trackingNumber, ORDER_TRACKING_MAX, "A tracking number");
+  if (!tracking.ok) return tracking;
+  if (!tracking.value) return { ok: false, message: "Enter the tracking number before shipping." };
+
+  const carrier = optionalText(input.carrier, ORDER_CARRIER_MAX, "A carrier");
+  if (!carrier.ok) return carrier;
+
+  const supplier = optionalText(input.supplier, ORDER_SUPPLIER_MAX, "A supplier");
+  if (!supplier.ok) return supplier;
+
+  return { ok: true, value: { trackingNumber: tracking.value, carrier: carrier.value, supplier: supplier.value } };
 }
 
 // ---- Order requests ----
@@ -269,16 +306,24 @@ export type OrderDbRow = {
   createdAt: Date;
   lines: readonly OrderDbLine[];
   events: readonly OrderEventRow[];
+  // Fulfilment, written when the order ships. Optional so older callers and tests can build a row without them.
+  trackingNumber?: string | null;
+  carrier?: string | null;
 };
 
-// The Order type from orders.ts, plus what a row adds: the total paid, the region, whether it was cancelled, and the lines as paid
-// (option and unit price). A cancelled order keeps status "placed" so the tracker still reads, and sets cancelled.
+// What the buyer may read about a shipped order: the tracking number and, when staff recorded one, the carrier.
+export type OrderTracking = { number: string; carrier: string | null };
+
+// The Order type from orders.ts, plus what a row adds: the total paid, the region, whether it was cancelled, the lines as paid
+// (option and unit price), and the tracking once it ships. A cancelled order keeps status "placed" so the tracker still reads,
+// and sets cancelled.
 export type OrderRow = Order & {
   totalOre: number;
   region: string | null;
   placedAt: Date;
   cancelled: boolean;
   paid: readonly OrderDbLine[];
+  tracking: OrderTracking | null;
 };
 
 export function orderRowFromDb(row: OrderDbRow): OrderRow {
@@ -287,6 +332,7 @@ export function orderRowFromDb(row: OrderDbRow): OrderRow {
   const quantities = new Map<string, number>();
   for (const line of row.lines) quantities.set(line.itemId, (quantities.get(line.itemId) ?? 0) + line.quantity);
   const lines: OrderLine[] = [...quantities].map(([itemId, quantity]) => ({ itemId, quantity }));
+  const trackingNumber = row.trackingNumber?.trim();
   return {
     id: row.number.toLowerCase(),
     number: row.number,
@@ -298,7 +344,137 @@ export function orderRowFromDb(row: OrderDbRow): OrderRow {
     placedAt: row.createdAt,
     cancelled,
     paid: row.lines,
+    tracking: trackingNumber ? { number: trackingNumber, carrier: row.carrier?.trim() || null } : null,
   };
+}
+
+// ---- Staff stages, flags, grants, payouts, edits ----
+// Pixl's stored order keys map onto LOADOUT's stage names here, so every reviewer page reads one mapping. "claimed" is not a database
+// status: it is a placed order with an open fulfiller claim (FulfillmentCommitment). Flags and the grant reference reuse existing
+// columns and rows (see orders-data.ts); none of them needs a new column for the staging build.
+
+export const OWN_ORDER_MESSAGE = "Nobody fulfils their own shop order, owners included.";
+export const CHANGED_MESSAGE = "The order changed while you were looking. Reload and try again.";
+
+export const FULFILMENT_STAGE_LABELS = {
+  new: "New",
+  claimed: "Claimed",
+  packed: "Packed",
+  shipped: "Shipped",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+} as const;
+export type FulfilmentStage = keyof typeof FULFILMENT_STAGE_LABELS;
+
+// Pixl's stored key for each LOADOUT stage. Packed is Pixl's "credited", Delivered is Pixl's "done", New is "pending".
+export const PIXL_STAGE_KEY: Record<FulfilmentStage, string> = {
+  new: "pending",
+  claimed: "claimed",
+  packed: "credited",
+  shipped: "shipped",
+  delivered: "done",
+  cancelled: "cancelled",
+};
+
+// The LOADOUT stage of an order. Null for a status the database should never hold.
+export function fulfilmentStage(status: string, claimed: boolean): FulfilmentStage | null {
+  switch (status) {
+    case "placed":
+      return claimed ? "claimed" : "new";
+    case "packed":
+      return "packed";
+    case "shipped":
+      return "shipped";
+    case "delivered":
+      return "delivered";
+    case "cancelled":
+      return "cancelled";
+    default:
+      return null;
+  }
+}
+
+// A flag is an order status event with one of these statuses. The newest flag event decides whether the order is flagged.
+export const FLAG_STATUS = "flagged";
+export const FLAG_CLEARED_STATUS = "flag_cleared";
+
+export function isFlaggedFromEvents(events: readonly { status: string; at: Date }[]): boolean {
+  let latest: { status: string; at: Date } | null = null;
+  for (const event of events) {
+    if (event.status !== FLAG_STATUS && event.status !== FLAG_CLEARED_STATUS) continue;
+    if (!latest || event.at.getTime() >= latest.at.getTime()) latest = event;
+  }
+  return latest?.status === FLAG_STATUS;
+}
+
+// Staff may cancel (and refund) an order until it ships. A buyer may cancel only a placed order (checkCancel).
+export function checkStaffCancel(status: string): Verdict {
+  if (status === "placed" || status === "packed") return { ok: true };
+  return { ok: false, message: `Only a placed or packed order can be cancelled by staff. This one is ${status}.` };
+}
+
+// A fulfiller may flag an order only while it can still be packed or sent.
+export function checkFlaggable(status: string): Verdict {
+  if (status === "placed" || status === "packed") return { ok: true };
+  return { ok: false, message: `Only a placed or packed order can be flagged. This one is ${status}.` };
+}
+
+// A grant has no parcel. Its reference goes in the tracking field, with the carrier set to GRANT_CARRIER, so the buyer reads it the
+// same way as a tracking number.
+export const GRANT_CARRIER = "Grant";
+
+export function checkGrantRef(raw: unknown): { ok: true; value: string } | { ok: false; message: string } {
+  const text = typeof raw === "string" ? raw.trim() : "";
+  if (text === "") return { ok: false, message: "Enter the grant reference before sending the grant." };
+  if (text.length > ORDER_TRACKING_MAX) return { ok: false, message: `The grant reference is at most ${ORDER_TRACKING_MAX} characters.` };
+  return { ok: true, value: text };
+}
+
+// Fulfiller payouts, settled when the order ships: 2 Ore per item, and 1 Ore per grant (owner, 22 Nov 2026).
+export const FULFILMENT_PAYOUT_ORE_PER_ITEM = 2;
+export const FULFILMENT_PAYOUT_ORE_PER_GRANT = 1;
+
+export function itemCountOf(lines: readonly { quantity: number }[]): number {
+  return lines.reduce((sum, line) => sum + Math.max(0, Math.trunc(line.quantity)), 0);
+}
+
+export function fulfilmentPayoutOre(input: { items: number; grant: boolean }): number {
+  if (input.grant) return FULFILMENT_PAYOUT_ORE_PER_GRANT;
+  return Math.max(0, Math.trunc(input.items)) * FULFILMENT_PAYOUT_ORE_PER_ITEM;
+}
+
+// Edits to the shipment after it left: a blank field is left alone, never cleared, so a tracking number cannot be wiped by a later edit.
+export type ShipmentEdit = { trackingNumber?: string; carrier?: string; supplier?: string };
+export type ShipmentEditCheck = { ok: true; value: ShipmentEdit } | { ok: false; message: string };
+
+export function checkShipmentEdit(input: { trackingNumber?: unknown; carrier?: unknown; supplier?: unknown }): ShipmentEditCheck {
+  const value: ShipmentEdit = {};
+  if (input.trackingNumber !== undefined) {
+    const tracking = optionalText(input.trackingNumber, ORDER_TRACKING_MAX, "A tracking number");
+    if (!tracking.ok) return tracking;
+    if (tracking.value) value.trackingNumber = tracking.value;
+  }
+  if (input.carrier !== undefined) {
+    const carrier = optionalText(input.carrier, ORDER_CARRIER_MAX, "A carrier");
+    if (!carrier.ok) return carrier;
+    if (carrier.value) value.carrier = carrier.value;
+  }
+  if (input.supplier !== undefined) {
+    const supplier = optionalText(input.supplier, ORDER_SUPPLIER_MAX, "A supplier");
+    if (!supplier.ok) return supplier;
+    if (supplier.value) value.supplier = supplier.value;
+  }
+  return { ok: true, value };
+}
+
+// The real cost of an order in whole cents. It is recorded in the audit row, since orders have no cost column yet.
+export const ORDER_COST_CENTS_MAX = 10_000_000;
+
+export function checkCostCents(raw: unknown): { ok: true; value: number } | { ok: false; message: string } {
+  if (typeof raw !== "number" || !Number.isSafeInteger(raw) || raw < 0 || raw > ORDER_COST_CENTS_MAX) {
+    return { ok: false, message: "Enter the real cost in dollars, as a plain amount." };
+  }
+  return { ok: true, value: raw };
 }
 
 // ---- Catalog rows ----

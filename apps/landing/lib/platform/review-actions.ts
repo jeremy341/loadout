@@ -9,7 +9,7 @@
 //   claimShip / pickUpShip       ship
 //   releaseClaim                 ship
 //   heartbeat                    ship, awayMinutes (5 or more releases the claim)
-//   recordTriage                 ship, decision (not-fraud | fraud), note
+//   recordTriage                 retired: refuses every call (the human fraud triage is gone; Robert's score decides)
 //   decideJournal                ship, journalId (or journalSeq), action (approve-all | partial | clarify | reject), keptMinutes or hours, reason
 //   reviewVerdict                ship, verdict (approved | needs_changes | ban), note, reasonCode, auditNote, repoOpened ...
 //   placeHold / releaseHold      ship, reason
@@ -23,6 +23,7 @@ import type { FormState } from "./actions";
 import { checkReason, recordAudit } from "./audit";
 import { db } from "./db";
 import { checkLedgerEntry, clawbackPlan } from "./ledger";
+import { PARKED_STATUS } from "./review";
 import { loadDeskShip, minutesOf, type DeskShip } from "./review-data";
 import {
   mayAddNote,
@@ -32,7 +33,6 @@ import {
   mayGiveVerdict,
   mayHold,
   mayRelease,
-  mayTriage,
   mayUnship,
   NOTE_STATUSES,
   reasonCodeOf,
@@ -48,15 +48,17 @@ import {
   correctionDelta,
   creditFor,
   journalDecision,
-  recordFraudTriage,
+  reviewPayoutFor,
   tenthsOfHour,
   turnedNineteenSinceShipping,
+  unshipFrom,
   updateShipCredit,
   validateAuditSections,
   verdictEffect,
   type AuditSections,
   type JournalActionKind,
   type JournalForVerdict,
+  type ReviewPayoutKind,
 } from "./review-rules";
 import { requireAccess } from "./session";
 
@@ -134,6 +136,13 @@ async function releasePending(tx: Tx, ship: Pick<DeskShip, "id" | "title" | "own
   const pending = sum._sum.amountOre ?? 0;
   if (pending !== 0) await ledgerRow(tx, { personId: ship.owner.id, projectId: ship.id, amountOre: -pending, status: "pending", kind: "adjustment", reason: why, now });
   return pending;
+}
+
+// One ReviewPayout row for the reviewer who gave a verdict (owner decision, 22 Nov 2026: 2 Ore approval or confirmed ban, 1 Ore needs
+// changes). Written in the verdict's own transaction, so a verdict that loses its race pays nothing.
+async function reviewerPay(tx: Tx, reviewerId: string, ship: Pick<DeskShip, "id">, kind: ReviewPayoutKind): Promise<void> {
+  const row = reviewPayoutFor(kind);
+  await tx.reviewPayout.create({ data: { reviewerId, projectId: ship.id, kind: row.kind, amountOre: row.amountOre, status: row.status } });
 }
 
 // Minutes as hours to one decimal ("1.7"), the same 0.1 hour rounding the Ore uses, for reasons and notes.
@@ -290,31 +299,12 @@ export async function heartbeat(_prev: FormState, formData: FormData): Promise<F
   });
 }
 
-// ---- Fraud triage (second pass only) ----
+// ---- Fraud triage (retired) ----
 
-export async function recordTriage(_prev: FormState, formData: FormData): Promise<FormState> {
-  const { viewer, actor } = await context();
-  const ship = await shipFrom(formData);
-  if (!ship) return error(NOT_FOUND);
-  const now = new Date();
-  const gate = mayTriage(actor, ship.facts, now);
-  if (!gate.ok) return error(gate.message);
-  const decision = text(formData.get("decision"));
-  const recorded = recordFraudTriage({ decision: decision as "fraud" | "not-fraud", by: actor.id, note: text(formData.get("note")), byIsFinalOrOwner: actor.isOwner || actor.canSecondPass });
-  if (!recorded.ok) return error(recorded.message, "note");
-  return run(async () => {
-    await db().$transaction(async (tx) => {
-      must(
-        await tx.project.updateMany({
-          where: { id: ship.id, status: "second-pass", claimedBy: actor.id, heldAt: null, triage: null },
-          data: { triage: recorded.value.triage, triageBy: actor.id, triageNote: recorded.value.note, triageAt: now },
-        }),
-      );
-      await audit(tx, { actorId: actor.id, action: "review.triage", ship, reason: recorded.value.note, before: { triage: ship.triage }, after: { triage: recorded.value.triage, reviewer: viewer.displayName } });
-    });
-    refresh(ship);
-    return { status: "saved", message: `Saved. Triage recorded as ${recorded.value.triage === "fraud" ? "Fraud" : "Not fraud"}.` };
-  });
+// The human fraud triage and its second-pass gate are gone (plans/proposals/platform-parity-pixl.md, step 2.3). Robert's score is the
+// fraud signal. This export stays so the reviewer dashboard's import still compiles; it refuses every call and writes nothing.
+export async function recordTriage(_prev: FormState, _formData: FormData): Promise<FormState> {
+  return error("The fraud triage has been removed. Robert's fraud score now decides whether a parked ship moves on.");
 }
 
 // ---- Journal decisions ----
@@ -432,33 +422,36 @@ export async function reviewVerdict(_prev: FormState, formData: FormData): Promi
     await db().$transaction(async (tx) => {
       const before = { status: ship.status };
       if (reroute) {
-        // Overturning a ban proposal with an approval: back to the second pass for the triage and the approval.
+        // Overturning a ban proposal with an approval: back to the second pass for the approval.
         must(await tx.project.updateMany({ where: guard, data: { proposedBanBy: null, proposedBanReason: null, triage: null, triageBy: null, triageNote: null, triageAt: null, ...reviewedAs } }));
         await audit(tx, { actorId: actor.id, action: "review.verdict", ship, reason: note, before, after: { ...base, verdict: "ban_overturned", status: "second-pass" } });
         return;
       }
       if (kind === "approve" && stage === "first-pass") {
+        // Parked: the ship waits for Robert's fraud score. Its Ore stays pending, and the reviewer's pay row stays pending too.
         must(
           await tx.project.updateMany({
             where: guard,
-            data: { status: "second-pass", firstPassBy: actor.id, firstPassAt: now, firstPassNote: note, firstPassMinutes: keptMinutes, reviewNote: null, reviewReason: null, triage: null, triageBy: null, triageNote: null, triageAt: null, ...reviewedAs },
+            data: { status: PARKED_STATUS, firstPassBy: actor.id, firstPassAt: now, firstPassNote: note, firstPassMinutes: keptMinutes, reviewNote: null, reviewReason: null, ...reviewedAs },
           }),
         );
         if (credit.ore > 0) await ledgerRow(tx, { personId: ship.owner.id, projectId: ship.id, amountOre: credit.ore, status: "pending", kind: "approved_hours", reason: `Pending: ${hoursText(credit.newMinutes)} approved hours recommended at the first pass on ${ship.title}.`, now });
-        await audit(tx, { actorId: actor.id, action: "review.verdict", ship, reason: note, before, after: { ...base, verdict: "first_pass_approved", status: "second-pass", pendingOre: credit.ore } });
+        await reviewerPay(tx, actor.id, ship, "first-pass-approve");
+        await audit(tx, { actorId: actor.id, action: "review.verdict", ship, reason: note, before, after: { ...base, verdict: "first_pass_approved", status: PARKED_STATUS, pendingOre: credit.ore } });
         return;
       }
       if (kind === "approve") {
         // The second pass: the Ore becomes confirmed. The pending row is reversed, then the confirmed row is written.
         must(
           await tx.project.updateMany({
-            where: { ...guard, triage: "not-fraud" },
+            where: guard,
             data: { status: "approved", approvedMinutes: keptMinutes, reviewNote: note, reviewReason: null, isUpdate: false, assignedTo: null, reshippedAt: null, assignmentRemindedAt: null, proposedBanBy: null, proposedBanReason: null, ...reviewedAs },
           }),
         );
         await tx.journalEntry.updateMany({ where: { projectId: ship.id, reviewAction: { not: null } }, data: { status: "approved" } });
         await releasePending(tx, ship, "Pending Ore released on final approval.", now);
         if (credit.ore > 0) await ledgerRow(tx, { personId: ship.owner.id, projectId: ship.id, amountOre: credit.ore, status: "confirmed", kind: "approved_hours", reason: `Approved: ${hoursText(credit.newMinutes)} new hours on ${ship.title}.`, now });
+        await reviewerPay(tx, actor.id, ship, "approve");
         await audit(tx, { actorId: actor.id, action: "review.verdict", ship, reason: note, before, after: { ...base, verdict: "approved", status: "approved", ore: credit.ore, newMinutes: credit.newMinutes } });
         return;
       }
@@ -470,6 +463,7 @@ export async function reviewVerdict(_prev: FormState, formData: FormData): Promi
           }),
         );
         await releasePending(tx, ship, "Pending Ore released: changes were requested.", now);
+        await reviewerPay(tx, actor.id, ship, "needs-changes");
         await audit(tx, { actorId: actor.id, action: "review.verdict", ship, reason: note, before, after: { ...base, verdict: "needs_changes", status: "needs-changes", reasonCode } });
         return;
       }
@@ -487,12 +481,13 @@ export async function reviewVerdict(_prev: FormState, formData: FormData): Promi
       // A confirmed ban (owner only, checked by the gate).
       must(await tx.project.updateMany({ where: guard, data: { status: "banned", bannedAt: now, proposedBanReason: note, assignedTo: null, reshippedAt: null, ...reviewedAs } }));
       await releasePending(tx, ship, "Pending Ore released: the project was banned.", now);
+      await reviewerPay(tx, actor.id, ship, "ban");
       await audit(tx, { actorId: actor.id, action: "review.ban", ship, reason: note, before, after: { ...base, verdict: "banned", status: "banned" } });
     });
     refresh(ship);
     const message =
       reroute ? "Saved. The ban proposal was overturned and the ship is back in the second pass."
-      : kind === "approve" ? (final ? "Saved. Approved, and the Ore is confirmed." : "Saved. Passed to the second pass. The Ore stays pending.")
+      : kind === "approve" ? (final ? "Saved. Approved, and the Ore is confirmed." : "Saved. Parked until Robert's fraud score clears it. The Ore stays pending.")
       : kind === "needs_changes" ? "Saved. Sent back to the builder."
       : proposal ? "Saved. Ban proposed for an owner to confirm."
       : "Saved. The project is banned.";
@@ -589,13 +584,16 @@ export async function correctApprovedHours(_prev: FormState, formData: FormData)
   });
 }
 
-// Unship an approved project back to a draft (owner only). The clearing list is Pixl's unshipResetFields, in LOADOUT's columns.
+// Unship a project back to a draft (owner only). From the fraud review (parked), the second pass or approved (unshipFrom). The clearing
+// list is Pixl's unshipResetFields, in LOADOUT's columns. Clawback takes back only confirmed credit the ship earned; a parked or
+// second-pass ship has none, so nothing is clawed back and its pending Ore is released.
 export async function unshipProject(_prev: FormState, formData: FormData): Promise<FormState> {
   const { viewer, actor } = await context();
   const ship = await shipFrom(formData);
   if (!ship) return error(NOT_FOUND);
   const gate = mayUnship(actor, ship.facts);
   if (!gate.ok) return error(gate.message);
+  if (!unshipFrom(ship.status)) return error("This project can't be unshipped from where it is.");
   const reason = checkReason(formData.get("reason"));
   if (!reason.ok) return error(reason.message, "reason");
   return run(async () => {
@@ -607,7 +605,7 @@ export async function unshipProject(_prev: FormState, formData: FormData): Promi
       await lockPerson(tx, ship.owner.id);
       must(
         await tx.project.updateMany({
-          where: { id: ship.id, status: "approved" },
+          where: { id: ship.id, status: ship.status },
           data: {
             status: "draft", submittedAt: null, statusChangedAt: now, reviewNote: null, reviewReason: null, approvedMinutes: 0, isUpdate: false, changeNote: null, resubmitCount: 0, firstShippedAt: null, reshippedAt: null,
             firstPassBy: null, firstPassAt: null, firstPassNote: null, firstPassMinutes: null, triage: null, triageBy: null, triageNote: null, triageAt: null,
@@ -628,7 +626,7 @@ export async function unshipProject(_prev: FormState, formData: FormData): Promi
         const tail = plan.shortfallOre > 0 ? `: ${plan.clawbackOre} of ${net} Ore taken back, ${plan.shortfallOre} Ore already spent.` : `: ${plan.clawbackOre} Ore taken back.`;
         await ledgerRow(tx, { personId: ship.owner.id, projectId: ship.id, amountOre: -plan.clawbackOre, status: "confirmed", kind: "adjustment", reason: `Unshipped ${ship.title.slice(0, 60)}${tail}`, now });
       }
-      await audit(tx, { actorId: actor.id, action: "review.unship", ship, reason: reason.reason, before: { status: "approved", approvedMinutes: ship.approvedMinutes }, after: { status: "draft", clawedBackOre: plan.clawbackOre, shortfallOre: plan.shortfallOre, reviewer: viewer.displayName } });
+      await audit(tx, { actorId: actor.id, action: "review.unship", ship, reason: reason.reason, before: { status: ship.status, approvedMinutes: ship.approvedMinutes }, after: { status: "draft", clawedBackOre: plan.clawbackOre, shortfallOre: plan.shortfallOre, reviewer: viewer.displayName } });
     });
     refresh(ship);
     return { status: "saved", message: shortfall > 0 ? `Saved. The project is a draft again. ${shortfall} Ore of what it earned was already spent, so that part was not taken back.` : "Saved. The project is a draft again." };

@@ -238,3 +238,128 @@ html:has(.reviewer-root) {
     scroll-margin-top: 72px;
   }
 }
+
+/* ---- Staging honesty, shortcuts and cheer (.ulpi/design/reviewer-desk-staging-honesty.md) ---- */
+
+/* "Not connected" notes read differently from "Sample data" ones by more than the word: a dashed rule instead of a solid one. */
+.rv-data-scope[data-scope="not-connected"] {
+  border-left-style: dashed;
+}
+
+/* A zero in a count badge stays visible (none is information) but plain: no fill, a lighter weight. */
+.hc-badge[data-variant="count"][data-zero="true"] {
+  background: transparent;
+  font-weight: 400;
+}
+
+/* The palette's one-line note when builder and project search is not available. It keeps its height so the list does not jump. */
+.rv-search-note {
+  min-height: 0;
+  margin: 0;
+  padding: 0 14px;
+  color: var(--secondary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.rv-search-note:not(:empty) {
+  padding-block: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.hc-search-footer button.hc-kbd {
+  border: 0;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* The shortcut list. */
+.rv-shortcuts {
+  width: min(520px, calc(100vw - 32px));
+  margin: 12vh auto auto;
+}
+.rv-shortcuts-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+.rv-shortcuts-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rv-shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.rv-shortcuts-table th,
+.rv-shortcuts-table td {
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.rv-shortcuts-table tr:first-child th,
+.rv-shortcuts-table tr:first-child td {
+  border-top: 0;
+}
+.rv-shortcuts-table th {
+  width: 40%;
+  padding-right: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* The approval celebration: a status line with ten squares that fly out once. */
+.rv-cheer {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 40;
+  max-width: calc(100vw - 32px);
+  padding: 10px 14px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-left: 4px solid var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+  pointer-events: none;
+}
+.rv-cheer-burst {
+  position: absolute;
+  left: 24px;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+.rv-cheer-square {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  opacity: 0;
+  animation: rv-cheer-fly 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes rv-cheer-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), calc(var(--dy) - 24px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* The component does not render the squares at all under reduced motion; this is the belt for a late change of the setting. */
+  .rv-cheer-burst {
+    display: none;
+  }
+}

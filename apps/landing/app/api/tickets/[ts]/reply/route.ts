@@ -14,8 +14,8 @@ export const POST = guardedRoute<Ctx>("api.tickets.reply", "helper", async (acce
   const text = typeof body.text === "string" ? body.text.trim().slice(0, 4000) : "";
   if (!text) return NextResponse.json({ error: "Text is required" }, { status: 400 });
   try {
-    await ticketReply(ts, text, { slackId: access.session.slackId, username: access.session.name });
-    return NextResponse.json({ ok: true });
+    const reply = await ticketReply(ts, text, { slackId: access.session.slackId, username: access.session.name });
+    return NextResponse.json({ ok: true, saved: reply.saved, notice: reply.notice });
   } catch {
     // An upstream error can contain internal addresses or tokens. Never echo it to the browser.
     return NextResponse.json({ error: "Could not post the reply. Try again shortly." }, { status: 502 });

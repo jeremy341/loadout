@@ -1,11 +1,12 @@
 import { headers } from "next/headers";
-import { sql } from "./pgCompat";
+import type { Prisma } from "@/lib/generated/prisma/client";
+import { databaseConfigured, db } from "@/lib/platform/db";
 import { clientIp } from "./auditTarget";
 
-// Writes one row to the shared audit_log table (migration 0214_audit_log.sql).
-// Fire-and-forget: a failed insert goes to stderr and never breaks the page or
-// action that triggered it. `meta` must never carry tokens, secrets or player
-// PII - callers pass ids and field names, not values.
+// Writes one row to LOADOUT's real AuditEvent table. The copied Pixl desk used a `sql` helper backed by the sample store, so every
+// guard-level allow/denied row was silently discarded. Staging must never claim an audit it did not persist.
+// Fire-and-forget: a failed insert goes to stderr and never breaks the action or page that triggered it. `meta` must never carry
+// tokens, secrets or player PII — callers pass ids and field names, not values.
 
 export type AuditResult = "ok" | "denied" | "error";
 
@@ -29,6 +30,26 @@ async function requestInfo(): Promise<{ ip: string | null; userAgent: string | n
   }
 }
 
+// Kept pure so the mapping can be tested without a database.
+export function toAuditEvent(entry: AuditEntry, info: { ip: string | null; userAgent: string | null }) {
+  const actorType = entry.actorType ?? (entry.slackId ? "staff" : "anonymous");
+  return {
+    actorId: entry.actorId ?? entry.slackId ?? `anonymous:${actorType}`,
+    action: `guard.${entry.action.slice(0, 120)}`,
+    targetType: "Guard",
+    targetId: entry.target?.slice(0, 200) ?? "",
+    reason: `result=${entry.result}`,
+    after: {
+      result: entry.result,
+      actorType,
+      slackId: entry.slackId ?? null,
+      ip: info.ip,
+      userAgent: info.userAgent,
+      meta: entry.meta ?? {},
+    } as Prisma.InputJsonValue,
+  };
+}
+
 export async function audit(entry: AuditEntry, req?: Request): Promise<void> {
   const info = req
     ? {
@@ -36,26 +57,9 @@ export async function audit(entry: AuditEntry, req?: Request): Promise<void> {
         userAgent: req.headers.get("user-agent")?.slice(0, 400) ?? null,
       }
     : await requestInfo();
-  const actorType = entry.actorType ?? (entry.slackId ? "staff" : "anonymous");
-  const row = {
-    app: "internal-dashboard",
-    actor_type: actorType,
-    actor_id: entry.actorId ?? entry.slackId ?? null,
-    slack_id: entry.slackId ?? null,
-    action: entry.action.slice(0, 120),
-    target: entry.target?.slice(0, 200) ?? null,
-    result: entry.result,
-    ip: info.ip,
-    user_agent: info.userAgent,
-    meta: JSON.stringify(entry.meta ?? {}),
-  };
+  if (!databaseConfigured()) return;
+  const row = toAuditEvent(entry, info);
   void Promise.resolve()
-    .then(
-      () => sql`
-        insert into audit_log (app, actor_type, actor_id, slack_id, action, target, result, ip, user_agent, meta)
-        values (${row.app}, ${row.actor_type}, ${row.actor_id}, ${row.slack_id}, ${row.action},
-                ${row.target}, ${row.result}, ${row.ip}, ${row.user_agent}, ${row.meta}::jsonb)
-      `,
-    )
+    .then(() => db().auditEvent.create({ data: row }))
     .catch((e) => console.error("[audit] insert failed", row.action, (e as Error).message));
 }

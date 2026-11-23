@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { requirePage } from "@/reviewer-dash/lib/guard";
+import { listShopOrders } from "@/reviewer-dash/lib/live-ops";
 import {
-  listShopOrders,
   listFulfillers,
   buyerDetailsByUserId,
   buyerCountriesByUserId,
@@ -49,6 +49,7 @@ import {
   buttonClass,
   formatDate,
 } from "@/reviewer-dash/app/_ui/ui";
+import DataNote from "@/reviewer-dash/app/_ui/DataNote";
 import { SlackHandle } from "./SlackHandle";
 import { OrderList } from "./OrderList";
 import { OrderDetail } from "./OrderDetail";
@@ -340,6 +341,10 @@ export default async function FulfillmentPage({
           </div>
         }
       />
+
+      <DataNote kind="sample">
+        The order list is live. Buyer contact details and the budget figures are still staging samples; no address or phone is real.
+      </DataNote>
 
       {showingQueue && counts && !mineOnly && (
         <section className="fw-pipeline" aria-label="Fulfilment pipeline">

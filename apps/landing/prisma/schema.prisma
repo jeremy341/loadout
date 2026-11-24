@@ -109,6 +109,16 @@ model Session {
   createdAt DateTime @default(now())
 
   @@index([personId])
+  @@index([expiresAt])
+}
+
+// One row per signed inbound webhook delivery (the signature is unique per timestamp and body). A repeat is a replay and is not
+// processed again. Rows older than the webhook tolerance are pruned by the session-cleanup job.
+model WebhookReplay {
+  signature String   @id
+  seenAt    DateTime @default(now())
+
+  @@index([seenAt])
 }
 
 model Project {

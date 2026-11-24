@@ -391,7 +391,8 @@ export default async function ReviewDetail({
   const ageFlag = turnedNineteenSinceShipping(p.users?.birthday, shippedAt);
 
   // ---- Builder details for the eligibility check.
-  // PII is encrypted at rest; decryptPII also passes legacy plaintext through.
+  // Builder PII is shown from plaintext today: no stored column is encrypted yet (see reviewer-dash/lib/crypto.ts). decryptPII
+  // passes plaintext through, so this reads the same either way.
   // Name/email/birth date/address are for final reviewers and owners only
   // (canSeeBuilderPII); a first-pass reviewer gets the age plus "on file" /
   // "missing" per field, and for them only the birthday is even decrypted.

@@ -22,6 +22,8 @@
 // project never lifts self-review, and an exception never lets anyone review a ship they own. Grants are written by
 // records-data.ts grantSelfReviewException, which is audited.
 
+import { buyerDetailsVisible, isOwnPurchase } from "./buyer-rules";
+
 export const REVIEWER = "reviewer";
 export const HELPER = "helper";
 export const FULFILLER = "fulfiller";
@@ -278,11 +280,10 @@ export function claimedBy(order: OrderOwnership, personId: string): boolean {
 }
 
 export function canSeeBuyerDetails(order: OrderOwnership, viewer: Pick<ReviewerAccess, "isOwner" | "personId">): boolean {
-  return viewer.isOwner || claimedBy(order, viewer.personId);
+  return buyerDetailsVisible({ isOwner: viewer.isOwner, claimedByViewer: claimedBy(order, viewer.personId) });
 }
 
 // A fulfiller must never claim or ship their own order. Owners are not exempt.
 export function isOwnOrder(order: OrderOwnership, personId: string): boolean {
-  const buyer = (order.buyerId ?? "").trim();
-  return buyer !== "" && buyer === personId.trim();
+  return isOwnPurchase(order.buyerId, personId);
 }

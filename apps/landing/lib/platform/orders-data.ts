@@ -207,8 +207,10 @@ async function placeInTx(
     if (taken.count !== 1) throw new Refused({ code: "out_of_stock", message: "That item just sold out.", itemId: need.itemId });
   }
 
-  const existing = await tx.shopOrder.findMany({ select: { number: true } });
-  const number = nextOrderNumber(existing.map((row) => row.number));
+  // The highest existing number is read in the database, not every order number into memory for each placement (L10).
+  const [{ top }] = await tx.$queryRaw<{ top: bigint | null }[]>`
+    SELECT MAX(CAST(SUBSTRING("number" FROM '^LO-([0-9]+)$') AS BIGINT)) AS top FROM "ShopOrder"`;
+  const number = nextOrderNumber(top === null ? [] : [`LO-${top.toString()}`]);
   const now = new Date();
 
   const order = await tx.shopOrder.create({
@@ -427,7 +429,25 @@ export async function grantOrder(
 
 // A builder cancels their own order while it is placed. Stock goes back and the stored total is refunded as a positive ledger
 // entry. The requisition row stays linked to the order; availability ignores requisitions whose order is cancelled, so it can be spent again.
+// A stock row that is missing would lose the units while the refund still happens. The cancel rolls back and says so instead (L11).
+class StockRecordMissing extends Error {}
+
+async function withStockCheck(run: () => Promise<Result>): Promise<Result> {
+  try {
+    return await run();
+  } catch (error) {
+    if (error instanceof StockRecordMissing) {
+      return no("stock_missing", "A stock record for an item in this order is missing, so it cannot be cancelled yet. Tell the team.");
+    }
+    throw error;
+  }
+}
+
 export async function cancelOrder(orderId: string, personId: string): Promise<Result> {
+  return withStockCheck(() => cancelOrderOnce(orderId, personId));
+}
+
+async function cancelOrderOnce(orderId: string, personId: string): Promise<Result> {
   return db().$transaction(async (tx): Promise<Result> => {
     const person = await lockPerson(tx, personId);
     if (!person || person.bannedAt) return no("person_unavailable", "This account cannot change orders right now.");
@@ -441,10 +461,11 @@ export async function cancelOrder(orderId: string, personId: string): Promise<Re
     if (moved.count !== 1) return no("changed", CHANGED_MESSAGE);
 
     for (const need of stockNeeds(order.lines)) {
-      await tx.shopOptionStock.updateMany({
+      const back = await tx.shopOptionStock.updateMany({
         where: { itemId: need.itemId, option: need.option },
         data: { stock: { increment: need.quantity } },
       });
+      if (back.count !== 1) throw new StockRecordMissing(need.itemId);
     }
 
     await appendLedger(tx, personId, { amountOre: order.totalOre, kind: "shop_refund", reason: `Refund for cancelled order ${order.number}` });
@@ -466,6 +487,10 @@ export async function cancelOrder(orderId: string, personId: string): Promise<Re
 // Owner: cancel and refund before the order ships. Restocks every line, refunds the stored total through the ledger, closes any
 // open claim, and refuses if the order has moved on from expectedStatus (a stale form cannot cancel a newer order).
 export async function cancelOrderAsStaff(orderId: string, actorId: string, expectedStatus: string): Promise<Result> {
+  return withStockCheck(() => cancelOrderAsStaffOnce(orderId, actorId, expectedStatus));
+}
+
+async function cancelOrderAsStaffOnce(orderId: string, actorId: string, expectedStatus: string): Promise<Result> {
   const target = await db().shopOrder.findUnique({ where: { id: orderId }, select: { personId: true } });
   if (!target) return no("not_found", "That order does not exist.");
 
@@ -482,7 +507,11 @@ export async function cancelOrderAsStaff(orderId: string, actorId: string, expec
     if (moved.count !== 1) return no("changed", CHANGED_MESSAGE);
 
     for (const need of stockNeeds(order.lines)) {
-      await tx.shopOptionStock.updateMany({ where: { itemId: need.itemId, option: need.option }, data: { stock: { increment: need.quantity } } });
+      const back = await tx.shopOptionStock.updateMany({
+        where: { itemId: need.itemId, option: need.option },
+        data: { stock: { increment: need.quantity } },
+      });
+      if (back.count !== 1) throw new StockRecordMissing(need.itemId);
     }
 
     const now = new Date();

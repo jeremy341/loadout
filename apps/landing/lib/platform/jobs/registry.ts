@@ -1,6 +1,6 @@
 // The job registry: the list of scheduled jobs with a one-line description and the function that runs them. The cron
 // route (app/api/cron/[job]) and the manual wrapper (scripts/run-job.ts) both dispatch through here, so a job added to
-// JOBS is at once runnable by hand and schedulable in vercel.json — nothing else needs to know the names.
+// JOBS is at once runnable by hand and scheduled by the Nest deploy (the /etc/cron.d/loadout file that scripts/deploy-nest.sh writes).
 //
 // Server only. The functions read and write through the platform modules (hackatime/data, stats-data, db); each returns
 // a small JSON summary that the runner stores on the JobRun row. Summaries carry counts and fixed words only: never a

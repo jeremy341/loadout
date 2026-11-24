@@ -1,7 +1,7 @@
 // The cron endpoint: GET or POST /api/cron/<job> runs the registered job <job> exactly once, through runner.ts, with a
-// JobRun row inserted ("running") before it starts and finished ("ok" or "error") after. Vercel's crons (vercel.json)
-// call GET with `Authorization: Bearer CRON_SECRET` once the env var is set; POST exists so a staff member can fire a
-// job by hand from a shell with the same curl and the same record.
+// JobRun row inserted ("running") before it starts and finished ("ok" or "error") after. The Nest host's cron file
+// (/etc/cron.d/loadout, written by scripts/deploy-nest.sh) calls it through scripts/run-cron-job.sh with
+// `Authorization: Bearer CRON_SECRET`. POST lets a staff member fire a job by hand with the same curl and the same record.
 //
 // Fail closed: without the right bearer — no CRON_SECRET in the environment, a missing header, the wrong secret —
 // nothing runs and the answer is 403 for every job name, known or not, so the endpoint cannot be used to probe which

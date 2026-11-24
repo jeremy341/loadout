@@ -116,3 +116,23 @@ export async function grantAdmin(personId: string): Promise<{ created: boolean }
     return { created };
   });
 }
+
+// Removes the admin marker (M5): the only way it ends, since bootstrap grants are otherwise permanent. The caller checks that the
+// actor is an owner; this writes the audit row in the same transaction.
+export async function revokeAdmin(personId: string, actorId: string): Promise<{ removed: boolean }> {
+  return db().$transaction(async (tx) => {
+    const gone = await tx.roleGrant.deleteMany({ where: { personId, role: ADMIN_ROLE } });
+    if (gone.count > 0) {
+      await recordAudit(tx, {
+        actorId,
+        action: "superadmin.revoke",
+        targetType: "Person",
+        targetId: personId,
+        reason: "Owner removed the admin marker.",
+        before: { roles: [ADMIN_ROLE] },
+        after: { roles: [] },
+      });
+    }
+    return { removed: gone.count > 0 };
+  });
+}

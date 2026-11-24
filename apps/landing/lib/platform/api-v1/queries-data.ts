@@ -136,11 +136,13 @@ export async function publicProjects(
   const parsed = parseSearchQuery(filter.q);
   const track = filter.track ?? parsed.track;
   const by = filter.ownerHandle ?? parsed.by;
+  // Prisma's contains does not escape LIKE wildcards, so % and _ in a search term would match far more than was typed.
+  const literal = (token: string) => token.replace(/[\\%_]/g, (c) => `\\${c}`);
   const words = parsed.tokens.map((token) => ({
     OR: [
-      { title: { contains: token, mode: "insensitive" as const } },
-      { description: { contains: token, mode: "insensitive" as const } },
-      { owner: { handle: { contains: token, mode: "insensitive" as const } } },
+      { title: { contains: literal(token), mode: "insensitive" as const } },
+      { description: { contains: literal(token), mode: "insensitive" as const } },
+      { owner: { handle: { contains: literal(token), mode: "insensitive" as const } } },
     ],
   }));
   return db().project.findMany({

@@ -122,11 +122,6 @@ export async function selfReviewExceptionsFor(personId: string) {
   return records.activeSelfReviewExceptions(personId);
 }
 
-export async function grantSelfReview(input: { personId: string; projectId: string | null; reason: string; expiresAt: Date | null }): Promise<{ id: string }> {
-  requireDatabase();
-  return records.grantSelfReviewException(input, await signedInViewerId());
-}
-
 // ---- Ships snapshot (counts by name, recorded with a timestamp) ----
 
 export async function recordShipsCounts(counts: unknown): Promise<{ id: string }> {

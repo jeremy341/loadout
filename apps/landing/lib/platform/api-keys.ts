@@ -73,7 +73,8 @@ export function checkScopes(raw: unknown): Checked<{ scopes: ApiScope[] }> {
   const wanted = new Set<string>();
   for (const item of raw) {
     if (typeof item !== "string") return { ok: false, message: "A permission is not valid." };
-    wanted.add(item.trim());
+    // Scope names are lower case in the registry; a caller that sends "Profile" means "profile".
+    wanted.add(item.trim().toLowerCase());
   }
   const unknown = [...wanted].find((s) => !(API_SCOPES as readonly string[]).includes(s));
   if (unknown !== undefined) return { ok: false, message: `The permission "${unknown.slice(0, 20)}" does not exist.` };

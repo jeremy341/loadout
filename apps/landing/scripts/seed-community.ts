@@ -21,7 +21,7 @@ if (!author) {
 
 // Community goals. current is what staff wrote (nothing counts up on its own); the values are local-dev stand-ins.
 const goals = [
-  { key: "era-threshold", title: "Meet the Era threshold", body: "Approved hours from every builder count toward the Era. When the threshold is met at an eligible weekly reset, the next Era begins.", current: 1240, target: 2000, endsAt: new Date("2027-05-01T00:00:00.000Z") },
+  { key: "era-threshold", title: "Meet the Era threshold", body: "Era Points from every finally approved project count toward the current Era. When the threshold is met and the Era has been open 14 days, it is ready to advance and the owner confirms.", current: 1240, target: 2000, endsAt: new Date("2027-05-01T00:00:00.000Z") },
   { key: "all-four-tracks", title: "An approved project in every track", body: "Tools, Systems, Compute and Hardware each need at least one approved project in the current Era.", current: 3, target: 4, endsAt: null },
   { key: "show-and-tell-reach", title: "Builders who showed a project", body: "Counts builders who have presented in a Show & Tell session.", current: 14, target: 20, endsAt: null },
 ];

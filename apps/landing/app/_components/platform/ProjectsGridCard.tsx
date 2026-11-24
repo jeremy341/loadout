@@ -19,7 +19,7 @@ export function ProjectsGridCard({ project }: Readonly<{ project: ProjectsGridCa
   const footId = `pf-sg-foot-${project.id}`;
   return (
     <Link className="pf-sg-card" data-track={project.track ? project.track.toLowerCase() : undefined} href={profileProjectHref(true, project.id)} aria-labelledby={titleId} aria-describedby={footId}>
-      <ProjectCover status={project.status} track={project.track} hours={hours} depth={false} badges />
+      <ProjectCover status={project.status} track={project.track} hours={hours} depth={false} badges initial={Array.from(project.title.trim())[0]?.toUpperCase() ?? ""} />
       <span className="pf-sg-body">
         <span className="pf-sg-top">
           <span className="pf-sg-title" id={titleId}>

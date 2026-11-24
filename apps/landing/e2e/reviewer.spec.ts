@@ -231,6 +231,9 @@ for (const scheme of ["dark", "light"] as const) {
     await page.addInitScript((theme) => localStorage.setItem("loadout-theme", theme), scheme);
     await page.goto("/review");
     await expect(page.locator("html")).toHaveAttribute("data-display-theme", scheme);
+    // The site-wide sentence lives behind the info button in the top bar.
+    await page.getByRole("button", { name: "About the data on this site" }).click();
+    await expect(page.locator(".reviewer-sample-note")).toBeVisible();
     const result = await new AxeBuilder({ page }).include(".reviewer-sample-note").include('button[title="Switch between light and dark"]').analyze();
     expect(result.violations.map((v) => `${v.id} (${v.impact})`)).toEqual([]);
   });

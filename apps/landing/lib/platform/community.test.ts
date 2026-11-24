@@ -22,7 +22,15 @@ import {
   topIdeas,
   upcomingSessions,
   visibleSnapshotRows,
+  eraBannerText,
+  eraProgress,
   eraStages,
+  ERA_BONUS_PERCENT,
+  ERA_MIN_DAYS,
+  GOALS,
+  isEraReady,
+  makeEraState,
+  SAMPLE_ERA,
   filterIdeas,
   findIdea,
   findSession,
@@ -50,6 +58,99 @@ describe("era stages", () => {
     const stages = eraStages(1);
     expect(stages.map((stage) => stage.state)).toEqual(["earlier", "current", "later", "later", "later"]);
     expect(stages[1].name).toBe("Electrification");
+  });
+});
+
+describe("sample Era state", () => {
+  test("is typed sample data: stage, points, one threshold, days open and the minimum", () => {
+    expect(SAMPLE_ERA.name).toBe("Electrification");
+    expect(SAMPLE_ERA.stageIndex).toBe(1);
+    expect(SAMPLE_ERA.points).toBe(1240);
+    expect(SAMPLE_ERA.threshold).toBe(2000);
+    expect(SAMPLE_ERA.daysOpen).toBe(9);
+    expect(SAMPLE_ERA.minDays).toBe(ERA_MIN_DAYS);
+    expect(SAMPLE_ERA.ready).toBe(false);
+    expect(ERA_BONUS_PERCENT).toBe(10);
+  });
+
+  test("ready needs the threshold and the 14 days together", () => {
+    expect(isEraReady({ points: 2000, threshold: 2000, daysOpen: 14, minDays: 14 })).toBe(true);
+    expect(isEraReady({ points: 2400, threshold: 2000, daysOpen: 13, minDays: 14 })).toBe(false);
+    expect(isEraReady({ points: 1999, threshold: 2000, daysOpen: 30, minDays: 14 })).toBe(false);
+    expect(isEraReady({ points: 5, threshold: 0, daysOpen: 30, minDays: 14 })).toBe(false);
+  });
+
+  test("makeEraState names the Era from its stage and sets the ready flag", () => {
+    const state = makeEraState({ stageIndex: 2, points: 3000, threshold: 3000, daysOpen: 20, minDays: 14, previousClosedPoints: 2000, viewerPoints: 0 });
+    expect(state.name).toBe("Computing");
+    expect(state.ready).toBe(true);
+  });
+});
+
+describe("eraProgress", () => {
+  test("the sample is building: 62 percent, 760 to go, 5 days left, previous and next stages", () => {
+    const era = eraProgress(SAMPLE_ERA);
+    expect(era.percent).toBe(62);
+    expect(era.pointsText).toBe("1,240 of 2,000 Era Points");
+    expect(era.remaining).toBe(760);
+    expect(era.daysLeft).toBe(5);
+    expect(era.daysCapped).toBe(9);
+    expect(era.status).toBe("building");
+    expect(era.statusLabel).toBe("Building");
+    expect(era.statusText).toContain("The owner confirms the advance");
+    expect([era.previous, era.current, era.next]).toEqual(["Steam", "Electrification", "Computing"]);
+    expect([era.stageNumber, era.stageCount]).toEqual([2, 5]);
+  });
+
+  test("the percentage never reads 100 until the threshold is met", () => {
+    expect(eraProgress({ ...SAMPLE_ERA, points: 1999 }).percent).toBe(99);
+    expect(eraProgress({ ...SAMPLE_ERA, points: 2000 }).percent).toBe(100);
+  });
+
+  test("threshold met before the days have passed waits for the days", () => {
+    const era = eraProgress({ ...SAMPLE_ERA, points: 2100, daysOpen: 13 });
+    expect(era.status).toBe("threshold-met");
+    expect(era.statusLabel).toBe("Threshold met");
+    expect(era.statusText).toContain("1 more day");
+  });
+
+  test("14 days passed but points short keeps building and says what is missing", () => {
+    const era = eraProgress({ ...SAMPLE_ERA, daysOpen: 20 });
+    expect(era.status).toBe("days-passed");
+    expect(era.daysLeft).toBe(0);
+    expect(era.daysCapped).toBe(14);
+    expect(era.statusText).toContain("760 more Era Points");
+  });
+
+  test("both met is READY TO ADVANCE and the owner confirms; it never says a timer advances it", () => {
+    const era = eraProgress({ ...SAMPLE_ERA, points: 2000, daysOpen: 14 });
+    expect(era.status).toBe("ready");
+    expect(era.statusLabel).toBe("Ready to advance");
+    expect(era.statusText).toContain("The owner confirms the advance");
+    expect(era.statusText).toContain("not happen on a timer");
+  });
+
+  test("the first and last Era have no earlier or later stage", () => {
+    const first = eraProgress(makeEraState({ stageIndex: 0, points: 0, threshold: 1000, daysOpen: 0, minDays: 14, previousClosedPoints: null, viewerPoints: 0 }));
+    expect(first.previous).toBeNull();
+    expect(first.next).toBe("Electrification");
+    const last = eraProgress(makeEraState({ stageIndex: 4, points: 0, threshold: 1000, daysOpen: 0, minDays: 14, previousClosedPoints: 900, viewerPoints: 0 }));
+    expect(last.next).toBeNull();
+    expect(last.previous).toBe("Networks");
+  });
+
+  test("the banner text is one short line", () => {
+    expect(eraBannerText()).toBe("Electrification Era: 1,240 of 2,000 Era Points, 62%");
+  });
+});
+
+describe("Era copy", () => {
+  test("the Era goal says Era Points, not approved hours, and names the owner", () => {
+    const goal = GOALS.find((entry) => entry.id === "era-threshold");
+    expect(goal?.text).toContain("Era Points");
+    expect(goal?.text).not.toMatch(/approved hours/i);
+    expect(goal?.text).toContain("owner confirms");
+    expect(goal?.unit).toBe("Era Points");
   });
 });
 

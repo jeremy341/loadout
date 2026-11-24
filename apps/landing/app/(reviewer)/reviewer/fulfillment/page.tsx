@@ -49,7 +49,6 @@ import {
   buttonClass,
   formatDate,
 } from "@/reviewer-dash/app/_ui/ui";
-import DataNote from "@/reviewer-dash/app/_ui/DataNote";
 import { SlackHandle } from "./SlackHandle";
 import { OrderList } from "./OrderList";
 import { OrderDetail } from "./OrderDetail";
@@ -341,11 +340,6 @@ export default async function FulfillmentPage({
           </div>
         }
       />
-
-      <DataNote kind="sample">
-        The order list still comes from fixtures. Claim, pack, ship, grant, flag and cancel are recorded in the database; the list will
-        show those rows when its read side is switched over.
-      </DataNote>
 
       {showingQueue && counts && !mineOnly && (
         <section className="fw-pipeline" aria-label="Fulfilment pipeline">

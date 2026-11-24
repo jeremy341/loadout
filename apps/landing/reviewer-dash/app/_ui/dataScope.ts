@@ -37,6 +37,15 @@ const SCOPES: readonly (readonly [RegExp, DataScope | null])[] = [
   [/^\/operations(\/|$)/, { ...SAVED, text: "Operations are saved to the database. Every change is recorded in the audit history." }],
   [/^\/superadmin(\/|$)/, { ...SAVED, text: "The grant is saved to the database and every attempt is recorded." }],
   [/^\/fulfil{1,2}ment\/airbridge-preview(\/|$)/, null],
+  // One notice for the whole fulfilment area: the order list is fixtures, and the actions on it are recorded in the database.
+  [
+    /^\/fulfil{1,2}ment(\/|$)/,
+    {
+      kind: "sample",
+      label: "Sample data",
+      text: "The order list comes from fixtures. Claim, pack, ship, grant, flag and cancel are recorded in the database; the list will show those rows when its read side is switched over.",
+    },
+  ],
   [/^\/notify(\/|$)/, null],
   [/^\/settings(\/|$)/, { kind: "mixed", label: "Saved and sample", text: "Feature flags are saved to the database. Display preferences are kept in memory and are gone when the server restarts." }],
   [/^\/review\/(pay|macros|erasure|age-exceptions|hardware)(\/|$)/, READ_ONLY_SAMPLE],

@@ -39,7 +39,7 @@ export function ProfileProjects({ rows, own }: Readonly<{ rows: ProfileProjectRo
             return (
               <li key={row.id}>
                 <Link className="pf-sp-project" href={card.href} aria-labelledby={titleId} aria-describedby={footId}>
-                  <ProjectCover status={row.status} track={row.track} hours={hours} depth={false} badges={false} />
+                  <ProjectCover status={row.status} track={row.track} hours={hours} depth={false} badges={false} initial={Array.from(row.title.trim())[0]?.toUpperCase() ?? ""} />
                   <span className="pf-sp-project-body">
                     <span className="pf-sp-project-title" id={titleId}>
                       {row.pinned ? (

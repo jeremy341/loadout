@@ -202,8 +202,9 @@ function CommitRow({
             className="hc-link"
             onMouseEnter={canDiff && !open ? () => schedule(true, 350) : undefined}
             onMouseLeave={canDiff ? () => schedule(false, 200) : undefined}
+            title={c.sha}
           >
-            <Mono>{c.sha}</Mono>
+            <Mono>{c.sha.slice(0, 7)}</Mono>
           </a>
           {canDiff && preview && !open && (
             <div
@@ -215,7 +216,7 @@ function CommitRow({
             </div>
           )}
         </td>
-        <td className="max-w-[420px]">
+        <td className="min-w-[16rem] max-w-[420px]">
           <div className="flex flex-wrap items-center gap-2">
             {canDiff ? (
               <button
@@ -258,7 +259,7 @@ function CommitRow({
             <TrackedBadge secs={c.tracked} />
           </td>
         )}
-        <td>
+        <td className="whitespace-nowrap">
           <Mono>{c.author}</Mono>
         </td>
       </tr>

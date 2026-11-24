@@ -425,3 +425,38 @@ test("platform pages do not scroll sideways at phone width", async ({ page }) =>
     expect(overflow, path).toBeLessThanOrEqual(0);
   }
 });
+
+test("Notifications says that each preference saves at once, and leaves a gap under the empty box", async ({ page }) => {
+  test.skip(STAFF_MODE, "participant pages are checked in builder mode");
+  await page.goto("/dashboard/notifications");
+  const heading = page.getByRole("heading", { level: 2, name: "Tell me when" });
+  await expect(heading).toBeVisible({ timeout: 30000 });
+  await expect(page.getByText("Each change saves as soon as you tick or untick a box.")).toBeVisible();
+  const empty = page.locator(".pf-nt > .pf-empty");
+  if (await empty.count()) {
+    const emptyBox = await empty.boundingBox();
+    const headingBox = await heading.boundingBox();
+    expect(headingBox!.y - (emptyBox!.y + emptyBox!.height)).toBeGreaterThanOrEqual(24);
+  }
+});
+
+test("Ideas tabs have room between them and a tap target of at least 44px", async ({ page }) => {
+  test.skip(STAFF_MODE, "participant pages are checked in builder mode");
+  await page.goto("/dashboard/ideas");
+  const tabs = page.getByRole("navigation", { name: "Idea status" }).getByRole("link");
+  await expect(tabs).toHaveText(["Open", "Taken", "Closed"], { timeout: 30000 });
+  const boxes = await tabs.evaluateAll((links) => links.map((link) => link.getBoundingClientRect()).map((r) => ({ x: r.x, w: r.width, h: r.height })));
+  for (const box of boxes) {
+    expect(box.h).toBeGreaterThanOrEqual(44);
+    expect(box.w).toBeGreaterThanOrEqual(44);
+  }
+  for (let i = 1; i < boxes.length; i++) expect(boxes[i].x - (boxes[i - 1].x + boxes[i - 1].w)).toBeGreaterThanOrEqual(8);
+});
+
+test("the Ledger has one rule between the balance card and the Entries heading", async ({ page }) => {
+  test.skip(STAFF_MODE, "participant pages are checked in builder mode");
+  await page.goto("/dashboard/ledger");
+  await expect(page.getByRole("heading", { level: 2, name: "Entries" })).toBeVisible({ timeout: 30000 });
+  const topBorder = await page.locator(".pf-ledger-entries").evaluate((el) => getComputedStyle(el).borderTopWidth);
+  expect(topBorder).toBe("0px");
+});

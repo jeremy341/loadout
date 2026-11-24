@@ -11,6 +11,7 @@ import { TrackBadge, StatusBadge, TypeBadge, BeaconBadge } from "@/reviewer-dash
 import type { Track } from "@/lib/platform/progress";
 import { staffName } from "@/reviewer-dash/lib/staffName";
 import { isAllowedImageSrc } from "@/reviewer-dash/lib/safeUrl";
+import { projectInitial, thumbTone } from "@/reviewer-dash/lib/projectThumb";
 import { RowSelect, SelectAllBox } from "@/reviewer-dash/app/_components/MassSelect";
 import { Badge, EmptyRow, Mono, Muted, Table } from "@/reviewer-dash/app/_ui/ui";
 
@@ -108,7 +109,9 @@ export function ReviewTable({
                     className="h-10 w-10 shrink-0 rounded-md border border-[var(--border)] object-cover"
                   />
                 ) : (
-                  <span className="h-10 w-10 shrink-0 rounded-md border border-[var(--border)] bg-[var(--sunken)]" />
+                  <span className="rv-thumb" data-tone={thumbTone(p.track)} aria-hidden="true">
+                    {projectInitial(p.name)}
+                  </span>
                 )}
                 <div className="min-w-0">
                   <div className="flex min-w-0 items-center gap-2">

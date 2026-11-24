@@ -1,6 +1,6 @@
 # LOADOUT Eras and Community Progression
 
-**Status:** Approved product direction, recorded 2026-10-05. The planned qualifying-project bonus is +10% of base Ore; stacking, operations and implementation remain open and are not part of this change.
+**Status:** Approved product direction, recorded 2026-10-05. The planned Era-project bonus is +10% of base Ore; stacking, operations and implementation remain open and are not part of this change.
 
 **Canonical owner:** This plan owns Era cadence, advancement, Era Points, the Era Ore bonus, Era objectives, and the selected mission structure. Plan 01 owns product meaning, Plan 02 owns the economy formula, Plan 05 owns launch operations, Plan 06 owns the compact public explanation, and the future platform proposal records selected surfaces. If copies disagree, this plan governs Era-specific behavior.
 
@@ -24,56 +24,45 @@ This sequence is an example, not a launch order or promise. Era themes, wording,
 
 ## Cadence and advancement
 
-- An Era starts on the program's normal weekly reset.
-- An Era lasts **at least 14 days**.
-- The first eligible advancement check is the **second weekly reset after it begins**.
-- Reaching the community threshold before that check sets **ADVANCEMENT READY**. The current Era remains active until the scheduled check.
-- Advancement happens only when both conditions hold: the minimum duration has elapsed and the current Era threshold is met.
-- If the threshold is still unmet after 14 days, the Era stays active. Once the threshold is met, advance at the next eligible weekly reset.
-- Never advance automatically on a timer without the community threshold, and never shorten the minimum duration because participation is high.
+Owner decisions, 22 Nov 2026.
 
-Example:
+- Each Era has **one fixed Era Point threshold**, set by the owner before the Era starts.
+- An Era stays open for **at least 14 days**. Never shorten the minimum because participation is high.
+- When the threshold is met **and** 14 days have passed, the Era becomes **READY TO ADVANCE**. It stays the current Era until the **owner confirms the advance**, which can happen at any time. Nothing advances on a timer, and nothing advances without the owner's confirmation.
+- A finished Era keeps the total it had when it closed. Later corrections, such as a ban, change only the current Era.
+- The weekly reset no longer decides advancement. It still refreshes weekly missions.
 
-```text
-Monday: Era begins
-Monday, one week later: first reset; Era continues
-Thursday: threshold reached; show ADVANCEMENT READY
-Monday, two weeks after start: next Era begins
-```
-
-The authoritative reset timezone, reset-hour behavior, downtime/retry policy, and the exact handling of a threshold crossed during a reset are implementation decisions that must be specified before launch. Store one configured schedule and use it consistently for participant displays and server-side advancement.
+Store each Era's start, threshold, ready time, and the owner's confirmation (actor and time) so the advance can be audited. The owner's confirmation is an admin action and follows the existing audit model.
 
 ## Era Points
 
-- Approved projects contribute non-spendable Era Points to shared Era progress.
-- Era Points are a distinct progress measure, separate from global spendable Ore and lifetime per-track XP.
-- Era Points cannot be transferred, purchased, or spent.
-- A builder can see the contribution recorded for their approved project and the shared progress counter.
-- Candidate conceptual relationship:
+Owner decisions, 22 Nov 2026.
 
-  ```text
-  approved work × quality × Era relevance → Era contribution
-  ```
-
-- This is not an approved numeric formula. Exact weighting, point caps, threshold values, aggregation, correction/reversal behavior, and retained per-Era history remain open. Do not publish sample thresholds or formula coefficients as live facts.
+- **1 approved hour of an Era project = 1 Era Point.** Points are added to the shared community total.
+- Points are added **only at final approval**, after the first pass, the fraud review, and the second pass have all cleared. An approved project cannot be unshipped, so there is no reversal for a normal approval.
+- Points belong to the Era that is current when the project is approved. Each Era starts at zero; **nothing carries over**.
+- If a builder is banned, their Era Points are removed from the **current** Era. A finished Era keeps its closing total.
+- Era Points are a distinct progress measure, separate from global spendable Ore and lifetime per-track XP. They cannot be transferred, purchased, or spent.
+- A builder can see their own contribution and the shared total. The community total is the point of the page: nobody is ranked by Era Points, and there are no scores.
+- Threshold values for each Era are not set yet. Do not publish sample thresholds as live facts.
 - Only approved, non-duplicate project work contributes. Era activity must not bypass the normal project-fit, quality, time-validation, attribution, or anti-abuse rules.
 
 ## Era build bonus
 
-- A project may receive the Era bonus only when it meaningfully matches the active Era objectives.
-- The builder may request Era-bonus review when submitting a project; this request does not affect normal eligibility or the base review.
-- A reviewer makes a separate **binary** decision: qualifies or does not qualify. Do not implement partial percentages in the initial design.
-- The planned qualifying-project bonus is **+10% of its approved base Ore award**. Example: 720 approved base Ore → 72 Era bonus → 792 total Ore.
-- There is **no Era bonus to Track XP**. Era relevance is not a fifth quality dimension and must not alter LOADOUT's four quality dimensions: Originality, Technical Depth, Execution, and Documentation.
-- Non-qualifying Era relevance never makes an otherwise valid LOADOUT project invalid and never reduces its normal approved award.
-- Store the team decision and a short reason in the audit record. The review UI should distinguish the Era decision from the team decision and any other bonus.
+Owner decisions, 22 Nov 2026.
+
+- A builder marks a project as an **Era project** with a checkbox when they submit it. Any project can be marked. No objective is required. The mark does not affect normal eligibility or the base review.
+- Only projects marked as Era projects add Era Points and earn the Era bonus.
+- The bonus is **+10% of the project's approved base Ore award**, paid **once per project** at final approval. A resubmission after "needs changes" does not pay it again. Example: 720 approved base Ore → 72 Era bonus → 792 total Ore.
+- There is **no Era bonus to Track XP**, and the Era mark is not a fifth quality dimension. LOADOUT's four quality dimensions (Originality, Technical Depth, Execution, Documentation) are unchanged.
+- There is no separate reviewer decision on whether a project qualifies. Record who marked the project and when, and keep the bonus in the ledger audit trail.
 - The final stacking order against existing Ore ceilings, corrections, and duplicate-award protections must be resolved in the economy implementation plan before code ships. The +10% value does not silently change other formulas.
 
 ## Era objectives
 
 - Each Era can offer approximately **4–8 optional objectives** as a planning target, not a hard limit.
 - Objectives describe technical challenges that can be answered in Tools, Systems, Compute, or Hardware. They do not require every participant to produce a historically accurate artifact.
-- A project in any track can qualify when its actual technical work fits the objective.
+- Owner decision, 22 Nov 2026: the objectives are examples only and no project needs one to be marked as an Era project. Whether they stay in the product is deferred.
 - Objective examples for an Electrification-themed Era:
   - **Measure:** collect or visualize physical data.
   - **Control:** build electronic control.
@@ -89,8 +78,8 @@ These are different systems:
 | System | Meaning | Reset behavior |
 |---|---|---|
 | **Season** | Competitive leaderboard/program period | Season-specific ranks reset; the existing season plan governs |
-| **Era** | Shared technological progression | Advances only when both the threshold and minimum-duration rules are satisfied at an eligible weekly reset |
-| **Weekly reset** | Schedule boundary | Refreshes weekly missions and checks whether a ready Era may advance |
+| **Era** | Shared technological progression | Becomes ready when the threshold is met and 14 days have passed; the owner confirms the advance |
+| **Weekly reset** | Schedule boundary | Refreshes weekly missions |
 
 Lifetime Ore, the Digital Loadout, lifetime Track XP, and project history do not reset when an Era changes. Era Points are not a second currency. The exact archived-history presentation is still open.
 
@@ -108,7 +97,7 @@ A parked LOADOUT IRL event, if it is ever revisited, would use the same online C
 
 ### Builder dashboard
 
-The dashboard may show the current Era, verified community progress, the +10% qualifying-project bonus, the next eligible reset, and **ADVANCEMENT READY** when the configured threshold is reached before that reset. Do not substitute timers or mock values for server state.
+The dashboard may show the current Era, verified community progress, the +10% Era-project bonus, the days open against the 14-day minimum, and **READY TO ADVANCE** when the threshold is met and 14 days have passed, with a note that the owner confirms the advance. Do not substitute timers or mock values for server state.
 
 ### Missions
 
@@ -127,16 +116,15 @@ Treat missions, Era Objectives, and seasonal quests as distinct layers. Missions
 
 ## Pre-implementation decisions
 
-Before building the mechanic, resolve and record:
+Settled by the owner on 22 Nov 2026 (see the sections above): the points source and timing, per-Era totals with no carry-over, the fixed threshold per Era, the 14-day minimum, owner-confirmed advancement, the Era checkbox, the once-per-project +10% bonus, and ban handling. Before building the mechanic, resolve and record:
 
 1. Era sequence and who approves later Era themes.
-2. The reset timezone, weekly reset time, durable schedule source, and missed-job recovery behavior.
-3. The points formula, point precision/caps, threshold for each Era, and aggregation/reversal rules.
+2. The threshold value for each Era.
+3. Where the owner confirms an advance, what the confirmation records, and how a missed or repeated confirmation is handled.
 4. Whether historical per-builder Era contributions remain visible after an Era ends.
 5. The exact base Ore amount and bonus stacking/cap rules, with worked examples.
-6. Reviewer qualification criteria, required reason, and moderator override/re-review behavior.
-7. The initial optional objective count and cross-track objective examples.
-8. Which values may be public before launch and how unavailable/unconfigured Era state is displayed.
-9. Persistence, idempotency, race handling at a weekly reset, and tests for early, late, missing, duplicate, and reversed contributions.
+6. Whether the example objectives stay in the product (deferred).
+7. Which values may be public before launch and how unavailable/unconfigured Era state is displayed.
+8. Persistence, idempotency, and tests for early, late, duplicate, and banned-builder contributions, including the effect of a ban on the current Era total.
 
-These choices must not be inferred from sample UI. Implementation starts only after the policies and operational schedule are approved.
+These choices must not be inferred from sample UI. Implementation starts only after the policies are approved.

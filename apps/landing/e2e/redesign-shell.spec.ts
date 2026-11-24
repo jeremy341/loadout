@@ -66,8 +66,16 @@ test("at 1440 the sidebar holds the grouped links and the theme switch, and the 
   await expect(page.getByRole("button", { name: "Menu" })).toBeHidden();
   for (const gone of ["Referrals"]) await expect(nav.getByRole("link", { name: gone })).toHaveCount(0);
   const box = await side.boundingBox();
-  expect(box?.width).toBe(232);
+  // 232px of sidebar plus the 44px rail kept for the accessibility tab, which sits on the left window edge.
+  expect(box?.width).toBe(276);
   expect(box?.x).toBe(0);
+  const tabBox = await page.locator(".a11y-tab").boundingBox();
+  expect(tabBox).not.toBeNull();
+  // The tab is in the rail: it never reaches a navigation link.
+  for (const link of await nav.getByRole("link").all()) {
+    const linkBox = await link.boundingBox();
+    expect(linkBox && tabBox && linkBox.x >= tabBox.x + tabBox.width, "nav link clear of the accessibility tab").toBe(true);
+  }
   const accountBox = await account.boundingBox();
   const barBox = await bar.boundingBox();
   expect(accountBox && barBox && accountBox.x + accountBox.width <= barBox.x + barBox.width + 1 && accountBox.x + accountBox.width >= barBox.x + barBox.width - 40).toBe(true);

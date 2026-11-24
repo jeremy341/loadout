@@ -14,6 +14,7 @@ import { eligibilityMessage } from "@/lib/platform/eligibility";
 import { hcaConfig } from "@/lib/platform/hca";
 import { getOwnProfile } from "@/lib/platform/profile-data";
 import { requireViewer } from "@/lib/platform/session";
+import "@/app/_components/platform/page-polish.css";
 
 export const metadata: Metadata = { title: "Settings - LOADOUT" };
 
@@ -93,7 +94,7 @@ export default async function SettingsPage() {
         </p>
         {connected ? (
           <p className="pf-lead">
-            <a className="pf-fact-link" href="/api/auth/hackclub/start">Sign in again with Hack Club Auth</a> to refresh your birthday and verification.
+            <a className="pf-fact-link" href="/api/auth/hackclub/start">Sign in again with Hack Club Auth</a> to refresh your verification status.
           </p>
         ) : (
         <ConnectionPlaceholder

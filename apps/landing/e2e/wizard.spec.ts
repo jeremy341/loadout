@@ -76,13 +76,14 @@ for (const [width, height] of [
   [1440, 900],
   [390, 844],
 ] as const) {
-  test(`each of the five steps shows at ${width}px with no sideways scroll`, async ({ page }) => {
+  test(`each step shows at ${width}px with no sideways scroll`, async ({ page }) => {
     test.skip(STAFF_MODE, "participant pages are checked in builder mode");
     test.setTimeout(90000);
     await setup(page, width, height);
     const steps = page.getByRole("list", { name: "Steps" });
     await openWizard(page);
-    await expect(steps.getByRole("listitem")).toHaveCount(5);
+    // Before a kind is picked the strip shows the software path: six steps (owner, 23 Nov 2026).
+    await expect(steps.getByRole("listitem")).toHaveCount(6);
     await expect(steps.getByRole("button", { name: /^01 kind/ })).toHaveAttribute("aria-current", "step");
     // A new draft starts with nothing chosen, so Next waits for a pick.
     await expect(page.getByRole("radio", { name: /^Hardware/ })).not.toBeChecked();
@@ -184,8 +185,7 @@ test("the idea needs 10 characters and says so, and short text under 40 gets the
   const idea = page.getByLabel("Your idea");
   await expect(page.getByRole("button", { name: "Next" })).toBeDisabled();
   await idea.fill("Too short");
-  // Enter is a newline in the idea box; the Next button is what asks for the missing characters. It is aria-disabled,
-  // so force the press to exercise the refusal message rather than wait for actionability.
+  // Next is aria-disabled while the idea is short. A press is still accepted: it says what is missing and keeps the builder here.
   await page.getByRole("button", { name: "Next" }).click({ force: true });
   await expect(page.getByRole("heading", { level: 1, name: "What's your idea?" })).toBeVisible();
   await expect(page.getByText("Write at least 10 characters.")).toBeVisible();
@@ -338,9 +338,8 @@ test("a keyboard alone finishes every step and focus follows the heading", async
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Your idea")).toBeFocused();
   await page.keyboard.type("A tool that tidies my notes.");
-  // Enter in the idea box is a newline. Move to Next with the keyboard and press it to advance.
-  await page.getByRole("button", { name: "Next" }).focus();
-  await page.keyboard.press("Enter");
+  // Enter is a new line in the idea box (owner, 22 Nov 2026); the builder moves on with Next.
+  await page.getByRole("button", { name: "Next" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "What's it called?" })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.getByLabel("Project name")).toBeFocused();

@@ -70,7 +70,7 @@ export async function PublicProject({ id, viewerId, embedded = false }: Readonly
 
       <section className="pf-spp-head" aria-labelledby={`${pre}spp-title`}>
         <div className="pf-spp-cover">
-          <ProjectCover status={project.status} track={project.track} hours={hours} large depth={false} badges={false} cover={cover} title={project.title} />
+          <ProjectCover status={project.status} track={project.track} hours={hours} large depth={false} badges={false} cover={cover} title={project.title} initial={Array.from(project.title.trim())[0]?.toUpperCase() ?? ""} />
         </div>
         <div className="pf-spp-top">
           <div className="pf-spp-id">
@@ -113,7 +113,7 @@ export async function PublicProject({ id, viewerId, embedded = false }: Readonly
           </div>
           <div>
             <dt>Hackatime</dt>
-            <dd>Not connected</dd>
+            <dd className="pf-spp-fact-text">Not connected</dd>
           </div>
         </dl>
 
@@ -159,7 +159,7 @@ export async function PublicProject({ id, viewerId, embedded = false }: Readonly
 
       <section className="pf-spp-box" aria-labelledby={`${pre}journal-heading`}>
         <h2 id={`${pre}journal-heading`}>Journal</h2>
-        {journal.length === 0 ? <p className="pf-muted" data-testid="project-journal-empty">No journal entries on this project yet.</p> : null}
+        {journal.length === 0 ? <p className="pf-muted pf-spp-empty" data-testid="project-journal-empty">No journal entries on this project yet.</p> : null}
         <ProjectTimeline projectId={project.id} entries={journal} handle={handle} startedAt={project.createdAt} limit={JOURNAL_SHOWN} photos={photos} idPrefix={pre} entryTestId={embedded ? "visitor-entry" : "journal-entry"} />
         {journal.length > JOURNAL_SHOWN ? <p className="pf-muted pf-box-note">Showing the newest {JOURNAL_SHOWN} of {journal.length} entries.</p> : null}
       </section>

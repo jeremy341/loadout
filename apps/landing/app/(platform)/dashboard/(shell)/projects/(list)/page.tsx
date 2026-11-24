@@ -63,6 +63,8 @@ export default async function ProjectsPage({ searchParams }: Readonly<{ searchPa
         </form>
       ) : null}
 
+      {all.length === 0 ? <p className="pf-sg-empty">No projects yet. Create your first one!</p> : null}
+
       <ul className="pf-sg-grid">
         {items.map((item) =>
           item.kind === "new" ? null : (
@@ -80,9 +82,9 @@ export default async function ProjectsPage({ searchParams }: Readonly<{ searchPa
 
       {paging.pages > 1 ? (
         <nav className="pf-sg-pager" aria-label="Pages">
-          {paging.page > 1 ? <Link href={listHref(q, paging.page - 1)} rel="prev">Previous</Link> : null}
-          <span>Page {paging.page} of {paging.pages}</span>
-          {paging.page < paging.pages ? <Link href={listHref(q, paging.page + 1)} rel="next">Next</Link> : null}
+          {paging.page > 1 ? <Link className="pf-sg-pager-btn" href={listHref(q, paging.page - 1)} rel="prev">Previous</Link> : <span className="pf-sg-pager-btn pf-sg-pager-off" aria-hidden="true">Previous</span>}
+          <span className="pf-sg-pager-pos">Page {paging.page} of {paging.pages}</span>
+          {paging.page < paging.pages ? <Link className="pf-sg-pager-btn" href={listHref(q, paging.page + 1)} rel="next">Next</Link> : <span className="pf-sg-pager-btn pf-sg-pager-off" aria-hidden="true">Next</span>}
         </nav>
       ) : null}
     </>

@@ -81,7 +81,7 @@ function writeStorage(draft: WizardDraft | null, step = 0) {
 }
 
 // Software has an extra step for its track, right after the kind. Hardware has the one track, so it skips that step. The lib's
-// five steps stay as they are; the track step lives here. The strip shows six segments for software (owner, 22 Nov 2026: six is fine).
+// The track step lives here. The strip shows six segments until a kind is chosen, and for software; hardware sets its track itself, so it shows five (owner, 23 Nov 2026).
 type StepKey = (typeof WIZARD_STEPS)[number]["key"] | "track";
 type StepItem = { key: StepKey; label: string; heading: string };
 const TRACK_STEP: StepItem = { key: "track", label: "Track", heading: "Which track is it?" };
@@ -105,7 +105,7 @@ function reachableIn(steps: readonly StepItem[], draft: WizardDraft, kind: Proje
 // The step a saved draft was on, never past what the draft allows.
 function savedStep(text: string | null, draft: WizardDraft): number {
   const kind = kindOfTrack(draft.track);
-  const steps = stepsFor(kind === "software");
+  const steps = stepsFor(kind !== "hardware");
   const reachable = reachableIn(steps, draft, kind);
   try {
     const raw = text ? (JSON.parse(text) as { step?: unknown }).step : undefined;
@@ -221,7 +221,7 @@ export function NewProjectWizard() {
   );
 
   const kind: ProjectKind | null = kindPick ?? kindOfTrack(draft.track);
-  const steps = stepsFor(kind === "software");
+  const steps = stepsFor(kind !== "hardware");
   const stepKey = steps[Math.min(step, steps.length - 1)].key;
   const reachable = reachableIn(steps, draft, kind);
   useEffect(() => {

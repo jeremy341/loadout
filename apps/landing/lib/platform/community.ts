@@ -29,8 +29,16 @@ export function isCommunityTabCurrent(pathname: string, href: string): boolean {
 }
 
 // ---- Community Era (plan 11) ----
-// The sequence is an example, not a launch order. No threshold, percentage, countdown or date is shown, because plan 11
-// says those must come from configured server state.
+// The sequence of Eras and the four objectives are an example, not a launch order. The real Era Point calculation is not built,
+// so the Overview reads a typed SAMPLE_ERA state (owner-approved sample numbers for the closed beta); the pages label it once.
+// The rules the pages state come from the owner's Era decisions:
+//   - Era Points are one community total. A project adds Era Points equal to its approved hours, only at final approval, and
+//     they belong to the Era that is current then; they never carry into the next Era.
+//   - Each Era has one fixed threshold and stays open at least 14 days. Threshold met plus 14 days is READY TO ADVANCE, and
+//     the owner confirms the advance. Nothing advances on a timer.
+//   - A finished Era keeps the total it had when it closed. A ban removes that builder's points from the current Era.
+//   - A project marked as an Era project (a checkbox on submit) earns +10% of its approved Ore, once, at final approval.
+export const ERA_RULES_HREF = "/docs/eras";
 export const COMMUNITY_ERAS = ["Steam", "Electrification", "Computing", "Networks", "Acceleration"] as const;
 export const ERA_PREVIEW_INDEX = 1;
 export const ERA_MIN_DAYS = 14;
@@ -42,6 +50,118 @@ export type EraStage = { name: string; state: "earlier" | "current" | "later" };
 export function eraStages(currentIndex: number = ERA_PREVIEW_INDEX): EraStage[] {
   return COMMUNITY_ERAS.map((name, index) => ({ name, state: index < currentIndex ? "earlier" : index === currentIndex ? "current" : "later" }));
 }
+
+export type EraState = {
+  // Index into COMMUNITY_ERAS.
+  stageIndex: number;
+  name: string;
+  // The community total for this Era: approved hours of projects finally approved while it is current.
+  points: number;
+  // The one fixed threshold the owner set for this Era.
+  threshold: number;
+  daysOpen: number;
+  minDays: number;
+  // Threshold met and the minimum days passed. The owner still confirms the advance.
+  ready: boolean;
+  // The total the previous Era had when it closed, or null for the first Era.
+  previousClosedPoints: number | null;
+};
+
+export function isEraReady(input: Pick<EraState, "points" | "threshold" | "daysOpen" | "minDays">): boolean {
+  return input.threshold > 0 && input.points >= input.threshold && input.daysOpen >= input.minDays;
+}
+
+export function makeEraState(input: Omit<EraState, "name" | "ready">): EraState {
+  const name = COMMUNITY_ERAS[input.stageIndex] ?? COMMUNITY_ERAS[0];
+  return { ...input, name, ready: isEraReady(input) };
+}
+
+// SAMPLE figures for the closed beta. The values mirror the sample goal (1,240 of 2,000) so the two pages agree.
+export const SAMPLE_ERA: EraState = makeEraState({
+  stageIndex: ERA_PREVIEW_INDEX,
+  points: 1240,
+  threshold: 2000,
+  daysOpen: 9,
+  minDays: ERA_MIN_DAYS,
+  previousClosedPoints: 1815,
+});
+
+export type EraProgressStatus = "building" | "threshold-met" | "days-passed" | "ready";
+
+export type EraProgress = {
+  percent: number;
+  pointsText: string;
+  remaining: number;
+  daysOpen: number;
+  daysCapped: number;
+  daysLeft: number;
+  status: EraProgressStatus;
+  statusLabel: string;
+  statusText: string;
+  // Prior, current and next stage names; null at either end of the sequence.
+  previous: string | null;
+  current: string;
+  next: string | null;
+  stageNumber: number;
+  stageCount: number;
+};
+
+export const formatEraNumber = (value: number): string => Math.max(0, Math.round(value)).toLocaleString("en-GB");
+const plural = (count: number, word: string): string => `${count} ${word}${count === 1 ? "" : "s"}`;
+
+// Everything the Overview prints about the Era, derived from one state. The percentage is whole and rounded down, so the bar
+// never reads 100% before the threshold is met (goalPercent). READY TO ADVANCE only means the owner may confirm now.
+export function eraProgress(state: EraState): EraProgress {
+  const percent = goalPercent(state.points, state.threshold);
+  const remaining = Math.max(0, state.threshold - state.points);
+  const daysOpen = Math.max(0, Math.floor(state.daysOpen));
+  const daysLeft = Math.max(0, state.minDays - daysOpen);
+  const thresholdMet = state.threshold > 0 && state.points >= state.threshold;
+  const daysMet = daysLeft === 0;
+  let status: EraProgressStatus;
+  let statusLabel: string;
+  let statusText: string;
+  if (thresholdMet && daysMet) {
+    status = "ready";
+    statusLabel = "Ready to advance";
+    statusText = "The threshold is met and the Era has been open long enough. The owner confirms the advance; it does not happen on a timer.";
+  } else if (thresholdMet) {
+    status = "threshold-met";
+    statusLabel = "Threshold met";
+    statusText = `${plural(daysLeft, "more day")} until the Era has been open ${state.minDays} days. Then it is ready to advance, and the owner confirms.`;
+  } else if (daysMet) {
+    status = "days-passed";
+    statusLabel = "Building";
+    statusText = `${formatEraNumber(remaining)} more Era Points to reach the threshold. The ${state.minDays} days have passed, so the owner can confirm the advance once it is met.`;
+  } else {
+    status = "building";
+    statusLabel = "Building";
+    statusText = `${formatEraNumber(remaining)} more Era Points and ${plural(daysLeft, "more day")} before this Era can advance. The owner confirms the advance.`;
+  }
+  return {
+    percent,
+    pointsText: `${formatEraNumber(state.points)} of ${formatEraNumber(state.threshold)} Era Points`,
+    remaining,
+    daysOpen,
+    daysCapped: Math.min(daysOpen, state.minDays),
+    daysLeft,
+    status,
+    statusLabel,
+    statusText,
+    previous: state.stageIndex > 0 ? (COMMUNITY_ERAS[state.stageIndex - 1] ?? null) : null,
+    current: state.name,
+    next: COMMUNITY_ERAS[state.stageIndex + 1] ?? null,
+    stageNumber: state.stageIndex + 1,
+    stageCount: COMMUNITY_ERAS.length,
+  };
+}
+
+// The Era in one short line, for the slim banner on the other Community pages.
+export function eraBannerText(state: EraState = SAMPLE_ERA): string {
+  const progress = eraProgress(state);
+  return `${progress.current} Era: ${progress.pointsText}, ${progress.percent}%`;
+}
+
 
 // ---- Builders ----
 // Invented handles for the reviewer fulfilment fixtures (lib/reviewer/fulfilment.ts maps a signed-in staff member onto one
@@ -367,8 +487,8 @@ export const GOALS: readonly Goal[] = [
   {
     id: "era-threshold",
     title: "Meet the Era threshold",
-    text: "Approved hours from every builder count toward the Era. When the threshold is met at an eligible weekly reset, the next Era begins.",
-    unit: "approved hours",
+    text: "Era Points from every finally approved project count toward the current Era. When the threshold is met and the Era has been open 14 days, it is ready to advance and the owner confirms.",
+    unit: "Era Points",
     value: 1240,
     target: 2000,
     reward: "The next Community Era begins at an eligible weekly reset.",

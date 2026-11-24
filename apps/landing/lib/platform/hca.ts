@@ -5,8 +5,7 @@ import { createHash, randomBytes } from "node:crypto";
 export const HCA_BASE_URL = "https://auth.hackclub.com";
 // The scopes the Hack Club Auth app page allows today. HCA rejects the whole sign-in when a requested scope is not ticked there, so
 // only ticked scopes are requested. The Slack id gives the profile picture and verification_status gives the verified state.
-// Eligibility also needs the birthday (lib/platform/eligibility.ts checks the 13-18 age range from it), so until birthdate is
-// enabled on the app, sign-in works but eligibility reads "missing birthday". Add birthdate here once HCA allows it.
+// Eligibility depends only on verification_status (lib/platform/eligibility.ts); the app does not request or read a birthday.
 export const HCA_SCOPES = "openid profile slack_id verification_status";
 export const DEFAULT_REDIRECT_URI = "http://localhost:3010/api/auth/hackclub/callback";
 export const LOGIN_ATTEMPT_MINUTES = 10;

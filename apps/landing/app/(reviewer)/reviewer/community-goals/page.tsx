@@ -41,7 +41,7 @@ export default async function CommunityGoalsPage({
       <PageHeader
         title="Community Goals"
         count={levels.length}
-        description="The Eras. Every builder's approved hours count toward the current Era, and when its threshold is met at an eligible weekly reset the next Era begins. Hours are approved work, not Ore, and nothing here is spent."
+        description="The Eras. A project adds Era Points equal to its approved hours at final approval, and they count toward the current Era only. When the threshold is met and the Era has been open 14 days, it is ready to advance and the owner confirms. Era Points are not Ore, and nothing here is spent."
       />
       <Flash error={error} ok={saved ? "Saved." : null} />
 

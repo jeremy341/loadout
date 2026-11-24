@@ -30,7 +30,7 @@ export function BudgetCharts({ kind, rows }: { kind: "obligations" | "expenses" 
     <div className="h-64 w-full" aria-hidden="true">
       <BarChart data={rows.map((row) => ({ name: row.label, usd: row.value / 100 }))} aspectRatio="auto" className="h-full" animationDuration={reduced ? 0 : 650} margin={{ top: 25, right: 20, bottom: 40, left: 20 }}>
         <Grid horizontal numTicksRows={4} />
-        <Bar dataKey="usd" fill="var(--hc-cyan)" animate={!reduced} showValue valueLabelFormatter={(value) => money(value * 100)} />
+        <Bar dataKey="usd" fill="var(--hc-cyan)" valueLabelColor="#0b1116" animate={!reduced} showValue valueLabelFormatter={(value) => money(value * 100)} />
         <BarXAxis showAllLabels />
         <ChartTooltip rows={(point) => [{ label: "Orders at the internal rate", value: money(Number(point.usd) * 100), color: "var(--hc-cyan)" }]} />
       </BarChart>

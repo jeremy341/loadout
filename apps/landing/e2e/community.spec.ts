@@ -9,8 +9,8 @@ import {
 } from "../lib/platform/community";
 
 // The Community section of the participant platform. Goals, news, events and the leaderboard read real database rows
-// (seeded for local development by `bun run db:seed:local` plus `bun run scripts/seed-community.ts`); the era strip, the idea
-// board and Show & Tell are still proposed content and each says so where it appears. Local development opens without
+// (seeded for local development by `bun run db:seed:local` plus `bun run scripts/seed-community.ts`); the Era numbers, the idea
+// board and Show & Tell are sample content, labelled once by the line under each page title. Local development opens without
 // sign-in as the builder test account (see platform.spec.ts), so these tests need the same local Postgres and seeded accounts.
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const VIEWPORTS = [
@@ -46,38 +46,44 @@ test("the Community hub has the tab row, the Era, real goals and one short previ
   await expect(tabs).toHaveText(TABS, { timeout: 30000 });
   await expect(tabs.first()).toHaveAttribute("aria-current", "page");
 
+  // The Era is the centrepiece: its heading, the current Era and stage, the points against the one threshold, the days against the
+  // 14-day minimum, and the owner-confirms line. Sample numbers, labelled once by one quiet line under the title.
+  const era = page.locator(".cm-hero");
   await expect(page.getByRole("heading", { level: 2, name: "Community Era" })).toBeVisible();
-  await expect(page.getByRole("list", { name: "Example Era sequence" }).getByRole("listitem")).toHaveCount(5);
-  await expect(page.getByText("+10% of base Ore (planned)")).toBeVisible();
-  // No threshold, countdown or percentage for the Era.
-  await expect(page.locator(".cm-era")).not.toContainText(/\d+\s?%\s?(complete|done)/i);
+  await expect(era.locator(".cm-hero-name")).toHaveText("Electrification");
+  await expect(era).toContainText("Stage 2 of 5");
+  await expect(era).toContainText("1,240");
+  await expect(era).toContainText("of 2,000 Era Points");
+  await expect(era).toContainText("62%");
+  await expect(era).toContainText("9 of 14 minimum");
+  await expect(era).toContainText("The owner confirms the advance");
+  // The bar is a progressbar with a text alternative; the days indicator is another.
+  const bar = era.getByRole("progressbar", { name: "Electrification Era Points toward the threshold" });
+  await expect(bar).toHaveAttribute("aria-valuemin", "0");
+  await expect(bar).toHaveAttribute("aria-valuemax", "2000");
+  await expect(bar).toHaveAttribute("aria-valuenow", "1240");
+  await expect(bar).toHaveAttribute("aria-valuetext", "1,240 of 2,000 Era Points, 62%");
+  await expect(era.getByRole("progressbar", { name: "Days this Era has been open" })).toHaveAttribute("aria-valuenow", "9");
+  // Previous, current and next stage.
+  const stages = era.getByRole("list", { name: "Era sequence: previous, current and next" }).getByRole("listitem");
+  await expect(stages).toHaveCount(3);
+  await expect(stages.nth(0)).toContainText("Steam");
+  await expect(stages.nth(1)).toHaveAttribute("aria-current", "step");
+  await expect(stages.nth(2)).toContainText("Computing");
+  // The overview is the Era and nothing else: no explainer sections and no previews of the other tabs.
+  await expect(page.locator("main").getByRole("heading", { level: 2 })).toHaveText(["Community Era"]);
+  await expect(page.getByRole("heading", { level: 3 })).toHaveCount(0);
+  await expect(page.getByText("More in Community")).toHaveCount(0);
+  await expect(page.locator(".cm-mini")).toHaveCount(0);
+  // No peer scores; the one sample label is a single short line, not a box above every tab.
+  await expect(page.getByText(/peer (score|review)/i)).toHaveCount(0);
+  await expect(page.locator(".cm-staging")).toHaveText("Sample Era numbers, ideas and sessions. Closed beta.");
+  await expect(page.getByText("Sample data.")).toHaveCount(0);
+  // How points and the bonus work is in the documentation, one link away.
+  await expect(page.getByRole("link", { name: "How Eras work" })).toHaveAttribute("href", "/docs/eras");
 
-  // The goal strip is the real goals section: the seeded goals page copies decide whether the rows are there.
-  const goalBars = page.locator(".cm-refer .cm-bar");
-  const seededGoals = await goalBars.count();
-  test.skip(seededGoals === 0, "Community goals reads the database. Run scripts/seed-community.ts first.");
-  await expect(page.getByRole("heading", { level: 2, name: "Community goals" })).toBeVisible();
-  await expect(goalBars).toHaveCount(2);
-
-  await expect(page.locator("main").getByRole("heading", { level: 2 })).toHaveText(["Community Era", "Community goals", "Show & Tell", "Leaderboard", "Top ideas", "Latest news", "Referrals"]);
-  await expect(page.getByRole("link", { name: "Next session: date to be announced." })).toBeVisible();
-  // Three rows at most in any preview, and nothing that looks like a feed or a repost. Five preview lists: the goals
-  // strip, Show & Tell, the leaderboard, the top ideas and the latest news.
-  await expect(page.locator(".cm-mini")).toHaveCount(5);
-  for (const list of await page.locator(".cm-mini").all()) {
-    expect(await list.locator(":scope > li").count()).toBeLessThanOrEqual(3);
-  }
-  await expect(page.getByRole("list", { name: "Top builders this week by approved hours, all tracks" })).toBeVisible();
-  await expect(page.getByText(/repost/i)).toHaveCount(0);
-  // The sample banner is gone from the real sections; the proposal notes stay where fixtures remain.
-  await expect(page.getByText(/invented samples/)).toHaveCount(0);
-  await expect(page.getByText("Show & Tell is still a proposal: these sessions are samples.")).toBeVisible();
-  // Referrals has no tab; it is a plain link from the hub.
-  await page.getByRole("link", { name: "Open Referrals" }).click();
-  await expect(page).toHaveURL(/\/dashboard\/referrals$/);
-  await page.goBack();
-
-  await page.getByRole("link", { name: "See all Top ideas" }).click();
+  // The other sections are the tabs.
+  await page.getByRole("navigation", { name: "Community" }).getByRole("link", { name: "Ideas" }).click();
   await expect(page).toHaveURL(/\/dashboard\/community\/ideas$/);
   await expect(page.getByRole("navigation", { name: "Community" }).getByRole("link", { name: "Ideas" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("navigation", { name: "Community" }).getByRole("link", { name: "Overview" })).not.toHaveAttribute("aria-current", "page");
@@ -237,6 +243,46 @@ test("goals are plain bars with the figures written out", async ({ page }) => {
   await expect(bars.first()).toHaveAttribute("aria-valuetext", "1,240 of 2,000, 62%");
   await expect(page.getByText("1,240 of 2,000").first()).toBeVisible();
   await expect(page.getByText("62%").first()).toBeVisible();
+  // The Era goal counts Era Points, not approved hours, and the owner confirms the advance.
+  await expect(page.getByText(/Era Points from every finally approved project count toward the current Era/)).toBeVisible();
+  await expect(page.getByText(/approved hours from every builder/i)).toHaveCount(0);
+});
+
+test("every Community tab except the Overview carries the slim Era banner, and the Overview does not repeat it", async ({ page }) => {
+  for (const path of PAGES.filter((entry) => !entry.includes("/ideas/") && !entry.includes("/show-and-tell/"))) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1 })).toBeAttached({ timeout: 30000 });
+    const banner = page.locator(".cm-banner");
+    if (path === "/dashboard/community") {
+      await expect(banner).toHaveCount(0);
+      continue;
+    }
+    await expect(banner, path).toHaveCount(1);
+    await expect(banner).toContainText("Electrification Era");
+    await expect(banner).toContainText("1,240 of 2,000 Era Points, 62%");
+    await expect(banner).toHaveAttribute("href", "/dashboard/community");
+    // The one quiet line replaces the old multi-line box, on every tab.
+    await expect(page.locator(".cm-staging")).toHaveText("Sample Era numbers, ideas and sessions. Closed beta.");
+  }
+});
+
+test("event cards use the full width: text on the left, date and RSVP on the right", async ({ page }) => {
+  await setTheme(page, 1440, 900, "dark");
+  await page.goto("/dashboard/community/events");
+  await expect(page.getByRole("heading", { level: 1, name: "Events" })).toBeVisible({ timeout: 30000 });
+  const cards = page.locator(".cm-event");
+  test.skip((await cards.count()) === 0, "Events reads the database. Run scripts/seed-community.ts first.");
+  const card = cards.first();
+  const box = await card.boundingBox();
+  const main = await card.locator(".cm-event-main").boundingBox();
+  const side = await card.locator(".cm-event-side").boundingBox();
+  expect(box && main && side).toBeTruthy();
+  // The right column sits beside the text (same row) and reaches the card's right edge.
+  expect(side!.x).toBeGreaterThan(main!.x + main!.width - 1);
+  expect(side!.x + side!.width).toBeGreaterThan(box!.x + box!.width - 40);
+  // The date is on the right, not in the text column.
+  await expect(card.locator(".cm-event-side .cm-event-day")).toBeVisible();
+  await expect(card.locator(".cm-event-main .cm-event-day")).toHaveCount(0);
 });
 
 test("community pages do not scroll sideways at phone width", async ({ page }) => {
@@ -408,6 +454,6 @@ test.describe("Community lists explain both their full and their empty state", (
     await expect(ended.locator(".ex-label")).toContainText("Ended");
     await expect(ended.getByRole("button", { name: /RSVP/ })).toHaveCount(0);
     await expect(ended.locator("p.ex-closed")).toContainText(/builder(s)? going|No builders going yet/);
-    await expect(ended.locator("p.cm-mini-kind")).toContainText("UTC");
+    await expect(ended.locator("p.cm-event-times")).toContainText("UTC");
   });
 });

@@ -9,6 +9,7 @@ import { listIdeas } from "@/lib/platform/ideas-data";
 import { getOwnProfile } from "@/lib/platform/profile-data";
 import { requireViewer } from "@/lib/platform/session";
 import "@/app/_components/platform/ideas.css";
+import "@/app/_components/platform/page-polish.css";
 
 export const metadata: Metadata = { title: "Ideas - LOADOUT" };
 

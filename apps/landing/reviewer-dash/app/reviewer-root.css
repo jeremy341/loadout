@@ -33,14 +33,49 @@ html:has(.reviewer-root) {
   }
 }
 
-/* One quiet line on every page: nothing here is saved. */
+/* The site-wide sample-data sentence, opened from the info button in the top bar (app/_ui/SampleDataInfo.tsx). */
 .reviewer-sample-note {
-  margin: 0 auto;
-  max-width: 1840px;
-  padding: 6px 24px 0;
+  margin: 0;
   /* --muted is 3.0:1 on the light page; --secondary changes with the theme and passes in both. */
   color: var(--secondary);
   font-size: 12px;
+  line-height: 1.45;
+}
+/* A project row with no cover image: a track-coloured square with the project's first letter. */
+.rv-thumb {
+  --thumb: var(--secondary);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid color-mix(in srgb, var(--thumb) 45%, var(--border));
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--thumb) 14%, var(--sunken));
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+.rv-thumb[data-tone="blue"] { --thumb: var(--hc-blue); }
+.rv-thumb[data-tone="green"] { --thumb: var(--hc-green); }
+.rv-thumb[data-tone="purple"] { --thumb: #c46ae8; }
+.rv-thumb[data-tone="orange"] { --thumb: var(--hc-orange); }
+
+.rv-info {
+  position: relative;
+}
+.rv-info-panel {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(320px, calc(100vw - 32px));
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .reviewer-theme-switch {

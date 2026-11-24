@@ -36,7 +36,6 @@ import { parseProjectTab, projectTabHref, shipChecksLeft, shipChecksLine, type P
 import { MAX_PINNED } from "@/lib/platform/profile";
 import { projectStatusLabel } from "@/lib/platform/projects";
 import { relativeTime } from "@/lib/platform/explore-feed";
-import { formatHours } from "@/lib/platform/journal";
 import { repoHost } from "@/lib/platform/search-view";
 import { requireViewer } from "@/lib/platform/session";
 import { checkShip, firstTriggerBlocker, needsChangeNote } from "@/lib/platform/ship-gate";
@@ -107,7 +106,11 @@ export default async function ProjectPage({
   const shipLine = shipChecksLine(shipLeft);
   // The one text link beside the title that points at Ship. It only restates the status and the checks the Ship tab already shows.
   const shipHint = status === "needs-changes" ? "Read the changes requested" : !open ? "See where it stands" : triggerReason === null ? "Ready to ship" : null;
-  const base =`/dashboard/projects/${project.id}`;
+  // Same unit as the approved hours beside it: a number and H, hundredths at most.
+  const loggedHours = Number.isInteger(stats.hours) ? stats.hours : Math.round(stats.hours * 100) / 100;
+  // The cover block only shows while it can change or when there is a picture; a locked project with none has nothing to show.
+  const showCover = cover !== null || journalOpen(project.status);
+  const base = `/dashboard/projects/${project.id}`;
   const source = repoHost(project.repoUrl);
   const demo = repoHost(project.demoUrl);
 
@@ -223,10 +226,12 @@ export default async function ProjectPage({
       ) : null}
 
       <section className="pf-spp-head" aria-labelledby="owner-title" data-track={project.track ? project.track.toLowerCase() : undefined}>
-        <div className="pf-spp-cover" data-cover={cover ? "image" : "none"}>
-          <ProjectCover status={project.status} track={project.track} hours={hours} large depth={false} badges={false} cover={cover} title={project.title} />
-          <CoverUpload projectId={project.id} title={project.title} enabled={uploadsOn} cover={cover} locked={!journalOpen(project.status)} />
-        </div>
+        {showCover ? (
+          <div className="pf-spp-cover" data-cover={cover ? "image" : "none"}>
+            <ProjectCover status={project.status} track={project.track} hours={hours} large depth={false} badges={false} cover={cover} title={project.title} initial={Array.from(project.title.trim())[0]?.toUpperCase() ?? ""} />
+            <CoverUpload projectId={project.id} title={project.title} enabled={uploadsOn} cover={cover} locked={!journalOpen(project.status)} />
+          </div>
+        ) : null}
         <div className="pf-spp-top">
           <div className="pf-spp-id">
             <h1 id="owner-title" className="pf-spp-title">{project.title}</h1>
@@ -259,7 +264,7 @@ export default async function ProjectPage({
           </div>
           <div>
             <dt>Logged by you</dt>
-            <dd>{formatHours(stats.hours)}</dd>
+            <dd>{loggedHours} H</dd>
           </div>
           {project.repoUrl ? (
             <div>

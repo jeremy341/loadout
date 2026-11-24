@@ -90,6 +90,7 @@ Rules:
 
 - Homepage content sits in a centre column 1080px wide. Section padding is set per breakpoint in `home.css`; change it there.
 - Spacing uses multiples of 4px.
+- The participant platform (and the Docs inside it) keeps the Accessibility tab on the left window edge and reserves a rail for it, so the tab never covers navigation, search or page text. From 900px the sidebar is 232px plus a 44px rail (`--pf-rail`) and its links start right of the tab; below 900px the page keeps a 36px rail on its left and the tab no longer retracts. The wizard frame keeps 48px side gutters. Participant pages use two content widths from `shell.css`/`platform.css`: `--pf-wide` (1080px, the page grid) and `--pf-narrow` (760px, reading columns). The koi fade to a ghost under the sidebar and each page block, never over words (`KoiPond.tsx`). Brief: `.ulpi/design/platform-shell-layout-fixes.md`.
 - The Docs use a boxed 300px sidebar, a reading column and a contents rail, with hard-edged panels.
 - Breakpoints in use are 360, 370, 560, 639, 640, 700, 800, 820, 900, 1024, 1080, 1100, 1359, 1360 and 1420px. Use the nearest existing breakpoint before adding one. The browser suite checks 320, 390, 471, 700, 900 and 1440px, and checks for horizontal scroll.
 
@@ -199,6 +200,8 @@ Divergences from the homepage and the Docs (all deliberate):
 - The platform grid is 32px, and the page does not darken as you scroll.
 - Only `transform` and `opacity` animate, and nothing moves under reduced motion.
 - Empty states (`EmptyState`) are a dashed panel with one plain sentence and at most one action. Loading states (`Skeleton`) copy the shape of the content and announce one `role="status"` line; `ConnectionPlaceholder` is an honest "not connected" block and disables nothing itself.
+
+- Project covers (`ProjectCover`) without a picture show the track pattern and a plate with the project's first letter (`page-polish.css`, brief `.ulpi/design/participant-page-polish.md`). The own project page shows no cover block when the project is locked and has no picture. Paging controls (Projects) are bordered Previous and Next buttons of at least 48px with the page position between them. The profile share control is a bordered "Copy profile link" button.
 
 Text minimums: reading text is 16px (`1em` of `.pf`, which scales with the reading-size setting). Small labels are set in `em` and never go below 12px at the default size (0.75em); smaller tiers were raised on 18 Nov 2026 (`.ulpi/design/dashboard-minimal-pass.md`). Primary controls and sidebar links are at least 44px tall (48px and 52px with Larger controls).
 

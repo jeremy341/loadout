@@ -35,7 +35,7 @@ test("own profile is the Stasis two columns: profile card and Activity on the le
   await expect(page.getByRole("link", { name: "Back to Projects" })).toHaveAttribute("href", "/dashboard/projects");
   const card = page.locator(".pf-sp-profile");
   const cardBox = await card.boundingBox();
-  expect(cardBox && Math.round(cardBox.width)).toBe(320);
+  expect(cardBox && Math.round(cardBox.width)).toBe(340);
   // left column: profile card, then Activity; right column: Badges, then Projects
   const activity = page.getByRole("region", { name: "Activity" });
   const badges = page.getByRole("region", { name: "Track levels" });
@@ -54,7 +54,7 @@ test("own profile is the Stasis two columns: profile card and Activity on the le
   for (const gone of ["Top track", "Depth", "Joined"]) await expect(card.getByText(gone, { exact: true })).toHaveCount(0);
   await expect(page.getByText("Hours are self-reported")).toHaveCount(0);
   await expect(card.getByRole("button", { name: "Edit profile" })).toBeVisible();
-  await expect(card.getByRole("button", { name: "Share" })).toBeVisible();
+  await expect(card.getByRole("button", { name: "Copy profile link" })).toBeVisible();
   await expect(page.getByRole("tablist")).toHaveCount(0);
   await expect(page.getByText(/builder@loadout.test/)).toHaveCount(0);
   await expect(page.getByText("Test builder", { exact: true })).toHaveCount(0);
@@ -69,16 +69,16 @@ test("the old tab links go to the bare profile", async ({ page }) => {
   }
 });
 
-test("Share copies the address and says Copied! for two seconds", async ({ page, context }) => {
+test("Copy profile link copies the address and says Link copied! for two seconds", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]).catch(() => undefined);
   await page.goto("/dashboard/profile");
-  const share = page.getByRole("button", { name: "Share" });
+  const share = page.getByRole("button", { name: "Copy profile link" });
   await expect(share).toBeVisible({ timeout: 30000 });
   await page.waitForLoadState("networkidle");
   await share.click();
-  await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Link copied!" })).toBeVisible();
   await expect(page.getByRole("status").filter({ hasText: "Link copied" })).toBeAttached();
-  await expect(page.getByRole("button", { name: "Share" })).toBeVisible({ timeout: 5000 });
+  await expect(page.getByRole("button", { name: "Copy profile link" })).toBeVisible({ timeout: 5000 });
   const copied = await page.evaluate(() => navigator.clipboard.readText()).catch(() => null);
   if (copied !== null) expect(copied).toMatch(/\/dashboard\/profile$/);
 });
@@ -174,7 +174,7 @@ test("a visitor sees the same cards and every project, but no private fields", a
   await expect(page.locator(".pf-sp-photo")).toHaveCount(0);
   for (const gone of ["Top track", "Depth", "Joined"]) await expect(page.getByText(gone, { exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Edit profile|Edit bio/ })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Share" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy profile link" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Pin to profile|Unpin|Hide from profile/ })).toHaveCount(0);
   // every project is public, drafts included: listed, and every card opens its public page
   const panel = page.getByRole("region", { name: "Projects" });

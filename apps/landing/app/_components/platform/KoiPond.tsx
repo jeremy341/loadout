@@ -7,7 +7,7 @@ import "./koi.css";
 // The engine is the vendored MIT ascii-koi pond (public/vendor/ascii-koi, see NOTICE.md), drawn on a transparent canvas with no water
 // texture, so the fish bring their own pixels and the page grid is left alone. It is decoration only: aria-hidden, never takes focus
 // or clicks, off when "Hide ASCII drawings" is on, still under reduced motion or "Reduce motion", and paused by the browser while the
-// tab is hidden. Where text sits over the water the fish are dimmed a little so the words stay readable.
+// tab is hidden. Where text sits over the water the fish fade to a ghost so the words stay readable.
 
 type Palette = { water: string; ink: string; accent: string; koiLight: string; koiDark: string; dark: boolean; koi: string[] };
 type Clearing = { left: number; top: number; right: number; bottom: number; fade: number; min: number };
@@ -85,14 +85,22 @@ export function KoiPond({ sidebar = true }: { sidebar?: boolean }) {
         }
       }
     };
-    // The fish fade a little under the sidebar and the main column, never to nothing, so they stay one pond across the page.
+    // The fish fade to a ghost under reading text: the sidebar and each top-level block of the page (headings, tabs, lists, cards, the
+    // wizard card). Between blocks and in the margins they stay at full strength, so the pond is still one pond across the page, but
+    // no word is ever read through a fish. A fixed layer behind the content, so scrolling only moves the rectangles.
     const dim = (): Clearing[] | null => {
-      const areas = [document.querySelector(".pf-side"), document.getElementById("platform-main")];
+      const areas: Element[] = [];
+      const side = document.querySelector(".pf-side");
+      if (side) areas.push(side);
+      const main = document.getElementById("platform-main");
+      const card = main?.querySelector(":scope > .pf-focus-card");
+      const blocks = Array.from((card ?? main)?.children ?? []);
+      areas.push(...(blocks.length ? blocks : main ? [main] : []));
       const out: Clearing[] = [];
-      for (const area of areas) {
-        const rect = area?.getBoundingClientRect();
-        if (!rect || !rect.width || rect.right <= 0) continue;
-        out.push({ left: rect.left * SCALE, top: rect.top * SCALE, right: rect.right * SCALE, bottom: rect.bottom * SCALE, fade: 60, min: 0.38 });
+      for (const area of areas.slice(0, 40)) {
+        const rect = area.getBoundingClientRect();
+        if (!rect.width || !rect.height || rect.right <= 0 || rect.bottom <= 0 || rect.top >= window.innerHeight) continue;
+        out.push({ left: rect.left * SCALE, top: rect.top * SCALE, right: rect.right * SCALE, bottom: rect.bottom * SCALE, fade: 36, min: area === side ? 0.14 : 0.12 });
       }
       return out.length ? out : null;
     };

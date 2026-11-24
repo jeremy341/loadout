@@ -19,6 +19,7 @@ import CommandPalette from "@/reviewer-dash/app/_ui/CommandPalette";
 import Tooltips from "@/reviewer-dash/app/_ui/Tooltips";
 import ThemeBridge from "@/reviewer-dash/app/_ui/ThemeBridge";
 import ViewAs from "@/reviewer-dash/app/_ui/ViewAs";
+import SampleDataInfo from "@/reviewer-dash/app/_ui/SampleDataInfo";
 import { buildNav } from "@/reviewer-dash/app/_ui/nav";
 import type { AdminAccess } from "@/reviewer-dash/lib/roles";
 import { Icon, Mono } from "@/reviewer-dash/app/_ui/ui";
@@ -118,6 +119,8 @@ export default async function ReviewerLayout({ children }: { children: React.Rea
                   current={viewAsCurrent}
                 />
               )}
+              {/* Only where sample records can exist (local test accounts, development). Each page's own data note still says where its data lives. */}
+              {sampleShipsOn() && <SampleDataInfo />}
               <ThemeToggle />
               <Link href="/settings" className="hc-btn hc-btn-ghost hc-btn-sm hc-btn-icon" title="Settings" aria-label="Settings">
                 <Icon glyph="settings" size={20} />
@@ -130,10 +133,6 @@ export default async function ReviewerLayout({ children }: { children: React.Rea
             </div>
           </div>
         </header>
-        {/* Only where sample records can exist (local test accounts, development). Each page's own data note still says where its data lives. */}
-        {sampleShipsOn() && (
-          <p className="reviewer-sample-note">Each page says where its data comes from. Anything marked sample data is kept in memory and is gone when the server restarts.</p>
-        )}
         <main className="hc-main mx-auto max-w-[1840px] px-6 py-8">{children}</main>
       </div>
     </div>

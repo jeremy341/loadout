@@ -20,6 +20,12 @@ describe("reviewer layout", () => {
     expect(source).toMatch(/navCountsSafe\(access\)/);
   });
 
+  test("the site-wide sample-data sentence sits behind the top-bar info control, not above every page", () => {
+    expect(source).toMatch(/\{sampleShipsOn\(\) && <SampleDataInfo \/>\}/);
+    expect(source).not.toContain("Each page says where its data comes from");
+    expect(source).not.toContain('<p className="reviewer-sample-note">');
+  });
+
   test("an unknown preview role shows as signed out, not a builder or an owner", () => {
     expect(source).toMatch(/viewAsRoleKey\(chosen\)/);
     expect(source).toContain('key: "signed-out"');

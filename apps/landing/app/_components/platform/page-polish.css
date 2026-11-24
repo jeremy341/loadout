@@ -1,0 +1,65 @@
+/* Page-specific polish from the 1440px review of the participant pages (brief: .ulpi/design/participant-page-polish.md).
+   Every rule reads the --pf-* tokens, so both themes and the colour-vision palettes follow. Nothing here animates. The selectors
+   start with `html body .pf` so they sit above the flat-page rules in minimal.css without !important. */
+
+/* ---- Project covers: a track plate with the project's first letter, and a pattern that reads at card size ---- */
+html body .pf .pf-project-cover > .pf-cover-initial {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  padding-bottom: 8px;
+  border: 2px solid var(--tk, var(--pf-link));
+  background: var(--pf-bg);
+  box-shadow: inset 0 -8px 0 var(--tk, var(--pf-rule));
+  color: var(--pf-fg);
+  font: 400 2.5em/1 var(--font-display), monospace;
+}
+html body .pf :is(.pf-sg-card, .pf-sp-project) .pf-project-cover[data-track] {
+  background-image: repeating-conic-gradient(color-mix(in srgb, var(--tk) 40%, var(--tk-deep)) 0 25%, transparent 0 50%);
+}
+
+/* ---- Explore project page: air under the empty journal line, and a status word that is not a big number ---- */
+html body .pf .pf-spp-empty { margin: 0 0 20px; }
+html body .pf .pf-spp-facts dd.pf-spp-fact-text { font: 400 0.9375em/1.3 var(--font-ui), monospace; letter-spacing: 0; text-transform: none; color: var(--pf-mut); }
+
+/* ---- Own project page: an empty cover is a real cover (the Visitor view and Explore keep their own size) ---- */
+html body .pf .pf-spp-cover[data-cover="none"] > .pf-project-cover { aspect-ratio: 16 / 3; height: auto; min-height: 0; max-height: 180px; width: 100%; }
+@media (max-width: 559px) {
+  html body .pf .pf-spp-cover[data-cover="none"] > .pf-project-cover { aspect-ratio: 16 / 6; height: auto; }
+}
+
+/* ---- Notifications: space under the empty box, and the autosave note ---- */
+html body .pf .pf-nt > .pf-empty { margin: 0 0 40px; }
+html body .pf .pf-nt-note { margin: 12px 0 0; color: var(--pf-mut); font-size: 0.875em; }
+
+/* ---- Settings: the sign-in-again link is the same size as the sentence around it ---- */
+html body .pf .pf-lead .pf-fact-link { font: inherit; letter-spacing: inherit; text-transform: none; }
+
+/* ---- Ideas: three tabs with room between them and a tap target of at least 44 by 44 ---- */
+html body .pf .pf-id-filters { gap: 0 12px; }
+html body .pf .pf-id-filters a { min-width: 44px; padding: 0 20px 0 0; }
+
+/* ---- Projects: previous and next are real buttons with a page position between them ---- */
+html body .pf .pf-sg-pager { justify-content: space-between; gap: 16px; margin-top: 32px; font-size: 1em; }
+html body .pf .pf-sg-pager-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; min-width: 120px; padding: 0 20px; border: 1px solid var(--pf-fg); background: var(--pf-panel); color: var(--pf-fg); font: 400 14px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+html body .pf a.pf-sg-pager-btn:hover { border-color: var(--pf-link); color: var(--pf-link); }
+html body .pf a.pf-sg-pager-btn:focus-visible { outline: 2px solid var(--pf-focus); outline-offset: 2px; }
+html body .pf .pf-sg-pager-off { visibility: hidden; }
+html body .pf .pf-sg-pager-pos { font: 400 14px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--pf-mut); text-align: center; }
+
+/* ---- Profile: the share control is a visible button, and the left column has room ---- */
+html body .pf .pf-sp-actions .pf-btn.pf-sp-share:not(.pri) { min-height: 44px; padding: 0 16px; border: 1px solid var(--pf-fg); background: transparent; color: var(--pf-fg); font: 400 13px var(--font-dot), monospace; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; justify-content: center; }
+html body .pf .pf-sp-actions .pf-btn.pf-sp-share:not(.pri):hover { border-color: var(--pf-link); color: var(--pf-link); text-decoration: none; }
+@media (min-width: 1100px) {
+  html body .pf .pf-sp { grid-template-columns: 340px minmax(0, 1fr); column-gap: 44px; }
+  html body .pf .pf-sp-left { width: auto; }
+  html body .pf .pf-sp-profile { gap: 16px; padding-bottom: 28px; }
+  html body .pf .pf-sp-profile > .pf-sp-plate { margin-bottom: 12px; }
+  html body .pf .pf-sp-actions { gap: 8px; }
+  html body .pf .pf-sp-left > .pf-hm { margin-top: 28px; }
+}

@@ -8,11 +8,15 @@ import "@/app/_components/platform/expeditions.css";
 
 export const metadata: Metadata = { title: "Events - LOADOUT" };
 
-// The time an event runs, in UTC with no invented zone: the day and clock for the start, the day and clock for the end.
-function eventWindow(event: EventRow): string {
-  const fmt = (date: Date) =>
-    `${date.getUTCDate()} ${date.toLocaleString("en-GB", { month: "short", timeZone: "UTC" })} ${date.toLocaleString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} UTC`;
-  return event.endsAt ? `${fmt(event.startsAt)} to ${fmt(event.endsAt)}` : `from ${fmt(event.startsAt)}`;
+// The time an event runs, in UTC with no invented zone. The day is the large figure on the right of the card; the clock line
+// under it is "19:32 to 21:32 UTC" when the event ends the same day, and carries the end date when it does not.
+const day = (date: Date) => `${date.getUTCDate()} ${date.toLocaleString("en-GB", { month: "short", timeZone: "UTC" })}`;
+const clock = (date: Date) => date.toLocaleString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+
+function eventTimes(event: EventRow): string {
+  if (!event.endsAt) return `from ${clock(event.startsAt)} UTC`;
+  if (day(event.endsAt) === day(event.startsAt)) return `${clock(event.startsAt)} to ${clock(event.endsAt)} UTC`;
+  return `${clock(event.startsAt)} UTC to ${day(event.endsAt)} ${clock(event.endsAt)} UTC`;
 }
 
 // Events the community can act on: the planned ones with their dates, each with the live count of builders going and an
@@ -47,15 +51,21 @@ export default async function EventsPage() {
               const open = isRsvpOpen({ startsAt: event.startsAt, endsAt: event.endsAt, stoppedAt: null }, now);
               const status = eventStatus({ startsAt: event.startsAt, endsAt: event.endsAt, stoppedAt: null }, now);
               return (
-                <li className="pf-box ex-event" key={event.id}>
-                  <div className="ex-event-grid">
-                    <div>
+                <li className="pf-box ex-event cm-event" key={event.id}>
+                  <div className="ex-event-grid cm-event-grid">
+                    <div className="cm-event-main">
                       <span className="ex-label">
                         {event.kind} / {EVENT_STATUS_LABELS[status]}
                       </span>
                       <h3 className="ex-event-title">{event.title}</h3>
                       <p className="ex-event-text">{event.body}</p>
-                      <p className="cm-mini-kind">{eventWindow(event)}</p>
+                    </div>
+                    <div className="cm-event-side">
+                      <p className="cm-event-day">
+                        <span className="pf-sr">Date: </span>
+                        {day(event.startsAt)}
+                      </p>
+                      <p className="cm-event-times">{eventTimes(event)}</p>
                       <RsvpButton eventId={event.id} going={event.viewerGoing} open={open} />
                       <p className="ex-closed">{rsvpCountText(event.rsvpCount)}</p>
                     </div>
@@ -72,15 +82,21 @@ export default async function EventsPage() {
           <h2 id="past-heading">Past</h2>
           <ul className="ex-list">
             {past.map((event) => (
-              <li className="pf-box ex-event" key={event.id}>
-                <div className="ex-event-grid">
-                  <div>
+              <li className="pf-box ex-event cm-event" key={event.id}>
+                <div className="ex-event-grid cm-event-grid">
+                  <div className="cm-event-main">
                     <span className="ex-label">
                       {event.kind} / {EVENT_STATUS_LABELS.ended}
                     </span>
                     <h3 className="ex-event-title">{event.title}</h3>
                     <p className="ex-event-text">{event.body}</p>
-                    <p className="cm-mini-kind">{eventWindow(event)}</p>
+                  </div>
+                  <div className="cm-event-side">
+                    <p className="cm-event-day">
+                      <span className="pf-sr">Date: </span>
+                      {day(event.startsAt)}
+                    </p>
+                    <p className="cm-event-times">{eventTimes(event)}</p>
                     <p className="ex-closed">{rsvpCountText(event.rsvpCount)}</p>
                   </div>
                 </div>

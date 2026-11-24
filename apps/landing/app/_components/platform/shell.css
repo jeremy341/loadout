@@ -2,6 +2,15 @@
    Square edges, a 1px outline, a hard offset edge on the right, Pixelify for the sections. The only motion is the drawer sliding in
    (transform, 180ms) and the scrim fading; both are off under reduced motion (platform.css and the query below). */
 
+/* ---- The accessibility rail ----
+   The shared Accessibility tab is fixed to the left window edge, as on the homepage. The shell keeps a rail there that nothing is
+   drawn into: inside the sidebar from 900px, along the left of the page below it. Width of the tab plus a small gap. */
+.pf { --pf-rail: 36px; }
+@media (min-width: 900px) { .pf { --pf-rail: 44px; } }
+
+/* The narrow reading width. Pages that used their own figure (760px, 820px) follow the shared token (--pf-narrow, platform.css). */
+html .pf :is(.pf-section, .pf-nt, .pf-invites, .pf-id) { max-width: var(--pf-narrow, 760px); }
+
 /* ---- Frame: sidebar and page side by side on a wide screen ---- */
 .pf .pf-has-side { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; }
 
@@ -84,12 +93,14 @@
 
 /* ---- Wide: the sidebar stays, the strip and the scrim go ---- */
 @media (min-width: 900px) {
-  .pf .pf-has-side { grid-template-columns: 232px minmax(0, 1fr); grid-template-rows: auto 1fr; }
+  .pf .pf-has-side { grid-template-columns: calc(232px + var(--pf-rail)) minmax(0, 1fr); grid-template-rows: auto 1fr; }
   .pf .pf-strip-menu, .pf .pf-strip-brand, .pf .pf-scrim, .pf .pf-side-close { display: none; }
   /* Desktop: the top bar is only the Ore chip and the account menu, pinned to the top right while the page scrolls. */
   .pf .pf-strip { grid-column: 2; grid-row: 1; justify-content: flex-end; min-height: 0; padding: 14px 20px 0; border-bottom: 0; background: none; position: sticky; top: 0; z-index: 20; }
   .pf .pf-tab-heading { display: block; }
-  .pf .pf-side { position: sticky; top: 0; z-index: 10; grid-column: 1; grid-row: 1 / span 2; width: auto; height: 100dvh; transform: none; visibility: visible; }
+  .pf .pf-side { position: sticky; top: 0; z-index: 10; grid-column: 1; grid-row: 1 / span 2; width: auto; height: 100dvh; padding-left: calc(12px + var(--pf-rail)); transform: none; visibility: visible; }
+  /* The wordmark sits above the tab, so it keeps its place at the far left; everything below it starts to the right of the rail. */
+  .pf .pf-side-head { margin-left: calc(-1 * var(--pf-rail)); }
   .pf .pf-has-side > .pf-main { grid-column: 2; grid-row: 2; }
   .pf .lg-text { font-size: 36px; }
 }
@@ -99,6 +110,9 @@ html[data-larger-controls="true"] .pf .pf-tabs a { min-height: 52px; }
   .pf .pf-side, .pf .pf-strip { border-color: CanvasText; box-shadow: none; }
 }
 
+/* Sign-in and the notices have no sidebar: their page keeps the rail beside the fixed tab, at every width. */
+.pf:has(> .a11y-shortcut) .pf-plain > .pf-main { padding-left: calc(var(--pf-rail) + 8px); }
+
 /* ---- Bare pages (the creation wizard): no sidebar, no top bar, one centred column ---- */
 .pf .pf-bare { display: block; min-height: 100dvh; }
 .pf .pf-main-bare { max-width: 880px; margin-inline: auto; padding-inline: 16px; }
@@ -106,3 +120,12 @@ html[data-larger-controls="true"] .pf .pf-tabs a { min-height: 52px; }
 /* The accessibility tab on the participant platform stays on the left edge, where the home page puts it. Only the colours follow the
    platform palette, so a colour-vision profile keeps the tab readable. */
 .pf .a11y-tab { border-width: 2px 2px 4px 4px; color: var(--pf-acf); background: var(--pf-ac); }
+
+/* Under 900px the page has no sidebar, so the page itself keeps the rail: the tab stays on the left edge, always visible, and no
+   heading, field or card runs under it. The tab is narrower here (about 33px) and no longer retracts, because the rail would be empty. */
+@media (max-width: 899px) {
+  .pf .a11y-tab { min-width: 32px; padding: 8px 3px; font-size: 14px; }
+  .pf .a11y-shortcut[data-retracted="true"] { transform: none; }
+  .pf .pf-has-side > .pf-main:not(.pf-main-docs) { padding-left: calc(var(--pf-rail) + 8px); }
+  .pf .pf-has-side > .pf-main-docs { padding-left: var(--pf-rail); }
+}

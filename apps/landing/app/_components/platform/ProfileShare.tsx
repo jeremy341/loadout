@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Stasis's Share button: copies the address of the page and says "Copied!" for two seconds. The change is also announced.
+// A button that copies the address of this profile page and says "Link copied!" for two seconds. The change is also announced.
 export function ProfileShare() {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -27,8 +27,8 @@ export function ProfileShare() {
 
   return (
     <>
-      <button type="button" className="pf-btn pf-sp-btn" onClick={share}>
-        {copied ? "Copied!" : "Share"}
+      <button type="button" className="pf-btn pf-sp-btn pf-sp-share" onClick={share}>
+        {copied ? "Link copied!" : "Copy profile link"}
       </button>
       <span className="pf-sr" role="status">
         {copied ? "Link copied" : ""}

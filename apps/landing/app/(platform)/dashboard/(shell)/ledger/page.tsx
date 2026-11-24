@@ -73,7 +73,7 @@ export default async function LedgerPage({ searchParams }: { searchParams: Promi
         </div>
       </section>
 
-      <section className="pf-section pf-ledger-entries" aria-labelledby="ledger-entries-heading">
+      <section className="pf-section pf-section-plain pf-ledger-entries" aria-labelledby="ledger-entries-heading">
         <div className="pf-ledger-bar">
           <h2 id="ledger-entries-heading">Entries</h2>
           <LedgerKindSelect value={query.kind ?? ""} options={options} />

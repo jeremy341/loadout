@@ -261,7 +261,7 @@ html .pf .pf-sg-card:hover .pf-sg-title, html .pf .pf-sg-card:focus-visible .pf-
 html .pf .pf-sg-hours { flex: none; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.04em; color: var(--pf-mut); font-variant-numeric: tabular-nums; }
 html .pf .pf-sg-desc { -webkit-line-clamp: 3; line-clamp: 3; margin-top: 2px; font-size: 1em; line-height: 1.6; }
 html .pf .pf-sg-card { background: var(--pf-panel); }
-html .pf .pf-sg-grid .pf-new-card { min-height: 280px; }
+html .pf .pf-sg-grid .pf-new-card { min-height: 100%; }
 
 /* ---- Project page (owner): flat header, one meta line, inline facts, no boxes inside boxes ---- */
 html .pf .pf-column { max-width: 960px; }
@@ -398,11 +398,10 @@ html .pf .pf-conn-status { border: 0; padding: 0; color: var(--pf-mut); }
 html .pf .pf-facts-account dd { font: 400 1em var(--font-ui), monospace; }
 
 /* ---- Community: flat sections ---- */
-html .pf .cm-era, html .pf .cm-grid > .pf-box, html .pf .cm-refer { padding: 0; border: 0; background: transparent; box-shadow: none; }
-html .pf .cm-era .pf-box-head, html .pf .cm-grid > .pf-box > .pf-box-head, html .pf .cm-refer .pf-box-head { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
-html .pf .cm-era .pf-box-head h2, html .pf .cm-grid > .pf-box .pf-box-head h2, html .pf .cm-refer .pf-box-head h2 { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
+html .pf .cm-grid > .pf-box, html .pf .cm-refer { padding: 0; border: 0; background: transparent; box-shadow: none; }
+html .pf .cm-grid > .pf-box > .pf-box-head, html .pf .cm-refer .pf-box-head { padding-bottom: 8px; border-bottom: 1px solid var(--pf-fg); margin-bottom: 16px; }
+html .pf .cm-grid > .pf-box .pf-box-head h2, html .pf .cm-refer .pf-box-head h2 { margin: 0; font: 400 13px var(--font-dot), monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pf-mut); }
 html .pf .cm-grid { gap: 40px; }
-html .pf .cm-era-lead { font-size: 1.125em; color: var(--pf-fg); }
 
 /* ---- Orders and other ruled lists: no frame, hairlines between rows ---- */
 html .pf .ex-list { border: 0; background: transparent; box-shadow: none; }
@@ -699,7 +698,7 @@ html .pf .pf-sg-meta { display: none; }
   html .pf .pf-sg-title { font-size: 1.0625em; }
   html .pf .pf-sg-title-text { overflow: visible; white-space: normal; text-overflow: clip; overflow-wrap: anywhere; }
   html .pf .pf-sg-meta { display: block; font: 400 12px var(--font-dot), monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pf-mut); }
-  html .pf .pf-sg-grid .pf-new-card { min-height: 200px; }
+  html .pf .pf-sg-grid .pf-new-card { min-height: 56px; }
 }
 
 /* Project header: an empty cover is a thin band, and the one active action sits beside the title (under it on a phone). */

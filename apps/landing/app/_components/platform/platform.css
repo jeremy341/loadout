@@ -284,7 +284,10 @@ html:not([data-display-theme="light"]) .pf .pf-ore-icon { filter: hue-rotate(170
 .pf .pf-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 /* ---- Main column, headings, rules ---- */
-.pf-main { padding: 28px 16px 56px; max-width: 1080px; width: 100%; min-width: 0; margin-inline: auto; }
+/* The two content widths of the participant pages. Wide: the page grid (cards, tables, boards). Narrow: reading columns (settings,
+   ledger sections, notifications, the idea board). A page uses one of these and defines no width of its own. */
+.pf { --pf-wide: 1080px; --pf-narrow: 760px; }
+.pf-main { padding: 28px 16px 56px; max-width: var(--pf-wide, 1080px); width: 100%; min-width: 0; margin-inline: auto; }
 .pf-main h1 {
   position: relative;
   width: fit-content;

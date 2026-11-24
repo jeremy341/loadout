@@ -1,17 +1,5 @@
 import Link from "next/link";
 
-// A section title with a link to the page that owns the full list.
-export function PreviewHead({ id, title, href }: { id: string; title: string; href: string }) {
-  return (
-    <div className="pf-box-head">
-      <h2 id={id}>{title}</h2>
-      <Link href={href}>
-        See all<span className="pf-sr"> {title}</span>
-      </Link>
-    </div>
-  );
-}
-
 export function BackLink({ href, children }: { href: string; children: string }) {
   return (
     <div className="pf-crumbs">

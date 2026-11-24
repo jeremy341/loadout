@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { setPrefAction } from "@/app/(platform)/dashboard/(shell)/notifications/actions";
 import { NOTIFICATION_KINDS, type NotificationKind } from "@/lib/platform/notifications";
 import "./notifications.css";
+import "./page-polish.css";
 
 const LABELS: Record<NotificationKind, string> = {
   kudos: "Someone gives kudos to your project",
@@ -42,7 +43,8 @@ export function NotificationPrefs({ initial }: Readonly<{ initial: Record<Notifi
   return (
     <section className="pf-nt-sec" aria-labelledby="pf-nt-prefs">
       <h2 id="pf-nt-prefs" className="pf-nt-h">Tell me when</h2>
-      <ul className="pf-nt-prefs">
+      <p className="pf-nt-note" id="pf-nt-prefs-note">Each change saves as soon as you tick or untick a box.</p>
+      <ul className="pf-nt-prefs" aria-describedby="pf-nt-prefs-note">
         {NOTIFICATION_KINDS.map((kind) => (
           <li key={kind}>
             <label className="pf-nt-pref">

@@ -21,7 +21,8 @@
   align-content: start;
   min-height: 100dvh;
   min-width: 0;
-  padding: 40px 16px 32px;
+  /* 48px each side at every width: the fixed accessibility tab (about 40px) can never reach the column, and the column stays centred. */
+  padding: 40px 48px 32px;
   box-sizing: border-box;
 }
 
@@ -46,7 +47,9 @@ html .pf.pf-focus .pf-wiz-step { gap: 10px; min-height: 44px; align-content: sta
 html .pf.pf-focus .pf-wiz-seg { height: 3px; border: 0; background: var(--pf-rule); }
 html .pf.pf-focus .pf-wiz-step[data-state="done"] .pf-wiz-seg,
 html .pf.pf-focus .pf-wiz-step[data-state="current"] .pf-wiz-seg { background: var(--pf-state); border: 0; }
-html .pf.pf-focus .pf-wiz-step-label { font-size: 11px; letter-spacing: 0.06em; text-transform: none; }
+html .pf.pf-focus .pf-wiz-step-label { font-size: 13px; letter-spacing: 0.06em; text-transform: none; }
+/* A step not reached yet is disabled, but its label keeps the full muted ink (no 0.7 fade): at least 4.5:1 on both papers. */
+html .pf.pf-focus .pf-wiz-step:disabled { opacity: 1; }
 
 /* The question sits in the middle of the page, centred. The fields under it stay left aligned inside the column. */
 html .pf.pf-focus .pf-wiz-body { display: grid; align-content: center; justify-items: stretch; gap: 0; padding: 24px 0; }
@@ -144,6 +147,11 @@ html .pf.pf-focus .pf-wiz-bar .pf-btn.pri[type="submit"] { padding: 0 24px; }
   /* The shared accessibility tab is fixed on the left edge and about 40px wide. The gutter is the same 48px on both sides, so the
      column stays centred on the viewport and the tab never covers the question. */
   .pf-focus-main { padding: 24px 48px; }
+  /* Only the current step shows its name here. At 13px it is wider than a one-sixth cell, so the current step takes the room it needs
+     and the other segments share the rest; its name never runs over the next number. */
+  html .pf.pf-focus .pf-wiz-steps { display: flex; gap: 4px; }
+  html .pf.pf-focus .pf-wiz-steps > li { flex: 1 1 0; min-width: 0; }
+  html .pf.pf-focus .pf-wiz-steps > li:has(> .pf-wiz-step[data-state="current"]) { flex: 0 0 auto; min-width: max-content; }
   html .pf.pf-focus .pf-wiz-kinds .pf-choice-grid { grid-template-columns: 1fr; }
   html .pf.pf-focus .pf-wiz-bar .pf-btn { flex: 1; min-height: 48px; }
   html .pf.pf-focus .pf-wiz-bar .pf-btn.pri { flex: 2; min-height: 48px; justify-content: center; }

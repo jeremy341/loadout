@@ -6,7 +6,7 @@
    so the fish swim over the grey from the sidebar to the page without a break, and the sidebar words stay on top of them. */
 .pf .pf-koi-side { display: none; }
 @media (min-width: 900px) {
-  .pf .pf-koi-side { display: block; position: absolute; inset: 0 auto 0 0; width: 232px; background: var(--pf-panel); border-right: 1px solid var(--pf-fg); box-shadow: 4px 0 0 var(--pf-edge); }
+  .pf .pf-koi-side { display: block; position: absolute; inset: 0 auto 0 0; width: calc(232px + var(--pf-rail)); background: var(--pf-panel); border-right: 1px solid var(--pf-fg); box-shadow: 4px 0 0 var(--pf-edge); }
   html .pf .pf-side { background: transparent; box-shadow: none; border-right-color: transparent; }
 }
 html[data-hide-ascii="true"] .pf .pf-koi { display: none; }

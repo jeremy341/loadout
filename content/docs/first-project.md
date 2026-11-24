@@ -14,7 +14,7 @@ Before opening your editor, write down what would make that first version useful
 
 Make a project folder and set up [Git](/docs/git) so you can keep checkpoints as you go. Read the [tracking setup plan](/docs/time-setup) too, and start taking notes from your first session. A short note written today will be much more useful than trying to reconstruct the whole week before shipping.
 
-## The five steps {#steps}
+## The steps {#steps}
 
 1. **Choose the first result.** Describe what somebody should be able to do with your version and which [tracks](/docs/tracks) the work uses.
 2. **Get it working.** Build that version, test it with realistic input and keep the failures in your journal. They explain how you reached the result.

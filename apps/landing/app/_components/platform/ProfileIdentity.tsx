@@ -7,6 +7,7 @@ import { ScrambleText } from "./ScrambleText";
 import { CountUp } from "./CountUp";
 import "./notifications.css";
 import "./profile.css";
+import "./page-polish.css";
 
 type Top = { track: string; level: number } | null;
 

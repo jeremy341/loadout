@@ -172,7 +172,7 @@ test("the wizard opens with no sidebar and no top bar, and a Close control back 
   await expect(page.getByRole("button", { name: "Account" })).toHaveCount(0);
   const close = page.getByRole("link", { name: /Close/ });
   await expect(close).toHaveAttribute("href", "/dashboard/projects");
-  await expect(page.getByRole("list", { name: "Steps" }).getByRole("listitem")).toHaveCount(5);
+  await expect(page.getByRole("list", { name: "Steps" }).getByRole("listitem")).toHaveCount(6);
   // The rest of the app keeps its sidebar.
   await page.goto("/dashboard/projects");
   await expect(page.getByRole("navigation", { name: "Participant" })).toBeVisible({ timeout: 30000 });

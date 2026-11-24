@@ -33,9 +33,18 @@ describe("dataScopeFor", () => {
     expect(dataScopeFor("/review/guidelines")).toBeNull();
   });
 
+  test("Fulfillment has one combined sample notice, not two", () => {
+    for (const path of ["/fulfillment", "/fulfilment", "/fulfillment/label/2001"]) {
+      const scope = dataScopeFor(path);
+      expect(scope?.kind).toBe("sample");
+      expect(scope?.text).toContain("comes from fixtures");
+      expect(scope?.text).toContain("recorded in the database");
+    }
+  });
+
   test("an unknown page defaults to the sample warning, a trailing slash is ignored", () => {
     expect(dataScopeFor("/shop/")?.kind).toBe("sample");
-    expect(dataScopeFor("/fulfillment")?.text).toContain("memory");
+    expect(dataScopeFor("/ideas")?.text).toContain("memory");
     expect(dataScopeFor("/operations/")?.kind).toBe("saved");
   });
 });

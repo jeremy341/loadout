@@ -140,9 +140,19 @@ export async function ticketThread(ts: string): Promise<ThreadMessage[]> {
   return [first, ...rest];
 }
 
-export async function ticketReply(ts: string, text: string, actor: { slackId?: string; username?: string }): Promise<void> {
+export interface TicketReplyResult {
+  saved: boolean;
+  notice?: string;
+}
+
+export const PIXO_OFFLINE_REPLY_NOTICE = "Sample data. The reply is not saved or sent.";
+
+export async function ticketReply(ts: string, text: string, actor: { slackId?: string; username?: string }): Promise<TicketReplyResult> {
   if (!isValidTicketTs(ts)) throw new Error("Invalid ticket id");
-  if (await sampleMode()) return sampleReply(ts, text, actor);
+  if (await sampleMode()) {
+    sampleReply(ts, text, actor);
+    return { saved: false, notice: PIXO_OFFLINE_REPLY_NOTICE };
+  }
   const ticket = await byTs(ts);
   if (!ticket) throw new SlackApiError("chat.postMessage", "thread_not_found");
   const body = text.trim();
@@ -154,6 +164,7 @@ export async function ticketReply(ts: string, text: string, actor: { slackId?: s
     await tx.ticket.update({ where: { id: ticket.id }, data: { lastMessageAt: new Date() } });
     await enqueueThreadReply(ticket, message.id, body, tx);
   });
+  return { saved: true };
 }
 
 export interface ResolveResult {

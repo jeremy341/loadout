@@ -1,5 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import * as realSession from "@/lib/platform/session";
+import * as realAudit from "./audit";
 
 // The guards decide access through the session, and write an audit row named after the action/route they wrap. Those three
 // edges are mocked so the tests can drive allow / wrong-role / no-session without a request or a database. The real exports
@@ -21,7 +22,7 @@ mock.module("@/lib/platform/session", () => ({
   readViewer: async () => viewer,
   ownerEmails: () => owners,
 }));
-mock.module("./audit", () => ({ audit }));
+mock.module("./audit", () => ({ ...realAudit, audit }));
 mock.module("next/navigation", () => ({ notFound, redirect }));
 
 afterAll(() => mock.restore());

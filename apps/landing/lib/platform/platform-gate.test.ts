@@ -23,9 +23,18 @@ describe("platform password gate", () => {
     const env = { LOADOUT_PLATFORM_PASSWORD: "shared-secret" };
     const token = platformGateToken(env);
     expect(token).toBe(platformGateToken(env));
-    expect(token).toMatch(/^[A-Za-z0-9_-]+$/);
+    expect(token).toMatch(/^\d+\.[A-Za-z0-9_-]+$/);
     expect(token).not.toContain("shared-secret");
     expect(platformGateToken({ LOADOUT_PLATFORM_PASSWORD: "other-secret" })).not.toBe(token);
+  });
+
+  test("a token expires on the server after the max age, not only in the browser", () => {
+    const env = { LOADOUT_PLATFORM_PASSWORD: "shared-secret" };
+    const now = Math.floor(Date.now() / 1000);
+    const day = 24 * 60 * 60;
+    expect(hasPlatformUnlockCookie(platformGateToken(env, now - day), env)).toBe(true);
+    expect(hasPlatformUnlockCookie(platformGateToken(env, now - 8 * day), env)).toBe(false);
+    expect(hasPlatformUnlockCookie(platformGateToken(env, now + 600), env)).toBe(false);
   });
 
   test("a request cookie unlocks the gate only when the token is valid", () => {

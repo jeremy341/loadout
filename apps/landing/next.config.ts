@@ -1,11 +1,18 @@
 import type { NextConfig } from "next";
 
-// Headers every response carries. There is deliberately no script-src or style-src: a strict one would break Next's dev HMR and
-// the inline scripts it emits, and needs a nonce setup of its own. The directives here cost nothing and close framing, <base>
-// hijacks and plugin embeds. The one iframe in the app is the reviewer README panel: a sandboxed srcDoc frame with no HTTP
-// response of its own, so frame-ancestors 'none' does not affect it and no same-origin embed needs 'self' here
-// (reviewer-dash/app/_components/ReadmePanel.tsx).
-const CONTENT_SECURITY_POLICY = "frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
+// Headers every response carries. The directives here close framing, <base> hijacks and plugin embeds. The one iframe in the app
+// is the reviewer README panel: a sandboxed srcDoc frame with no HTTP response of its own, so frame-ancestors 'none' does not
+// affect it (reviewer-dash/app/_components/ReadmePanel.tsx).
+//
+// Production also restricts scripts to this origin. The app loads no third-party script and never calls eval, so only same-origin
+// files and Next's inline bootstrap scripts can run; an injected <script src="https://evil"> is refused. 'unsafe-inline' stays for
+// Next's bootstrap until a per-request nonce is wired through proxy.ts (that makes every page dynamic, so it is a separate change).
+// Development keeps no script-src, because Next's dev server needs eval for hot reload.
+const BASE_CONTENT_SECURITY_POLICY = "frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
+const CONTENT_SECURITY_POLICY =
+  process.env.NODE_ENV === "production"
+    ? `script-src 'self' 'unsafe-inline'; ${BASE_CONTENT_SECURITY_POLICY}`
+    : BASE_CONTENT_SECURITY_POLICY;
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },

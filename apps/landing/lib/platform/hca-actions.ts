@@ -12,6 +12,7 @@ import {
   type HcaIdentity,
   type SignInError,
 } from "./hca";
+import { ownerEmails } from "./session";
 import { fetchSlackAvatar } from "./slack-avatar";
 
 // Database and network side of Hack Club Auth sign-in. The rules it applies live in hca.ts.
@@ -135,6 +136,11 @@ export async function bindIdentity(identity: HcaIdentity, now = new Date()): Pro
       ]);
       const decision = decideBinding({ hcaId: identity.id, email: identity.email, byHcaId, byEmail });
       if (decision.action === "conflict") return { error: "identity_conflict" };
+      // Owners come from LOADOUT_OWNER_EMAILS, matched on the stored email. Only an address Hack Club Auth marks verified may
+      // take that role, so an unverified claim on an owner address cannot bind (or re-bind) an owner row.
+      if (identity.email && ownerEmails().includes(identity.email) && identity.verificationStatus !== "verified") {
+        return { error: "owner_email_unverified" };
+      }
       const synced = {
         birthday: identity.birthday,
         verificationStatus: identity.verificationStatus,
@@ -165,7 +171,12 @@ export async function bindIdentity(identity: HcaIdentity, now = new Date()): Pro
         });
         if (updated.count !== 1) return { error: "server_error" };
       } else {
-        await tx.person.update({ where: { id: decision.personId }, data: synced });
+        // HCA's primary email is the sign-in identity, so a changed address follows it. Ownership and the email lookup both read
+        // this column. decideBinding already refused any address held by a different identity, so this write cannot collide.
+        await tx.person.update({
+          where: { id: decision.personId },
+          data: identity.email ? { ...synced, email: identity.email } : synced,
+        });
       }
       // Re-check inside the transaction: a ban applied while we were binding must not hand back an id for a closed account.
       const current = await tx.person.findUnique({ where: { id: decision.personId }, select: { bannedAt: true } });

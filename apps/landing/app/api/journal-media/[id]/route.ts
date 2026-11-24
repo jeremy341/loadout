@@ -5,6 +5,7 @@ import { db } from "@/lib/platform/db";
 import { deleteJournalMedia, mediaWriteDeps } from "@/lib/platform/media-data";
 import { readImage } from "@/lib/platform/media-store";
 import { sameOrigin } from "@/lib/platform/same-origin";
+import { createRateLimiter } from "@/lib/platform/rate-limit";
 import { readViewer } from "@/lib/platform/session";
 import { IMAGE_MIME, type ImageType } from "@/lib/platform/uploads";
 
@@ -17,9 +18,16 @@ import { IMAGE_MIME, type ImageType } from "@/lib/platform/uploads";
 const EXT_TYPE: Record<string, ImageType> = { jpg: "jpeg", png: "png", webp: "webp" };
 const notFound = () => new NextResponse("Not found", { status: 404 });
 
+// A journal page loads its photos together, so the room is generous. The cap stops one signed-in account from driving disk
+// reads and database reads without limit (L2).
+const mediaReads = createRateLimiter({ limit: 300, windowMs: 60_000 });
+
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const viewer = await readViewer();
   if (!viewer) return notFound();
+  if (!mediaReads.check(`viewer:${viewer.id}`).ok) {
+    return new NextResponse("Too many requests", { status: 429, headers: { "Retry-After": "60" } });
+  }
   const { id } = await params;
   const row = await db().journalMedia.findFirst({
     where: { id, deletedAt: null, project: { status: { not: "banned" }, owner: { bannedAt: null, ...notBlockedWith(viewer.id) } } },

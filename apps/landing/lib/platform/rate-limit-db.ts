@@ -23,6 +23,9 @@ export const RATE_LIMIT_PRESETS = Object.freeze({
   API_KEY_MINUTE: { limit: 60, windowMs: MINUTE_MS },
   API_KEY_DAY: { limit: 5000, windowMs: DAY_MS },
   API_IP_MINUTE: { limit: 20, windowMs: MINUTE_MS },
+  // Used when the caller's address is unknown (no trusted proxy). Every such caller shares one bucket, so it gets the room a
+  // whole public audience needs; the per-key limits still do the real limiting.
+  API_IP_UNKNOWN_MINUTE: { limit: 1200, windowMs: MINUTE_MS },
   EXPORT_DAY: { limit: 2, windowMs: DAY_MS },
 } satisfies Record<string, RateLimitPreset>);
 

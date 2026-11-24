@@ -18,11 +18,14 @@
 //   botJson(id, body, status?), botError(id, status, code, message?), botInvalid(id, message)
 //   requireBot(request, deps?)                 401/403 JSON, or null when the caller may continue
 //   botGuard(request, route, deps?)            requireBot, then the per-route minute limit (429)
+import { clientIp } from "../client-ip";
+import { readCappedBody } from "../media-limits";
 import { requestId } from "../request-id";
 import { requireServiceKey, type EnvSource, type ServiceKeyAudit } from "../service-keys";
 
 export const BOT_SERVICE = "slack-bot" as const;
 export const BOT_ROUTE_LIMIT = 300;
+export const BOT_ADDRESS_LIMIT = 1200;
 export const MAX_BODY_CHARS = 16_000;
 const MINUTE_MS = 60_000;
 
@@ -117,7 +120,10 @@ export function queryText(url: URL, name: string, max: number, required = true):
 
 // Reads the body as JSON. An empty body is `{}` when `optional` is set, otherwise refused.
 export async function readJson(request: Request, optional = false): Promise<Check<unknown>> {
-  const raw = await request.text();
+  // The stream is counted as it arrives, so an oversized body is cut off without being buffered whole.
+  const bytes = await readCappedBody(request, MAX_BODY_CHARS);
+  if (bytes === null) return fail("body is too large");
+  const raw = new TextDecoder().decode(bytes);
   if (raw.length > MAX_BODY_CHARS) return fail("body is too large");
   if (raw.trim() === "") return optional ? { ok: true, value: {} } : fail("body must be JSON");
   try {
@@ -153,10 +159,17 @@ export async function requireBot(request: Request, deps: BotAuthDeps = {}): Prom
 // The auth check, then the per-route limit. Returns the request id so the route can echo it on its own responses.
 export async function botGuard(request: Request, route: string, deps: BotAuthDeps = {}): Promise<{ id: string; denied: Response | null }> {
   const id = requestId(request);
-  const denied = await authorise(request, id, deps);
-  if (denied) return { id, denied };
   // Loaded lazily: the limiter needs the database client, which the pure tests must never reach.
   const limits = await import("../rate-limit-db");
+  // A ceiling per address, checked before any key lookup. A flood of wrong keys is refused here and never spends the route budget
+  // that the live bot shares. The bot reaches the site from one address, so this sits well above its normal traffic.
+  const address = await limits.checkLimit({ key: `bot-ip:${clientIp(request)}:minute`, limit: BOT_ADDRESS_LIMIT, windowMs: MINUTE_MS });
+  if (!address.ok) {
+    return { id, denied: Response.json({ error: "rate_limited" }, { status: 429, headers: { ...limits.rateLimitHeaders(address), "x-request-id": id } }) };
+  }
+  const denied = await authorise(request, id, deps);
+  if (denied) return { id, denied };
+  // The route budget is shared by every caller that holds the bot key. Rotating that key is the remedy for a leak.
   const result = await limits.checkLimit({ key: `bot:${route}:minute`, limit: BOT_ROUTE_LIMIT, windowMs: MINUTE_MS });
   if (!result.ok) {
     return { id, denied: Response.json({ error: "rate_limited" }, { status: 429, headers: { ...limits.rateLimitHeaders(result), "x-request-id": id } }) };

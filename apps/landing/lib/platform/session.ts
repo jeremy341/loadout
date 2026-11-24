@@ -13,6 +13,7 @@ import {
   type Requirement,
   type ReviewerAccess,
 } from "@/lib/reviewer/access";
+import { getPublicSuffix } from "tldts";
 import { isReviewHost } from "@/lib/reviewer/host";
 
 export const SESSION_COOKIE = "loadout_session";
@@ -74,6 +75,14 @@ export async function destroySession(token: string): Promise<void> {
   await db().session.deleteMany({ where: { tokenHash: hashToken(token) } });
 }
 
+// Ends every session a person holds. With keepToken, the caller's own session survives (sign out everywhere else). Returns the
+// count only. A stolen token then stops working at once, not after its 30 days (L5).
+export async function signOutEverywhere(personId: string, keepToken?: string | null): Promise<number> {
+  const keep = keepToken ? hashToken(keepToken) : null;
+  const removed = await db().session.deleteMany({ where: { personId, ...(keep ? { tokenHash: { not: keep } } : {}) } });
+  return removed.count;
+}
+
 // Called by the registered "session-cleanup" cron job (lib/platform/jobs/jobs/session-cleanup.ts). A session past its expiry can
 // no longer sign anyone in, so it is safe to delete. Only a count is returned — never a token hash or a person id.
 export async function purgeExpiredSessions(now: Date = new Date()): Promise<number> {
@@ -132,12 +141,6 @@ async function withExpiredBanCleared<T extends { id: string; bannedAt: Date | nu
 // A cookie Domain may only be a parent of the host that receives it. ".com" would be accepted by the browser's suffix rule as
 // a parent of every .com host, so a bare public suffix is refused here as well. Anything invalid is ignored and the cookie stays
 // host-only, which is safe and still works when both sites share one host.
-const PUBLIC_SUFFIXES = new Set([
-  "com", "org", "net", "edu", "gov", "mil", "int", "info", "biz", "name", "io", "co", "dev", "app", "xyz", "online",
-  "site", "tech", "me", "tv", "cc", "ai", "us", "uk", "ca", "de", "fr", "es", "it", "nl", "jp", "cn", "in", "br", "au",
-  "nz", "se", "no", "fi", "ch", "be", "pl", "ru", "ua", "mx", "ar", "co.uk", "org.uk", "ac.uk", "gov.uk", "com.au",
-  "net.au", "org.au", "co.nz", "com.br", "com.cn", "co.jp", "co.in", "com.mx",
-]);
 
 const plainHost = (value: string | null | undefined): string => {
   const raw = (value ?? "").trim().toLowerCase().replace(/\.$/, "");
@@ -150,7 +153,8 @@ export function validCookieDomain(domain: string | null | undefined, host: strin
   const clean = plainHost(domain)?.replace(/^\.+/, "") ?? "";
   const current = plainHost(host);
   if (!clean || !current || !clean.includes(".")) return null;
-  if (PUBLIC_SUFFIXES.has(clean)) return null;
+  // The Public Suffix List (tldts), private section included: github.io, vercel.app and the like are suffixes a cookie may not span.
+  if (getPublicSuffix(clean, { allowPrivateDomains: true }) === clean) return null;
   const labels = clean.split(".");
   if (labels.some((label) => !label || label.startsWith("-") || label.endsWith("-") || !/^[a-z0-9-]+$/.test(label))) return null;
   if (/^\d+\.\d+\.\d+\.\d+$/.test(clean) || clean.includes(":")) return null;

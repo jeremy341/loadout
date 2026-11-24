@@ -26,7 +26,7 @@ import { db } from "../db";
 import { dataExportAudit } from "../privacy-data";
 import { checkLimit, rateLimitHeaders, RATE_LIMIT_PRESETS, type LimitResult } from "../rate-limit-db";
 import { createRateLimiter } from "../rate-limit";
-import { clientIp } from "../client-ip";
+import { UNKNOWN_IP, clientIp } from "../client-ip";
 import { auditPathOf } from "../service-keys";
 import { logLine, REQUEST_ID_HEADER, requestId } from "../request-id";
 
@@ -104,7 +104,8 @@ async function run(
 
   // The per-IP limit applies to every request, including one with a key, and is checked before any key lookup. A flood of bad
   // keys therefore cannot skip the IP gate, and an over-limit IP is answered 429 without spending a database key read.
-  const ipLimit = await checkLimit({ key: `api-ip:${ip}:minute`, ...RATE_LIMIT_PRESETS.API_IP_MINUTE });
+  const ipPreset = ip === UNKNOWN_IP ? RATE_LIMIT_PRESETS.API_IP_UNKNOWN_MINUTE : RATE_LIMIT_PRESETS.API_IP_MINUTE;
+  const ipLimit = await checkLimit({ key: `api-ip:${ip}:minute`, ...ipPreset });
   const ipHeaders = pickLimitHeaders([ipLimit]);
   if (!ipLimit.ok) return { response: limitedResponse(ipHeaders), headers: ipHeaders };
 

@@ -450,7 +450,7 @@ import { isRealId, loadAudits, loadReal, sampleShipsOn } from "./real";
 
 export const db = sampleDb;
 
-// Pixl proves a birthday is encrypted at rest and decrypts it here. Sample birthdays are plain dates.
+// Birthdays are plain dates here. decryptPII (lib/crypto.ts) passes them through; no stored birthday is encrypted yet.
 export function turnedNineteenSinceShipping(
   birthday: string | null | undefined,
   shippedAt: string | null | undefined,

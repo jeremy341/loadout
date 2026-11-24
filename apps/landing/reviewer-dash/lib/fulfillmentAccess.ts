@@ -2,6 +2,8 @@
 // are unit-testable; app/fulfillment/* and the order actions in app/actions.ts
 // call these.
 
+import { buyerDetailsVisible, isOwnPurchase } from "@/lib/reviewer/buyer-rules";
+
 export interface FulfillmentViewer {
   isOwner: boolean;
   session: { slackId: string };
@@ -24,7 +26,7 @@ export function claimedBy(order: OrderOwnership, slackId: string): boolean {
 // other fulfiller sees the buyer's country only (enough to decide whether to
 // claim it), so browsing the queue doesn't hand out a list of addresses.
 export function canSeeBuyerDetails(order: OrderOwnership, viewer: FulfillmentViewer): boolean {
-  return viewer.isOwner || claimedBy(order, viewer.session.slackId);
+  return buyerDetailsVisible({ isOwner: viewer.isOwner, claimedByViewer: claimedBy(order, viewer.session.slackId) });
 }
 
 // The printable address label: same rule (it's the address in large print).
@@ -34,8 +36,7 @@ export const canViewLabel = canSeeBuyerDetails;
 // 2026-11-14); LOADOUT does not, so the owner flag is accepted and ignored. The handle stands in for the Slack id.
 export function isOwnOrder(order: OrderOwnership, slackId: string, viewerIsOwner = false): boolean {
   void viewerIsOwner;
-  const buyer = (order.player_slack ?? "").trim();
-  return buyer !== "" && buyer === slackId.trim();
+  return isOwnPurchase(order.player_slack, slackId);
 }
 
 // Flagging an order over budget is part of working it, so only the fulfiller

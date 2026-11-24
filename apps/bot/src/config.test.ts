@@ -4,7 +4,7 @@ import { ConfigError, loadConfig, redact } from "./config";
 const KEY = "k".repeat(40);
 const base = {
   SLACK_BOT_TOKEN: "xoxb-test-token",
-  SLACK_SIGNING_SECRET: "signing-test",
+  SLACK_SIGNING_SECRET: "0123456789abcdef0123456789abcdef",
   SITE_BASE_URL: "https://site.example.test/",
   SERVICE_KEY_SLACK_BOT: KEY,
 };
@@ -54,6 +54,13 @@ describe("loadConfig", () => {
     const problems = problemsOf({});
     expect(problems).toContain("SLACK_BOT_TOKEN is required");
     expect(problems).toContain("SLACK_SIGNING_SECRET is required");
+    // A placeholder or a short signing secret is refused at startup, not accepted and left to fail every Slack request.
+    expect(problemsOf({ ...base, SLACK_SIGNING_SECRET: "replace-with-signing-secret" })).toEqual([
+      "SLACK_SIGNING_SECRET must be the 32-character signing secret from the Slack app, not a placeholder",
+    ]);
+    expect(problemsOf({ ...base, SLACK_SIGNING_SECRET: "short" })).toEqual([
+      "SLACK_SIGNING_SECRET must be the 32-character signing secret from the Slack app, not a placeholder",
+    ]);
     expect(problems).toContain("SITE_BASE_URL is required");
     expect(problems).toContain("SERVICE_KEY_SLACK_BOT is required");
     expect(problems.length).toBe(4);

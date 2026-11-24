@@ -67,6 +67,7 @@ export type SignInError =
   | "throttled"
   | "identity_failed"
   | "identity_conflict"
+  | "owner_email_unverified"
   | "account_closed"
   | "gate_failed"
   | "server_error";
@@ -80,6 +81,7 @@ export const SIGN_IN_ERROR_MESSAGES: Record<SignInError, string> = {
   throttled: "Too many tries in a row. Wait a minute, then try again.",
   identity_failed: "We could not read your details from Hack Club Auth. Try again in a moment.",
   identity_conflict: "That Hack Club Auth account does not match the account on this email. Ask the team for help.",
+  owner_email_unverified: "This address is an owner address, and Hack Club Auth has not verified it. Ask the team for help.",
   account_closed: "This account cannot sign in. Contact the team.",
   gate_failed: "That access password was not right. Ask an admin for the shared password and try again.",
   server_error: "Something went wrong on our side. Try again in a moment.",

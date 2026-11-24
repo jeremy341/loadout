@@ -10,6 +10,7 @@ import { databaseConfigured, db } from "@/lib/platform/db";
 import { recordCheck } from "@/lib/platform/fraud/checks";
 import { verdictFor } from "@/lib/platform/fraud/robert-outcome";
 import { advanceIfScored } from "@/lib/platform/fraud/robert-sync";
+import { readCappedBody } from "@/lib/platform/media-limits";
 import {
   WEBHOOK_MAX_BODY_BYTES,
   WEBHOOK_SIGNATURE_HEADER,
@@ -99,6 +100,19 @@ async function applyOutcome(seq: number, reading: Reading, reviewedAt: string): 
   return { recorded: written.ok, advanced, state: "applied" };
 }
 
+// True the first time a verified delivery signature is seen. A captured request that is replayed inside the timestamp tolerance
+// finds its signature already stored and is not processed again (L3). Called only after the signature checks out.
+async function firstDelivery(signature: string): Promise<boolean> {
+  if (!databaseConfigured()) return true;
+  try {
+    await db().webhookReplay.create({ data: { signature } });
+    return true;
+  } catch (error) {
+    if ((error as { code?: string }).code === "P2002") return false;
+    throw error;
+  }
+}
+
 async function applyIfMatched(seq: number | null, reading: Reading, reviewedAt: string): Promise<Applied> {
   if (seq === null) return { recorded: false, advanced: false, state: "unmatched" };
   if (!databaseConfigured()) return { recorded: false, advanced: false, state: "no_database" };
@@ -118,11 +132,18 @@ function nonOutcomeReply(body: OutcomeBody): NextResponse | null {
 }
 
 export async function POST(req: Request) {
-  const rawBody = await req.text();
+  // Counted as it streams, so a huge body is refused without being buffered. The signature is checked over the exact bytes.
+  const bytes = await readCappedBody(req, WEBHOOK_MAX_BODY_BYTES);
+  if (bytes === null) return reply({ ok: false, error: "Body too large." }, 413);
+  const rawBody = new TextDecoder().decode(bytes);
   if (isTooLarge(rawBody)) return reply({ ok: false, error: "Body too large." }, 413);
 
   const refusal = signatureRefusal(req, rawBody);
   if (refusal) return refusal;
+
+  // Only a verified signature is recorded, so an attacker cannot fill the replay table without the secret.
+  const signature = req.headers.get(WEBHOOK_SIGNATURE_HEADER) ?? "";
+  if (!(await firstDelivery(signature))) return reply({ ok: true, duplicate: true }, 200);
 
   const body = parseBody(rawBody);
   if (!body) return reply({ ok: false, error: "Body is not valid JSON." }, 400);

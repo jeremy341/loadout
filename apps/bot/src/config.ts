@@ -109,11 +109,18 @@ export function loadConfig(env: Env): AppConfig {
   const logLevel = get("LOG_LEVEL") || "info";
   if (!(LOG_LEVELS as readonly string[]).includes(logLevel)) problems.push("LOG_LEVEL must be debug, info, warn or error");
 
+  // Slack's signing secret is 32 hex characters. A placeholder or a short value would make every Slack request fail verification
+  // in a confusing way, so the config refuses it at startup.
+  const signingSecret = required("SLACK_SIGNING_SECRET");
+  if (signingSecret && (signingSecret.length < 32 || /^replace[-_]/i.test(signingSecret))) {
+    problems.push("SLACK_SIGNING_SECRET must be the 32-character signing secret from the Slack app, not a placeholder");
+  }
+
   const config: AppConfig = {
     botName,
     triggerWords,
     slackBotToken: required("SLACK_BOT_TOKEN"),
-    slackSigningSecret: required("SLACK_SIGNING_SECRET"),
+    slackSigningSecret: signingSecret,
     siteBaseUrl,
     serviceKey,
     helpChannelId: optionalId("HELP_CHANNEL_ID"),

@@ -24,7 +24,10 @@ export async function POST(request: Request) {
   const helper = checkHelperId(fields.value.slackId);
   if (!helper.ok) return botInvalid(rid, helper.message);
 
-  const result = await addHelper(admin.value, helper.value, parseAdminSlackIds(process.env.BOT_ADMIN_SLACK_IDS));
+  const adminIds = parseAdminSlackIds(process.env.BOT_ADMIN_SLACK_IDS);
+  // An empty list would refuse every admin with the same "forbidden" as a real refusal. Say the server is misconfigured instead.
+  if (adminIds.length === 0) return botError(rid, 503, "admin_list_not_configured");
+  const result = await addHelper(admin.value, helper.value, adminIds);
   if (!result.ok) return botError(rid, 403, "forbidden");
   return botJson(rid, { ok: true });
 }

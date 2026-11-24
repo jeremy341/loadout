@@ -58,15 +58,38 @@ jobs:
           chmod 600 "$HOME/.ssh/loadout_deploy"
           printf '%s\n' "$NEST_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
 
-      - name: Upload release archive
+      - name: Upload and verify release archive
         env:
           RELEASE_SHA: ${{ github.sha }}
           NEST_HOST: ${{ secrets.NEST_HOST }}
           NEST_USER: ${{ secrets.NEST_USER }}
         run: |
-          scp -i "$HOME/.ssh/loadout_deploy" \
-            "$RUNNER_TEMP/loadout-$RELEASE_SHA.tgz" \
-            "$NEST_USER@$NEST_HOST:/tmp/loadout-$RELEASE_SHA.tgz"
+          set -euo pipefail
+          archive="$RUNNER_TEMP/loadout-$RELEASE_SHA.tgz"
+          destination="$NEST_USER@$NEST_HOST"
+          final="/tmp/loadout-$RELEASE_SHA.tgz"
+          partial="$final.$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT.part"
+          checksum=$(sha256sum "$archive")
+          checksum=${checksum%% *}
+          options=(-i "$HOME/.ssh/loadout_deploy" -o BatchMode=yes -o StrictHostKeyChecking=yes
+                   -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=3)
+          printf -v verify_command 'printf "%%s  %%s\\n" %q %q | sha256sum --check --status && mv -f -- %q %q' \
+            "$checksum" "$partial" "$partial" "$final"
+          printf -v cleanup_command 'rm -f -- %q' "$partial"
+          for attempt in 1 2 3; do
+            echo "Uploading release $RELEASE_SHA (attempt $attempt of 3)"
+            if ! scp "${options[@]}" "$archive" "$destination:$partial"; then
+              echo "::warning::SCP reported a failure; checking whether the complete archive arrived."
+            fi
+            if printf '%s\n' "$verify_command" | ssh "${options[@]}" "$destination" 'bash -s'; then
+              echo "Verified the release archive on Nest."
+              exit 0
+            fi
+            echo "::warning::Could not verify or promote the Nest archive on attempt $attempt."
+          done
+          printf '%s\n' "$cleanup_command" | ssh "${options[@]}" "$destination" 'bash -s' || true
+          echo "::error::Failed to upload a verified Nest release archive after three attempts."
+          exit 1
 
       - name: Deploy and verify
         env:

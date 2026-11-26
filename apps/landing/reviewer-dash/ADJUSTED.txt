@@ -9,12 +9,8 @@ reviewer-dash/lib/slack.ts
 reviewer-dash/lib/hackatime.ts
 reviewer-dash/lib/commits.ts
 reviewer-dash/lib/bom.ts
-reviewer-dash/lib/fraudy.ts
 reviewer-dash/lib/crypto.ts
 reviewer-dash/lib/ysws.ts
-reviewer-dash/lib/operations.ts
-reviewer-dash/lib/operationsReview.ts
-reviewer-dash/lib/reviewGrants.ts
 reviewer-dash/lib/aiReview.ts
 reviewer-dash/app/actions.ts
 reviewer-dash/app/_generated/config.ts
@@ -62,19 +58,14 @@ reviewer-dash/app/actions-review.ts
 # P4 operations and fulfilment: hand-written stand-ins and edited copies.
 reviewer-dash/lib/sample/ops.ts
 reviewer-dash/lib/sample/ops-data.ts
-reviewer-dash/lib/sample/opsSql.ts
 reviewer-dash/app/actions-ops.ts
 reviewer-dash/lib/tickets.ts
 reviewer-dash/lib/ticketsApi.ts
-reviewer-dash/lib/pixo.ts
-reviewer-dash/lib/pixoCall.ts
 reviewer-dash/lib/airtable.ts
 reviewer-dash/lib/budget.ts
 reviewer-dash/lib/budgetPosition.ts
 reviewer-dash/lib/budgetCash.ts
 reviewer-dash/lib/eligibility/ships.ts
-reviewer-dash/lib/eligibility/airbridgeCache.ts
-reviewer-dash/lib/eligibility/shipsSnapshotStore.ts
 reviewer-dash/lib/eligibility/evidence.ts
 app/(reviewer)/reviewer/operations/page.tsx
 app/(reviewer)/reviewer/fulfillment/airbridge-preview/page.tsx
@@ -86,7 +77,6 @@ app/api/tickets/[ts]/reply/route.ts
 reviewer-dash/app/actions-roles.ts
 app/(reviewer)/reviewer/reviewers/[id]/page.tsx
 reviewer-dash/app/actions-review.ts
-reviewer-dash/lib/pgCompat.ts
 app/api/projects/export/route.ts
 app/(reviewer)/reviewer/projects/page.tsx
 app/(reviewer)/reviewer/projects/page.tsx

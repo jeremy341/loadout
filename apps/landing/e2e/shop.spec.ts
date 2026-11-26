@@ -29,20 +29,22 @@ test("the hub opens on the top bar, discounts, the closed notice, categories and
   await expect(chips).toHaveText(["All items", "Tools", "Systems", "Compute", "Hardware", "General"]);
   await expect(chips.first()).toHaveAttribute("aria-current", "page");
 
-  // Recently added holds the last eight; Within reach is left out while the Ore balance is zero.
+  // Recently added holds every item flagged new; Within reach is left out while the Ore balance is zero.
   const recent = page.getByRole("region", { name: "Recently added" });
-  await expect(recent.locator(".pf-shop-card")).toHaveCount(8);
+  await expect(recent.locator(".pf-shop-card")).toHaveCount(17);
   await expect(page.getByRole("heading", { level: 2, name: "Within reach" })).toHaveCount(0);
 
   // The long list is 24 at a time, and Show more keeps what is shown.
   const all = page.getByRole("region", { name: "All items" });
   await expect(all.locator(".pf-shop-card")).toHaveCount(24);
-  await expect(all.getByRole("status")).toHaveText("70 items.");
+  await expect(all.getByRole("status")).toHaveText("86 items.");
   await all.getByRole("link", { name: "Show more" }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(all.locator(".pf-shop-card")).toHaveCount(48);
   await page.getByRole("link", { name: "Show more" }).click();
-  await expect(all.locator(".pf-shop-card")).toHaveCount(70);
+  await expect(all.locator(".pf-shop-card")).toHaveCount(72);
+  await page.getByRole("link", { name: "Show more" }).click();
+  await expect(all.locator(".pf-shop-card")).toHaveCount(86);
   await expect(page.getByRole("link", { name: "Show more" })).toHaveCount(0);
 
   // Nothing can be bought, and there is no wishlist star on a card.
@@ -52,9 +54,9 @@ test("the hub opens on the top bar, discounts, the closed notice, categories and
 test("a category, a search and the affordable filter show the list alone, with the tag as its title", async ({ page }) => {
   await page.goto(`${SHOP}?tag=systems`);
   const all = page.getByRole("region", { name: "Systems" });
-  await expect(all.locator(".pf-shop-card")).toHaveCount(16, { timeout: 30000 });
+  await expect(all.locator(".pf-shop-card")).toHaveCount(24, { timeout: 30000 });
   await expect(page.getByRole("region", { name: "Recently added" })).toHaveCount(0);
-  await expect(all.getByRole("status")).toHaveText("16 items match.");
+  await expect(all.getByRole("status")).toHaveText("24 items match.");
   const chips = page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link");
   await expect(chips).toHaveText(["All items", "Tools", "Systems", "Compute", "Hardware", "General"]);
   await expect(chips.nth(2)).toHaveAttribute("aria-current", "page");
@@ -72,7 +74,7 @@ test("a category, a search and the affordable filter show the list alone, with t
   await expect(general.locator(".pf-shop-card").first().locator("h3")).toHaveText("$50 technical conference grant");
 
   await page.goto(`${SHOP}?sort=high`);
-  await expect(page.locator(".pf-shop-grid .pf-shop-card").first().locator("h3")).toHaveText("Framework 16 laptop", { timeout: 30000 });
+  await expect(page.locator(".pf-shop-grid .pf-shop-card").first().locator("h3")).toHaveText("Framework 16 laptop, prebuilt", { timeout: 30000 });
   await page.goto(`${SHOP}?afford=1`);
   await expect(page.getByText(/Nothing you can afford yet/)).toBeVisible({ timeout: 30000 });
   await page.goto(`${SHOP}?q=zzzz`);
@@ -108,7 +110,7 @@ test("an item page shows the price box, how the price is worked out, the closed 
 
   await page.goto(`${SHOP}/framework-12`);
   const price = page.getByRole("region", { name: "Your price" });
-  await expect(price).toContainText("Base price1,260 Ore");
+  await expect(price).toContainText("Base price1,605 Ore");
   await expect(price).toContainText(/Tools level discount−\d+(\.\d)?%/);
   await expect(price).toContainText(/You pay[\d,]+ Ore/);
   await expect(price).not.toContainText("With a Field Requisition this would be");
@@ -254,7 +256,7 @@ test("a builder with Tools past LV.5 can choose a Field Requisition on a Tools i
   await expect(price).toContainText(/You save [\d,]+ Ore more with the requisition\./);
   const after = Number(((await price.locator(".pf-shop-total dd").innerText()).match(/[\d,]+/) ?? ["0"])[0].replace(/,/g, ""));
   expect(after).toBeLessThan(before);
-  expect(before - after).toBe(126);
+  expect(before - after).toBe(161);
 
   // The link works on a fresh load, and the order button stays closed.
   await page.reload();
@@ -324,7 +326,8 @@ test("the strip arrows scroll a rail and are disabled at its ends", async ({ pag
   await expect(right).toBeEnabled();
   await right.click();
   await expect(left).toBeEnabled();
-  for (let step = 0; step < 10; step += 1) {
+  // One press moves less than a full view, and the rail holds every new item, so allow plenty of presses.
+  for (let step = 0; step < 30; step += 1) {
     if (await right.isDisabled()) break;
     await right.click();
     // The strip scrolls, then the arrow state follows the scroll position, so give it a moment between presses.
@@ -373,14 +376,14 @@ test("a tag with no matches keeps the category heading and clears back to the fu
 test("an unknown tag or page value is ignored rather than breaking the hub", async ({ page }) => {
   await page.goto(`${SHOP}?tag=not-a-category`);
   await expect(page.getByRole("heading", { level: 2, name: "All items" })).toBeVisible({ timeout: 30000 });
-  await expect(page.getByRole("status")).toHaveText("70 items.");
+  await expect(page.getByRole("status")).toHaveText("86 items.");
   const chips = page.getByRole("navigation", { name: "Filter by tag" }).getByRole("link");
   await expect(chips.first()).toHaveAttribute("aria-current", "page");
 
   // A page past the end shows the whole catalog once, with no link to a further page.
   await page.goto(`${SHOP}?page=999`);
-  await expect(page.getByRole("status")).toHaveText("70 items.", { timeout: 30000 });
-  await expect(page.locator(".pf-shop-grid .pf-shop-card")).toHaveCount(70);
+  await expect(page.getByRole("status")).toHaveText("86 items.", { timeout: 30000 });
+  await expect(page.locator(".pf-shop-grid .pf-shop-card")).toHaveCount(86);
   await expect(page.getByRole("link", { name: "Show more" })).toHaveCount(0);
 });
 
@@ -389,7 +392,7 @@ test("a requisition link on an ineligible item is ignored and its choice stays b
   const cases = [
     { id: "usb-c-dock", total: "You pay90 Ore", reason: "Requisitions need an item of 400 Ore or more." },
     { id: "oscilloscope", total: "You pay974 Ore", reason: "This item is in another track." },
-    { id: "mac-mini", total: "You pay1,365 Ore", reason: "This item is in another track." },
+    { id: "mac-mini", total: "You pay2,557 Ore", reason: "This item is in another track." },
     { id: "conference-grant", total: "You pay115 Ore", reason: "General items are open to everyone" },
   ] as const;
   for (const { id, total, reason } of cases) {
@@ -410,18 +413,18 @@ test("prices keep thousands separators, the minus sign and one-decimal discounts
   // The largest draft price, so both the grouping and the rounded-down discount are visible.
   await page.goto(`${SHOP}/framework-16`);
   const price = page.getByRole("region", { name: "Your price" });
-  await expect(price).toContainText("Base price2,915 Ore", { timeout: 30000 });
+  await expect(price).toContainText("Base price4,230 Ore", { timeout: 30000 });
   await expect(price).toContainText("Tools level discount−4.8%");
-  await expect(price).toContainText("You pay2,775 Ore");
-  await expect(price).toContainText("That is about 277.5 approved hours of work.");
-  await expect(price.locator(".pf-shop-was")).toContainText("2,915");
+  await expect(price).toContainText("You pay4,027 Ore");
+  await expect(price).toContainText("That is about 402.7 approved hours of work.");
+  await expect(price.locator(".pf-shop-was")).toContainText("4,230");
 
   // The requisition uses the same grouping and the plain minus sign.
   await page.getByRole("checkbox", { name: "Field Requisition (2)" }).click();
   await expect(page).toHaveURL(/requisition=1/);
   await expect(price).toContainText("Field Requisition−10%");
-  await expect(price).toContainText("You pay2,484 Ore");
-  await expect(price).toContainText("You save 291 Ore more with the requisition.");
+  await expect(price).toContainText("You pay3,604 Ore");
+  await expect(price).toContainText("You save 423 Ore more with the requisition.");
 
   // A General item is at full price: no struck-through amount and no discount line.
   await page.goto(`${SHOP}/meta-quest-3`);

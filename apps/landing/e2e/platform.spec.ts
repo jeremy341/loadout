@@ -166,7 +166,7 @@ test("the Shop lists the proposed items with track tags, discounts and a plain n
   await expect(tags.nth(2)).toHaveAttribute("aria-current", "page");
 
   // A multi-track item shows under every track it relates to, at the best related track discount.
-  await expect(cards).toHaveCount(16);
+  await expect(cards).toHaveCount(24);
   await expect(cards.filter({ hasText: "Raspberry Pi 5" })).toHaveCount(1);
   await expect(cards.filter({ hasText: "Hardware security key" })).toHaveCount(1);
   await expect(cards.filter({ hasText: "Framework 16 laptop" })).toHaveCount(1);
@@ -183,7 +183,7 @@ test("the Shop lists the proposed items with track tags, discounts and a plain n
 
   // Sort and the affordable filter live in the address, with a message when nothing matches.
   await page.goto("/dashboard/shop?sort=high");
-  await expect(cards.first().locator("h3")).toHaveText("Framework 16 laptop", { timeout: 30000 });
+  await expect(cards.first().locator("h3")).toHaveText("Framework 16 laptop, prebuilt", { timeout: 30000 });
   await page.goto("/dashboard/shop?afford=1");
   await expect(page.getByText(/Nothing you can afford yet/)).toBeVisible({ timeout: 30000 });
   await page.goto("/dashboard/shop?q=zzzz");

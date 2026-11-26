@@ -15,7 +15,7 @@ export const faqItems = [
   { question: "What is Toolbelt?",
     answer: "Equip another builder's finished project in yours. You earn 50 Ore once per tool, and its maker earns 10 Ore per verified user (working numbers)." },
   { question: "What can I buy?",
-    answer: "Examples so far: boards, tools, storage, printers and laptops, from 25 Ore for a domain to 2,915 for a Framework 16." },
+    answer: "Examples so far: boards, tools, storage, printers and laptops, from 25 Ore for a domain to 4,230 for a Framework 16." },
   { question: "Can I use AI?",
     answer: "Yes. Say where you used it, and show what you built and understand yourself. Using AI alone doesn't rule a project out." },
   { question: "Can I work with a team?",

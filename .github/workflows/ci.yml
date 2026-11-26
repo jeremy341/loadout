@@ -95,6 +95,9 @@ jobs:
       - name: Typecheck
         if: steps.changed.outputs.app == 'true'
         run: bun run typecheck
+      - name: Unused files and dependencies
+        if: steps.changed.outputs.app == 'true'
+        run: bun run deadcode
       - name: Unit tests
         if: steps.changed.outputs.app == 'true'
         run: bun run test

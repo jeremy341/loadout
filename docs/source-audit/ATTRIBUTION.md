@@ -246,3 +246,26 @@ The two nights' stays and the $10 parts grant were removed (72 items on 60 pictu
 ## Reviewer site: copy of Pixl's internal dashboard — 2026-11-15
 
 The reviewer site (`apps/landing/reviewer-dash/` and the review routes in `apps/landing/app/(reviewer)/reviewer/`) is a copy of `references/pixl/apps/internal-dashboard` at commit `1468ba6942b13add1ac50e1319541a033ee1df38`, under Pixl's MIT licence and the owner-stated permission recorded above. Pixl's notice is kept in `apps/landing/reviewer-dash/PIXL-LICENSE.md`. The files are copied by `apps/landing/reviewer-dash/scripts/copy-from-pixl.mjs`, which rewrites the import aliases and prints how each file differs from Pixl's; every hand edit is listed in `apps/landing/reviewer-dash/ADJUSTMENTS.md` and `ADJUSTED.txt`. The data layer, sign-in, session and server actions are LOADOUT's own and run on sample data. Not copied: Phantom Sans and every other font, images and art, `apps/pixorpheus`, the game, pixels and shop code, and anything that needs a key or a network call. The copied code uses `@hackclub/icons` (the Hack Foundation, a three-clause BSD-style licence), `motion`, `d3-scale`, `d3-shape`, `d3-array`, `clsx` and `tailwind-merge` (MIT or ISC).
+
+## Shop catalog photos from Wikimedia Commons, 2026-11-25
+
+Fourteen pictures in `apps/landing/public/loadout/shop/` were added or recut from Wikimedia Commons photos, each credited on its item page. Page URLs are `https://commons.wikimedia.org/wiki/` plus the file name. **Changes made to each photo:** background removed locally with `rembg` (model `isnet-general-use`; MIT tool, run from a scratch folder and not added to the repo), cropped, fitted inside 800 px and saved as WebP. The RTL-SDR picture also drops the loose cap and cable, and the multimeter picture is trimmed to its casing. The share-alike licences apply to these pictures only, including these changed versions, not to the rest of the site.
+
+| Shop file | Commons file | Author | Licence |
+| --- | --- | --- | --- |
+| `eink-module` | `File:Monokroomne e-paberi moodul suurusega 122x250 pikslit.jpg` | Tauno Erik | CC BY 4.0 |
+| `thermal-camera` | `File:FLIR One Pro Thermal Camera (30418521478).jpg` | jcutrer com | CC BY-SA 2.0 |
+| `lora-node` | `File:Meshtastic FakeTec node with display P1089966.jpg` | -stk | CC BY-SA 4.0 |
+| `bench-psu` | `File:Bench power supply.jpg` | Derrick Parker | CC0 |
+| `mini-pc` | `File:Dell OptiPlex 3060 Micro (1).jpg` | Cjp24 | CC BY-SA 4.0 |
+| `thinkpad` | `File:ThinkPad T14.jpg` | Edvard10 | CC0 |
+| `macbook-neo` | `File:MacBook Neo in Citrus.jpg` | Padgriffin | CC BY 4.0 |
+| `security-key` | `File:YubiKey 5C NFC bare frontish.jpg` | Addshore | CC BY-SA 4.0 |
+| `serial-kit` | `File:CH341A USB with crocodile clip.jpg` | RAIL P (RAIL.PHOTOGRAPHY) | CC0 |
+| `usb-meter` | `File:Yojock USB-Tester 001.jpg` | Marschmensch | CC BY-SA 4.0 |
+| `multimeter` | `File:UT61D digital multimeter front.jpg` | Anselm Schüler | CC BY-SA 4.0 |
+| `robotics-kit` | `File:Tower Pro SG90 micro servo motor.jpg` | Suyash Dwivedi | CC BY-SA 4.0 |
+| `nas` | `File:Synology Disk Station DS223J - NAS-Server.jpg` | DYVER | CC BY-SA 4.0 |
+| `rtl-sdr` | `File:Rtl-sdr.jpg` | Joeceads | CC BY-SA 4.0 |
+
+The generic monitor, API credits and PCB grant now use LOADOUT sprites instead of a maker's advert, a company logo and an unrelated collage.

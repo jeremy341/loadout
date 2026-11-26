@@ -51,7 +51,7 @@ gh pr merge <number> --squash --auto
 
 The required checks are listed once in [the required-check contract](required-checks.md). That contract describes workflow configuration, not proof of GitHub branch protection; see [branch protection setup](branch-protection-setup.md) for dated settings evidence.
 
-All of the checks start at the same moment and run in parallel: Repository integrity, Landing quality (lint, typecheck, unit tests and the production build), and eight browser runners that cover the suite exactly once. A pull request normally finishes in about three minutes. Vercel also builds a preview for every pull request, so check the change there before you merge.
+All of the checks start at the same moment and run in parallel: Repository integrity, Landing quality (lint, typecheck, unused files and dependencies, unit tests and the production build), and eight browser runners that cover the suite exactly once. A pull request normally finishes in about three minutes. Vercel also builds a preview for every pull request, so check the change there before you merge.
 
 Rules that keep the history short:
 
@@ -80,6 +80,7 @@ Run the relevant checks; a full Docs or landing change uses:
 ```powershell
 bun run lint
 bun run typecheck
+bun run deadcode
 bun run test
 bun run build
 bun run test:e2e

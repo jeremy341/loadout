@@ -8,7 +8,7 @@ This document owns all rules that affect XP, Ore, reward pricing, specialization
 
 > **Depth gives leverage. Breadth gives flexibility. Mastery gives access.**
 
-## Decisions recorded through 2026-10-19
+## Decisions recorded through 2026-11-25
 
 This table is the current decision summary and supersedes conflicting legacy prose below. This plan owns rates, Ore, prizes, and economic limits. Peer review was removed on 22 Oct 2026. The future platform and review service are not implemented. The calibration worksheet contains candidate calculations but does not override this plan.
 
@@ -24,11 +24,11 @@ This table is the current decision summary and supersedes conflicting legacy pro
 | Toolbelt rewards (owner, 14 Nov 2026) | Equipping builder: 50 Ore once per tool/project after the significant-use gate (the equipping project needs 25 approved hours). Maker: 10 Ore per verified user who passes the gate, capped at 500 Ore per tool/project per season. No Usage Milestones, no badges, no checkpoints, no seasonal pool. No Track XP from equipping. Detail in section 19 and [toolbelt.md](proposals/toolbelt.md). |
 | General Requisition stacking (owner, 14 Nov 2026) | A General Requisition is a second ticket that works in any track (not track-bound) and stacks with the track discount and one Field Requisition. Combined cap 40%. It is earned only through a Flagship (reviewer-decided standout award), one per Flagship. One General Requisition per order; the 400 Ore minimum applies to both tickets. |
 | Ore value (owner, 14 Nov 2026) | 10 Ore = $4.35 internal, up from $4.25. Shop Ore prices were repriced by 4.25 ÷ 4.35, rounded to 5 Ore, with items already at 400 or more held at 400 or more so Requisition eligibility is kept. This replaces the 15 Oct price values in the catalogue. |
-| Levels 16–20 and discount cap (owner, 14 Nov 2026) | Max level is now LV.20. The whole curve was rescaled on 14 Nov 2026 so LV.20 is 275 approved hours: LV.5 23, LV.8 58, LV.11 104, LV.15 178, LV.18 236, LV.20 275 (replacing the owner's 35/90/160/275 set levels). The permanent discount is 15% at LV.15, rising one point per level to 20% at LV.20. The combined cap (permanent plus Requisition) is 30%, which equals LV.20 plus one Requisition. These values replace the 25% cap and LV.15 maximum. Field Requisitions now sit at LV.5, 8, 11, 15, 18 and 20 (six per track, 10% each; no larger size, because above 10 points the 30% cap would cut it). LV.18 and LV.20 were added 14 Nov 2026. |
+| Levels 16–20 and discount cap (owner, 14 Nov 2026) | Max level is now LV.20. The whole curve was rescaled on 14 Nov 2026 so LV.20 is 275 approved hours: LV.5 23, LV.8 58, LV.11 104, LV.15 178, LV.18 236, LV.20 275 (replacing the owner's 35/90/160/275 set levels). The permanent discount is 15% at LV.15, rising one point per level to 20% at LV.20. With the permanent discount and one Field Requisition the most is 30%, which equals LV.20 plus one ticket; a General Requisition on top raises the combined cap to 40% (row above). These values replace the 25% cap and LV.15 maximum. Field Requisitions now sit at LV.5, 8, 11, 15, 18 and 20 (six per track, 10% each; no larger size, because above 10 points the 30% limit on a Field Requisition would cut it). LV.18 and LV.20 were added 14 Nov 2026. |
 | External contributors | Open source is required. The first meaningful external contribution earns a separate achievement and +50 Ore. |
 | Referrals | A referral counts only after the invited builder verifies, tracks and journals real work, and earns a first approved ship. Referral reward amounts and milestone ladder remain open. |
 | Seasons and community rewards | Include achievements, seasons, seasonal quests, leaderboards, Community Eras, missions, and community rewards. Exact season cadence, quest values, and reward triggers remain open where not already fixed below. |
-| General Requisitions | Include rare, one-use discounts that can be awarded for community actions or achievements. Exact triggers and values remain open. |
+| Apple computer pricing (25 Nov 2026) | Any laptop is allowed. A MacBook or Mac desktop has a base price of 1.25 times the USD working price at the Ore rate, rounded to 5. iPads and the Apple Developer Program are not included. The $50 laptop grant is split into a PC grant (115 Ore, never for Apple hardware) and a Mac grant (145 Ore). Custom Order quotes for a Mac use the same factor. Detail in section 26.2. |
 | Reward shop | Add a personal wishlist. Do not add a separate shop suggestion or voting system. Ore prices are the same in every region; availability and delivery may vary. |
 | IRL and event-only systems | LOADOUT IRL is parked. Stasis-style inventory, rentals, NFC checkout, and manufacturing are reserved for the in-person event, not the online platform. |
 | Open ideas | Keep Limited Drops and sponsor drops/challenges as unconfirmed ideas. A free tools-and-services directory is planned for later, limited to services confirmed for LOADOUT participants. |
@@ -42,12 +42,12 @@ This table is the current decision summary and supersedes conflicting legacy pro
 | Tracking and evidence | Hackatime for software, Lapse for Hardware, journal every eight development hours, required Hardware BOM, Lapse videos visible only to the team | Tracker integration, consent, retention, and exact hardware evidence workflow | `content/docs/tracking.md`, `project-types.md`, `shipping.md` |
 | Referrals | Count only after verified builder's first approved ship | Reward values and milestone ladder | `content/docs/referrals.md` (planned) |
 | Contributor achievement | First meaningful external contribution earns +50 Ore | How later contributions are recognized | `content/docs/progress.md` |
-| General Requisitions | Rare one-use shop discounts for community actions/achievements | Award triggers, values, inventory and limits | `content/docs/requisitions.md` |
+| General Requisitions | One-use 10% ticket in any track, stacks with one Field Requisition, 400 Ore minimum, earned only through a Flagship (14 Nov 2026) | Flagship reviewer checklist and ticket records | `content/docs/requisitions.md` |
 | Shop | Wishlist included; prices uniform across regions; no shop-suggestion voting | Wishlist behavior, catalog operations, regional availability and delivery | `content/docs/pricing.md`, `prizes.md` |
 | Shop and event ideas | Limited Drops and sponsor drops/challenges remain unconfirmed; free resource directory is planned later | Whether/when to scope these ideas and which services are actually available | Internal only until approved |
 | Custom Orders | Relevant level, approved work, sufficient Ore and team fulfillment approval; program cancellation restores the Requisition | Tier levels and limits, quote validity, exact sourcing formula and cancellation/refund terms | `content/docs/custom-orders.md` |
 
-Intermediate level-discount and XP curves, Research Mode bonuses, Custom Order details, and unconfirmed reward thresholds remain open. No answer or elapsed time automatically approves an open value. The agreed Field Requisition schedule is LV.5, LV.8, LV.11 and LV.15, four tickets per track (decided 24 Oct 2026).
+Intermediate level-discount and XP curves, Research Mode bonuses, Custom Order details, and unconfirmed reward thresholds remain open. No answer or elapsed time automatically approves an open value. The agreed Field Requisition schedule is LV.5, LV.8, LV.11, LV.15, LV.18 and LV.20, six tickets per track (14 Nov 2026; it replaced the four-ticket schedule of 24 Oct 2026).
 
 
 ---
@@ -359,27 +359,7 @@ WIN
 
 Use rare **General Requisitions** instead. They are significant, but one-use. General Requisitions are included in LOADOUT's planned community-reward system and may be earned through community actions or achievements; specific triggers and amounts remain open.
 
-Possible seasonal structure:
-
-```text
-SEASON #1
-General Master Requisition
-one purchase, any eligible field
-large capped saving
-
-SEASON #2–3
-General Requisition II
-
-TRACK WINNER
-Field Requisition
-for that track
-
-TOP BUILDER
-General Requisition II
-
-TOP 5 BUILDERS
-General Requisition I
-```
+A General Requisition is earned only through a Flagship (14 Nov 2026), so seasons and leaderboard places do not award one. The earlier tiered season structure was removed; see git history. A track winner may still be considered for a Field Requisition in that track.
 
 Possible non-economic rewards:
 - season badge
@@ -512,6 +492,10 @@ An item records its base Ore price, related tracks, access requirements, Requisi
 **Historical (superseded 20 Nov 2026):** an earlier version of this plan recorded 200 Ore as the agreed sample price for a Raspberry Pi 5, replacing a still older 700-Ore illustration. Neither figure is the current working price. Treat 200 Ore as a historical illustration only.
 
 **Working entry, 20 Nov 2026:** the working-catalog price for a Raspberry Pi 5 is 490 Ore, aligned with the public Docs ([Prizes & requests](../content/docs/prizes.md)) and the homepage planned-prizes block. It is provisional until the shop opens; no owner approval of a final price is implied. Hardware and Systems are relevant fields. A cross-track surcharge is still a candidate, so no automatic +10% markup is implied.
+
+**Apple computers (25 Nov 2026).** Any laptop is allowed, and Apple computers cost more Ore per dollar. A MacBook or Mac desktop has a base price of its USD working price ÷ 0.435 × 1.25, rounded to 5. Level discounts and Requisitions then apply to that base as usual. The $50 PC laptop grant cannot pay for Apple hardware; the $50 Mac grant is 145 Ore.
+
+**Catalog refresh (25 Nov 2026).** The working catalog gained build-focused items. The AirPods Pro and the Blåhaj plush stay as an exception to section 26.1, on the requester's instruction (26 Nov 2026). The Jetson Nano kit, which NVIDIA was phasing out, was replaced by the Orin Nano Super, and the Raspberry Pi 5 entry now means the 8 GB model. Items, USD figures and sources are in [the proposal](proposals/shop-hacker-items.md). All of these are provisional working prices.
 
 There is no `normal_discount_cap_ore` field in the current product rule: the owner removed savings caps in Ore. Future platform design can choose its schema after the remaining rules are settled.
 
@@ -680,44 +664,16 @@ Use one clear confirmation showing the base price, permanent saving, ticket savi
 
 ## 26.11 General Requisitions
 
-**Planned feature; details remain open.** The examples below do not establish an amount, threshold, or entitlement. General Requisitions are rare one-use discounts for eligible shop items and may reward community actions or achievements.
+**Planned feature (owner, 14 Nov 2026).** The shop previews it; holding a ticket and using it on a real order needs a ticket record that is not built yet.
 
-General Requisitions can be used on any eligible field.
+- A second ticket that works in any track and stacks with the track discount and one Field Requisition.
+- Worth 10% of the base price, on an item of 400 Ore or more, one per order.
+- Combined cap 40% of the base price.
+- Earned only through a Flagship, one per Flagship. The Flagship rules are in [rewards and recognition](proposals/rewards-and-recognition.md).
 
-They are **not permanent global discounts**.
+The older three-tier version (General Requisition I, II and Master, not stackable) is superseded.
 
-They should be awarded rarely for major community/program contributions such as:
-- season champion;
-- top track performance;
-- sponsor challenge;
-- organizer-selected exceptional contribution.
-
-Working defaults:
-
-### GENERAL REQUISITION I
-```text
-Minimum item: 1,000 Ore
-10% one-purchase discount
-Maximum saving: 300 Ore
-```
-
-### GENERAL REQUISITION II
-```text
-Minimum item: 2,000 Ore
-15% one-purchase discount
-Maximum saving: 600 Ore
-```
-
-### GENERAL MASTER REQUISITION
-```text
-Minimum item: 4,000 Ore
-15% one-purchase discount
-Maximum saving: 1,000 Ore
-```
-
-A General Requisition can be used instead of a Field Requisition, **not together with one**.
-
-Permanent track pricing still applies first. The General Requisition then adds its allowed one-time benefit subject to the item's final discount guardrails.
+---
 
 ## 26.12 Requisition Inventory
 
@@ -1050,7 +1006,7 @@ A Custom Order uses its final approved base quote. Show eligibility, each saving
 
 These sample prices are working examples for planning copy, not final price promises, current stock or fulfillment commitments. Hours assume the solid-work baseline of 10 Ore per approved hour and no purchase discount.
 
-**Working catalog, 20 Nov 2026.** This table matches the public Docs ([Prizes & requests](../content/docs/prizes.md)) and the homepage planned-prizes block. All prices are provisional working values until the shop opens; this entry records alignment with the public copy and does not claim a new owner price approval.
+**Working catalog, 20 Nov 2026, with the Framework 16 repriced as a prebuilt on 25 Nov 2026.** This table matches the public Docs ([Prizes & requests](../content/docs/prizes.md)) and the homepage planned-prizes block. All prices are provisional working values until the shop opens; this entry records alignment with the public copy and does not claim a new owner price approval.
 
 | Item | Base Ore | Solid-work hours |
 |---|---:|---:|
@@ -1061,7 +1017,7 @@ These sample prices are working examples for planning copy, not final price prom
 | Domain | 25 | 2.5 |
 | A1 Mini printer | 615 | 61.5 |
 | Enclosed printer | 1,020 | 102 |
-| Framework 16 | 2,915 | 291.5 |
+| Framework 16 | 4,230 | 423 |
 
 The enclosed printer and Framework 16 have no level requirement in this working catalog. Other specialist equipment gates and additional item prices remain undecided. The calibration worksheet keeps additional candidate items for internal comparison.
 
@@ -1093,7 +1049,7 @@ Use the decision table at the top of this document and current sections 10, 11, 
 - No total limit on legitimate hours or projects; repeat ships need five new approved hours and new work.
 - Lifetime progress persists across Seasons and Eras.
 - Shop prices in Ore are the same in every region; item availability and delivery can vary by region.
-- General Requisitions are planned as rare one-use community/achievement rewards; exact triggers and amounts remain open.
+- A General Requisition is a one-use 10% ticket that stacks with one Field Requisition and is earned only through a Flagship (section 26.11).
 
 No older example, fallback default or unpublished candidate silently changes these rules.
 
@@ -1101,7 +1057,7 @@ No older example, fallback default or unpublished candidate silently changes the
 
 ## Working Values To Pilot-Test
 
-The following remain open: intermediate discount and XP curves, the XP quality equation, any Research XP bonus, cross-track markup, Usage Milestone thresholds/rewards, referral reward values, General Requisition triggers/values, Custom Order tier values, and buyer-refund terms. Limited Drops and sponsor drops/challenges remain open ideas, not approved program features. See the calibration worksheet (removed; see git history). Do not treat an open item as an entitlement.
+The following remain open: intermediate discount and XP curves, the XP quality equation, any Research XP bonus, cross-track markup, Usage Milestone thresholds/rewards, referral reward values, the Flagship reviewer checklist, Custom Order tier values, and buyer-refund terms. Limited Drops and sponsor drops/challenges remain open ideas, not approved program features. See the calibration worksheet (removed; see git history). Do not treat an open item as an entitlement.
 
 ---
 
@@ -1111,7 +1067,7 @@ The following remain open: intermediate discount and XP curves, the XP quality e
 2. Research bonus amount and qualification criteria.
 3. Full level-discount curve, rounding and cross-track pricing.
 4. Usage Milestone qualification/evidence and referral reward configuration.
-5. General Requisition triggers and award values; determine if and when open drop/sponsor ideas receive a separate approval.
+5. The Flagship reviewer checklist and General Requisition ticket records; determine if and when open drop/sponsor ideas receive a separate approval.
 6. Custom Order tiers, limits, landed-cost formula, quote validity and cancellation/refund terms.
 7. Confirmed inventory, regional delivery/tax terms and operational launch readiness.
 

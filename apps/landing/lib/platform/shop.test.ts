@@ -1,7 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+  APPLE_PRICE_FACTOR,
   categoryCount,
   categoryThumbs,
   filterShopItems,
@@ -17,6 +18,7 @@ import {
   lockFor,
   parseShopQuery,
   priceFor,
+  RETIRED_SHOP_IDS,
   SHOP_ITEMS,
   SHOP_TAGS,
   shopGridColumns,
@@ -33,8 +35,8 @@ const all: ShopQuery = { q: "", tag: null, sort: "featured", afford: false };
 const item = (id: string) => shopItemById(id) as ShopItem;
 
 describe("catalog", () => {
-  test("it holds the 70 proposed items", () => {
-    expect(SHOP_ITEMS).toHaveLength(70);
+  test("it holds the 86 proposed items", () => {
+    expect(SHOP_ITEMS).toHaveLength(86);
   });
 
   test("every item has a unique id, a positive price and a photo", () => {
@@ -48,11 +50,55 @@ describe("catalog", () => {
   test("the working prices match the Docs table", () => {
     expect(item("esp32-starter-kit").baseOre).toBe(30);
     expect(item("raspberry-pi-5").baseOre).toBe(490);
-    expect(item("framework-16").baseOre).toBe(2915);
+    expect(item("framework-16").baseOre).toBe(4230);
   });
 
   test("an unknown id is not an item", () => {
     expect(shopItemById("nope")).toBeNull();
+  });
+});
+
+describe("pricing rules", () => {
+  // The USD working prices behind the Apple entries (plans/proposals/shop-hacker-items.md).
+  test("Apple computers carry the Apple factor on top of 10 Ore = $4.35, rounded to 5", () => {
+    expect(APPLE_PRICE_FACTOR).toBe(1.25);
+    const usd = { "mac-mini": 899, "macbook-air": 1299, "macbook-neo": 699, "mac-grant": 50 };
+    for (const [id, price] of Object.entries(usd)) {
+      expect(item(id).baseOre).toBe(5 * Math.round((price * APPLE_PRICE_FACTOR) / 0.435 / 5));
+    }
+  });
+
+  test("a Mac costs more Ore than a PC laptop at the same dollar price, and so does its grant", () => {
+    expect(item("macbook-neo").baseOre).toBeGreaterThan(item("framework-12").baseOre);
+    expect(item("mac-grant").baseOre).toBeGreaterThan(item("laptop-grant").baseOre);
+    expect(item("laptop-grant").blurb).toContain("non-Apple");
+  });
+
+  test("a retired item is not in the catalog", () => {
+    expect(SHOP_ITEMS.filter((entry) => RETIRED_SHOP_IDS.includes(entry.id))).toEqual([]);
+  });
+
+  test("the public Docs table shows catalog names and prices", () => {
+    const docs = readFileSync(join(process.cwd(), "../../content/docs/prizes.md"), "utf8");
+    const rows = [...docs.matchAll(/^\| (.+?) \| ([\d,]+) Ore \|/gm)];
+    expect(rows.length).toBeGreaterThan(0);
+    for (const [, name, ore] of rows) {
+      expect({ name, ore: SHOP_ITEMS.find((entry) => entry.name === name)?.baseOre }).toEqual({ name, ore: Number(ore.replace(",", "")) });
+    }
+  });
+
+  test("both FAQs quote the catalog's Framework 16 price", () => {
+    const price = item("framework-16").baseOre.toLocaleString("en-US");
+    const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
+    expect(read("app/_components/home/faq-items.ts")).toContain(`${price} for a Framework 16`);
+    expect(read("../../content/docs/faq.md")).toContain(`${price}-Ore Framework 16`);
+  });
+
+  test("every homepage prize id is in the catalog", () => {
+    const belt = readFileSync(join(process.cwd(), "app/_components/home/PlannedPrizes.tsx"), "utf8");
+    const ids = [...belt.matchAll(/ id: "([a-z0-9-]+)"/g)].map((match) => match[1]);
+    expect(ids).toHaveLength(6);
+    for (const id of ids) expect(shopItemById(id)).not.toBeNull();
   });
 });
 
@@ -136,8 +182,8 @@ describe("filter and sort", () => {
   const ids = (query: ShopQuery, ore = 0) => filterShopItems(SHOP_ITEMS, query, approved, ore).map((entry) => entry.id);
 
   test("a track tag shows every item that relates to it, including multi-track items", () => {
-    expect(ids({ ...all, tag: "Systems" })).toEqual(["security-key", "vps-year", "hosting-grant", "cloud-db-credits", "network-switch", "nas", "mac-mini", "samsung-t7-ssd", "raspberry-pi-5", "pi-zero-2-w", "pc-upgrade-grant", "framework-12", "framework-16", "laptop-grant", "lora-node", "macbook-air"]);
-    expect(ids({ ...all, tag: "Compute" })).toEqual(["api-credits", "mac-mini", "samsung-t7-ssd", "gpu-cloud-credits", "cpu-cloud-credits", "pc-upgrade-grant", "fpga-starter-board", "jetson-nano", "rx-9060", "framework-12", "framework-16", "laptop-grant", "macbook-air"]);
+    expect(ids({ ...all, tag: "Systems" })).toEqual(["security-key", "vps-year", "hosting-grant", "server-grant", "cloud-db-credits", "network-switch", "nas", "hdd-grant", "kvm-over-ip", "used-mini-pc", "mac-mini", "samsung-t7-ssd", "raspberry-pi-5", "pi-zero-2-w", "pc-upgrade-grant", "framework-12", "framework-16", "laptop-grant", "thinkpad-refurb", "mac-grant", "macbook-neo", "lora-node", "serial-kit", "macbook-air"]);
+    expect(ids({ ...all, tag: "Compute" })).toEqual(["api-credits", "server-grant", "used-mini-pc", "mac-mini", "samsung-t7-ssd", "gpu-cloud-credits", "cpu-cloud-credits", "pc-upgrade-grant", "fpga-starter-board", "jetson-orin-nano", "rx-9060", "framework-12", "framework-16", "laptop-grant", "thinkpad-refurb", "mac-grant", "macbook-neo", "macbook-air"]);
   });
 
   test("General shows only the items with no track", () => {
@@ -151,13 +197,13 @@ describe("filter and sort", () => {
 
   test("search matches the name, kind and description, ignoring case", () => {
     expect(ids({ ...all, q: "PI" })).toContain("raspberry-pi-5");
-    expect(ids({ ...all, q: "fabrication" })).toEqual(["pcb-grant", "filament", "ender-3-v3", "bambu-a1-mini", "enclosed-printer"]);
+    expect(ids({ ...all, q: "fabrication" })).toEqual(["pcb-grant", "pcba-grant", "parts-grant", "filament", "ender-3-v3", "bambu-a1-mini", "enclosed-printer"]);
     expect(ids({ ...all, q: "zzz" })).toEqual([]);
   });
 
   test("affordable keeps only what the balance covers", () => {
     expect(ids({ ...all, afford: true }, 0)).toEqual([]);
-    expect(ids({ ...all, afford: true }, 30)).toEqual(["domain", "api-credits", "hosting-grant", "pico-w", "esp32-starter-kit", "debug-probe", "pcb-grant"]);
+    expect(ids({ ...all, afford: true }, 30)).toEqual(["domain", "api-credits", "hosting-grant", "pico-w", "pico-2-w", "esp32-starter-kit", "debug-probe", "pcb-grant", "parts-grant"]);
   });
 
   test("price sorts use the price after the discount", () => {
@@ -194,8 +240,9 @@ describe("catalog photos", () => {
     const credited = SHOP_ITEMS.filter((entry) => entry.credit).map((entry) => entry.id);
     expect(new Set(credited)).toEqual(
       new Set([
-        "pico-w", "fpga-starter-board", "logic-analyzer", "security-key", "pi-zero-2-w", "breadboard-kit", "rtl-sdr", "oscilloscope", "filament",
-        "robotics-kit", "multimeter", "usb-microscope", "pinecil", "usb-c-dock", "jetson-nano", "calipers", "hot-air-station", "fume-extractor",
+        "pico-w", "fpga-starter-board", "logic-analyzer", "security-key", "pi-zero-2-w", "eink-module", "lora-node", "thermal-camera", "bench-psu",
+        "used-mini-pc", "thinkpad-refurb", "macbook-neo", "serial-kit", "usb-power-meter", "breadboard-kit", "rtl-sdr", "oscilloscope", "filament",
+        "robotics-kit", "multimeter", "usb-microscope", "pinecil", "usb-c-dock", "calipers", "hot-air-station", "fume-extractor",
         "sensor-kit", "network-switch", "nas", "cable-kit",
       ]),
     );
@@ -215,11 +262,12 @@ describe("catalog photos", () => {
 });
 
 describe("hub helpers", () => {
-  test("the last eight catalog entries are new, newest first", () => {
+  test("only flagged entries are new, last in the catalog first, wherever they sit", () => {
     const fresh = recentlyAdded();
-    expect(fresh).toHaveLength(8);
-    expect(fresh.map((entry) => entry.id)).toEqual(SHOP_ITEMS.slice(-8).map((entry) => entry.id).reverse());
-    expect(isNewItem(item("blahaj"))).toBe(true);
+    expect(fresh).toHaveLength(17);
+    expect(fresh.map((entry) => entry.id)).toEqual(SHOP_ITEMS.filter((entry) => entry.isNew).map((entry) => entry.id).reverse());
+    expect(isNewItem(item("pico-2-w"))).toBe(true);
+    expect(isNewItem(item("kindle"))).toBe(false);
     expect(isNewItem(item("pico-w"))).toBe(false);
   });
 
@@ -261,7 +309,7 @@ describe("hub helpers", () => {
     expect(first.shown).toHaveLength(24);
     expect(first.next).toBe(2);
     expect(visibleItems(SHOP_ITEMS, 2).shown).toHaveLength(48);
-    const last = visibleItems(SHOP_ITEMS, 3);
+    const last = visibleItems(SHOP_ITEMS, 4);
     expect(last.shown).toHaveLength(SHOP_ITEMS.length);
     expect(last.next).toBeNull();
     expect(visibleItems(SHOP_ITEMS, 0).shown).toHaveLength(24);

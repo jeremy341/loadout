@@ -8,7 +8,7 @@
 // The seed never resets stock or `active` on a re-run; it only fills in rows that are missing.
 import type { Prisma } from "../generated/prisma/client";
 import { db } from "./db";
-import { shopItemById, SHOP_ITEMS, type ShopItem } from "./shop";
+import { RETIRED_SHOP_IDS, shopItemById, SHOP_ITEMS, type ShopItem } from "./shop";
 import { shopItemFromRow, stockForNewItem } from "./shop-rules";
 
 export type ShopItemView = ShopItem & { stock: number | null };
@@ -40,7 +40,8 @@ function toView(row: ItemWithStock): ShopItemView {
 }
 
 // Writes the static catalog into the database. Run from scripts/seed-shop.ts. Catalog fields are overwritten to match the static
-// list; stock rows are created only when missing, and `active` is left alone so a staff switch-off survives a re-seed.
+// list; stock rows are created only when missing, and `active` is left alone so a staff switch-off survives a re-seed. The one
+// exception: rows for retired items are switched off.
 export async function seedShopFromStatic(): Promise<{ items: number; stockRows: number }> {
   let stockRows = 0;
   await db().$transaction(
@@ -56,6 +57,7 @@ export async function seedShopFromStatic(): Promise<{ items: number; stockRows: 
           stockRows += 1;
         }
       }
+      await tx.shopItem.updateMany({ where: { id: { in: [...RETIRED_SHOP_IDS] } }, data: { active: false } });
     },
     { timeout: 60_000 },
   );

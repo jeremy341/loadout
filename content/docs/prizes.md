@@ -16,14 +16,18 @@ This is the working prize list. The homepage shows one example from each categor
 | --- | --- | --- |
 | ESP32 starter kit | 30 Ore | 3 |
 | Soldering iron kit | 80 Ore | 8 |
-| Raspberry Pi 5 | 490 Ore | 49 |
+| Raspberry Pi 5, 8GB | 490 Ore | 49 |
 | Samsung T7 SSD | 460 Ore | 46 |
 | A domain for your project | 25 Ore | 2.5 |
 | Bambu Lab A1 Mini 3D printer | 615 Ore | 61.5 |
 | Enclosed 3D printer | 1,020 Ore | 102 |
-| Framework 16 laptop | 2,915 Ore | 291.5 |
+| Framework 16 laptop, prebuilt | 4,230 Ore | 423 |
 
 The enclosed printer and Framework are longer-term goals with steeper prices. Neither has a specific level requirement in these examples; you'd need enough Ore to cover the price.
+
+## Can I get any laptop? {#laptops}
+
+Any laptop can be a prize. Apple computers cost more Ore for the same dollar price: their working price is **1.25 times** what another computer costs at that price. That covers MacBooks and Mac desktops, but not iPads or the Apple Developer Program. There are separate grants too, one toward a PC laptop and a dearer one toward a Mac. The PC grant can't pay for a Mac, and the same goes for a Custom Order quote.
 
 ## Does my track affect what I can buy? {#pricing}
 

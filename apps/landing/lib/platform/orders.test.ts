@@ -144,10 +144,10 @@ describe("wishlist", () => {
 
   test("the price is the shop's price for the same hours", () => {
     const entry = wishlistEntries(["framework-12"], approved)[0];
-    // Framework 12 relates to Tools, Systems and Compute; Tools gives the best discount, 4.8% off 1,260 Ore.
-    expect(entry.price.base).toBe(1260);
+    // Framework 12 relates to Tools, Systems and Compute; Tools gives the best discount, 4.8% off 1,605 Ore.
+    expect(entry.price.base).toBe(1605);
     expect(entry.price.track).toBe("Tools");
-    expect(entry.price.final).toBe(Math.round(1260 * (1 - 4.8 / 100)));
+    expect(entry.price.final).toBe(Math.round(1605 * (1 - 4.8 / 100)));
   });
 
   test("unknown and repeated ids are dropped", () => {

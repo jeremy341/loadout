@@ -1,0 +1,25 @@
+// Unused-file and unused-dependency check: `bun run deadcode` (also in CI). Only those two are checked.
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  // knip's Bun plugin reads the landing test script's file argument as a directory and crashes.
+  "bun": false,
+  "ignore": [
+    // Data layer for referrals, which plan 02 lists as planned. Not wired up yet.
+    "apps/landing/lib/platform/referrals-data.ts",
+    // Loaded by URL from KoiPond.tsx, not imported.
+    "apps/landing/public/vendor/**",
+    // Artwork build scripts that are run by hand.
+    "assets/editable/**"
+  ],
+  "workspaces": {
+    ".": {},
+    "apps/landing": {
+      "entry": ["**/*.test.{ts,tsx}", "scripts/**/*.{ts,mjs}", "e2e/**/*.{ts,mts,mjs}", "ecosystem.config.cjs", "reviewer-dash/scripts/**/*.mjs"],
+      // Used by the generated Prisma client and its pg adapter, which knip does not read because the client is not in Git.
+      "ignoreDependencies": ["@prisma/client", "pg", "@types/pg"]
+    },
+    "apps/bot": {
+      "entry": ["src/{main,index}.ts", "src/modules/*/index.ts", "scripts/**/*.ts", "**/*.test.ts"]
+    }
+  }
+}

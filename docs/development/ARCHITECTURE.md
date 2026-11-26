@@ -1,6 +1,6 @@
 # Current application architecture
 
-Implemented public application: Next.js App Router in `apps/landing`. It contains the homepage and program-draft Docs, not live participant, economy, reviewer, order or event services.
+Implemented public application: Next.js App Router in `apps/landing`. It serves the homepage and program-draft Docs. The same app holds the participant platform (`app/(platform)`) and reviewer desk (`app/(reviewer)`), and `apps/bot` is the Slack bot; those are [staging work](staging-posture.md), not live participant, economy, reviewer, order or event services. The rest of this page covers the public application.
 
 ## Public Docs
 

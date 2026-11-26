@@ -24,7 +24,7 @@ const ROUTE_DIRS = ["review", "admins", "bans", "budget", "community-goals", "ev
 // Single route files copied the same way. layout.tsx is hand-adapted (see ADJUSTED.txt), page.tsx is the overview.
 const ROUTE_FILES = ["page.tsx"];
 // Extra non-route roots to follow.
-const ROOTS = ["app/_ui/ui.tsx", "app/_ui/Tabs.tsx", "app/_ui/Select.tsx", "app/_ui/PaginatedTable.tsx", "app/_ui/Progress.tsx", "app/_ui/SlackName.tsx", "app/_ui/SubmitButton.tsx", "app/_ui/CommandPalette.tsx", "app/_ui/TopNav.tsx", "app/_ui/Tooltips.tsx", "app/_ui/nav.ts", "app/_ui/glyphs.ts", "app/_ui/actionError.ts", "app/_ui/admin.css", "app/_ui/themes.css", "app/_ui/fonts.css"];
+const ROOTS = ["app/_ui/ui.tsx", "app/_ui/Tabs.tsx", "app/_ui/PaginatedTable.tsx", "app/_ui/SlackName.tsx", "app/_ui/SubmitButton.tsx", "app/_ui/CommandPalette.tsx", "app/_ui/TopNav.tsx", "app/_ui/Tooltips.tsx", "app/_ui/nav.ts", "app/_ui/glyphs.ts", "app/_ui/actionError.ts", "app/_ui/admin.css", "app/_ui/themes.css", "app/_ui/fonts.css"];
 // Pure-module tests that run without a database, copied next to their module.
 const TESTS = ["reviewMacros", "pagination", "queueWait", "reviewAssignment", "reviewAccess", "reviewClaimState", "reviewStats", "reviewReward", "doubleDip", "githubRepoOwner", "reviewTypeFilter", "reviewCycleDisplay", "auditReviewerView", "hours", "safeUrl", "unship"].map((n) => `lib/${n}.test.ts`).concat(["app/_ui/actionError.test.ts", "app/_ui/nav.test.ts"]);
 
@@ -38,7 +38,13 @@ const ADAPTED = new Set([
 ]);
 // Pixl components out of scope for the review area (game, economy, shop, blackout, Robert). Imports are left in place; the adapter
 // layer or the adjustment pass handles them, and the script reports them.
-const SKIP = new Set(["app/_ui/fonts.css"]);
+// Files LOADOUT removed because nothing imports them. Modules in ADAPTED are already never copied; these are the others,
+// listed so that a re-run does not copy them back.
+const RETIRED = [
+  "app/_ui/Progress.tsx", "app/_ui/Select.tsx", "lib/eligibility/airbridgeCache.ts", "lib/eligibility/shipsMatch.ts",
+  "lib/eligibility/shipsSnapshotStore.ts", "lib/pixoCall.ts", "lib/robertOutcome.ts",
+];
+const SKIP = new Set(["app/_ui/fonts.css", ...RETIRED]);
 
 const ADJUSTED = new Set(
   fs.existsSync(path.join(landing, "reviewer-dash", "ADJUSTED.txt"))

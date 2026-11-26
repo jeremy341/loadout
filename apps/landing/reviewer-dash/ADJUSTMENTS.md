@@ -311,3 +311,7 @@ Other fixes
 - Not fixed, skipped in the axe test with the reason in the spec: Pixl's palette fails `color-contrast` in places (white on #ec3750 at 4.0:1 on the active nav link, #8492a6 nav links on the light page at 3.0:1, info and danger badges, diff counts); the resize divider (`ReviewSplit.tsx`, Pixl's) is a focusable `role="separator"` without `aria-valuenow` (`aria-required-attr`).
 - The sample tickets are stamped relative to the server's clock, so `sample` timestamps in `route-matrix.ts` for `/api/tickets/[ts]/*` go stale after the server has run a while; the test reads a live one from `/api/tickets`.
 - The dev server answers a not-found page of the desk (a ship outside a one-queue reviewer's queue) with status 200 and empty content; the test checks the content.
+
+## Unused files removed (25 Nov 2026)
+
+Nothing in LOADOUT imported these, so they were deleted: `app/_ui/{Progress,Select}.tsx`, `lib/eligibility/{airbridgeCache,shipsMatch,shipsSnapshotStore}.ts`, `lib/{fraudy,operations,operationsReview,pgCompat,pixo,pixoCall,reviewGrants,robertOutcome}.ts` and `lib/sample/opsSql.ts`. Earlier sections that mention them record the port. The fraud checks LOADOUT runs live in `lib/platform/fraud/`. `copy-from-pixl.mjs` keeps the removed Pixl modules in `ADAPTED` or `RETIRED`, so a re-run does not bring them back.

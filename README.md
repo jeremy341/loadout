@@ -4,7 +4,9 @@
 
 ## The website
 
-`apps/landing` contains the public homepage and program-draft Docs. Visit [loadout.dino.icu](https://loadout.dino.icu/) or read the [public Docs](https://loadout.dino.icu/docs/start). Public Markdown is maintained in `content/docs/`; internal plans, workflow, source audits, and design notes are not published or indexed.
+`apps/landing` serves the public homepage and program-draft Docs. Visit [loadout.dino.icu](https://loadout.dino.icu/) or read the [public Docs](https://loadout.dino.icu/docs/start). Public Markdown is maintained in `content/docs/`; internal plans, workflow, source audits, and design notes are not published or indexed.
+
+The same app also holds a participant platform (`app/(platform)`, under `/dashboard`) and a staff reviewer desk (`app/(reviewer)`, under `/reviewer`), and `apps/bot` is the [Slack bot](apps/bot/README.md). These are staging work that prepares for Hack Club infrastructure ([staging posture](docs/development/staging-posture.md)), not a launched service.
 
 The site has no live participant accounts, project-submission, review, reward, ordering, or event service. The RSVP link expresses interest and does not enroll anyone.
 

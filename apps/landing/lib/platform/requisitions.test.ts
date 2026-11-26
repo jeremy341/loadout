@@ -96,9 +96,9 @@ describe("requisitionOffer", () => {
     // LV.20 gives 20% and the requisition 10%: 30%, under the cap.
     expect(result.percentWith).toBe(30);
     // Force the cap with a larger level discount than the game gives, to prove the ceiling holds.
-    const capped = requisitionOffer(item("mac-mini"), { base: 1380, track: "Systems", percent: 35, final: 897 }, { Tools: 0, Systems: 1, Compute: 0, Hardware: 0 });
+    const capped = requisitionOffer(item("mac-mini"), { base: 2585, track: "Systems", percent: 35, final: 1680 }, { Tools: 0, Systems: 1, Compute: 0, Hardware: 0 });
     expect(capped.percentWith).toBe(40);
-    expect(capped.priceWith).toBe(828);
+    expect(capped.priceWith).toBe(1551);
   });
 
   test("not eligible keeps the level-discount price", () => {

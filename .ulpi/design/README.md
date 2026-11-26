@@ -43,6 +43,7 @@ Separate public-site files:
 - [`profile-two-column.md`](profile-two-column.md): the two-column profile with the activity heatmap. **Layout superseded** by `redesign-profile.md`; its heatmap section stays true.
 - [`redesign-profile.md`](redesign-profile.md): the profile's wide header and internal tabs. Replaces the layout in `profile-two-column.md`.
 - [`redesign-shop.md`](redesign-shop.md): the Shop as a parts counter. Read with the Shop part of `stardance-layout.md` and the Shop notes in `dashboard-minimal-pass.md`.
+- [`shop-hacker-items.md`](shop-hacker-items.md): catalog refresh (25 Nov 2026): new items, Apple pricing, replaced photos. Data and images only.
 
 ## Participant platform: Expeditions, Community, Events, Orders and placeholders
 

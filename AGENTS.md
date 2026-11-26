@@ -20,7 +20,7 @@ Read [the development workflow](docs/development/WORKFLOW.md) before changing th
 
 ## Product and source boundaries
 
-The current app is the public homepage and program-draft Docs in `apps/landing`; it has no live participant, reviewer, economy, ordering, fulfillment, or event services. Internal age policy is 13–18, and the public Docs state 13–18. The [canonical plan index](plans/00-index.md) identifies policy owners. Preserve four quality dimensions—Originality, Technical Depth, Execution, and Documentation—and four tracks—Tools, Systems, Compute, and Hardware. Research Mode remains a modifier.
+`apps/landing` holds the public homepage and program-draft Docs, a participant platform and a reviewer desk; `apps/bot` is the Slack bot. The platform, desk and bot are [staging work](docs/development/staging-posture.md): there are no live participant, reviewer, economy, ordering, fulfillment, or event services. Internal age policy is 13–18, and the public Docs state 13–18. The [canonical plan index](plans/00-index.md) identifies policy owners. Preserve four quality dimensions (Originality, Technical Depth, Execution, and Documentation) and four tracks (Tools, Systems, Compute, and Hardware). Research Mode remains a modifier.
 
 Clearly label owner-approved draft or working values as provisional when shown publicly; do not present unresolved values as final. Live eligibility, dates, registration, stock, ordering, fulfillment, destinations and service claims require confirmation. Follow [public content authoring](docs/development/content-authoring.md) for participant Docs.
 

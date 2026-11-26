@@ -15,6 +15,10 @@
     "test:e2e": "bun run --filter @loadout/landing test:e2e",
     "docs:release-summary": "bun run apps/landing/scripts/docs-release-summary.ts",
     "bot:dev": "bun run --filter @loadout/bot dev",
-    "bot:test": "bun run --filter @loadout/bot test"
+    "bot:test": "bun run --filter @loadout/bot test",
+    "deadcode": "knip --include files,dependencies"
+  },
+  "devDependencies": {
+    "knip": "5.88.1"
   }
 }
